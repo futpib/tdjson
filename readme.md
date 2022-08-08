@@ -1,26 +1,34 @@
-# slip44
+# tdjson
 
-> TypeScript version of https://github.com/satoshilabs/slips/blob/master/slip-0044.md
+> TypeScript types for libtdjson.so
 
-[![npm](https://shields.io/npm/v/slip44)](https://www.npmjs.com/package/slip44) [![Coverage Status](https://coveralls.io/repos/github/futpib/slip44/badge.svg?branch=master)](https://coveralls.io/github/futpib/slip44?branch=master)
+[![npm](https://shields.io/npm/v/tdjson)](https://www.npmjs.com/package/tdjson) [![Coverage Status](https://coveralls.io/repos/github/futpib/tdjson/badge.svg?branch=master)](https://coveralls.io/github/futpib/tdjson?branch=master)
 
-TypeScript code is [updated daily automatically](https://github.com/futpib/slip44/actions/workflows/generate.yml) from [slips](https://github.com/satoshilabs/slips/blob/master/slip-0044.md).
+TypeScript code is [updated daily automatically](https://github.com/futpib/tdjson/actions/workflows/generate.yml) from [td_api.tl](https://github.com/tdlib/td/blob/master/td/generate/scheme/td_api.tl).
 
 ## Usage
 
 ```typescript
-import { registeredCoinTypes } from 'slip44';
+import { Tdjson } from 'tdjson';
 
-registeredCoinTypes.find(([
-	_coinType,
-	_derivationPathComponent,
-	symbol,
-	_name,
-	_url,
-	_comment
-]) => {
-	return symbol === 'BTC';
+class MyTdjson extends Tdjson {
+	protected async _request(message: any) {
+		// TODO: Call actual libtdjson.so binding here.
+		return { '@type': 'ok' };
+	}
+}
+
+const myTdjson = new MyTdjson();
+
+// All methods typed and autocompleted with documentation 🎉
+const proxy = await myTdjson.addProxy({
+	server: '127.0.0.1',
+	port: 1234,
+	enable: true,
+	type: {
+		'@type': 'proxyTypeSocks5',
+		username: 'username',
+		password: 'password',
+	},
 });
-
-//  [ 0, 2147483648, 'BTC', 'Bitcoin', 'https://bitcoin.org', undefined ]
 ```

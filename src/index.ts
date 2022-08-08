@@ -1,1 +1,1 @@
-export * from './slip44';
+export * from './tdjson';

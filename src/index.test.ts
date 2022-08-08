@@ -1,32 +1,26 @@
 import test from 'ava';
-// @ts-expect-error 7016
-import anyBip44Constants from 'bip44-constants';
+import { Tdjson } from './tdjson';
 
-import type { RegisteredCoinSymbol } from './slip44';
-import { registeredCoinTypes } from '.';
+test('Tdjson', async t => {
+	const log: any[] = [];
 
-const bip44Constants = anyBip44Constants as Array<[number, string, string]>;
+	const myTdjson = new class MyTdjson extends Tdjson {
+		protected async _request(message: any) {
+			log.push(message);
+			return { '@type': 'ok' };
+		}
+	}();
 
-test('Contains everything from `bip44-constants`', t => {
-	for (const row of bip44Constants) {
-		const [ derivationPathComponent_ ] = row;
-		t.true(
-			registeredCoinTypes.some(([ /* coinType */, derivationPathComponent ]) => derivationPathComponent === derivationPathComponent_),
-			`Coin type ${JSON.stringify(row)} from 'bip44-constants' exists.`,
-		);
-	}
-});
-
-const snapshotSymbols = new Set<RegisteredCoinSymbol>([
-	'BTC',
-	'XMR',
-	'DASH',
-	'VASH',
-]);
-
-for (const symbol of snapshotSymbols) {
-	test(`${symbol} snapshot`, t => {
-		const records = registeredCoinTypes.filter(coin => coin[2] === symbol);
-		t.snapshot(records);
+	await myTdjson.addProxy({
+		server: '127.0.0.1',
+		port: 1234,
+		enable: true,
+		type: {
+			'@type': 'proxyTypeSocks5',
+			username: 'username',
+			password: 'password',
+		},
 	});
-}
+
+	t.snapshot(log);
+});
