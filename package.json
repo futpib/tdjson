@@ -21,8 +21,7 @@
     "generate": "ts-node ./src/tdjson.generate.ts && xo --fix ./src/tdjson.ts",
     "build": "tsc",
     "test": "xo && nyc ava",
-    "prepare": "husky install || true",
-    "prepublish": "yarn build"
+    "prepare": "yarn build"
   },
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
