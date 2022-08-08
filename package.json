@@ -70,6 +70,7 @@
         "always-multiline"
       ],
       "@typescript-eslint/consistent-type-imports": "error",
+      "@typescript-eslint/naming-convention": "off",
       "import/extensions": "off",
       "unicorn/prefer-module": "off"
     }

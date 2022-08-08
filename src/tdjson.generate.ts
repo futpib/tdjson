@@ -250,11 +250,16 @@ function stringifyConstructorArgument(constructor_: Combinator, argument: string
 	const comment = constructor_.comments.find(comment => comment.tag === argument.id.name);
 	const commentText = stringifyCommentText([ comment?.text ], interfaceName);
 
+	const typeAnnotation = stringifyTypeAnnotation(argument.typeAnnotation);
+
+	const isOptional = typeAnnotation === 'boolean';
+	const optionalPropertySign = isOptional ? '?' : '';
+
 	return outdent`
 		/**
 		${commentText}
 		*/
-		${argument.id.name}: ${stringifyTypeAnnotation(argument.typeAnnotation)};
+		${argument.id.name}${optionalPropertySign}: ${typeAnnotation};
 	`;
 }
 
@@ -306,11 +311,16 @@ function stringifyFunctionOptionsType(function_: Combinator) {
 		const comment = function_.comments.find(comment => comment.tag === argument.id.name);
 		const commentText = stringifyCommentText([ comment?.text ]);
 
+		const typeAnnotation = stringifyTypeAnnotation(argument.typeAnnotation);
+
+		const isOptional = typeAnnotation === 'boolean';
+		const optionalPropertySign = isOptional ? '?' : '';
+
 		return outdent`
 			/**
 			${commentText}
 			*/
-			${argument.id.name}: ${stringifyTypeAnnotation(argument.typeAnnotation)};
+			${argument.id.name}${optionalPropertySign}: ${typeAnnotation};
 		`;
 	}).join('\n');
 
@@ -429,7 +439,6 @@ async function main() {
 
 	const typescript = [
 		'/* eslint-disable @typescript-eslint/no-unsafe-return */',
-		'/* eslint-disable @typescript-eslint/naming-convention */',
 
 		...constructors.map(c => stringifyConstructor(c)),
 
