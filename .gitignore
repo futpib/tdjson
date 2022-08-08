@@ -130,6 +130,7 @@ dist
 # yarn v2
 .yarn/cache
 .yarn/unplugged
+.yarn/versions
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
@@ -181,4 +182,3 @@ flycheck_*.el
 
 # network security
 /network-security.data
-
