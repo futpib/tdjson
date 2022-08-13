@@ -302,7 +302,7 @@ Telegram terms of service.
 	terms_of_service: TermsOfService;
 }
 /**
-The user has been authorized, but needs to enter a password to start using the application.
+The user has been authorized, but needs to enter a 2-step verification password to start using the application.
 Subtype of {@link AuthorizationState}.
 */
 export interface AuthorizationStateWaitPassword {
@@ -378,7 +378,7 @@ Information about the recovery email address to which the confirmation email was
 */
 	recovery_email_address_code_info: EmailAddressAuthenticationCodeInfo;
 	/**
-If not 0, point in time (Unix timestamp) after which the password can be reset immediately using resetPassword.
+If not 0, point in time (Unix timestamp) after which the 2-step verification password can be reset immediately using resetPassword.
 */
 	pending_reset_date: number;
 }
@@ -725,27 +725,35 @@ Mask scaling coefficient. (For example, 2.0 means a doubled size).
 	scale: number;
 }
 /**
-Describes type of a sticker.
-Subtype of {@link StickerType}.
+Describes format of a sticker.
+Subtype of {@link StickerFormat}.
 */
-export interface StickerTypeStatic {
-	'@type': 'stickerTypeStatic';
+export interface StickerFormatWebp {
+	'@type': 'stickerFormatWebp';
 
 }
 /**
 The sticker is an animation in TGS format.
-Subtype of {@link StickerType}.
+Subtype of {@link StickerFormat}.
 */
-export interface StickerTypeAnimated {
-	'@type': 'stickerTypeAnimated';
+export interface StickerFormatTgs {
+	'@type': 'stickerFormatTgs';
 
 }
 /**
 The sticker is a video in WEBM format.
+Subtype of {@link StickerFormat}.
+*/
+export interface StickerFormatWebm {
+	'@type': 'stickerFormatWebm';
+
+}
+/**
+Describes type of a sticker.
 Subtype of {@link StickerType}.
 */
-export interface StickerTypeVideo {
-	'@type': 'stickerTypeVideo';
+export interface StickerTypeRegular {
+	'@type': 'stickerTypeRegular';
 
 }
 /**
@@ -754,10 +762,15 @@ Subtype of {@link StickerType}.
 */
 export interface StickerTypeMask {
 	'@type': 'stickerTypeMask';
-	/**
-Position where the mask is placed; may be null.
+
+}
+/**
+The sticker is a custom emoji to be used inside message text and caption.
+Subtype of {@link StickerType}.
 */
-	mask_position: MaskPosition;
+export interface StickerTypeCustomEmoji {
+	'@type': 'stickerTypeCustomEmoji';
+
 }
 /**
 Represents a closed vector path. The path begins at the end point of the last command.
@@ -893,9 +906,13 @@ The minithumbnail of the album cover; may be null.
 */
 	album_cover_minithumbnail: Minithumbnail;
 	/**
-The thumbnail of the album cover in JPEG format; as defined by the sender. The full size thumbnail is supposed to be extracted from the downloaded file; may be null.
+The thumbnail of the album cover in JPEG format; as defined by the sender. The full size thumbnail is supposed to be extracted from the downloaded audio file; may be null.
 */
 	album_cover_thumbnail: Thumbnail;
+	/**
+Album cover variants to use if the downloaded audio file contains no album cover. Provided thumbnail dimensions are approximate.
+*/
+	external_album_covers: Thumbnail[];
 	/**
 File containing the audio.
 */
@@ -967,9 +984,21 @@ Emoji corresponding to the sticker.
 */
 	emoji: string;
 	/**
+Sticker format.
+*/
+	format: StickerFormat;
+	/**
 Sticker type.
 */
 	type: StickerType;
+	/**
+Position where the mask is placed; may be null even the sticker is a mask.
+*/
+	mask_position: MaskPosition;
+	/**
+Identifier of the emoji if the sticker is a custom emoji.
+*/
+	custom_emoji_id: string;
 	/**
 Sticker's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the upper-left corner.
 */
@@ -979,7 +1008,11 @@ Sticker thumbnail in WEBP or JPEG format; may be null.
 */
 	thumbnail: Thumbnail;
 	/**
-Premium animation of the sticker; may be null. If present, only Premium users can send the sticker.
+True, if only Premium users can use the sticker.
+*/
+	is_premium?: boolean;
+	/**
+Premium animation of the sticker; may be null.
 */
 	premium_animation: File;
 	/**
@@ -1077,25 +1110,21 @@ MIME type of the file; as defined by the sender.
 */
 	mime_type: string;
 	/**
-True, if speech recognition is completed; Premium users only.
+Result of speech recognition in the voice note; may be null.
 */
-	is_recognized?: boolean;
-	/**
-Recognized text of the voice note; Premium users only. Call recognizeSpeech to get recognized text of the voice note.
-*/
-	recognized_text: string;
+	speech_recognition_result: SpeechRecognitionResult;
 	/**
 File containing the voice note.
 */
 	voice: File;
 }
 /**
-Describes an animated representation of an emoji.
+Describes an animated or custom representation of an emoji.
 */
 export interface AnimatedEmoji {
 	'@type': 'animatedEmoji';
 	/**
-Animated sticker for the emoji.
+Sticker for the emoji; may be null if yet unknown for a custom emoji. If the sticker is a custom emoji, it can have arbitrary format different from stickerFormatTgs.
 */
 	sticker: Sticker;
 	/**
@@ -1103,7 +1132,7 @@ Emoji modifier fitzpatrick type; 0-6; 0 if none.
 */
 	fitzpatrick_type: number;
 	/**
-File containing the sound to be played when the animated emoji is clicked; may be null. The sound is encoded with the Opus codec, and stored inside an OGG container.
+File containing the sound to be played when the sticker is clicked; may be null. The sound is encoded with the Opus codec, and stored inside an OGG container.
 */
 	sound: File;
 }
@@ -1608,6 +1637,36 @@ True, if the administrator isn't shown in the chat member list and sends message
 	is_anonymous?: boolean;
 }
 /**
+Describes an option for gifting Telegram Premium to a user.
+*/
+export interface PremiumGiftOption {
+	'@type': 'premiumGiftOption';
+	/**
+ISO 4217 currency code for Telegram Premium subscription payment.
+*/
+	currency: string;
+	/**
+The amount to pay, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+The discount associated with this gift option, as a percentage.
+*/
+	discount_percentage: number;
+	/**
+Number of month the Telegram Premium subscription will be active.
+*/
+	month_count: number;
+	/**
+Identifier of the store product associated with the option.
+*/
+	store_product_id: string;
+	/**
+An internal link to be opened for gifting Telegram Premium to the user if store payment isn't possible; may be null if direct payment isn't available.
+*/
+	payment_link: InternalLinkType;
+}
+/**
 Represents a user.
 */
 export interface User {
@@ -1757,6 +1816,10 @@ True, if the user can't be linked in forwarded messages due to their privacy set
 */
 	has_private_forwards?: boolean;
 	/**
+True, if voice and video notes can't be sent or forwarded to the user.
+*/
+	has_restricted_voice_and_video_note_messages?: boolean;
+	/**
 True, if the current user needs to explicitly allow to share their phone number with the user when the method addContact is used.
 */
 	need_phone_number_privacy_exception?: boolean;
@@ -1764,6 +1827,10 @@ True, if the current user needs to explicitly allow to share their phone number 
 A short user bio; may be null for bots.
 */
 	bio: FormattedText;
+	/**
+The list of available options for gifting Telegram Premium to the user.
+*/
+	premium_gift_options: PremiumGiftOption[];
 	/**
 Number of group chats where both the other user and the current user are a member; 0 for the current user.
 */
@@ -2567,7 +2634,7 @@ Hash of the currently used key for comparison with the hash of the chat partner'
 */
 	key_hash: string;
 	/**
-Secret chat layer; determines features supported by the chat partner's application. Nested text entities and underline and strikethrough entities are supported if the layer >= 101, files bigger than 2000MB are supported if the layer >= 143.
+Secret chat layer; determines features supported by the chat partner's application. Nested text entities and underline and strikethrough entities are supported if the layer >= 101, files bigger than 2000MB are supported if the layer >= 143, spoiler and custom emoji text entities are supported if the layer >= 144.
 */
 	layer: number;
 }
@@ -2885,7 +2952,7 @@ True, if the message statistics are available through getMessageStatistics.
 */
 	can_get_statistics?: boolean;
 	/**
-True, if information about the message thread is available through getMessageThread.
+True, if information about the message thread is available through getMessageThread and getMessageThreadHistory.
 */
 	can_get_message_thread?: boolean;
 	/**
@@ -3905,7 +3972,7 @@ Data to be sent to the bot via a callback query.
 	data: string;
 }
 /**
-A button that asks for password of the current user and then sends a callback query to a bot.
+A button that asks for the 2-step verification password of the current user and then sends a callback query to a bot.
 Subtype of {@link InlineKeyboardButtonType}.
 */
 export interface InlineKeyboardButtonTypeCallbackWithPassword {
@@ -5331,7 +5398,7 @@ A list of objects used to calculate the total shipping costs.
 	price_parts: LabeledPricePart[];
 }
 /**
-Contains information about saved card credentials.
+Contains information about saved payment credentials.
 */
 export interface SavedCredentials {
 	'@type': 'savedCredentials';
@@ -5438,6 +5505,20 @@ Payment form URL.
 	url: string;
 }
 /**
+Describes an additional payment option.
+*/
+export interface PaymentOption {
+	'@type': 'paymentOption';
+	/**
+Title for the payment option.
+*/
+	title: string;
+	/**
+Payment form URL to be opened in a web view.
+*/
+	url: string;
+}
+/**
 Contains information about an invoice payment form.
 */
 export interface PaymentForm {
@@ -5463,19 +5544,23 @@ Information about the payment provider.
 */
 	payment_provider: PaymentProvider;
 	/**
+The list of additional payment options.
+*/
+	additional_payment_options: PaymentOption[];
+	/**
 Saved server-side order information; may be null.
 */
 	saved_order_info: OrderInfo;
 	/**
-Information about saved card credentials; may be null.
+The list of saved payment credentials.
 */
-	saved_credentials: SavedCredentials;
+	saved_credentials: SavedCredentials[];
 	/**
 True, if the user can choose to save credentials.
 */
 	can_save_credentials?: boolean;
 	/**
-True, if the user will be able to save credentials protected by a password they set up.
+True, if the user will be able to save credentials, if sets up a 2-step verification password.
 */
 	need_password?: boolean;
 	/**
@@ -7173,6 +7258,29 @@ Provider payment identifier.
 	provider_payment_charge_id: string;
 }
 /**
+Telegram Premium was gifted to the user.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageGiftedPremium {
+	'@type': 'messageGiftedPremium';
+	/**
+Currency for the paid amount.
+*/
+	currency: string;
+	/**
+The paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of month the Telegram Premium subscription will be active.
+*/
+	month_count: number;
+	/**
+A sticker to be shown in the message; may be null if unknown.
+*/
+	sticker: Sticker;
+}
+/**
 A contact has registered with Telegram.
 Subtype of {@link MessageContent}.
 */
@@ -7367,7 +7475,7 @@ export interface TextEntityTypeStrikethrough {
 
 }
 /**
-A spoiler text. Not supported in secret chats.
+A spoiler text.
 Subtype of {@link TextEntityType}.
 */
 export interface TextEntityTypeSpoiler {
@@ -7422,6 +7530,17 @@ export interface TextEntityTypeMentionName {
 Identifier of the mentioned user.
 */
 	user_id: number;
+}
+/**
+A custom emoji. The text behind a custom emoji must be an emoji. Only premium users can use premium custom emoji.
+Subtype of {@link TextEntityType}.
+*/
+export interface TextEntityTypeCustomEmoji {
+	'@type': 'textEntityTypeCustomEmoji';
+	/**
+Unique identifier of the custom emoji.
+*/
+	custom_emoji_id: string;
 }
 /**
 A media timestamp.
@@ -7518,7 +7637,7 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageText {
 	'@type': 'inputMessageText';
 	/**
-Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Spoiler, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually.
+Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified manually.
 */
 	text: FormattedText;
 	/**
@@ -8340,6 +8459,10 @@ True, if the sticker set is official.
 */
 	is_official?: boolean;
 	/**
+Format of the stickers in the set.
+*/
+	sticker_format: StickerFormat;
+	/**
 Type of the stickers in the set.
 */
 	sticker_type: StickerType;
@@ -8393,6 +8516,10 @@ True, if the sticker set has been archived. A sticker set can't be installed and
 True, if the sticker set is official.
 */
 	is_official?: boolean;
+	/**
+Format of the stickers in the set.
+*/
+	sticker_format: StickerFormat;
 	/**
 Type of the stickers in the set.
 */
@@ -9261,6 +9388,39 @@ The number of users that imported the corresponding contact; 0 for already regis
 	importer_count: number[];
 }
 /**
+Describes result of speech recognition in a voice note.
+Subtype of {@link SpeechRecognitionResult}.
+*/
+export interface SpeechRecognitionResultPending {
+	'@type': 'speechRecognitionResultPending';
+	/**
+Partially recognized text.
+*/
+	partial_text: string;
+}
+/**
+The speech recognition successfully finished.
+Subtype of {@link SpeechRecognitionResult}.
+*/
+export interface SpeechRecognitionResultText {
+	'@type': 'speechRecognitionResultText';
+	/**
+Recognized text.
+*/
+	text: string;
+}
+/**
+The speech recognition failed.
+Subtype of {@link SpeechRecognitionResult}.
+*/
+export interface SpeechRecognitionResultError {
+	'@type': 'speechRecognitionResultError';
+	/**
+Received error.
+*/
+	error: Error;
+}
+/**
 Describes a color to highlight a bot added to attachment menu.
 */
 export interface AttachmentMenuBotColor {
@@ -10124,7 +10284,7 @@ Subtype of {@link CallbackQueryPayload}.
 export interface CallbackQueryPayloadDataWithPassword {
 	'@type': 'callbackQueryPayloadDataWithPassword';
 	/**
-The password for the current user.
+The 2-step verification password for the current user.
 */
 	password: string;
 	/**
@@ -11027,6 +11187,14 @@ export interface PremiumFeatureUniqueStickers {
 
 }
 /**
+Allowed to use custom emoji stickers in message texts and captions.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureCustomEmoji {
+	'@type': 'premiumFeatureCustomEmoji';
+
+}
+/**
 Ability to change position of the main chat list, archive and mute all new chats from non-contacts, and completely disable notifications about the user's contacts joined Telegram.
 Subtype of {@link PremiumFeature}.
 */
@@ -11170,6 +11338,36 @@ Monthly subscription payment for Telegram Premium subscription, in the smallest 
 The list of available promotion animations for Premium features.
 */
 	animations: PremiumFeaturePromotionAnimation[];
+}
+/**
+Describes a purpose of an in-store payment.
+Subtype of {@link StorePaymentPurpose}.
+*/
+export interface StorePaymentPurposePremiumSubscription {
+	'@type': 'storePaymentPurposePremiumSubscription';
+	/**
+Pass true if this is a restore of a Telegram Premium purchase; only for App Store.
+*/
+	is_restore?: boolean;
+}
+/**
+The user gifted Telegram Premium to another user.
+Subtype of {@link StorePaymentPurpose}.
+*/
+export interface StorePaymentPurposeGiftedPremium {
+	'@type': 'storePaymentPurposeGiftedPremium';
+	/**
+Identifier of the user for which Premium was gifted.
+*/
+	user_id: number;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
 }
 /**
 Represents a data needed to subscribe for push notifications through registerDevice method. To use specific push notification service, the correct application platform must be specified and a valid server authentication data must be uploaded at https://my.telegram.org.
@@ -12569,6 +12767,14 @@ export interface UserPrivacySettingAllowFindingByPhoneNumber {
 
 }
 /**
+A privacy setting for managing whether the user can receive voice and video messages in private chats.
+Subtype of {@link UserPrivacySetting}.
+*/
+export interface UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages {
+	'@type': 'userPrivacySettingAllowPrivateVoiceAndVideoNoteMessages';
+
+}
+/**
 Contains information about the period of inactivity after which the current user's account will automatically be deleted.
 */
 export interface AccountTtl {
@@ -12728,7 +12934,7 @@ True, if this session is the current session.
 */
 	is_current?: boolean;
 	/**
-True, if a password is needed to complete authorization of the session.
+True, if a 2-step verification password is needed to complete authorization of the session.
 */
 	is_password_pending?: boolean;
 	/**
@@ -13277,6 +13483,14 @@ Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeQrCodeAuthentication {
 	'@type': 'internalLinkTypeQrCodeAuthentication';
+
+}
+/**
+The link forces restore of App Store purchases when opened. For official iOS application only.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeRestorePurchases {
+	'@type': 'internalLinkTypeRestorePurchases';
 
 }
 /**
@@ -14196,9 +14410,13 @@ Emojis corresponding to the sticker.
 */
 	emojis: string;
 	/**
-Sticker type.
+Sticker format.
 */
-	type: StickerType;
+	format: StickerFormat;
+	/**
+Position where the mask is placed; pass null if not specified.
+*/
+	mask_position: MaskPosition;
 }
 /**
 Represents a date range.
@@ -15769,9 +15987,9 @@ Subtype of {@link Update}.
 export interface UpdateInstalledStickerSets {
 	'@type': 'updateInstalledStickerSets';
 	/**
-True, if the list of installed mask sticker sets was updated.
+Type of the affected stickers.
 */
-	is_masks?: boolean;
+	sticker_type: StickerType;
 	/**
 The new list of installed ordinary sticker sets.
 */
@@ -15783,6 +16001,10 @@ Subtype of {@link Update}.
 */
 export interface UpdateTrendingStickerSets {
 	'@type': 'updateTrendingStickerSets';
+	/**
+Type of the affected stickers.
+*/
+	sticker_type: StickerType;
 	/**
 The prefix of the list of trending sticker sets with the newest trending sticker sets.
 */
@@ -16466,11 +16688,14 @@ export type MaskPoint =
 	| MaskPointEyes
 	| MaskPointMouth
 	| MaskPointChin;
+export type StickerFormat =
+	| StickerFormatWebp
+	| StickerFormatTgs
+	| StickerFormatWebm;
 export type StickerType =
-	| StickerTypeStatic
-	| StickerTypeAnimated
-	| StickerTypeVideo
-	| StickerTypeMask;
+	| StickerTypeRegular
+	| StickerTypeMask
+	| StickerTypeCustomEmoji;
 export type PollType =
 	| PollTypeRegular
 	| PollTypeQuiz;
@@ -16748,6 +16973,7 @@ export type MessageContent =
 	| MessageGameScore
 	| MessagePaymentSuccessful
 	| MessagePaymentSuccessfulBot
+	| MessageGiftedPremium
 	| MessageContactRegistered
 	| MessageWebsiteConnected
 	| MessageWebAppDataSent
@@ -16775,6 +17001,7 @@ export type TextEntityType =
 	| TextEntityTypePreCode
 	| TextEntityTypeTextUrl
 	| TextEntityTypeMentionName
+	| TextEntityTypeCustomEmoji
 	| TextEntityTypeMediaTimestamp;
 export type MessageSchedulingState =
 	| MessageSchedulingStateSendAtDate
@@ -16871,6 +17098,10 @@ export type CallProblem =
 export type DiceStickers =
 	| DiceStickersRegular
 	| DiceStickersSlotMachine;
+export type SpeechRecognitionResult =
+	| SpeechRecognitionResultPending
+	| SpeechRecognitionResultText
+	| SpeechRecognitionResultError;
 export type InputInlineQueryResult =
 	| InputInlineQueryResultAnimation
 	| InputInlineQueryResultArticle
@@ -16960,6 +17191,7 @@ export type PremiumFeature =
 	| PremiumFeatureDisabledAds
 	| PremiumFeatureUniqueReactions
 	| PremiumFeatureUniqueStickers
+	| PremiumFeatureCustomEmoji
 	| PremiumFeatureAdvancedChatManagement
 	| PremiumFeatureProfileBadge
 	| PremiumFeatureAnimatedProfilePhoto
@@ -16969,6 +17201,9 @@ export type PremiumSource =
 	| PremiumSourceFeature
 	| PremiumSourceLink
 	| PremiumSourceSettings;
+export type StorePaymentPurpose =
+	| StorePaymentPurposePremiumSubscription
+	| StorePaymentPurposeGiftedPremium;
 export type DeviceToken =
 	| DeviceTokenFirebaseCloudMessaging
 	| DeviceTokenApplePush
@@ -17084,7 +17319,8 @@ export type UserPrivacySetting =
 	| UserPrivacySettingAllowChatInvites
 	| UserPrivacySettingAllowCalls
 	| UserPrivacySettingAllowPeerToPeerCalls
-	| UserPrivacySettingAllowFindingByPhoneNumber;
+	| UserPrivacySettingAllowFindingByPhoneNumber
+	| UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages;
 export type SessionType =
 	| SessionTypeAndroid
 	| SessionTypeApple
@@ -17142,6 +17378,7 @@ export type InternalLinkType =
 	| InternalLinkTypeProxy
 	| InternalLinkTypePublicChat
 	| InternalLinkTypeQrCodeAuthentication
+	| InternalLinkTypeRestorePurchases
 	| InternalLinkTypeSettings
 	| InternalLinkTypeStickerSet
 	| InternalLinkTypeTheme
@@ -17454,11 +17691,11 @@ The last name of the user; 0-64 characters.
 	}
 
 	/**
-Checks the authentication password for correctness. Works only when the current authorization state is authorizationStateWaitPassword.
+Checks the 2-step verification password for correctness. Works only when the current authorization state is authorizationStateWaitPassword.
 */
 	async checkAuthenticationPassword(options: {
 		/**
-The password to check.
+The 2-step verification password to check.
 */
 		password: string;
 	}): Promise<Ok> {
@@ -17469,7 +17706,7 @@ The password to check.
 	}
 
 	/**
-Requests to send a password recovery code to an email address that was previously set up. Works only when the current authorization state is authorizationStateWaitPassword.
+Requests to send a 2-step verification password recovery code to an email address that was previously set up. Works only when the current authorization state is authorizationStateWaitPassword.
 */
 	async requestAuthenticationPasswordRecovery(): Promise<Ok> {
 		return this._request({
@@ -17478,7 +17715,7 @@ Requests to send a password recovery code to an email address that was previousl
 	}
 
 	/**
-Checks whether a password recovery code sent to an email address is valid. Works only when the current authorization state is authorizationStateWaitPassword.
+Checks whether a 2-step verification password recovery code sent to an email address is valid. Works only when the current authorization state is authorizationStateWaitPassword.
 */
 	async checkAuthenticationPasswordRecoveryCode(options: {
 		/**
@@ -17493,7 +17730,7 @@ Recovery code to check.
 	}
 
 	/**
-Recovers the password with a password recovery code sent to an email address that was previously set up. Works only when the current authorization state is authorizationStateWaitPassword.
+Recovers the 2-step verification password with a password recovery code sent to an email address that was previously set up. Works only when the current authorization state is authorizationStateWaitPassword.
 */
 	async recoverAuthenticationPassword(options: {
 		/**
@@ -17501,7 +17738,7 @@ Recovery code to check.
 */
 		recovery_code: string;
 		/**
-New password of the user; may be empty to remove the password.
+New 2-step verification password of the user; may be empty to remove the password.
 */
 		new_password: string;
 		/**
@@ -17606,15 +17843,15 @@ Returns the current state of 2-step verification.
 	}
 
 	/**
-Changes the password for the current user. If a new recovery email address is specified, then the change will not be applied until the new recovery email address is confirmed.
+Changes the 2-step verification password for the current user. If a new recovery email address is specified, then the change will not be applied until the new recovery email address is confirmed.
 */
 	async setPassword(options: {
 		/**
-Previous password of the user.
+Previous 2-step verification password of the user.
 */
 		old_password: string;
 		/**
-New password of the user; may be empty to remove the password.
+New 2-step verification password of the user; may be empty to remove the password.
 */
 		new_password: string;
 		/**
@@ -17641,7 +17878,7 @@ Returns a 2-step verification recovery email address that was previously set up.
 */
 	async getRecoveryEmailAddress(options: {
 		/**
-The password for the current user.
+The 2-step verification password for the current user.
 */
 		password: string;
 	}): Promise<RecoveryEmailAddress> {
@@ -17656,7 +17893,7 @@ Changes the 2-step verification recovery email address of the user. If a new rec
 */
 	async setRecoveryEmailAddress(options: {
 		/**
-Password of the current user.
+The 2-step verification password of the current user.
 */
 		password: string;
 		/**
@@ -17727,7 +17964,7 @@ Recovery code to check.
 */
 		recovery_code: string;
 		/**
-New password of the user; may be empty to remove the password.
+New 2-step verification password of the user; may be empty to remove the password.
 */
 		new_password: string;
 		/**
@@ -17764,7 +18001,7 @@ Creates a new temporary password for processing payments.
 */
 	async createTemporaryPassword(options: {
 		/**
-Persistent user password.
+The 2-step verification password of the current user.
 */
 		password: string;
 		/**
@@ -19653,7 +19890,7 @@ The new message scheduling state; pass null to send the message immediately.
 	}
 
 	/**
-Returns reactions, which can be added to a message. The list can change after updateReactions, updateChatAvailableReactions for the chat, or updateMessageInteractionInfo for the message. The method will return Premium reactions, even the current user has no Premium subscription.
+Returns reactions, which can be added to a message. The list can change after updateReactions, updateChatAvailableReactions for the chat, or updateMessageInteractionInfo for the message.
 */
 	async getMessageAvailableReactions(options: {
 		/**
@@ -19745,7 +19982,7 @@ The text in which to look for entites.
 	}
 
 	/**
-Parses Bold, Italic, Underline, Strikethrough, Spoiler, Code, Pre, PreCode, TextUrl and MentionName entities contained in the text. Can be called synchronously.
+Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName entities contained in the text. Can be called synchronously.
 */
 	async parseTextEntities(options: {
 		/**
@@ -21073,7 +21310,7 @@ Chat identifier.
 */
 		chat_id: number;
 		/**
-New notification settings for the chat. If the chat is muted for more than 1 week, it is considered to be muted forever.
+New notification settings for the chat. If the chat is muted for more than 366 days, it is considered to be muted forever.
 */
 		notification_settings: ChatNotificationSettings;
 	}): Promise<Ok> {
@@ -21459,7 +21696,7 @@ Identifier of the user to which transfer the ownership. The ownership can't be t
 */
 		user_id: number;
 		/**
-The password of the current user.
+The 2-step verification password of the current user.
 */
 		password: string;
 	}): Promise<Ok> {
@@ -21826,9 +22063,9 @@ Directory in which the file is supposed to be saved.
 	}
 
 	/**
-Asynchronously uploads a file to the cloud without sending it in a message. updateFile will be used to notify about upload progress and successful completion of the upload. The file will not have a persistent remote identifier until it will be sent in a message.
+Preliminary uploads a file to the cloud before sending it in a message, which can be useful for uploading of being recorded voice and video notes. Updates updateFile will be used to notify about upload progress and successful completion of the upload. The file will not have a persistent remote identifier until it will be sent in a message.
 */
-	async uploadFile(options: {
+	async preliminaryUploadFile(options: {
 		/**
 File to upload.
 */
@@ -21838,20 +22075,20 @@ File type; pass null if unknown.
 */
 		file_type: FileType;
 		/**
-Priority of the upload (1-32). The higher the priority, the earlier the file will be uploaded. If the priorities of two files are equal, then the first one for which uploadFile was called will be uploaded first.
+Priority of the upload (1-32). The higher the priority, the earlier the file will be uploaded. If the priorities of two files are equal, then the first one for which preliminaryUploadFile was called will be uploaded first.
 */
 		priority: number;
 	}): Promise<File> {
 		return this._request({
 			...options,
-			'@type': 'uploadFile',
+			'@type': 'preliminaryUploadFile',
 		});
 	}
 
 	/**
-Stops the uploading of a file. Supported only for files uploaded by using uploadFile. For other files the behavior is undefined.
+Stops the preliminary uploading of a file. Supported only for files uploaded by using preliminaryUploadFile. For other files the behavior is undefined.
 */
-	async cancelUploadFile(options: {
+	async cancelPreliminaryUploadFile(options: {
 		/**
 Identifier of the file to stop uploading.
 */
@@ -21859,7 +22096,7 @@ Identifier of the file to stop uploading.
 	}): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'cancelUploadFile',
+			'@type': 'cancelPreliminaryUploadFile',
 		});
 	}
 
@@ -23474,9 +23711,13 @@ The maximum number of photos to be returned; up to 100.
 	}
 
 	/**
-Returns stickers from the installed sticker sets that correspond to a given emoji. If the emoji is non-empty, favorite and recently used stickers may also be returned.
+Returns stickers from the installed sticker sets that correspond to a given emoji. If the emoji is non-empty, then favorite, recently used or trending stickers may also be returned.
 */
 	async getStickers(options: {
+		/**
+Type of the sticker sets to return.
+*/
+		sticker_type: StickerType;
 		/**
 String representation of emoji. If empty, returns all known installed stickers.
 */
@@ -23485,6 +23726,10 @@ String representation of emoji. If empty, returns all known installed stickers.
 The maximum number of stickers to be returned.
 */
 		limit: number;
+		/**
+Chat identifier for which to return stickers. Available custom emoji may be different for different chats.
+*/
+		chat_id: number;
 	}): Promise<Stickers> {
 		return this._request({
 			...options,
@@ -23501,7 +23746,7 @@ String representation of emoji; must be non-empty.
 */
 		emoji: string;
 		/**
-The maximum number of stickers to be returned.
+The maximum number of stickers to be returned; 0-100.
 */
 		limit: number;
 	}): Promise<Stickers> {
@@ -23512,13 +23757,28 @@ The maximum number of stickers to be returned.
 	}
 
 	/**
+Returns premium stickers from regular sticker sets.
+*/
+	async getPremiumStickers(options: {
+		/**
+The maximum number of stickers to be returned; 0-100.
+*/
+		limit: number;
+	}): Promise<Stickers> {
+		return this._request({
+			...options,
+			'@type': 'getPremiumStickers',
+		});
+	}
+
+	/**
 Returns a list of installed sticker sets.
 */
 	async getInstalledStickerSets(options: {
 		/**
-Pass true to return mask sticker sets; pass false to return ordinary sticker sets.
+Type of the sticker sets to return.
 */
-		is_masks?: boolean;
+		sticker_type: StickerType;
 	}): Promise<StickerSets> {
 		return this._request({
 			...options,
@@ -23531,9 +23791,9 @@ Returns a list of archived sticker sets.
 */
 	async getArchivedStickerSets(options: {
 		/**
-Pass true to return mask stickers sets; pass false to return ordinary sticker sets.
+Type of the sticker sets to return.
 */
-		is_masks?: boolean;
+		sticker_type: StickerType;
 		/**
 Identifier of the sticker set from which to return the result.
 */
@@ -23553,6 +23813,10 @@ The maximum number of sticker sets to return; up to 100.
 Returns a list of trending sticker sets. For optimal performance, the number of returned sticker sets is chosen by TDLib.
 */
 	async getTrendingStickerSets(options: {
+		/**
+Type of the sticker sets to return.
+*/
+		sticker_type: StickerType;
 		/**
 The offset from which to return the sticker sets; must be non-negative.
 */
@@ -23618,9 +23882,9 @@ Searches for installed sticker sets by looking for specified query in their titl
 */
 	async searchInstalledStickerSets(options: {
 		/**
-Pass true to return mask sticker sets; pass false to return ordinary sticker sets.
+Type of the sticker sets to search for.
 */
-		is_masks?: boolean;
+		sticker_type: StickerType;
 		/**
 Query to search for.
 */
@@ -23694,9 +23958,9 @@ Changes the order of installed sticker sets.
 */
 	async reorderInstalledStickerSets(options: {
 		/**
-Pass true to change the order of mask sticker sets; pass false to change the order of ordinary sticker sets.
+Type of the sticker sets to reorder.
 */
-		is_masks?: boolean;
+		sticker_type: StickerType;
 		/**
 Identifiers of installed sticker sets in the new correct order.
 */
@@ -23724,7 +23988,7 @@ Pass true to return stickers and masks that were recently attached to photos or 
 	}
 
 	/**
-Manually adds a new sticker to the list of recently used stickers. The new sticker is added to the top of the list. If the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be added to this list.
+Manually adds a new sticker to the list of recently used stickers. The new sticker is added to the top of the list. If the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be added to this list. Emoji stickers can't be added to recent stickers.
 */
 	async addRecentSticker(options: {
 		/**
@@ -23786,7 +24050,7 @@ Returns favorite stickers.
 	}
 
 	/**
-Adds a new sticker to the list of favorite stickers. The new sticker is added to the top of the list. If the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be added to this list.
+Adds a new sticker to the list of favorite stickers. The new sticker is added to the top of the list. If the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be added to this list. Emoji stickers can't be added to favorite stickers.
 */
 	async addFavoriteSticker(options: {
 		/**
@@ -23869,15 +24133,6 @@ The emoji.
 	}
 
 	/**
-Returns all emojis, which has a corresponding animated emoji.
-*/
-	async getAllAnimatedEmojis(): Promise<Emojis> {
-		return this._request({
-			'@type': 'getAllAnimatedEmojis',
-		});
-	}
-
-	/**
 Returns an HTTP URL which can be used to automatically log in to the translation platform and suggest new emoji replacements. The URL will be valid for 30 seconds after generation.
 */
 	async getEmojiSuggestionsUrl(options: {
@@ -23889,6 +24144,21 @@ Language code for which the emoji replacements will be suggested.
 		return this._request({
 			...options,
 			'@type': 'getEmojiSuggestionsUrl',
+		});
+	}
+
+	/**
+Returns list of custom emoji stickers by their identifiers. Stickers are returned in arbitrary order. Only found stickers are returned.
+*/
+	async getCustomEmojiStickers(options: {
+		/**
+Identifiers of custom emoji stickers. At most 200 custom emoji stickers can be received simultaneously.
+*/
+		custom_emoji_ids: string[];
+	}): Promise<Stickers> {
+		return this._request({
+			...options,
+			'@type': 'getCustomEmojiStickers',
 		});
 	}
 
@@ -25168,6 +25438,10 @@ Deletes the account of the current user, deleting all information associated wit
 The reason why the account was deleted; optional.
 */
 		reason: string;
+		/**
+The 2-step verification password of the current user. If not specified, account deletion can be canceled within one week.
+*/
+		password: string;
 	}): Promise<Ok> {
 		return this._request({
 			...options,
@@ -25495,7 +25769,7 @@ Telegram Passport element type.
 */
 		type: PassportElementType;
 		/**
-Password of the current user.
+The 2-step verification password of the current user.
 */
 		password: string;
 	}): Promise<PassportElement> {
@@ -25510,7 +25784,7 @@ Returns all available Telegram Passport elements.
 */
 	async getAllPassportElements(options: {
 		/**
-Password of the current user.
+The 2-step verification password of the current user.
 */
 		password: string;
 	}): Promise<PassportElements> {
@@ -25529,7 +25803,7 @@ Input Telegram Passport element.
 */
 		element: InputPassportElement;
 		/**
-Password of the current user.
+The 2-step verification password of the current user.
 */
 		password: string;
 	}): Promise<PassportElement> {
@@ -25706,7 +25980,7 @@ Authorization form identifier.
 */
 		autorization_form_id: number;
 		/**
-Password of the current user.
+The 2-step verification password of the current user.
 */
 		password: string;
 	}): Promise<PassportElementsWithErrors> {
@@ -25866,6 +26140,10 @@ Sticker set title; 1-64 characters.
 Sticker set name. Can contain only English letters, digits and underscores. Must end with *"_by_<bot username>"* (*<bot_username>* is case insensitive) for bots; 1-64 characters.
 */
 		name: string;
+		/**
+Type of the stickers in the set.
+*/
+		sticker_type: StickerType;
 		/**
 List of stickers to be added to the set; must be non-empty. All stickers must have the same format. For TGS stickers, uploadStickerFile must be used before the sticker is shown.
 */
@@ -26029,9 +26307,9 @@ Source of the request; pass null if the method is called from some non-standard 
 	/**
 Returns examples of premium stickers for demonstration purposes.
 */
-	async getPremiumStickers(): Promise<Stickers> {
+	async getPremiumStickerExamples(): Promise<Stickers> {
 		return this._request({
-			'@type': 'getPremiumStickers',
+			'@type': 'getPremiumStickerExamples',
 		});
 	}
 
@@ -26071,14 +26349,20 @@ Returns state of Telegram Premium subscription and promotion videos for Premium 
 	/**
 Checks whether Telegram Premium purchase is possible. Must be called before in-store Premium purchase.
 */
-	async canPurchasePremium(): Promise<Ok> {
+	async canPurchasePremium(options: {
+		/**
+Transaction purpose.
+*/
+		purpose: StorePaymentPurpose;
+	}): Promise<Ok> {
 		return this._request({
+			...options,
 			'@type': 'canPurchasePremium',
 		});
 	}
 
 	/**
-Informs server about a Telegram Premium purchase through App Store. For official applications only.
+Informs server about a purchase through App Store. For official applications only.
 */
 	async assignAppStoreTransaction(options: {
 		/**
@@ -26086,9 +26370,9 @@ App Store receipt.
 */
 		receipt: string;
 		/**
-Pass true if this is a restore of a Telegram Premium purchase.
+Transaction purpose.
 */
-		is_restore?: boolean;
+		purpose: StorePaymentPurpose;
 	}): Promise<Ok> {
 		return this._request({
 			...options,
@@ -26097,13 +26381,25 @@ Pass true if this is a restore of a Telegram Premium purchase.
 	}
 
 	/**
-Informs server about a Telegram Premium purchase through Google Play. For official applications only.
+Informs server about a purchase through Google Play. For official applications only.
 */
 	async assignGooglePlayTransaction(options: {
+		/**
+Application package name.
+*/
+		package_name: string;
+		/**
+Identifier of the purchased store product.
+*/
+		store_product_id: string;
 		/**
 Google Play purchase token.
 */
 		purchase_token: string;
+		/**
+Transaction purpose.
+*/
+		purpose: StorePaymentPurpose;
 	}): Promise<Ok> {
 		return this._request({
 			...options,
