@@ -85,5 +85,8 @@
       "compile": "tsc"
     }
   },
-  "packageManager": "yarn@3.1.1"
+  "packageManager": "yarn@3.1.1",
+  "dependencies": {
+    "tty-strings": "^1.1.0"
+  }
 }

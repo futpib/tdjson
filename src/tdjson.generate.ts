@@ -7,6 +7,11 @@ import { outdent } from 'outdent';
 import invariant from 'invariant';
 import * as A from 'arcsecond';
 import { pascalCase } from 'pascal-case';
+import * as ttyStrings from 'tty-strings';
+
+function wordWrap(text: string): string {
+	return ttyStrings.wordWrap(text, 120);
+}
 
 function trimFilterJoin(strings: string[]): string {
 	return strings.map(s => s.trim()).filter(s => s.length > 0).join(' ');
@@ -234,7 +239,7 @@ function stringifyCommentText(lines: Array<undefined | string>, thisInterfaceNam
 		text = text.replaceAll(/(?<!{)@(\w+)/g, (_, referencedIdentifier: string) => `{@link ${thisInterfaceName}#${referencedIdentifier}}`);
 	}
 
-	return text;
+	return wordWrap(text);
 }
 
 function stringifyConstructorArgument(constructor_: Combinator, argument: string | Identifier | AnnotatedIdentifier) {
