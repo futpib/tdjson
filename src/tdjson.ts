@@ -16869,6 +16869,24 @@ List of log tags.
 	tags: string[];
 }
 /**
+Contains custom information about the user.
+*/
+export interface UserSupportInfo {
+	'@type': 'userSupportInfo';
+	/**
+Information message.
+*/
+	message: FormattedText;
+	/**
+Information author.
+*/
+	author: string;
+	/**
+Information change date.
+*/
+	date: number;
+}
+/**
 A simple object containing a number; for testing only.
 */
 export interface TestInt {
@@ -27473,6 +27491,40 @@ Text of a message to log.
 		return this._request({
 			...options,
 			'@type': 'addLogMessage',
+		});
+	}
+
+	/**
+Returns support information for the given user; for Telegram support only.
+*/
+	async getUserSupportInfo(options: {
+		/**
+User identifier.
+*/
+		user_id: number;
+	}): Promise<UserSupportInfo> {
+		return this._request({
+			...options,
+			'@type': 'getUserSupportInfo',
+		});
+	}
+
+	/**
+Sets support information for the given user; for Telegram support only.
+*/
+	async setUserSupportInfo(options: {
+		/**
+User identifier.
+*/
+		user_id: number;
+		/**
+New information message.
+*/
+		message: FormattedText;
+	}): Promise<UserSupportInfo> {
+		return this._request({
+			...options,
+			'@type': 'setUserSupportInfo',
 		});
 	}
 
