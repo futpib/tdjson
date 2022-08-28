@@ -16,4 +16,5 @@ jobs:
               npmAuthToken: ${{ secrets.NPM_AUTH_TOKEN }}
           EOF
           yarn install --immutable
+          yarn prepare
           yarn npm publish --access public
