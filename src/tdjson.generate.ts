@@ -242,6 +242,10 @@ function stringifyCommentText(lines: Array<undefined | string>, thisInterfaceNam
 	return wordWrap(text);
 }
 
+function stringifyConstructorName(constructor_: Combinator) {
+	return pascalCase(constructor_.left.id.name);
+}
+
 function stringifyConstructorArgument(constructor_: Combinator, argument: string | Identifier | AnnotatedIdentifier) {
 	invariant(
 		typeof argument === 'object'
@@ -250,7 +254,7 @@ function stringifyConstructorArgument(constructor_: Combinator, argument: string
 		inspect(argument),
 	);
 
-	const interfaceName = pascalCase(constructor_.left.id.name);
+	const interfaceName = stringifyConstructorName(constructor_);
 
 	const comment = constructor_.comments.find(comment => comment.tag === argument.id.name);
 	const commentText = stringifyCommentText([ comment?.text ], interfaceName);
@@ -268,7 +272,7 @@ function stringifyConstructorArgument(constructor_: Combinator, argument: string
 	`;
 }
 
-function stringifyConstructor(constructor_: Combinator) {
+function stringifyConstructor(constructor_: Combinator, isFunction = false) {
 	if (
 		constructor_.right.id.name === 'Double'
 			|| constructor_.right.id.name === 'String'
@@ -282,11 +286,21 @@ function stringifyConstructor(constructor_: Combinator) {
 		return '';
 	}
 
-	const interfaceName = pascalCase(constructor_.left.id.name);
+	const interfaceName = stringifyConstructorName(constructor_);
 
-	const constructorCommentText = constructor_.right.id.name === interfaceName ? '' : outdent`
-		Subtype of {@link ${constructor_.right.id.name}}.
-	`;
+	const constructorCommentText = (
+		isFunction
+			? outdent`
+				Request type for {@link Tdjson#${constructor_.left.id.name}}.
+			`
+			: (
+				constructor_.right.id.name === interfaceName
+					? ''
+					: outdent`
+						Subtype of {@link ${constructor_.right.id.name}}.
+					`
+			)
+	);
 
 	const descriptionComment = constructor_.comments.find(comment => comment.tag === 'description');
 	const descriptionCommentText = stringifyCommentText([
@@ -306,30 +320,9 @@ function stringifyConstructor(constructor_: Combinator) {
 }
 
 function stringifyFunctionOptionsType(function_: Combinator) {
-	const propertiesText = function_.left.arguments.map(argument => {
-		invariant(
-			typeof argument === 'object'
-				&& argument.type === 'AnnotatedIdentifier',
-			'FIXME',
-		);
+	const interfaceName = stringifyConstructorName(function_);
 
-		const comment = function_.comments.find(comment => comment.tag === argument.id.name);
-		const commentText = stringifyCommentText([ comment?.text ]);
-
-		const typeAnnotation = stringifyTypeAnnotation(argument.typeAnnotation);
-
-		const isOptional = typeAnnotation === 'boolean';
-		const optionalPropertySign = isOptional ? '?' : '';
-
-		return outdent`
-			/**
-			${commentText}
-			*/
-			${argument.id.name}${optionalPropertySign}: ${typeAnnotation};
-		`;
-	}).join('\n');
-
-	return `{\n${propertiesText}\n}`;
+	return `Omit<${interfaceName}, '@type'>`;
 }
 
 function stringifyFunction(function_: Combinator) {
@@ -374,20 +367,25 @@ function stringifyFunctions(functions: Combinator[]) {
 			/**
 			Send a request to the actual libtdjson.so here. Do not forget to handle {@link Error} responses and timeouts.
 			*/
-			protected abstract _request(message: any): Promise<any>;
+			protected abstract _request<R extends Request>(message: R): Promise<any>;
 		}
 	`;
 }
 
-function stringifyConstructorUnion(unionName: string, constructors: Set<Combinator>) {
+function stringifyConstructorUnion(unionName: string, constructors: Iterable<Combinator>) {
 	if (unionName === 'Bool') {
 		return '';
 	}
 
+	const constructorsUnion = (
+		[ ...constructors ]
+			.map(constructor_ => '| ' + stringifyConstructorName(constructor_))
+			.join('\n')
+	);
+
 	return outdent`
 		export type ${unionName} =
-			${[ ...constructors ].map(constructor_ => '| ' + pascalCase(constructor_.left.id.name)).join('\n')}
-		;
+			${constructorsUnion};
 	`;
 }
 
@@ -448,6 +446,10 @@ async function main() {
 		...constructors.map(c => stringifyConstructor(c)),
 
 		...[ ...constructorUnions.entries() ].filter(([ _, group ]) => group.size > 1).map(([ unionName, constructors ]) => stringifyConstructorUnion(unionName, constructors)),
+
+		...functions.map(c => stringifyConstructor(c, true)),
+
+		stringifyConstructorUnion('Request', functions),
 
 		stringifyFunctions(functions),
 	].filter(Boolean).join('\n\n');

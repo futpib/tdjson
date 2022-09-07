@@ -18038,6 +18038,7 @@ export type AuthenticationCodeType =
 	| AuthenticationCodeTypeCall
 	| AuthenticationCodeTypeFlashCall
 	| AuthenticationCodeTypeMissedCall;
+
 export type AuthorizationState =
 	| AuthorizationStateWaitTdlibParameters
 	| AuthorizationStateWaitEncryptionKey
@@ -18050,11 +18051,13 @@ export type AuthorizationState =
 	| AuthorizationStateLoggingOut
 	| AuthorizationStateClosing
 	| AuthorizationStateClosed;
+
 export type InputFile =
 	| InputFileId
 	| InputFileRemote
 	| InputFileLocal
 	| InputFileGenerated;
+
 export type ThumbnailFormat =
 	| ThumbnailFormatJpeg
 	| ThumbnailFormatGif
@@ -18063,31 +18066,38 @@ export type ThumbnailFormat =
 	| ThumbnailFormatTgs
 	| ThumbnailFormatWebm
 	| ThumbnailFormatWebp;
+
 export type MaskPoint =
 	| MaskPointForehead
 	| MaskPointEyes
 	| MaskPointMouth
 	| MaskPointChin;
+
 export type StickerFormat =
 	| StickerFormatWebp
 	| StickerFormatTgs
 	| StickerFormatWebm;
+
 export type StickerType =
 	| StickerTypeRegular
 	| StickerTypeMask
 	| StickerTypeCustomEmoji;
+
 export type PollType =
 	| PollTypeRegular
 	| PollTypeQuiz;
+
 export type UserType =
 	| UserTypeRegular
 	| UserTypeDeleted
 	| UserTypeBot
 	| UserTypeUnknown;
+
 export type InputChatPhoto =
 	| InputChatPhotoPrevious
 	| InputChatPhotoStatic
 	| InputChatPhotoAnimation;
+
 export type ChatMemberStatus =
 	| ChatMemberStatusCreator
 	| ChatMemberStatusAdministrator
@@ -18095,6 +18105,7 @@ export type ChatMemberStatus =
 	| ChatMemberStatusRestricted
 	| ChatMemberStatusLeft
 	| ChatMemberStatusBanned;
+
 export type ChatMembersFilter =
 	| ChatMembersFilterContacts
 	| ChatMembersFilterAdministrators
@@ -18103,6 +18114,7 @@ export type ChatMembersFilter =
 	| ChatMembersFilterRestricted
 	| ChatMembersFilterBanned
 	| ChatMembersFilterBots;
+
 export type SupergroupMembersFilter =
 	| SupergroupMembersFilterRecent
 	| SupergroupMembersFilterContacts
@@ -18112,41 +18124,51 @@ export type SupergroupMembersFilter =
 	| SupergroupMembersFilterBanned
 	| SupergroupMembersFilterMention
 	| SupergroupMembersFilterBots;
+
 export type SecretChatState =
 	| SecretChatStatePending
 	| SecretChatStateReady
 	| SecretChatStateClosed;
+
 export type MessageSender =
 	| MessageSenderUser
 	| MessageSenderChat;
+
 export type MessageForwardOrigin =
 	| MessageForwardOriginUser
 	| MessageForwardOriginChat
 	| MessageForwardOriginHiddenUser
 	| MessageForwardOriginChannel
 	| MessageForwardOriginMessageImport;
+
 export type MessageSendingState =
 	| MessageSendingStatePending
 	| MessageSendingStateFailed;
+
 export type NotificationSettingsScope =
 	| NotificationSettingsScopePrivateChats
 	| NotificationSettingsScopeGroupChats
 	| NotificationSettingsScopeChannelChats;
+
 export type ChatType =
 	| ChatTypePrivate
 	| ChatTypeBasicGroup
 	| ChatTypeSupergroup
 	| ChatTypeSecret;
+
 export type ChatList =
 	| ChatListMain
 	| ChatListArchive
 	| ChatListFilter;
+
 export type ChatSource =
 	| ChatSourceMtprotoProxy
 	| ChatSourcePublicServiceAnnouncement;
+
 export type PublicChatType =
 	| PublicChatTypeHasUsername
 	| PublicChatTypeIsLocationBased;
+
 export type ChatActionBar =
 	| ChatActionBarReportSpam
 	| ChatActionBarReportUnrelatedLocation
@@ -18155,12 +18177,14 @@ export type ChatActionBar =
 	| ChatActionBarAddContact
 	| ChatActionBarSharePhoneNumber
 	| ChatActionBarJoinRequest;
+
 export type KeyboardButtonType =
 	| KeyboardButtonTypeText
 	| KeyboardButtonTypeRequestPhoneNumber
 	| KeyboardButtonTypeRequestLocation
 	| KeyboardButtonTypeRequestPoll
 	| KeyboardButtonTypeWebApp;
+
 export type InlineKeyboardButtonType =
 	| InlineKeyboardButtonTypeUrl
 	| InlineKeyboardButtonTypeLoginUrl
@@ -18171,14 +18195,17 @@ export type InlineKeyboardButtonType =
 	| InlineKeyboardButtonTypeSwitchInline
 	| InlineKeyboardButtonTypeBuy
 	| InlineKeyboardButtonTypeUser;
+
 export type ReplyMarkup =
 	| ReplyMarkupRemoveKeyboard
 	| ReplyMarkupForceReply
 	| ReplyMarkupShowKeyboard
 	| ReplyMarkupInlineKeyboard;
+
 export type LoginUrlInfo =
 	| LoginUrlInfoOpen
 	| LoginUrlInfoRequestConfirmation;
+
 export type RichText =
 	| RichTextPlain
 	| RichTextBold
@@ -18197,14 +18224,17 @@ export type RichText =
 	| RichTextAnchor
 	| RichTextAnchorLink
 	| RichTexts;
+
 export type PageBlockHorizontalAlignment =
 	| PageBlockHorizontalAlignmentLeft
 	| PageBlockHorizontalAlignmentCenter
 	| PageBlockHorizontalAlignmentRight;
+
 export type PageBlockVerticalAlignment =
 	| PageBlockVerticalAlignmentTop
 	| PageBlockVerticalAlignmentMiddle
 	| PageBlockVerticalAlignmentBottom;
+
 export type PageBlock =
 	| PageBlockTitle
 	| PageBlockSubtitle
@@ -18235,18 +18265,22 @@ export type PageBlock =
 	| PageBlockDetails
 	| PageBlockRelatedArticles
 	| PageBlockMap;
+
 export type InputCredentials =
 	| InputCredentialsSaved
 	| InputCredentialsNew
 	| InputCredentialsApplePay
 	| InputCredentialsGooglePay;
+
 export type PaymentProvider =
 	| PaymentProviderSmartGlocal
 	| PaymentProviderStripe
 	| PaymentProviderOther;
+
 export type InputInvoice =
 	| InputInvoiceMessage
 	| InputInvoiceName;
+
 export type PassportElementType =
 	| PassportElementTypePersonalDetails
 	| PassportElementTypePassport
@@ -18261,6 +18295,7 @@ export type PassportElementType =
 	| PassportElementTypeTemporaryRegistration
 	| PassportElementTypePhoneNumber
 	| PassportElementTypeEmailAddress;
+
 export type PassportElement =
 	| PassportElementPersonalDetails
 	| PassportElementPassport
@@ -18275,6 +18310,7 @@ export type PassportElement =
 	| PassportElementTemporaryRegistration
 	| PassportElementPhoneNumber
 	| PassportElementEmailAddress;
+
 export type InputPassportElement =
 	| InputPassportElementPersonalDetails
 	| InputPassportElementPassport
@@ -18289,6 +18325,7 @@ export type InputPassportElement =
 	| InputPassportElementTemporaryRegistration
 	| InputPassportElementPhoneNumber
 	| InputPassportElementEmailAddress;
+
 export type PassportElementErrorSource =
 	| PassportElementErrorSourceUnspecified
 	| PassportElementErrorSourceDataField
@@ -18299,6 +18336,7 @@ export type PassportElementErrorSource =
 	| PassportElementErrorSourceTranslationFiles
 	| PassportElementErrorSourceFile
 	| PassportElementErrorSourceFiles;
+
 export type InputPassportElementErrorSource =
 	| InputPassportElementErrorSourceUnspecified
 	| InputPassportElementErrorSourceDataField
@@ -18309,6 +18347,7 @@ export type InputPassportElementErrorSource =
 	| InputPassportElementErrorSourceTranslationFiles
 	| InputPassportElementErrorSourceFile
 	| InputPassportElementErrorSourceFiles;
+
 export type MessageContent =
 	| MessageText
 	| MessageAnimation
@@ -18362,6 +18401,7 @@ export type MessageContent =
 	| MessagePassportDataReceived
 	| MessageProximityAlertTriggered
 	| MessageUnsupported;
+
 export type TextEntityType =
 	| TextEntityTypeMention
 	| TextEntityTypeHashtag
@@ -18383,9 +18423,11 @@ export type TextEntityType =
 	| TextEntityTypeMentionName
 	| TextEntityTypeCustomEmoji
 	| TextEntityTypeMediaTimestamp;
+
 export type MessageSchedulingState =
 	| MessageSchedulingStateSendAtDate
 	| MessageSchedulingStateSendWhenOnline;
+
 export type InputMessageContent =
 	| InputMessageText
 	| InputMessageAnimation
@@ -18404,6 +18446,7 @@ export type InputMessageContent =
 	| InputMessageInvoice
 	| InputMessagePoll
 	| InputMessageForwarded;
+
 export type SearchMessagesFilter =
 	| SearchMessagesFilterEmpty
 	| SearchMessagesFilterAnimation
@@ -18422,6 +18465,7 @@ export type SearchMessagesFilter =
 	| SearchMessagesFilterUnreadReaction
 	| SearchMessagesFilterFailedToSend
 	| SearchMessagesFilterPinned;
+
 export type ChatAction =
 	| ChatActionTyping
 	| ChatActionRecordingVideo
@@ -18438,6 +18482,7 @@ export type ChatAction =
 	| ChatActionUploadingVideoNote
 	| ChatActionWatchingAnimations
 	| ChatActionCancel;
+
 export type UserStatus =
 	| UserStatusEmpty
 	| UserStatusOnline
@@ -18445,15 +18490,18 @@ export type UserStatus =
 	| UserStatusRecently
 	| UserStatusLastWeek
 	| UserStatusLastMonth;
+
 export type CallDiscardReason =
 	| CallDiscardReasonEmpty
 	| CallDiscardReasonMissed
 	| CallDiscardReasonDeclined
 	| CallDiscardReasonDisconnected
 	| CallDiscardReasonHungUp;
+
 export type CallServerType =
 	| CallServerTypeTelegramReflector
 	| CallServerTypeWebrtc;
+
 export type CallState =
 	| CallStatePending
 	| CallStateExchangingKeys
@@ -18461,10 +18509,12 @@ export type CallState =
 	| CallStateHangingUp
 	| CallStateDiscarded
 	| CallStateError;
+
 export type GroupCallVideoQuality =
 	| GroupCallVideoQualityThumbnail
 	| GroupCallVideoQualityMedium
 	| GroupCallVideoQualityFull;
+
 export type CallProblem =
 	| CallProblemEcho
 	| CallProblemNoise
@@ -18475,13 +18525,16 @@ export type CallProblem =
 	| CallProblemDropped
 	| CallProblemDistortedVideo
 	| CallProblemPixelatedVideo;
+
 export type DiceStickers =
 	| DiceStickersRegular
 	| DiceStickersSlotMachine;
+
 export type SpeechRecognitionResult =
 	| SpeechRecognitionResultPending
 	| SpeechRecognitionResultText
 	| SpeechRecognitionResultError;
+
 export type InputInlineQueryResult =
 	| InputInlineQueryResultAnimation
 	| InputInlineQueryResultArticle
@@ -18495,6 +18548,7 @@ export type InputInlineQueryResult =
 	| InputInlineQueryResultVenue
 	| InputInlineQueryResultVideo
 	| InputInlineQueryResultVoiceNote;
+
 export type InlineQueryResult =
 	| InlineQueryResultArticle
 	| InlineQueryResultContact
@@ -18508,10 +18562,12 @@ export type InlineQueryResult =
 	| InlineQueryResultSticker
 	| InlineQueryResultVideo
 	| InlineQueryResultVoiceNote;
+
 export type CallbackQueryPayload =
 	| CallbackQueryPayloadData
 	| CallbackQueryPayloadDataWithPassword
 	| CallbackQueryPayloadGame;
+
 export type ChatEventAction =
 	| ChatEventMessageEdited
 	| ChatEventMessageDeleted
@@ -18548,10 +18604,12 @@ export type ChatEventAction =
 	| ChatEventVideoChatMuteNewParticipantsToggled
 	| ChatEventVideoChatParticipantIsMutedToggled
 	| ChatEventVideoChatParticipantVolumeLevelChanged;
+
 export type LanguagePackStringValue =
 	| LanguagePackStringValueOrdinary
 	| LanguagePackStringValuePluralized
 	| LanguagePackStringValueDeleted;
+
 export type PremiumLimitType =
 	| PremiumLimitTypeSupergroupCount
 	| PremiumLimitTypePinnedChatCount
@@ -18563,6 +18621,7 @@ export type PremiumLimitType =
 	| PremiumLimitTypePinnedArchivedChatCount
 	| PremiumLimitTypeCaptionLength
 	| PremiumLimitTypeBioLength;
+
 export type PremiumFeature =
 	| PremiumFeatureIncreasedLimits
 	| PremiumFeatureIncreasedUploadFileSize
@@ -18576,14 +18635,17 @@ export type PremiumFeature =
 	| PremiumFeatureProfileBadge
 	| PremiumFeatureAnimatedProfilePhoto
 	| PremiumFeatureAppIcons;
+
 export type PremiumSource =
 	| PremiumSourceLimitExceeded
 	| PremiumSourceFeature
 	| PremiumSourceLink
 	| PremiumSourceSettings;
+
 export type StorePaymentPurpose =
 	| StorePaymentPurposePremiumSubscription
 	| StorePaymentPurposeGiftedPremium;
+
 export type DeviceToken =
 	| DeviceTokenFirebaseCloudMessaging
 	| DeviceTokenApplePush
@@ -18596,40 +18658,49 @@ export type DeviceToken =
 	| DeviceTokenUbuntuPush
 	| DeviceTokenBlackBerryPush
 	| DeviceTokenTizenPush;
+
 export type BackgroundFill =
 	| BackgroundFillSolid
 	| BackgroundFillGradient
 	| BackgroundFillFreeformGradient;
+
 export type BackgroundType =
 	| BackgroundTypeWallpaper
 	| BackgroundTypePattern
 	| BackgroundTypeFill;
+
 export type InputBackground =
 	| InputBackgroundLocal
 	| InputBackgroundRemote;
+
 export type CanTransferOwnershipResult =
 	| CanTransferOwnershipResultOk
 	| CanTransferOwnershipResultPasswordNeeded
 	| CanTransferOwnershipResultPasswordTooFresh
 	| CanTransferOwnershipResultSessionTooFresh;
+
 export type CheckChatUsernameResult =
 	| CheckChatUsernameResultOk
 	| CheckChatUsernameResultUsernameInvalid
 	| CheckChatUsernameResultUsernameOccupied
 	| CheckChatUsernameResultPublicChatsTooMuch
 	| CheckChatUsernameResultPublicGroupsUnavailable;
+
 export type CheckStickerSetNameResult =
 	| CheckStickerSetNameResultOk
 	| CheckStickerSetNameResultNameInvalid
 	| CheckStickerSetNameResultNameOccupied;
+
 export type ResetPasswordResult =
 	| ResetPasswordResultOk
 	| ResetPasswordResultPending
 	| ResetPasswordResultDeclined;
+
 export type MessageFileType =
 	| MessageFileTypePrivate
 	| MessageFileTypeGroup
 	| MessageFileTypeUnknown;
+
 export type PushMessageContent =
 	| PushMessageContentHidden
 	| PushMessageContentAnimation
@@ -18660,21 +18731,25 @@ export type PushMessageContent =
 	| PushMessageContentRecurringPayment
 	| PushMessageContentMessageForwards
 	| PushMessageContentMediaAlbum;
+
 export type NotificationType =
 	| NotificationTypeNewMessage
 	| NotificationTypeNewSecretChat
 	| NotificationTypeNewCall
 	| NotificationTypeNewPushMessage;
+
 export type NotificationGroupType =
 	| NotificationGroupTypeMessages
 	| NotificationGroupTypeMentions
 	| NotificationGroupTypeSecretChat
 	| NotificationGroupTypeCalls;
+
 export type OptionValue =
 	| OptionValueBoolean
 	| OptionValueEmpty
 	| OptionValueInteger
 	| OptionValueString;
+
 export type JsonValue =
 	| JsonValueNull
 	| JsonValueBoolean
@@ -18682,6 +18757,7 @@ export type JsonValue =
 	| JsonValueString
 	| JsonValueArray
 	| JsonValueObject;
+
 export type UserPrivacySettingRule =
 	| UserPrivacySettingRuleAllowAll
 	| UserPrivacySettingRuleAllowContacts
@@ -18691,6 +18767,7 @@ export type UserPrivacySettingRule =
 	| UserPrivacySettingRuleRestrictContacts
 	| UserPrivacySettingRuleRestrictUsers
 	| UserPrivacySettingRuleRestrictChatMembers;
+
 export type UserPrivacySetting =
 	| UserPrivacySettingShowStatus
 	| UserPrivacySettingShowProfilePhoto
@@ -18701,6 +18778,7 @@ export type UserPrivacySetting =
 	| UserPrivacySettingAllowPeerToPeerCalls
 	| UserPrivacySettingAllowFindingByPhoneNumber
 	| UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages;
+
 export type SessionType =
 	| SessionTypeAndroid
 	| SessionTypeApple
@@ -18719,6 +18797,7 @@ export type SessionType =
 	| SessionTypeVivaldi
 	| SessionTypeWindows
 	| SessionTypeXbox;
+
 export type ChatReportReason =
 	| ChatReportReasonSpam
 	| ChatReportReasonViolence
@@ -18730,10 +18809,12 @@ export type ChatReportReason =
 	| ChatReportReasonIllegalDrugs
 	| ChatReportReasonPersonalDetails
 	| ChatReportReasonCustom;
+
 export type TargetChat =
 	| TargetChatCurrent
 	| TargetChatChosen
 	| TargetChatInternalLink;
+
 export type InternalLinkType =
 	| InternalLinkTypeActiveSessions
 	| InternalLinkTypeAttachmentMenuBot
@@ -18767,6 +18848,7 @@ export type InternalLinkType =
 	| InternalLinkTypeUnsupportedProxy
 	| InternalLinkTypeUserPhoneNumber
 	| InternalLinkTypeVideoChat;
+
 export type FileType =
 	| FileTypeNone
 	| FileTypeAnimation
@@ -18785,21 +18867,25 @@ export type FileType =
 	| FileTypeVideoNote
 	| FileTypeVoiceNote
 	| FileTypeWallpaper;
+
 export type NetworkType =
 	| NetworkTypeNone
 	| NetworkTypeMobile
 	| NetworkTypeMobileRoaming
 	| NetworkTypeWiFi
 	| NetworkTypeOther;
+
 export type NetworkStatisticsEntry =
 	| NetworkStatisticsEntryFile
 	| NetworkStatisticsEntryCall;
+
 export type ConnectionState =
 	| ConnectionStateWaitingForNetwork
 	| ConnectionStateConnectingToProxy
 	| ConnectionStateConnecting
 	| ConnectionStateUpdating
 	| ConnectionStateReady;
+
 export type TopChatCategory =
 	| TopChatCategoryUsers
 	| TopChatCategoryBots
@@ -18808,11 +18894,13 @@ export type TopChatCategory =
 	| TopChatCategoryInlineBots
 	| TopChatCategoryCalls
 	| TopChatCategoryForwardChats;
+
 export type TMeUrlType =
 	| TMeUrlTypeUser
 	| TMeUrlTypeSupergroup
 	| TMeUrlTypeChatInvite
 	| TMeUrlTypeStickerSet;
+
 export type SuggestedAction =
 	| SuggestedActionEnableArchiveAndMuteNewChats
 	| SuggestedActionCheckPassword
@@ -18820,23 +18908,29 @@ export type SuggestedAction =
 	| SuggestedActionViewChecksHint
 	| SuggestedActionConvertToBroadcastGroup
 	| SuggestedActionSetPassword;
+
 export type TextParseMode =
 	| TextParseModeMarkdown
 	| TextParseModeHtml;
+
 export type ProxyType =
 	| ProxyTypeSocks5
 	| ProxyTypeHttp
 	| ProxyTypeMtproto;
+
 export type StatisticalGraph =
 	| StatisticalGraphData
 	| StatisticalGraphAsync
 	| StatisticalGraphError;
+
 export type ChatStatistics =
 	| ChatStatisticsSupergroup
 	| ChatStatisticsChannel;
+
 export type VectorPathCommand =
 	| VectorPathCommandLine
 	| VectorPathCommandCubicBezierCurve;
+
 export type BotCommandScope =
 	| BotCommandScopeDefault
 	| BotCommandScopeAllPrivateChats
@@ -18845,6 +18939,7 @@ export type BotCommandScope =
 	| BotCommandScopeChat
 	| BotCommandScopeChatAdministrators
 	| BotCommandScopeChatMember;
+
 export type Update =
 	| UpdateAuthorizationState
 	| UpdateNewMessage
@@ -18949,10 +19044,9008 @@ export type Update =
 	| UpdatePollAnswer
 	| UpdateChatMember
 	| UpdateNewChatJoinRequest;
+
 export type LogStream =
 	| LogStreamDefault
 	| LogStreamFile
 	| LogStreamEmpty;
+
+/**
+Returns the current authorization state; this is an offline request. For informational purposes only. Use
+updateAuthorizationState instead to maintain the current authorization state. Can be called before initialization.
+Request type for {@link Tdjson#getAuthorizationState}.
+*/
+export interface GetAuthorizationState {
+	'@type': 'getAuthorizationState';
+
+}
+
+/**
+Sets the parameters for TDLib initialization. Works only when the current authorization state is
+authorizationStateWaitTdlibParameters.
+Request type for {@link Tdjson#setTdlibParameters}.
+*/
+export interface SetTdlibParameters {
+	'@type': 'setTdlibParameters';
+	/**
+Parameters for TDLib initialization.
+*/
+	parameters: TdlibParameters;
+}
+
+/**
+Checks the database encryption key for correctness. Works only when the current authorization state is
+authorizationStateWaitEncryptionKey.
+Request type for {@link Tdjson#checkDatabaseEncryptionKey}.
+*/
+export interface CheckDatabaseEncryptionKey {
+	'@type': 'checkDatabaseEncryptionKey';
+	/**
+Encryption key to check or set up.
+*/
+	encryption_key: string;
+}
+
+/**
+Sets the phone number of the user and sends an authentication code to the user. Works only when the current
+authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
+authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
+authorizationStateWaitPassword.
+Request type for {@link Tdjson#setAuthenticationPhoneNumber}.
+*/
+export interface SetAuthenticationPhoneNumber {
+	'@type': 'setAuthenticationPhoneNumber';
+	/**
+The phone number of the user, in international format.
+*/
+	phone_number: string;
+	/**
+Settings for the authentication of the user's phone number; pass null to use default settings.
+*/
+	settings: PhoneNumberAuthenticationSettings;
+}
+
+/**
+Re-sends an authentication code to the user. Works only when the current authorization state is
+authorizationStateWaitCode, the next_code_type of the result is not null and the server-specified timeout has passed.
+Request type for {@link Tdjson#resendAuthenticationCode}.
+*/
+export interface ResendAuthenticationCode {
+	'@type': 'resendAuthenticationCode';
+
+}
+
+/**
+Checks the authentication code. Works only when the current authorization state is authorizationStateWaitCode.
+Request type for {@link Tdjson#checkAuthenticationCode}.
+*/
+export interface CheckAuthenticationCode {
+	'@type': 'checkAuthenticationCode';
+	/**
+Authentication code to check.
+*/
+	code: string;
+}
+
+/**
+Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current
+authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
+authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
+authorizationStateWaitPassword.
+Request type for {@link Tdjson#requestQrCodeAuthentication}.
+*/
+export interface RequestQrCodeAuthentication {
+	'@type': 'requestQrCodeAuthentication';
+	/**
+List of user identifiers of other users currently using the application.
+*/
+	other_user_ids: number[];
+}
+
+/**
+Finishes user registration. Works only when the current authorization state is authorizationStateWaitRegistration.
+Request type for {@link Tdjson#registerUser}.
+*/
+export interface RegisterUser {
+	'@type': 'registerUser';
+	/**
+The first name of the user; 1-64 characters.
+*/
+	first_name: string;
+	/**
+The last name of the user; 0-64 characters.
+*/
+	last_name: string;
+}
+
+/**
+Checks the 2-step verification password for correctness. Works only when the current authorization state is
+authorizationStateWaitPassword.
+Request type for {@link Tdjson#checkAuthenticationPassword}.
+*/
+export interface CheckAuthenticationPassword {
+	'@type': 'checkAuthenticationPassword';
+	/**
+The 2-step verification password to check.
+*/
+	password: string;
+}
+
+/**
+Requests to send a 2-step verification password recovery code to an email address that was previously set up. Works only
+when the current authorization state is authorizationStateWaitPassword.
+Request type for {@link Tdjson#requestAuthenticationPasswordRecovery}.
+*/
+export interface RequestAuthenticationPasswordRecovery {
+	'@type': 'requestAuthenticationPasswordRecovery';
+
+}
+
+/**
+Checks whether a 2-step verification password recovery code sent to an email address is valid. Works only when the
+current authorization state is authorizationStateWaitPassword.
+Request type for {@link Tdjson#checkAuthenticationPasswordRecoveryCode}.
+*/
+export interface CheckAuthenticationPasswordRecoveryCode {
+	'@type': 'checkAuthenticationPasswordRecoveryCode';
+	/**
+Recovery code to check.
+*/
+	recovery_code: string;
+}
+
+/**
+Recovers the 2-step verification password with a password recovery code sent to an email address that was previously set
+up. Works only when the current authorization state is authorizationStateWaitPassword.
+Request type for {@link Tdjson#recoverAuthenticationPassword}.
+*/
+export interface RecoverAuthenticationPassword {
+	'@type': 'recoverAuthenticationPassword';
+	/**
+Recovery code to check.
+*/
+	recovery_code: string;
+	/**
+New 2-step verification password of the user; may be empty to remove the password.
+*/
+	new_password: string;
+	/**
+New password hint; may be empty.
+*/
+	new_hint: string;
+}
+
+/**
+Checks the authentication token of a bot; to log in as a bot. Works only when the current authorization state is
+authorizationStateWaitPhoneNumber. Can be used instead of setAuthenticationPhoneNumber and checkAuthenticationCode to
+log in.
+Request type for {@link Tdjson#checkAuthenticationBotToken}.
+*/
+export interface CheckAuthenticationBotToken {
+	'@type': 'checkAuthenticationBotToken';
+	/**
+The bot token.
+*/
+	token: string;
+}
+
+/**
+Closes the TDLib instance after a proper logout. Requires an available network connection. All local data will be
+destroyed. After the logout completes, updateAuthorizationState with authorizationStateClosed will be sent.
+Request type for {@link Tdjson#logOut}.
+*/
+export interface LogOut {
+	'@type': 'logOut';
+
+}
+
+/**
+Closes the TDLib instance. All databases will be flushed to disk and properly closed. After the close completes,
+updateAuthorizationState with authorizationStateClosed will be sent. Can be called before initialization.
+Request type for {@link Tdjson#close}.
+*/
+export interface Close {
+	'@type': 'close';
+
+}
+
+/**
+Closes the TDLib instance, destroying all local data without a proper logout. The current user session will remain in
+the list of all active sessions. All local data will be destroyed. After the destruction completes
+updateAuthorizationState with authorizationStateClosed will be sent. Can be called before authorization.
+Request type for {@link Tdjson#destroy}.
+*/
+export interface Destroy {
+	'@type': 'destroy';
+
+}
+
+/**
+Confirms QR code authentication on another device. Returns created session on success.
+Request type for {@link Tdjson#confirmQrCodeAuthentication}.
+*/
+export interface ConfirmQrCodeAuthentication {
+	'@type': 'confirmQrCodeAuthentication';
+	/**
+A link from a QR code. The link must be scanned by the in-app camera.
+*/
+	link: string;
+}
+
+/**
+Returns all updates needed to restore current TDLib state, i.e. all actual
+UpdateAuthorizationState/UpdateUser/UpdateNewChat and others. This is especially useful if TDLib is run in a separate
+process. Can be called before initialization.
+Request type for {@link Tdjson#getCurrentState}.
+*/
+export interface GetCurrentState {
+	'@type': 'getCurrentState';
+
+}
+
+/**
+Changes the database encryption key. Usually the encryption key is never changed and is stored in some OS keychain.
+Request type for {@link Tdjson#setDatabaseEncryptionKey}.
+*/
+export interface SetDatabaseEncryptionKey {
+	'@type': 'setDatabaseEncryptionKey';
+	/**
+New encryption key.
+*/
+	new_encryption_key: string;
+}
+
+/**
+Returns the current state of 2-step verification.
+Request type for {@link Tdjson#getPasswordState}.
+*/
+export interface GetPasswordState {
+	'@type': 'getPasswordState';
+
+}
+
+/**
+Changes the 2-step verification password for the current user. If a new recovery email address is specified, then the
+change will not be applied until the new recovery email address is confirmed.
+Request type for {@link Tdjson#setPassword}.
+*/
+export interface SetPassword {
+	'@type': 'setPassword';
+	/**
+Previous 2-step verification password of the user.
+*/
+	old_password: string;
+	/**
+New 2-step verification password of the user; may be empty to remove the password.
+*/
+	new_password: string;
+	/**
+New password hint; may be empty.
+*/
+	new_hint: string;
+	/**
+Pass true to change also the recovery email address.
+*/
+	set_recovery_email_address?: boolean;
+	/**
+New recovery email address; may be empty.
+*/
+	new_recovery_email_address: string;
+}
+
+/**
+Returns a 2-step verification recovery email address that was previously set up. This method can be used to verify a
+password provided by the user.
+Request type for {@link Tdjson#getRecoveryEmailAddress}.
+*/
+export interface GetRecoveryEmailAddress {
+	'@type': 'getRecoveryEmailAddress';
+	/**
+The 2-step verification password for the current user.
+*/
+	password: string;
+}
+
+/**
+Changes the 2-step verification recovery email address of the user. If a new recovery email address is specified, then
+the change will not be applied until the new recovery email address is confirmed. If new_recovery_email_address is the
+same as the email address that is currently set up, this call succeeds immediately and aborts all other requests waiting
+for an email confirmation.
+Request type for {@link Tdjson#setRecoveryEmailAddress}.
+*/
+export interface SetRecoveryEmailAddress {
+	'@type': 'setRecoveryEmailAddress';
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
+	/**
+New recovery email address.
+*/
+	new_recovery_email_address: string;
+}
+
+/**
+Checks the 2-step verification recovery email address verification code.
+Request type for {@link Tdjson#checkRecoveryEmailAddressCode}.
+*/
+export interface CheckRecoveryEmailAddressCode {
+	'@type': 'checkRecoveryEmailAddressCode';
+	/**
+Verification code to check.
+*/
+	code: string;
+}
+
+/**
+Resends the 2-step verification recovery email address verification code.
+Request type for {@link Tdjson#resendRecoveryEmailAddressCode}.
+*/
+export interface ResendRecoveryEmailAddressCode {
+	'@type': 'resendRecoveryEmailAddressCode';
+
+}
+
+/**
+Requests to send a 2-step verification password recovery code to an email address that was previously set up.
+Request type for {@link Tdjson#requestPasswordRecovery}.
+*/
+export interface RequestPasswordRecovery {
+	'@type': 'requestPasswordRecovery';
+
+}
+
+/**
+Checks whether a 2-step verification password recovery code sent to an email address is valid.
+Request type for {@link Tdjson#checkPasswordRecoveryCode}.
+*/
+export interface CheckPasswordRecoveryCode {
+	'@type': 'checkPasswordRecoveryCode';
+	/**
+Recovery code to check.
+*/
+	recovery_code: string;
+}
+
+/**
+Recovers the 2-step verification password using a recovery code sent to an email address that was previously set up.
+Request type for {@link Tdjson#recoverPassword}.
+*/
+export interface RecoverPassword {
+	'@type': 'recoverPassword';
+	/**
+Recovery code to check.
+*/
+	recovery_code: string;
+	/**
+New 2-step verification password of the user; may be empty to remove the password.
+*/
+	new_password: string;
+	/**
+New password hint; may be empty.
+*/
+	new_hint: string;
+}
+
+/**
+Removes 2-step verification password without previous password and access to recovery email address. The password can't
+be reset immediately and the request needs to be repeated after the specified time.
+Request type for {@link Tdjson#resetPassword}.
+*/
+export interface ResetPassword {
+	'@type': 'resetPassword';
+
+}
+
+/**
+Cancels reset of 2-step verification password. The method can be called if passwordState.pending_reset_date > 0.
+Request type for {@link Tdjson#cancelPasswordReset}.
+*/
+export interface CancelPasswordReset {
+	'@type': 'cancelPasswordReset';
+
+}
+
+/**
+Creates a new temporary password for processing payments.
+Request type for {@link Tdjson#createTemporaryPassword}.
+*/
+export interface CreateTemporaryPassword {
+	'@type': 'createTemporaryPassword';
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
+	/**
+Time during which the temporary password will be valid, in seconds; must be between 60 and 86400.
+*/
+	valid_for: number;
+}
+
+/**
+Returns information about the current temporary password.
+Request type for {@link Tdjson#getTemporaryPasswordState}.
+*/
+export interface GetTemporaryPasswordState {
+	'@type': 'getTemporaryPasswordState';
+
+}
+
+/**
+Returns the current user.
+Request type for {@link Tdjson#getMe}.
+*/
+export interface GetMe {
+	'@type': 'getMe';
+
+}
+
+/**
+Returns information about a user by their identifier. This is an offline request if the current user is not a bot.
+Request type for {@link Tdjson#getUser}.
+*/
+export interface GetUser {
+	'@type': 'getUser';
+	/**
+User identifier.
+*/
+	user_id: number;
+}
+
+/**
+Returns full information about a user by their identifier.
+Request type for {@link Tdjson#getUserFullInfo}.
+*/
+export interface GetUserFullInfo {
+	'@type': 'getUserFullInfo';
+	/**
+User identifier.
+*/
+	user_id: number;
+}
+
+/**
+Returns information about a basic group by its identifier. This is an offline request if the current user is not a bot.
+Request type for {@link Tdjson#getBasicGroup}.
+*/
+export interface GetBasicGroup {
+	'@type': 'getBasicGroup';
+	/**
+Basic group identifier.
+*/
+	basic_group_id: number;
+}
+
+/**
+Returns full information about a basic group by its identifier.
+Request type for {@link Tdjson#getBasicGroupFullInfo}.
+*/
+export interface GetBasicGroupFullInfo {
+	'@type': 'getBasicGroupFullInfo';
+	/**
+Basic group identifier.
+*/
+	basic_group_id: number;
+}
+
+/**
+Returns information about a supergroup or a channel by its identifier. This is an offline request if the current user is
+not a bot.
+Request type for {@link Tdjson#getSupergroup}.
+*/
+export interface GetSupergroup {
+	'@type': 'getSupergroup';
+	/**
+Supergroup or channel identifier.
+*/
+	supergroup_id: number;
+}
+
+/**
+Returns full information about a supergroup or a channel by its identifier, cached for up to 1 minute.
+Request type for {@link Tdjson#getSupergroupFullInfo}.
+*/
+export interface GetSupergroupFullInfo {
+	'@type': 'getSupergroupFullInfo';
+	/**
+Supergroup or channel identifier.
+*/
+	supergroup_id: number;
+}
+
+/**
+Returns information about a secret chat by its identifier. This is an offline request.
+Request type for {@link Tdjson#getSecretChat}.
+*/
+export interface GetSecretChat {
+	'@type': 'getSecretChat';
+	/**
+Secret chat identifier.
+*/
+	secret_chat_id: number;
+}
+
+/**
+Returns information about a chat by its identifier, this is an offline request if the current user is not a bot.
+Request type for {@link Tdjson#getChat}.
+*/
+export interface GetChat {
+	'@type': 'getChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Returns information about a message.
+Request type for {@link Tdjson#getMessage}.
+*/
+export interface GetMessage {
+	'@type': 'getMessage';
+	/**
+Identifier of the chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message to get.
+*/
+	message_id: number;
+}
+
+/**
+Returns information about a message, if it is available without sending network request. This is an offline request.
+Request type for {@link Tdjson#getMessageLocally}.
+*/
+export interface GetMessageLocally {
+	'@type': 'getMessageLocally';
+	/**
+Identifier of the chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message to get.
+*/
+	message_id: number;
+}
+
+/**
+Returns information about a message that is replied by a given message. Also returns the pinned message, the game
+message, and the invoice message for messages of the types messagePinMessage, messageGameScore, and
+messagePaymentSuccessful respectively.
+Request type for {@link Tdjson#getRepliedMessage}.
+*/
+export interface GetRepliedMessage {
+	'@type': 'getRepliedMessage';
+	/**
+Identifier of the chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the reply message.
+*/
+	message_id: number;
+}
+
+/**
+Returns information about a newest pinned message in the chat.
+Request type for {@link Tdjson#getChatPinnedMessage}.
+*/
+export interface GetChatPinnedMessage {
+	'@type': 'getChatPinnedMessage';
+	/**
+Identifier of the chat the message belongs to.
+*/
+	chat_id: number;
+}
+
+/**
+Returns information about a message with the callback button that originated a callback query; for bots only.
+Request type for {@link Tdjson#getCallbackQueryMessage}.
+*/
+export interface GetCallbackQueryMessage {
+	'@type': 'getCallbackQueryMessage';
+	/**
+Identifier of the chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+Identifier of the callback query.
+*/
+	callback_query_id: string;
+}
+
+/**
+Returns information about messages. If a message is not found, returns null on the corresponding position of the result.
+Request type for {@link Tdjson#getMessages}.
+*/
+export interface GetMessages {
+	'@type': 'getMessages';
+	/**
+Identifier of the chat the messages belong to.
+*/
+	chat_id: number;
+	/**
+Identifiers of the messages to get.
+*/
+	message_ids: number[];
+}
+
+/**
+Returns information about a message thread. Can be used only if message.can_get_message_thread == true.
+Request type for {@link Tdjson#getMessageThread}.
+*/
+export interface GetMessageThread {
+	'@type': 'getMessageThread';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Returns viewers of a recent outgoing message in a basic group or a supergroup chat. For video notes and voice notes only
+users, opened content of the message, are returned. The method can be called if message.can_get_viewers == true.
+Request type for {@link Tdjson#getMessageViewers}.
+*/
+export interface GetMessageViewers {
+	'@type': 'getMessageViewers';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Returns information about a file; this is an offline request.
+Request type for {@link Tdjson#getFile}.
+*/
+export interface GetFile {
+	'@type': 'getFile';
+	/**
+Identifier of the file to get.
+*/
+	file_id: number;
+}
+
+/**
+Returns information about a file by its remote ID; this is an offline request. Can be used to register a URL as a file
+for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is still
+accessible to the user. For example, if the file is from a message, then the message must be not deleted and accessible
+to the user. If the file database is disabled, then the corresponding object with the file must be preloaded by the
+application.
+Request type for {@link Tdjson#getRemoteFile}.
+*/
+export interface GetRemoteFile {
+	'@type': 'getRemoteFile';
+	/**
+Remote identifier of the file to get.
+*/
+	remote_file_id: string;
+	/**
+File type; pass null if unknown.
+*/
+	file_type: FileType;
+}
+
+/**
+Loads more chats from a chat list. The loaded chats and their positions in the chat list will be sent through updates.
+Chats are sorted by the pair (chat.position.order, chat.id) in descending order. Returns a 404 error if all chats have
+been loaded.
+Request type for {@link Tdjson#loadChats}.
+*/
+export interface LoadChats {
+	'@type': 'loadChats';
+	/**
+The chat list in which to load chats; pass null to load chats from the main chat list.
+*/
+	chat_list: ChatList;
+	/**
+The maximum number of chats to be loaded. For optimal performance, the number of loaded chats is chosen by TDLib and can
+be smaller than the specified limit, even if the end of the list is not reached.
+*/
+	limit: number;
+}
+
+/**
+Returns an ordered list of chats from the beginning of a chat list. For informational purposes only. Use loadChats and
+updates processing instead to maintain chat lists in a consistent state.
+Request type for {@link Tdjson#getChats}.
+*/
+export interface GetChats {
+	'@type': 'getChats';
+	/**
+The chat list in which to return chats; pass null to get chats from the main chat list.
+*/
+	chat_list: ChatList;
+	/**
+The maximum number of chats to be returned.
+*/
+	limit: number;
+}
+
+/**
+Searches a public chat by its username. Currently, only private chats, supergroups and channels can be public. Returns
+the chat if found; otherwise an error is returned.
+Request type for {@link Tdjson#searchPublicChat}.
+*/
+export interface SearchPublicChat {
+	'@type': 'searchPublicChat';
+	/**
+Username to be resolved.
+*/
+	username: string;
+}
+
+/**
+Searches public chats by looking for specified query in their username and title. Currently, only private chats,
+supergroups and channels can be public. Returns a meaningful number of results. Excludes private chats with contacts and
+chats from the chat list from the results.
+Request type for {@link Tdjson#searchPublicChats}.
+*/
+export interface SearchPublicChats {
+	'@type': 'searchPublicChats';
+	/**
+Query to search for.
+*/
+	query: string;
+}
+
+/**
+Searches for the specified query in the title and username of already known chats, this is an offline request. Returns
+chats in the order seen in the main chat list.
+Request type for {@link Tdjson#searchChats}.
+*/
+export interface SearchChats {
+	'@type': 'searchChats';
+	/**
+Query to search for. If the query is empty, returns up to 50 recently found chats.
+*/
+	query: string;
+	/**
+The maximum number of chats to be returned.
+*/
+	limit: number;
+}
+
+/**
+Searches for the specified query in the title and username of already known chats via request to the server. Returns
+chats in the order seen in the main chat list.
+Request type for {@link Tdjson#searchChatsOnServer}.
+*/
+export interface SearchChatsOnServer {
+	'@type': 'searchChatsOnServer';
+	/**
+Query to search for.
+*/
+	query: string;
+	/**
+The maximum number of chats to be returned.
+*/
+	limit: number;
+}
+
+/**
+Returns a list of users and location-based supergroups nearby. The list of users nearby will be updated for 60 seconds
+after the request by the updates updateUsersNearby. The request must be sent again every 25 seconds with adjusted
+location to not miss new chats.
+Request type for {@link Tdjson#searchChatsNearby}.
+*/
+export interface SearchChatsNearby {
+	'@type': 'searchChatsNearby';
+	/**
+Current user location.
+*/
+	location: Location;
+}
+
+/**
+Returns a list of frequently used chats. Supported only if the chat info database is enabled.
+Request type for {@link Tdjson#getTopChats}.
+*/
+export interface GetTopChats {
+	'@type': 'getTopChats';
+	/**
+Category of chats to be returned.
+*/
+	category: TopChatCategory;
+	/**
+The maximum number of chats to be returned; up to 30.
+*/
+	limit: number;
+}
+
+/**
+Removes a chat from the list of frequently used chats. Supported only if the chat info database is enabled.
+Request type for {@link Tdjson#removeTopChat}.
+*/
+export interface RemoveTopChat {
+	'@type': 'removeTopChat';
+	/**
+Category of frequently used chats.
+*/
+	category: TopChatCategory;
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Adds a chat to the list of recently found chats. The chat is added to the beginning of the list. If the chat is already
+in the list, it will be removed from the list first.
+Request type for {@link Tdjson#addRecentlyFoundChat}.
+*/
+export interface AddRecentlyFoundChat {
+	'@type': 'addRecentlyFoundChat';
+	/**
+Identifier of the chat to add.
+*/
+	chat_id: number;
+}
+
+/**
+Removes a chat from the list of recently found chats.
+Request type for {@link Tdjson#removeRecentlyFoundChat}.
+*/
+export interface RemoveRecentlyFoundChat {
+	'@type': 'removeRecentlyFoundChat';
+	/**
+Identifier of the chat to be removed.
+*/
+	chat_id: number;
+}
+
+/**
+Clears the list of recently found chats.
+Request type for {@link Tdjson#clearRecentlyFoundChats}.
+*/
+export interface ClearRecentlyFoundChats {
+	'@type': 'clearRecentlyFoundChats';
+
+}
+
+/**
+Returns recently opened chats, this is an offline request. Returns chats in the order of last opening.
+Request type for {@link Tdjson#getRecentlyOpenedChats}.
+*/
+export interface GetRecentlyOpenedChats {
+	'@type': 'getRecentlyOpenedChats';
+	/**
+The maximum number of chats to be returned.
+*/
+	limit: number;
+}
+
+/**
+Checks whether a username can be set for a chat.
+Request type for {@link Tdjson#checkChatUsername}.
+*/
+export interface CheckChatUsername {
+	'@type': 'checkChatUsername';
+	/**
+Chat identifier; must be identifier of a supergroup chat, or a channel chat, or a private chat with self, or zero if the
+chat is being created.
+*/
+	chat_id: number;
+	/**
+Username to be checked.
+*/
+	username: string;
+}
+
+/**
+Returns a list of public chats of the specified type, owned by the user.
+Request type for {@link Tdjson#getCreatedPublicChats}.
+*/
+export interface GetCreatedPublicChats {
+	'@type': 'getCreatedPublicChats';
+	/**
+Type of the public chats to return.
+*/
+	type: PublicChatType;
+}
+
+/**
+Checks whether the maximum number of owned public chats has been reached. Returns corresponding error if the limit was
+reached. The limit can be increased with Telegram Premium.
+Request type for {@link Tdjson#checkCreatedPublicChatsLimit}.
+*/
+export interface CheckCreatedPublicChatsLimit {
+	'@type': 'checkCreatedPublicChatsLimit';
+	/**
+Type of the public chats, for which to check the limit.
+*/
+	type: PublicChatType;
+}
+
+/**
+Returns a list of basic group and supergroup chats, which can be used as a discussion group for a channel. Returned
+basic group chats must be first upgraded to supergroups before they can be set as a discussion group. To set a returned
+supergroup as a discussion group, access to its old messages must be enabled using toggleSupergroupIsAllHistoryAvailable
+first.
+Request type for {@link Tdjson#getSuitableDiscussionChats}.
+*/
+export interface GetSuitableDiscussionChats {
+	'@type': 'getSuitableDiscussionChats';
+
+}
+
+/**
+Returns a list of recently inactive supergroups and channels. Can be used when user reaches limit on the number of
+joined supergroups and channels and receives CHANNELS_TOO_MUCH error. Also, the limit can be increased with Telegram
+Premium.
+Request type for {@link Tdjson#getInactiveSupergroupChats}.
+*/
+export interface GetInactiveSupergroupChats {
+	'@type': 'getInactiveSupergroupChats';
+
+}
+
+/**
+Returns a list of common group chats with a given user. Chats are sorted by their type and creation date.
+Request type for {@link Tdjson#getGroupsInCommon}.
+*/
+export interface GetGroupsInCommon {
+	'@type': 'getGroupsInCommon';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+Chat identifier starting from which to return chats; use 0 for the first request.
+*/
+	offset_chat_id: number;
+	/**
+The maximum number of chats to be returned; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Returns messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of decreasing
+message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline request if
+only_local is true.
+Request type for {@link Tdjson#getChatHistory}.
+*/
+export interface GetChatHistory {
+	'@type': 'getChatHistory';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message starting from which history must be fetched; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+	/**
+Specify 0 to get results from exactly the from_message_id or a negative offset up to 99 to get additionally some newer
+messages.
+*/
+	offset: number;
+	/**
+The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
+negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
+is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+	/**
+Pass true to get only messages that are available without sending network requests.
+*/
+	only_local?: boolean;
+}
+
+/**
+Returns messages in a message thread of a message. Can be used only if message.can_get_message_thread == true. Message
+thread of a channel message is in the channel's linked supergroup. The messages are returned in a reverse chronological
+order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by
+TDLib.
+Request type for {@link Tdjson#getMessageThreadHistory}.
+*/
+export interface GetMessageThreadHistory {
+	'@type': 'getMessageThreadHistory';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message identifier, which thread history needs to be returned.
+*/
+	message_id: number;
+	/**
+Identifier of the message starting from which history must be fetched; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+	/**
+Specify 0 to get results from exactly the from_message_id or a negative offset up to 99 to get additionally some newer
+messages.
+*/
+	offset: number;
+	/**
+The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
+negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
+is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Deletes all messages in the chat. Use chat.can_be_deleted_only_for_self and chat.can_be_deleted_for_all_users fields to
+find whether and how the method can be applied to the chat.
+Request type for {@link Tdjson#deleteChatHistory}.
+*/
+export interface DeleteChatHistory {
+	'@type': 'deleteChatHistory';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Pass true to remove the chat from all chat lists.
+*/
+	remove_from_chat_list?: boolean;
+	/**
+Pass true to delete chat history for all users.
+*/
+	revoke?: boolean;
+}
+
+/**
+Deletes a chat along with all messages in the corresponding chat for all chat members. For group chats this will release
+the username and remove all members. Use the field chat.can_be_deleted_for_all_users to find whether the method can be
+applied to the chat.
+Request type for {@link Tdjson#deleteChat}.
+*/
+export interface DeleteChat {
+	'@type': 'deleteChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of
+decreasing message_id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
+instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by
+TDLib and can be smaller than the specified limit.
+Request type for {@link Tdjson#searchChatMessages}.
+*/
+export interface SearchChatMessages {
+	'@type': 'searchChatMessages';
+	/**
+Identifier of the chat in which to search messages.
+*/
+	chat_id: number;
+	/**
+Query to search for.
+*/
+	query: string;
+	/**
+Identifier of the sender of messages to search for; pass null to search for messages from any sender. Not supported in
+secret chats.
+*/
+	sender_id: MessageSender;
+	/**
+Identifier of the message starting from which history must be fetched; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+	/**
+Specify 0 to get results from exactly the from_message_id or a negative offset to get the specified message and some
+newer messages.
+*/
+	offset: number;
+	/**
+The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
+negative, the limit must be greater than -offset. For optimal performance, the number of returned messages is chosen by
+TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+	/**
+Additional filter for messages to search; pass null to search for all messages.
+*/
+	filter: SearchMessagesFilter;
+	/**
+If not 0, only messages in the specified thread will be returned; supergroups only.
+*/
+	message_thread_id: number;
+}
+
+/**
+Searches for messages in all chats except secret chats. Returns the results in reverse chronological order (i.e., in
+order of decreasing (date, chat_id, message_id)). For optimal performance, the number of returned messages is chosen by
+TDLib and can be smaller than the specified limit.
+Request type for {@link Tdjson#searchMessages}.
+*/
+export interface SearchMessages {
+	'@type': 'searchMessages';
+	/**
+Chat list in which to search messages; pass null to search in all chats regardless of their chat list. Only Main and
+Archive chat lists are supported.
+*/
+	chat_list: ChatList;
+	/**
+Query to search for.
+*/
+	query: string;
+	/**
+The date of the message starting from which the results need to be fetched. Use 0 or any date in the future to get
+results from the last message.
+*/
+	offset_date: number;
+	/**
+The chat identifier of the last found message, or 0 for the first request.
+*/
+	offset_chat_id: number;
+	/**
+The message identifier of the last found message, or 0 for the first request.
+*/
+	offset_message_id: number;
+	/**
+The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+	/**
+Additional filter for messages to search; pass null to search for all messages. Filters searchMessagesFilterMention,
+searchMessagesFilterUnreadMention, searchMessagesFilterUnreadReaction, searchMessagesFilterFailedToSend, and
+searchMessagesFilterPinned are unsupported in this function.
+*/
+	filter: SearchMessagesFilter;
+	/**
+If not 0, the minimum date of the messages to return.
+*/
+	min_date: number;
+	/**
+If not 0, the maximum date of the messages to return.
+*/
+	max_date: number;
+}
+
+/**
+Searches for messages in secret chats. Returns the results in reverse chronological order. For optimal performance, the
+number of returned messages is chosen by TDLib.
+Request type for {@link Tdjson#searchSecretMessages}.
+*/
+export interface SearchSecretMessages {
+	'@type': 'searchSecretMessages';
+	/**
+Identifier of the chat in which to search. Specify 0 to search in all secret chats.
+*/
+	chat_id: number;
+	/**
+Query to search for. If empty, searchChatMessages must be used instead.
+*/
+	query: string;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+	/**
+Additional filter for messages to search; pass null to search for all messages.
+*/
+	filter: SearchMessagesFilter;
+}
+
+/**
+Searches for call messages. Returns the results in reverse chronological order (i.e., in order of decreasing
+message_id). For optimal performance, the number of returned messages is chosen by TDLib.
+Request type for {@link Tdjson#searchCallMessages}.
+*/
+export interface SearchCallMessages {
+	'@type': 'searchCallMessages';
+	/**
+Identifier of the message from which to search; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+	/**
+The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+	/**
+Pass true to search only for messages with missed/declined calls.
+*/
+	only_missed?: boolean;
+}
+
+/**
+Searches for outgoing messages with content of the type messageDocument in all chats except secret chats. Returns the
+results in reverse chronological order.
+Request type for {@link Tdjson#searchOutgoingDocumentMessages}.
+*/
+export interface SearchOutgoingDocumentMessages {
+	'@type': 'searchOutgoingDocumentMessages';
+	/**
+Query to search for in document file name and message caption.
+*/
+	query: string;
+	/**
+The maximum number of messages to be returned; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Deletes all call messages.
+Request type for {@link Tdjson#deleteAllCallMessages}.
+*/
+export interface DeleteAllCallMessages {
+	'@type': 'deleteAllCallMessages';
+	/**
+Pass true to delete the messages for all users.
+*/
+	revoke?: boolean;
+}
+
+/**
+Returns information about the recent locations of chat members that were sent to the chat. Returns up to 1 location
+message per user.
+Request type for {@link Tdjson#searchChatRecentLocationMessages}.
+*/
+export interface SearchChatRecentLocationMessages {
+	'@type': 'searchChatRecentLocationMessages';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The maximum number of messages to be returned.
+*/
+	limit: number;
+}
+
+/**
+Returns all active live locations that need to be updated by the application. The list is persistent across application
+restarts only if the message database is used.
+Request type for {@link Tdjson#getActiveLiveLocationMessages}.
+*/
+export interface GetActiveLiveLocationMessages {
+	'@type': 'getActiveLiveLocationMessages';
+
+}
+
+/**
+Returns the last message sent in a chat no later than the specified date.
+Request type for {@link Tdjson#getChatMessageByDate}.
+*/
+export interface GetChatMessageByDate {
+	'@type': 'getChatMessageByDate';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Point in time (Unix timestamp) relative to which to search for messages.
+*/
+	date: number;
+}
+
+/**
+Returns sparse positions of messages of the specified type in the chat to be used for shared media scroll
+implementation. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). Cannot be
+used in secret chats or with searchMessagesFilterFailedToSend filter without an enabled message database.
+Request type for {@link Tdjson#getChatSparseMessagePositions}.
+*/
+export interface GetChatSparseMessagePositions {
+	'@type': 'getChatSparseMessagePositions';
+	/**
+Identifier of the chat in which to return information about message positions.
+*/
+	chat_id: number;
+	/**
+Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterMention,
+searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are unsupported in this function.
+*/
+	filter: SearchMessagesFilter;
+	/**
+The message identifier from which to return information about message positions.
+*/
+	from_message_id: number;
+	/**
+The expected number of message positions to be returned; 50-2000. A smaller number of positions can be returned, if
+there are not enough appropriate messages.
+*/
+	limit: number;
+}
+
+/**
+Returns information about the next messages of the specified type in the chat split by days. Returns the results in
+reverse chronological order. Can return partial result for the last returned day. Behavior of this method depends on the
+value of the option "utc_time_offset".
+Request type for {@link Tdjson#getChatMessageCalendar}.
+*/
+export interface GetChatMessageCalendar {
+	'@type': 'getChatMessageCalendar';
+	/**
+Identifier of the chat in which to return information about messages.
+*/
+	chat_id: number;
+	/**
+Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterMention,
+searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are unsupported in this function.
+*/
+	filter: SearchMessagesFilter;
+	/**
+The message identifier from which to return information about messages; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+}
+
+/**
+Returns approximate number of messages of the specified type in the chat.
+Request type for {@link Tdjson#getChatMessageCount}.
+*/
+export interface GetChatMessageCount {
+	'@type': 'getChatMessageCount';
+	/**
+Identifier of the chat in which to count messages.
+*/
+	chat_id: number;
+	/**
+Filter for message content; searchMessagesFilterEmpty is unsupported in this function.
+*/
+	filter: SearchMessagesFilter;
+	/**
+Pass true to get the number of messages without sending network requests, or -1 if the number of messages is unknown
+locally.
+*/
+	return_local?: boolean;
+}
+
+/**
+Returns all scheduled messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of
+decreasing message_id).
+Request type for {@link Tdjson#getChatScheduledMessages}.
+*/
+export interface GetChatScheduledMessages {
+	'@type': 'getChatScheduledMessages';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Returns forwarded copies of a channel message to different public channels. For optimal performance, the number of
+returned messages is chosen by TDLib.
+Request type for {@link Tdjson#getMessagePublicForwards}.
+*/
+export interface GetMessagePublicForwards {
+	'@type': 'getMessagePublicForwards';
+	/**
+Chat identifier of the message.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of messages to be returned; must be positive and can't be greater than 100. For optimal performance,
+the number of returned messages is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Returns sponsored message to be shown in a chat; for channel chats only. Returns a 404 error if there is no sponsored
+message in the chat.
+Request type for {@link Tdjson#getChatSponsoredMessage}.
+*/
+export interface GetChatSponsoredMessage {
+	'@type': 'getChatSponsoredMessage';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+}
+
+/**
+Removes an active notification from notification list. Needs to be called only if the notification is removed by the
+current user.
+Request type for {@link Tdjson#removeNotification}.
+*/
+export interface RemoveNotification {
+	'@type': 'removeNotification';
+	/**
+Identifier of notification group to which the notification belongs.
+*/
+	notification_group_id: number;
+	/**
+Identifier of removed notification.
+*/
+	notification_id: number;
+}
+
+/**
+Removes a group of active notifications. Needs to be called only if the notification group is removed by the current
+user.
+Request type for {@link Tdjson#removeNotificationGroup}.
+*/
+export interface RemoveNotificationGroup {
+	'@type': 'removeNotificationGroup';
+	/**
+Notification group identifier.
+*/
+	notification_group_id: number;
+	/**
+The maximum identifier of removed notifications.
+*/
+	max_notification_id: number;
+}
+
+/**
+Returns an HTTPS link to a message in a chat. Available only for already sent messages in supergroups and channels, or
+if message.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
+Request type for {@link Tdjson#getMessageLink}.
+*/
+export interface GetMessageLink {
+	'@type': 'getMessageLink';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+If not 0, timestamp from which the video/audio/video note/voice note playing must start, in seconds. The media can be in
+the message content or in its web page preview.
+*/
+	media_timestamp: number;
+	/**
+Pass true to create a link for the whole media album.
+*/
+	for_album?: boolean;
+	/**
+Pass true to create a link to the message as a channel post comment, or from a message thread.
+*/
+	for_comment?: boolean;
+}
+
+/**
+Returns an HTML code for embedding the message. Available only for messages in supergroups and channels with a username.
+Request type for {@link Tdjson#getMessageEmbeddingCode}.
+*/
+export interface GetMessageEmbeddingCode {
+	'@type': 'getMessageEmbeddingCode';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Pass true to return an HTML code for embedding of the whole media album.
+*/
+	for_album?: boolean;
+}
+
+/**
+Returns information about a public or private message link. Can be called for any internal link of the type
+internalLinkTypeMessage.
+Request type for {@link Tdjson#getMessageLinkInfo}.
+*/
+export interface GetMessageLinkInfo {
+	'@type': 'getMessageLinkInfo';
+	/**
+The message link.
+*/
+	url: string;
+}
+
+/**
+Translates a text to the given language. Returns a 404 error if the translation can't be performed.
+Request type for {@link Tdjson#translateText}.
+*/
+export interface TranslateText {
+	'@type': 'translateText';
+	/**
+Text to translate.
+*/
+	text: string;
+	/**
+A two-letter ISO 639-1 language code of the language from which the message is translated. If empty, the language will
+be detected automatically.
+*/
+	from_language_code: string;
+	/**
+A two-letter ISO 639-1 language code of the language to which the message is translated.
+*/
+	to_language_code: string;
+}
+
+/**
+Recognizes speech in a voice note message. The message must be successfully sent and must not be scheduled. May return
+an error with a message "MSG_VOICE_TOO_LONG" if the voice note is too long to be recognized.
+Request type for {@link Tdjson#recognizeSpeech}.
+*/
+export interface RecognizeSpeech {
+	'@type': 'recognizeSpeech';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Rates recognized speech in a voice note message.
+Request type for {@link Tdjson#rateSpeechRecognition}.
+*/
+export interface RateSpeechRecognition {
+	'@type': 'rateSpeechRecognition';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Pass true if the speech recognition is good.
+*/
+	is_good?: boolean;
+}
+
+/**
+Returns list of message sender identifiers, which can be used to send messages in a chat.
+Request type for {@link Tdjson#getChatAvailableMessageSenders}.
+*/
+export interface GetChatAvailableMessageSenders {
+	'@type': 'getChatAvailableMessageSenders';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Selects a message sender to send messages in a chat.
+Request type for {@link Tdjson#setChatMessageSender}.
+*/
+export interface SetChatMessageSender {
+	'@type': 'setChatMessageSender';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New message sender for the chat.
+*/
+	message_sender_id: MessageSender;
+}
+
+/**
+Sends a message. Returns the sent message.
+Request type for {@link Tdjson#sendMessage}.
+*/
+export interface SendMessage {
+	'@type': 'sendMessage';
+	/**
+Target chat.
+*/
+	chat_id: number;
+	/**
+If not 0, a message thread identifier in which the message will be sent.
+*/
+	message_thread_id: number;
+	/**
+Identifier of the replied message; 0 if none.
+*/
+	reply_to_message_id: number;
+	/**
+Options to be used to send the message; pass null to use default options.
+*/
+	options: MessageSendOptions;
+	/**
+Markup for replying to the message; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+The content of the message to be sent.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Sends 2-10 messages grouped together into an album. Currently, only audio, document, photo and video messages can be
+grouped into an album. Documents and audio files can be only grouped in an album with messages of the same type. Returns
+sent messages.
+Request type for {@link Tdjson#sendMessageAlbum}.
+*/
+export interface SendMessageAlbum {
+	'@type': 'sendMessageAlbum';
+	/**
+Target chat.
+*/
+	chat_id: number;
+	/**
+If not 0, a message thread identifier in which the messages will be sent.
+*/
+	message_thread_id: number;
+	/**
+Identifier of a replied message; 0 if none.
+*/
+	reply_to_message_id: number;
+	/**
+Options to be used to send the messages; pass null to use default options.
+*/
+	options: MessageSendOptions;
+	/**
+Contents of messages to be sent. At most 10 messages can be added to an album.
+*/
+	input_message_contents: InputMessageContent[];
+	/**
+Pass true to get fake messages instead of actually sending them.
+*/
+	only_preview?: boolean;
+}
+
+/**
+Invites a bot to a chat (if it is not yet a member) and sends it the /start command. Bots can't be invited to a private
+chat other than the chat with the bot. Bots can't be invited to channels (although they can be added as admins) and
+secret chats. Returns the sent message.
+Request type for {@link Tdjson#sendBotStartMessage}.
+*/
+export interface SendBotStartMessage {
+	'@type': 'sendBotStartMessage';
+	/**
+Identifier of the bot.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the target chat.
+*/
+	chat_id: number;
+	/**
+A hidden parameter sent to the bot for deep linking purposes (https://core.telegram.org/bots#deep-linking).
+*/
+	parameter: string;
+}
+
+/**
+Sends the result of an inline query as a message. Returns the sent message. Always clears a chat draft message.
+Request type for {@link Tdjson#sendInlineQueryResultMessage}.
+*/
+export interface SendInlineQueryResultMessage {
+	'@type': 'sendInlineQueryResultMessage';
+	/**
+Target chat.
+*/
+	chat_id: number;
+	/**
+If not 0, a message thread identifier in which the message will be sent.
+*/
+	message_thread_id: number;
+	/**
+Identifier of a replied message; 0 if none.
+*/
+	reply_to_message_id: number;
+	/**
+Options to be used to send the message; pass null to use default options.
+*/
+	options: MessageSendOptions;
+	/**
+Identifier of the inline query.
+*/
+	query_id: string;
+	/**
+Identifier of the inline result.
+*/
+	result_id: string;
+	/**
+Pass true to hide the bot, via which the message is sent. Can be used only for bots
+GetOption("animation_search_bot_username"), GetOption("photo_search_bot_username"), and
+GetOption("venue_search_bot_username").
+*/
+	hide_via_bot?: boolean;
+}
+
+/**
+Forwards previously sent messages. Returns the forwarded messages in the same order as the message identifiers passed in
+message_ids. If a message can't be forwarded, null will be returned instead of the message.
+Request type for {@link Tdjson#forwardMessages}.
+*/
+export interface ForwardMessages {
+	'@type': 'forwardMessages';
+	/**
+Identifier of the chat to which to forward messages.
+*/
+	chat_id: number;
+	/**
+Identifier of the chat from which to forward messages.
+*/
+	from_chat_id: number;
+	/**
+Identifiers of the messages to forward. Message identifiers must be in a strictly increasing order. At most 100 messages
+can be forwarded simultaneously.
+*/
+	message_ids: number[];
+	/**
+Options to be used to send the messages; pass null to use default options.
+*/
+	options: MessageSendOptions;
+	/**
+Pass true to copy content of the messages without reference to the original sender. Always true if the messages are
+forwarded to a secret chat or are local.
+*/
+	send_copy?: boolean;
+	/**
+Pass true to remove media captions of message copies. Ignored if send_copy is false.
+*/
+	remove_caption?: boolean;
+	/**
+Pass true to get fake messages instead of actually forwarding them.
+*/
+	only_preview?: boolean;
+}
+
+/**
+Resends messages which failed to send. Can be called only for messages for which messageSendingStateFailed.can_retry is
+true and after specified in messageSendingStateFailed.retry_after time passed. If a message is re-sent, the
+corresponding failed to send message is deleted. Returns the sent messages in the same order as the message identifiers
+passed in message_ids. If a message can't be re-sent, null will be returned instead of the message.
+Request type for {@link Tdjson#resendMessages}.
+*/
+export interface ResendMessages {
+	'@type': 'resendMessages';
+	/**
+Identifier of the chat to send messages.
+*/
+	chat_id: number;
+	/**
+Identifiers of the messages to resend. Message identifiers must be in a strictly increasing order.
+*/
+	message_ids: number[];
+}
+
+/**
+Sends a notification about a screenshot taken in a chat. Supported only in private and secret chats.
+Request type for {@link Tdjson#sendChatScreenshotTakenNotification}.
+*/
+export interface SendChatScreenshotTakenNotification {
+	'@type': 'sendChatScreenshotTakenNotification';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Adds a local message to a chat. The message is persistent across application restarts only if the message database is
+used. Returns the added message.
+Request type for {@link Tdjson#addLocalMessage}.
+*/
+export interface AddLocalMessage {
+	'@type': 'addLocalMessage';
+	/**
+Target chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the sender of the message.
+*/
+	sender_id: MessageSender;
+	/**
+Identifier of the replied message; 0 if none.
+*/
+	reply_to_message_id: number;
+	/**
+Pass true to disable notification for the message.
+*/
+	disable_notification?: boolean;
+	/**
+The content of the message to be added.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Deletes messages.
+Request type for {@link Tdjson#deleteMessages}.
+*/
+export interface DeleteMessages {
+	'@type': 'deleteMessages';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifiers of the messages to be deleted.
+*/
+	message_ids: number[];
+	/**
+Pass true to delete messages for all chat members. Always true for supergroups, channels and secret chats.
+*/
+	revoke?: boolean;
+}
+
+/**
+Deletes all messages sent by the specified message sender in a chat. Supported only for supergroups; requires
+can_delete_messages administrator privileges.
+Request type for {@link Tdjson#deleteChatMessagesBySender}.
+*/
+export interface DeleteChatMessagesBySender {
+	'@type': 'deleteChatMessagesBySender';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the sender of messages to delete.
+*/
+	sender_id: MessageSender;
+}
+
+/**
+Deletes all messages between the specified dates in a chat. Supported only for private chats and basic groups. Messages
+sent in the last 30 seconds will not be deleted.
+Request type for {@link Tdjson#deleteChatMessagesByDate}.
+*/
+export interface DeleteChatMessagesByDate {
+	'@type': 'deleteChatMessagesByDate';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The minimum date of the messages to delete.
+*/
+	min_date: number;
+	/**
+The maximum date of the messages to delete.
+*/
+	max_date: number;
+	/**
+Pass true to delete chat messages for all users; private chats only.
+*/
+	revoke?: boolean;
+}
+
+/**
+Edits the text of a message (or a text of a game message). Returns the edited message after the edit is completed on the
+server side.
+Request type for {@link Tdjson#editMessageText}.
+*/
+export interface EditMessageText {
+	'@type': 'editMessageText';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New text content of the message. Must be of type inputMessageText.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Edits the message content of a live location. Messages can be edited for a limited period of time specified in the live
+location. Returns the edited message after the edit is completed on the server side.
+Request type for {@link Tdjson#editMessageLiveLocation}.
+*/
+export interface EditMessageLiveLocation {
+	'@type': 'editMessageLiveLocation';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New location content of the message; pass null to stop sharing the live location.
+*/
+	location: Location;
+	/**
+The new direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
+*/
+	heading: number;
+	/**
+The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
+*/
+	proximity_alert_radius: number;
+}
+
+/**
+Edits the content of a message with an animation, an audio, a document, a photo or a video, including message caption.
+If only the caption needs to be edited, use editMessageCaption instead. The media can't be edited if the message was set
+to self-destruct or to a self-destructing media. The type of message content in an album can't be changed with exception
+of replacing a photo with a video or vice versa. Returns the edited message after the edit is completed on the server
+side.
+Request type for {@link Tdjson#editMessageMedia}.
+*/
+export interface EditMessageMedia {
+	'@type': 'editMessageMedia';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
+inputMessageDocument, inputMessagePhoto or inputMessageVideo.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Edits the message content caption. Returns the edited message after the edit is completed on the server side.
+Request type for {@link Tdjson#editMessageCaption}.
+*/
+export interface EditMessageCaption {
+	'@type': 'editMessageCaption';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New message content caption; 0-GetOption("message_caption_length_max") characters; pass null to remove caption.
+*/
+	caption: FormattedText;
+}
+
+/**
+Edits the message reply markup; for bots only. Returns the edited message after the edit is completed on the server
+side.
+Request type for {@link Tdjson#editMessageReplyMarkup}.
+*/
+export interface EditMessageReplyMarkup {
+	'@type': 'editMessageReplyMarkup';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+}
+
+/**
+Edits the text of an inline text or game message sent via a bot; for bots only.
+Request type for {@link Tdjson#editInlineMessageText}.
+*/
+export interface EditInlineMessageText {
+	'@type': 'editInlineMessageText';
+	/**
+Inline message identifier.
+*/
+	inline_message_id: string;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New text content of the message. Must be of type inputMessageText.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Edits the content of a live location in an inline message sent via a bot; for bots only.
+Request type for {@link Tdjson#editInlineMessageLiveLocation}.
+*/
+export interface EditInlineMessageLiveLocation {
+	'@type': 'editInlineMessageLiveLocation';
+	/**
+Inline message identifier.
+*/
+	inline_message_id: string;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New location content of the message; pass null to stop sharing the live location.
+*/
+	location: Location;
+	/**
+The new direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
+*/
+	heading: number;
+	/**
+The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
+*/
+	proximity_alert_radius: number;
+}
+
+/**
+Edits the content of a message with an animation, an audio, a document, a photo or a video in an inline message sent via
+a bot; for bots only.
+Request type for {@link Tdjson#editInlineMessageMedia}.
+*/
+export interface EditInlineMessageMedia {
+	'@type': 'editInlineMessageMedia';
+	/**
+Inline message identifier.
+*/
+	inline_message_id: string;
+	/**
+The new message reply markup; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
+inputMessageDocument, inputMessagePhoto or inputMessageVideo.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Edits the caption of an inline message sent via a bot; for bots only.
+Request type for {@link Tdjson#editInlineMessageCaption}.
+*/
+export interface EditInlineMessageCaption {
+	'@type': 'editInlineMessageCaption';
+	/**
+Inline message identifier.
+*/
+	inline_message_id: string;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New message content caption; pass null to remove caption; 0-GetOption("message_caption_length_max") characters.
+*/
+	caption: FormattedText;
+}
+
+/**
+Edits the reply markup of an inline message sent via a bot; for bots only.
+Request type for {@link Tdjson#editInlineMessageReplyMarkup}.
+*/
+export interface EditInlineMessageReplyMarkup {
+	'@type': 'editInlineMessageReplyMarkup';
+	/**
+Inline message identifier.
+*/
+	inline_message_id: string;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+}
+
+/**
+Edits the time when a scheduled message will be sent. Scheduling state of all messages in the same album or forwarded
+together with the message will be also changed.
+Request type for {@link Tdjson#editMessageSchedulingState}.
+*/
+export interface EditMessageSchedulingState {
+	'@type': 'editMessageSchedulingState';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message scheduling state; pass null to send the message immediately.
+*/
+	scheduling_state: MessageSchedulingState;
+}
+
+/**
+Returns reactions, which can be added to a message. The list can change after updateReactions,
+updateChatAvailableReactions for the chat, or updateMessageInteractionInfo for the message.
+Request type for {@link Tdjson#getMessageAvailableReactions}.
+*/
+export interface GetMessageAvailableReactions {
+	'@type': 'getMessageAvailableReactions';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Changes chosen reaction for a message.
+Request type for {@link Tdjson#setMessageReaction}.
+*/
+export interface SetMessageReaction {
+	'@type': 'setMessageReaction';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Text representation of the new chosen reaction. Can be an empty string or the currently chosen non-big reaction to
+remove the reaction.
+*/
+	reaction: string;
+	/**
+Pass true if the reaction is added with a big animation.
+*/
+	is_big?: boolean;
+}
+
+/**
+Returns reactions added for a message, along with their sender.
+Request type for {@link Tdjson#getMessageAddedReactions}.
+*/
+export interface GetMessageAddedReactions {
+	'@type': 'getMessageAddedReactions';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+If non-empty, only added reactions with the specified text representation will be returned.
+*/
+	reaction: string;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of reactions to be returned; must be positive and can't be greater than 100.
+*/
+	limit: number;
+}
+
+/**
+Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses)
+contained in the text. Can be called synchronously.
+Request type for {@link Tdjson#getTextEntities}.
+*/
+export interface GetTextEntities {
+	'@type': 'getTextEntities';
+	/**
+The text in which to look for entites.
+*/
+	text: string;
+}
+
+/**
+Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName
+entities contained in the text. Can be called synchronously.
+Request type for {@link Tdjson#parseTextEntities}.
+*/
+export interface ParseTextEntities {
+	'@type': 'parseTextEntities';
+	/**
+The text to parse.
+*/
+	text: string;
+	/**
+Text parse mode.
+*/
+	parse_mode: TextParseMode;
+}
+
+/**
+Parses Markdown entities in a human-friendly format, ignoring markup errors. Can be called synchronously.
+Request type for {@link Tdjson#parseMarkdown}.
+*/
+export interface ParseMarkdown {
+	'@type': 'parseMarkdown';
+	/**
+The text to parse. For example, "__italic__ ~~strikethrough~~ ||spoiler|| **bold** `code` ```pre``` __[italic__
+text_url](telegram.org) __italic**bold italic__bold**".
+*/
+	text: FormattedText;
+}
+
+/**
+Replaces text entities with Markdown formatting in a human-friendly format. Entities that can't be represented in
+Markdown unambiguously are kept as is. Can be called synchronously.
+Request type for {@link Tdjson#getMarkdownText}.
+*/
+export interface GetMarkdownText {
+	'@type': 'getMarkdownText';
+	/**
+The text.
+*/
+	text: FormattedText;
+}
+
+/**
+Returns the MIME type of a file, guessed by its extension. Returns an empty string on failure. Can be called
+synchronously.
+Request type for {@link Tdjson#getFileMimeType}.
+*/
+export interface GetFileMimeType {
+	'@type': 'getFileMimeType';
+	/**
+The name of the file or path to the file.
+*/
+	file_name: string;
+}
+
+/**
+Returns the extension of a file, guessed by its MIME type. Returns an empty string on failure. Can be called
+synchronously.
+Request type for {@link Tdjson#getFileExtension}.
+*/
+export interface GetFileExtension {
+	'@type': 'getFileExtension';
+	/**
+The MIME type of the file.
+*/
+	mime_type: string;
+}
+
+/**
+Removes potentially dangerous characters from the name of a file. The encoding of the file name is supposed to be UTF-8.
+Returns an empty string on failure. Can be called synchronously.
+Request type for {@link Tdjson#cleanFileName}.
+*/
+export interface CleanFileName {
+	'@type': 'cleanFileName';
+	/**
+File name or path to the file.
+*/
+	file_name: string;
+}
+
+/**
+Returns a string stored in the local database from the specified localization target and language pack by its key.
+Returns a 404 error if the string is not found. Can be called synchronously.
+Request type for {@link Tdjson#getLanguagePackString}.
+*/
+export interface GetLanguagePackString {
+	'@type': 'getLanguagePackString';
+	/**
+Path to the language pack database in which strings are stored.
+*/
+	language_pack_database_path: string;
+	/**
+Localization target to which the language pack belongs.
+*/
+	localization_target: string;
+	/**
+Language pack identifier.
+*/
+	language_pack_id: string;
+	/**
+Language pack key of the string to be returned.
+*/
+	key: string;
+}
+
+/**
+Converts a JSON-serialized string to corresponding JsonValue object. Can be called synchronously.
+Request type for {@link Tdjson#getJsonValue}.
+*/
+export interface GetJsonValue {
+	'@type': 'getJsonValue';
+	/**
+The JSON-serialized string.
+*/
+	json: string;
+}
+
+/**
+Converts a JsonValue object to corresponding JSON-serialized string. Can be called synchronously.
+Request type for {@link Tdjson#getJsonString}.
+*/
+export interface GetJsonString {
+	'@type': 'getJsonString';
+	/**
+The JsonValue object.
+*/
+	json_value: JsonValue;
+}
+
+/**
+Converts a themeParameters object to corresponding JSON-serialized string. Can be called synchronously.
+Request type for {@link Tdjson#getThemeParametersJsonString}.
+*/
+export interface GetThemeParametersJsonString {
+	'@type': 'getThemeParametersJsonString';
+	/**
+Theme parameters to convert to JSON.
+*/
+	theme: ThemeParameters;
+}
+
+/**
+Changes the user answer to a poll. A poll in quiz mode can be answered only once.
+Request type for {@link Tdjson#setPollAnswer}.
+*/
+export interface SetPollAnswer {
+	'@type': 'setPollAnswer';
+	/**
+Identifier of the chat to which the poll belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the poll.
+*/
+	message_id: number;
+	/**
+0-based identifiers of answer options, chosen by the user. User can choose more than 1 answer option only is the poll
+allows multiple answers.
+*/
+	option_ids: number[];
+}
+
+/**
+Returns users voted for the specified option in a non-anonymous polls. For optimal performance, the number of returned
+users is chosen by TDLib.
+Request type for {@link Tdjson#getPollVoters}.
+*/
+export interface GetPollVoters {
+	'@type': 'getPollVoters';
+	/**
+Identifier of the chat to which the poll belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the poll.
+*/
+	message_id: number;
+	/**
+0-based identifier of the answer option.
+*/
+	option_id: number;
+	/**
+Number of users to skip in the result; must be non-negative.
+*/
+	offset: number;
+	/**
+The maximum number of users to be returned; must be positive and can't be greater than 50. For optimal performance, the
+number of returned users is chosen by TDLib and can be smaller than the specified limit, even if the end of the voter
+list has not been reached.
+*/
+	limit: number;
+}
+
+/**
+Stops a poll. A poll in a message can be stopped when the message has can_be_edited flag set.
+Request type for {@link Tdjson#stopPoll}.
+*/
+export interface StopPoll {
+	'@type': 'stopPoll';
+	/**
+Identifier of the chat to which the poll belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the poll.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+}
+
+/**
+Hides a suggested action.
+Request type for {@link Tdjson#hideSuggestedAction}.
+*/
+export interface HideSuggestedAction {
+	'@type': 'hideSuggestedAction';
+	/**
+Suggested action to hide.
+*/
+	action: SuggestedAction;
+}
+
+/**
+Returns information about a button of type inlineKeyboardButtonTypeLoginUrl. The method needs to be called when the user
+presses the button.
+Request type for {@link Tdjson#getLoginUrlInfo}.
+*/
+export interface GetLoginUrlInfo {
+	'@type': 'getLoginUrlInfo';
+	/**
+Chat identifier of the message with the button.
+*/
+	chat_id: number;
+	/**
+Message identifier of the message with the button.
+*/
+	message_id: number;
+	/**
+Button identifier.
+*/
+	button_id: number;
+}
+
+/**
+Returns an HTTP URL which can be used to automatically authorize the user on a website after clicking an inline button
+of type inlineKeyboardButtonTypeLoginUrl. Use the method getLoginUrlInfo to find whether a prior user confirmation is
+needed. If an error is returned, then the button must be handled as an ordinary URL button.
+Request type for {@link Tdjson#getLoginUrl}.
+*/
+export interface GetLoginUrl {
+	'@type': 'getLoginUrl';
+	/**
+Chat identifier of the message with the button.
+*/
+	chat_id: number;
+	/**
+Message identifier of the message with the button.
+*/
+	message_id: number;
+	/**
+Button identifier.
+*/
+	button_id: number;
+	/**
+Pass true to allow the bot to send messages to the current user.
+*/
+	allow_write_access?: boolean;
+}
+
+/**
+Sends an inline query to a bot and returns its results. Returns an error with code 502 if the bot fails to answer the
+query before the query timeout expires.
+Request type for {@link Tdjson#getInlineQueryResults}.
+*/
+export interface GetInlineQueryResults {
+	'@type': 'getInlineQueryResults';
+	/**
+The identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the chat where the query was sent.
+*/
+	chat_id: number;
+	/**
+Location of the user; pass null if unknown or the bot doesn't need user's location.
+*/
+	user_location: Location;
+	/**
+Text of the query.
+*/
+	query: string;
+	/**
+Offset of the first entry to return.
+*/
+	offset: string;
+}
+
+/**
+Sets the result of an inline query; for bots only.
+Request type for {@link Tdjson#answerInlineQuery}.
+*/
+export interface AnswerInlineQuery {
+	'@type': 'answerInlineQuery';
+	/**
+Identifier of the inline query.
+*/
+	inline_query_id: string;
+	/**
+Pass true if results may be cached and returned only for the user that sent the query. By default, results may be
+returned to any user who sends the same query.
+*/
+	is_personal?: boolean;
+	/**
+The results of the query.
+*/
+	results: InputInlineQueryResult[];
+	/**
+Allowed time to cache the results of the query, in seconds.
+*/
+	cache_time: number;
+	/**
+Offset for the next inline query; pass an empty string if there are no more results.
+*/
+	next_offset: string;
+	/**
+If non-empty, this text must be shown on the button that opens a private chat with the bot and sends a start message to
+the bot with the parameter switch_pm_parameter.
+*/
+	switch_pm_text: string;
+	/**
+The parameter for the bot start message.
+*/
+	switch_pm_parameter: string;
+}
+
+/**
+Returns an HTTPS URL of a Web App to open after keyboardButtonTypeWebApp button is pressed.
+Request type for {@link Tdjson#getWebAppUrl}.
+*/
+export interface GetWebAppUrl {
+	'@type': 'getWebAppUrl';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+The URL from the keyboardButtonTypeWebApp button.
+*/
+	url: string;
+	/**
+Preferred Web App theme; pass null to use the default theme.
+*/
+	theme: ThemeParameters;
+}
+
+/**
+Sends data received from a keyboardButtonTypeWebApp Web App to a bot.
+Request type for {@link Tdjson#sendWebAppData}.
+*/
+export interface SendWebAppData {
+	'@type': 'sendWebAppData';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+Text of the keyboardButtonTypeWebApp button, which opened the Web App.
+*/
+	button_text: string;
+	/**
+Received data.
+*/
+	data: string;
+}
+
+/**
+Informs TDLib that a Web App is being opened from attachment menu, a botMenuButton button, an
+internalLinkTypeAttachmentMenuBot link, or an inlineKeyboardButtonTypeWebApp button. For each bot, a confirmation alert
+about data sent to the bot must be shown once.
+Request type for {@link Tdjson#openWebApp}.
+*/
+export interface OpenWebApp {
+	'@type': 'openWebApp';
+	/**
+Identifier of the chat in which the Web App is opened.
+*/
+	chat_id: number;
+	/**
+Identifier of the bot, providing the Web App.
+*/
+	bot_user_id: number;
+	/**
+The URL from an inlineKeyboardButtonTypeWebApp button, a botMenuButton button, or an internalLinkTypeAttachmentMenuBot
+link, or an empty string otherwise.
+*/
+	url: string;
+	/**
+Preferred Web App theme; pass null to use the default theme.
+*/
+	theme: ThemeParameters;
+	/**
+Identifier of the replied message for the message sent by the Web App; 0 if none.
+*/
+	reply_to_message_id: number;
+}
+
+/**
+Informs TDLib that a previously opened Web App was closed.
+Request type for {@link Tdjson#closeWebApp}.
+*/
+export interface CloseWebApp {
+	'@type': 'closeWebApp';
+	/**
+Identifier of Web App launch, received from openWebApp.
+*/
+	web_app_launch_id: string;
+}
+
+/**
+Sets the result of interaction with a Web App and sends corresponding message on behalf of the user to the chat from
+which the query originated; for bots only.
+Request type for {@link Tdjson#answerWebAppQuery}.
+*/
+export interface AnswerWebAppQuery {
+	'@type': 'answerWebAppQuery';
+	/**
+Identifier of the Web App query.
+*/
+	web_app_query_id: string;
+	/**
+The result of the query.
+*/
+	result: InputInlineQueryResult;
+}
+
+/**
+Sends a callback query to a bot and returns an answer. Returns an error with code 502 if the bot fails to answer the
+query before the query timeout expires.
+Request type for {@link Tdjson#getCallbackQueryAnswer}.
+*/
+export interface GetCallbackQueryAnswer {
+	'@type': 'getCallbackQueryAnswer';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message from which the query originated.
+*/
+	message_id: number;
+	/**
+Query payload.
+*/
+	payload: CallbackQueryPayload;
+}
+
+/**
+Sets the result of a callback query; for bots only.
+Request type for {@link Tdjson#answerCallbackQuery}.
+*/
+export interface AnswerCallbackQuery {
+	'@type': 'answerCallbackQuery';
+	/**
+Identifier of the callback query.
+*/
+	callback_query_id: string;
+	/**
+Text of the answer.
+*/
+	text: string;
+	/**
+Pass true to show an alert to the user instead of a toast notification.
+*/
+	show_alert?: boolean;
+	/**
+URL to be opened.
+*/
+	url: string;
+	/**
+Time during which the result of the query can be cached, in seconds.
+*/
+	cache_time: number;
+}
+
+/**
+Sets the result of a shipping query; for bots only.
+Request type for {@link Tdjson#answerShippingQuery}.
+*/
+export interface AnswerShippingQuery {
+	'@type': 'answerShippingQuery';
+	/**
+Identifier of the shipping query.
+*/
+	shipping_query_id: string;
+	/**
+Available shipping options.
+*/
+	shipping_options: ShippingOption[];
+	/**
+An error message, empty on success.
+*/
+	error_message: string;
+}
+
+/**
+Sets the result of a pre-checkout query; for bots only.
+Request type for {@link Tdjson#answerPreCheckoutQuery}.
+*/
+export interface AnswerPreCheckoutQuery {
+	'@type': 'answerPreCheckoutQuery';
+	/**
+Identifier of the pre-checkout query.
+*/
+	pre_checkout_query_id: string;
+	/**
+An error message, empty on success.
+*/
+	error_message: string;
+}
+
+/**
+Updates the game score of the specified user in the game; for bots only.
+Request type for {@link Tdjson#setGameScore}.
+*/
+export interface SetGameScore {
+	'@type': 'setGameScore';
+	/**
+The chat to which the message with the game belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Pass true to edit the game message to include the current scoreboard.
+*/
+	edit_message?: boolean;
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+The new score.
+*/
+	score: number;
+	/**
+Pass true to update the score even if it decreases. If the score is 0, the user will be deleted from the high score
+table.
+*/
+	force?: boolean;
+}
+
+/**
+Updates the game score of the specified user in a game; for bots only.
+Request type for {@link Tdjson#setInlineGameScore}.
+*/
+export interface SetInlineGameScore {
+	'@type': 'setInlineGameScore';
+	/**
+Inline message identifier.
+*/
+	inline_message_id: string;
+	/**
+Pass true to edit the game message to include the current scoreboard.
+*/
+	edit_message?: boolean;
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+The new score.
+*/
+	score: number;
+	/**
+Pass true to update the score even if it decreases. If the score is 0, the user will be deleted from the high score
+table.
+*/
+	force?: boolean;
+}
+
+/**
+Returns the high scores for a game and some part of the high score table in the range of the specified user; for bots
+only.
+Request type for {@link Tdjson#getGameHighScores}.
+*/
+export interface GetGameHighScores {
+	'@type': 'getGameHighScores';
+	/**
+The chat that contains the message with the game.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+User identifier.
+*/
+	user_id: number;
+}
+
+/**
+Returns game high scores and some part of the high score table in the range of the specified user; for bots only.
+Request type for {@link Tdjson#getInlineGameHighScores}.
+*/
+export interface GetInlineGameHighScores {
+	'@type': 'getInlineGameHighScores';
+	/**
+Inline message identifier.
+*/
+	inline_message_id: string;
+	/**
+User identifier.
+*/
+	user_id: number;
+}
+
+/**
+Deletes the default reply markup from a chat. Must be called after a one-time keyboard or a ForceReply reply markup has
+been used. UpdateChatReplyMarkup will be sent if the reply markup is changed.
+Request type for {@link Tdjson#deleteChatReplyMarkup}.
+*/
+export interface DeleteChatReplyMarkup {
+	'@type': 'deleteChatReplyMarkup';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The message identifier of the used keyboard.
+*/
+	message_id: number;
+}
+
+/**
+Sends a notification about user activity in a chat.
+Request type for {@link Tdjson#sendChatAction}.
+*/
+export interface SendChatAction {
+	'@type': 'sendChatAction';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+If not 0, a message thread identifier in which the action was performed.
+*/
+	message_thread_id: number;
+	/**
+The action description; pass null to cancel the currently active action.
+*/
+	action: ChatAction;
+}
+
+/**
+Informs TDLib that the chat is opened by the user. Many useful activities depend on the chat being opened or closed
+(e.g., in supergroups and channels all updates are received only for opened chats).
+Request type for {@link Tdjson#openChat}.
+*/
+export interface OpenChat {
+	'@type': 'openChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Informs TDLib that the chat is closed by the user. Many useful activities depend on the chat being opened or closed.
+Request type for {@link Tdjson#closeChat}.
+*/
+export interface CloseChat {
+	'@type': 'closeChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Informs TDLib that messages are being viewed by the user. Sponsored messages must be marked as viewed only when the
+entire text of the message is shown on the screen (excluding the button). Many useful activities depend on whether the
+messages are currently being viewed or not (e.g., marking messages as read, incrementing a view counter, updating a view
+counter, removing deleted messages in supergroups and channels).
+Request type for {@link Tdjson#viewMessages}.
+*/
+export interface ViewMessages {
+	'@type': 'viewMessages';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+If not 0, a message thread identifier in which the messages are being viewed.
+*/
+	message_thread_id: number;
+	/**
+The identifiers of the messages being viewed.
+*/
+	message_ids: number[];
+	/**
+Pass true to mark as read the specified messages even the chat is closed.
+*/
+	force_read?: boolean;
+}
+
+/**
+Informs TDLib that the message content has been opened (e.g., the user has opened a photo, video, document, location or
+venue, or has listened to an audio file or voice note message). An updateMessageContentOpened update will be generated
+if something has changed.
+Request type for {@link Tdjson#openMessageContent}.
+*/
+export interface OpenMessageContent {
+	'@type': 'openMessageContent';
+	/**
+Chat identifier of the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message with the opened content.
+*/
+	message_id: number;
+}
+
+/**
+Informs TDLib that a message with an animated emoji was clicked by the user. Returns a big animated sticker to be played
+or a 404 error if usual animation needs to be played.
+Request type for {@link Tdjson#clickAnimatedEmojiMessage}.
+*/
+export interface ClickAnimatedEmojiMessage {
+	'@type': 'clickAnimatedEmojiMessage';
+	/**
+Chat identifier of the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the clicked message.
+*/
+	message_id: number;
+}
+
+/**
+Returns information about the type of an internal link. Returns a 404 error if the link is not internal. Can be called
+before authorization.
+Request type for {@link Tdjson#getInternalLinkType}.
+*/
+export interface GetInternalLinkType {
+	'@type': 'getInternalLinkType';
+	/**
+The link.
+*/
+	link: string;
+}
+
+/**
+Returns information about an action to be done when the current user clicks an external link. Don't use this method for
+links from secret chats if web page preview is disabled in secret chats.
+Request type for {@link Tdjson#getExternalLinkInfo}.
+*/
+export interface GetExternalLinkInfo {
+	'@type': 'getExternalLinkInfo';
+	/**
+The link.
+*/
+	link: string;
+}
+
+/**
+Returns an HTTP URL which can be used to automatically authorize the current user on a website after clicking an HTTP
+link. Use the method getExternalLinkInfo to find whether a prior user confirmation is needed.
+Request type for {@link Tdjson#getExternalLink}.
+*/
+export interface GetExternalLink {
+	'@type': 'getExternalLink';
+	/**
+The HTTP link.
+*/
+	link: string;
+	/**
+Pass true if the current user allowed the bot, returned in getExternalLinkInfo, to send them messages.
+*/
+	allow_write_access?: boolean;
+}
+
+/**
+Marks all mentions in a chat as read.
+Request type for {@link Tdjson#readAllChatMentions}.
+*/
+export interface ReadAllChatMentions {
+	'@type': 'readAllChatMentions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Marks all reactions in a chat as read.
+Request type for {@link Tdjson#readAllChatReactions}.
+*/
+export interface ReadAllChatReactions {
+	'@type': 'readAllChatReactions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Returns an existing chat corresponding to a given user.
+Request type for {@link Tdjson#createPrivateChat}.
+*/
+export interface CreatePrivateChat {
+	'@type': 'createPrivateChat';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+Pass true to create the chat without a network request. In this case all information about the chat except its type,
+title and photo can be incorrect.
+*/
+	force?: boolean;
+}
+
+/**
+Returns an existing chat corresponding to a known basic group.
+Request type for {@link Tdjson#createBasicGroupChat}.
+*/
+export interface CreateBasicGroupChat {
+	'@type': 'createBasicGroupChat';
+	/**
+Basic group identifier.
+*/
+	basic_group_id: number;
+	/**
+Pass true to create the chat without a network request. In this case all information about the chat except its type,
+title and photo can be incorrect.
+*/
+	force?: boolean;
+}
+
+/**
+Returns an existing chat corresponding to a known supergroup or channel.
+Request type for {@link Tdjson#createSupergroupChat}.
+*/
+export interface CreateSupergroupChat {
+	'@type': 'createSupergroupChat';
+	/**
+Supergroup or channel identifier.
+*/
+	supergroup_id: number;
+	/**
+Pass true to create the chat without a network request. In this case all information about the chat except its type,
+title and photo can be incorrect.
+*/
+	force?: boolean;
+}
+
+/**
+Returns an existing chat corresponding to a known secret chat.
+Request type for {@link Tdjson#createSecretChat}.
+*/
+export interface CreateSecretChat {
+	'@type': 'createSecretChat';
+	/**
+Secret chat identifier.
+*/
+	secret_chat_id: number;
+}
+
+/**
+Creates a new basic group and sends a corresponding messageBasicGroupChatCreate. Returns the newly created chat.
+Request type for {@link Tdjson#createNewBasicGroupChat}.
+*/
+export interface CreateNewBasicGroupChat {
+	'@type': 'createNewBasicGroupChat';
+	/**
+Identifiers of users to be added to the basic group.
+*/
+	user_ids: number[];
+	/**
+Title of the new basic group; 1-128 characters.
+*/
+	title: string;
+}
+
+/**
+Creates a new supergroup or channel and sends a corresponding messageSupergroupChatCreate. Returns the newly created
+chat.
+Request type for {@link Tdjson#createNewSupergroupChat}.
+*/
+export interface CreateNewSupergroupChat {
+	'@type': 'createNewSupergroupChat';
+	/**
+Title of the new chat; 1-128 characters.
+*/
+	title: string;
+	/**
+Pass true to create a channel chat.
+*/
+	is_channel?: boolean;
+	/**
+Creates a new supergroup or channel and sends a corresponding messageSupergroupChatCreate. Returns the newly created
+chat.
+*/
+	description: string;
+	/**
+Chat location if a location-based supergroup is being created; pass null to create an ordinary supergroup chat.
+*/
+	location: ChatLocation;
+	/**
+Pass true to create a supergroup for importing messages using importMessage.
+*/
+	for_import?: boolean;
+}
+
+/**
+Creates a new secret chat. Returns the newly created chat.
+Request type for {@link Tdjson#createNewSecretChat}.
+*/
+export interface CreateNewSecretChat {
+	'@type': 'createNewSecretChat';
+	/**
+Identifier of the target user.
+*/
+	user_id: number;
+}
+
+/**
+Creates a new supergroup from an existing basic group and sends a corresponding messageChatUpgradeTo and
+messageChatUpgradeFrom; requires creator privileges. Deactivates the original basic group.
+Request type for {@link Tdjson#upgradeBasicGroupChatToSupergroupChat}.
+*/
+export interface UpgradeBasicGroupChatToSupergroupChat {
+	'@type': 'upgradeBasicGroupChatToSupergroupChat';
+	/**
+Identifier of the chat to upgrade.
+*/
+	chat_id: number;
+}
+
+/**
+Returns chat lists to which the chat can be added. This is an offline request.
+Request type for {@link Tdjson#getChatListsToAddChat}.
+*/
+export interface GetChatListsToAddChat {
+	'@type': 'getChatListsToAddChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Adds a chat to a chat list. A chat can't be simultaneously in Main and Archive chat lists, so it is automatically
+removed from another one if needed.
+Request type for {@link Tdjson#addChatToList}.
+*/
+export interface AddChatToList {
+	'@type': 'addChatToList';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The chat list. Use getChatListsToAddChat to get suitable chat lists.
+*/
+	chat_list: ChatList;
+}
+
+/**
+Returns information about a chat filter by its identifier.
+Request type for {@link Tdjson#getChatFilter}.
+*/
+export interface GetChatFilter {
+	'@type': 'getChatFilter';
+	/**
+Chat filter identifier.
+*/
+	chat_filter_id: number;
+}
+
+/**
+Creates new chat filter. Returns information about the created chat filter. There can be up to
+GetOption("chat_filter_count_max") chat filters, but the limit can be increased with Telegram Premium.
+Request type for {@link Tdjson#createChatFilter}.
+*/
+export interface CreateChatFilter {
+	'@type': 'createChatFilter';
+	/**
+Chat filter.
+*/
+	filter: ChatFilter;
+}
+
+/**
+Edits existing chat filter. Returns information about the edited chat filter.
+Request type for {@link Tdjson#editChatFilter}.
+*/
+export interface EditChatFilter {
+	'@type': 'editChatFilter';
+	/**
+Chat filter identifier.
+*/
+	chat_filter_id: number;
+	/**
+The edited chat filter.
+*/
+	filter: ChatFilter;
+}
+
+/**
+Deletes existing chat filter.
+Request type for {@link Tdjson#deleteChatFilter}.
+*/
+export interface DeleteChatFilter {
+	'@type': 'deleteChatFilter';
+	/**
+Chat filter identifier.
+*/
+	chat_filter_id: number;
+}
+
+/**
+Changes the order of chat filters.
+Request type for {@link Tdjson#reorderChatFilters}.
+*/
+export interface ReorderChatFilters {
+	'@type': 'reorderChatFilters';
+	/**
+Identifiers of chat filters in the new correct order.
+*/
+	chat_filter_ids: number[];
+	/**
+Position of the main chat list among chat filters, 0-based. Can be non-zero only for Premium users.
+*/
+	main_chat_list_position: number;
+}
+
+/**
+Returns recommended chat filters for the current user.
+Request type for {@link Tdjson#getRecommendedChatFilters}.
+*/
+export interface GetRecommendedChatFilters {
+	'@type': 'getRecommendedChatFilters';
+
+}
+
+/**
+Returns default icon name for a filter. Can be called synchronously.
+Request type for {@link Tdjson#getChatFilterDefaultIconName}.
+*/
+export interface GetChatFilterDefaultIconName {
+	'@type': 'getChatFilterDefaultIconName';
+	/**
+Chat filter.
+*/
+	filter: ChatFilter;
+}
+
+/**
+Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info
+administrator right.
+Request type for {@link Tdjson#setChatTitle}.
+*/
+export interface SetChatTitle {
+	'@type': 'setChatTitle';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New title of the chat; 1-128 characters.
+*/
+	title: string;
+}
+
+/**
+Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info
+administrator right.
+Request type for {@link Tdjson#setChatPhoto}.
+*/
+export interface SetChatPhoto {
+	'@type': 'setChatPhoto';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New chat photo; pass null to delete the chat photo.
+*/
+	photo: InputChatPhoto;
+}
+
+/**
+Changes the message TTL in a chat. Requires can_delete_messages administrator right in basic groups, supergroups and
+channels Message TTL can't be changed in a chat with the current user (Saved Messages) and the chat 777000 (Telegram).
+Request type for {@link Tdjson#setChatMessageTtl}.
+*/
+export interface SetChatMessageTtl {
+	'@type': 'setChatMessageTtl';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New TTL value, in seconds; unless the chat is secret, it must be from 0 up to 365 * 86400 and be divisible by 86400.
+*/
+	ttl: number;
+}
+
+/**
+Changes the chat members permissions. Supported only for basic groups and supergroups. Requires can_restrict_members
+administrator right.
+Request type for {@link Tdjson#setChatPermissions}.
+*/
+export interface SetChatPermissions {
+	'@type': 'setChatPermissions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New non-administrator members permissions in the chat.
+*/
+	permissions: ChatPermissions;
+}
+
+/**
+Changes the chat theme. Supported only in private and secret chats.
+Request type for {@link Tdjson#setChatTheme}.
+*/
+export interface SetChatTheme {
+	'@type': 'setChatTheme';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Name of the new chat theme; pass an empty string to return the default theme.
+*/
+	theme_name: string;
+}
+
+/**
+Changes the draft message in a chat.
+Request type for {@link Tdjson#setChatDraftMessage}.
+*/
+export interface SetChatDraftMessage {
+	'@type': 'setChatDraftMessage';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+If not 0, a message thread identifier in which the draft was changed.
+*/
+	message_thread_id: number;
+	/**
+New draft message; pass null to remove the draft.
+*/
+	draft_message: DraftMessage;
+}
+
+/**
+Changes the notification settings of a chat. Notification settings of a chat with the current user (Saved Messages)
+can't be changed.
+Request type for {@link Tdjson#setChatNotificationSettings}.
+*/
+export interface SetChatNotificationSettings {
+	'@type': 'setChatNotificationSettings';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New notification settings for the chat. If the chat is muted for more than 366 days, it is considered to be muted
+forever.
+*/
+	notification_settings: ChatNotificationSettings;
+}
+
+/**
+Changes the ability of users to save, forward, or copy chat content. Supported only for basic groups, supergroups and
+channels. Requires owner privileges.
+Request type for {@link Tdjson#toggleChatHasProtectedContent}.
+*/
+export interface ToggleChatHasProtectedContent {
+	'@type': 'toggleChatHasProtectedContent';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of has_protected_content.
+*/
+	has_protected_content?: boolean;
+}
+
+/**
+Changes the marked as unread state of a chat.
+Request type for {@link Tdjson#toggleChatIsMarkedAsUnread}.
+*/
+export interface ToggleChatIsMarkedAsUnread {
+	'@type': 'toggleChatIsMarkedAsUnread';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of is_marked_as_unread.
+*/
+	is_marked_as_unread?: boolean;
+}
+
+/**
+Changes the value of the default disable_notification parameter, used when a message is sent to a chat.
+Request type for {@link Tdjson#toggleChatDefaultDisableNotification}.
+*/
+export interface ToggleChatDefaultDisableNotification {
+	'@type': 'toggleChatDefaultDisableNotification';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of default_disable_notification.
+*/
+	default_disable_notification?: boolean;
+}
+
+/**
+Changes reactions, available in a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
+administrator right.
+Request type for {@link Tdjson#setChatAvailableReactions}.
+*/
+export interface SetChatAvailableReactions {
+	'@type': 'setChatAvailableReactions';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+New list of reactions, available in the chat. All reactions must be active.
+*/
+	available_reactions: string[];
+}
+
+/**
+Changes application-specific data associated with a chat.
+Request type for {@link Tdjson#setChatClientData}.
+*/
+export interface SetChatClientData {
+	'@type': 'setChatClientData';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of client_data.
+*/
+	client_data: string;
+}
+
+/**
+Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
+administrator right.
+Request type for {@link Tdjson#setChatDescription}.
+*/
+export interface SetChatDescription {
+	'@type': 'setChatDescription';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
+administrator right.
+*/
+	description: string;
+}
+
+/**
+Changes the discussion group of a channel chat; requires can_change_info administrator right in the channel if it is
+specified.
+Request type for {@link Tdjson#setChatDiscussionGroup}.
+*/
+export interface SetChatDiscussionGroup {
+	'@type': 'setChatDiscussionGroup';
+	/**
+Identifier of the channel chat. Pass 0 to remove a link from the supergroup passed in the second argument to a linked
+channel chat (requires can_pin_messages rights in the supergroup).
+*/
+	chat_id: number;
+	/**
+Identifier of a new channel's discussion group. Use 0 to remove the discussion group. Use the method
+getSuitableDiscussionChats to find all suitable groups. Basic group chats must be first upgraded to supergroup chats. If
+new chat members don't have access to old messages in the supergroup, then toggleSupergroupIsAllHistoryAvailable must be
+used first to change that.
+*/
+	discussion_chat_id: number;
+}
+
+/**
+Changes the location of a chat. Available only for some location-based supergroups, use
+supergroupFullInfo.can_set_location to check whether the method is allowed to use.
+Request type for {@link Tdjson#setChatLocation}.
+*/
+export interface SetChatLocation {
+	'@type': 'setChatLocation';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New location for the chat; must be valid and not null.
+*/
+	location: ChatLocation;
+}
+
+/**
+Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members rights.
+Request type for {@link Tdjson#setChatSlowModeDelay}.
+*/
+export interface SetChatSlowModeDelay {
+	'@type': 'setChatSlowModeDelay';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New slow mode delay for the chat, in seconds; must be one of 0, 10, 30, 60, 300, 900, 3600.
+*/
+	slow_mode_delay: number;
+}
+
+/**
+Pins a message in a chat; requires can_pin_messages rights or can_edit_messages rights in the channel.
+Request type for {@link Tdjson#pinChatMessage}.
+*/
+export interface PinChatMessage {
+	'@type': 'pinChatMessage';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the new pinned message.
+*/
+	message_id: number;
+	/**
+Pass true to disable notification about the pinned message. Notifications are always disabled in channels and private
+chats.
+*/
+	disable_notification?: boolean;
+	/**
+Pass true to pin the message only for self; private chats only.
+*/
+	only_for_self?: boolean;
+}
+
+/**
+Removes a pinned message from a chat; requires can_pin_messages rights in the group or can_edit_messages rights in the
+channel.
+Request type for {@link Tdjson#unpinChatMessage}.
+*/
+export interface UnpinChatMessage {
+	'@type': 'unpinChatMessage';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the removed pinned message.
+*/
+	message_id: number;
+}
+
+/**
+Removes all pinned messages from a chat; requires can_pin_messages rights in the group or can_edit_messages rights in
+the channel.
+Request type for {@link Tdjson#unpinAllChatMessages}.
+*/
+export interface UnpinAllChatMessages {
+	'@type': 'unpinAllChatMessages';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+}
+
+/**
+Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method. May return
+an error with a message "INVITE_REQUEST_SENT" if only a join request was created.
+Request type for {@link Tdjson#joinChat}.
+*/
+export interface JoinChat {
+	'@type': 'joinChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Removes the current user from chat members. Private and secret chats can't be left using this method.
+Request type for {@link Tdjson#leaveChat}.
+*/
+export interface LeaveChat {
+	'@type': 'leaveChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Adds a new member to a chat. Members can't be added to private or secret chats.
+Request type for {@link Tdjson#addChatMember}.
+*/
+export interface AddChatMember {
+	'@type': 'addChatMember';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+	/**
+The number of earlier messages from the chat to be forwarded to the new member; up to 100. Ignored for supergroups and
+channels, or if the added user is a bot.
+*/
+	forward_limit: number;
+}
+
+/**
+Adds multiple new members to a chat. Currently, this method is only available for supergroups and channels. This method
+can't be used to join a chat. Members can't be added to a channel if it has more than 200 members.
+Request type for {@link Tdjson#addChatMembers}.
+*/
+export interface AddChatMembers {
+	'@type': 'addChatMembers';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifiers of the users to be added to the chat. The maximum number of added users is 20 for supergroups and 100 for
+channels.
+*/
+	user_ids: number[];
+}
+
+/**
+Changes the status of a chat member, needs appropriate privileges. This function is currently not suitable for
+transferring chat ownership; use transferChatOwnership instead. Use addChatMember or banChatMember if some additional
+parameters needs to be passed.
+Request type for {@link Tdjson#setChatMemberStatus}.
+*/
+export interface SetChatMemberStatus {
+	'@type': 'setChatMemberStatus';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Member identifier. Chats can be only banned and unbanned in supergroups and channels.
+*/
+	member_id: MessageSender;
+	/**
+The new status of the member in the chat.
+*/
+	status: ChatMemberStatus;
+}
+
+/**
+Bans a member in a chat. Members can't be banned in private or secret chats. In supergroups and channels, the user will
+not be able to return to the group on their own using invite links, etc., unless unbanned first.
+Request type for {@link Tdjson#banChatMember}.
+*/
+export interface BanChatMember {
+	'@type': 'banChatMember';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Member identifier.
+*/
+	member_id: MessageSender;
+	/**
+Point in time (Unix timestamp) when the user will be unbanned; 0 if never. If the user is banned for more than 366 days
+or for less than 30 seconds from the current time, the user is considered to be banned forever. Ignored in basic groups
+and if a chat is banned.
+*/
+	banned_until_date: number;
+	/**
+Pass true to delete all messages in the chat for the user that is being removed. Always true for supergroups and
+channels.
+*/
+	revoke_messages?: boolean;
+}
+
+/**
+Checks whether the current session can be used to transfer a chat ownership to another user.
+Request type for {@link Tdjson#canTransferOwnership}.
+*/
+export interface CanTransferOwnership {
+	'@type': 'canTransferOwnership';
+
+}
+
+/**
+Changes the owner of a chat. The current user must be a current owner of the chat. Use the method canTransferOwnership
+to check whether the ownership can be transferred from the current session. Available only for supergroups and channel
+chats.
+Request type for {@link Tdjson#transferChatOwnership}.
+*/
+export interface TransferChatOwnership {
+	'@type': 'transferChatOwnership';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the user to which transfer the ownership. The ownership can't be transferred to a bot or to a deleted
+user.
+*/
+	user_id: number;
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
+}
+
+/**
+Returns information about a single member of a chat.
+Request type for {@link Tdjson#getChatMember}.
+*/
+export interface GetChatMember {
+	'@type': 'getChatMember';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Member identifier.
+*/
+	member_id: MessageSender;
+}
+
+/**
+Searches for a specified query in the first name, last name and username of the members of a specified chat. Requires
+administrator rights in channels.
+Request type for {@link Tdjson#searchChatMembers}.
+*/
+export interface SearchChatMembers {
+	'@type': 'searchChatMembers';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Query to search for.
+*/
+	query: string;
+	/**
+The maximum number of users to be returned; up to 200.
+*/
+	limit: number;
+	/**
+The type of users to search for; pass null to search among all chat members.
+*/
+	filter: ChatMembersFilter;
+}
+
+/**
+Returns a list of administrators of the chat with their custom titles.
+Request type for {@link Tdjson#getChatAdministrators}.
+*/
+export interface GetChatAdministrators {
+	'@type': 'getChatAdministrators';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Clears message drafts in all chats.
+Request type for {@link Tdjson#clearAllDraftMessages}.
+*/
+export interface ClearAllDraftMessages {
+	'@type': 'clearAllDraftMessages';
+	/**
+Pass true to keep local message drafts in secret chats.
+*/
+	exclude_secret_chats?: boolean;
+}
+
+/**
+Returns saved notification sound by its identifier. Returns a 404 error if there is no saved notification sound with the
+specified identifier.
+Request type for {@link Tdjson#getSavedNotificationSound}.
+*/
+export interface GetSavedNotificationSound {
+	'@type': 'getSavedNotificationSound';
+	/**
+Identifier of the notification sound.
+*/
+	notification_sound_id: string;
+}
+
+/**
+Returns list of saved notification sounds. If a sound isn't in the list, then default sound needs to be used.
+Request type for {@link Tdjson#getSavedNotificationSounds}.
+*/
+export interface GetSavedNotificationSounds {
+	'@type': 'getSavedNotificationSounds';
+
+}
+
+/**
+Adds a new notification sound to the list of saved notification sounds. The new notification sound is added to the top
+of the list. If it is already in the list, its position isn't changed.
+Request type for {@link Tdjson#addSavedNotificationSound}.
+*/
+export interface AddSavedNotificationSound {
+	'@type': 'addSavedNotificationSound';
+	/**
+Notification sound file to add.
+*/
+	sound: InputFile;
+}
+
+/**
+Removes a notification sound from the list of saved notification sounds.
+Request type for {@link Tdjson#removeSavedNotificationSound}.
+*/
+export interface RemoveSavedNotificationSound {
+	'@type': 'removeSavedNotificationSound';
+	/**
+Identifier of the notification sound.
+*/
+	notification_sound_id: string;
+}
+
+/**
+Returns list of chats with non-default notification settings.
+Request type for {@link Tdjson#getChatNotificationSettingsExceptions}.
+*/
+export interface GetChatNotificationSettingsExceptions {
+	'@type': 'getChatNotificationSettingsExceptions';
+	/**
+If specified, only chats from the scope will be returned; pass null to return chats from all scopes.
+*/
+	scope: NotificationSettingsScope;
+	/**
+Pass true to include in the response chats with only non-default sound.
+*/
+	compare_sound?: boolean;
+}
+
+/**
+Returns the notification settings for chats of a given type.
+Request type for {@link Tdjson#getScopeNotificationSettings}.
+*/
+export interface GetScopeNotificationSettings {
+	'@type': 'getScopeNotificationSettings';
+	/**
+Types of chats for which to return the notification settings information.
+*/
+	scope: NotificationSettingsScope;
+}
+
+/**
+Changes notification settings for chats of a given type.
+Request type for {@link Tdjson#setScopeNotificationSettings}.
+*/
+export interface SetScopeNotificationSettings {
+	'@type': 'setScopeNotificationSettings';
+	/**
+Types of chats for which to change the notification settings.
+*/
+	scope: NotificationSettingsScope;
+	/**
+The new notification settings for the given scope.
+*/
+	notification_settings: ScopeNotificationSettings;
+}
+
+/**
+Resets all notification settings to their default values. By default, all chats are unmuted and message previews are
+shown.
+Request type for {@link Tdjson#resetAllNotificationSettings}.
+*/
+export interface ResetAllNotificationSettings {
+	'@type': 'resetAllNotificationSettings';
+
+}
+
+/**
+Changes the pinned state of a chat. There can be up to
+GetOption("pinned_chat_count_max")/GetOption("pinned_archived_chat_count_max") pinned non-secret chats and the same
+number of secret chats in the main/archive chat list. The limit can be increased with Telegram Premium.
+Request type for {@link Tdjson#toggleChatIsPinned}.
+*/
+export interface ToggleChatIsPinned {
+	'@type': 'toggleChatIsPinned';
+	/**
+Chat list in which to change the pinned state of the chat.
+*/
+	chat_list: ChatList;
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Pass true to pin the chat; pass false to unpin it.
+*/
+	is_pinned?: boolean;
+}
+
+/**
+Changes the order of pinned chats.
+Request type for {@link Tdjson#setPinnedChats}.
+*/
+export interface SetPinnedChats {
+	'@type': 'setPinnedChats';
+	/**
+Chat list in which to change the order of pinned chats.
+*/
+	chat_list: ChatList;
+	/**
+The new list of pinned chats.
+*/
+	chat_ids: number[];
+}
+
+/**
+Returns information about a bot that can be added to attachment menu.
+Request type for {@link Tdjson#getAttachmentMenuBot}.
+*/
+export interface GetAttachmentMenuBot {
+	'@type': 'getAttachmentMenuBot';
+	/**
+Bot's user identifier.
+*/
+	bot_user_id: number;
+}
+
+/**
+Adds or removes a bot to attachment menu. Bot can be added to attachment menu, only if
+userTypeBot.can_be_added_to_attachment_menu == true.
+Request type for {@link Tdjson#toggleBotIsAddedToAttachmentMenu}.
+*/
+export interface ToggleBotIsAddedToAttachmentMenu {
+	'@type': 'toggleBotIsAddedToAttachmentMenu';
+	/**
+Bot's user identifier.
+*/
+	bot_user_id: number;
+	/**
+Pass true to add the bot to attachment menu; pass false to remove the bot from attachment menu.
+*/
+	is_added?: boolean;
+}
+
+/**
+Downloads a file from the cloud. Download progress and completion of the download will be notified through updateFile
+updates.
+Request type for {@link Tdjson#downloadFile}.
+*/
+export interface DownloadFile {
+	'@type': 'downloadFile';
+	/**
+Identifier of the file to download.
+*/
+	file_id: number;
+	/**
+Priority of the download (1-32). The higher the priority, the earlier the file will be downloaded. If the priorities of
+two files are equal, then the last one for which downloadFile/addFileToDownloads was called will be downloaded first.
+*/
+	priority: number;
+	/**
+The starting position from which the file needs to be downloaded.
+*/
+	offset: number;
+	/**
+Number of bytes which need to be downloaded starting from the "offset" position before the download will automatically
+be canceled; use 0 to download without a limit.
+*/
+	limit: number;
+	/**
+Pass true to return response only after the file download has succeeded, has failed, has been canceled, or a new
+downloadFile request with different offset/limit parameters was sent; pass false to return file state immediately, just
+after the download has been started.
+*/
+	synchronous?: boolean;
+}
+
+/**
+Returns file downloaded prefix size from a given offset, in bytes.
+Request type for {@link Tdjson#getFileDownloadedPrefixSize}.
+*/
+export interface GetFileDownloadedPrefixSize {
+	'@type': 'getFileDownloadedPrefixSize';
+	/**
+Identifier of the file.
+*/
+	file_id: number;
+	/**
+Offset from which downloaded prefix size needs to be calculated.
+*/
+	offset: number;
+}
+
+/**
+Stops the downloading of a file. If a file has already been downloaded, does nothing.
+Request type for {@link Tdjson#cancelDownloadFile}.
+*/
+export interface CancelDownloadFile {
+	'@type': 'cancelDownloadFile';
+	/**
+Identifier of a file to stop downloading.
+*/
+	file_id: number;
+	/**
+Pass true to stop downloading only if it hasn't been started, i.e. request hasn't been sent to server.
+*/
+	only_if_pending?: boolean;
+}
+
+/**
+Returns suggested name for saving a file in a given directory.
+Request type for {@link Tdjson#getSuggestedFileName}.
+*/
+export interface GetSuggestedFileName {
+	'@type': 'getSuggestedFileName';
+	/**
+Identifier of the file.
+*/
+	file_id: number;
+	/**
+Directory in which the file is supposed to be saved.
+*/
+	directory: string;
+}
+
+/**
+Preliminary uploads a file to the cloud before sending it in a message, which can be useful for uploading of being
+recorded voice and video notes. Updates updateFile will be used to notify about upload progress and successful
+completion of the upload. The file will not have a persistent remote identifier until it will be sent in a message.
+Request type for {@link Tdjson#preliminaryUploadFile}.
+*/
+export interface PreliminaryUploadFile {
+	'@type': 'preliminaryUploadFile';
+	/**
+File to upload.
+*/
+	file: InputFile;
+	/**
+File type; pass null if unknown.
+*/
+	file_type: FileType;
+	/**
+Priority of the upload (1-32). The higher the priority, the earlier the file will be uploaded. If the priorities of two
+files are equal, then the first one for which preliminaryUploadFile was called will be uploaded first.
+*/
+	priority: number;
+}
+
+/**
+Stops the preliminary uploading of a file. Supported only for files uploaded by using preliminaryUploadFile. For other
+files the behavior is undefined.
+Request type for {@link Tdjson#cancelPreliminaryUploadFile}.
+*/
+export interface CancelPreliminaryUploadFile {
+	'@type': 'cancelPreliminaryUploadFile';
+	/**
+Identifier of the file to stop uploading.
+*/
+	file_id: number;
+}
+
+/**
+Writes a part of a generated file. This method is intended to be used only if the application has no direct access to
+TDLib's file system, because it is usually slower than a direct write to the destination file.
+Request type for {@link Tdjson#writeGeneratedFilePart}.
+*/
+export interface WriteGeneratedFilePart {
+	'@type': 'writeGeneratedFilePart';
+	/**
+The identifier of the generation process.
+*/
+	generation_id: string;
+	/**
+The offset from which to write the data to the file.
+*/
+	offset: number;
+	/**
+The data to write.
+*/
+	data: string;
+}
+
+/**
+Informs TDLib on a file generation progress.
+Request type for {@link Tdjson#setFileGenerationProgress}.
+*/
+export interface SetFileGenerationProgress {
+	'@type': 'setFileGenerationProgress';
+	/**
+The identifier of the generation process.
+*/
+	generation_id: string;
+	/**
+Expected size of the generated file, in bytes; 0 if unknown.
+*/
+	expected_size: number;
+	/**
+The number of bytes already generated.
+*/
+	local_prefix_size: number;
+}
+
+/**
+Finishes the file generation.
+Request type for {@link Tdjson#finishFileGeneration}.
+*/
+export interface FinishFileGeneration {
+	'@type': 'finishFileGeneration';
+	/**
+The identifier of the generation process.
+*/
+	generation_id: string;
+	/**
+If passed, the file generation has failed and must be terminated; pass null if the file generation succeeded.
+*/
+	error: Error;
+}
+
+/**
+Reads a part of a file from the TDLib file cache and returns read bytes. This method is intended to be used only if the
+application has no direct access to TDLib's file system, because it is usually slower than a direct read from the file.
+Request type for {@link Tdjson#readFilePart}.
+*/
+export interface ReadFilePart {
+	'@type': 'readFilePart';
+	/**
+Identifier of the file. The file must be located in the TDLib file cache.
+*/
+	file_id: number;
+	/**
+The offset from which to read the file.
+*/
+	offset: number;
+	/**
+Number of bytes to read. An error will be returned if there are not enough bytes available in the file from the
+specified position. Pass 0 to read all available data from the specified position.
+*/
+	count: number;
+}
+
+/**
+Deletes a file from the TDLib file cache.
+Request type for {@link Tdjson#deleteFile}.
+*/
+export interface DeleteFile {
+	'@type': 'deleteFile';
+	/**
+Identifier of the file to delete.
+*/
+	file_id: number;
+}
+
+/**
+Adds a file from a message to the list of file downloads. Download progress and completion of the download will be
+notified through updateFile updates. If message database is used, the list of file downloads is persistent across
+application restarts. The downloading is independent from download using downloadFile, i.e. it continues if downloadFile
+is canceled or is used to download a part of the file.
+Request type for {@link Tdjson#addFileToDownloads}.
+*/
+export interface AddFileToDownloads {
+	'@type': 'addFileToDownloads';
+	/**
+Identifier of the file to download.
+*/
+	file_id: number;
+	/**
+Chat identifier of the message with the file.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+Priority of the download (1-32). The higher the priority, the earlier the file will be downloaded. If the priorities of
+two files are equal, then the last one for which downloadFile/addFileToDownloads was called will be downloaded first.
+*/
+	priority: number;
+}
+
+/**
+Changes pause state of a file in the file download list.
+Request type for {@link Tdjson#toggleDownloadIsPaused}.
+*/
+export interface ToggleDownloadIsPaused {
+	'@type': 'toggleDownloadIsPaused';
+	/**
+Identifier of the downloaded file.
+*/
+	file_id: number;
+	/**
+Pass true if the download is paused.
+*/
+	is_paused?: boolean;
+}
+
+/**
+Changes pause state of all files in the file download list.
+Request type for {@link Tdjson#toggleAllDownloadsArePaused}.
+*/
+export interface ToggleAllDownloadsArePaused {
+	'@type': 'toggleAllDownloadsArePaused';
+	/**
+Pass true to pause all downloads; pass false to unpause them.
+*/
+	are_paused?: boolean;
+}
+
+/**
+Removes a file from the file download list.
+Request type for {@link Tdjson#removeFileFromDownloads}.
+*/
+export interface RemoveFileFromDownloads {
+	'@type': 'removeFileFromDownloads';
+	/**
+Identifier of the downloaded file.
+*/
+	file_id: number;
+	/**
+Pass true to delete the file from the TDLib file cache.
+*/
+	delete_from_cache?: boolean;
+}
+
+/**
+Removes all files from the file download list.
+Request type for {@link Tdjson#removeAllFilesFromDownloads}.
+*/
+export interface RemoveAllFilesFromDownloads {
+	'@type': 'removeAllFilesFromDownloads';
+	/**
+Pass true to remove only active downloads, including paused.
+*/
+	only_active?: boolean;
+	/**
+Pass true to remove only completed downloads.
+*/
+	only_completed?: boolean;
+	/**
+Pass true to delete the file from the TDLib file cache.
+*/
+	delete_from_cache?: boolean;
+}
+
+/**
+Searches for files in the file download list or recently downloaded files from the list.
+Request type for {@link Tdjson#searchFileDownloads}.
+*/
+export interface SearchFileDownloads {
+	'@type': 'searchFileDownloads';
+	/**
+Query to search for; may be empty to return all downloaded files.
+*/
+	query: string;
+	/**
+Pass true to search only for active downloads, including paused.
+*/
+	only_active?: boolean;
+	/**
+Pass true to search only for completed downloads.
+*/
+	only_completed?: boolean;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of files to be returned.
+*/
+	limit: number;
+}
+
+/**
+Returns information about a file with messages exported from another application.
+Request type for {@link Tdjson#getMessageFileType}.
+*/
+export interface GetMessageFileType {
+	'@type': 'getMessageFileType';
+	/**
+Beginning of the message file; up to 100 first lines.
+*/
+	message_file_head: string;
+}
+
+/**
+Returns a confirmation text to be shown to the user before starting message import.
+Request type for {@link Tdjson#getMessageImportConfirmationText}.
+*/
+export interface GetMessageImportConfirmationText {
+	'@type': 'getMessageImportConfirmationText';
+	/**
+Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual
+contact or an identifier of a supergroup chat with can_change_info administrator right.
+*/
+	chat_id: number;
+}
+
+/**
+Imports messages exported from another app.
+Request type for {@link Tdjson#importMessages}.
+*/
+export interface ImportMessages {
+	'@type': 'importMessages';
+	/**
+Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual
+contact or an identifier of a supergroup chat with can_change_info administrator right.
+*/
+	chat_id: number;
+	/**
+File with messages to import. Only inputFileLocal and inputFileGenerated are supported. The file must not be previously
+uploaded.
+*/
+	message_file: InputFile;
+	/**
+Files used in the imported messages. Only inputFileLocal and inputFileGenerated are supported. The files must not be
+previously uploaded.
+*/
+	attached_files: InputFile[];
+}
+
+/**
+Replaces current primary invite link for a chat with a new primary invite link. Available for basic groups, supergroups,
+and channels. Requires administrator privileges and can_invite_users right.
+Request type for {@link Tdjson#replacePrimaryChatInviteLink}.
+*/
+export interface ReplacePrimaryChatInviteLink {
+	'@type': 'replacePrimaryChatInviteLink';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Creates a new invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator
+privileges and can_invite_users right in the chat.
+Request type for {@link Tdjson#createChatInviteLink}.
+*/
+export interface CreateChatInviteLink {
+	'@type': 'createChatInviteLink';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link name; 0-32 characters.
+*/
+	name: string;
+	/**
+Point in time (Unix timestamp) when the link will expire; pass 0 if never.
+*/
+	expiration_date: number;
+	/**
+The maximum number of chat members that can join the chat via the link simultaneously; 0-99999; pass 0 if not limited.
+*/
+	member_limit: number;
+	/**
+Pass true if users joining the chat via the link need to be approved by chat administrators. In this case, member_limit
+must be 0.
+*/
+	creates_join_request?: boolean;
+}
+
+/**
+Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. Requires
+administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links.
+Request type for {@link Tdjson#editChatInviteLink}.
+*/
+export interface EditChatInviteLink {
+	'@type': 'editChatInviteLink';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link to be edited.
+*/
+	invite_link: string;
+	/**
+Invite link name; 0-32 characters.
+*/
+	name: string;
+	/**
+Point in time (Unix timestamp) when the link will expire; pass 0 if never.
+*/
+	expiration_date: number;
+	/**
+The maximum number of chat members that can join the chat via the link simultaneously; 0-99999; pass 0 if not limited.
+*/
+	member_limit: number;
+	/**
+Pass true if users joining the chat via the link need to be approved by chat administrators. In this case, member_limit
+must be 0.
+*/
+	creates_join_request?: boolean;
+}
+
+/**
+Returns information about an invite link. Requires administrator privileges and can_invite_users right in the chat to
+get own links and owner privileges to get other links.
+Request type for {@link Tdjson#getChatInviteLink}.
+*/
+export interface GetChatInviteLink {
+	'@type': 'getChatInviteLink';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link to get.
+*/
+	invite_link: string;
+}
+
+/**
+Returns list of chat administrators with number of their invite links. Requires owner privileges in the chat.
+Request type for {@link Tdjson#getChatInviteLinkCounts}.
+*/
+export interface GetChatInviteLinkCounts {
+	'@type': 'getChatInviteLinkCounts';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Returns invite links for a chat created by specified administrator. Requires administrator privileges and
+can_invite_users right in the chat to get own links and owner privileges to get other links.
+Request type for {@link Tdjson#getChatInviteLinks}.
+*/
+export interface GetChatInviteLinks {
+	'@type': 'getChatInviteLinks';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+User identifier of a chat administrator. Must be an identifier of the current user for non-owner.
+*/
+	creator_user_id: number;
+	/**
+Pass true if revoked links needs to be returned instead of active or expired.
+*/
+	is_revoked?: boolean;
+	/**
+Creation date of an invite link starting after which to return invite links; use 0 to get results from the beginning.
+*/
+	offset_date: number;
+	/**
+Invite link starting after which to return invite links; use empty string to get results from the beginning.
+*/
+	offset_invite_link: string;
+	/**
+The maximum number of invite links to return; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Returns chat members joined a chat via an invite link. Requires administrator privileges and can_invite_users right in
+the chat for own links and owner privileges for other links.
+Request type for {@link Tdjson#getChatInviteLinkMembers}.
+*/
+export interface GetChatInviteLinkMembers {
+	'@type': 'getChatInviteLinkMembers';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link for which to return chat members.
+*/
+	invite_link: string;
+	/**
+A chat member from which to return next chat members; pass null to get results from the beginning.
+*/
+	offset_member: ChatInviteLinkMember;
+	/**
+The maximum number of chat members to return; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Revokes invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges
+and can_invite_users right in the chat for own links and owner privileges for other links. If a primary link is revoked,
+then additionally to the revoked link returns new primary link.
+Request type for {@link Tdjson#revokeChatInviteLink}.
+*/
+export interface RevokeChatInviteLink {
+	'@type': 'revokeChatInviteLink';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link to be revoked.
+*/
+	invite_link: string;
+}
+
+/**
+Deletes revoked chat invite links. Requires administrator privileges and can_invite_users right in the chat for own
+links and owner privileges for other links.
+Request type for {@link Tdjson#deleteRevokedChatInviteLink}.
+*/
+export interface DeleteRevokedChatInviteLink {
+	'@type': 'deleteRevokedChatInviteLink';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link to revoke.
+*/
+	invite_link: string;
+}
+
+/**
+Deletes all revoked chat invite links created by a given chat administrator. Requires administrator privileges and
+can_invite_users right in the chat for own links and owner privileges for other links.
+Request type for {@link Tdjson#deleteAllRevokedChatInviteLinks}.
+*/
+export interface DeleteAllRevokedChatInviteLinks {
+	'@type': 'deleteAllRevokedChatInviteLinks';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+User identifier of a chat administrator, which links will be deleted. Must be an identifier of the current user for
+non-owner.
+*/
+	creator_user_id: number;
+}
+
+/**
+Checks the validity of an invite link for a chat and returns information about the corresponding chat.
+Request type for {@link Tdjson#checkChatInviteLink}.
+*/
+export interface CheckChatInviteLink {
+	'@type': 'checkChatInviteLink';
+	/**
+Invite link to be checked.
+*/
+	invite_link: string;
+}
+
+/**
+Uses an invite link to add the current user to the chat if possible. May return an error with a message
+"INVITE_REQUEST_SENT" if only a join request was created.
+Request type for {@link Tdjson#joinChatByInviteLink}.
+*/
+export interface JoinChatByInviteLink {
+	'@type': 'joinChatByInviteLink';
+	/**
+Invite link to use.
+*/
+	invite_link: string;
+}
+
+/**
+Returns pending join requests in a chat.
+Request type for {@link Tdjson#getChatJoinRequests}.
+*/
+export interface GetChatJoinRequests {
+	'@type': 'getChatJoinRequests';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link for which to return join requests. If empty, all join requests will be returned. Requires administrator
+privileges and can_invite_users right in the chat for own links and owner privileges for other links.
+*/
+	invite_link: string;
+	/**
+A query to search for in the first names, last names and usernames of the users to return.
+*/
+	query: string;
+	/**
+A chat join request from which to return next requests; pass null to get results from the beginning.
+*/
+	offset_request: ChatJoinRequest;
+	/**
+The maximum number of requests to join the chat to return.
+*/
+	limit: number;
+}
+
+/**
+Handles a pending join request in a chat.
+Request type for {@link Tdjson#processChatJoinRequest}.
+*/
+export interface ProcessChatJoinRequest {
+	'@type': 'processChatJoinRequest';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the user that sent the request.
+*/
+	user_id: number;
+	/**
+Pass true to approve the request; pass false to decline it.
+*/
+	approve?: boolean;
+}
+
+/**
+Handles all pending join requests for a given link in a chat.
+Request type for {@link Tdjson#processChatJoinRequests}.
+*/
+export interface ProcessChatJoinRequests {
+	'@type': 'processChatJoinRequests';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link for which to process join requests. If empty, all join requests will be processed. Requires administrator
+privileges and can_invite_users right in the chat for own links and owner privileges for other links.
+*/
+	invite_link: string;
+	/**
+Pass true to approve all requests; pass false to decline them.
+*/
+	approve?: boolean;
+}
+
+/**
+Creates a new call.
+Request type for {@link Tdjson#createCall}.
+*/
+export interface CreateCall {
+	'@type': 'createCall';
+	/**
+Identifier of the user to be called.
+*/
+	user_id: number;
+	/**
+The call protocols supported by the application.
+*/
+	protocol: CallProtocol;
+	/**
+Pass true to create a video call.
+*/
+	is_video?: boolean;
+}
+
+/**
+Accepts an incoming call.
+Request type for {@link Tdjson#acceptCall}.
+*/
+export interface AcceptCall {
+	'@type': 'acceptCall';
+	/**
+Call identifier.
+*/
+	call_id: number;
+	/**
+The call protocols supported by the application.
+*/
+	protocol: CallProtocol;
+}
+
+/**
+Sends call signaling data.
+Request type for {@link Tdjson#sendCallSignalingData}.
+*/
+export interface SendCallSignalingData {
+	'@type': 'sendCallSignalingData';
+	/**
+Call identifier.
+*/
+	call_id: number;
+	/**
+The data.
+*/
+	data: string;
+}
+
+/**
+Discards a call.
+Request type for {@link Tdjson#discardCall}.
+*/
+export interface DiscardCall {
+	'@type': 'discardCall';
+	/**
+Call identifier.
+*/
+	call_id: number;
+	/**
+Pass true if the user was disconnected.
+*/
+	is_disconnected?: boolean;
+	/**
+The call duration, in seconds.
+*/
+	duration: number;
+	/**
+Pass true if the call was a video call.
+*/
+	is_video?: boolean;
+	/**
+Identifier of the connection used during the call.
+*/
+	connection_id: string;
+}
+
+/**
+Sends a call rating.
+Request type for {@link Tdjson#sendCallRating}.
+*/
+export interface SendCallRating {
+	'@type': 'sendCallRating';
+	/**
+Call identifier.
+*/
+	call_id: number;
+	/**
+Call rating; 1-5.
+*/
+	rating: number;
+	/**
+An optional user comment if the rating is less than 5.
+*/
+	comment: string;
+	/**
+List of the exact types of problems with the call, specified by the user.
+*/
+	problems: CallProblem[];
+}
+
+/**
+Sends debug information for a call to Telegram servers.
+Request type for {@link Tdjson#sendCallDebugInformation}.
+*/
+export interface SendCallDebugInformation {
+	'@type': 'sendCallDebugInformation';
+	/**
+Call identifier.
+*/
+	call_id: number;
+	/**
+Debug information in application-specific format.
+*/
+	debug_information: string;
+}
+
+/**
+Sends log file for a call to Telegram servers.
+Request type for {@link Tdjson#sendCallLog}.
+*/
+export interface SendCallLog {
+	'@type': 'sendCallLog';
+	/**
+Call identifier.
+*/
+	call_id: number;
+	/**
+Call log file. Only inputFileLocal and inputFileGenerated are supported.
+*/
+	log_file: InputFile;
+}
+
+/**
+Returns list of participant identifiers, on whose behalf a video chat in the chat can be joined.
+Request type for {@link Tdjson#getVideoChatAvailableParticipants}.
+*/
+export interface GetVideoChatAvailableParticipants {
+	'@type': 'getVideoChatAvailableParticipants';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Changes default participant identifier, on whose behalf a video chat in the chat will be joined.
+Request type for {@link Tdjson#setVideoChatDefaultParticipant}.
+*/
+export interface SetVideoChatDefaultParticipant {
+	'@type': 'setVideoChatDefaultParticipant';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Default group call participant identifier to join the video chats.
+*/
+	default_participant_id: MessageSender;
+}
+
+/**
+Creates a video chat (a group call bound to a chat). Available only for basic groups, supergroups and channels; requires
+can_manage_video_chats rights.
+Request type for {@link Tdjson#createVideoChat}.
+*/
+export interface CreateVideoChat {
+	'@type': 'createVideoChat';
+	/**
+Identifier of a chat in which the video chat will be created.
+*/
+	chat_id: number;
+	/**
+Group call title; if empty, chat title will be used.
+*/
+	title: string;
+	/**
+Point in time (Unix timestamp) when the group call is supposed to be started by an administrator; 0 to start the video
+chat immediately. The date must be at least 10 seconds and at most 8 days in the future.
+*/
+	start_date: number;
+	/**
+Pass true to create an RTMP stream instead of an ordinary video chat; requires creator privileges.
+*/
+	is_rtmp_stream?: boolean;
+}
+
+/**
+Returns RTMP URL for streaming to the chat; requires creator privileges.
+Request type for {@link Tdjson#getVideoChatRtmpUrl}.
+*/
+export interface GetVideoChatRtmpUrl {
+	'@type': 'getVideoChatRtmpUrl';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Replaces the current RTMP URL for streaming to the chat; requires creator privileges.
+Request type for {@link Tdjson#replaceVideoChatRtmpUrl}.
+*/
+export interface ReplaceVideoChatRtmpUrl {
+	'@type': 'replaceVideoChatRtmpUrl';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Returns information about a group call.
+Request type for {@link Tdjson#getGroupCall}.
+*/
+export interface GetGroupCall {
+	'@type': 'getGroupCall';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Starts a scheduled group call.
+Request type for {@link Tdjson#startScheduledGroupCall}.
+*/
+export interface StartScheduledGroupCall {
+	'@type': 'startScheduledGroupCall';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Toggles whether the current user will receive a notification when the group call will start; scheduled group calls only.
+Request type for {@link Tdjson#toggleGroupCallEnabledStartNotification}.
+*/
+export interface ToggleGroupCallEnabledStartNotification {
+	'@type': 'toggleGroupCallEnabledStartNotification';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+New value of the enabled_start_notification setting.
+*/
+	enabled_start_notification?: boolean;
+}
+
+/**
+Joins an active group call. Returns join response payload for tgcalls.
+Request type for {@link Tdjson#joinGroupCall}.
+*/
+export interface JoinGroupCall {
+	'@type': 'joinGroupCall';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Identifier of a group call participant, which will be used to join the call; pass null to join as self; video chats
+only.
+*/
+	participant_id: MessageSender;
+	/**
+Caller audio channel synchronization source identifier; received from tgcalls.
+*/
+	audio_source_id: number;
+	/**
+Group call join payload; received from tgcalls.
+*/
+	payload: string;
+	/**
+Pass true to join the call with muted microphone.
+*/
+	is_muted?: boolean;
+	/**
+Pass true if the user's video is enabled.
+*/
+	is_my_video_enabled?: boolean;
+	/**
+If non-empty, invite hash to be used to join the group call without being muted by administrators.
+*/
+	invite_hash: string;
+}
+
+/**
+Starts screen sharing in a joined group call. Returns join response payload for tgcalls.
+Request type for {@link Tdjson#startGroupCallScreenSharing}.
+*/
+export interface StartGroupCallScreenSharing {
+	'@type': 'startGroupCallScreenSharing';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Screen sharing audio channel synchronization source identifier; received from tgcalls.
+*/
+	audio_source_id: number;
+	/**
+Group call join payload; received from tgcalls.
+*/
+	payload: string;
+}
+
+/**
+Pauses or unpauses screen sharing in a joined group call.
+Request type for {@link Tdjson#toggleGroupCallScreenSharingIsPaused}.
+*/
+export interface ToggleGroupCallScreenSharingIsPaused {
+	'@type': 'toggleGroupCallScreenSharingIsPaused';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+True if screen sharing is paused.
+*/
+	is_paused?: boolean;
+}
+
+/**
+Ends screen sharing in a joined group call.
+Request type for {@link Tdjson#endGroupCallScreenSharing}.
+*/
+export interface EndGroupCallScreenSharing {
+	'@type': 'endGroupCallScreenSharing';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Sets group call title. Requires groupCall.can_be_managed group call flag.
+Request type for {@link Tdjson#setGroupCallTitle}.
+*/
+export interface SetGroupCallTitle {
+	'@type': 'setGroupCallTitle';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+New group call title; 1-64 characters.
+*/
+	title: string;
+}
+
+/**
+Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires
+groupCall.can_toggle_mute_new_participants group call flag.
+Request type for {@link Tdjson#toggleGroupCallMuteNewParticipants}.
+*/
+export interface ToggleGroupCallMuteNewParticipants {
+	'@type': 'toggleGroupCallMuteNewParticipants';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+New value of the mute_new_participants setting.
+*/
+	mute_new_participants?: boolean;
+}
+
+/**
+Invites users to an active group call. Sends a service message of type messageInviteToGroupCall for video chats.
+Request type for {@link Tdjson#inviteGroupCallParticipants}.
+*/
+export interface InviteGroupCallParticipants {
+	'@type': 'inviteGroupCallParticipants';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+User identifiers. At most 10 users can be invited simultaneously.
+*/
+	user_ids: number[];
+}
+
+/**
+Returns invite link to a video chat in a public chat.
+Request type for {@link Tdjson#getGroupCallInviteLink}.
+*/
+export interface GetGroupCallInviteLink {
+	'@type': 'getGroupCallInviteLink';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Pass true if the invite link needs to contain an invite hash, passing which to joinGroupCall would allow the invited
+user to unmute themselves. Requires groupCall.can_be_managed group call flag.
+*/
+	can_self_unmute?: boolean;
+}
+
+/**
+Revokes invite link for a group call. Requires groupCall.can_be_managed group call flag.
+Request type for {@link Tdjson#revokeGroupCallInviteLink}.
+*/
+export interface RevokeGroupCallInviteLink {
+	'@type': 'revokeGroupCallInviteLink';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Starts recording of an active group call. Requires groupCall.can_be_managed group call flag.
+Request type for {@link Tdjson#startGroupCallRecording}.
+*/
+export interface StartGroupCallRecording {
+	'@type': 'startGroupCallRecording';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Group call recording title; 0-64 characters.
+*/
+	title: string;
+	/**
+Pass true to record a video file instead of an audio file.
+*/
+	record_video?: boolean;
+	/**
+Pass true to use portrait orientation for video instead of landscape one.
+*/
+	use_portrait_orientation?: boolean;
+}
+
+/**
+Ends recording of an active group call. Requires groupCall.can_be_managed group call flag.
+Request type for {@link Tdjson#endGroupCallRecording}.
+*/
+export interface EndGroupCallRecording {
+	'@type': 'endGroupCallRecording';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Toggles whether current user's video is paused.
+Request type for {@link Tdjson#toggleGroupCallIsMyVideoPaused}.
+*/
+export interface ToggleGroupCallIsMyVideoPaused {
+	'@type': 'toggleGroupCallIsMyVideoPaused';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Pass true if the current user's video is paused.
+*/
+	is_my_video_paused?: boolean;
+}
+
+/**
+Toggles whether current user's video is enabled.
+Request type for {@link Tdjson#toggleGroupCallIsMyVideoEnabled}.
+*/
+export interface ToggleGroupCallIsMyVideoEnabled {
+	'@type': 'toggleGroupCallIsMyVideoEnabled';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Pass true if the current user's video is enabled.
+*/
+	is_my_video_enabled?: boolean;
+}
+
+/**
+Informs TDLib that speaking state of a participant of an active group has changed.
+Request type for {@link Tdjson#setGroupCallParticipantIsSpeaking}.
+*/
+export interface SetGroupCallParticipantIsSpeaking {
+	'@type': 'setGroupCallParticipantIsSpeaking';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Group call participant's synchronization audio source identifier, or 0 for the current user.
+*/
+	audio_source: number;
+	/**
+Pass true if the user is speaking.
+*/
+	is_speaking?: boolean;
+}
+
+/**
+Toggles whether a participant of an active group call is muted, unmuted, or allowed to unmute themselves.
+Request type for {@link Tdjson#toggleGroupCallParticipantIsMuted}.
+*/
+export interface ToggleGroupCallParticipantIsMuted {
+	'@type': 'toggleGroupCallParticipantIsMuted';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Participant identifier.
+*/
+	participant_id: MessageSender;
+	/**
+Pass true to mute the user; pass false to unmute the them.
+*/
+	is_muted?: boolean;
+}
+
+/**
+Changes volume level of a participant of an active group call. If the current user can manage the group call, then the
+participant's volume level will be changed for all users with the default volume level.
+Request type for {@link Tdjson#setGroupCallParticipantVolumeLevel}.
+*/
+export interface SetGroupCallParticipantVolumeLevel {
+	'@type': 'setGroupCallParticipantVolumeLevel';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Participant identifier.
+*/
+	participant_id: MessageSender;
+	/**
+New participant's volume level; 1-20000 in hundreds of percents.
+*/
+	volume_level: number;
+}
+
+/**
+Toggles whether a group call participant hand is rased.
+Request type for {@link Tdjson#toggleGroupCallParticipantIsHandRaised}.
+*/
+export interface ToggleGroupCallParticipantIsHandRaised {
+	'@type': 'toggleGroupCallParticipantIsHandRaised';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Participant identifier.
+*/
+	participant_id: MessageSender;
+	/**
+Pass true if the user's hand needs to be raised. Only self hand can be raised. Requires groupCall.can_be_managed group
+call flag to lower other's hand.
+*/
+	is_hand_raised?: boolean;
+}
+
+/**
+Loads more participants of a group call. The loaded participants will be received through updates. Use the field
+groupCall.loaded_all_participants to check whether all participants have already been loaded.
+Request type for {@link Tdjson#loadGroupCallParticipants}.
+*/
+export interface LoadGroupCallParticipants {
+	'@type': 'loadGroupCallParticipants';
+	/**
+Group call identifier. The group call must be previously received through getGroupCall and must be joined or being
+joined.
+*/
+	group_call_id: number;
+	/**
+The maximum number of participants to load; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Leaves a group call.
+Request type for {@link Tdjson#leaveGroupCall}.
+*/
+export interface LeaveGroupCall {
+	'@type': 'leaveGroupCall';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Ends a group call. Requires groupCall.can_be_managed.
+Request type for {@link Tdjson#endGroupCall}.
+*/
+export interface EndGroupCall {
+	'@type': 'endGroupCall';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Returns information about available group call streams.
+Request type for {@link Tdjson#getGroupCallStreams}.
+*/
+export interface GetGroupCallStreams {
+	'@type': 'getGroupCallStreams';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Returns a file with a segment of a group call stream in a modified OGG format for audio or MPEG-4 format for video.
+Request type for {@link Tdjson#getGroupCallStreamSegment}.
+*/
+export interface GetGroupCallStreamSegment {
+	'@type': 'getGroupCallStreamSegment';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Point in time when the stream segment begins; Unix timestamp in milliseconds.
+*/
+	time_offset: number;
+	/**
+Segment duration scale; 0-1. Segment's duration is 1000/(2**scale) milliseconds.
+*/
+	scale: number;
+	/**
+Identifier of an audio/video channel to get as received from tgcalls.
+*/
+	channel_id: number;
+	/**
+Video quality as received from tgcalls; pass null to get the worst available quality.
+*/
+	video_quality: GroupCallVideoQuality;
+}
+
+/**
+Changes the block state of a message sender. Currently, only users and supergroup chats can be blocked.
+Request type for {@link Tdjson#toggleMessageSenderIsBlocked}.
+*/
+export interface ToggleMessageSenderIsBlocked {
+	'@type': 'toggleMessageSenderIsBlocked';
+	/**
+Identifier of a message sender to block/unblock.
+*/
+	sender_id: MessageSender;
+	/**
+New value of is_blocked.
+*/
+	is_blocked?: boolean;
+}
+
+/**
+Blocks an original sender of a message in the Replies chat.
+Request type for {@link Tdjson#blockMessageSenderFromReplies}.
+*/
+export interface BlockMessageSenderFromReplies {
+	'@type': 'blockMessageSenderFromReplies';
+	/**
+The identifier of an incoming message in the Replies chat.
+*/
+	message_id: number;
+	/**
+Pass true to delete the message.
+*/
+	delete_message?: boolean;
+	/**
+Pass true to delete all messages from the same sender.
+*/
+	delete_all_messages?: boolean;
+	/**
+Pass true to report the sender to the Telegram moderators.
+*/
+	report_spam?: boolean;
+}
+
+/**
+Returns users and chats that were blocked by the current user.
+Request type for {@link Tdjson#getBlockedMessageSenders}.
+*/
+export interface GetBlockedMessageSenders {
+	'@type': 'getBlockedMessageSenders';
+	/**
+Number of users and chats to skip in the result; must be non-negative.
+*/
+	offset: number;
+	/**
+The maximum number of users and chats to return; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Adds a user to the contact list or edits an existing contact by their user identifier.
+Request type for {@link Tdjson#addContact}.
+*/
+export interface AddContact {
+	'@type': 'addContact';
+	/**
+The contact to add or edit; phone number may be empty and needs to be specified only if known, vCard is ignored.
+*/
+	contact: Contact;
+	/**
+Pass true to share the current user's phone number with the new contact. A corresponding rule to
+userPrivacySettingShowPhoneNumber will be added if needed. Use the field
+userFullInfo.need_phone_number_privacy_exception to check whether the current user needs to be asked to share their
+phone number.
+*/
+	share_phone_number?: boolean;
+}
+
+/**
+Adds new contacts or edits existing contacts by their phone numbers; contacts' user identifiers are ignored.
+Request type for {@link Tdjson#importContacts}.
+*/
+export interface ImportContacts {
+	'@type': 'importContacts';
+	/**
+The list of contacts to import or edit; contacts' vCard are ignored and are not imported.
+*/
+	contacts: Contact[];
+}
+
+/**
+Returns all user contacts.
+Request type for {@link Tdjson#getContacts}.
+*/
+export interface GetContacts {
+	'@type': 'getContacts';
+
+}
+
+/**
+Searches for the specified query in the first names, last names and usernames of the known user contacts.
+Request type for {@link Tdjson#searchContacts}.
+*/
+export interface SearchContacts {
+	'@type': 'searchContacts';
+	/**
+Query to search for; may be empty to return all contacts.
+*/
+	query: string;
+	/**
+The maximum number of users to be returned.
+*/
+	limit: number;
+}
+
+/**
+Removes users from the contact list.
+Request type for {@link Tdjson#removeContacts}.
+*/
+export interface RemoveContacts {
+	'@type': 'removeContacts';
+	/**
+Identifiers of users to be deleted.
+*/
+	user_ids: number[];
+}
+
+/**
+Returns the total number of imported contacts.
+Request type for {@link Tdjson#getImportedContactCount}.
+*/
+export interface GetImportedContactCount {
+	'@type': 'getImportedContactCount';
+
+}
+
+/**
+Changes imported contacts using the list of contacts saved on the device. Imports newly added contacts and, if at least
+the file database is enabled, deletes recently deleted contacts. Query result depends on the result of the previous
+query, so only one query is possible at the same time.
+Request type for {@link Tdjson#changeImportedContacts}.
+*/
+export interface ChangeImportedContacts {
+	'@type': 'changeImportedContacts';
+	/**
+The new list of contacts, contact's vCard are ignored and are not imported.
+*/
+	contacts: Contact[];
+}
+
+/**
+Clears all imported contacts, contact list remains unchanged.
+Request type for {@link Tdjson#clearImportedContacts}.
+*/
+export interface ClearImportedContacts {
+	'@type': 'clearImportedContacts';
+
+}
+
+/**
+Searches a user by their phone number. Returns a 404 error if the user can't be found.
+Request type for {@link Tdjson#searchUserByPhoneNumber}.
+*/
+export interface SearchUserByPhoneNumber {
+	'@type': 'searchUserByPhoneNumber';
+	/**
+Phone number to search for.
+*/
+	phone_number: string;
+}
+
+/**
+Shares the phone number of the current user with a mutual contact. Supposed to be called when the user clicks on
+chatActionBarSharePhoneNumber.
+Request type for {@link Tdjson#sharePhoneNumber}.
+*/
+export interface SharePhoneNumber {
+	'@type': 'sharePhoneNumber';
+	/**
+Identifier of the user with whom to share the phone number. The user must be a mutual contact.
+*/
+	user_id: number;
+}
+
+/**
+Returns the profile photos of a user. The result of this query may be outdated: some photos might have been deleted
+already.
+Request type for {@link Tdjson#getUserProfilePhotos}.
+*/
+export interface GetUserProfilePhotos {
+	'@type': 'getUserProfilePhotos';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+The number of photos to skip; must be non-negative.
+*/
+	offset: number;
+	/**
+The maximum number of photos to be returned; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Returns stickers from the installed sticker sets that correspond to a given emoji. If the emoji is non-empty, then
+favorite, recently used or trending stickers may also be returned.
+Request type for {@link Tdjson#getStickers}.
+*/
+export interface GetStickers {
+	'@type': 'getStickers';
+	/**
+Type of the sticker sets to return.
+*/
+	sticker_type: StickerType;
+	/**
+String representation of emoji. If empty, returns all known installed stickers.
+*/
+	emoji: string;
+	/**
+The maximum number of stickers to be returned.
+*/
+	limit: number;
+	/**
+Chat identifier for which to return stickers. Available custom emoji may be different for different chats.
+*/
+	chat_id: number;
+}
+
+/**
+Searches for stickers from public sticker sets that correspond to a given emoji.
+Request type for {@link Tdjson#searchStickers}.
+*/
+export interface SearchStickers {
+	'@type': 'searchStickers';
+	/**
+String representation of emoji; must be non-empty.
+*/
+	emoji: string;
+	/**
+The maximum number of stickers to be returned; 0-100.
+*/
+	limit: number;
+}
+
+/**
+Returns premium stickers from regular sticker sets.
+Request type for {@link Tdjson#getPremiumStickers}.
+*/
+export interface GetPremiumStickers {
+	'@type': 'getPremiumStickers';
+	/**
+The maximum number of stickers to be returned; 0-100.
+*/
+	limit: number;
+}
+
+/**
+Returns a list of installed sticker sets.
+Request type for {@link Tdjson#getInstalledStickerSets}.
+*/
+export interface GetInstalledStickerSets {
+	'@type': 'getInstalledStickerSets';
+	/**
+Type of the sticker sets to return.
+*/
+	sticker_type: StickerType;
+}
+
+/**
+Returns a list of archived sticker sets.
+Request type for {@link Tdjson#getArchivedStickerSets}.
+*/
+export interface GetArchivedStickerSets {
+	'@type': 'getArchivedStickerSets';
+	/**
+Type of the sticker sets to return.
+*/
+	sticker_type: StickerType;
+	/**
+Identifier of the sticker set from which to return the result.
+*/
+	offset_sticker_set_id: string;
+	/**
+The maximum number of sticker sets to return; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Returns a list of trending sticker sets. For optimal performance, the number of returned sticker sets is chosen by
+TDLib.
+Request type for {@link Tdjson#getTrendingStickerSets}.
+*/
+export interface GetTrendingStickerSets {
+	'@type': 'getTrendingStickerSets';
+	/**
+Type of the sticker sets to return.
+*/
+	sticker_type: StickerType;
+	/**
+The offset from which to return the sticker sets; must be non-negative.
+*/
+	offset: number;
+	/**
+The maximum number of sticker sets to be returned; up to 100. For optimal performance, the number of returned sticker
+sets is chosen by TDLib and can be smaller than the specified limit, even if the end of the list has not been reached.
+*/
+	limit: number;
+}
+
+/**
+Returns a list of sticker sets attached to a file. Currently, only photos and videos can have attached sticker sets.
+Request type for {@link Tdjson#getAttachedStickerSets}.
+*/
+export interface GetAttachedStickerSets {
+	'@type': 'getAttachedStickerSets';
+	/**
+File identifier.
+*/
+	file_id: number;
+}
+
+/**
+Returns information about a sticker set by its identifier.
+Request type for {@link Tdjson#getStickerSet}.
+*/
+export interface GetStickerSet {
+	'@type': 'getStickerSet';
+	/**
+Identifier of the sticker set.
+*/
+	set_id: string;
+}
+
+/**
+Searches for a sticker set by its name.
+Request type for {@link Tdjson#searchStickerSet}.
+*/
+export interface SearchStickerSet {
+	'@type': 'searchStickerSet';
+	/**
+Name of the sticker set.
+*/
+	name: string;
+}
+
+/**
+Searches for installed sticker sets by looking for specified query in their title and name.
+Request type for {@link Tdjson#searchInstalledStickerSets}.
+*/
+export interface SearchInstalledStickerSets {
+	'@type': 'searchInstalledStickerSets';
+	/**
+Type of the sticker sets to search for.
+*/
+	sticker_type: StickerType;
+	/**
+Query to search for.
+*/
+	query: string;
+	/**
+The maximum number of sticker sets to return.
+*/
+	limit: number;
+}
+
+/**
+Searches for ordinary sticker sets by looking for specified query in their title and name. Excludes installed sticker
+sets from the results.
+Request type for {@link Tdjson#searchStickerSets}.
+*/
+export interface SearchStickerSets {
+	'@type': 'searchStickerSets';
+	/**
+Query to search for.
+*/
+	query: string;
+}
+
+/**
+Installs/uninstalls or activates/archives a sticker set.
+Request type for {@link Tdjson#changeStickerSet}.
+*/
+export interface ChangeStickerSet {
+	'@type': 'changeStickerSet';
+	/**
+Identifier of the sticker set.
+*/
+	set_id: string;
+	/**
+The new value of is_installed.
+*/
+	is_installed?: boolean;
+	/**
+The new value of is_archived. A sticker set can't be installed and archived simultaneously.
+*/
+	is_archived?: boolean;
+}
+
+/**
+Informs the server that some trending sticker sets have been viewed by the user.
+Request type for {@link Tdjson#viewTrendingStickerSets}.
+*/
+export interface ViewTrendingStickerSets {
+	'@type': 'viewTrendingStickerSets';
+	/**
+Identifiers of viewed trending sticker sets.
+*/
+	sticker_set_ids: string[];
+}
+
+/**
+Changes the order of installed sticker sets.
+Request type for {@link Tdjson#reorderInstalledStickerSets}.
+*/
+export interface ReorderInstalledStickerSets {
+	'@type': 'reorderInstalledStickerSets';
+	/**
+Type of the sticker sets to reorder.
+*/
+	sticker_type: StickerType;
+	/**
+Identifiers of installed sticker sets in the new correct order.
+*/
+	sticker_set_ids: string[];
+}
+
+/**
+Returns a list of recently used stickers.
+Request type for {@link Tdjson#getRecentStickers}.
+*/
+export interface GetRecentStickers {
+	'@type': 'getRecentStickers';
+	/**
+Pass true to return stickers and masks that were recently attached to photos or video files; pass false to return
+recently sent stickers.
+*/
+	is_attached?: boolean;
+}
+
+/**
+Manually adds a new sticker to the list of recently used stickers. The new sticker is added to the top of the list. If
+the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be
+added to this list. Emoji stickers can't be added to recent stickers.
+Request type for {@link Tdjson#addRecentSticker}.
+*/
+export interface AddRecentSticker {
+	'@type': 'addRecentSticker';
+	/**
+Pass true to add the sticker to the list of stickers recently attached to photo or video files; pass false to add the
+sticker to the list of recently sent stickers.
+*/
+	is_attached?: boolean;
+	/**
+Sticker file to add.
+*/
+	sticker: InputFile;
+}
+
+/**
+Removes a sticker from the list of recently used stickers.
+Request type for {@link Tdjson#removeRecentSticker}.
+*/
+export interface RemoveRecentSticker {
+	'@type': 'removeRecentSticker';
+	/**
+Pass true to remove the sticker from the list of stickers recently attached to photo or video files; pass false to
+remove the sticker from the list of recently sent stickers.
+*/
+	is_attached?: boolean;
+	/**
+Sticker file to delete.
+*/
+	sticker: InputFile;
+}
+
+/**
+Clears the list of recently used stickers.
+Request type for {@link Tdjson#clearRecentStickers}.
+*/
+export interface ClearRecentStickers {
+	'@type': 'clearRecentStickers';
+	/**
+Pass true to clear the list of stickers recently attached to photo or video files; pass false to clear the list of
+recently sent stickers.
+*/
+	is_attached?: boolean;
+}
+
+/**
+Returns favorite stickers.
+Request type for {@link Tdjson#getFavoriteStickers}.
+*/
+export interface GetFavoriteStickers {
+	'@type': 'getFavoriteStickers';
+
+}
+
+/**
+Adds a new sticker to the list of favorite stickers. The new sticker is added to the top of the list. If the sticker was
+already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be added to this
+list. Emoji stickers can't be added to favorite stickers.
+Request type for {@link Tdjson#addFavoriteSticker}.
+*/
+export interface AddFavoriteSticker {
+	'@type': 'addFavoriteSticker';
+	/**
+Sticker file to add.
+*/
+	sticker: InputFile;
+}
+
+/**
+Removes a sticker from the list of favorite stickers.
+Request type for {@link Tdjson#removeFavoriteSticker}.
+*/
+export interface RemoveFavoriteSticker {
+	'@type': 'removeFavoriteSticker';
+	/**
+Sticker file to delete from the list.
+*/
+	sticker: InputFile;
+}
+
+/**
+Returns emoji corresponding to a sticker. The list is only for informational purposes, because a sticker is always sent
+with a fixed emoji from the corresponding Sticker object.
+Request type for {@link Tdjson#getStickerEmojis}.
+*/
+export interface GetStickerEmojis {
+	'@type': 'getStickerEmojis';
+	/**
+Sticker file identifier.
+*/
+	sticker: InputFile;
+}
+
+/**
+Searches for emojis by keywords. Supported only if the file database is enabled.
+Request type for {@link Tdjson#searchEmojis}.
+*/
+export interface SearchEmojis {
+	'@type': 'searchEmojis';
+	/**
+Text to search for.
+*/
+	text: string;
+	/**
+Pass true if only emojis, which exactly match the text, needs to be returned.
+*/
+	exact_match?: boolean;
+	/**
+List of possible IETF language tags of the user's input language; may be empty if unknown.
+*/
+	input_language_codes: string[];
+}
+
+/**
+Returns an animated emoji corresponding to a given emoji. Returns a 404 error if the emoji has no animated emoji.
+Request type for {@link Tdjson#getAnimatedEmoji}.
+*/
+export interface GetAnimatedEmoji {
+	'@type': 'getAnimatedEmoji';
+	/**
+The emoji.
+*/
+	emoji: string;
+}
+
+/**
+Returns an HTTP URL which can be used to automatically log in to the translation platform and suggest new emoji
+replacements. The URL will be valid for 30 seconds after generation.
+Request type for {@link Tdjson#getEmojiSuggestionsUrl}.
+*/
+export interface GetEmojiSuggestionsUrl {
+	'@type': 'getEmojiSuggestionsUrl';
+	/**
+Language code for which the emoji replacements will be suggested.
+*/
+	language_code: string;
+}
+
+/**
+Returns list of custom emoji stickers by their identifiers. Stickers are returned in arbitrary order. Only found
+stickers are returned.
+Request type for {@link Tdjson#getCustomEmojiStickers}.
+*/
+export interface GetCustomEmojiStickers {
+	'@type': 'getCustomEmojiStickers';
+	/**
+Identifiers of custom emoji stickers. At most 200 custom emoji stickers can be received simultaneously.
+*/
+	custom_emoji_ids: string[];
+}
+
+/**
+Returns saved animations.
+Request type for {@link Tdjson#getSavedAnimations}.
+*/
+export interface GetSavedAnimations {
+	'@type': 'getSavedAnimations';
+
+}
+
+/**
+Manually adds a new animation to the list of saved animations. The new animation is added to the beginning of the list.
+If the animation was already in the list, it is removed first. Only non-secret video animations with MIME type
+"video/mp4" can be added to the list.
+Request type for {@link Tdjson#addSavedAnimation}.
+*/
+export interface AddSavedAnimation {
+	'@type': 'addSavedAnimation';
+	/**
+The animation file to be added. Only animations known to the server (i.e., successfully sent via a message) can be added
+to the list.
+*/
+	animation: InputFile;
+}
+
+/**
+Removes an animation from the list of saved animations.
+Request type for {@link Tdjson#removeSavedAnimation}.
+*/
+export interface RemoveSavedAnimation {
+	'@type': 'removeSavedAnimation';
+	/**
+Animation file to be removed.
+*/
+	animation: InputFile;
+}
+
+/**
+Returns up to 20 recently used inline bots in the order of their last usage.
+Request type for {@link Tdjson#getRecentInlineBots}.
+*/
+export interface GetRecentInlineBots {
+	'@type': 'getRecentInlineBots';
+
+}
+
+/**
+Searches for recently used hashtags by their prefix.
+Request type for {@link Tdjson#searchHashtags}.
+*/
+export interface SearchHashtags {
+	'@type': 'searchHashtags';
+	/**
+Hashtag prefix to search for.
+*/
+	prefix: string;
+	/**
+The maximum number of hashtags to be returned.
+*/
+	limit: number;
+}
+
+/**
+Removes a hashtag from the list of recently used hashtags.
+Request type for {@link Tdjson#removeRecentHashtag}.
+*/
+export interface RemoveRecentHashtag {
+	'@type': 'removeRecentHashtag';
+	/**
+Hashtag to delete.
+*/
+	hashtag: string;
+}
+
+/**
+Returns a web page preview by the text of the message. Do not call this function too often. Returns a 404 error if the
+web page has no preview.
+Request type for {@link Tdjson#getWebPagePreview}.
+*/
+export interface GetWebPagePreview {
+	'@type': 'getWebPagePreview';
+	/**
+Message text with formatting.
+*/
+	text: FormattedText;
+}
+
+/**
+Returns an instant view version of a web page if available. Returns a 404 error if the web page has no instant view
+page.
+Request type for {@link Tdjson#getWebPageInstantView}.
+*/
+export interface GetWebPageInstantView {
+	'@type': 'getWebPageInstantView';
+	/**
+The web page URL.
+*/
+	url: string;
+	/**
+Pass true to get full instant view for the web page.
+*/
+	force_full?: boolean;
+}
+
+/**
+Changes a profile photo for the current user.
+Request type for {@link Tdjson#setProfilePhoto}.
+*/
+export interface SetProfilePhoto {
+	'@type': 'setProfilePhoto';
+	/**
+Profile photo to set.
+*/
+	photo: InputChatPhoto;
+}
+
+/**
+Deletes a profile photo.
+Request type for {@link Tdjson#deleteProfilePhoto}.
+*/
+export interface DeleteProfilePhoto {
+	'@type': 'deleteProfilePhoto';
+	/**
+Identifier of the profile photo to delete.
+*/
+	profile_photo_id: string;
+}
+
+/**
+Changes the first and last name of the current user.
+Request type for {@link Tdjson#setName}.
+*/
+export interface SetName {
+	'@type': 'setName';
+	/**
+The new value of the first name for the current user; 1-64 characters.
+*/
+	first_name: string;
+	/**
+The new value of the optional last name for the current user; 0-64 characters.
+*/
+	last_name: string;
+}
+
+/**
+Changes the bio of the current user.
+Request type for {@link Tdjson#setBio}.
+*/
+export interface SetBio {
+	'@type': 'setBio';
+	/**
+The new value of the user bio; 0-GetOption("bio_length_max") characters without line feeds.
+*/
+	bio: string;
+}
+
+/**
+Changes the username of the current user.
+Request type for {@link Tdjson#setUsername}.
+*/
+export interface SetUsername {
+	'@type': 'setUsername';
+	/**
+The new value of the username. Use an empty string to remove the username.
+*/
+	username: string;
+}
+
+/**
+Changes the location of the current user. Needs to be called if GetOption("is_location_visible") is true and location
+changes for more than 1 kilometer.
+Request type for {@link Tdjson#setLocation}.
+*/
+export interface SetLocation {
+	'@type': 'setLocation';
+	/**
+The new location of the user.
+*/
+	location: Location;
+}
+
+/**
+Changes the phone number of the user and sends an authentication code to the user's new phone number. On success,
+returns information about the sent code.
+Request type for {@link Tdjson#changePhoneNumber}.
+*/
+export interface ChangePhoneNumber {
+	'@type': 'changePhoneNumber';
+	/**
+The new phone number of the user in international format.
+*/
+	phone_number: string;
+	/**
+Settings for the authentication of the user's phone number; pass null to use default settings.
+*/
+	settings: PhoneNumberAuthenticationSettings;
+}
+
+/**
+Re-sends the authentication code sent to confirm a new phone number for the current user. Works only if the previously
+received authenticationCodeInfo next_code_type was not null and the server-specified timeout has passed.
+Request type for {@link Tdjson#resendChangePhoneNumberCode}.
+*/
+export interface ResendChangePhoneNumberCode {
+	'@type': 'resendChangePhoneNumberCode';
+
+}
+
+/**
+Checks the authentication code sent to confirm a new phone number of the user.
+Request type for {@link Tdjson#checkChangePhoneNumberCode}.
+*/
+export interface CheckChangePhoneNumberCode {
+	'@type': 'checkChangePhoneNumberCode';
+	/**
+Authentication code to check.
+*/
+	code: string;
+}
+
+/**
+Sets the list of commands supported by the bot for the given user scope and language; for bots only.
+Request type for {@link Tdjson#setCommands}.
+*/
+export interface SetCommands {
+	'@type': 'setCommands';
+	/**
+The scope to which the commands are relevant; pass null to change commands in the default bot command scope.
+*/
+	scope: BotCommandScope;
+	/**
+A two-letter ISO 639-1 language code. If empty, the commands will be applied to all users from the given scope, for
+which language there are no dedicated commands.
+*/
+	language_code: string;
+	/**
+List of the bot's commands.
+*/
+	commands: BotCommand[];
+}
+
+/**
+Deletes commands supported by the bot for the given user scope and language; for bots only.
+Request type for {@link Tdjson#deleteCommands}.
+*/
+export interface DeleteCommands {
+	'@type': 'deleteCommands';
+	/**
+The scope to which the commands are relevant; pass null to delete commands in the default bot command scope.
+*/
+	scope: BotCommandScope;
+	/**
+A two-letter ISO 639-1 language code or an empty string.
+*/
+	language_code: string;
+}
+
+/**
+Returns the list of commands supported by the bot for the given user scope and language; for bots only.
+Request type for {@link Tdjson#getCommands}.
+*/
+export interface GetCommands {
+	'@type': 'getCommands';
+	/**
+The scope to which the commands are relevant; pass null to get commands in the default bot command scope.
+*/
+	scope: BotCommandScope;
+	/**
+A two-letter ISO 639-1 language code or an empty string.
+*/
+	language_code: string;
+}
+
+/**
+Sets menu button for the given user or for all users; for bots only.
+Request type for {@link Tdjson#setMenuButton}.
+*/
+export interface SetMenuButton {
+	'@type': 'setMenuButton';
+	/**
+Identifier of the user or 0 to set menu button for all users.
+*/
+	user_id: number;
+	/**
+New menu button.
+*/
+	menu_button: BotMenuButton;
+}
+
+/**
+Returns menu button set by the bot for the given user; for bots only.
+Request type for {@link Tdjson#getMenuButton}.
+*/
+export interface GetMenuButton {
+	'@type': 'getMenuButton';
+	/**
+Identifier of the user or 0 to get the default menu button.
+*/
+	user_id: number;
+}
+
+/**
+Sets default administrator rights for adding the bot to basic group and supergroup chats; for bots only.
+Request type for {@link Tdjson#setDefaultGroupAdministratorRights}.
+*/
+export interface SetDefaultGroupAdministratorRights {
+	'@type': 'setDefaultGroupAdministratorRights';
+	/**
+Default administrator rights for adding the bot to basic group and supergroup chats; may be null.
+*/
+	default_group_administrator_rights: ChatAdministratorRights;
+}
+
+/**
+Sets default administrator rights for adding the bot to channel chats; for bots only.
+Request type for {@link Tdjson#setDefaultChannelAdministratorRights}.
+*/
+export interface SetDefaultChannelAdministratorRights {
+	'@type': 'setDefaultChannelAdministratorRights';
+	/**
+Default administrator rights for adding the bot to channels; may be null.
+*/
+	default_channel_administrator_rights: ChatAdministratorRights;
+}
+
+/**
+Returns all active sessions of the current user.
+Request type for {@link Tdjson#getActiveSessions}.
+*/
+export interface GetActiveSessions {
+	'@type': 'getActiveSessions';
+
+}
+
+/**
+Terminates a session of the current user.
+Request type for {@link Tdjson#terminateSession}.
+*/
+export interface TerminateSession {
+	'@type': 'terminateSession';
+	/**
+Session identifier.
+*/
+	session_id: string;
+}
+
+/**
+Terminates all other sessions of the current user.
+Request type for {@link Tdjson#terminateAllOtherSessions}.
+*/
+export interface TerminateAllOtherSessions {
+	'@type': 'terminateAllOtherSessions';
+
+}
+
+/**
+Toggles whether a session can accept incoming calls.
+Request type for {@link Tdjson#toggleSessionCanAcceptCalls}.
+*/
+export interface ToggleSessionCanAcceptCalls {
+	'@type': 'toggleSessionCanAcceptCalls';
+	/**
+Session identifier.
+*/
+	session_id: string;
+	/**
+Pass true to allow accepting incoming calls by the session; pass false otherwise.
+*/
+	can_accept_calls?: boolean;
+}
+
+/**
+Toggles whether a session can accept incoming secret chats.
+Request type for {@link Tdjson#toggleSessionCanAcceptSecretChats}.
+*/
+export interface ToggleSessionCanAcceptSecretChats {
+	'@type': 'toggleSessionCanAcceptSecretChats';
+	/**
+Session identifier.
+*/
+	session_id: string;
+	/**
+Pass true to allow accepring secret chats by the session; pass false otherwise.
+*/
+	can_accept_secret_chats?: boolean;
+}
+
+/**
+Changes the period of inactivity after which sessions will automatically be terminated.
+Request type for {@link Tdjson#setInactiveSessionTtl}.
+*/
+export interface SetInactiveSessionTtl {
+	'@type': 'setInactiveSessionTtl';
+	/**
+New number of days of inactivity before sessions will be automatically terminated; 1-366 days.
+*/
+	inactive_session_ttl_days: number;
+}
+
+/**
+Returns all website where the current user used Telegram to log in.
+Request type for {@link Tdjson#getConnectedWebsites}.
+*/
+export interface GetConnectedWebsites {
+	'@type': 'getConnectedWebsites';
+
+}
+
+/**
+Disconnects website from the current user's Telegram account.
+Request type for {@link Tdjson#disconnectWebsite}.
+*/
+export interface DisconnectWebsite {
+	'@type': 'disconnectWebsite';
+	/**
+Website identifier.
+*/
+	website_id: string;
+}
+
+/**
+Disconnects all websites from the current user's Telegram account.
+Request type for {@link Tdjson#disconnectAllWebsites}.
+*/
+export interface DisconnectAllWebsites {
+	'@type': 'disconnectAllWebsites';
+
+}
+
+/**
+Changes the username of a supergroup or channel, requires owner privileges in the supergroup or channel.
+Request type for {@link Tdjson#setSupergroupUsername}.
+*/
+export interface SetSupergroupUsername {
+	'@type': 'setSupergroupUsername';
+	/**
+Identifier of the supergroup or channel.
+*/
+	supergroup_id: number;
+	/**
+New value of the username. Use an empty string to remove the username.
+*/
+	username: string;
+}
+
+/**
+Changes the sticker set of a supergroup; requires can_change_info administrator right.
+Request type for {@link Tdjson#setSupergroupStickerSet}.
+*/
+export interface SetSupergroupStickerSet {
+	'@type': 'setSupergroupStickerSet';
+	/**
+Identifier of the supergroup.
+*/
+	supergroup_id: number;
+	/**
+New value of the supergroup sticker set identifier. Use 0 to remove the supergroup sticker set.
+*/
+	sticker_set_id: string;
+}
+
+/**
+Toggles whether sender signature is added to sent messages in a channel; requires can_change_info administrator right.
+Request type for {@link Tdjson#toggleSupergroupSignMessages}.
+*/
+export interface ToggleSupergroupSignMessages {
+	'@type': 'toggleSupergroupSignMessages';
+	/**
+Identifier of the channel.
+*/
+	supergroup_id: number;
+	/**
+New value of sign_messages.
+*/
+	sign_messages?: boolean;
+}
+
+/**
+Toggles whether joining is mandatory to send messages to a discussion supergroup; requires can_restrict_members
+administrator right.
+Request type for {@link Tdjson#toggleSupergroupJoinToSendMessages}.
+*/
+export interface ToggleSupergroupJoinToSendMessages {
+	'@type': 'toggleSupergroupJoinToSendMessages';
+	/**
+Identifier of the supergroup.
+*/
+	supergroup_id: number;
+	/**
+New value of join_to_send_messages.
+*/
+	join_to_send_messages?: boolean;
+}
+
+/**
+Toggles whether all users directly joining the supergroup need to be approved by supergroup administrators; requires
+can_restrict_members administrator right.
+Request type for {@link Tdjson#toggleSupergroupJoinByRequest}.
+*/
+export interface ToggleSupergroupJoinByRequest {
+	'@type': 'toggleSupergroupJoinByRequest';
+	/**
+Identifier of the channel.
+*/
+	supergroup_id: number;
+	/**
+New value of join_by_request.
+*/
+	join_by_request?: boolean;
+}
+
+/**
+Toggles whether the message history of a supergroup is available to new members; requires can_change_info administrator
+right.
+Request type for {@link Tdjson#toggleSupergroupIsAllHistoryAvailable}.
+*/
+export interface ToggleSupergroupIsAllHistoryAvailable {
+	'@type': 'toggleSupergroupIsAllHistoryAvailable';
+	/**
+The identifier of the supergroup.
+*/
+	supergroup_id: number;
+	/**
+The new value of is_all_history_available.
+*/
+	is_all_history_available?: boolean;
+}
+
+/**
+Upgrades supergroup to a broadcast group; requires owner privileges in the supergroup.
+Request type for {@link Tdjson#toggleSupergroupIsBroadcastGroup}.
+*/
+export interface ToggleSupergroupIsBroadcastGroup {
+	'@type': 'toggleSupergroupIsBroadcastGroup';
+	/**
+Identifier of the supergroup.
+*/
+	supergroup_id: number;
+}
+
+/**
+Reports messages in a supergroup as spam; requires administrator rights in the supergroup.
+Request type for {@link Tdjson#reportSupergroupSpam}.
+*/
+export interface ReportSupergroupSpam {
+	'@type': 'reportSupergroupSpam';
+	/**
+Supergroup identifier.
+*/
+	supergroup_id: number;
+	/**
+Identifiers of messages to report.
+*/
+	message_ids: number[];
+}
+
+/**
+Returns information about members or banned users in a supergroup or channel. Can be used only if
+supergroupFullInfo.can_get_members == true; additionally, administrator privileges may be required for some filters.
+Request type for {@link Tdjson#getSupergroupMembers}.
+*/
+export interface GetSupergroupMembers {
+	'@type': 'getSupergroupMembers';
+	/**
+Identifier of the supergroup or channel.
+*/
+	supergroup_id: number;
+	/**
+The type of users to return; pass null to use supergroupMembersFilterRecent.
+*/
+	filter: SupergroupMembersFilter;
+	/**
+Number of users to skip.
+*/
+	offset: number;
+	/**
+The maximum number of users be returned; up to 200.
+*/
+	limit: number;
+}
+
+/**
+Closes a secret chat, effectively transferring its state to secretChatStateClosed.
+Request type for {@link Tdjson#closeSecretChat}.
+*/
+export interface CloseSecretChat {
+	'@type': 'closeSecretChat';
+	/**
+Secret chat identifier.
+*/
+	secret_chat_id: number;
+}
+
+/**
+Returns a list of service actions taken by chat members and administrators in the last 48 hours. Available only for
+supergroups and channels. Requires administrator rights. Returns results in reverse chronological order (i.e., in order
+of decreasing event_id).
+Request type for {@link Tdjson#getChatEventLog}.
+*/
+export interface GetChatEventLog {
+	'@type': 'getChatEventLog';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Search query by which to filter events.
+*/
+	query: string;
+	/**
+Identifier of an event from which to return results. Use 0 to get results from the latest events.
+*/
+	from_event_id: string;
+	/**
+The maximum number of events to return; up to 100.
+*/
+	limit: number;
+	/**
+The types of events to return; pass null to get chat events of all types.
+*/
+	filters: ChatEventLogFilters;
+	/**
+User identifiers by which to filter events. By default, events relating to all users will be returned.
+*/
+	user_ids: number[];
+}
+
+/**
+Returns an invoice payment form. This method must be called when the user presses inlineKeyboardButtonBuy.
+Request type for {@link Tdjson#getPaymentForm}.
+*/
+export interface GetPaymentForm {
+	'@type': 'getPaymentForm';
+	/**
+The invoice.
+*/
+	input_invoice: InputInvoice;
+	/**
+Preferred payment form theme; pass null to use the default theme.
+*/
+	theme: ThemeParameters;
+}
+
+/**
+Validates the order information provided by a user and returns the available shipping options for a flexible invoice.
+Request type for {@link Tdjson#validateOrderInfo}.
+*/
+export interface ValidateOrderInfo {
+	'@type': 'validateOrderInfo';
+	/**
+The invoice.
+*/
+	input_invoice: InputInvoice;
+	/**
+The order information, provided by the user; pass null if empty.
+*/
+	order_info: OrderInfo;
+	/**
+Pass true to save the order information.
+*/
+	allow_save?: boolean;
+}
+
+/**
+Sends a filled-out payment form to the bot for final verification.
+Request type for {@link Tdjson#sendPaymentForm}.
+*/
+export interface SendPaymentForm {
+	'@type': 'sendPaymentForm';
+	/**
+The invoice.
+*/
+	input_invoice: InputInvoice;
+	/**
+Payment form identifier returned by getPaymentForm.
+*/
+	payment_form_id: string;
+	/**
+Identifier returned by validateOrderInfo, or an empty string.
+*/
+	order_info_id: string;
+	/**
+Identifier of a chosen shipping option, if applicable.
+*/
+	shipping_option_id: string;
+	/**
+The credentials chosen by user for payment.
+*/
+	credentials: InputCredentials;
+	/**
+Chosen by the user amount of tip in the smallest units of the currency.
+*/
+	tip_amount: number;
+}
+
+/**
+Returns information about a successful payment.
+Request type for {@link Tdjson#getPaymentReceipt}.
+*/
+export interface GetPaymentReceipt {
+	'@type': 'getPaymentReceipt';
+	/**
+Chat identifier of the PaymentSuccessful message.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+}
+
+/**
+Returns saved order information. Returns a 404 error if there is no saved order information.
+Request type for {@link Tdjson#getSavedOrderInfo}.
+*/
+export interface GetSavedOrderInfo {
+	'@type': 'getSavedOrderInfo';
+
+}
+
+/**
+Deletes saved order information.
+Request type for {@link Tdjson#deleteSavedOrderInfo}.
+*/
+export interface DeleteSavedOrderInfo {
+	'@type': 'deleteSavedOrderInfo';
+
+}
+
+/**
+Deletes saved credentials for all payment provider bots.
+Request type for {@link Tdjson#deleteSavedCredentials}.
+*/
+export interface DeleteSavedCredentials {
+	'@type': 'deleteSavedCredentials';
+
+}
+
+/**
+Creates a link for the given invoice; for bots only.
+Request type for {@link Tdjson#createInvoiceLink}.
+*/
+export interface CreateInvoiceLink {
+	'@type': 'createInvoiceLink';
+	/**
+Information about the invoice of the type inputMessageInvoice.
+*/
+	invoice: InputMessageContent;
+}
+
+/**
+Returns a user that can be contacted to get support.
+Request type for {@link Tdjson#getSupportUser}.
+*/
+export interface GetSupportUser {
+	'@type': 'getSupportUser';
+
+}
+
+/**
+Returns backgrounds installed by the user.
+Request type for {@link Tdjson#getBackgrounds}.
+*/
+export interface GetBackgrounds {
+	'@type': 'getBackgrounds';
+	/**
+Pass true to order returned backgrounds for a dark theme.
+*/
+	for_dark_theme?: boolean;
+}
+
+/**
+Constructs a persistent HTTP URL for a background.
+Request type for {@link Tdjson#getBackgroundUrl}.
+*/
+export interface GetBackgroundUrl {
+	'@type': 'getBackgroundUrl';
+	/**
+Background name.
+*/
+	name: string;
+	/**
+Background type.
+*/
+	type: BackgroundType;
+}
+
+/**
+Searches for a background by its name.
+Request type for {@link Tdjson#searchBackground}.
+*/
+export interface SearchBackground {
+	'@type': 'searchBackground';
+	/**
+The name of the background.
+*/
+	name: string;
+}
+
+/**
+Changes the background selected by the user; adds background to the list of installed backgrounds.
+Request type for {@link Tdjson#setBackground}.
+*/
+export interface SetBackground {
+	'@type': 'setBackground';
+	/**
+The input background to use; pass null to create a new filled backgrounds or to remove the current background.
+*/
+	background: InputBackground;
+	/**
+Background type; pass null to use the default type of the remote background or to remove the current background.
+*/
+	type: BackgroundType;
+	/**
+Pass true if the background is changed for a dark theme.
+*/
+	for_dark_theme?: boolean;
+}
+
+/**
+Removes background from the list of installed backgrounds.
+Request type for {@link Tdjson#removeBackground}.
+*/
+export interface RemoveBackground {
+	'@type': 'removeBackground';
+	/**
+The background identifier.
+*/
+	background_id: string;
+}
+
+/**
+Resets list of installed backgrounds to its default value.
+Request type for {@link Tdjson#resetBackgrounds}.
+*/
+export interface ResetBackgrounds {
+	'@type': 'resetBackgrounds';
+
+}
+
+/**
+Returns information about the current localization target. This is an offline request if only_local is true. Can be
+called before authorization.
+Request type for {@link Tdjson#getLocalizationTargetInfo}.
+*/
+export interface GetLocalizationTargetInfo {
+	'@type': 'getLocalizationTargetInfo';
+	/**
+Pass true to get only locally available information without sending network requests.
+*/
+	only_local?: boolean;
+}
+
+/**
+Returns information about a language pack. Returned language pack identifier may be different from a provided one. Can
+be called before authorization.
+Request type for {@link Tdjson#getLanguagePackInfo}.
+*/
+export interface GetLanguagePackInfo {
+	'@type': 'getLanguagePackInfo';
+	/**
+Language pack identifier.
+*/
+	language_pack_id: string;
+}
+
+/**
+Returns strings from a language pack in the current localization target by their keys. Can be called before
+authorization.
+Request type for {@link Tdjson#getLanguagePackStrings}.
+*/
+export interface GetLanguagePackStrings {
+	'@type': 'getLanguagePackStrings';
+	/**
+Language pack identifier of the strings to be returned.
+*/
+	language_pack_id: string;
+	/**
+Language pack keys of the strings to be returned; leave empty to request all available strings.
+*/
+	keys: string[];
+}
+
+/**
+Fetches the latest versions of all strings from a language pack in the current localization target from the server. This
+method doesn't need to be called explicitly for the current used/base language packs. Can be called before
+authorization.
+Request type for {@link Tdjson#synchronizeLanguagePack}.
+*/
+export interface SynchronizeLanguagePack {
+	'@type': 'synchronizeLanguagePack';
+	/**
+Language pack identifier.
+*/
+	language_pack_id: string;
+}
+
+/**
+Adds a custom server language pack to the list of installed language packs in current localization target. Can be called
+before authorization.
+Request type for {@link Tdjson#addCustomServerLanguagePack}.
+*/
+export interface AddCustomServerLanguagePack {
+	'@type': 'addCustomServerLanguagePack';
+	/**
+Identifier of a language pack to be added; may be different from a name that is used in an "https://t.me/setlanguage/"
+link.
+*/
+	language_pack_id: string;
+}
+
+/**
+Adds or changes a custom local language pack to the current localization target.
+Request type for {@link Tdjson#setCustomLanguagePack}.
+*/
+export interface SetCustomLanguagePack {
+	'@type': 'setCustomLanguagePack';
+	/**
+Information about the language pack. Language pack ID must start with 'X', consist only of English letters, digits and
+hyphens, and must not exceed 64 characters. Can be called before authorization.
+*/
+	info: LanguagePackInfo;
+	/**
+Strings of the new language pack.
+*/
+	strings: LanguagePackString[];
+}
+
+/**
+Edits information about a custom local language pack in the current localization target. Can be called before
+authorization.
+Request type for {@link Tdjson#editCustomLanguagePackInfo}.
+*/
+export interface EditCustomLanguagePackInfo {
+	'@type': 'editCustomLanguagePackInfo';
+	/**
+New information about the custom local language pack.
+*/
+	info: LanguagePackInfo;
+}
+
+/**
+Adds, edits or deletes a string in a custom local language pack. Can be called before authorization.
+Request type for {@link Tdjson#setCustomLanguagePackString}.
+*/
+export interface SetCustomLanguagePackString {
+	'@type': 'setCustomLanguagePackString';
+	/**
+Identifier of a previously added custom local language pack in the current localization target.
+*/
+	language_pack_id: string;
+	/**
+New language pack string.
+*/
+	new_string: LanguagePackString;
+}
+
+/**
+Deletes all information about a language pack in the current localization target. The language pack which is currently
+in use (including base language pack) or is being synchronized can't be deleted. Can be called before authorization.
+Request type for {@link Tdjson#deleteLanguagePack}.
+*/
+export interface DeleteLanguagePack {
+	'@type': 'deleteLanguagePack';
+	/**
+Identifier of the language pack to delete.
+*/
+	language_pack_id: string;
+}
+
+/**
+Registers the currently used device for receiving push notifications. Returns a globally unique identifier of the push
+notification subscription.
+Request type for {@link Tdjson#registerDevice}.
+*/
+export interface RegisterDevice {
+	'@type': 'registerDevice';
+	/**
+Device token.
+*/
+	device_token: DeviceToken;
+	/**
+List of user identifiers of other users currently using the application.
+*/
+	other_user_ids: number[];
+}
+
+/**
+Handles a push notification. Returns error with code 406 if the push notification is not supported and connection to the
+server is required to fetch new data. Can be called before authorization.
+Request type for {@link Tdjson#processPushNotification}.
+*/
+export interface ProcessPushNotification {
+	'@type': 'processPushNotification';
+	/**
+JSON-encoded push notification payload with all fields sent by the server, and "google.sent_time" and
+"google.notification.sound" fields added.
+*/
+	payload: string;
+}
+
+/**
+Returns a globally unique push notification subscription identifier for identification of an account, which has received
+a push notification. Can be called synchronously.
+Request type for {@link Tdjson#getPushReceiverId}.
+*/
+export interface GetPushReceiverId {
+	'@type': 'getPushReceiverId';
+	/**
+JSON-encoded push notification payload.
+*/
+	payload: string;
+}
+
+/**
+Returns t.me URLs recently visited by a newly registered user.
+Request type for {@link Tdjson#getRecentlyVisitedTMeUrls}.
+*/
+export interface GetRecentlyVisitedTMeUrls {
+	'@type': 'getRecentlyVisitedTMeUrls';
+	/**
+Google Play referrer to identify the user.
+*/
+	referrer: string;
+}
+
+/**
+Changes user privacy settings.
+Request type for {@link Tdjson#setUserPrivacySettingRules}.
+*/
+export interface SetUserPrivacySettingRules {
+	'@type': 'setUserPrivacySettingRules';
+	/**
+The privacy setting.
+*/
+	setting: UserPrivacySetting;
+	/**
+The new privacy rules.
+*/
+	rules: UserPrivacySettingRules;
+}
+
+/**
+Returns the current privacy settings.
+Request type for {@link Tdjson#getUserPrivacySettingRules}.
+*/
+export interface GetUserPrivacySettingRules {
+	'@type': 'getUserPrivacySettingRules';
+	/**
+The privacy setting.
+*/
+	setting: UserPrivacySetting;
+}
+
+/**
+Returns the value of an option by its name. (Check the list of available options on
+https://core.telegram.org/tdlib/options.) Can be called before authorization. Can be called synchronously for options
+"version" and "commit_hash".
+Request type for {@link Tdjson#getOption}.
+*/
+export interface GetOption {
+	'@type': 'getOption';
+	/**
+The name of the option.
+*/
+	name: string;
+}
+
+/**
+Sets the value of an option. (Check the list of available options on https://core.telegram.org/tdlib/options.) Only
+writable options can be set. Can be called before authorization.
+Request type for {@link Tdjson#setOption}.
+*/
+export interface SetOption {
+	'@type': 'setOption';
+	/**
+The name of the option.
+*/
+	name: string;
+	/**
+The new value of the option; pass null to reset option value to a default value.
+*/
+	value: OptionValue;
+}
+
+/**
+Changes the period of inactivity after which the account of the current user will automatically be deleted.
+Request type for {@link Tdjson#setAccountTtl}.
+*/
+export interface SetAccountTtl {
+	'@type': 'setAccountTtl';
+	/**
+New account TTL.
+*/
+	ttl: AccountTtl;
+}
+
+/**
+Returns the period of inactivity after which the account of the current user will automatically be deleted.
+Request type for {@link Tdjson#getAccountTtl}.
+*/
+export interface GetAccountTtl {
+	'@type': 'getAccountTtl';
+
+}
+
+/**
+Deletes the account of the current user, deleting all information associated with the user from the server. The phone
+number of the account can be used to create a new account. Can be called before authorization when the current
+authorization state is authorizationStateWaitPassword.
+Request type for {@link Tdjson#deleteAccount}.
+*/
+export interface DeleteAccount {
+	'@type': 'deleteAccount';
+	/**
+The reason why the account was deleted; optional.
+*/
+	reason: string;
+	/**
+The 2-step verification password of the current user. If not specified, account deletion can be canceled within one
+week.
+*/
+	password: string;
+}
+
+/**
+Removes a chat action bar without any other action.
+Request type for {@link Tdjson#removeChatActionBar}.
+*/
+export interface RemoveChatActionBar {
+	'@type': 'removeChatActionBar';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if
+chat.can_be_reported.
+Request type for {@link Tdjson#reportChat}.
+*/
+export interface ReportChat {
+	'@type': 'reportChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifiers of reported messages; may be empty to report the whole chat.
+*/
+	message_ids: number[];
+	/**
+The reason for reporting the chat.
+*/
+	reason: ChatReportReason;
+	/**
+Additional report details; 0-1024 characters.
+*/
+	text: string;
+}
+
+/**
+Reports a chat photo to the Telegram moderators. A chat photo can be reported only if chat.can_be_reported.
+Request type for {@link Tdjson#reportChatPhoto}.
+*/
+export interface ReportChatPhoto {
+	'@type': 'reportChatPhoto';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the photo to report. Only full photos from chatPhoto can be reported.
+*/
+	file_id: number;
+	/**
+The reason for reporting the chat photo.
+*/
+	reason: ChatReportReason;
+	/**
+Additional report details; 0-1024 characters.
+*/
+	text: string;
+}
+
+/**
+Returns detailed statistics about a chat. Currently, this method can be used only for supergroups and channels. Can be
+used only if supergroupFullInfo.can_get_statistics == true.
+Request type for {@link Tdjson#getChatStatistics}.
+*/
+export interface GetChatStatistics {
+	'@type': 'getChatStatistics';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Pass true if a dark theme is used by the application.
+*/
+	is_dark?: boolean;
+}
+
+/**
+Returns detailed statistics about a message. Can be used only if message.can_get_statistics == true.
+Request type for {@link Tdjson#getMessageStatistics}.
+*/
+export interface GetMessageStatistics {
+	'@type': 'getMessageStatistics';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+Pass true if a dark theme is used by the application.
+*/
+	is_dark?: boolean;
+}
+
+/**
+Loads an asynchronous or a zoomed in statistical graph.
+Request type for {@link Tdjson#getStatisticalGraph}.
+*/
+export interface GetStatisticalGraph {
+	'@type': 'getStatisticalGraph';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The token for graph loading.
+*/
+	token: string;
+	/**
+X-value for zoomed in graph or 0 otherwise.
+*/
+	x: number;
+}
+
+/**
+Returns storage usage statistics. Can be called before authorization.
+Request type for {@link Tdjson#getStorageStatistics}.
+*/
+export interface GetStorageStatistics {
+	'@type': 'getStorageStatistics';
+	/**
+The maximum number of chats with the largest storage usage for which separate statistics need to be returned. All other
+chats will be grouped in entries with chat_id == 0. If the chat info database is not used, the chat_limit is ignored and
+is always set to 0.
+*/
+	chat_limit: number;
+}
+
+/**
+Quickly returns approximate storage usage statistics. Can be called before authorization.
+Request type for {@link Tdjson#getStorageStatisticsFast}.
+*/
+export interface GetStorageStatisticsFast {
+	'@type': 'getStorageStatisticsFast';
+
+}
+
+/**
+Returns database statistics.
+Request type for {@link Tdjson#getDatabaseStatistics}.
+*/
+export interface GetDatabaseStatistics {
+	'@type': 'getDatabaseStatistics';
+
+}
+
+/**
+Optimizes storage usage, i.e. deletes some files and returns new storage usage statistics. Secret thumbnails can't be
+deleted.
+Request type for {@link Tdjson#optimizeStorage}.
+*/
+export interface OptimizeStorage {
+	'@type': 'optimizeStorage';
+	/**
+Limit on the total size of files after deletion, in bytes. Pass -1 to use the default limit.
+*/
+	size: number;
+	/**
+Limit on the time that has passed since the last time a file was accessed (or creation time for some filesystems). Pass
+-1 to use the default limit.
+*/
+	ttl: number;
+	/**
+Limit on the total number of files after deletion. Pass -1 to use the default limit.
+*/
+	count: number;
+	/**
+The amount of time after the creation of a file during which it can't be deleted, in seconds. Pass -1 to use the default
+value.
+*/
+	immunity_delay: number;
+	/**
+If non-empty, only files with the given types are considered. By default, all types except thumbnails, profile photos,
+stickers and wallpapers are deleted.
+*/
+	file_types: FileType[];
+	/**
+If non-empty, only files from the given chats are considered. Use 0 as chat identifier to delete files not belonging to
+any chat (e.g., profile photos).
+*/
+	chat_ids: number[];
+	/**
+If non-empty, files from the given chats are excluded. Use 0 as chat identifier to exclude all files not belonging to
+any chat (e.g., profile photos).
+*/
+	exclude_chat_ids: number[];
+	/**
+Pass true if statistics about the files that were deleted must be returned instead of the whole storage usage
+statistics. Affects only returned statistics.
+*/
+	return_deleted_file_statistics?: boolean;
+	/**
+Same as in getStorageStatistics. Affects only returned statistics.
+*/
+	chat_limit: number;
+}
+
+/**
+Sets the current network type. Can be called before authorization. Calling this method forces all network connections to
+reopen, mitigating the delay in switching between different networks, so it must be called whenever the network is
+changed, even if the network type remains the same. Network type is used to check whether the library can use the
+network at all and also for collecting detailed network data usage statistics.
+Request type for {@link Tdjson#setNetworkType}.
+*/
+export interface SetNetworkType {
+	'@type': 'setNetworkType';
+	/**
+The new network type; pass null to set network type to networkTypeOther.
+*/
+	type: NetworkType;
+}
+
+/**
+Returns network data usage statistics. Can be called before authorization.
+Request type for {@link Tdjson#getNetworkStatistics}.
+*/
+export interface GetNetworkStatistics {
+	'@type': 'getNetworkStatistics';
+	/**
+Pass true to get statistics only for the current library launch.
+*/
+	only_current?: boolean;
+}
+
+/**
+Adds the specified data to data usage statistics. Can be called before authorization.
+Request type for {@link Tdjson#addNetworkStatistics}.
+*/
+export interface AddNetworkStatistics {
+	'@type': 'addNetworkStatistics';
+	/**
+The network statistics entry with the data to be added to statistics.
+*/
+	entry: NetworkStatisticsEntry;
+}
+
+/**
+Resets all network data usage statistics to zero. Can be called before authorization.
+Request type for {@link Tdjson#resetNetworkStatistics}.
+*/
+export interface ResetNetworkStatistics {
+	'@type': 'resetNetworkStatistics';
+
+}
+
+/**
+Returns auto-download settings presets for the current user.
+Request type for {@link Tdjson#getAutoDownloadSettingsPresets}.
+*/
+export interface GetAutoDownloadSettingsPresets {
+	'@type': 'getAutoDownloadSettingsPresets';
+
+}
+
+/**
+Sets auto-download settings.
+Request type for {@link Tdjson#setAutoDownloadSettings}.
+*/
+export interface SetAutoDownloadSettings {
+	'@type': 'setAutoDownloadSettings';
+	/**
+New user auto-download settings.
+*/
+	settings: AutoDownloadSettings;
+	/**
+Type of the network for which the new settings are relevant.
+*/
+	type: NetworkType;
+}
+
+/**
+Returns information about a bank card.
+Request type for {@link Tdjson#getBankCardInfo}.
+*/
+export interface GetBankCardInfo {
+	'@type': 'getBankCardInfo';
+	/**
+The bank card number.
+*/
+	bank_card_number: string;
+}
+
+/**
+Returns one of the available Telegram Passport elements.
+Request type for {@link Tdjson#getPassportElement}.
+*/
+export interface GetPassportElement {
+	'@type': 'getPassportElement';
+	/**
+Telegram Passport element type.
+*/
+	type: PassportElementType;
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
+}
+
+/**
+Returns all available Telegram Passport elements.
+Request type for {@link Tdjson#getAllPassportElements}.
+*/
+export interface GetAllPassportElements {
+	'@type': 'getAllPassportElements';
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
+}
+
+/**
+Adds an element to the user's Telegram Passport. May return an error with a message "PHONE_VERIFICATION_NEEDED" or
+"EMAIL_VERIFICATION_NEEDED" if the chosen phone number or the chosen email address must be verified first.
+Request type for {@link Tdjson#setPassportElement}.
+*/
+export interface SetPassportElement {
+	'@type': 'setPassportElement';
+	/**
+Input Telegram Passport element.
+*/
+	element: InputPassportElement;
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
+}
+
+/**
+Deletes a Telegram Passport element.
+Request type for {@link Tdjson#deletePassportElement}.
+*/
+export interface DeletePassportElement {
+	'@type': 'deletePassportElement';
+	/**
+Element type.
+*/
+	type: PassportElementType;
+}
+
+/**
+Informs the user that some of the elements in their Telegram Passport contain errors; for bots only. The user will not
+be able to resend the elements, until the errors are fixed.
+Request type for {@link Tdjson#setPassportElementErrors}.
+*/
+export interface SetPassportElementErrors {
+	'@type': 'setPassportElementErrors';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+The errors.
+*/
+	errors: InputPassportElementError[];
+}
+
+/**
+Returns an IETF language tag of the language preferred in the country, which must be used to fill native fields in
+Telegram Passport personal details. Returns a 404 error if unknown.
+Request type for {@link Tdjson#getPreferredCountryLanguage}.
+*/
+export interface GetPreferredCountryLanguage {
+	'@type': 'getPreferredCountryLanguage';
+	/**
+A two-letter ISO 3166-1 alpha-2 country code.
+*/
+	country_code: string;
+}
+
+/**
+Sends a code to verify a phone number to be added to a user's Telegram Passport.
+Request type for {@link Tdjson#sendPhoneNumberVerificationCode}.
+*/
+export interface SendPhoneNumberVerificationCode {
+	'@type': 'sendPhoneNumberVerificationCode';
+	/**
+The phone number of the user, in international format.
+*/
+	phone_number: string;
+	/**
+Settings for the authentication of the user's phone number; pass null to use default settings.
+*/
+	settings: PhoneNumberAuthenticationSettings;
+}
+
+/**
+Re-sends the code to verify a phone number to be added to a user's Telegram Passport.
+Request type for {@link Tdjson#resendPhoneNumberVerificationCode}.
+*/
+export interface ResendPhoneNumberVerificationCode {
+	'@type': 'resendPhoneNumberVerificationCode';
+
+}
+
+/**
+Checks the phone number verification code for Telegram Passport.
+Request type for {@link Tdjson#checkPhoneNumberVerificationCode}.
+*/
+export interface CheckPhoneNumberVerificationCode {
+	'@type': 'checkPhoneNumberVerificationCode';
+	/**
+Verification code to check.
+*/
+	code: string;
+}
+
+/**
+Sends a code to verify an email address to be added to a user's Telegram Passport.
+Request type for {@link Tdjson#sendEmailAddressVerificationCode}.
+*/
+export interface SendEmailAddressVerificationCode {
+	'@type': 'sendEmailAddressVerificationCode';
+	/**
+Email address.
+*/
+	email_address: string;
+}
+
+/**
+Re-sends the code to verify an email address to be added to a user's Telegram Passport.
+Request type for {@link Tdjson#resendEmailAddressVerificationCode}.
+*/
+export interface ResendEmailAddressVerificationCode {
+	'@type': 'resendEmailAddressVerificationCode';
+
+}
+
+/**
+Checks the email address verification code for Telegram Passport.
+Request type for {@link Tdjson#checkEmailAddressVerificationCode}.
+*/
+export interface CheckEmailAddressVerificationCode {
+	'@type': 'checkEmailAddressVerificationCode';
+	/**
+Verification code to check.
+*/
+	code: string;
+}
+
+/**
+Returns a Telegram Passport authorization form for sharing data with a service.
+Request type for {@link Tdjson#getPassportAuthorizationForm}.
+*/
+export interface GetPassportAuthorizationForm {
+	'@type': 'getPassportAuthorizationForm';
+	/**
+User identifier of the service's bot.
+*/
+	bot_user_id: number;
+	/**
+Telegram Passport element types requested by the service.
+*/
+	scope: string;
+	/**
+Service's public key.
+*/
+	public_key: string;
+	/**
+Unique request identifier provided by the service.
+*/
+	nonce: string;
+}
+
+/**
+Returns already available Telegram Passport elements suitable for completing a Telegram Passport authorization form.
+Result can be received only once for each authorization form.
+Request type for {@link Tdjson#getPassportAuthorizationFormAvailableElements}.
+*/
+export interface GetPassportAuthorizationFormAvailableElements {
+	'@type': 'getPassportAuthorizationFormAvailableElements';
+	/**
+Authorization form identifier.
+*/
+	autorization_form_id: number;
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
+}
+
+/**
+Sends a Telegram Passport authorization form, effectively sharing data with the service. This method must be called
+after getPassportAuthorizationFormAvailableElements if some previously available elements are going to be reused.
+Request type for {@link Tdjson#sendPassportAuthorizationForm}.
+*/
+export interface SendPassportAuthorizationForm {
+	'@type': 'sendPassportAuthorizationForm';
+	/**
+Authorization form identifier.
+*/
+	autorization_form_id: number;
+	/**
+Types of Telegram Passport elements chosen by user to complete the authorization form.
+*/
+	types: PassportElementType[];
+}
+
+/**
+Sends phone number confirmation code to handle links of the type internalLinkTypePhoneNumberConfirmation.
+Request type for {@link Tdjson#sendPhoneNumberConfirmationCode}.
+*/
+export interface SendPhoneNumberConfirmationCode {
+	'@type': 'sendPhoneNumberConfirmationCode';
+	/**
+Hash value from the link.
+*/
+	hash: string;
+	/**
+Phone number value from the link.
+*/
+	phone_number: string;
+	/**
+Settings for the authentication of the user's phone number; pass null to use default settings.
+*/
+	settings: PhoneNumberAuthenticationSettings;
+}
+
+/**
+Resends phone number confirmation code.
+Request type for {@link Tdjson#resendPhoneNumberConfirmationCode}.
+*/
+export interface ResendPhoneNumberConfirmationCode {
+	'@type': 'resendPhoneNumberConfirmationCode';
+
+}
+
+/**
+Checks phone number confirmation code.
+Request type for {@link Tdjson#checkPhoneNumberConfirmationCode}.
+*/
+export interface CheckPhoneNumberConfirmationCode {
+	'@type': 'checkPhoneNumberConfirmationCode';
+	/**
+Confirmation code to check.
+*/
+	code: string;
+}
+
+/**
+Informs the server about the number of pending bot updates if they haven't been processed for a long time; for bots
+only.
+Request type for {@link Tdjson#setBotUpdatesStatus}.
+*/
+export interface SetBotUpdatesStatus {
+	'@type': 'setBotUpdatesStatus';
+	/**
+The number of pending updates.
+*/
+	pending_update_count: number;
+	/**
+The last error message.
+*/
+	error_message: string;
+}
+
+/**
+Uploads a file with a sticker; returns the uploaded file.
+Request type for {@link Tdjson#uploadStickerFile}.
+*/
+export interface UploadStickerFile {
+	'@type': 'uploadStickerFile';
+	/**
+Sticker file owner; ignored for regular users.
+*/
+	user_id: number;
+	/**
+Sticker file to upload.
+*/
+	sticker: InputSticker;
+}
+
+/**
+Returns a suggested name for a new sticker set with a given title.
+Request type for {@link Tdjson#getSuggestedStickerSetName}.
+*/
+export interface GetSuggestedStickerSetName {
+	'@type': 'getSuggestedStickerSetName';
+	/**
+Sticker set title; 1-64 characters.
+*/
+	title: string;
+}
+
+/**
+Checks whether a name can be used for a new sticker set.
+Request type for {@link Tdjson#checkStickerSetName}.
+*/
+export interface CheckStickerSetName {
+	'@type': 'checkStickerSetName';
+	/**
+Name to be checked.
+*/
+	name: string;
+}
+
+/**
+Creates a new sticker set. Returns the newly created sticker set.
+Request type for {@link Tdjson#createNewStickerSet}.
+*/
+export interface CreateNewStickerSet {
+	'@type': 'createNewStickerSet';
+	/**
+Sticker set owner; ignored for regular users.
+*/
+	user_id: number;
+	/**
+Sticker set title; 1-64 characters.
+*/
+	title: string;
+	/**
+Sticker set name. Can contain only English letters, digits and underscores. Must end with *"_by_<bot username>"*
+(*<bot_username>* is case insensitive) for bots; 1-64 characters.
+*/
+	name: string;
+	/**
+Type of the stickers in the set.
+*/
+	sticker_type: StickerType;
+	/**
+List of stickers to be added to the set; must be non-empty. All stickers must have the same format. For TGS stickers,
+uploadStickerFile must be used before the sticker is shown.
+*/
+	stickers: InputSticker[];
+	/**
+Source of the sticker set; may be empty if unknown.
+*/
+	source: string;
+}
+
+/**
+Adds a new sticker to a set; for bots only. Returns the sticker set.
+Request type for {@link Tdjson#addStickerToSet}.
+*/
+export interface AddStickerToSet {
+	'@type': 'addStickerToSet';
+	/**
+Sticker set owner.
+*/
+	user_id: number;
+	/**
+Sticker set name.
+*/
+	name: string;
+	/**
+Sticker to add to the set.
+*/
+	sticker: InputSticker;
+}
+
+/**
+Sets a sticker set thumbnail; for bots only. Returns the sticker set.
+Request type for {@link Tdjson#setStickerSetThumbnail}.
+*/
+export interface SetStickerSetThumbnail {
+	'@type': 'setStickerSetThumbnail';
+	/**
+Sticker set owner.
+*/
+	user_id: number;
+	/**
+Sticker set name.
+*/
+	name: string;
+	/**
+Thumbnail to set in PNG, TGS, or WEBM format; pass null to remove the sticker set thumbnail. Thumbnail format must match
+the format of stickers in the set.
+*/
+	thumbnail: InputFile;
+}
+
+/**
+Changes the position of a sticker in the set to which it belongs; for bots only. The sticker set must have been created
+by the bot.
+Request type for {@link Tdjson#setStickerPositionInSet}.
+*/
+export interface SetStickerPositionInSet {
+	'@type': 'setStickerPositionInSet';
+	/**
+Sticker.
+*/
+	sticker: InputFile;
+	/**
+New position of the sticker in the set, 0-based.
+*/
+	position: number;
+}
+
+/**
+Removes a sticker from the set to which it belongs; for bots only. The sticker set must have been created by the bot.
+Request type for {@link Tdjson#removeStickerFromSet}.
+*/
+export interface RemoveStickerFromSet {
+	'@type': 'removeStickerFromSet';
+	/**
+Sticker.
+*/
+	sticker: InputFile;
+}
+
+/**
+Returns information about a file with a map thumbnail in PNG format. Only map thumbnail files with size less than 1MB
+can be downloaded.
+Request type for {@link Tdjson#getMapThumbnailFile}.
+*/
+export interface GetMapThumbnailFile {
+	'@type': 'getMapThumbnailFile';
+	/**
+Location of the map center.
+*/
+	location: Location;
+	/**
+Map zoom level; 13-20.
+*/
+	zoom: number;
+	/**
+Map width in pixels before applying scale; 16-1024.
+*/
+	width: number;
+	/**
+Map height in pixels before applying scale; 16-1024.
+*/
+	height: number;
+	/**
+Map scale; 1-3.
+*/
+	scale: number;
+	/**
+Identifier of a chat in which the thumbnail will be shown. Use 0 if unknown.
+*/
+	chat_id: number;
+}
+
+/**
+Returns information about a limit, increased for Premium users. Returns a 404 error if the limit is unknown.
+Request type for {@link Tdjson#getPremiumLimit}.
+*/
+export interface GetPremiumLimit {
+	'@type': 'getPremiumLimit';
+	/**
+Type of the limit.
+*/
+	limit_type: PremiumLimitType;
+}
+
+/**
+Returns information about features, available to Premium users.
+Request type for {@link Tdjson#getPremiumFeatures}.
+*/
+export interface GetPremiumFeatures {
+	'@type': 'getPremiumFeatures';
+	/**
+Source of the request; pass null if the method is called from some non-standard source.
+*/
+	source: PremiumSource;
+}
+
+/**
+Returns examples of premium stickers for demonstration purposes.
+Request type for {@link Tdjson#getPremiumStickerExamples}.
+*/
+export interface GetPremiumStickerExamples {
+	'@type': 'getPremiumStickerExamples';
+
+}
+
+/**
+Informs TDLib that the user viewed detailed information about a Premium feature on the Premium features screen.
+Request type for {@link Tdjson#viewPremiumFeature}.
+*/
+export interface ViewPremiumFeature {
+	'@type': 'viewPremiumFeature';
+	/**
+The viewed premium feature.
+*/
+	feature: PremiumFeature;
+}
+
+/**
+Informs TDLib that the user clicked Premium subscription button on the Premium features screen.
+Request type for {@link Tdjson#clickPremiumSubscriptionButton}.
+*/
+export interface ClickPremiumSubscriptionButton {
+	'@type': 'clickPremiumSubscriptionButton';
+
+}
+
+/**
+Returns state of Telegram Premium subscription and promotion videos for Premium features.
+Request type for {@link Tdjson#getPremiumState}.
+*/
+export interface GetPremiumState {
+	'@type': 'getPremiumState';
+
+}
+
+/**
+Checks whether Telegram Premium purchase is possible. Must be called before in-store Premium purchase.
+Request type for {@link Tdjson#canPurchasePremium}.
+*/
+export interface CanPurchasePremium {
+	'@type': 'canPurchasePremium';
+	/**
+Transaction purpose.
+*/
+	purpose: StorePaymentPurpose;
+}
+
+/**
+Informs server about a purchase through App Store. For official applications only.
+Request type for {@link Tdjson#assignAppStoreTransaction}.
+*/
+export interface AssignAppStoreTransaction {
+	'@type': 'assignAppStoreTransaction';
+	/**
+App Store receipt.
+*/
+	receipt: string;
+	/**
+Transaction purpose.
+*/
+	purpose: StorePaymentPurpose;
+}
+
+/**
+Informs server about a purchase through Google Play. For official applications only.
+Request type for {@link Tdjson#assignGooglePlayTransaction}.
+*/
+export interface AssignGooglePlayTransaction {
+	'@type': 'assignGooglePlayTransaction';
+	/**
+Application package name.
+*/
+	package_name: string;
+	/**
+Identifier of the purchased store product.
+*/
+	store_product_id: string;
+	/**
+Google Play purchase token.
+*/
+	purchase_token: string;
+	/**
+Transaction purpose.
+*/
+	purpose: StorePaymentPurpose;
+}
+
+/**
+Accepts Telegram terms of services.
+Request type for {@link Tdjson#acceptTermsOfService}.
+*/
+export interface AcceptTermsOfService {
+	'@type': 'acceptTermsOfService';
+	/**
+Terms of service identifier.
+*/
+	terms_of_service_id: string;
+}
+
+/**
+Sends a custom request; for bots only.
+Request type for {@link Tdjson#sendCustomRequest}.
+*/
+export interface SendCustomRequest {
+	'@type': 'sendCustomRequest';
+	/**
+The method name.
+*/
+	method: string;
+	/**
+JSON-serialized method parameters.
+*/
+	parameters: string;
+}
+
+/**
+Answers a custom query; for bots only.
+Request type for {@link Tdjson#answerCustomQuery}.
+*/
+export interface AnswerCustomQuery {
+	'@type': 'answerCustomQuery';
+	/**
+Identifier of a custom query.
+*/
+	custom_query_id: string;
+	/**
+JSON-serialized answer to the query.
+*/
+	data: string;
+}
+
+/**
+Succeeds after a specified amount of time has passed. Can be called before initialization.
+Request type for {@link Tdjson#setAlarm}.
+*/
+export interface SetAlarm {
+	'@type': 'setAlarm';
+	/**
+Number of seconds before the function returns.
+*/
+	seconds: number;
+}
+
+/**
+Returns information about existing countries. Can be called before authorization.
+Request type for {@link Tdjson#getCountries}.
+*/
+export interface GetCountries {
+	'@type': 'getCountries';
+
+}
+
+/**
+Uses the current IP address to find the current country. Returns two-letter ISO 3166-1 alpha-2 country code. Can be
+called before authorization.
+Request type for {@link Tdjson#getCountryCode}.
+*/
+export interface GetCountryCode {
+	'@type': 'getCountryCode';
+
+}
+
+/**
+Returns information about a phone number by its prefix. Can be called before authorization.
+Request type for {@link Tdjson#getPhoneNumberInfo}.
+*/
+export interface GetPhoneNumberInfo {
+	'@type': 'getPhoneNumberInfo';
+	/**
+The phone number prefix.
+*/
+	phone_number_prefix: string;
+}
+
+/**
+Returns information about a phone number by its prefix synchronously. getCountries must be called at least once after
+changing localization to the specified language if properly localized country information is expected. Can be called
+synchronously.
+Request type for {@link Tdjson#getPhoneNumberInfoSync}.
+*/
+export interface GetPhoneNumberInfoSync {
+	'@type': 'getPhoneNumberInfoSync';
+	/**
+A two-letter ISO 639-1 language code for country information localization.
+*/
+	language_code: string;
+	/**
+The phone number prefix.
+*/
+	phone_number_prefix: string;
+}
+
+/**
+Returns the link for downloading official Telegram application to be used when the current user invites friends to
+Telegram.
+Request type for {@link Tdjson#getApplicationDownloadLink}.
+*/
+export interface GetAppDownloadLink {
+	'@type': 'getApplicationDownloadLink';
+
+}
+
+/**
+Returns information about a tg:// deep link. Use "tg://need_update_for_some_feature" or "tg:some_unsupported_feature"
+for testing. Returns a 404 error for unknown links. Can be called before authorization.
+Request type for {@link Tdjson#getDeepLinkInfo}.
+*/
+export interface GetDeepLinkInfo {
+	'@type': 'getDeepLinkInfo';
+	/**
+The link.
+*/
+	link: string;
+}
+
+/**
+Returns application config, provided by the server. Can be called before authorization.
+Request type for {@link Tdjson#getApplicationConfig}.
+*/
+export interface GetAppConfig {
+	'@type': 'getApplicationConfig';
+
+}
+
+/**
+Saves application log event on the server. Can be called before authorization.
+Request type for {@link Tdjson#saveApplicationLogEvent}.
+*/
+export interface SaveAppLogEvent {
+	'@type': 'saveApplicationLogEvent';
+	/**
+Event type.
+*/
+	type: string;
+	/**
+Optional chat identifier, associated with the event.
+*/
+	chat_id: number;
+	/**
+The log event data.
+*/
+	data: JsonValue;
+}
+
+/**
+Adds a proxy server for network requests. Can be called before authorization.
+Request type for {@link Tdjson#addProxy}.
+*/
+export interface AddProxy {
+	'@type': 'addProxy';
+	/**
+Proxy server IP address.
+*/
+	server: string;
+	/**
+Proxy server port.
+*/
+	port: number;
+	/**
+Pass true to immediately enable the proxy.
+*/
+	enable?: boolean;
+	/**
+Proxy type.
+*/
+	type: ProxyType;
+}
+
+/**
+Edits an existing proxy server for network requests. Can be called before authorization.
+Request type for {@link Tdjson#editProxy}.
+*/
+export interface EditProxy {
+	'@type': 'editProxy';
+	/**
+Proxy identifier.
+*/
+	proxy_id: number;
+	/**
+Proxy server IP address.
+*/
+	server: string;
+	/**
+Proxy server port.
+*/
+	port: number;
+	/**
+Pass true to immediately enable the proxy.
+*/
+	enable?: boolean;
+	/**
+Proxy type.
+*/
+	type: ProxyType;
+}
+
+/**
+Enables a proxy. Only one proxy can be enabled at a time. Can be called before authorization.
+Request type for {@link Tdjson#enableProxy}.
+*/
+export interface EnableProxy {
+	'@type': 'enableProxy';
+	/**
+Proxy identifier.
+*/
+	proxy_id: number;
+}
+
+/**
+Disables the currently enabled proxy. Can be called before authorization.
+Request type for {@link Tdjson#disableProxy}.
+*/
+export interface DisableProxy {
+	'@type': 'disableProxy';
+
+}
+
+/**
+Removes a proxy server. Can be called before authorization.
+Request type for {@link Tdjson#removeProxy}.
+*/
+export interface RemoveProxy {
+	'@type': 'removeProxy';
+	/**
+Proxy identifier.
+*/
+	proxy_id: number;
+}
+
+/**
+Returns list of proxies that are currently set up. Can be called before authorization.
+Request type for {@link Tdjson#getProxies}.
+*/
+export interface GetProxies {
+	'@type': 'getProxies';
+
+}
+
+/**
+Returns an HTTPS link, which can be used to add a proxy. Available only for SOCKS5 and MTProto proxies. Can be called
+before authorization.
+Request type for {@link Tdjson#getProxyLink}.
+*/
+export interface GetProxyLink {
+	'@type': 'getProxyLink';
+	/**
+Proxy identifier.
+*/
+	proxy_id: number;
+}
+
+/**
+Computes time needed to receive a response from a Telegram server through a proxy. Can be called before authorization.
+Request type for {@link Tdjson#pingProxy}.
+*/
+export interface PingProxy {
+	'@type': 'pingProxy';
+	/**
+Proxy identifier. Use 0 to ping a Telegram server without a proxy.
+*/
+	proxy_id: number;
+}
+
+/**
+Sets new log stream for internal logging of TDLib. Can be called synchronously.
+Request type for {@link Tdjson#setLogStream}.
+*/
+export interface SetLogStream {
+	'@type': 'setLogStream';
+	/**
+New log stream.
+*/
+	log_stream: LogStream;
+}
+
+/**
+Returns information about currently used log stream for internal logging of TDLib. Can be called synchronously.
+Request type for {@link Tdjson#getLogStream}.
+*/
+export interface GetLogStream {
+	'@type': 'getLogStream';
+
+}
+
+/**
+Sets the verbosity level of the internal logging of TDLib. Can be called synchronously.
+Request type for {@link Tdjson#setLogVerbosityLevel}.
+*/
+export interface SetLogVerbosityLevel {
+	'@type': 'setLogVerbosityLevel';
+	/**
+New value of the verbosity level for logging. Value 0 corresponds to fatal errors, value 1 corresponds to errors, value
+2 corresponds to warnings and debug warnings, value 3 corresponds to informational, value 4 corresponds to debug, value
+5 corresponds to verbose debug, value greater than 5 and up to 1023 can be used to enable even more logging.
+*/
+	new_verbosity_level: number;
+}
+
+/**
+Returns current verbosity level of the internal logging of TDLib. Can be called synchronously.
+Request type for {@link Tdjson#getLogVerbosityLevel}.
+*/
+export interface GetLogVerbosityLevel {
+	'@type': 'getLogVerbosityLevel';
+
+}
+
+/**
+Returns list of available TDLib internal log tags, for example, ["actor", "binlog", "connections", "notifications",
+"proxy"]. Can be called synchronously.
+Request type for {@link Tdjson#getLogTags}.
+*/
+export interface GetLogTags {
+	'@type': 'getLogTags';
+
+}
+
+/**
+Sets the verbosity level for a specified TDLib internal log tag. Can be called synchronously.
+Request type for {@link Tdjson#setLogTagVerbosityLevel}.
+*/
+export interface SetLogTagVerbosityLevel {
+	'@type': 'setLogTagVerbosityLevel';
+	/**
+Logging tag to change verbosity level.
+*/
+	tag: string;
+	/**
+New verbosity level; 1-1024.
+*/
+	new_verbosity_level: number;
+}
+
+/**
+Returns current verbosity level for a specified TDLib internal log tag. Can be called synchronously.
+Request type for {@link Tdjson#getLogTagVerbosityLevel}.
+*/
+export interface GetLogTagVerbosityLevel {
+	'@type': 'getLogTagVerbosityLevel';
+	/**
+Logging tag to change verbosity level.
+*/
+	tag: string;
+}
+
+/**
+Adds a message to TDLib internal log. Can be called synchronously.
+Request type for {@link Tdjson#addLogMessage}.
+*/
+export interface AddLogMessage {
+	'@type': 'addLogMessage';
+	/**
+The minimum verbosity level needed for the message to be logged; 0-1023.
+*/
+	verbosity_level: number;
+	/**
+Text of a message to log.
+*/
+	text: string;
+}
+
+/**
+Returns support information for the given user; for Telegram support only.
+Request type for {@link Tdjson#getUserSupportInfo}.
+*/
+export interface GetUserSupportInfo {
+	'@type': 'getUserSupportInfo';
+	/**
+User identifier.
+*/
+	user_id: number;
+}
+
+/**
+Sets support information for the given user; for Telegram support only.
+Request type for {@link Tdjson#setUserSupportInfo}.
+*/
+export interface SetUserSupportInfo {
+	'@type': 'setUserSupportInfo';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+New information message.
+*/
+	message: FormattedText;
+}
+
+/**
+Does nothing; for testing only. This is an offline method. Can be called before authorization.
+Request type for {@link Tdjson#testCallEmpty}.
+*/
+export interface TestCallEmpty {
+	'@type': 'testCallEmpty';
+
+}
+
+/**
+Returns the received string; for testing only. This is an offline method. Can be called before authorization.
+Request type for {@link Tdjson#testCallString}.
+*/
+export interface TestCallString {
+	'@type': 'testCallString';
+	/**
+String to return.
+*/
+	x: string;
+}
+
+/**
+Returns the received bytes; for testing only. This is an offline method. Can be called before authorization.
+Request type for {@link Tdjson#testCallBytes}.
+*/
+export interface TestCallBytes {
+	'@type': 'testCallBytes';
+	/**
+Bytes to return.
+*/
+	x: string;
+}
+
+/**
+Returns the received vector of numbers; for testing only. This is an offline method. Can be called before authorization.
+Request type for {@link Tdjson#testCallVectorInt}.
+*/
+export interface TestCallVectorInt {
+	'@type': 'testCallVectorInt';
+	/**
+Vector of numbers to return.
+*/
+	x: number[];
+}
+
+/**
+Returns the received vector of objects containing a number; for testing only. This is an offline method. Can be called
+before authorization.
+Request type for {@link Tdjson#testCallVectorIntObject}.
+*/
+export interface TestCallVectorIntObject {
+	'@type': 'testCallVectorIntObject';
+	/**
+Vector of objects to return.
+*/
+	x: TestInt[];
+}
+
+/**
+Returns the received vector of strings; for testing only. This is an offline method. Can be called before authorization.
+Request type for {@link Tdjson#testCallVectorString}.
+*/
+export interface TestCallVectorString {
+	'@type': 'testCallVectorString';
+	/**
+Vector of strings to return.
+*/
+	x: string[];
+}
+
+/**
+Returns the received vector of objects containing a string; for testing only. This is an offline method. Can be called
+before authorization.
+Request type for {@link Tdjson#testCallVectorStringObject}.
+*/
+export interface TestCallVectorStringObject {
+	'@type': 'testCallVectorStringObject';
+	/**
+Vector of objects to return.
+*/
+	x: TestString[];
+}
+
+/**
+Returns the squared received number; for testing only. This is an offline method. Can be called before authorization.
+Request type for {@link Tdjson#testSquareInt}.
+*/
+export interface TestSquareInt {
+	'@type': 'testSquareInt';
+	/**
+Number to square.
+*/
+	x: number;
+}
+
+/**
+Sends a simple network request to the Telegram servers; for testing only. Can be called before authorization.
+Request type for {@link Tdjson#testNetwork}.
+*/
+export interface TestNetwork {
+	'@type': 'testNetwork';
+
+}
+
+/**
+Sends a simple network request to the Telegram servers via proxy; for testing only. Can be called before authorization.
+Request type for {@link Tdjson#testProxy}.
+*/
+export interface TestProxy {
+	'@type': 'testProxy';
+	/**
+Proxy server IP address.
+*/
+	server: string;
+	/**
+Proxy server port.
+*/
+	port: number;
+	/**
+Proxy type.
+*/
+	type: ProxyType;
+	/**
+Identifier of a datacenter with which to test connection.
+*/
+	dc_id: number;
+	/**
+The maximum overall timeout for the request.
+*/
+	timeout: number;
+}
+
+/**
+Forces an updates.getDifference call to the Telegram servers; for testing only.
+Request type for {@link Tdjson#testGetDifference}.
+*/
+export interface TestGetDifference {
+	'@type': 'testGetDifference';
+
+}
+
+/**
+Does nothing and ensures that the Update object is used; for testing only. This is an offline method. Can be called
+before authorization.
+Request type for {@link Tdjson#testUseUpdate}.
+*/
+export interface TestUseUpdate {
+	'@type': 'testUseUpdate';
+
+}
+
+/**
+Returns the specified error and ensures that the Error object is used; for testing only. Can be called synchronously.
+Request type for {@link Tdjson#testReturnError}.
+*/
+export interface TestReturnError {
+	'@type': 'testReturnError';
+	/**
+The error to be returned.
+*/
+	error: Error;
+}
+
+export type Request =
+	| GetAuthorizationState
+	| SetTdlibParameters
+	| CheckDatabaseEncryptionKey
+	| SetAuthenticationPhoneNumber
+	| ResendAuthenticationCode
+	| CheckAuthenticationCode
+	| RequestQrCodeAuthentication
+	| RegisterUser
+	| CheckAuthenticationPassword
+	| RequestAuthenticationPasswordRecovery
+	| CheckAuthenticationPasswordRecoveryCode
+	| RecoverAuthenticationPassword
+	| CheckAuthenticationBotToken
+	| LogOut
+	| Close
+	| Destroy
+	| ConfirmQrCodeAuthentication
+	| GetCurrentState
+	| SetDatabaseEncryptionKey
+	| GetPasswordState
+	| SetPassword
+	| GetRecoveryEmailAddress
+	| SetRecoveryEmailAddress
+	| CheckRecoveryEmailAddressCode
+	| ResendRecoveryEmailAddressCode
+	| RequestPasswordRecovery
+	| CheckPasswordRecoveryCode
+	| RecoverPassword
+	| ResetPassword
+	| CancelPasswordReset
+	| CreateTemporaryPassword
+	| GetTemporaryPasswordState
+	| GetMe
+	| GetUser
+	| GetUserFullInfo
+	| GetBasicGroup
+	| GetBasicGroupFullInfo
+	| GetSupergroup
+	| GetSupergroupFullInfo
+	| GetSecretChat
+	| GetChat
+	| GetMessage
+	| GetMessageLocally
+	| GetRepliedMessage
+	| GetChatPinnedMessage
+	| GetCallbackQueryMessage
+	| GetMessages
+	| GetMessageThread
+	| GetMessageViewers
+	| GetFile
+	| GetRemoteFile
+	| LoadChats
+	| GetChats
+	| SearchPublicChat
+	| SearchPublicChats
+	| SearchChats
+	| SearchChatsOnServer
+	| SearchChatsNearby
+	| GetTopChats
+	| RemoveTopChat
+	| AddRecentlyFoundChat
+	| RemoveRecentlyFoundChat
+	| ClearRecentlyFoundChats
+	| GetRecentlyOpenedChats
+	| CheckChatUsername
+	| GetCreatedPublicChats
+	| CheckCreatedPublicChatsLimit
+	| GetSuitableDiscussionChats
+	| GetInactiveSupergroupChats
+	| GetGroupsInCommon
+	| GetChatHistory
+	| GetMessageThreadHistory
+	| DeleteChatHistory
+	| DeleteChat
+	| SearchChatMessages
+	| SearchMessages
+	| SearchSecretMessages
+	| SearchCallMessages
+	| SearchOutgoingDocumentMessages
+	| DeleteAllCallMessages
+	| SearchChatRecentLocationMessages
+	| GetActiveLiveLocationMessages
+	| GetChatMessageByDate
+	| GetChatSparseMessagePositions
+	| GetChatMessageCalendar
+	| GetChatMessageCount
+	| GetChatScheduledMessages
+	| GetMessagePublicForwards
+	| GetChatSponsoredMessage
+	| RemoveNotification
+	| RemoveNotificationGroup
+	| GetMessageLink
+	| GetMessageEmbeddingCode
+	| GetMessageLinkInfo
+	| TranslateText
+	| RecognizeSpeech
+	| RateSpeechRecognition
+	| GetChatAvailableMessageSenders
+	| SetChatMessageSender
+	| SendMessage
+	| SendMessageAlbum
+	| SendBotStartMessage
+	| SendInlineQueryResultMessage
+	| ForwardMessages
+	| ResendMessages
+	| SendChatScreenshotTakenNotification
+	| AddLocalMessage
+	| DeleteMessages
+	| DeleteChatMessagesBySender
+	| DeleteChatMessagesByDate
+	| EditMessageText
+	| EditMessageLiveLocation
+	| EditMessageMedia
+	| EditMessageCaption
+	| EditMessageReplyMarkup
+	| EditInlineMessageText
+	| EditInlineMessageLiveLocation
+	| EditInlineMessageMedia
+	| EditInlineMessageCaption
+	| EditInlineMessageReplyMarkup
+	| EditMessageSchedulingState
+	| GetMessageAvailableReactions
+	| SetMessageReaction
+	| GetMessageAddedReactions
+	| GetTextEntities
+	| ParseTextEntities
+	| ParseMarkdown
+	| GetMarkdownText
+	| GetFileMimeType
+	| GetFileExtension
+	| CleanFileName
+	| GetLanguagePackString
+	| GetJsonValue
+	| GetJsonString
+	| GetThemeParametersJsonString
+	| SetPollAnswer
+	| GetPollVoters
+	| StopPoll
+	| HideSuggestedAction
+	| GetLoginUrlInfo
+	| GetLoginUrl
+	| GetInlineQueryResults
+	| AnswerInlineQuery
+	| GetWebAppUrl
+	| SendWebAppData
+	| OpenWebApp
+	| CloseWebApp
+	| AnswerWebAppQuery
+	| GetCallbackQueryAnswer
+	| AnswerCallbackQuery
+	| AnswerShippingQuery
+	| AnswerPreCheckoutQuery
+	| SetGameScore
+	| SetInlineGameScore
+	| GetGameHighScores
+	| GetInlineGameHighScores
+	| DeleteChatReplyMarkup
+	| SendChatAction
+	| OpenChat
+	| CloseChat
+	| ViewMessages
+	| OpenMessageContent
+	| ClickAnimatedEmojiMessage
+	| GetInternalLinkType
+	| GetExternalLinkInfo
+	| GetExternalLink
+	| ReadAllChatMentions
+	| ReadAllChatReactions
+	| CreatePrivateChat
+	| CreateBasicGroupChat
+	| CreateSupergroupChat
+	| CreateSecretChat
+	| CreateNewBasicGroupChat
+	| CreateNewSupergroupChat
+	| CreateNewSecretChat
+	| UpgradeBasicGroupChatToSupergroupChat
+	| GetChatListsToAddChat
+	| AddChatToList
+	| GetChatFilter
+	| CreateChatFilter
+	| EditChatFilter
+	| DeleteChatFilter
+	| ReorderChatFilters
+	| GetRecommendedChatFilters
+	| GetChatFilterDefaultIconName
+	| SetChatTitle
+	| SetChatPhoto
+	| SetChatMessageTtl
+	| SetChatPermissions
+	| SetChatTheme
+	| SetChatDraftMessage
+	| SetChatNotificationSettings
+	| ToggleChatHasProtectedContent
+	| ToggleChatIsMarkedAsUnread
+	| ToggleChatDefaultDisableNotification
+	| SetChatAvailableReactions
+	| SetChatClientData
+	| SetChatDescription
+	| SetChatDiscussionGroup
+	| SetChatLocation
+	| SetChatSlowModeDelay
+	| PinChatMessage
+	| UnpinChatMessage
+	| UnpinAllChatMessages
+	| JoinChat
+	| LeaveChat
+	| AddChatMember
+	| AddChatMembers
+	| SetChatMemberStatus
+	| BanChatMember
+	| CanTransferOwnership
+	| TransferChatOwnership
+	| GetChatMember
+	| SearchChatMembers
+	| GetChatAdministrators
+	| ClearAllDraftMessages
+	| GetSavedNotificationSound
+	| GetSavedNotificationSounds
+	| AddSavedNotificationSound
+	| RemoveSavedNotificationSound
+	| GetChatNotificationSettingsExceptions
+	| GetScopeNotificationSettings
+	| SetScopeNotificationSettings
+	| ResetAllNotificationSettings
+	| ToggleChatIsPinned
+	| SetPinnedChats
+	| GetAttachmentMenuBot
+	| ToggleBotIsAddedToAttachmentMenu
+	| DownloadFile
+	| GetFileDownloadedPrefixSize
+	| CancelDownloadFile
+	| GetSuggestedFileName
+	| PreliminaryUploadFile
+	| CancelPreliminaryUploadFile
+	| WriteGeneratedFilePart
+	| SetFileGenerationProgress
+	| FinishFileGeneration
+	| ReadFilePart
+	| DeleteFile
+	| AddFileToDownloads
+	| ToggleDownloadIsPaused
+	| ToggleAllDownloadsArePaused
+	| RemoveFileFromDownloads
+	| RemoveAllFilesFromDownloads
+	| SearchFileDownloads
+	| GetMessageFileType
+	| GetMessageImportConfirmationText
+	| ImportMessages
+	| ReplacePrimaryChatInviteLink
+	| CreateChatInviteLink
+	| EditChatInviteLink
+	| GetChatInviteLink
+	| GetChatInviteLinkCounts
+	| GetChatInviteLinks
+	| GetChatInviteLinkMembers
+	| RevokeChatInviteLink
+	| DeleteRevokedChatInviteLink
+	| DeleteAllRevokedChatInviteLinks
+	| CheckChatInviteLink
+	| JoinChatByInviteLink
+	| GetChatJoinRequests
+	| ProcessChatJoinRequest
+	| ProcessChatJoinRequests
+	| CreateCall
+	| AcceptCall
+	| SendCallSignalingData
+	| DiscardCall
+	| SendCallRating
+	| SendCallDebugInformation
+	| SendCallLog
+	| GetVideoChatAvailableParticipants
+	| SetVideoChatDefaultParticipant
+	| CreateVideoChat
+	| GetVideoChatRtmpUrl
+	| ReplaceVideoChatRtmpUrl
+	| GetGroupCall
+	| StartScheduledGroupCall
+	| ToggleGroupCallEnabledStartNotification
+	| JoinGroupCall
+	| StartGroupCallScreenSharing
+	| ToggleGroupCallScreenSharingIsPaused
+	| EndGroupCallScreenSharing
+	| SetGroupCallTitle
+	| ToggleGroupCallMuteNewParticipants
+	| InviteGroupCallParticipants
+	| GetGroupCallInviteLink
+	| RevokeGroupCallInviteLink
+	| StartGroupCallRecording
+	| EndGroupCallRecording
+	| ToggleGroupCallIsMyVideoPaused
+	| ToggleGroupCallIsMyVideoEnabled
+	| SetGroupCallParticipantIsSpeaking
+	| ToggleGroupCallParticipantIsMuted
+	| SetGroupCallParticipantVolumeLevel
+	| ToggleGroupCallParticipantIsHandRaised
+	| LoadGroupCallParticipants
+	| LeaveGroupCall
+	| EndGroupCall
+	| GetGroupCallStreams
+	| GetGroupCallStreamSegment
+	| ToggleMessageSenderIsBlocked
+	| BlockMessageSenderFromReplies
+	| GetBlockedMessageSenders
+	| AddContact
+	| ImportContacts
+	| GetContacts
+	| SearchContacts
+	| RemoveContacts
+	| GetImportedContactCount
+	| ChangeImportedContacts
+	| ClearImportedContacts
+	| SearchUserByPhoneNumber
+	| SharePhoneNumber
+	| GetUserProfilePhotos
+	| GetStickers
+	| SearchStickers
+	| GetPremiumStickers
+	| GetInstalledStickerSets
+	| GetArchivedStickerSets
+	| GetTrendingStickerSets
+	| GetAttachedStickerSets
+	| GetStickerSet
+	| SearchStickerSet
+	| SearchInstalledStickerSets
+	| SearchStickerSets
+	| ChangeStickerSet
+	| ViewTrendingStickerSets
+	| ReorderInstalledStickerSets
+	| GetRecentStickers
+	| AddRecentSticker
+	| RemoveRecentSticker
+	| ClearRecentStickers
+	| GetFavoriteStickers
+	| AddFavoriteSticker
+	| RemoveFavoriteSticker
+	| GetStickerEmojis
+	| SearchEmojis
+	| GetAnimatedEmoji
+	| GetEmojiSuggestionsUrl
+	| GetCustomEmojiStickers
+	| GetSavedAnimations
+	| AddSavedAnimation
+	| RemoveSavedAnimation
+	| GetRecentInlineBots
+	| SearchHashtags
+	| RemoveRecentHashtag
+	| GetWebPagePreview
+	| GetWebPageInstantView
+	| SetProfilePhoto
+	| DeleteProfilePhoto
+	| SetName
+	| SetBio
+	| SetUsername
+	| SetLocation
+	| ChangePhoneNumber
+	| ResendChangePhoneNumberCode
+	| CheckChangePhoneNumberCode
+	| SetCommands
+	| DeleteCommands
+	| GetCommands
+	| SetMenuButton
+	| GetMenuButton
+	| SetDefaultGroupAdministratorRights
+	| SetDefaultChannelAdministratorRights
+	| GetActiveSessions
+	| TerminateSession
+	| TerminateAllOtherSessions
+	| ToggleSessionCanAcceptCalls
+	| ToggleSessionCanAcceptSecretChats
+	| SetInactiveSessionTtl
+	| GetConnectedWebsites
+	| DisconnectWebsite
+	| DisconnectAllWebsites
+	| SetSupergroupUsername
+	| SetSupergroupStickerSet
+	| ToggleSupergroupSignMessages
+	| ToggleSupergroupJoinToSendMessages
+	| ToggleSupergroupJoinByRequest
+	| ToggleSupergroupIsAllHistoryAvailable
+	| ToggleSupergroupIsBroadcastGroup
+	| ReportSupergroupSpam
+	| GetSupergroupMembers
+	| CloseSecretChat
+	| GetChatEventLog
+	| GetPaymentForm
+	| ValidateOrderInfo
+	| SendPaymentForm
+	| GetPaymentReceipt
+	| GetSavedOrderInfo
+	| DeleteSavedOrderInfo
+	| DeleteSavedCredentials
+	| CreateInvoiceLink
+	| GetSupportUser
+	| GetBackgrounds
+	| GetBackgroundUrl
+	| SearchBackground
+	| SetBackground
+	| RemoveBackground
+	| ResetBackgrounds
+	| GetLocalizationTargetInfo
+	| GetLanguagePackInfo
+	| GetLanguagePackStrings
+	| SynchronizeLanguagePack
+	| AddCustomServerLanguagePack
+	| SetCustomLanguagePack
+	| EditCustomLanguagePackInfo
+	| SetCustomLanguagePackString
+	| DeleteLanguagePack
+	| RegisterDevice
+	| ProcessPushNotification
+	| GetPushReceiverId
+	| GetRecentlyVisitedTMeUrls
+	| SetUserPrivacySettingRules
+	| GetUserPrivacySettingRules
+	| GetOption
+	| SetOption
+	| SetAccountTtl
+	| GetAccountTtl
+	| DeleteAccount
+	| RemoveChatActionBar
+	| ReportChat
+	| ReportChatPhoto
+	| GetChatStatistics
+	| GetMessageStatistics
+	| GetStatisticalGraph
+	| GetStorageStatistics
+	| GetStorageStatisticsFast
+	| GetDatabaseStatistics
+	| OptimizeStorage
+	| SetNetworkType
+	| GetNetworkStatistics
+	| AddNetworkStatistics
+	| ResetNetworkStatistics
+	| GetAutoDownloadSettingsPresets
+	| SetAutoDownloadSettings
+	| GetBankCardInfo
+	| GetPassportElement
+	| GetAllPassportElements
+	| SetPassportElement
+	| DeletePassportElement
+	| SetPassportElementErrors
+	| GetPreferredCountryLanguage
+	| SendPhoneNumberVerificationCode
+	| ResendPhoneNumberVerificationCode
+	| CheckPhoneNumberVerificationCode
+	| SendEmailAddressVerificationCode
+	| ResendEmailAddressVerificationCode
+	| CheckEmailAddressVerificationCode
+	| GetPassportAuthorizationForm
+	| GetPassportAuthorizationFormAvailableElements
+	| SendPassportAuthorizationForm
+	| SendPhoneNumberConfirmationCode
+	| ResendPhoneNumberConfirmationCode
+	| CheckPhoneNumberConfirmationCode
+	| SetBotUpdatesStatus
+	| UploadStickerFile
+	| GetSuggestedStickerSetName
+	| CheckStickerSetName
+	| CreateNewStickerSet
+	| AddStickerToSet
+	| SetStickerSetThumbnail
+	| SetStickerPositionInSet
+	| RemoveStickerFromSet
+	| GetMapThumbnailFile
+	| GetPremiumLimit
+	| GetPremiumFeatures
+	| GetPremiumStickerExamples
+	| ViewPremiumFeature
+	| ClickPremiumSubscriptionButton
+	| GetPremiumState
+	| CanPurchasePremium
+	| AssignAppStoreTransaction
+	| AssignGooglePlayTransaction
+	| AcceptTermsOfService
+	| SendCustomRequest
+	| AnswerCustomQuery
+	| SetAlarm
+	| GetCountries
+	| GetCountryCode
+	| GetPhoneNumberInfo
+	| GetPhoneNumberInfoSync
+	| GetAppDownloadLink
+	| GetDeepLinkInfo
+	| GetAppConfig
+	| SaveAppLogEvent
+	| AddProxy
+	| EditProxy
+	| EnableProxy
+	| DisableProxy
+	| RemoveProxy
+	| GetProxies
+	| GetProxyLink
+	| PingProxy
+	| SetLogStream
+	| GetLogStream
+	| SetLogVerbosityLevel
+	| GetLogVerbosityLevel
+	| GetLogTags
+	| SetLogTagVerbosityLevel
+	| GetLogTagVerbosityLevel
+	| AddLogMessage
+	| GetUserSupportInfo
+	| SetUserSupportInfo
+	| TestCallEmpty
+	| TestCallString
+	| TestCallBytes
+	| TestCallVectorInt
+	| TestCallVectorIntObject
+	| TestCallVectorString
+	| TestCallVectorStringObject
+	| TestSquareInt
+	| TestNetwork
+	| TestProxy
+	| TestGetDifference
+	| TestUseUpdate
+	| TestReturnError;
+
 export abstract class Tdjson {
 	/**
 Returns the current authorization state; this is an offline request. For informational purposes only. Use
@@ -18968,12 +28061,7 @@ updateAuthorizationState instead to maintain the current authorization state. Ca
 Sets the parameters for TDLib initialization. Works only when the current authorization state is
 authorizationStateWaitTdlibParameters.
 */
-	async setTdlibParameters(options: {
-		/**
-Parameters for TDLib initialization.
-*/
-		parameters: TdlibParameters;
-	}): Promise<Ok> {
+	async setTdlibParameters(options: Omit<SetTdlibParameters, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setTdlibParameters',
@@ -18984,12 +28072,7 @@ Parameters for TDLib initialization.
 Checks the database encryption key for correctness. Works only when the current authorization state is
 authorizationStateWaitEncryptionKey.
 */
-	async checkDatabaseEncryptionKey(options: {
-		/**
-Encryption key to check or set up.
-*/
-		encryption_key: string;
-	}): Promise<Ok> {
+	async checkDatabaseEncryptionKey(options: Omit<CheckDatabaseEncryptionKey, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkDatabaseEncryptionKey',
@@ -19002,16 +28085,7 @@ authorization state is authorizationStateWaitPhoneNumber, or if there is no pend
 authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
 authorizationStateWaitPassword.
 */
-	async setAuthenticationPhoneNumber(options: {
-		/**
-The phone number of the user, in international format.
-*/
-		phone_number: string;
-		/**
-Settings for the authentication of the user's phone number; pass null to use default settings.
-*/
-		settings: PhoneNumberAuthenticationSettings;
-	}): Promise<Ok> {
+	async setAuthenticationPhoneNumber(options: Omit<SetAuthenticationPhoneNumber, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setAuthenticationPhoneNumber',
@@ -19031,12 +28105,7 @@ authorizationStateWaitCode, the next_code_type of the result is not null and the
 	/**
 Checks the authentication code. Works only when the current authorization state is authorizationStateWaitCode.
 */
-	async checkAuthenticationCode(options: {
-		/**
-Authentication code to check.
-*/
-		code: string;
-	}): Promise<Ok> {
+	async checkAuthenticationCode(options: Omit<CheckAuthenticationCode, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkAuthenticationCode',
@@ -19049,12 +28118,7 @@ authorization state is authorizationStateWaitPhoneNumber, or if there is no pend
 authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
 authorizationStateWaitPassword.
 */
-	async requestQrCodeAuthentication(options: {
-		/**
-List of user identifiers of other users currently using the application.
-*/
-		other_user_ids: number[];
-	}): Promise<Ok> {
+	async requestQrCodeAuthentication(options: Omit<RequestQrCodeAuthentication, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'requestQrCodeAuthentication',
@@ -19064,16 +28128,7 @@ List of user identifiers of other users currently using the application.
 	/**
 Finishes user registration. Works only when the current authorization state is authorizationStateWaitRegistration.
 */
-	async registerUser(options: {
-		/**
-The first name of the user; 1-64 characters.
-*/
-		first_name: string;
-		/**
-The last name of the user; 0-64 characters.
-*/
-		last_name: string;
-	}): Promise<Ok> {
+	async registerUser(options: Omit<RegisterUser, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'registerUser',
@@ -19084,12 +28139,7 @@ The last name of the user; 0-64 characters.
 Checks the 2-step verification password for correctness. Works only when the current authorization state is
 authorizationStateWaitPassword.
 */
-	async checkAuthenticationPassword(options: {
-		/**
-The 2-step verification password to check.
-*/
-		password: string;
-	}): Promise<Ok> {
+	async checkAuthenticationPassword(options: Omit<CheckAuthenticationPassword, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkAuthenticationPassword',
@@ -19110,12 +28160,7 @@ when the current authorization state is authorizationStateWaitPassword.
 Checks whether a 2-step verification password recovery code sent to an email address is valid. Works only when the
 current authorization state is authorizationStateWaitPassword.
 */
-	async checkAuthenticationPasswordRecoveryCode(options: {
-		/**
-Recovery code to check.
-*/
-		recovery_code: string;
-	}): Promise<Ok> {
+	async checkAuthenticationPasswordRecoveryCode(options: Omit<CheckAuthenticationPasswordRecoveryCode, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkAuthenticationPasswordRecoveryCode',
@@ -19126,20 +28171,7 @@ Recovery code to check.
 Recovers the 2-step verification password with a password recovery code sent to an email address that was previously set
 up. Works only when the current authorization state is authorizationStateWaitPassword.
 */
-	async recoverAuthenticationPassword(options: {
-		/**
-Recovery code to check.
-*/
-		recovery_code: string;
-		/**
-New 2-step verification password of the user; may be empty to remove the password.
-*/
-		new_password: string;
-		/**
-New password hint; may be empty.
-*/
-		new_hint: string;
-	}): Promise<Ok> {
+	async recoverAuthenticationPassword(options: Omit<RecoverAuthenticationPassword, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'recoverAuthenticationPassword',
@@ -19151,12 +28183,7 @@ Checks the authentication token of a bot; to log in as a bot. Works only when th
 authorizationStateWaitPhoneNumber. Can be used instead of setAuthenticationPhoneNumber and checkAuthenticationCode to
 log in.
 */
-	async checkAuthenticationBotToken(options: {
-		/**
-The bot token.
-*/
-		token: string;
-	}): Promise<Ok> {
+	async checkAuthenticationBotToken(options: Omit<CheckAuthenticationBotToken, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkAuthenticationBotToken',
@@ -19197,12 +28224,7 @@ updateAuthorizationState with authorizationStateClosed will be sent. Can be call
 	/**
 Confirms QR code authentication on another device. Returns created session on success.
 */
-	async confirmQrCodeAuthentication(options: {
-		/**
-A link from a QR code. The link must be scanned by the in-app camera.
-*/
-		link: string;
-	}): Promise<Session> {
+	async confirmQrCodeAuthentication(options: Omit<ConfirmQrCodeAuthentication, '@type'>): Promise<Session> {
 		return this._request({
 			...options,
 			'@type': 'confirmQrCodeAuthentication',
@@ -19223,12 +28245,7 @@ process. Can be called before initialization.
 	/**
 Changes the database encryption key. Usually the encryption key is never changed and is stored in some OS keychain.
 */
-	async setDatabaseEncryptionKey(options: {
-		/**
-New encryption key.
-*/
-		new_encryption_key: string;
-	}): Promise<Ok> {
+	async setDatabaseEncryptionKey(options: Omit<SetDatabaseEncryptionKey, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setDatabaseEncryptionKey',
@@ -19248,28 +28265,7 @@ Returns the current state of 2-step verification.
 Changes the 2-step verification password for the current user. If a new recovery email address is specified, then the
 change will not be applied until the new recovery email address is confirmed.
 */
-	async setPassword(options: {
-		/**
-Previous 2-step verification password of the user.
-*/
-		old_password: string;
-		/**
-New 2-step verification password of the user; may be empty to remove the password.
-*/
-		new_password: string;
-		/**
-New password hint; may be empty.
-*/
-		new_hint: string;
-		/**
-Pass true to change also the recovery email address.
-*/
-		set_recovery_email_address?: boolean;
-		/**
-New recovery email address; may be empty.
-*/
-		new_recovery_email_address: string;
-	}): Promise<PasswordState> {
+	async setPassword(options: Omit<SetPassword, '@type'>): Promise<PasswordState> {
 		return this._request({
 			...options,
 			'@type': 'setPassword',
@@ -19280,12 +28276,7 @@ New recovery email address; may be empty.
 Returns a 2-step verification recovery email address that was previously set up. This method can be used to verify a
 password provided by the user.
 */
-	async getRecoveryEmailAddress(options: {
-		/**
-The 2-step verification password for the current user.
-*/
-		password: string;
-	}): Promise<RecoveryEmailAddress> {
+	async getRecoveryEmailAddress(options: Omit<GetRecoveryEmailAddress, '@type'>): Promise<RecoveryEmailAddress> {
 		return this._request({
 			...options,
 			'@type': 'getRecoveryEmailAddress',
@@ -19298,16 +28289,7 @@ the change will not be applied until the new recovery email address is confirmed
 same as the email address that is currently set up, this call succeeds immediately and aborts all other requests waiting
 for an email confirmation.
 */
-	async setRecoveryEmailAddress(options: {
-		/**
-The 2-step verification password of the current user.
-*/
-		password: string;
-		/**
-New recovery email address.
-*/
-		new_recovery_email_address: string;
-	}): Promise<PasswordState> {
+	async setRecoveryEmailAddress(options: Omit<SetRecoveryEmailAddress, '@type'>): Promise<PasswordState> {
 		return this._request({
 			...options,
 			'@type': 'setRecoveryEmailAddress',
@@ -19317,12 +28299,7 @@ New recovery email address.
 	/**
 Checks the 2-step verification recovery email address verification code.
 */
-	async checkRecoveryEmailAddressCode(options: {
-		/**
-Verification code to check.
-*/
-		code: string;
-	}): Promise<PasswordState> {
+	async checkRecoveryEmailAddressCode(options: Omit<CheckRecoveryEmailAddressCode, '@type'>): Promise<PasswordState> {
 		return this._request({
 			...options,
 			'@type': 'checkRecoveryEmailAddressCode',
@@ -19350,12 +28327,7 @@ Requests to send a 2-step verification password recovery code to an email addres
 	/**
 Checks whether a 2-step verification password recovery code sent to an email address is valid.
 */
-	async checkPasswordRecoveryCode(options: {
-		/**
-Recovery code to check.
-*/
-		recovery_code: string;
-	}): Promise<Ok> {
+	async checkPasswordRecoveryCode(options: Omit<CheckPasswordRecoveryCode, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkPasswordRecoveryCode',
@@ -19365,20 +28337,7 @@ Recovery code to check.
 	/**
 Recovers the 2-step verification password using a recovery code sent to an email address that was previously set up.
 */
-	async recoverPassword(options: {
-		/**
-Recovery code to check.
-*/
-		recovery_code: string;
-		/**
-New 2-step verification password of the user; may be empty to remove the password.
-*/
-		new_password: string;
-		/**
-New password hint; may be empty.
-*/
-		new_hint: string;
-	}): Promise<PasswordState> {
+	async recoverPassword(options: Omit<RecoverPassword, '@type'>): Promise<PasswordState> {
 		return this._request({
 			...options,
 			'@type': 'recoverPassword',
@@ -19407,16 +28366,7 @@ Cancels reset of 2-step verification password. The method can be called if passw
 	/**
 Creates a new temporary password for processing payments.
 */
-	async createTemporaryPassword(options: {
-		/**
-The 2-step verification password of the current user.
-*/
-		password: string;
-		/**
-Time during which the temporary password will be valid, in seconds; must be between 60 and 86400.
-*/
-		valid_for: number;
-	}): Promise<TemporaryPasswordState> {
+	async createTemporaryPassword(options: Omit<CreateTemporaryPassword, '@type'>): Promise<TemporaryPasswordState> {
 		return this._request({
 			...options,
 			'@type': 'createTemporaryPassword',
@@ -19444,12 +28394,7 @@ Returns the current user.
 	/**
 Returns information about a user by their identifier. This is an offline request if the current user is not a bot.
 */
-	async getUser(options: {
-		/**
-User identifier.
-*/
-		user_id: number;
-	}): Promise<User> {
+	async getUser(options: Omit<GetUser, '@type'>): Promise<User> {
 		return this._request({
 			...options,
 			'@type': 'getUser',
@@ -19459,12 +28404,7 @@ User identifier.
 	/**
 Returns full information about a user by their identifier.
 */
-	async getUserFullInfo(options: {
-		/**
-User identifier.
-*/
-		user_id: number;
-	}): Promise<UserFullInfo> {
+	async getUserFullInfo(options: Omit<GetUserFullInfo, '@type'>): Promise<UserFullInfo> {
 		return this._request({
 			...options,
 			'@type': 'getUserFullInfo',
@@ -19474,12 +28414,7 @@ User identifier.
 	/**
 Returns information about a basic group by its identifier. This is an offline request if the current user is not a bot.
 */
-	async getBasicGroup(options: {
-		/**
-Basic group identifier.
-*/
-		basic_group_id: number;
-	}): Promise<BasicGroup> {
+	async getBasicGroup(options: Omit<GetBasicGroup, '@type'>): Promise<BasicGroup> {
 		return this._request({
 			...options,
 			'@type': 'getBasicGroup',
@@ -19489,12 +28424,7 @@ Basic group identifier.
 	/**
 Returns full information about a basic group by its identifier.
 */
-	async getBasicGroupFullInfo(options: {
-		/**
-Basic group identifier.
-*/
-		basic_group_id: number;
-	}): Promise<BasicGroupFullInfo> {
+	async getBasicGroupFullInfo(options: Omit<GetBasicGroupFullInfo, '@type'>): Promise<BasicGroupFullInfo> {
 		return this._request({
 			...options,
 			'@type': 'getBasicGroupFullInfo',
@@ -19505,12 +28435,7 @@ Basic group identifier.
 Returns information about a supergroup or a channel by its identifier. This is an offline request if the current user is
 not a bot.
 */
-	async getSupergroup(options: {
-		/**
-Supergroup or channel identifier.
-*/
-		supergroup_id: number;
-	}): Promise<Supergroup> {
+	async getSupergroup(options: Omit<GetSupergroup, '@type'>): Promise<Supergroup> {
 		return this._request({
 			...options,
 			'@type': 'getSupergroup',
@@ -19520,12 +28445,7 @@ Supergroup or channel identifier.
 	/**
 Returns full information about a supergroup or a channel by its identifier, cached for up to 1 minute.
 */
-	async getSupergroupFullInfo(options: {
-		/**
-Supergroup or channel identifier.
-*/
-		supergroup_id: number;
-	}): Promise<SupergroupFullInfo> {
+	async getSupergroupFullInfo(options: Omit<GetSupergroupFullInfo, '@type'>): Promise<SupergroupFullInfo> {
 		return this._request({
 			...options,
 			'@type': 'getSupergroupFullInfo',
@@ -19535,12 +28455,7 @@ Supergroup or channel identifier.
 	/**
 Returns information about a secret chat by its identifier. This is an offline request.
 */
-	async getSecretChat(options: {
-		/**
-Secret chat identifier.
-*/
-		secret_chat_id: number;
-	}): Promise<SecretChat> {
+	async getSecretChat(options: Omit<GetSecretChat, '@type'>): Promise<SecretChat> {
 		return this._request({
 			...options,
 			'@type': 'getSecretChat',
@@ -19550,12 +28465,7 @@ Secret chat identifier.
 	/**
 Returns information about a chat by its identifier, this is an offline request if the current user is not a bot.
 */
-	async getChat(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Chat> {
+	async getChat(options: Omit<GetChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'getChat',
@@ -19565,16 +28475,7 @@ Chat identifier.
 	/**
 Returns information about a message.
 */
-	async getMessage(options: {
-		/**
-Identifier of the chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the message to get.
-*/
-		message_id: number;
-	}): Promise<Message> {
+	async getMessage(options: Omit<GetMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'getMessage',
@@ -19584,16 +28485,7 @@ Identifier of the message to get.
 	/**
 Returns information about a message, if it is available without sending network request. This is an offline request.
 */
-	async getMessageLocally(options: {
-		/**
-Identifier of the chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the message to get.
-*/
-		message_id: number;
-	}): Promise<Message> {
+	async getMessageLocally(options: Omit<GetMessageLocally, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'getMessageLocally',
@@ -19605,16 +28497,7 @@ Returns information about a message that is replied by a given message. Also ret
 message, and the invoice message for messages of the types messagePinMessage, messageGameScore, and
 messagePaymentSuccessful respectively.
 */
-	async getRepliedMessage(options: {
-		/**
-Identifier of the chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the reply message.
-*/
-		message_id: number;
-	}): Promise<Message> {
+	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'getRepliedMessage',
@@ -19624,12 +28507,7 @@ Identifier of the reply message.
 	/**
 Returns information about a newest pinned message in the chat.
 */
-	async getChatPinnedMessage(options: {
-		/**
-Identifier of the chat the message belongs to.
-*/
-		chat_id: number;
-	}): Promise<Message> {
+	async getChatPinnedMessage(options: Omit<GetChatPinnedMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'getChatPinnedMessage',
@@ -19639,20 +28517,7 @@ Identifier of the chat the message belongs to.
 	/**
 Returns information about a message with the callback button that originated a callback query; for bots only.
 */
-	async getCallbackQueryMessage(options: {
-		/**
-Identifier of the chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Message identifier.
-*/
-		message_id: number;
-		/**
-Identifier of the callback query.
-*/
-		callback_query_id: string;
-	}): Promise<Message> {
+	async getCallbackQueryMessage(options: Omit<GetCallbackQueryMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'getCallbackQueryMessage',
@@ -19662,16 +28527,7 @@ Identifier of the callback query.
 	/**
 Returns information about messages. If a message is not found, returns null on the corresponding position of the result.
 */
-	async getMessages(options: {
-		/**
-Identifier of the chat the messages belong to.
-*/
-		chat_id: number;
-		/**
-Identifiers of the messages to get.
-*/
-		message_ids: number[];
-	}): Promise<Messages> {
+	async getMessages(options: Omit<GetMessages, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'getMessages',
@@ -19681,16 +28537,7 @@ Identifiers of the messages to get.
 	/**
 Returns information about a message thread. Can be used only if message.can_get_message_thread == true.
 */
-	async getMessageThread(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-	}): Promise<MessageThreadInfo> {
+	async getMessageThread(options: Omit<GetMessageThread, '@type'>): Promise<MessageThreadInfo> {
 		return this._request({
 			...options,
 			'@type': 'getMessageThread',
@@ -19701,16 +28548,7 @@ Identifier of the message.
 Returns viewers of a recent outgoing message in a basic group or a supergroup chat. For video notes and voice notes only
 users, opened content of the message, are returned. The method can be called if message.can_get_viewers == true.
 */
-	async getMessageViewers(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-	}): Promise<Users> {
+	async getMessageViewers(options: Omit<GetMessageViewers, '@type'>): Promise<Users> {
 		return this._request({
 			...options,
 			'@type': 'getMessageViewers',
@@ -19720,12 +28558,7 @@ Identifier of the message.
 	/**
 Returns information about a file; this is an offline request.
 */
-	async getFile(options: {
-		/**
-Identifier of the file to get.
-*/
-		file_id: number;
-	}): Promise<File> {
+	async getFile(options: Omit<GetFile, '@type'>): Promise<File> {
 		return this._request({
 			...options,
 			'@type': 'getFile',
@@ -19739,16 +28572,7 @@ accessible to the user. For example, if the file is from a message, then the mes
 to the user. If the file database is disabled, then the corresponding object with the file must be preloaded by the
 application.
 */
-	async getRemoteFile(options: {
-		/**
-Remote identifier of the file to get.
-*/
-		remote_file_id: string;
-		/**
-File type; pass null if unknown.
-*/
-		file_type: FileType;
-	}): Promise<File> {
+	async getRemoteFile(options: Omit<GetRemoteFile, '@type'>): Promise<File> {
 		return this._request({
 			...options,
 			'@type': 'getRemoteFile',
@@ -19760,17 +28584,7 @@ Loads more chats from a chat list. The loaded chats and their positions in the c
 Chats are sorted by the pair (chat.position.order, chat.id) in descending order. Returns a 404 error if all chats have
 been loaded.
 */
-	async loadChats(options: {
-		/**
-The chat list in which to load chats; pass null to load chats from the main chat list.
-*/
-		chat_list: ChatList;
-		/**
-The maximum number of chats to be loaded. For optimal performance, the number of loaded chats is chosen by TDLib and can
-be smaller than the specified limit, even if the end of the list is not reached.
-*/
-		limit: number;
-	}): Promise<Ok> {
+	async loadChats(options: Omit<LoadChats, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'loadChats',
@@ -19781,16 +28595,7 @@ be smaller than the specified limit, even if the end of the list is not reached.
 Returns an ordered list of chats from the beginning of a chat list. For informational purposes only. Use loadChats and
 updates processing instead to maintain chat lists in a consistent state.
 */
-	async getChats(options: {
-		/**
-The chat list in which to return chats; pass null to get chats from the main chat list.
-*/
-		chat_list: ChatList;
-		/**
-The maximum number of chats to be returned.
-*/
-		limit: number;
-	}): Promise<Chats> {
+	async getChats(options: Omit<GetChats, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'getChats',
@@ -19801,12 +28606,7 @@ The maximum number of chats to be returned.
 Searches a public chat by its username. Currently, only private chats, supergroups and channels can be public. Returns
 the chat if found; otherwise an error is returned.
 */
-	async searchPublicChat(options: {
-		/**
-Username to be resolved.
-*/
-		username: string;
-	}): Promise<Chat> {
+	async searchPublicChat(options: Omit<SearchPublicChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'searchPublicChat',
@@ -19818,12 +28618,7 @@ Searches public chats by looking for specified query in their username and title
 supergroups and channels can be public. Returns a meaningful number of results. Excludes private chats with contacts and
 chats from the chat list from the results.
 */
-	async searchPublicChats(options: {
-		/**
-Query to search for.
-*/
-		query: string;
-	}): Promise<Chats> {
+	async searchPublicChats(options: Omit<SearchPublicChats, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'searchPublicChats',
@@ -19834,16 +28629,7 @@ Query to search for.
 Searches for the specified query in the title and username of already known chats, this is an offline request. Returns
 chats in the order seen in the main chat list.
 */
-	async searchChats(options: {
-		/**
-Query to search for. If the query is empty, returns up to 50 recently found chats.
-*/
-		query: string;
-		/**
-The maximum number of chats to be returned.
-*/
-		limit: number;
-	}): Promise<Chats> {
+	async searchChats(options: Omit<SearchChats, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'searchChats',
@@ -19854,16 +28640,7 @@ The maximum number of chats to be returned.
 Searches for the specified query in the title and username of already known chats via request to the server. Returns
 chats in the order seen in the main chat list.
 */
-	async searchChatsOnServer(options: {
-		/**
-Query to search for.
-*/
-		query: string;
-		/**
-The maximum number of chats to be returned.
-*/
-		limit: number;
-	}): Promise<Chats> {
+	async searchChatsOnServer(options: Omit<SearchChatsOnServer, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'searchChatsOnServer',
@@ -19875,12 +28652,7 @@ Returns a list of users and location-based supergroups nearby. The list of users
 after the request by the updates updateUsersNearby. The request must be sent again every 25 seconds with adjusted
 location to not miss new chats.
 */
-	async searchChatsNearby(options: {
-		/**
-Current user location.
-*/
-		location: Location;
-	}): Promise<ChatsNearby> {
+	async searchChatsNearby(options: Omit<SearchChatsNearby, '@type'>): Promise<ChatsNearby> {
 		return this._request({
 			...options,
 			'@type': 'searchChatsNearby',
@@ -19890,16 +28662,7 @@ Current user location.
 	/**
 Returns a list of frequently used chats. Supported only if the chat info database is enabled.
 */
-	async getTopChats(options: {
-		/**
-Category of chats to be returned.
-*/
-		category: TopChatCategory;
-		/**
-The maximum number of chats to be returned; up to 30.
-*/
-		limit: number;
-	}): Promise<Chats> {
+	async getTopChats(options: Omit<GetTopChats, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'getTopChats',
@@ -19909,16 +28672,7 @@ The maximum number of chats to be returned; up to 30.
 	/**
 Removes a chat from the list of frequently used chats. Supported only if the chat info database is enabled.
 */
-	async removeTopChat(options: {
-		/**
-Category of frequently used chats.
-*/
-		category: TopChatCategory;
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async removeTopChat(options: Omit<RemoveTopChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeTopChat',
@@ -19929,12 +28683,7 @@ Chat identifier.
 Adds a chat to the list of recently found chats. The chat is added to the beginning of the list. If the chat is already
 in the list, it will be removed from the list first.
 */
-	async addRecentlyFoundChat(options: {
-		/**
-Identifier of the chat to add.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async addRecentlyFoundChat(options: Omit<AddRecentlyFoundChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addRecentlyFoundChat',
@@ -19944,12 +28693,7 @@ Identifier of the chat to add.
 	/**
 Removes a chat from the list of recently found chats.
 */
-	async removeRecentlyFoundChat(options: {
-		/**
-Identifier of the chat to be removed.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async removeRecentlyFoundChat(options: Omit<RemoveRecentlyFoundChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeRecentlyFoundChat',
@@ -19968,12 +28712,7 @@ Clears the list of recently found chats.
 	/**
 Returns recently opened chats, this is an offline request. Returns chats in the order of last opening.
 */
-	async getRecentlyOpenedChats(options: {
-		/**
-The maximum number of chats to be returned.
-*/
-		limit: number;
-	}): Promise<Chats> {
+	async getRecentlyOpenedChats(options: Omit<GetRecentlyOpenedChats, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'getRecentlyOpenedChats',
@@ -19983,17 +28722,7 @@ The maximum number of chats to be returned.
 	/**
 Checks whether a username can be set for a chat.
 */
-	async checkChatUsername(options: {
-		/**
-Chat identifier; must be identifier of a supergroup chat, or a channel chat, or a private chat with self, or zero if the
-chat is being created.
-*/
-		chat_id: number;
-		/**
-Username to be checked.
-*/
-		username: string;
-	}): Promise<CheckChatUsernameResult> {
+	async checkChatUsername(options: Omit<CheckChatUsername, '@type'>): Promise<CheckChatUsernameResult> {
 		return this._request({
 			...options,
 			'@type': 'checkChatUsername',
@@ -20003,12 +28732,7 @@ Username to be checked.
 	/**
 Returns a list of public chats of the specified type, owned by the user.
 */
-	async getCreatedPublicChats(options: {
-		/**
-Type of the public chats to return.
-*/
-		type: PublicChatType;
-	}): Promise<Chats> {
+	async getCreatedPublicChats(options: Omit<GetCreatedPublicChats, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'getCreatedPublicChats',
@@ -20019,12 +28743,7 @@ Type of the public chats to return.
 Checks whether the maximum number of owned public chats has been reached. Returns corresponding error if the limit was
 reached. The limit can be increased with Telegram Premium.
 */
-	async checkCreatedPublicChatsLimit(options: {
-		/**
-Type of the public chats, for which to check the limit.
-*/
-		type: PublicChatType;
-	}): Promise<Ok> {
+	async checkCreatedPublicChatsLimit(options: Omit<CheckCreatedPublicChatsLimit, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkCreatedPublicChatsLimit',
@@ -20057,20 +28776,7 @@ Premium.
 	/**
 Returns a list of common group chats with a given user. Chats are sorted by their type and creation date.
 */
-	async getGroupsInCommon(options: {
-		/**
-User identifier.
-*/
-		user_id: number;
-		/**
-Chat identifier starting from which to return chats; use 0 for the first request.
-*/
-		offset_chat_id: number;
-		/**
-The maximum number of chats to be returned; up to 100.
-*/
-		limit: number;
-	}): Promise<Chats> {
+	async getGroupsInCommon(options: Omit<GetGroupsInCommon, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'getGroupsInCommon',
@@ -20082,31 +28788,7 @@ Returns messages in a chat. The messages are returned in a reverse chronological
 message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline request if
 only_local is true.
 */
-	async getChatHistory(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifier of the message starting from which history must be fetched; use 0 to get results from the last message.
-*/
-		from_message_id: number;
-		/**
-Specify 0 to get results from exactly the from_message_id or a negative offset up to 99 to get additionally some newer
-messages.
-*/
-		offset: number;
-		/**
-The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
-is chosen by TDLib and can be smaller than the specified limit.
-*/
-		limit: number;
-		/**
-Pass true to get only messages that are available without sending network requests.
-*/
-		only_local?: boolean;
-	}): Promise<Messages> {
+	async getChatHistory(options: Omit<GetChatHistory, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'getChatHistory',
@@ -20119,31 +28801,7 @@ thread of a channel message is in the channel's linked supergroup. The messages 
 order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by
 TDLib.
 */
-	async getMessageThreadHistory(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Message identifier, which thread history needs to be returned.
-*/
-		message_id: number;
-		/**
-Identifier of the message starting from which history must be fetched; use 0 to get results from the last message.
-*/
-		from_message_id: number;
-		/**
-Specify 0 to get results from exactly the from_message_id or a negative offset up to 99 to get additionally some newer
-messages.
-*/
-		offset: number;
-		/**
-The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
-is chosen by TDLib and can be smaller than the specified limit.
-*/
-		limit: number;
-	}): Promise<Messages> {
+	async getMessageThreadHistory(options: Omit<GetMessageThreadHistory, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'getMessageThreadHistory',
@@ -20154,20 +28812,7 @@ is chosen by TDLib and can be smaller than the specified limit.
 Deletes all messages in the chat. Use chat.can_be_deleted_only_for_self and chat.can_be_deleted_for_all_users fields to
 find whether and how the method can be applied to the chat.
 */
-	async deleteChatHistory(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Pass true to remove the chat from all chat lists.
-*/
-		remove_from_chat_list?: boolean;
-		/**
-Pass true to delete chat history for all users.
-*/
-		revoke?: boolean;
-	}): Promise<Ok> {
+	async deleteChatHistory(options: Omit<DeleteChatHistory, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteChatHistory',
@@ -20179,12 +28824,7 @@ Deletes a chat along with all messages in the corresponding chat for all chat me
 the username and remove all members. Use the field chat.can_be_deleted_for_all_users to find whether the method can be
 applied to the chat.
 */
-	async deleteChat(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async deleteChat(options: Omit<DeleteChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteChat',
@@ -20197,44 +28837,7 @@ decreasing message_id. Cannot be used in secret chats with a non-empty query (se
 instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by
 TDLib and can be smaller than the specified limit.
 */
-	async searchChatMessages(options: {
-		/**
-Identifier of the chat in which to search messages.
-*/
-		chat_id: number;
-		/**
-Query to search for.
-*/
-		query: string;
-		/**
-Identifier of the sender of messages to search for; pass null to search for messages from any sender. Not supported in
-secret chats.
-*/
-		sender_id: MessageSender;
-		/**
-Identifier of the message starting from which history must be fetched; use 0 to get results from the last message.
-*/
-		from_message_id: number;
-		/**
-Specify 0 to get results from exactly the from_message_id or a negative offset to get the specified message and some
-newer messages.
-*/
-		offset: number;
-		/**
-The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than -offset. For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit.
-*/
-		limit: number;
-		/**
-Additional filter for messages to search; pass null to search for all messages.
-*/
-		filter: SearchMessagesFilter;
-		/**
-If not 0, only messages in the specified thread will be returned; supergroups only.
-*/
-		message_thread_id: number;
-	}): Promise<Messages> {
+	async searchChatMessages(options: Omit<SearchChatMessages, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'searchChatMessages',
@@ -20246,49 +28849,7 @@ Searches for messages in all chats except secret chats. Returns the results in r
 order of decreasing (date, chat_id, message_id)). For optimal performance, the number of returned messages is chosen by
 TDLib and can be smaller than the specified limit.
 */
-	async searchMessages(options: {
-		/**
-Chat list in which to search messages; pass null to search in all chats regardless of their chat list. Only Main and
-Archive chat lists are supported.
-*/
-		chat_list: ChatList;
-		/**
-Query to search for.
-*/
-		query: string;
-		/**
-The date of the message starting from which the results need to be fetched. Use 0 or any date in the future to get
-results from the last message.
-*/
-		offset_date: number;
-		/**
-The chat identifier of the last found message, or 0 for the first request.
-*/
-		offset_chat_id: number;
-		/**
-The message identifier of the last found message, or 0 for the first request.
-*/
-		offset_message_id: number;
-		/**
-The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is
-chosen by TDLib and can be smaller than the specified limit.
-*/
-		limit: number;
-		/**
-Additional filter for messages to search; pass null to search for all messages. Filters searchMessagesFilterMention,
-searchMessagesFilterUnreadMention, searchMessagesFilterUnreadReaction, searchMessagesFilterFailedToSend, and
-searchMessagesFilterPinned are unsupported in this function.
-*/
-		filter: SearchMessagesFilter;
-		/**
-If not 0, the minimum date of the messages to return.
-*/
-		min_date: number;
-		/**
-If not 0, the maximum date of the messages to return.
-*/
-		max_date: number;
-	}): Promise<Messages> {
+	async searchMessages(options: Omit<SearchMessages, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'searchMessages',
@@ -20299,30 +28860,7 @@ If not 0, the maximum date of the messages to return.
 Searches for messages in secret chats. Returns the results in reverse chronological order. For optimal performance, the
 number of returned messages is chosen by TDLib.
 */
-	async searchSecretMessages(options: {
-		/**
-Identifier of the chat in which to search. Specify 0 to search in all secret chats.
-*/
-		chat_id: number;
-		/**
-Query to search for. If empty, searchChatMessages must be used instead.
-*/
-		query: string;
-		/**
-Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
-results.
-*/
-		offset: string;
-		/**
-The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is
-chosen by TDLib and can be smaller than the specified limit.
-*/
-		limit: number;
-		/**
-Additional filter for messages to search; pass null to search for all messages.
-*/
-		filter: SearchMessagesFilter;
-	}): Promise<FoundMessages> {
+	async searchSecretMessages(options: Omit<SearchSecretMessages, '@type'>): Promise<FoundMessages> {
 		return this._request({
 			...options,
 			'@type': 'searchSecretMessages',
@@ -20333,21 +28871,7 @@ Additional filter for messages to search; pass null to search for all messages.
 Searches for call messages. Returns the results in reverse chronological order (i.e., in order of decreasing
 message_id). For optimal performance, the number of returned messages is chosen by TDLib.
 */
-	async searchCallMessages(options: {
-		/**
-Identifier of the message from which to search; use 0 to get results from the last message.
-*/
-		from_message_id: number;
-		/**
-The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is
-chosen by TDLib and can be smaller than the specified limit.
-*/
-		limit: number;
-		/**
-Pass true to search only for messages with missed/declined calls.
-*/
-		only_missed?: boolean;
-	}): Promise<Messages> {
+	async searchCallMessages(options: Omit<SearchCallMessages, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'searchCallMessages',
@@ -20358,16 +28882,7 @@ Pass true to search only for messages with missed/declined calls.
 Searches for outgoing messages with content of the type messageDocument in all chats except secret chats. Returns the
 results in reverse chronological order.
 */
-	async searchOutgoingDocumentMessages(options: {
-		/**
-Query to search for in document file name and message caption.
-*/
-		query: string;
-		/**
-The maximum number of messages to be returned; up to 100.
-*/
-		limit: number;
-	}): Promise<FoundMessages> {
+	async searchOutgoingDocumentMessages(options: Omit<SearchOutgoingDocumentMessages, '@type'>): Promise<FoundMessages> {
 		return this._request({
 			...options,
 			'@type': 'searchOutgoingDocumentMessages',
@@ -20377,12 +28892,7 @@ The maximum number of messages to be returned; up to 100.
 	/**
 Deletes all call messages.
 */
-	async deleteAllCallMessages(options: {
-		/**
-Pass true to delete the messages for all users.
-*/
-		revoke?: boolean;
-	}): Promise<Ok> {
+	async deleteAllCallMessages(options: Omit<DeleteAllCallMessages, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteAllCallMessages',
@@ -20393,16 +28903,7 @@ Pass true to delete the messages for all users.
 Returns information about the recent locations of chat members that were sent to the chat. Returns up to 1 location
 message per user.
 */
-	async searchChatRecentLocationMessages(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-The maximum number of messages to be returned.
-*/
-		limit: number;
-	}): Promise<Messages> {
+	async searchChatRecentLocationMessages(options: Omit<SearchChatRecentLocationMessages, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'searchChatRecentLocationMessages',
@@ -20422,16 +28923,7 @@ restarts only if the message database is used.
 	/**
 Returns the last message sent in a chat no later than the specified date.
 */
-	async getChatMessageByDate(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Point in time (Unix timestamp) relative to which to search for messages.
-*/
-		date: number;
-	}): Promise<Message> {
+	async getChatMessageByDate(options: Omit<GetChatMessageByDate, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'getChatMessageByDate',
@@ -20443,26 +28935,7 @@ Returns sparse positions of messages of the specified type in the chat to be use
 implementation. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). Cannot be
 used in secret chats or with searchMessagesFilterFailedToSend filter without an enabled message database.
 */
-	async getChatSparseMessagePositions(options: {
-		/**
-Identifier of the chat in which to return information about message positions.
-*/
-		chat_id: number;
-		/**
-Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterMention,
-searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are unsupported in this function.
-*/
-		filter: SearchMessagesFilter;
-		/**
-The message identifier from which to return information about message positions.
-*/
-		from_message_id: number;
-		/**
-The expected number of message positions to be returned; 50-2000. A smaller number of positions can be returned, if
-there are not enough appropriate messages.
-*/
-		limit: number;
-	}): Promise<MessagePositions> {
+	async getChatSparseMessagePositions(options: Omit<GetChatSparseMessagePositions, '@type'>): Promise<MessagePositions> {
 		return this._request({
 			...options,
 			'@type': 'getChatSparseMessagePositions',
@@ -20474,21 +28947,7 @@ Returns information about the next messages of the specified type in the chat sp
 reverse chronological order. Can return partial result for the last returned day. Behavior of this method depends on the
 value of the option "utc_time_offset".
 */
-	async getChatMessageCalendar(options: {
-		/**
-Identifier of the chat in which to return information about messages.
-*/
-		chat_id: number;
-		/**
-Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterMention,
-searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are unsupported in this function.
-*/
-		filter: SearchMessagesFilter;
-		/**
-The message identifier from which to return information about messages; use 0 to get results from the last message.
-*/
-		from_message_id: number;
-	}): Promise<MessageCalendar> {
+	async getChatMessageCalendar(options: Omit<GetChatMessageCalendar, '@type'>): Promise<MessageCalendar> {
 		return this._request({
 			...options,
 			'@type': 'getChatMessageCalendar',
@@ -20498,21 +28957,7 @@ The message identifier from which to return information about messages; use 0 to
 	/**
 Returns approximate number of messages of the specified type in the chat.
 */
-	async getChatMessageCount(options: {
-		/**
-Identifier of the chat in which to count messages.
-*/
-		chat_id: number;
-		/**
-Filter for message content; searchMessagesFilterEmpty is unsupported in this function.
-*/
-		filter: SearchMessagesFilter;
-		/**
-Pass true to get the number of messages without sending network requests, or -1 if the number of messages is unknown
-locally.
-*/
-		return_local?: boolean;
-	}): Promise<Count> {
+	async getChatMessageCount(options: Omit<GetChatMessageCount, '@type'>): Promise<Count> {
 		return this._request({
 			...options,
 			'@type': 'getChatMessageCount',
@@ -20523,12 +28968,7 @@ locally.
 Returns all scheduled messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of
 decreasing message_id).
 */
-	async getChatScheduledMessages(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Messages> {
+	async getChatScheduledMessages(options: Omit<GetChatScheduledMessages, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'getChatScheduledMessages',
@@ -20539,26 +28979,7 @@ Chat identifier.
 Returns forwarded copies of a channel message to different public channels. For optimal performance, the number of
 returned messages is chosen by TDLib.
 */
-	async getMessagePublicForwards(options: {
-		/**
-Chat identifier of the message.
-*/
-		chat_id: number;
-		/**
-Message identifier.
-*/
-		message_id: number;
-		/**
-Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
-results.
-*/
-		offset: string;
-		/**
-The maximum number of messages to be returned; must be positive and can't be greater than 100. For optimal performance,
-the number of returned messages is chosen by TDLib and can be smaller than the specified limit.
-*/
-		limit: number;
-	}): Promise<FoundMessages> {
+	async getMessagePublicForwards(options: Omit<GetMessagePublicForwards, '@type'>): Promise<FoundMessages> {
 		return this._request({
 			...options,
 			'@type': 'getMessagePublicForwards',
@@ -20569,12 +28990,7 @@ the number of returned messages is chosen by TDLib and can be smaller than the s
 Returns sponsored message to be shown in a chat; for channel chats only. Returns a 404 error if there is no sponsored
 message in the chat.
 */
-	async getChatSponsoredMessage(options: {
-		/**
-Identifier of the chat.
-*/
-		chat_id: number;
-	}): Promise<SponsoredMessage> {
+	async getChatSponsoredMessage(options: Omit<GetChatSponsoredMessage, '@type'>): Promise<SponsoredMessage> {
 		return this._request({
 			...options,
 			'@type': 'getChatSponsoredMessage',
@@ -20585,16 +29001,7 @@ Identifier of the chat.
 Removes an active notification from notification list. Needs to be called only if the notification is removed by the
 current user.
 */
-	async removeNotification(options: {
-		/**
-Identifier of notification group to which the notification belongs.
-*/
-		notification_group_id: number;
-		/**
-Identifier of removed notification.
-*/
-		notification_id: number;
-	}): Promise<Ok> {
+	async removeNotification(options: Omit<RemoveNotification, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeNotification',
@@ -20605,16 +29012,7 @@ Identifier of removed notification.
 Removes a group of active notifications. Needs to be called only if the notification group is removed by the current
 user.
 */
-	async removeNotificationGroup(options: {
-		/**
-Notification group identifier.
-*/
-		notification_group_id: number;
-		/**
-The maximum identifier of removed notifications.
-*/
-		max_notification_id: number;
-	}): Promise<Ok> {
+	async removeNotificationGroup(options: Omit<RemoveNotificationGroup, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeNotificationGroup',
@@ -20625,29 +29023,7 @@ The maximum identifier of removed notifications.
 Returns an HTTPS link to a message in a chat. Available only for already sent messages in supergroups and channels, or
 if message.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
 */
-	async getMessageLink(options: {
-		/**
-Identifier of the chat to which the message belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-If not 0, timestamp from which the video/audio/video note/voice note playing must start, in seconds. The media can be in
-the message content or in its web page preview.
-*/
-		media_timestamp: number;
-		/**
-Pass true to create a link for the whole media album.
-*/
-		for_album?: boolean;
-		/**
-Pass true to create a link to the message as a channel post comment, or from a message thread.
-*/
-		for_comment?: boolean;
-	}): Promise<MessageLink> {
+	async getMessageLink(options: Omit<GetMessageLink, '@type'>): Promise<MessageLink> {
 		return this._request({
 			...options,
 			'@type': 'getMessageLink',
@@ -20657,20 +29033,7 @@ Pass true to create a link to the message as a channel post comment, or from a m
 	/**
 Returns an HTML code for embedding the message. Available only for messages in supergroups and channels with a username.
 */
-	async getMessageEmbeddingCode(options: {
-		/**
-Identifier of the chat to which the message belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-Pass true to return an HTML code for embedding of the whole media album.
-*/
-		for_album?: boolean;
-	}): Promise<Text> {
+	async getMessageEmbeddingCode(options: Omit<GetMessageEmbeddingCode, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getMessageEmbeddingCode',
@@ -20681,12 +29044,7 @@ Pass true to return an HTML code for embedding of the whole media album.
 Returns information about a public or private message link. Can be called for any internal link of the type
 internalLinkTypeMessage.
 */
-	async getMessageLinkInfo(options: {
-		/**
-The message link.
-*/
-		url: string;
-	}): Promise<MessageLinkInfo> {
+	async getMessageLinkInfo(options: Omit<GetMessageLinkInfo, '@type'>): Promise<MessageLinkInfo> {
 		return this._request({
 			...options,
 			'@type': 'getMessageLinkInfo',
@@ -20696,21 +29054,7 @@ The message link.
 	/**
 Translates a text to the given language. Returns a 404 error if the translation can't be performed.
 */
-	async translateText(options: {
-		/**
-Text to translate.
-*/
-		text: string;
-		/**
-A two-letter ISO 639-1 language code of the language from which the message is translated. If empty, the language will
-be detected automatically.
-*/
-		from_language_code: string;
-		/**
-A two-letter ISO 639-1 language code of the language to which the message is translated.
-*/
-		to_language_code: string;
-	}): Promise<Text> {
+	async translateText(options: Omit<TranslateText, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'translateText',
@@ -20721,16 +29065,7 @@ A two-letter ISO 639-1 language code of the language to which the message is tra
 Recognizes speech in a voice note message. The message must be successfully sent and must not be scheduled. May return
 an error with a message "MSG_VOICE_TOO_LONG" if the voice note is too long to be recognized.
 */
-	async recognizeSpeech(options: {
-		/**
-Identifier of the chat to which the message belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-	}): Promise<Ok> {
+	async recognizeSpeech(options: Omit<RecognizeSpeech, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'recognizeSpeech',
@@ -20740,20 +29075,7 @@ Identifier of the message.
 	/**
 Rates recognized speech in a voice note message.
 */
-	async rateSpeechRecognition(options: {
-		/**
-Identifier of the chat to which the message belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-Pass true if the speech recognition is good.
-*/
-		is_good?: boolean;
-	}): Promise<Ok> {
+	async rateSpeechRecognition(options: Omit<RateSpeechRecognition, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'rateSpeechRecognition',
@@ -20763,12 +29085,7 @@ Pass true if the speech recognition is good.
 	/**
 Returns list of message sender identifiers, which can be used to send messages in a chat.
 */
-	async getChatAvailableMessageSenders(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<MessageSenders> {
+	async getChatAvailableMessageSenders(options: Omit<GetChatAvailableMessageSenders, '@type'>): Promise<MessageSenders> {
 		return this._request({
 			...options,
 			'@type': 'getChatAvailableMessageSenders',
@@ -20778,16 +29095,7 @@ Chat identifier.
 	/**
 Selects a message sender to send messages in a chat.
 */
-	async setChatMessageSender(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New message sender for the chat.
-*/
-		message_sender_id: MessageSender;
-	}): Promise<Ok> {
+	async setChatMessageSender(options: Omit<SetChatMessageSender, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatMessageSender',
@@ -20797,32 +29105,7 @@ New message sender for the chat.
 	/**
 Sends a message. Returns the sent message.
 */
-	async sendMessage(options: {
-		/**
-Target chat.
-*/
-		chat_id: number;
-		/**
-If not 0, a message thread identifier in which the message will be sent.
-*/
-		message_thread_id: number;
-		/**
-Identifier of the replied message; 0 if none.
-*/
-		reply_to_message_id: number;
-		/**
-Options to be used to send the message; pass null to use default options.
-*/
-		options: MessageSendOptions;
-		/**
-Markup for replying to the message; pass null if none; for bots only.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-The content of the message to be sent.
-*/
-		input_message_content: InputMessageContent;
-	}): Promise<Message> {
+	async sendMessage(options: Omit<SendMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'sendMessage',
@@ -20834,32 +29117,7 @@ Sends 2-10 messages grouped together into an album. Currently, only audio, docum
 grouped into an album. Documents and audio files can be only grouped in an album with messages of the same type. Returns
 sent messages.
 */
-	async sendMessageAlbum(options: {
-		/**
-Target chat.
-*/
-		chat_id: number;
-		/**
-If not 0, a message thread identifier in which the messages will be sent.
-*/
-		message_thread_id: number;
-		/**
-Identifier of a replied message; 0 if none.
-*/
-		reply_to_message_id: number;
-		/**
-Options to be used to send the messages; pass null to use default options.
-*/
-		options: MessageSendOptions;
-		/**
-Contents of messages to be sent. At most 10 messages can be added to an album.
-*/
-		input_message_contents: InputMessageContent[];
-		/**
-Pass true to get fake messages instead of actually sending them.
-*/
-		only_preview?: boolean;
-	}): Promise<Messages> {
+	async sendMessageAlbum(options: Omit<SendMessageAlbum, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'sendMessageAlbum',
@@ -20871,20 +29129,7 @@ Invites a bot to a chat (if it is not yet a member) and sends it the /start comm
 chat other than the chat with the bot. Bots can't be invited to channels (although they can be added as admins) and
 secret chats. Returns the sent message.
 */
-	async sendBotStartMessage(options: {
-		/**
-Identifier of the bot.
-*/
-		bot_user_id: number;
-		/**
-Identifier of the target chat.
-*/
-		chat_id: number;
-		/**
-A hidden parameter sent to the bot for deep linking purposes (https://core.telegram.org/bots#deep-linking).
-*/
-		parameter: string;
-	}): Promise<Message> {
+	async sendBotStartMessage(options: Omit<SendBotStartMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'sendBotStartMessage',
@@ -20894,38 +29139,7 @@ A hidden parameter sent to the bot for deep linking purposes (https://core.teleg
 	/**
 Sends the result of an inline query as a message. Returns the sent message. Always clears a chat draft message.
 */
-	async sendInlineQueryResultMessage(options: {
-		/**
-Target chat.
-*/
-		chat_id: number;
-		/**
-If not 0, a message thread identifier in which the message will be sent.
-*/
-		message_thread_id: number;
-		/**
-Identifier of a replied message; 0 if none.
-*/
-		reply_to_message_id: number;
-		/**
-Options to be used to send the message; pass null to use default options.
-*/
-		options: MessageSendOptions;
-		/**
-Identifier of the inline query.
-*/
-		query_id: string;
-		/**
-Identifier of the inline result.
-*/
-		result_id: string;
-		/**
-Pass true to hide the bot, via which the message is sent. Can be used only for bots
-GetOption("animation_search_bot_username"), GetOption("photo_search_bot_username"), and
-GetOption("venue_search_bot_username").
-*/
-		hide_via_bot?: boolean;
-	}): Promise<Message> {
+	async sendInlineQueryResultMessage(options: Omit<SendInlineQueryResultMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'sendInlineQueryResultMessage',
@@ -20936,38 +29150,7 @@ GetOption("venue_search_bot_username").
 Forwards previously sent messages. Returns the forwarded messages in the same order as the message identifiers passed in
 message_ids. If a message can't be forwarded, null will be returned instead of the message.
 */
-	async forwardMessages(options: {
-		/**
-Identifier of the chat to which to forward messages.
-*/
-		chat_id: number;
-		/**
-Identifier of the chat from which to forward messages.
-*/
-		from_chat_id: number;
-		/**
-Identifiers of the messages to forward. Message identifiers must be in a strictly increasing order. At most 100 messages
-can be forwarded simultaneously.
-*/
-		message_ids: number[];
-		/**
-Options to be used to send the messages; pass null to use default options.
-*/
-		options: MessageSendOptions;
-		/**
-Pass true to copy content of the messages without reference to the original sender. Always true if the messages are
-forwarded to a secret chat or are local.
-*/
-		send_copy?: boolean;
-		/**
-Pass true to remove media captions of message copies. Ignored if send_copy is false.
-*/
-		remove_caption?: boolean;
-		/**
-Pass true to get fake messages instead of actually forwarding them.
-*/
-		only_preview?: boolean;
-	}): Promise<Messages> {
+	async forwardMessages(options: Omit<ForwardMessages, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'forwardMessages',
@@ -20980,16 +29163,7 @@ true and after specified in messageSendingStateFailed.retry_after time passed. I
 corresponding failed to send message is deleted. Returns the sent messages in the same order as the message identifiers
 passed in message_ids. If a message can't be re-sent, null will be returned instead of the message.
 */
-	async resendMessages(options: {
-		/**
-Identifier of the chat to send messages.
-*/
-		chat_id: number;
-		/**
-Identifiers of the messages to resend. Message identifiers must be in a strictly increasing order.
-*/
-		message_ids: number[];
-	}): Promise<Messages> {
+	async resendMessages(options: Omit<ResendMessages, '@type'>): Promise<Messages> {
 		return this._request({
 			...options,
 			'@type': 'resendMessages',
@@ -20999,12 +29173,7 @@ Identifiers of the messages to resend. Message identifiers must be in a strictly
 	/**
 Sends a notification about a screenshot taken in a chat. Supported only in private and secret chats.
 */
-	async sendChatScreenshotTakenNotification(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async sendChatScreenshotTakenNotification(options: Omit<SendChatScreenshotTakenNotification, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sendChatScreenshotTakenNotification',
@@ -21015,28 +29184,7 @@ Chat identifier.
 Adds a local message to a chat. The message is persistent across application restarts only if the message database is
 used. Returns the added message.
 */
-	async addLocalMessage(options: {
-		/**
-Target chat.
-*/
-		chat_id: number;
-		/**
-Identifier of the sender of the message.
-*/
-		sender_id: MessageSender;
-		/**
-Identifier of the replied message; 0 if none.
-*/
-		reply_to_message_id: number;
-		/**
-Pass true to disable notification for the message.
-*/
-		disable_notification?: boolean;
-		/**
-The content of the message to be added.
-*/
-		input_message_content: InputMessageContent;
-	}): Promise<Message> {
+	async addLocalMessage(options: Omit<AddLocalMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'addLocalMessage',
@@ -21046,20 +29194,7 @@ The content of the message to be added.
 	/**
 Deletes messages.
 */
-	async deleteMessages(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifiers of the messages to be deleted.
-*/
-		message_ids: number[];
-		/**
-Pass true to delete messages for all chat members. Always true for supergroups, channels and secret chats.
-*/
-		revoke?: boolean;
-	}): Promise<Ok> {
+	async deleteMessages(options: Omit<DeleteMessages, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteMessages',
@@ -21070,16 +29205,7 @@ Pass true to delete messages for all chat members. Always true for supergroups, 
 Deletes all messages sent by the specified message sender in a chat. Supported only for supergroups; requires
 can_delete_messages administrator privileges.
 */
-	async deleteChatMessagesBySender(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifier of the sender of messages to delete.
-*/
-		sender_id: MessageSender;
-	}): Promise<Ok> {
+	async deleteChatMessagesBySender(options: Omit<DeleteChatMessagesBySender, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteChatMessagesBySender',
@@ -21090,24 +29216,7 @@ Identifier of the sender of messages to delete.
 Deletes all messages between the specified dates in a chat. Supported only for private chats and basic groups. Messages
 sent in the last 30 seconds will not be deleted.
 */
-	async deleteChatMessagesByDate(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-The minimum date of the messages to delete.
-*/
-		min_date: number;
-		/**
-The maximum date of the messages to delete.
-*/
-		max_date: number;
-		/**
-Pass true to delete chat messages for all users; private chats only.
-*/
-		revoke?: boolean;
-	}): Promise<Ok> {
+	async deleteChatMessagesByDate(options: Omit<DeleteChatMessagesByDate, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteChatMessagesByDate',
@@ -21118,24 +29227,7 @@ Pass true to delete chat messages for all users; private chats only.
 Edits the text of a message (or a text of a game message). Returns the edited message after the edit is completed on the
 server side.
 */
-	async editMessageText(options: {
-		/**
-The chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-The new message reply markup; pass null if none; for bots only.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-New text content of the message. Must be of type inputMessageText.
-*/
-		input_message_content: InputMessageContent;
-	}): Promise<Message> {
+	async editMessageText(options: Omit<EditMessageText, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'editMessageText',
@@ -21146,32 +29238,7 @@ New text content of the message. Must be of type inputMessageText.
 Edits the message content of a live location. Messages can be edited for a limited period of time specified in the live
 location. Returns the edited message after the edit is completed on the server side.
 */
-	async editMessageLiveLocation(options: {
-		/**
-The chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-The new message reply markup; pass null if none; for bots only.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-New location content of the message; pass null to stop sharing the live location.
-*/
-		location: Location;
-		/**
-The new direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
-*/
-		heading: number;
-		/**
-The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
-*/
-		proximity_alert_radius: number;
-	}): Promise<Message> {
+	async editMessageLiveLocation(options: Omit<EditMessageLiveLocation, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'editMessageLiveLocation',
@@ -21185,25 +29252,7 @@ to self-destruct or to a self-destructing media. The type of message content in 
 of replacing a photo with a video or vice versa. Returns the edited message after the edit is completed on the server
 side.
 */
-	async editMessageMedia(options: {
-		/**
-The chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-The new message reply markup; pass null if none; for bots only.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
-inputMessageDocument, inputMessagePhoto or inputMessageVideo.
-*/
-		input_message_content: InputMessageContent;
-	}): Promise<Message> {
+	async editMessageMedia(options: Omit<EditMessageMedia, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'editMessageMedia',
@@ -21213,24 +29262,7 @@ inputMessageDocument, inputMessagePhoto or inputMessageVideo.
 	/**
 Edits the message content caption. Returns the edited message after the edit is completed on the server side.
 */
-	async editMessageCaption(options: {
-		/**
-The chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-The new message reply markup; pass null if none; for bots only.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-New message content caption; 0-GetOption("message_caption_length_max") characters; pass null to remove caption.
-*/
-		caption: FormattedText;
-	}): Promise<Message> {
+	async editMessageCaption(options: Omit<EditMessageCaption, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'editMessageCaption',
@@ -21241,20 +29273,7 @@ New message content caption; 0-GetOption("message_caption_length_max") character
 Edits the message reply markup; for bots only. Returns the edited message after the edit is completed on the server
 side.
 */
-	async editMessageReplyMarkup(options: {
-		/**
-The chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-The new message reply markup; pass null if none.
-*/
-		reply_markup: ReplyMarkup;
-	}): Promise<Message> {
+	async editMessageReplyMarkup(options: Omit<EditMessageReplyMarkup, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'editMessageReplyMarkup',
@@ -21264,20 +29283,7 @@ The new message reply markup; pass null if none.
 	/**
 Edits the text of an inline text or game message sent via a bot; for bots only.
 */
-	async editInlineMessageText(options: {
-		/**
-Inline message identifier.
-*/
-		inline_message_id: string;
-		/**
-The new message reply markup; pass null if none.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-New text content of the message. Must be of type inputMessageText.
-*/
-		input_message_content: InputMessageContent;
-	}): Promise<Ok> {
+	async editInlineMessageText(options: Omit<EditInlineMessageText, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'editInlineMessageText',
@@ -21287,28 +29293,7 @@ New text content of the message. Must be of type inputMessageText.
 	/**
 Edits the content of a live location in an inline message sent via a bot; for bots only.
 */
-	async editInlineMessageLiveLocation(options: {
-		/**
-Inline message identifier.
-*/
-		inline_message_id: string;
-		/**
-The new message reply markup; pass null if none.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-New location content of the message; pass null to stop sharing the live location.
-*/
-		location: Location;
-		/**
-The new direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
-*/
-		heading: number;
-		/**
-The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
-*/
-		proximity_alert_radius: number;
-	}): Promise<Ok> {
+	async editInlineMessageLiveLocation(options: Omit<EditInlineMessageLiveLocation, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'editInlineMessageLiveLocation',
@@ -21319,21 +29304,7 @@ The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if t
 Edits the content of a message with an animation, an audio, a document, a photo or a video in an inline message sent via
 a bot; for bots only.
 */
-	async editInlineMessageMedia(options: {
-		/**
-Inline message identifier.
-*/
-		inline_message_id: string;
-		/**
-The new message reply markup; pass null if none; for bots only.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
-inputMessageDocument, inputMessagePhoto or inputMessageVideo.
-*/
-		input_message_content: InputMessageContent;
-	}): Promise<Ok> {
+	async editInlineMessageMedia(options: Omit<EditInlineMessageMedia, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'editInlineMessageMedia',
@@ -21343,20 +29314,7 @@ inputMessageDocument, inputMessagePhoto or inputMessageVideo.
 	/**
 Edits the caption of an inline message sent via a bot; for bots only.
 */
-	async editInlineMessageCaption(options: {
-		/**
-Inline message identifier.
-*/
-		inline_message_id: string;
-		/**
-The new message reply markup; pass null if none.
-*/
-		reply_markup: ReplyMarkup;
-		/**
-New message content caption; pass null to remove caption; 0-GetOption("message_caption_length_max") characters.
-*/
-		caption: FormattedText;
-	}): Promise<Ok> {
+	async editInlineMessageCaption(options: Omit<EditInlineMessageCaption, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'editInlineMessageCaption',
@@ -21366,16 +29324,7 @@ New message content caption; pass null to remove caption; 0-GetOption("message_c
 	/**
 Edits the reply markup of an inline message sent via a bot; for bots only.
 */
-	async editInlineMessageReplyMarkup(options: {
-		/**
-Inline message identifier.
-*/
-		inline_message_id: string;
-		/**
-The new message reply markup; pass null if none.
-*/
-		reply_markup: ReplyMarkup;
-	}): Promise<Ok> {
+	async editInlineMessageReplyMarkup(options: Omit<EditInlineMessageReplyMarkup, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'editInlineMessageReplyMarkup',
@@ -21386,20 +29335,7 @@ The new message reply markup; pass null if none.
 Edits the time when a scheduled message will be sent. Scheduling state of all messages in the same album or forwarded
 together with the message will be also changed.
 */
-	async editMessageSchedulingState(options: {
-		/**
-The chat the message belongs to.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-The new message scheduling state; pass null to send the message immediately.
-*/
-		scheduling_state: MessageSchedulingState;
-	}): Promise<Ok> {
+	async editMessageSchedulingState(options: Omit<EditMessageSchedulingState, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'editMessageSchedulingState',
@@ -21410,16 +29346,7 @@ The new message scheduling state; pass null to send the message immediately.
 Returns reactions, which can be added to a message. The list can change after updateReactions,
 updateChatAvailableReactions for the chat, or updateMessageInteractionInfo for the message.
 */
-	async getMessageAvailableReactions(options: {
-		/**
-Identifier of the chat to which the message belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-	}): Promise<AvailableReactions> {
+	async getMessageAvailableReactions(options: Omit<GetMessageAvailableReactions, '@type'>): Promise<AvailableReactions> {
 		return this._request({
 			...options,
 			'@type': 'getMessageAvailableReactions',
@@ -21429,25 +29356,7 @@ Identifier of the message.
 	/**
 Changes chosen reaction for a message.
 */
-	async setMessageReaction(options: {
-		/**
-Identifier of the chat to which the message belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-Text representation of the new chosen reaction. Can be an empty string or the currently chosen non-big reaction to
-remove the reaction.
-*/
-		reaction: string;
-		/**
-Pass true if the reaction is added with a big animation.
-*/
-		is_big?: boolean;
-	}): Promise<Ok> {
+	async setMessageReaction(options: Omit<SetMessageReaction, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setMessageReaction',
@@ -21457,29 +29366,7 @@ Pass true if the reaction is added with a big animation.
 	/**
 Returns reactions added for a message, along with their sender.
 */
-	async getMessageAddedReactions(options: {
-		/**
-Identifier of the chat to which the message belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-If non-empty, only added reactions with the specified text representation will be returned.
-*/
-		reaction: string;
-		/**
-Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
-results.
-*/
-		offset: string;
-		/**
-The maximum number of reactions to be returned; must be positive and can't be greater than 100.
-*/
-		limit: number;
-	}): Promise<AddedReactions> {
+	async getMessageAddedReactions(options: Omit<GetMessageAddedReactions, '@type'>): Promise<AddedReactions> {
 		return this._request({
 			...options,
 			'@type': 'getMessageAddedReactions',
@@ -21490,12 +29377,7 @@ The maximum number of reactions to be returned; must be positive and can't be gr
 Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses)
 contained in the text. Can be called synchronously.
 */
-	async getTextEntities(options: {
-		/**
-The text in which to look for entites.
-*/
-		text: string;
-	}): Promise<TextEntities> {
+	async getTextEntities(options: Omit<GetTextEntities, '@type'>): Promise<TextEntities> {
 		return this._request({
 			...options,
 			'@type': 'getTextEntities',
@@ -21506,16 +29388,7 @@ The text in which to look for entites.
 Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName
 entities contained in the text. Can be called synchronously.
 */
-	async parseTextEntities(options: {
-		/**
-The text to parse.
-*/
-		text: string;
-		/**
-Text parse mode.
-*/
-		parse_mode: TextParseMode;
-	}): Promise<FormattedText> {
+	async parseTextEntities(options: Omit<ParseTextEntities, '@type'>): Promise<FormattedText> {
 		return this._request({
 			...options,
 			'@type': 'parseTextEntities',
@@ -21525,13 +29398,7 @@ Text parse mode.
 	/**
 Parses Markdown entities in a human-friendly format, ignoring markup errors. Can be called synchronously.
 */
-	async parseMarkdown(options: {
-		/**
-The text to parse. For example, "__italic__ ~~strikethrough~~ ||spoiler|| **bold** `code` ```pre``` __[italic__
-text_url](telegram.org) __italic**bold italic__bold**".
-*/
-		text: FormattedText;
-	}): Promise<FormattedText> {
+	async parseMarkdown(options: Omit<ParseMarkdown, '@type'>): Promise<FormattedText> {
 		return this._request({
 			...options,
 			'@type': 'parseMarkdown',
@@ -21542,12 +29409,7 @@ text_url](telegram.org) __italic**bold italic__bold**".
 Replaces text entities with Markdown formatting in a human-friendly format. Entities that can't be represented in
 Markdown unambiguously are kept as is. Can be called synchronously.
 */
-	async getMarkdownText(options: {
-		/**
-The text.
-*/
-		text: FormattedText;
-	}): Promise<FormattedText> {
+	async getMarkdownText(options: Omit<GetMarkdownText, '@type'>): Promise<FormattedText> {
 		return this._request({
 			...options,
 			'@type': 'getMarkdownText',
@@ -21558,12 +29420,7 @@ The text.
 Returns the MIME type of a file, guessed by its extension. Returns an empty string on failure. Can be called
 synchronously.
 */
-	async getFileMimeType(options: {
-		/**
-The name of the file or path to the file.
-*/
-		file_name: string;
-	}): Promise<Text> {
+	async getFileMimeType(options: Omit<GetFileMimeType, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getFileMimeType',
@@ -21574,12 +29431,7 @@ The name of the file or path to the file.
 Returns the extension of a file, guessed by its MIME type. Returns an empty string on failure. Can be called
 synchronously.
 */
-	async getFileExtension(options: {
-		/**
-The MIME type of the file.
-*/
-		mime_type: string;
-	}): Promise<Text> {
+	async getFileExtension(options: Omit<GetFileExtension, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getFileExtension',
@@ -21590,12 +29442,7 @@ The MIME type of the file.
 Removes potentially dangerous characters from the name of a file. The encoding of the file name is supposed to be UTF-8.
 Returns an empty string on failure. Can be called synchronously.
 */
-	async cleanFileName(options: {
-		/**
-File name or path to the file.
-*/
-		file_name: string;
-	}): Promise<Text> {
+	async cleanFileName(options: Omit<CleanFileName, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'cleanFileName',
@@ -21606,24 +29453,7 @@ File name or path to the file.
 Returns a string stored in the local database from the specified localization target and language pack by its key.
 Returns a 404 error if the string is not found. Can be called synchronously.
 */
-	async getLanguagePackString(options: {
-		/**
-Path to the language pack database in which strings are stored.
-*/
-		language_pack_database_path: string;
-		/**
-Localization target to which the language pack belongs.
-*/
-		localization_target: string;
-		/**
-Language pack identifier.
-*/
-		language_pack_id: string;
-		/**
-Language pack key of the string to be returned.
-*/
-		key: string;
-	}): Promise<LanguagePackStringValue> {
+	async getLanguagePackString(options: Omit<GetLanguagePackString, '@type'>): Promise<LanguagePackStringValue> {
 		return this._request({
 			...options,
 			'@type': 'getLanguagePackString',
@@ -21633,12 +29463,7 @@ Language pack key of the string to be returned.
 	/**
 Converts a JSON-serialized string to corresponding JsonValue object. Can be called synchronously.
 */
-	async getJsonValue(options: {
-		/**
-The JSON-serialized string.
-*/
-		json: string;
-	}): Promise<JsonValue> {
+	async getJsonValue(options: Omit<GetJsonValue, '@type'>): Promise<JsonValue> {
 		return this._request({
 			...options,
 			'@type': 'getJsonValue',
@@ -21648,12 +29473,7 @@ The JSON-serialized string.
 	/**
 Converts a JsonValue object to corresponding JSON-serialized string. Can be called synchronously.
 */
-	async getJsonString(options: {
-		/**
-The JsonValue object.
-*/
-		json_value: JsonValue;
-	}): Promise<Text> {
+	async getJsonString(options: Omit<GetJsonString, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getJsonString',
@@ -21663,12 +29483,7 @@ The JsonValue object.
 	/**
 Converts a themeParameters object to corresponding JSON-serialized string. Can be called synchronously.
 */
-	async getThemeParametersJsonString(options: {
-		/**
-Theme parameters to convert to JSON.
-*/
-		theme: ThemeParameters;
-	}): Promise<Text> {
+	async getThemeParametersJsonString(options: Omit<GetThemeParametersJsonString, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getThemeParametersJsonString',
@@ -21678,21 +29493,7 @@ Theme parameters to convert to JSON.
 	/**
 Changes the user answer to a poll. A poll in quiz mode can be answered only once.
 */
-	async setPollAnswer(options: {
-		/**
-Identifier of the chat to which the poll belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message containing the poll.
-*/
-		message_id: number;
-		/**
-0-based identifiers of answer options, chosen by the user. User can choose more than 1 answer option only is the poll
-allows multiple answers.
-*/
-		option_ids: number[];
-	}): Promise<Ok> {
+	async setPollAnswer(options: Omit<SetPollAnswer, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setPollAnswer',
@@ -21703,30 +29504,7 @@ allows multiple answers.
 Returns users voted for the specified option in a non-anonymous polls. For optimal performance, the number of returned
 users is chosen by TDLib.
 */
-	async getPollVoters(options: {
-		/**
-Identifier of the chat to which the poll belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message containing the poll.
-*/
-		message_id: number;
-		/**
-0-based identifier of the answer option.
-*/
-		option_id: number;
-		/**
-Number of users to skip in the result; must be non-negative.
-*/
-		offset: number;
-		/**
-The maximum number of users to be returned; must be positive and can't be greater than 50. For optimal performance, the
-number of returned users is chosen by TDLib and can be smaller than the specified limit, even if the end of the voter
-list has not been reached.
-*/
-		limit: number;
-	}): Promise<Users> {
+	async getPollVoters(options: Omit<GetPollVoters, '@type'>): Promise<Users> {
 		return this._request({
 			...options,
 			'@type': 'getPollVoters',
@@ -21736,20 +29514,7 @@ list has not been reached.
 	/**
 Stops a poll. A poll in a message can be stopped when the message has can_be_edited flag set.
 */
-	async stopPoll(options: {
-		/**
-Identifier of the chat to which the poll belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message containing the poll.
-*/
-		message_id: number;
-		/**
-The new message reply markup; pass null if none; for bots only.
-*/
-		reply_markup: ReplyMarkup;
-	}): Promise<Ok> {
+	async stopPoll(options: Omit<StopPoll, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'stopPoll',
@@ -21759,12 +29524,7 @@ The new message reply markup; pass null if none; for bots only.
 	/**
 Hides a suggested action.
 */
-	async hideSuggestedAction(options: {
-		/**
-Suggested action to hide.
-*/
-		action: SuggestedAction;
-	}): Promise<Ok> {
+	async hideSuggestedAction(options: Omit<HideSuggestedAction, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'hideSuggestedAction',
@@ -21775,20 +29535,7 @@ Suggested action to hide.
 Returns information about a button of type inlineKeyboardButtonTypeLoginUrl. The method needs to be called when the user
 presses the button.
 */
-	async getLoginUrlInfo(options: {
-		/**
-Chat identifier of the message with the button.
-*/
-		chat_id: number;
-		/**
-Message identifier of the message with the button.
-*/
-		message_id: number;
-		/**
-Button identifier.
-*/
-		button_id: number;
-	}): Promise<LoginUrlInfo> {
+	async getLoginUrlInfo(options: Omit<GetLoginUrlInfo, '@type'>): Promise<LoginUrlInfo> {
 		return this._request({
 			...options,
 			'@type': 'getLoginUrlInfo',
@@ -21800,24 +29547,7 @@ Returns an HTTP URL which can be used to automatically authorize the user on a w
 of type inlineKeyboardButtonTypeLoginUrl. Use the method getLoginUrlInfo to find whether a prior user confirmation is
 needed. If an error is returned, then the button must be handled as an ordinary URL button.
 */
-	async getLoginUrl(options: {
-		/**
-Chat identifier of the message with the button.
-*/
-		chat_id: number;
-		/**
-Message identifier of the message with the button.
-*/
-		message_id: number;
-		/**
-Button identifier.
-*/
-		button_id: number;
-		/**
-Pass true to allow the bot to send messages to the current user.
-*/
-		allow_write_access?: boolean;
-	}): Promise<HttpUrl> {
+	async getLoginUrl(options: Omit<GetLoginUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getLoginUrl',
@@ -21828,28 +29558,7 @@ Pass true to allow the bot to send messages to the current user.
 Sends an inline query to a bot and returns its results. Returns an error with code 502 if the bot fails to answer the
 query before the query timeout expires.
 */
-	async getInlineQueryResults(options: {
-		/**
-The identifier of the target bot.
-*/
-		bot_user_id: number;
-		/**
-Identifier of the chat where the query was sent.
-*/
-		chat_id: number;
-		/**
-Location of the user; pass null if unknown or the bot doesn't need user's location.
-*/
-		user_location: Location;
-		/**
-Text of the query.
-*/
-		query: string;
-		/**
-Offset of the first entry to return.
-*/
-		offset: string;
-	}): Promise<InlineQueryResults> {
+	async getInlineQueryResults(options: Omit<GetInlineQueryResults, '@type'>): Promise<InlineQueryResults> {
 		return this._request({
 			...options,
 			'@type': 'getInlineQueryResults',
@@ -21859,38 +29568,7 @@ Offset of the first entry to return.
 	/**
 Sets the result of an inline query; for bots only.
 */
-	async answerInlineQuery(options: {
-		/**
-Identifier of the inline query.
-*/
-		inline_query_id: string;
-		/**
-Pass true if results may be cached and returned only for the user that sent the query. By default, results may be
-returned to any user who sends the same query.
-*/
-		is_personal?: boolean;
-		/**
-The results of the query.
-*/
-		results: InputInlineQueryResult[];
-		/**
-Allowed time to cache the results of the query, in seconds.
-*/
-		cache_time: number;
-		/**
-Offset for the next inline query; pass an empty string if there are no more results.
-*/
-		next_offset: string;
-		/**
-If non-empty, this text must be shown on the button that opens a private chat with the bot and sends a start message to
-the bot with the parameter switch_pm_parameter.
-*/
-		switch_pm_text: string;
-		/**
-The parameter for the bot start message.
-*/
-		switch_pm_parameter: string;
-	}): Promise<Ok> {
+	async answerInlineQuery(options: Omit<AnswerInlineQuery, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'answerInlineQuery',
@@ -21900,20 +29578,7 @@ The parameter for the bot start message.
 	/**
 Returns an HTTPS URL of a Web App to open after keyboardButtonTypeWebApp button is pressed.
 */
-	async getWebAppUrl(options: {
-		/**
-Identifier of the target bot.
-*/
-		bot_user_id: number;
-		/**
-The URL from the keyboardButtonTypeWebApp button.
-*/
-		url: string;
-		/**
-Preferred Web App theme; pass null to use the default theme.
-*/
-		theme: ThemeParameters;
-	}): Promise<HttpUrl> {
+	async getWebAppUrl(options: Omit<GetWebAppUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getWebAppUrl',
@@ -21923,20 +29588,7 @@ Preferred Web App theme; pass null to use the default theme.
 	/**
 Sends data received from a keyboardButtonTypeWebApp Web App to a bot.
 */
-	async sendWebAppData(options: {
-		/**
-Identifier of the target bot.
-*/
-		bot_user_id: number;
-		/**
-Text of the keyboardButtonTypeWebApp button, which opened the Web App.
-*/
-		button_text: string;
-		/**
-Received data.
-*/
-		data: string;
-	}): Promise<Ok> {
+	async sendWebAppData(options: Omit<SendWebAppData, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sendWebAppData',
@@ -21948,29 +29600,7 @@ Informs TDLib that a Web App is being opened from attachment menu, a botMenuButt
 internalLinkTypeAttachmentMenuBot link, or an inlineKeyboardButtonTypeWebApp button. For each bot, a confirmation alert
 about data sent to the bot must be shown once.
 */
-	async openWebApp(options: {
-		/**
-Identifier of the chat in which the Web App is opened.
-*/
-		chat_id: number;
-		/**
-Identifier of the bot, providing the Web App.
-*/
-		bot_user_id: number;
-		/**
-The URL from an inlineKeyboardButtonTypeWebApp button, a botMenuButton button, or an internalLinkTypeAttachmentMenuBot
-link, or an empty string otherwise.
-*/
-		url: string;
-		/**
-Preferred Web App theme; pass null to use the default theme.
-*/
-		theme: ThemeParameters;
-		/**
-Identifier of the replied message for the message sent by the Web App; 0 if none.
-*/
-		reply_to_message_id: number;
-	}): Promise<WebAppInfo> {
+	async openWebApp(options: Omit<OpenWebApp, '@type'>): Promise<WebAppInfo> {
 		return this._request({
 			...options,
 			'@type': 'openWebApp',
@@ -21980,12 +29610,7 @@ Identifier of the replied message for the message sent by the Web App; 0 if none
 	/**
 Informs TDLib that a previously opened Web App was closed.
 */
-	async closeWebApp(options: {
-		/**
-Identifier of Web App launch, received from openWebApp.
-*/
-		web_app_launch_id: string;
-	}): Promise<Ok> {
+	async closeWebApp(options: Omit<CloseWebApp, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'closeWebApp',
@@ -21996,16 +29621,7 @@ Identifier of Web App launch, received from openWebApp.
 Sets the result of interaction with a Web App and sends corresponding message on behalf of the user to the chat from
 which the query originated; for bots only.
 */
-	async answerWebAppQuery(options: {
-		/**
-Identifier of the Web App query.
-*/
-		web_app_query_id: string;
-		/**
-The result of the query.
-*/
-		result: InputInlineQueryResult;
-	}): Promise<SentWebAppMessage> {
+	async answerWebAppQuery(options: Omit<AnswerWebAppQuery, '@type'>): Promise<SentWebAppMessage> {
 		return this._request({
 			...options,
 			'@type': 'answerWebAppQuery',
@@ -22016,20 +29632,7 @@ The result of the query.
 Sends a callback query to a bot and returns an answer. Returns an error with code 502 if the bot fails to answer the
 query before the query timeout expires.
 */
-	async getCallbackQueryAnswer(options: {
-		/**
-Identifier of the chat with the message.
-*/
-		chat_id: number;
-		/**
-Identifier of the message from which the query originated.
-*/
-		message_id: number;
-		/**
-Query payload.
-*/
-		payload: CallbackQueryPayload;
-	}): Promise<CallbackQueryAnswer> {
+	async getCallbackQueryAnswer(options: Omit<GetCallbackQueryAnswer, '@type'>): Promise<CallbackQueryAnswer> {
 		return this._request({
 			...options,
 			'@type': 'getCallbackQueryAnswer',
@@ -22039,28 +29642,7 @@ Query payload.
 	/**
 Sets the result of a callback query; for bots only.
 */
-	async answerCallbackQuery(options: {
-		/**
-Identifier of the callback query.
-*/
-		callback_query_id: string;
-		/**
-Text of the answer.
-*/
-		text: string;
-		/**
-Pass true to show an alert to the user instead of a toast notification.
-*/
-		show_alert?: boolean;
-		/**
-URL to be opened.
-*/
-		url: string;
-		/**
-Time during which the result of the query can be cached, in seconds.
-*/
-		cache_time: number;
-	}): Promise<Ok> {
+	async answerCallbackQuery(options: Omit<AnswerCallbackQuery, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'answerCallbackQuery',
@@ -22070,20 +29652,7 @@ Time during which the result of the query can be cached, in seconds.
 	/**
 Sets the result of a shipping query; for bots only.
 */
-	async answerShippingQuery(options: {
-		/**
-Identifier of the shipping query.
-*/
-		shipping_query_id: string;
-		/**
-Available shipping options.
-*/
-		shipping_options: ShippingOption[];
-		/**
-An error message, empty on success.
-*/
-		error_message: string;
-	}): Promise<Ok> {
+	async answerShippingQuery(options: Omit<AnswerShippingQuery, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'answerShippingQuery',
@@ -22093,16 +29662,7 @@ An error message, empty on success.
 	/**
 Sets the result of a pre-checkout query; for bots only.
 */
-	async answerPreCheckoutQuery(options: {
-		/**
-Identifier of the pre-checkout query.
-*/
-		pre_checkout_query_id: string;
-		/**
-An error message, empty on success.
-*/
-		error_message: string;
-	}): Promise<Ok> {
+	async answerPreCheckoutQuery(options: Omit<AnswerPreCheckoutQuery, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'answerPreCheckoutQuery',
@@ -22112,33 +29672,7 @@ An error message, empty on success.
 	/**
 Updates the game score of the specified user in the game; for bots only.
 */
-	async setGameScore(options: {
-		/**
-The chat to which the message with the game belongs.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-Pass true to edit the game message to include the current scoreboard.
-*/
-		edit_message?: boolean;
-		/**
-User identifier.
-*/
-		user_id: number;
-		/**
-The new score.
-*/
-		score: number;
-		/**
-Pass true to update the score even if it decreases. If the score is 0, the user will be deleted from the high score
-table.
-*/
-		force?: boolean;
-	}): Promise<Message> {
+	async setGameScore(options: Omit<SetGameScore, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'setGameScore',
@@ -22148,29 +29682,7 @@ table.
 	/**
 Updates the game score of the specified user in a game; for bots only.
 */
-	async setInlineGameScore(options: {
-		/**
-Inline message identifier.
-*/
-		inline_message_id: string;
-		/**
-Pass true to edit the game message to include the current scoreboard.
-*/
-		edit_message?: boolean;
-		/**
-User identifier.
-*/
-		user_id: number;
-		/**
-The new score.
-*/
-		score: number;
-		/**
-Pass true to update the score even if it decreases. If the score is 0, the user will be deleted from the high score
-table.
-*/
-		force?: boolean;
-	}): Promise<Ok> {
+	async setInlineGameScore(options: Omit<SetInlineGameScore, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setInlineGameScore',
@@ -22181,20 +29693,7 @@ table.
 Returns the high scores for a game and some part of the high score table in the range of the specified user; for bots
 only.
 */
-	async getGameHighScores(options: {
-		/**
-The chat that contains the message with the game.
-*/
-		chat_id: number;
-		/**
-Identifier of the message.
-*/
-		message_id: number;
-		/**
-User identifier.
-*/
-		user_id: number;
-	}): Promise<GameHighScores> {
+	async getGameHighScores(options: Omit<GetGameHighScores, '@type'>): Promise<GameHighScores> {
 		return this._request({
 			...options,
 			'@type': 'getGameHighScores',
@@ -22204,16 +29703,7 @@ User identifier.
 	/**
 Returns game high scores and some part of the high score table in the range of the specified user; for bots only.
 */
-	async getInlineGameHighScores(options: {
-		/**
-Inline message identifier.
-*/
-		inline_message_id: string;
-		/**
-User identifier.
-*/
-		user_id: number;
-	}): Promise<GameHighScores> {
+	async getInlineGameHighScores(options: Omit<GetInlineGameHighScores, '@type'>): Promise<GameHighScores> {
 		return this._request({
 			...options,
 			'@type': 'getInlineGameHighScores',
@@ -22224,16 +29714,7 @@ User identifier.
 Deletes the default reply markup from a chat. Must be called after a one-time keyboard or a ForceReply reply markup has
 been used. UpdateChatReplyMarkup will be sent if the reply markup is changed.
 */
-	async deleteChatReplyMarkup(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-The message identifier of the used keyboard.
-*/
-		message_id: number;
-	}): Promise<Ok> {
+	async deleteChatReplyMarkup(options: Omit<DeleteChatReplyMarkup, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteChatReplyMarkup',
@@ -22243,20 +29724,7 @@ The message identifier of the used keyboard.
 	/**
 Sends a notification about user activity in a chat.
 */
-	async sendChatAction(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-If not 0, a message thread identifier in which the action was performed.
-*/
-		message_thread_id: number;
-		/**
-The action description; pass null to cancel the currently active action.
-*/
-		action: ChatAction;
-	}): Promise<Ok> {
+	async sendChatAction(options: Omit<SendChatAction, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sendChatAction',
@@ -22267,12 +29735,7 @@ The action description; pass null to cancel the currently active action.
 Informs TDLib that the chat is opened by the user. Many useful activities depend on the chat being opened or closed
 (e.g., in supergroups and channels all updates are received only for opened chats).
 */
-	async openChat(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async openChat(options: Omit<OpenChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'openChat',
@@ -22282,12 +29745,7 @@ Chat identifier.
 	/**
 Informs TDLib that the chat is closed by the user. Many useful activities depend on the chat being opened or closed.
 */
-	async closeChat(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async closeChat(options: Omit<CloseChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'closeChat',
@@ -22300,24 +29758,7 @@ entire text of the message is shown on the screen (excluding the button). Many u
 messages are currently being viewed or not (e.g., marking messages as read, incrementing a view counter, updating a view
 counter, removing deleted messages in supergroups and channels).
 */
-	async viewMessages(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-If not 0, a message thread identifier in which the messages are being viewed.
-*/
-		message_thread_id: number;
-		/**
-The identifiers of the messages being viewed.
-*/
-		message_ids: number[];
-		/**
-Pass true to mark as read the specified messages even the chat is closed.
-*/
-		force_read?: boolean;
-	}): Promise<Ok> {
+	async viewMessages(options: Omit<ViewMessages, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'viewMessages',
@@ -22329,16 +29770,7 @@ Informs TDLib that the message content has been opened (e.g., the user has opene
 venue, or has listened to an audio file or voice note message). An updateMessageContentOpened update will be generated
 if something has changed.
 */
-	async openMessageContent(options: {
-		/**
-Chat identifier of the message.
-*/
-		chat_id: number;
-		/**
-Identifier of the message with the opened content.
-*/
-		message_id: number;
-	}): Promise<Ok> {
+	async openMessageContent(options: Omit<OpenMessageContent, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'openMessageContent',
@@ -22349,16 +29781,7 @@ Identifier of the message with the opened content.
 Informs TDLib that a message with an animated emoji was clicked by the user. Returns a big animated sticker to be played
 or a 404 error if usual animation needs to be played.
 */
-	async clickAnimatedEmojiMessage(options: {
-		/**
-Chat identifier of the message.
-*/
-		chat_id: number;
-		/**
-Identifier of the clicked message.
-*/
-		message_id: number;
-	}): Promise<Sticker> {
+	async clickAnimatedEmojiMessage(options: Omit<ClickAnimatedEmojiMessage, '@type'>): Promise<Sticker> {
 		return this._request({
 			...options,
 			'@type': 'clickAnimatedEmojiMessage',
@@ -22369,12 +29792,7 @@ Identifier of the clicked message.
 Returns information about the type of an internal link. Returns a 404 error if the link is not internal. Can be called
 before authorization.
 */
-	async getInternalLinkType(options: {
-		/**
-The link.
-*/
-		link: string;
-	}): Promise<InternalLinkType> {
+	async getInternalLinkType(options: Omit<GetInternalLinkType, '@type'>): Promise<InternalLinkType> {
 		return this._request({
 			...options,
 			'@type': 'getInternalLinkType',
@@ -22385,12 +29803,7 @@ The link.
 Returns information about an action to be done when the current user clicks an external link. Don't use this method for
 links from secret chats if web page preview is disabled in secret chats.
 */
-	async getExternalLinkInfo(options: {
-		/**
-The link.
-*/
-		link: string;
-	}): Promise<LoginUrlInfo> {
+	async getExternalLinkInfo(options: Omit<GetExternalLinkInfo, '@type'>): Promise<LoginUrlInfo> {
 		return this._request({
 			...options,
 			'@type': 'getExternalLinkInfo',
@@ -22401,16 +29814,7 @@ The link.
 Returns an HTTP URL which can be used to automatically authorize the current user on a website after clicking an HTTP
 link. Use the method getExternalLinkInfo to find whether a prior user confirmation is needed.
 */
-	async getExternalLink(options: {
-		/**
-The HTTP link.
-*/
-		link: string;
-		/**
-Pass true if the current user allowed the bot, returned in getExternalLinkInfo, to send them messages.
-*/
-		allow_write_access?: boolean;
-	}): Promise<HttpUrl> {
+	async getExternalLink(options: Omit<GetExternalLink, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getExternalLink',
@@ -22420,12 +29824,7 @@ Pass true if the current user allowed the bot, returned in getExternalLinkInfo, 
 	/**
 Marks all mentions in a chat as read.
 */
-	async readAllChatMentions(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async readAllChatMentions(options: Omit<ReadAllChatMentions, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'readAllChatMentions',
@@ -22435,12 +29834,7 @@ Chat identifier.
 	/**
 Marks all reactions in a chat as read.
 */
-	async readAllChatReactions(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async readAllChatReactions(options: Omit<ReadAllChatReactions, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'readAllChatReactions',
@@ -22450,17 +29844,7 @@ Chat identifier.
 	/**
 Returns an existing chat corresponding to a given user.
 */
-	async createPrivateChat(options: {
-		/**
-User identifier.
-*/
-		user_id: number;
-		/**
-Pass true to create the chat without a network request. In this case all information about the chat except its type,
-title and photo can be incorrect.
-*/
-		force?: boolean;
-	}): Promise<Chat> {
+	async createPrivateChat(options: Omit<CreatePrivateChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'createPrivateChat',
@@ -22470,17 +29854,7 @@ title and photo can be incorrect.
 	/**
 Returns an existing chat corresponding to a known basic group.
 */
-	async createBasicGroupChat(options: {
-		/**
-Basic group identifier.
-*/
-		basic_group_id: number;
-		/**
-Pass true to create the chat without a network request. In this case all information about the chat except its type,
-title and photo can be incorrect.
-*/
-		force?: boolean;
-	}): Promise<Chat> {
+	async createBasicGroupChat(options: Omit<CreateBasicGroupChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'createBasicGroupChat',
@@ -22490,17 +29864,7 @@ title and photo can be incorrect.
 	/**
 Returns an existing chat corresponding to a known supergroup or channel.
 */
-	async createSupergroupChat(options: {
-		/**
-Supergroup or channel identifier.
-*/
-		supergroup_id: number;
-		/**
-Pass true to create the chat without a network request. In this case all information about the chat except its type,
-title and photo can be incorrect.
-*/
-		force?: boolean;
-	}): Promise<Chat> {
+	async createSupergroupChat(options: Omit<CreateSupergroupChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'createSupergroupChat',
@@ -22510,12 +29874,7 @@ title and photo can be incorrect.
 	/**
 Returns an existing chat corresponding to a known secret chat.
 */
-	async createSecretChat(options: {
-		/**
-Secret chat identifier.
-*/
-		secret_chat_id: number;
-	}): Promise<Chat> {
+	async createSecretChat(options: Omit<CreateSecretChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'createSecretChat',
@@ -22525,16 +29884,7 @@ Secret chat identifier.
 	/**
 Creates a new basic group and sends a corresponding messageBasicGroupChatCreate. Returns the newly created chat.
 */
-	async createNewBasicGroupChat(options: {
-		/**
-Identifiers of users to be added to the basic group.
-*/
-		user_ids: number[];
-		/**
-Title of the new basic group; 1-128 characters.
-*/
-		title: string;
-	}): Promise<Chat> {
+	async createNewBasicGroupChat(options: Omit<CreateNewBasicGroupChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'createNewBasicGroupChat',
@@ -22545,29 +29895,7 @@ Title of the new basic group; 1-128 characters.
 Creates a new supergroup or channel and sends a corresponding messageSupergroupChatCreate. Returns the newly created
 chat.
 */
-	async createNewSupergroupChat(options: {
-		/**
-Title of the new chat; 1-128 characters.
-*/
-		title: string;
-		/**
-Pass true to create a channel chat.
-*/
-		is_channel?: boolean;
-		/**
-Creates a new supergroup or channel and sends a corresponding messageSupergroupChatCreate. Returns the newly created
-chat.
-*/
-		description: string;
-		/**
-Chat location if a location-based supergroup is being created; pass null to create an ordinary supergroup chat.
-*/
-		location: ChatLocation;
-		/**
-Pass true to create a supergroup for importing messages using importMessage.
-*/
-		for_import?: boolean;
-	}): Promise<Chat> {
+	async createNewSupergroupChat(options: Omit<CreateNewSupergroupChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'createNewSupergroupChat',
@@ -22577,12 +29905,7 @@ Pass true to create a supergroup for importing messages using importMessage.
 	/**
 Creates a new secret chat. Returns the newly created chat.
 */
-	async createNewSecretChat(options: {
-		/**
-Identifier of the target user.
-*/
-		user_id: number;
-	}): Promise<Chat> {
+	async createNewSecretChat(options: Omit<CreateNewSecretChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'createNewSecretChat',
@@ -22593,12 +29916,7 @@ Identifier of the target user.
 Creates a new supergroup from an existing basic group and sends a corresponding messageChatUpgradeTo and
 messageChatUpgradeFrom; requires creator privileges. Deactivates the original basic group.
 */
-	async upgradeBasicGroupChatToSupergroupChat(options: {
-		/**
-Identifier of the chat to upgrade.
-*/
-		chat_id: number;
-	}): Promise<Chat> {
+	async upgradeBasicGroupChatToSupergroupChat(options: Omit<UpgradeBasicGroupChatToSupergroupChat, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'upgradeBasicGroupChatToSupergroupChat',
@@ -22608,12 +29926,7 @@ Identifier of the chat to upgrade.
 	/**
 Returns chat lists to which the chat can be added. This is an offline request.
 */
-	async getChatListsToAddChat(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<ChatLists> {
+	async getChatListsToAddChat(options: Omit<GetChatListsToAddChat, '@type'>): Promise<ChatLists> {
 		return this._request({
 			...options,
 			'@type': 'getChatListsToAddChat',
@@ -22624,16 +29937,7 @@ Chat identifier.
 Adds a chat to a chat list. A chat can't be simultaneously in Main and Archive chat lists, so it is automatically
 removed from another one if needed.
 */
-	async addChatToList(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-The chat list. Use getChatListsToAddChat to get suitable chat lists.
-*/
-		chat_list: ChatList;
-	}): Promise<Ok> {
+	async addChatToList(options: Omit<AddChatToList, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addChatToList',
@@ -22643,12 +29947,7 @@ The chat list. Use getChatListsToAddChat to get suitable chat lists.
 	/**
 Returns information about a chat filter by its identifier.
 */
-	async getChatFilter(options: {
-		/**
-Chat filter identifier.
-*/
-		chat_filter_id: number;
-	}): Promise<ChatFilter> {
+	async getChatFilter(options: Omit<GetChatFilter, '@type'>): Promise<ChatFilter> {
 		return this._request({
 			...options,
 			'@type': 'getChatFilter',
@@ -22659,12 +29958,7 @@ Chat filter identifier.
 Creates new chat filter. Returns information about the created chat filter. There can be up to
 GetOption("chat_filter_count_max") chat filters, but the limit can be increased with Telegram Premium.
 */
-	async createChatFilter(options: {
-		/**
-Chat filter.
-*/
-		filter: ChatFilter;
-	}): Promise<ChatFilterInfo> {
+	async createChatFilter(options: Omit<CreateChatFilter, '@type'>): Promise<ChatFilterInfo> {
 		return this._request({
 			...options,
 			'@type': 'createChatFilter',
@@ -22674,16 +29968,7 @@ Chat filter.
 	/**
 Edits existing chat filter. Returns information about the edited chat filter.
 */
-	async editChatFilter(options: {
-		/**
-Chat filter identifier.
-*/
-		chat_filter_id: number;
-		/**
-The edited chat filter.
-*/
-		filter: ChatFilter;
-	}): Promise<ChatFilterInfo> {
+	async editChatFilter(options: Omit<EditChatFilter, '@type'>): Promise<ChatFilterInfo> {
 		return this._request({
 			...options,
 			'@type': 'editChatFilter',
@@ -22693,12 +29978,7 @@ The edited chat filter.
 	/**
 Deletes existing chat filter.
 */
-	async deleteChatFilter(options: {
-		/**
-Chat filter identifier.
-*/
-		chat_filter_id: number;
-	}): Promise<Ok> {
+	async deleteChatFilter(options: Omit<DeleteChatFilter, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteChatFilter',
@@ -22708,16 +29988,7 @@ Chat filter identifier.
 	/**
 Changes the order of chat filters.
 */
-	async reorderChatFilters(options: {
-		/**
-Identifiers of chat filters in the new correct order.
-*/
-		chat_filter_ids: number[];
-		/**
-Position of the main chat list among chat filters, 0-based. Can be non-zero only for Premium users.
-*/
-		main_chat_list_position: number;
-	}): Promise<Ok> {
+	async reorderChatFilters(options: Omit<ReorderChatFilters, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'reorderChatFilters',
@@ -22736,12 +30007,7 @@ Returns recommended chat filters for the current user.
 	/**
 Returns default icon name for a filter. Can be called synchronously.
 */
-	async getChatFilterDefaultIconName(options: {
-		/**
-Chat filter.
-*/
-		filter: ChatFilter;
-	}): Promise<Text> {
+	async getChatFilterDefaultIconName(options: Omit<GetChatFilterDefaultIconName, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getChatFilterDefaultIconName',
@@ -22752,16 +30018,7 @@ Chat filter.
 Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info
 administrator right.
 */
-	async setChatTitle(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New title of the chat; 1-128 characters.
-*/
-		title: string;
-	}): Promise<Ok> {
+	async setChatTitle(options: Omit<SetChatTitle, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatTitle',
@@ -22772,16 +30029,7 @@ New title of the chat; 1-128 characters.
 Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info
 administrator right.
 */
-	async setChatPhoto(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New chat photo; pass null to delete the chat photo.
-*/
-		photo: InputChatPhoto;
-	}): Promise<Ok> {
+	async setChatPhoto(options: Omit<SetChatPhoto, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatPhoto',
@@ -22792,16 +30040,7 @@ New chat photo; pass null to delete the chat photo.
 Changes the message TTL in a chat. Requires can_delete_messages administrator right in basic groups, supergroups and
 channels Message TTL can't be changed in a chat with the current user (Saved Messages) and the chat 777000 (Telegram).
 */
-	async setChatMessageTtl(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New TTL value, in seconds; unless the chat is secret, it must be from 0 up to 365 * 86400 and be divisible by 86400.
-*/
-		ttl: number;
-	}): Promise<Ok> {
+	async setChatMessageTtl(options: Omit<SetChatMessageTtl, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatMessageTtl',
@@ -22812,16 +30051,7 @@ New TTL value, in seconds; unless the chat is secret, it must be from 0 up to 36
 Changes the chat members permissions. Supported only for basic groups and supergroups. Requires can_restrict_members
 administrator right.
 */
-	async setChatPermissions(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New non-administrator members permissions in the chat.
-*/
-		permissions: ChatPermissions;
-	}): Promise<Ok> {
+	async setChatPermissions(options: Omit<SetChatPermissions, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatPermissions',
@@ -22831,16 +30061,7 @@ New non-administrator members permissions in the chat.
 	/**
 Changes the chat theme. Supported only in private and secret chats.
 */
-	async setChatTheme(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Name of the new chat theme; pass an empty string to return the default theme.
-*/
-		theme_name: string;
-	}): Promise<Ok> {
+	async setChatTheme(options: Omit<SetChatTheme, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatTheme',
@@ -22850,20 +30071,7 @@ Name of the new chat theme; pass an empty string to return the default theme.
 	/**
 Changes the draft message in a chat.
 */
-	async setChatDraftMessage(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-If not 0, a message thread identifier in which the draft was changed.
-*/
-		message_thread_id: number;
-		/**
-New draft message; pass null to remove the draft.
-*/
-		draft_message: DraftMessage;
-	}): Promise<Ok> {
+	async setChatDraftMessage(options: Omit<SetChatDraftMessage, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatDraftMessage',
@@ -22874,17 +30082,7 @@ New draft message; pass null to remove the draft.
 Changes the notification settings of a chat. Notification settings of a chat with the current user (Saved Messages)
 can't be changed.
 */
-	async setChatNotificationSettings(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New notification settings for the chat. If the chat is muted for more than 366 days, it is considered to be muted
-forever.
-*/
-		notification_settings: ChatNotificationSettings;
-	}): Promise<Ok> {
+	async setChatNotificationSettings(options: Omit<SetChatNotificationSettings, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatNotificationSettings',
@@ -22895,16 +30093,7 @@ forever.
 Changes the ability of users to save, forward, or copy chat content. Supported only for basic groups, supergroups and
 channels. Requires owner privileges.
 */
-	async toggleChatHasProtectedContent(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New value of has_protected_content.
-*/
-		has_protected_content?: boolean;
-	}): Promise<Ok> {
+	async toggleChatHasProtectedContent(options: Omit<ToggleChatHasProtectedContent, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleChatHasProtectedContent',
@@ -22914,16 +30103,7 @@ New value of has_protected_content.
 	/**
 Changes the marked as unread state of a chat.
 */
-	async toggleChatIsMarkedAsUnread(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New value of is_marked_as_unread.
-*/
-		is_marked_as_unread?: boolean;
-	}): Promise<Ok> {
+	async toggleChatIsMarkedAsUnread(options: Omit<ToggleChatIsMarkedAsUnread, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleChatIsMarkedAsUnread',
@@ -22933,16 +30113,7 @@ New value of is_marked_as_unread.
 	/**
 Changes the value of the default disable_notification parameter, used when a message is sent to a chat.
 */
-	async toggleChatDefaultDisableNotification(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New value of default_disable_notification.
-*/
-		default_disable_notification?: boolean;
-	}): Promise<Ok> {
+	async toggleChatDefaultDisableNotification(options: Omit<ToggleChatDefaultDisableNotification, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleChatDefaultDisableNotification',
@@ -22953,16 +30124,7 @@ New value of default_disable_notification.
 Changes reactions, available in a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
 administrator right.
 */
-	async setChatAvailableReactions(options: {
-		/**
-Identifier of the chat.
-*/
-		chat_id: number;
-		/**
-New list of reactions, available in the chat. All reactions must be active.
-*/
-		available_reactions: string[];
-	}): Promise<Ok> {
+	async setChatAvailableReactions(options: Omit<SetChatAvailableReactions, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatAvailableReactions',
@@ -22972,16 +30134,7 @@ New list of reactions, available in the chat. All reactions must be active.
 	/**
 Changes application-specific data associated with a chat.
 */
-	async setChatClientData(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New value of client_data.
-*/
-		client_data: string;
-	}): Promise<Ok> {
+	async setChatClientData(options: Omit<SetChatClientData, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatClientData',
@@ -22992,17 +30145,7 @@ New value of client_data.
 Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
 administrator right.
 */
-	async setChatDescription(options: {
-		/**
-Identifier of the chat.
-*/
-		chat_id: number;
-		/**
-Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
-administrator right.
-*/
-		description: string;
-	}): Promise<Ok> {
+	async setChatDescription(options: Omit<SetChatDescription, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatDescription',
@@ -23013,20 +30156,7 @@ administrator right.
 Changes the discussion group of a channel chat; requires can_change_info administrator right in the channel if it is
 specified.
 */
-	async setChatDiscussionGroup(options: {
-		/**
-Identifier of the channel chat. Pass 0 to remove a link from the supergroup passed in the second argument to a linked
-channel chat (requires can_pin_messages rights in the supergroup).
-*/
-		chat_id: number;
-		/**
-Identifier of a new channel's discussion group. Use 0 to remove the discussion group. Use the method
-getSuitableDiscussionChats to find all suitable groups. Basic group chats must be first upgraded to supergroup chats. If
-new chat members don't have access to old messages in the supergroup, then toggleSupergroupIsAllHistoryAvailable must be
-used first to change that.
-*/
-		discussion_chat_id: number;
-	}): Promise<Ok> {
+	async setChatDiscussionGroup(options: Omit<SetChatDiscussionGroup, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatDiscussionGroup',
@@ -23037,16 +30167,7 @@ used first to change that.
 Changes the location of a chat. Available only for some location-based supergroups, use
 supergroupFullInfo.can_set_location to check whether the method is allowed to use.
 */
-	async setChatLocation(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New location for the chat; must be valid and not null.
-*/
-		location: ChatLocation;
-	}): Promise<Ok> {
+	async setChatLocation(options: Omit<SetChatLocation, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatLocation',
@@ -23056,16 +30177,7 @@ New location for the chat; must be valid and not null.
 	/**
 Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members rights.
 */
-	async setChatSlowModeDelay(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-New slow mode delay for the chat, in seconds; must be one of 0, 10, 30, 60, 300, 900, 3600.
-*/
-		slow_mode_delay: number;
-	}): Promise<Ok> {
+	async setChatSlowModeDelay(options: Omit<SetChatSlowModeDelay, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatSlowModeDelay',
@@ -23075,25 +30187,7 @@ New slow mode delay for the chat, in seconds; must be one of 0, 10, 30, 60, 300,
 	/**
 Pins a message in a chat; requires can_pin_messages rights or can_edit_messages rights in the channel.
 */
-	async pinChatMessage(options: {
-		/**
-Identifier of the chat.
-*/
-		chat_id: number;
-		/**
-Identifier of the new pinned message.
-*/
-		message_id: number;
-		/**
-Pass true to disable notification about the pinned message. Notifications are always disabled in channels and private
-chats.
-*/
-		disable_notification?: boolean;
-		/**
-Pass true to pin the message only for self; private chats only.
-*/
-		only_for_self?: boolean;
-	}): Promise<Ok> {
+	async pinChatMessage(options: Omit<PinChatMessage, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'pinChatMessage',
@@ -23104,16 +30198,7 @@ Pass true to pin the message only for self; private chats only.
 Removes a pinned message from a chat; requires can_pin_messages rights in the group or can_edit_messages rights in the
 channel.
 */
-	async unpinChatMessage(options: {
-		/**
-Identifier of the chat.
-*/
-		chat_id: number;
-		/**
-Identifier of the removed pinned message.
-*/
-		message_id: number;
-	}): Promise<Ok> {
+	async unpinChatMessage(options: Omit<UnpinChatMessage, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'unpinChatMessage',
@@ -23124,12 +30209,7 @@ Identifier of the removed pinned message.
 Removes all pinned messages from a chat; requires can_pin_messages rights in the group or can_edit_messages rights in
 the channel.
 */
-	async unpinAllChatMessages(options: {
-		/**
-Identifier of the chat.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async unpinAllChatMessages(options: Omit<UnpinAllChatMessages, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'unpinAllChatMessages',
@@ -23140,12 +30220,7 @@ Identifier of the chat.
 Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method. May return
 an error with a message "INVITE_REQUEST_SENT" if only a join request was created.
 */
-	async joinChat(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async joinChat(options: Omit<JoinChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'joinChat',
@@ -23155,12 +30230,7 @@ Chat identifier.
 	/**
 Removes the current user from chat members. Private and secret chats can't be left using this method.
 */
-	async leaveChat(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async leaveChat(options: Omit<LeaveChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'leaveChat',
@@ -23170,21 +30240,7 @@ Chat identifier.
 	/**
 Adds a new member to a chat. Members can't be added to private or secret chats.
 */
-	async addChatMember(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifier of the user.
-*/
-		user_id: number;
-		/**
-The number of earlier messages from the chat to be forwarded to the new member; up to 100. Ignored for supergroups and
-channels, or if the added user is a bot.
-*/
-		forward_limit: number;
-	}): Promise<Ok> {
+	async addChatMember(options: Omit<AddChatMember, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addChatMember',
@@ -23195,17 +30251,7 @@ channels, or if the added user is a bot.
 Adds multiple new members to a chat. Currently, this method is only available for supergroups and channels. This method
 can't be used to join a chat. Members can't be added to a channel if it has more than 200 members.
 */
-	async addChatMembers(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifiers of the users to be added to the chat. The maximum number of added users is 20 for supergroups and 100 for
-channels.
-*/
-		user_ids: number[];
-	}): Promise<Ok> {
+	async addChatMembers(options: Omit<AddChatMembers, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addChatMembers',
@@ -23217,20 +30263,7 @@ Changes the status of a chat member, needs appropriate privileges. This function
 transferring chat ownership; use transferChatOwnership instead. Use addChatMember or banChatMember if some additional
 parameters needs to be passed.
 */
-	async setChatMemberStatus(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Member identifier. Chats can be only banned and unbanned in supergroups and channels.
-*/
-		member_id: MessageSender;
-		/**
-The new status of the member in the chat.
-*/
-		status: ChatMemberStatus;
-	}): Promise<Ok> {
+	async setChatMemberStatus(options: Omit<SetChatMemberStatus, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatMemberStatus',
@@ -23241,27 +30274,7 @@ The new status of the member in the chat.
 Bans a member in a chat. Members can't be banned in private or secret chats. In supergroups and channels, the user will
 not be able to return to the group on their own using invite links, etc., unless unbanned first.
 */
-	async banChatMember(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Member identifier.
-*/
-		member_id: MessageSender;
-		/**
-Point in time (Unix timestamp) when the user will be unbanned; 0 if never. If the user is banned for more than 366 days
-or for less than 30 seconds from the current time, the user is considered to be banned forever. Ignored in basic groups
-and if a chat is banned.
-*/
-		banned_until_date: number;
-		/**
-Pass true to delete all messages in the chat for the user that is being removed. Always true for supergroups and
-channels.
-*/
-		revoke_messages?: boolean;
-	}): Promise<Ok> {
+	async banChatMember(options: Omit<BanChatMember, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'banChatMember',
@@ -23282,21 +30295,7 @@ Changes the owner of a chat. The current user must be a current owner of the cha
 to check whether the ownership can be transferred from the current session. Available only for supergroups and channel
 chats.
 */
-	async transferChatOwnership(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifier of the user to which transfer the ownership. The ownership can't be transferred to a bot or to a deleted
-user.
-*/
-		user_id: number;
-		/**
-The 2-step verification password of the current user.
-*/
-		password: string;
-	}): Promise<Ok> {
+	async transferChatOwnership(options: Omit<TransferChatOwnership, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'transferChatOwnership',
@@ -23306,16 +30305,7 @@ The 2-step verification password of the current user.
 	/**
 Returns information about a single member of a chat.
 */
-	async getChatMember(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Member identifier.
-*/
-		member_id: MessageSender;
-	}): Promise<ChatMember> {
+	async getChatMember(options: Omit<GetChatMember, '@type'>): Promise<ChatMember> {
 		return this._request({
 			...options,
 			'@type': 'getChatMember',
@@ -23326,24 +30316,7 @@ Member identifier.
 Searches for a specified query in the first name, last name and username of the members of a specified chat. Requires
 administrator rights in channels.
 */
-	async searchChatMembers(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Query to search for.
-*/
-		query: string;
-		/**
-The maximum number of users to be returned; up to 200.
-*/
-		limit: number;
-		/**
-The type of users to search for; pass null to search among all chat members.
-*/
-		filter: ChatMembersFilter;
-	}): Promise<ChatMembers> {
+	async searchChatMembers(options: Omit<SearchChatMembers, '@type'>): Promise<ChatMembers> {
 		return this._request({
 			...options,
 			'@type': 'searchChatMembers',
@@ -23353,12 +30326,7 @@ The type of users to search for; pass null to search among all chat members.
 	/**
 Returns a list of administrators of the chat with their custom titles.
 */
-	async getChatAdministrators(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<ChatAdministrators> {
+	async getChatAdministrators(options: Omit<GetChatAdministrators, '@type'>): Promise<ChatAdministrators> {
 		return this._request({
 			...options,
 			'@type': 'getChatAdministrators',
@@ -23368,12 +30336,7 @@ Chat identifier.
 	/**
 Clears message drafts in all chats.
 */
-	async clearAllDraftMessages(options: {
-		/**
-Pass true to keep local message drafts in secret chats.
-*/
-		exclude_secret_chats?: boolean;
-	}): Promise<Ok> {
+	async clearAllDraftMessages(options: Omit<ClearAllDraftMessages, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'clearAllDraftMessages',
@@ -23384,12 +30347,7 @@ Pass true to keep local message drafts in secret chats.
 Returns saved notification sound by its identifier. Returns a 404 error if there is no saved notification sound with the
 specified identifier.
 */
-	async getSavedNotificationSound(options: {
-		/**
-Identifier of the notification sound.
-*/
-		notification_sound_id: string;
-	}): Promise<NotificationSounds> {
+	async getSavedNotificationSound(options: Omit<GetSavedNotificationSound, '@type'>): Promise<NotificationSounds> {
 		return this._request({
 			...options,
 			'@type': 'getSavedNotificationSound',
@@ -23409,12 +30367,7 @@ Returns list of saved notification sounds. If a sound isn't in the list, then de
 Adds a new notification sound to the list of saved notification sounds. The new notification sound is added to the top
 of the list. If it is already in the list, its position isn't changed.
 */
-	async addSavedNotificationSound(options: {
-		/**
-Notification sound file to add.
-*/
-		sound: InputFile;
-	}): Promise<NotificationSound> {
+	async addSavedNotificationSound(options: Omit<AddSavedNotificationSound, '@type'>): Promise<NotificationSound> {
 		return this._request({
 			...options,
 			'@type': 'addSavedNotificationSound',
@@ -23424,12 +30377,7 @@ Notification sound file to add.
 	/**
 Removes a notification sound from the list of saved notification sounds.
 */
-	async removeSavedNotificationSound(options: {
-		/**
-Identifier of the notification sound.
-*/
-		notification_sound_id: string;
-	}): Promise<Ok> {
+	async removeSavedNotificationSound(options: Omit<RemoveSavedNotificationSound, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeSavedNotificationSound',
@@ -23439,16 +30387,7 @@ Identifier of the notification sound.
 	/**
 Returns list of chats with non-default notification settings.
 */
-	async getChatNotificationSettingsExceptions(options: {
-		/**
-If specified, only chats from the scope will be returned; pass null to return chats from all scopes.
-*/
-		scope: NotificationSettingsScope;
-		/**
-Pass true to include in the response chats with only non-default sound.
-*/
-		compare_sound?: boolean;
-	}): Promise<Chats> {
+	async getChatNotificationSettingsExceptions(options: Omit<GetChatNotificationSettingsExceptions, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
 			'@type': 'getChatNotificationSettingsExceptions',
@@ -23458,12 +30397,7 @@ Pass true to include in the response chats with only non-default sound.
 	/**
 Returns the notification settings for chats of a given type.
 */
-	async getScopeNotificationSettings(options: {
-		/**
-Types of chats for which to return the notification settings information.
-*/
-		scope: NotificationSettingsScope;
-	}): Promise<ScopeNotificationSettings> {
+	async getScopeNotificationSettings(options: Omit<GetScopeNotificationSettings, '@type'>): Promise<ScopeNotificationSettings> {
 		return this._request({
 			...options,
 			'@type': 'getScopeNotificationSettings',
@@ -23473,16 +30407,7 @@ Types of chats for which to return the notification settings information.
 	/**
 Changes notification settings for chats of a given type.
 */
-	async setScopeNotificationSettings(options: {
-		/**
-Types of chats for which to change the notification settings.
-*/
-		scope: NotificationSettingsScope;
-		/**
-The new notification settings for the given scope.
-*/
-		notification_settings: ScopeNotificationSettings;
-	}): Promise<Ok> {
+	async setScopeNotificationSettings(options: Omit<SetScopeNotificationSettings, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setScopeNotificationSettings',
@@ -23504,20 +30429,7 @@ Changes the pinned state of a chat. There can be up to
 GetOption("pinned_chat_count_max")/GetOption("pinned_archived_chat_count_max") pinned non-secret chats and the same
 number of secret chats in the main/archive chat list. The limit can be increased with Telegram Premium.
 */
-	async toggleChatIsPinned(options: {
-		/**
-Chat list in which to change the pinned state of the chat.
-*/
-		chat_list: ChatList;
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Pass true to pin the chat; pass false to unpin it.
-*/
-		is_pinned?: boolean;
-	}): Promise<Ok> {
+	async toggleChatIsPinned(options: Omit<ToggleChatIsPinned, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleChatIsPinned',
@@ -23527,16 +30439,7 @@ Pass true to pin the chat; pass false to unpin it.
 	/**
 Changes the order of pinned chats.
 */
-	async setPinnedChats(options: {
-		/**
-Chat list in which to change the order of pinned chats.
-*/
-		chat_list: ChatList;
-		/**
-The new list of pinned chats.
-*/
-		chat_ids: number[];
-	}): Promise<Ok> {
+	async setPinnedChats(options: Omit<SetPinnedChats, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setPinnedChats',
@@ -23546,12 +30449,7 @@ The new list of pinned chats.
 	/**
 Returns information about a bot that can be added to attachment menu.
 */
-	async getAttachmentMenuBot(options: {
-		/**
-Bot's user identifier.
-*/
-		bot_user_id: number;
-	}): Promise<AttachmentMenuBot> {
+	async getAttachmentMenuBot(options: Omit<GetAttachmentMenuBot, '@type'>): Promise<AttachmentMenuBot> {
 		return this._request({
 			...options,
 			'@type': 'getAttachmentMenuBot',
@@ -23562,16 +30460,7 @@ Bot's user identifier.
 Adds or removes a bot to attachment menu. Bot can be added to attachment menu, only if
 userTypeBot.can_be_added_to_attachment_menu == true.
 */
-	async toggleBotIsAddedToAttachmentMenu(options: {
-		/**
-Bot's user identifier.
-*/
-		bot_user_id: number;
-		/**
-Pass true to add the bot to attachment menu; pass false to remove the bot from attachment menu.
-*/
-		is_added?: boolean;
-	}): Promise<Ok> {
+	async toggleBotIsAddedToAttachmentMenu(options: Omit<ToggleBotIsAddedToAttachmentMenu, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleBotIsAddedToAttachmentMenu',
@@ -23582,32 +30471,7 @@ Pass true to add the bot to attachment menu; pass false to remove the bot from a
 Downloads a file from the cloud. Download progress and completion of the download will be notified through updateFile
 updates.
 */
-	async downloadFile(options: {
-		/**
-Identifier of the file to download.
-*/
-		file_id: number;
-		/**
-Priority of the download (1-32). The higher the priority, the earlier the file will be downloaded. If the priorities of
-two files are equal, then the last one for which downloadFile/addFileToDownloads was called will be downloaded first.
-*/
-		priority: number;
-		/**
-The starting position from which the file needs to be downloaded.
-*/
-		offset: number;
-		/**
-Number of bytes which need to be downloaded starting from the "offset" position before the download will automatically
-be canceled; use 0 to download without a limit.
-*/
-		limit: number;
-		/**
-Pass true to return response only after the file download has succeeded, has failed, has been canceled, or a new
-downloadFile request with different offset/limit parameters was sent; pass false to return file state immediately, just
-after the download has been started.
-*/
-		synchronous?: boolean;
-	}): Promise<File> {
+	async downloadFile(options: Omit<DownloadFile, '@type'>): Promise<File> {
 		return this._request({
 			...options,
 			'@type': 'downloadFile',
@@ -23617,16 +30481,7 @@ after the download has been started.
 	/**
 Returns file downloaded prefix size from a given offset, in bytes.
 */
-	async getFileDownloadedPrefixSize(options: {
-		/**
-Identifier of the file.
-*/
-		file_id: number;
-		/**
-Offset from which downloaded prefix size needs to be calculated.
-*/
-		offset: number;
-	}): Promise<FileDownloadedPrefixSize> {
+	async getFileDownloadedPrefixSize(options: Omit<GetFileDownloadedPrefixSize, '@type'>): Promise<FileDownloadedPrefixSize> {
 		return this._request({
 			...options,
 			'@type': 'getFileDownloadedPrefixSize',
@@ -23636,16 +30491,7 @@ Offset from which downloaded prefix size needs to be calculated.
 	/**
 Stops the downloading of a file. If a file has already been downloaded, does nothing.
 */
-	async cancelDownloadFile(options: {
-		/**
-Identifier of a file to stop downloading.
-*/
-		file_id: number;
-		/**
-Pass true to stop downloading only if it hasn't been started, i.e. request hasn't been sent to server.
-*/
-		only_if_pending?: boolean;
-	}): Promise<Ok> {
+	async cancelDownloadFile(options: Omit<CancelDownloadFile, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'cancelDownloadFile',
@@ -23655,16 +30501,7 @@ Pass true to stop downloading only if it hasn't been started, i.e. request hasn'
 	/**
 Returns suggested name for saving a file in a given directory.
 */
-	async getSuggestedFileName(options: {
-		/**
-Identifier of the file.
-*/
-		file_id: number;
-		/**
-Directory in which the file is supposed to be saved.
-*/
-		directory: string;
-	}): Promise<Text> {
+	async getSuggestedFileName(options: Omit<GetSuggestedFileName, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getSuggestedFileName',
@@ -23676,21 +30513,7 @@ Preliminary uploads a file to the cloud before sending it in a message, which ca
 recorded voice and video notes. Updates updateFile will be used to notify about upload progress and successful
 completion of the upload. The file will not have a persistent remote identifier until it will be sent in a message.
 */
-	async preliminaryUploadFile(options: {
-		/**
-File to upload.
-*/
-		file: InputFile;
-		/**
-File type; pass null if unknown.
-*/
-		file_type: FileType;
-		/**
-Priority of the upload (1-32). The higher the priority, the earlier the file will be uploaded. If the priorities of two
-files are equal, then the first one for which preliminaryUploadFile was called will be uploaded first.
-*/
-		priority: number;
-	}): Promise<File> {
+	async preliminaryUploadFile(options: Omit<PreliminaryUploadFile, '@type'>): Promise<File> {
 		return this._request({
 			...options,
 			'@type': 'preliminaryUploadFile',
@@ -23701,12 +30524,7 @@ files are equal, then the first one for which preliminaryUploadFile was called w
 Stops the preliminary uploading of a file. Supported only for files uploaded by using preliminaryUploadFile. For other
 files the behavior is undefined.
 */
-	async cancelPreliminaryUploadFile(options: {
-		/**
-Identifier of the file to stop uploading.
-*/
-		file_id: number;
-	}): Promise<Ok> {
+	async cancelPreliminaryUploadFile(options: Omit<CancelPreliminaryUploadFile, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'cancelPreliminaryUploadFile',
@@ -23717,20 +30535,7 @@ Identifier of the file to stop uploading.
 Writes a part of a generated file. This method is intended to be used only if the application has no direct access to
 TDLib's file system, because it is usually slower than a direct write to the destination file.
 */
-	async writeGeneratedFilePart(options: {
-		/**
-The identifier of the generation process.
-*/
-		generation_id: string;
-		/**
-The offset from which to write the data to the file.
-*/
-		offset: number;
-		/**
-The data to write.
-*/
-		data: string;
-	}): Promise<Ok> {
+	async writeGeneratedFilePart(options: Omit<WriteGeneratedFilePart, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'writeGeneratedFilePart',
@@ -23740,20 +30545,7 @@ The data to write.
 	/**
 Informs TDLib on a file generation progress.
 */
-	async setFileGenerationProgress(options: {
-		/**
-The identifier of the generation process.
-*/
-		generation_id: string;
-		/**
-Expected size of the generated file, in bytes; 0 if unknown.
-*/
-		expected_size: number;
-		/**
-The number of bytes already generated.
-*/
-		local_prefix_size: number;
-	}): Promise<Ok> {
+	async setFileGenerationProgress(options: Omit<SetFileGenerationProgress, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setFileGenerationProgress',
@@ -23763,16 +30555,7 @@ The number of bytes already generated.
 	/**
 Finishes the file generation.
 */
-	async finishFileGeneration(options: {
-		/**
-The identifier of the generation process.
-*/
-		generation_id: string;
-		/**
-If passed, the file generation has failed and must be terminated; pass null if the file generation succeeded.
-*/
-		error: Error;
-	}): Promise<Ok> {
+	async finishFileGeneration(options: Omit<FinishFileGeneration, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'finishFileGeneration',
@@ -23783,21 +30566,7 @@ If passed, the file generation has failed and must be terminated; pass null if t
 Reads a part of a file from the TDLib file cache and returns read bytes. This method is intended to be used only if the
 application has no direct access to TDLib's file system, because it is usually slower than a direct read from the file.
 */
-	async readFilePart(options: {
-		/**
-Identifier of the file. The file must be located in the TDLib file cache.
-*/
-		file_id: number;
-		/**
-The offset from which to read the file.
-*/
-		offset: number;
-		/**
-Number of bytes to read. An error will be returned if there are not enough bytes available in the file from the
-specified position. Pass 0 to read all available data from the specified position.
-*/
-		count: number;
-	}): Promise<FilePart> {
+	async readFilePart(options: Omit<ReadFilePart, '@type'>): Promise<FilePart> {
 		return this._request({
 			...options,
 			'@type': 'readFilePart',
@@ -23807,12 +30576,7 @@ specified position. Pass 0 to read all available data from the specified positio
 	/**
 Deletes a file from the TDLib file cache.
 */
-	async deleteFile(options: {
-		/**
-Identifier of the file to delete.
-*/
-		file_id: number;
-	}): Promise<Ok> {
+	async deleteFile(options: Omit<DeleteFile, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteFile',
@@ -23825,25 +30589,7 @@ notified through updateFile updates. If message database is used, the list of fi
 application restarts. The downloading is independent from download using downloadFile, i.e. it continues if downloadFile
 is canceled or is used to download a part of the file.
 */
-	async addFileToDownloads(options: {
-		/**
-Identifier of the file to download.
-*/
-		file_id: number;
-		/**
-Chat identifier of the message with the file.
-*/
-		chat_id: number;
-		/**
-Message identifier.
-*/
-		message_id: number;
-		/**
-Priority of the download (1-32). The higher the priority, the earlier the file will be downloaded. If the priorities of
-two files are equal, then the last one for which downloadFile/addFileToDownloads was called will be downloaded first.
-*/
-		priority: number;
-	}): Promise<File> {
+	async addFileToDownloads(options: Omit<AddFileToDownloads, '@type'>): Promise<File> {
 		return this._request({
 			...options,
 			'@type': 'addFileToDownloads',
@@ -23853,16 +30599,7 @@ two files are equal, then the last one for which downloadFile/addFileToDownloads
 	/**
 Changes pause state of a file in the file download list.
 */
-	async toggleDownloadIsPaused(options: {
-		/**
-Identifier of the downloaded file.
-*/
-		file_id: number;
-		/**
-Pass true if the download is paused.
-*/
-		is_paused?: boolean;
-	}): Promise<Ok> {
+	async toggleDownloadIsPaused(options: Omit<ToggleDownloadIsPaused, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleDownloadIsPaused',
@@ -23872,12 +30609,7 @@ Pass true if the download is paused.
 	/**
 Changes pause state of all files in the file download list.
 */
-	async toggleAllDownloadsArePaused(options: {
-		/**
-Pass true to pause all downloads; pass false to unpause them.
-*/
-		are_paused?: boolean;
-	}): Promise<Ok> {
+	async toggleAllDownloadsArePaused(options: Omit<ToggleAllDownloadsArePaused, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleAllDownloadsArePaused',
@@ -23887,16 +30619,7 @@ Pass true to pause all downloads; pass false to unpause them.
 	/**
 Removes a file from the file download list.
 */
-	async removeFileFromDownloads(options: {
-		/**
-Identifier of the downloaded file.
-*/
-		file_id: number;
-		/**
-Pass true to delete the file from the TDLib file cache.
-*/
-		delete_from_cache?: boolean;
-	}): Promise<Ok> {
+	async removeFileFromDownloads(options: Omit<RemoveFileFromDownloads, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeFileFromDownloads',
@@ -23906,20 +30629,7 @@ Pass true to delete the file from the TDLib file cache.
 	/**
 Removes all files from the file download list.
 */
-	async removeAllFilesFromDownloads(options: {
-		/**
-Pass true to remove only active downloads, including paused.
-*/
-		only_active?: boolean;
-		/**
-Pass true to remove only completed downloads.
-*/
-		only_completed?: boolean;
-		/**
-Pass true to delete the file from the TDLib file cache.
-*/
-		delete_from_cache?: boolean;
-	}): Promise<Ok> {
+	async removeAllFilesFromDownloads(options: Omit<RemoveAllFilesFromDownloads, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeAllFilesFromDownloads',
@@ -23929,29 +30639,7 @@ Pass true to delete the file from the TDLib file cache.
 	/**
 Searches for files in the file download list or recently downloaded files from the list.
 */
-	async searchFileDownloads(options: {
-		/**
-Query to search for; may be empty to return all downloaded files.
-*/
-		query: string;
-		/**
-Pass true to search only for active downloads, including paused.
-*/
-		only_active?: boolean;
-		/**
-Pass true to search only for completed downloads.
-*/
-		only_completed?: boolean;
-		/**
-Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
-results.
-*/
-		offset: string;
-		/**
-The maximum number of files to be returned.
-*/
-		limit: number;
-	}): Promise<FoundFileDownloads> {
+	async searchFileDownloads(options: Omit<SearchFileDownloads, '@type'>): Promise<FoundFileDownloads> {
 		return this._request({
 			...options,
 			'@type': 'searchFileDownloads',
@@ -23961,12 +30649,7 @@ The maximum number of files to be returned.
 	/**
 Returns information about a file with messages exported from another application.
 */
-	async getMessageFileType(options: {
-		/**
-Beginning of the message file; up to 100 first lines.
-*/
-		message_file_head: string;
-	}): Promise<MessageFileType> {
+	async getMessageFileType(options: Omit<GetMessageFileType, '@type'>): Promise<MessageFileType> {
 		return this._request({
 			...options,
 			'@type': 'getMessageFileType',
@@ -23976,13 +30659,7 @@ Beginning of the message file; up to 100 first lines.
 	/**
 Returns a confirmation text to be shown to the user before starting message import.
 */
-	async getMessageImportConfirmationText(options: {
-		/**
-Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual
-contact or an identifier of a supergroup chat with can_change_info administrator right.
-*/
-		chat_id: number;
-	}): Promise<Text> {
+	async getMessageImportConfirmationText(options: Omit<GetMessageImportConfirmationText, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getMessageImportConfirmationText',
@@ -23992,23 +30669,7 @@ contact or an identifier of a supergroup chat with can_change_info administrator
 	/**
 Imports messages exported from another app.
 */
-	async importMessages(options: {
-		/**
-Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual
-contact or an identifier of a supergroup chat with can_change_info administrator right.
-*/
-		chat_id: number;
-		/**
-File with messages to import. Only inputFileLocal and inputFileGenerated are supported. The file must not be previously
-uploaded.
-*/
-		message_file: InputFile;
-		/**
-Files used in the imported messages. Only inputFileLocal and inputFileGenerated are supported. The files must not be
-previously uploaded.
-*/
-		attached_files: InputFile[];
-	}): Promise<Ok> {
+	async importMessages(options: Omit<ImportMessages, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'importMessages',
@@ -24019,12 +30680,7 @@ previously uploaded.
 Replaces current primary invite link for a chat with a new primary invite link. Available for basic groups, supergroups,
 and channels. Requires administrator privileges and can_invite_users right.
 */
-	async replacePrimaryChatInviteLink(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<ChatInviteLink> {
+	async replacePrimaryChatInviteLink(options: Omit<ReplacePrimaryChatInviteLink, '@type'>): Promise<ChatInviteLink> {
 		return this._request({
 			...options,
 			'@type': 'replacePrimaryChatInviteLink',
@@ -24035,29 +30691,7 @@ Chat identifier.
 Creates a new invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator
 privileges and can_invite_users right in the chat.
 */
-	async createChatInviteLink(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Invite link name; 0-32 characters.
-*/
-		name: string;
-		/**
-Point in time (Unix timestamp) when the link will expire; pass 0 if never.
-*/
-		expiration_date: number;
-		/**
-The maximum number of chat members that can join the chat via the link simultaneously; 0-99999; pass 0 if not limited.
-*/
-		member_limit: number;
-		/**
-Pass true if users joining the chat via the link need to be approved by chat administrators. In this case, member_limit
-must be 0.
-*/
-		creates_join_request?: boolean;
-	}): Promise<ChatInviteLink> {
+	async createChatInviteLink(options: Omit<CreateChatInviteLink, '@type'>): Promise<ChatInviteLink> {
 		return this._request({
 			...options,
 			'@type': 'createChatInviteLink',
@@ -24068,33 +30702,7 @@ must be 0.
 Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. Requires
 administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links.
 */
-	async editChatInviteLink(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Invite link to be edited.
-*/
-		invite_link: string;
-		/**
-Invite link name; 0-32 characters.
-*/
-		name: string;
-		/**
-Point in time (Unix timestamp) when the link will expire; pass 0 if never.
-*/
-		expiration_date: number;
-		/**
-The maximum number of chat members that can join the chat via the link simultaneously; 0-99999; pass 0 if not limited.
-*/
-		member_limit: number;
-		/**
-Pass true if users joining the chat via the link need to be approved by chat administrators. In this case, member_limit
-must be 0.
-*/
-		creates_join_request?: boolean;
-	}): Promise<ChatInviteLink> {
+	async editChatInviteLink(options: Omit<EditChatInviteLink, '@type'>): Promise<ChatInviteLink> {
 		return this._request({
 			...options,
 			'@type': 'editChatInviteLink',
@@ -24105,16 +30713,7 @@ must be 0.
 Returns information about an invite link. Requires administrator privileges and can_invite_users right in the chat to
 get own links and owner privileges to get other links.
 */
-	async getChatInviteLink(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Invite link to get.
-*/
-		invite_link: string;
-	}): Promise<ChatInviteLink> {
+	async getChatInviteLink(options: Omit<GetChatInviteLink, '@type'>): Promise<ChatInviteLink> {
 		return this._request({
 			...options,
 			'@type': 'getChatInviteLink',
@@ -24124,12 +30723,7 @@ Invite link to get.
 	/**
 Returns list of chat administrators with number of their invite links. Requires owner privileges in the chat.
 */
-	async getChatInviteLinkCounts(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<ChatInviteLinkCounts> {
+	async getChatInviteLinkCounts(options: Omit<GetChatInviteLinkCounts, '@type'>): Promise<ChatInviteLinkCounts> {
 		return this._request({
 			...options,
 			'@type': 'getChatInviteLinkCounts',
@@ -24140,32 +30734,7 @@ Chat identifier.
 Returns invite links for a chat created by specified administrator. Requires administrator privileges and
 can_invite_users right in the chat to get own links and owner privileges to get other links.
 */
-	async getChatInviteLinks(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-User identifier of a chat administrator. Must be an identifier of the current user for non-owner.
-*/
-		creator_user_id: number;
-		/**
-Pass true if revoked links needs to be returned instead of active or expired.
-*/
-		is_revoked?: boolean;
-		/**
-Creation date of an invite link starting after which to return invite links; use 0 to get results from the beginning.
-*/
-		offset_date: number;
-		/**
-Invite link starting after which to return invite links; use empty string to get results from the beginning.
-*/
-		offset_invite_link: string;
-		/**
-The maximum number of invite links to return; up to 100.
-*/
-		limit: number;
-	}): Promise<ChatInviteLinks> {
+	async getChatInviteLinks(options: Omit<GetChatInviteLinks, '@type'>): Promise<ChatInviteLinks> {
 		return this._request({
 			...options,
 			'@type': 'getChatInviteLinks',
@@ -24176,24 +30745,7 @@ The maximum number of invite links to return; up to 100.
 Returns chat members joined a chat via an invite link. Requires administrator privileges and can_invite_users right in
 the chat for own links and owner privileges for other links.
 */
-	async getChatInviteLinkMembers(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Invite link for which to return chat members.
-*/
-		invite_link: string;
-		/**
-A chat member from which to return next chat members; pass null to get results from the beginning.
-*/
-		offset_member: ChatInviteLinkMember;
-		/**
-The maximum number of chat members to return; up to 100.
-*/
-		limit: number;
-	}): Promise<ChatInviteLinkMembers> {
+	async getChatInviteLinkMembers(options: Omit<GetChatInviteLinkMembers, '@type'>): Promise<ChatInviteLinkMembers> {
 		return this._request({
 			...options,
 			'@type': 'getChatInviteLinkMembers',
@@ -24205,16 +30757,7 @@ Revokes invite link for a chat. Available for basic groups, supergroups, and cha
 and can_invite_users right in the chat for own links and owner privileges for other links. If a primary link is revoked,
 then additionally to the revoked link returns new primary link.
 */
-	async revokeChatInviteLink(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Invite link to be revoked.
-*/
-		invite_link: string;
-	}): Promise<ChatInviteLinks> {
+	async revokeChatInviteLink(options: Omit<RevokeChatInviteLink, '@type'>): Promise<ChatInviteLinks> {
 		return this._request({
 			...options,
 			'@type': 'revokeChatInviteLink',
@@ -24225,16 +30768,7 @@ Invite link to be revoked.
 Deletes revoked chat invite links. Requires administrator privileges and can_invite_users right in the chat for own
 links and owner privileges for other links.
 */
-	async deleteRevokedChatInviteLink(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Invite link to revoke.
-*/
-		invite_link: string;
-	}): Promise<Ok> {
+	async deleteRevokedChatInviteLink(options: Omit<DeleteRevokedChatInviteLink, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteRevokedChatInviteLink',
@@ -24245,17 +30779,7 @@ Invite link to revoke.
 Deletes all revoked chat invite links created by a given chat administrator. Requires administrator privileges and
 can_invite_users right in the chat for own links and owner privileges for other links.
 */
-	async deleteAllRevokedChatInviteLinks(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-User identifier of a chat administrator, which links will be deleted. Must be an identifier of the current user for
-non-owner.
-*/
-		creator_user_id: number;
-	}): Promise<Ok> {
+	async deleteAllRevokedChatInviteLinks(options: Omit<DeleteAllRevokedChatInviteLinks, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteAllRevokedChatInviteLinks',
@@ -24265,12 +30789,7 @@ non-owner.
 	/**
 Checks the validity of an invite link for a chat and returns information about the corresponding chat.
 */
-	async checkChatInviteLink(options: {
-		/**
-Invite link to be checked.
-*/
-		invite_link: string;
-	}): Promise<ChatInviteLinkInfo> {
+	async checkChatInviteLink(options: Omit<CheckChatInviteLink, '@type'>): Promise<ChatInviteLinkInfo> {
 		return this._request({
 			...options,
 			'@type': 'checkChatInviteLink',
@@ -24281,12 +30800,7 @@ Invite link to be checked.
 Uses an invite link to add the current user to the chat if possible. May return an error with a message
 "INVITE_REQUEST_SENT" if only a join request was created.
 */
-	async joinChatByInviteLink(options: {
-		/**
-Invite link to use.
-*/
-		invite_link: string;
-	}): Promise<Chat> {
+	async joinChatByInviteLink(options: Omit<JoinChatByInviteLink, '@type'>): Promise<Chat> {
 		return this._request({
 			...options,
 			'@type': 'joinChatByInviteLink',
@@ -24296,29 +30810,7 @@ Invite link to use.
 	/**
 Returns pending join requests in a chat.
 */
-	async getChatJoinRequests(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Invite link for which to return join requests. If empty, all join requests will be returned. Requires administrator
-privileges and can_invite_users right in the chat for own links and owner privileges for other links.
-*/
-		invite_link: string;
-		/**
-A query to search for in the first names, last names and usernames of the users to return.
-*/
-		query: string;
-		/**
-A chat join request from which to return next requests; pass null to get results from the beginning.
-*/
-		offset_request: ChatJoinRequest;
-		/**
-The maximum number of requests to join the chat to return.
-*/
-		limit: number;
-	}): Promise<ChatJoinRequests> {
+	async getChatJoinRequests(options: Omit<GetChatJoinRequests, '@type'>): Promise<ChatJoinRequests> {
 		return this._request({
 			...options,
 			'@type': 'getChatJoinRequests',
@@ -24328,20 +30820,7 @@ The maximum number of requests to join the chat to return.
 	/**
 Handles a pending join request in a chat.
 */
-	async processChatJoinRequest(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifier of the user that sent the request.
-*/
-		user_id: number;
-		/**
-Pass true to approve the request; pass false to decline it.
-*/
-		approve?: boolean;
-	}): Promise<Ok> {
+	async processChatJoinRequest(options: Omit<ProcessChatJoinRequest, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'processChatJoinRequest',
@@ -24351,21 +30830,7 @@ Pass true to approve the request; pass false to decline it.
 	/**
 Handles all pending join requests for a given link in a chat.
 */
-	async processChatJoinRequests(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Invite link for which to process join requests. If empty, all join requests will be processed. Requires administrator
-privileges and can_invite_users right in the chat for own links and owner privileges for other links.
-*/
-		invite_link: string;
-		/**
-Pass true to approve all requests; pass false to decline them.
-*/
-		approve?: boolean;
-	}): Promise<Ok> {
+	async processChatJoinRequests(options: Omit<ProcessChatJoinRequests, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'processChatJoinRequests',
@@ -24375,20 +30840,7 @@ Pass true to approve all requests; pass false to decline them.
 	/**
 Creates a new call.
 */
-	async createCall(options: {
-		/**
-Identifier of the user to be called.
-*/
-		user_id: number;
-		/**
-The call protocols supported by the application.
-*/
-		protocol: CallProtocol;
-		/**
-Pass true to create a video call.
-*/
-		is_video?: boolean;
-	}): Promise<CallId> {
+	async createCall(options: Omit<CreateCall, '@type'>): Promise<CallId> {
 		return this._request({
 			...options,
 			'@type': 'createCall',
@@ -24398,16 +30850,7 @@ Pass true to create a video call.
 	/**
 Accepts an incoming call.
 */
-	async acceptCall(options: {
-		/**
-Call identifier.
-*/
-		call_id: number;
-		/**
-The call protocols supported by the application.
-*/
-		protocol: CallProtocol;
-	}): Promise<Ok> {
+	async acceptCall(options: Omit<AcceptCall, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'acceptCall',
@@ -24417,16 +30860,7 @@ The call protocols supported by the application.
 	/**
 Sends call signaling data.
 */
-	async sendCallSignalingData(options: {
-		/**
-Call identifier.
-*/
-		call_id: number;
-		/**
-The data.
-*/
-		data: string;
-	}): Promise<Ok> {
+	async sendCallSignalingData(options: Omit<SendCallSignalingData, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sendCallSignalingData',
@@ -24436,28 +30870,7 @@ The data.
 	/**
 Discards a call.
 */
-	async discardCall(options: {
-		/**
-Call identifier.
-*/
-		call_id: number;
-		/**
-Pass true if the user was disconnected.
-*/
-		is_disconnected?: boolean;
-		/**
-The call duration, in seconds.
-*/
-		duration: number;
-		/**
-Pass true if the call was a video call.
-*/
-		is_video?: boolean;
-		/**
-Identifier of the connection used during the call.
-*/
-		connection_id: string;
-	}): Promise<Ok> {
+	async discardCall(options: Omit<DiscardCall, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'discardCall',
@@ -24467,24 +30880,7 @@ Identifier of the connection used during the call.
 	/**
 Sends a call rating.
 */
-	async sendCallRating(options: {
-		/**
-Call identifier.
-*/
-		call_id: number;
-		/**
-Call rating; 1-5.
-*/
-		rating: number;
-		/**
-An optional user comment if the rating is less than 5.
-*/
-		comment: string;
-		/**
-List of the exact types of problems with the call, specified by the user.
-*/
-		problems: CallProblem[];
-	}): Promise<Ok> {
+	async sendCallRating(options: Omit<SendCallRating, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sendCallRating',
@@ -24494,16 +30890,7 @@ List of the exact types of problems with the call, specified by the user.
 	/**
 Sends debug information for a call to Telegram servers.
 */
-	async sendCallDebugInformation(options: {
-		/**
-Call identifier.
-*/
-		call_id: number;
-		/**
-Debug information in application-specific format.
-*/
-		debug_information: string;
-	}): Promise<Ok> {
+	async sendCallDebugInformation(options: Omit<SendCallDebugInformation, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sendCallDebugInformation',
@@ -24513,16 +30900,7 @@ Debug information in application-specific format.
 	/**
 Sends log file for a call to Telegram servers.
 */
-	async sendCallLog(options: {
-		/**
-Call identifier.
-*/
-		call_id: number;
-		/**
-Call log file. Only inputFileLocal and inputFileGenerated are supported.
-*/
-		log_file: InputFile;
-	}): Promise<Ok> {
+	async sendCallLog(options: Omit<SendCallLog, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sendCallLog',
@@ -24532,12 +30910,7 @@ Call log file. Only inputFileLocal and inputFileGenerated are supported.
 	/**
 Returns list of participant identifiers, on whose behalf a video chat in the chat can be joined.
 */
-	async getVideoChatAvailableParticipants(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<MessageSenders> {
+	async getVideoChatAvailableParticipants(options: Omit<GetVideoChatAvailableParticipants, '@type'>): Promise<MessageSenders> {
 		return this._request({
 			...options,
 			'@type': 'getVideoChatAvailableParticipants',
@@ -24547,16 +30920,7 @@ Chat identifier.
 	/**
 Changes default participant identifier, on whose behalf a video chat in the chat will be joined.
 */
-	async setVideoChatDefaultParticipant(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Default group call participant identifier to join the video chats.
-*/
-		default_participant_id: MessageSender;
-	}): Promise<Ok> {
+	async setVideoChatDefaultParticipant(options: Omit<SetVideoChatDefaultParticipant, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setVideoChatDefaultParticipant',
@@ -24567,25 +30931,7 @@ Default group call participant identifier to join the video chats.
 Creates a video chat (a group call bound to a chat). Available only for basic groups, supergroups and channels; requires
 can_manage_video_chats rights.
 */
-	async createVideoChat(options: {
-		/**
-Identifier of a chat in which the video chat will be created.
-*/
-		chat_id: number;
-		/**
-Group call title; if empty, chat title will be used.
-*/
-		title: string;
-		/**
-Point in time (Unix timestamp) when the group call is supposed to be started by an administrator; 0 to start the video
-chat immediately. The date must be at least 10 seconds and at most 8 days in the future.
-*/
-		start_date: number;
-		/**
-Pass true to create an RTMP stream instead of an ordinary video chat; requires creator privileges.
-*/
-		is_rtmp_stream?: boolean;
-	}): Promise<GroupCallId> {
+	async createVideoChat(options: Omit<CreateVideoChat, '@type'>): Promise<GroupCallId> {
 		return this._request({
 			...options,
 			'@type': 'createVideoChat',
@@ -24595,12 +30941,7 @@ Pass true to create an RTMP stream instead of an ordinary video chat; requires c
 	/**
 Returns RTMP URL for streaming to the chat; requires creator privileges.
 */
-	async getVideoChatRtmpUrl(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<RtmpUrl> {
+	async getVideoChatRtmpUrl(options: Omit<GetVideoChatRtmpUrl, '@type'>): Promise<RtmpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getVideoChatRtmpUrl',
@@ -24610,12 +30951,7 @@ Chat identifier.
 	/**
 Replaces the current RTMP URL for streaming to the chat; requires creator privileges.
 */
-	async replaceVideoChatRtmpUrl(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<RtmpUrl> {
+	async replaceVideoChatRtmpUrl(options: Omit<ReplaceVideoChatRtmpUrl, '@type'>): Promise<RtmpUrl> {
 		return this._request({
 			...options,
 			'@type': 'replaceVideoChatRtmpUrl',
@@ -24625,12 +30961,7 @@ Chat identifier.
 	/**
 Returns information about a group call.
 */
-	async getGroupCall(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-	}): Promise<GroupCall> {
+	async getGroupCall(options: Omit<GetGroupCall, '@type'>): Promise<GroupCall> {
 		return this._request({
 			...options,
 			'@type': 'getGroupCall',
@@ -24640,12 +30971,7 @@ Group call identifier.
 	/**
 Starts a scheduled group call.
 */
-	async startScheduledGroupCall(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-	}): Promise<Ok> {
+	async startScheduledGroupCall(options: Omit<StartScheduledGroupCall, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'startScheduledGroupCall',
@@ -24655,16 +30981,7 @@ Group call identifier.
 	/**
 Toggles whether the current user will receive a notification when the group call will start; scheduled group calls only.
 */
-	async toggleGroupCallEnabledStartNotification(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-New value of the enabled_start_notification setting.
-*/
-		enabled_start_notification?: boolean;
-	}): Promise<Ok> {
+	async toggleGroupCallEnabledStartNotification(options: Omit<ToggleGroupCallEnabledStartNotification, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGroupCallEnabledStartNotification',
@@ -24674,37 +30991,7 @@ New value of the enabled_start_notification setting.
 	/**
 Joins an active group call. Returns join response payload for tgcalls.
 */
-	async joinGroupCall(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Identifier of a group call participant, which will be used to join the call; pass null to join as self; video chats
-only.
-*/
-		participant_id: MessageSender;
-		/**
-Caller audio channel synchronization source identifier; received from tgcalls.
-*/
-		audio_source_id: number;
-		/**
-Group call join payload; received from tgcalls.
-*/
-		payload: string;
-		/**
-Pass true to join the call with muted microphone.
-*/
-		is_muted?: boolean;
-		/**
-Pass true if the user's video is enabled.
-*/
-		is_my_video_enabled?: boolean;
-		/**
-If non-empty, invite hash to be used to join the group call without being muted by administrators.
-*/
-		invite_hash: string;
-	}): Promise<Text> {
+	async joinGroupCall(options: Omit<JoinGroupCall, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'joinGroupCall',
@@ -24714,20 +31001,7 @@ If non-empty, invite hash to be used to join the group call without being muted 
 	/**
 Starts screen sharing in a joined group call. Returns join response payload for tgcalls.
 */
-	async startGroupCallScreenSharing(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Screen sharing audio channel synchronization source identifier; received from tgcalls.
-*/
-		audio_source_id: number;
-		/**
-Group call join payload; received from tgcalls.
-*/
-		payload: string;
-	}): Promise<Text> {
+	async startGroupCallScreenSharing(options: Omit<StartGroupCallScreenSharing, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'startGroupCallScreenSharing',
@@ -24737,16 +31011,7 @@ Group call join payload; received from tgcalls.
 	/**
 Pauses or unpauses screen sharing in a joined group call.
 */
-	async toggleGroupCallScreenSharingIsPaused(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-True if screen sharing is paused.
-*/
-		is_paused?: boolean;
-	}): Promise<Ok> {
+	async toggleGroupCallScreenSharingIsPaused(options: Omit<ToggleGroupCallScreenSharingIsPaused, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGroupCallScreenSharingIsPaused',
@@ -24756,12 +31021,7 @@ True if screen sharing is paused.
 	/**
 Ends screen sharing in a joined group call.
 */
-	async endGroupCallScreenSharing(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-	}): Promise<Ok> {
+	async endGroupCallScreenSharing(options: Omit<EndGroupCallScreenSharing, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'endGroupCallScreenSharing',
@@ -24771,16 +31031,7 @@ Group call identifier.
 	/**
 Sets group call title. Requires groupCall.can_be_managed group call flag.
 */
-	async setGroupCallTitle(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-New group call title; 1-64 characters.
-*/
-		title: string;
-	}): Promise<Ok> {
+	async setGroupCallTitle(options: Omit<SetGroupCallTitle, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setGroupCallTitle',
@@ -24791,16 +31042,7 @@ New group call title; 1-64 characters.
 Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires
 groupCall.can_toggle_mute_new_participants group call flag.
 */
-	async toggleGroupCallMuteNewParticipants(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-New value of the mute_new_participants setting.
-*/
-		mute_new_participants?: boolean;
-	}): Promise<Ok> {
+	async toggleGroupCallMuteNewParticipants(options: Omit<ToggleGroupCallMuteNewParticipants, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGroupCallMuteNewParticipants',
@@ -24810,16 +31052,7 @@ New value of the mute_new_participants setting.
 	/**
 Invites users to an active group call. Sends a service message of type messageInviteToGroupCall for video chats.
 */
-	async inviteGroupCallParticipants(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-User identifiers. At most 10 users can be invited simultaneously.
-*/
-		user_ids: number[];
-	}): Promise<Ok> {
+	async inviteGroupCallParticipants(options: Omit<InviteGroupCallParticipants, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'inviteGroupCallParticipants',
@@ -24829,17 +31062,7 @@ User identifiers. At most 10 users can be invited simultaneously.
 	/**
 Returns invite link to a video chat in a public chat.
 */
-	async getGroupCallInviteLink(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Pass true if the invite link needs to contain an invite hash, passing which to joinGroupCall would allow the invited
-user to unmute themselves. Requires groupCall.can_be_managed group call flag.
-*/
-		can_self_unmute?: boolean;
-	}): Promise<HttpUrl> {
+	async getGroupCallInviteLink(options: Omit<GetGroupCallInviteLink, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getGroupCallInviteLink',
@@ -24849,12 +31072,7 @@ user to unmute themselves. Requires groupCall.can_be_managed group call flag.
 	/**
 Revokes invite link for a group call. Requires groupCall.can_be_managed group call flag.
 */
-	async revokeGroupCallInviteLink(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-	}): Promise<Ok> {
+	async revokeGroupCallInviteLink(options: Omit<RevokeGroupCallInviteLink, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'revokeGroupCallInviteLink',
@@ -24864,24 +31082,7 @@ Group call identifier.
 	/**
 Starts recording of an active group call. Requires groupCall.can_be_managed group call flag.
 */
-	async startGroupCallRecording(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Group call recording title; 0-64 characters.
-*/
-		title: string;
-		/**
-Pass true to record a video file instead of an audio file.
-*/
-		record_video?: boolean;
-		/**
-Pass true to use portrait orientation for video instead of landscape one.
-*/
-		use_portrait_orientation?: boolean;
-	}): Promise<Ok> {
+	async startGroupCallRecording(options: Omit<StartGroupCallRecording, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'startGroupCallRecording',
@@ -24891,12 +31092,7 @@ Pass true to use portrait orientation for video instead of landscape one.
 	/**
 Ends recording of an active group call. Requires groupCall.can_be_managed group call flag.
 */
-	async endGroupCallRecording(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-	}): Promise<Ok> {
+	async endGroupCallRecording(options: Omit<EndGroupCallRecording, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'endGroupCallRecording',
@@ -24906,16 +31102,7 @@ Group call identifier.
 	/**
 Toggles whether current user's video is paused.
 */
-	async toggleGroupCallIsMyVideoPaused(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Pass true if the current user's video is paused.
-*/
-		is_my_video_paused?: boolean;
-	}): Promise<Ok> {
+	async toggleGroupCallIsMyVideoPaused(options: Omit<ToggleGroupCallIsMyVideoPaused, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGroupCallIsMyVideoPaused',
@@ -24925,16 +31112,7 @@ Pass true if the current user's video is paused.
 	/**
 Toggles whether current user's video is enabled.
 */
-	async toggleGroupCallIsMyVideoEnabled(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Pass true if the current user's video is enabled.
-*/
-		is_my_video_enabled?: boolean;
-	}): Promise<Ok> {
+	async toggleGroupCallIsMyVideoEnabled(options: Omit<ToggleGroupCallIsMyVideoEnabled, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGroupCallIsMyVideoEnabled',
@@ -24944,20 +31122,7 @@ Pass true if the current user's video is enabled.
 	/**
 Informs TDLib that speaking state of a participant of an active group has changed.
 */
-	async setGroupCallParticipantIsSpeaking(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Group call participant's synchronization audio source identifier, or 0 for the current user.
-*/
-		audio_source: number;
-		/**
-Pass true if the user is speaking.
-*/
-		is_speaking?: boolean;
-	}): Promise<Ok> {
+	async setGroupCallParticipantIsSpeaking(options: Omit<SetGroupCallParticipantIsSpeaking, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setGroupCallParticipantIsSpeaking',
@@ -24967,20 +31132,7 @@ Pass true if the user is speaking.
 	/**
 Toggles whether a participant of an active group call is muted, unmuted, or allowed to unmute themselves.
 */
-	async toggleGroupCallParticipantIsMuted(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Participant identifier.
-*/
-		participant_id: MessageSender;
-		/**
-Pass true to mute the user; pass false to unmute the them.
-*/
-		is_muted?: boolean;
-	}): Promise<Ok> {
+	async toggleGroupCallParticipantIsMuted(options: Omit<ToggleGroupCallParticipantIsMuted, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGroupCallParticipantIsMuted',
@@ -24991,20 +31143,7 @@ Pass true to mute the user; pass false to unmute the them.
 Changes volume level of a participant of an active group call. If the current user can manage the group call, then the
 participant's volume level will be changed for all users with the default volume level.
 */
-	async setGroupCallParticipantVolumeLevel(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Participant identifier.
-*/
-		participant_id: MessageSender;
-		/**
-New participant's volume level; 1-20000 in hundreds of percents.
-*/
-		volume_level: number;
-	}): Promise<Ok> {
+	async setGroupCallParticipantVolumeLevel(options: Omit<SetGroupCallParticipantVolumeLevel, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setGroupCallParticipantVolumeLevel',
@@ -25014,21 +31153,7 @@ New participant's volume level; 1-20000 in hundreds of percents.
 	/**
 Toggles whether a group call participant hand is rased.
 */
-	async toggleGroupCallParticipantIsHandRaised(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Participant identifier.
-*/
-		participant_id: MessageSender;
-		/**
-Pass true if the user's hand needs to be raised. Only self hand can be raised. Requires groupCall.can_be_managed group
-call flag to lower other's hand.
-*/
-		is_hand_raised?: boolean;
-	}): Promise<Ok> {
+	async toggleGroupCallParticipantIsHandRaised(options: Omit<ToggleGroupCallParticipantIsHandRaised, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGroupCallParticipantIsHandRaised',
@@ -25039,17 +31164,7 @@ call flag to lower other's hand.
 Loads more participants of a group call. The loaded participants will be received through updates. Use the field
 groupCall.loaded_all_participants to check whether all participants have already been loaded.
 */
-	async loadGroupCallParticipants(options: {
-		/**
-Group call identifier. The group call must be previously received through getGroupCall and must be joined or being
-joined.
-*/
-		group_call_id: number;
-		/**
-The maximum number of participants to load; up to 100.
-*/
-		limit: number;
-	}): Promise<Ok> {
+	async loadGroupCallParticipants(options: Omit<LoadGroupCallParticipants, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'loadGroupCallParticipants',
@@ -25059,12 +31174,7 @@ The maximum number of participants to load; up to 100.
 	/**
 Leaves a group call.
 */
-	async leaveGroupCall(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-	}): Promise<Ok> {
+	async leaveGroupCall(options: Omit<LeaveGroupCall, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'leaveGroupCall',
@@ -25074,12 +31184,7 @@ Group call identifier.
 	/**
 Ends a group call. Requires groupCall.can_be_managed.
 */
-	async endGroupCall(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-	}): Promise<Ok> {
+	async endGroupCall(options: Omit<EndGroupCall, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'endGroupCall',
@@ -25089,12 +31194,7 @@ Group call identifier.
 	/**
 Returns information about available group call streams.
 */
-	async getGroupCallStreams(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-	}): Promise<GroupCallStreams> {
+	async getGroupCallStreams(options: Omit<GetGroupCallStreams, '@type'>): Promise<GroupCallStreams> {
 		return this._request({
 			...options,
 			'@type': 'getGroupCallStreams',
@@ -25104,28 +31204,7 @@ Group call identifier.
 	/**
 Returns a file with a segment of a group call stream in a modified OGG format for audio or MPEG-4 format for video.
 */
-	async getGroupCallStreamSegment(options: {
-		/**
-Group call identifier.
-*/
-		group_call_id: number;
-		/**
-Point in time when the stream segment begins; Unix timestamp in milliseconds.
-*/
-		time_offset: number;
-		/**
-Segment duration scale; 0-1. Segment's duration is 1000/(2**scale) milliseconds.
-*/
-		scale: number;
-		/**
-Identifier of an audio/video channel to get as received from tgcalls.
-*/
-		channel_id: number;
-		/**
-Video quality as received from tgcalls; pass null to get the worst available quality.
-*/
-		video_quality: GroupCallVideoQuality;
-	}): Promise<FilePart> {
+	async getGroupCallStreamSegment(options: Omit<GetGroupCallStreamSegment, '@type'>): Promise<FilePart> {
 		return this._request({
 			...options,
 			'@type': 'getGroupCallStreamSegment',
@@ -25135,16 +31214,7 @@ Video quality as received from tgcalls; pass null to get the worst available qua
 	/**
 Changes the block state of a message sender. Currently, only users and supergroup chats can be blocked.
 */
-	async toggleMessageSenderIsBlocked(options: {
-		/**
-Identifier of a message sender to block/unblock.
-*/
-		sender_id: MessageSender;
-		/**
-New value of is_blocked.
-*/
-		is_blocked?: boolean;
-	}): Promise<Ok> {
+	async toggleMessageSenderIsBlocked(options: Omit<ToggleMessageSenderIsBlocked, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleMessageSenderIsBlocked',
@@ -25154,24 +31224,7 @@ New value of is_blocked.
 	/**
 Blocks an original sender of a message in the Replies chat.
 */
-	async blockMessageSenderFromReplies(options: {
-		/**
-The identifier of an incoming message in the Replies chat.
-*/
-		message_id: number;
-		/**
-Pass true to delete the message.
-*/
-		delete_message?: boolean;
-		/**
-Pass true to delete all messages from the same sender.
-*/
-		delete_all_messages?: boolean;
-		/**
-Pass true to report the sender to the Telegram moderators.
-*/
-		report_spam?: boolean;
-	}): Promise<Ok> {
+	async blockMessageSenderFromReplies(options: Omit<BlockMessageSenderFromReplies, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'blockMessageSenderFromReplies',
@@ -25181,16 +31234,7 @@ Pass true to report the sender to the Telegram moderators.
 	/**
 Returns users and chats that were blocked by the current user.
 */
-	async getBlockedMessageSenders(options: {
-		/**
-Number of users and chats to skip in the result; must be non-negative.
-*/
-		offset: number;
-		/**
-The maximum number of users and chats to return; up to 100.
-*/
-		limit: number;
-	}): Promise<MessageSenders> {
+	async getBlockedMessageSenders(options: Omit<GetBlockedMessageSenders, '@type'>): Promise<MessageSenders> {
 		return this._request({
 			...options,
 			'@type': 'getBlockedMessageSenders',
@@ -25200,19 +31244,7 @@ The maximum number of users and chats to return; up to 100.
 	/**
 Adds a user to the contact list or edits an existing contact by their user identifier.
 */
-	async addContact(options: {
-		/**
-The contact to add or edit; phone number may be empty and needs to be specified only if known, vCard is ignored.
-*/
-		contact: Contact;
-		/**
-Pass true to share the current user's phone number with the new contact. A corresponding rule to
-userPrivacySettingShowPhoneNumber will be added if needed. Use the field
-userFullInfo.need_phone_number_privacy_exception to check whether the current user needs to be asked to share their
-phone number.
-*/
-		share_phone_number?: boolean;
-	}): Promise<Ok> {
+	async addContact(options: Omit<AddContact, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addContact',
@@ -25222,12 +31254,7 @@ phone number.
 	/**
 Adds new contacts or edits existing contacts by their phone numbers; contacts' user identifiers are ignored.
 */
-	async importContacts(options: {
-		/**
-The list of contacts to import or edit; contacts' vCard are ignored and are not imported.
-*/
-		contacts: Contact[];
-	}): Promise<ImportedContacts> {
+	async importContacts(options: Omit<ImportContacts, '@type'>): Promise<ImportedContacts> {
 		return this._request({
 			...options,
 			'@type': 'importContacts',
@@ -25246,16 +31273,7 @@ Returns all user contacts.
 	/**
 Searches for the specified query in the first names, last names and usernames of the known user contacts.
 */
-	async searchContacts(options: {
-		/**
-Query to search for; may be empty to return all contacts.
-*/
-		query: string;
-		/**
-The maximum number of users to be returned.
-*/
-		limit: number;
-	}): Promise<Users> {
+	async searchContacts(options: Omit<SearchContacts, '@type'>): Promise<Users> {
 		return this._request({
 			...options,
 			'@type': 'searchContacts',
@@ -25265,12 +31283,7 @@ The maximum number of users to be returned.
 	/**
 Removes users from the contact list.
 */
-	async removeContacts(options: {
-		/**
-Identifiers of users to be deleted.
-*/
-		user_ids: number[];
-	}): Promise<Ok> {
+	async removeContacts(options: Omit<RemoveContacts, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeContacts',
@@ -25291,12 +31304,7 @@ Changes imported contacts using the list of contacts saved on the device. Import
 the file database is enabled, deletes recently deleted contacts. Query result depends on the result of the previous
 query, so only one query is possible at the same time.
 */
-	async changeImportedContacts(options: {
-		/**
-The new list of contacts, contact's vCard are ignored and are not imported.
-*/
-		contacts: Contact[];
-	}): Promise<ImportedContacts> {
+	async changeImportedContacts(options: Omit<ChangeImportedContacts, '@type'>): Promise<ImportedContacts> {
 		return this._request({
 			...options,
 			'@type': 'changeImportedContacts',
@@ -25315,12 +31323,7 @@ Clears all imported contacts, contact list remains unchanged.
 	/**
 Searches a user by their phone number. Returns a 404 error if the user can't be found.
 */
-	async searchUserByPhoneNumber(options: {
-		/**
-Phone number to search for.
-*/
-		phone_number: string;
-	}): Promise<User> {
+	async searchUserByPhoneNumber(options: Omit<SearchUserByPhoneNumber, '@type'>): Promise<User> {
 		return this._request({
 			...options,
 			'@type': 'searchUserByPhoneNumber',
@@ -25331,12 +31334,7 @@ Phone number to search for.
 Shares the phone number of the current user with a mutual contact. Supposed to be called when the user clicks on
 chatActionBarSharePhoneNumber.
 */
-	async sharePhoneNumber(options: {
-		/**
-Identifier of the user with whom to share the phone number. The user must be a mutual contact.
-*/
-		user_id: number;
-	}): Promise<Ok> {
+	async sharePhoneNumber(options: Omit<SharePhoneNumber, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sharePhoneNumber',
@@ -25347,20 +31345,7 @@ Identifier of the user with whom to share the phone number. The user must be a m
 Returns the profile photos of a user. The result of this query may be outdated: some photos might have been deleted
 already.
 */
-	async getUserProfilePhotos(options: {
-		/**
-User identifier.
-*/
-		user_id: number;
-		/**
-The number of photos to skip; must be non-negative.
-*/
-		offset: number;
-		/**
-The maximum number of photos to be returned; up to 100.
-*/
-		limit: number;
-	}): Promise<ChatPhotos> {
+	async getUserProfilePhotos(options: Omit<GetUserProfilePhotos, '@type'>): Promise<ChatPhotos> {
 		return this._request({
 			...options,
 			'@type': 'getUserProfilePhotos',
@@ -25371,24 +31356,7 @@ The maximum number of photos to be returned; up to 100.
 Returns stickers from the installed sticker sets that correspond to a given emoji. If the emoji is non-empty, then
 favorite, recently used or trending stickers may also be returned.
 */
-	async getStickers(options: {
-		/**
-Type of the sticker sets to return.
-*/
-		sticker_type: StickerType;
-		/**
-String representation of emoji. If empty, returns all known installed stickers.
-*/
-		emoji: string;
-		/**
-The maximum number of stickers to be returned.
-*/
-		limit: number;
-		/**
-Chat identifier for which to return stickers. Available custom emoji may be different for different chats.
-*/
-		chat_id: number;
-	}): Promise<Stickers> {
+	async getStickers(options: Omit<GetStickers, '@type'>): Promise<Stickers> {
 		return this._request({
 			...options,
 			'@type': 'getStickers',
@@ -25398,16 +31366,7 @@ Chat identifier for which to return stickers. Available custom emoji may be diff
 	/**
 Searches for stickers from public sticker sets that correspond to a given emoji.
 */
-	async searchStickers(options: {
-		/**
-String representation of emoji; must be non-empty.
-*/
-		emoji: string;
-		/**
-The maximum number of stickers to be returned; 0-100.
-*/
-		limit: number;
-	}): Promise<Stickers> {
+	async searchStickers(options: Omit<SearchStickers, '@type'>): Promise<Stickers> {
 		return this._request({
 			...options,
 			'@type': 'searchStickers',
@@ -25417,12 +31376,7 @@ The maximum number of stickers to be returned; 0-100.
 	/**
 Returns premium stickers from regular sticker sets.
 */
-	async getPremiumStickers(options: {
-		/**
-The maximum number of stickers to be returned; 0-100.
-*/
-		limit: number;
-	}): Promise<Stickers> {
+	async getPremiumStickers(options: Omit<GetPremiumStickers, '@type'>): Promise<Stickers> {
 		return this._request({
 			...options,
 			'@type': 'getPremiumStickers',
@@ -25432,12 +31386,7 @@ The maximum number of stickers to be returned; 0-100.
 	/**
 Returns a list of installed sticker sets.
 */
-	async getInstalledStickerSets(options: {
-		/**
-Type of the sticker sets to return.
-*/
-		sticker_type: StickerType;
-	}): Promise<StickerSets> {
+	async getInstalledStickerSets(options: Omit<GetInstalledStickerSets, '@type'>): Promise<StickerSets> {
 		return this._request({
 			...options,
 			'@type': 'getInstalledStickerSets',
@@ -25447,20 +31396,7 @@ Type of the sticker sets to return.
 	/**
 Returns a list of archived sticker sets.
 */
-	async getArchivedStickerSets(options: {
-		/**
-Type of the sticker sets to return.
-*/
-		sticker_type: StickerType;
-		/**
-Identifier of the sticker set from which to return the result.
-*/
-		offset_sticker_set_id: string;
-		/**
-The maximum number of sticker sets to return; up to 100.
-*/
-		limit: number;
-	}): Promise<StickerSets> {
+	async getArchivedStickerSets(options: Omit<GetArchivedStickerSets, '@type'>): Promise<StickerSets> {
 		return this._request({
 			...options,
 			'@type': 'getArchivedStickerSets',
@@ -25471,21 +31407,7 @@ The maximum number of sticker sets to return; up to 100.
 Returns a list of trending sticker sets. For optimal performance, the number of returned sticker sets is chosen by
 TDLib.
 */
-	async getTrendingStickerSets(options: {
-		/**
-Type of the sticker sets to return.
-*/
-		sticker_type: StickerType;
-		/**
-The offset from which to return the sticker sets; must be non-negative.
-*/
-		offset: number;
-		/**
-The maximum number of sticker sets to be returned; up to 100. For optimal performance, the number of returned sticker
-sets is chosen by TDLib and can be smaller than the specified limit, even if the end of the list has not been reached.
-*/
-		limit: number;
-	}): Promise<TrendingStickerSets> {
+	async getTrendingStickerSets(options: Omit<GetTrendingStickerSets, '@type'>): Promise<TrendingStickerSets> {
 		return this._request({
 			...options,
 			'@type': 'getTrendingStickerSets',
@@ -25495,12 +31417,7 @@ sets is chosen by TDLib and can be smaller than the specified limit, even if the
 	/**
 Returns a list of sticker sets attached to a file. Currently, only photos and videos can have attached sticker sets.
 */
-	async getAttachedStickerSets(options: {
-		/**
-File identifier.
-*/
-		file_id: number;
-	}): Promise<StickerSets> {
+	async getAttachedStickerSets(options: Omit<GetAttachedStickerSets, '@type'>): Promise<StickerSets> {
 		return this._request({
 			...options,
 			'@type': 'getAttachedStickerSets',
@@ -25510,12 +31427,7 @@ File identifier.
 	/**
 Returns information about a sticker set by its identifier.
 */
-	async getStickerSet(options: {
-		/**
-Identifier of the sticker set.
-*/
-		set_id: string;
-	}): Promise<StickerSet> {
+	async getStickerSet(options: Omit<GetStickerSet, '@type'>): Promise<StickerSet> {
 		return this._request({
 			...options,
 			'@type': 'getStickerSet',
@@ -25525,12 +31437,7 @@ Identifier of the sticker set.
 	/**
 Searches for a sticker set by its name.
 */
-	async searchStickerSet(options: {
-		/**
-Name of the sticker set.
-*/
-		name: string;
-	}): Promise<StickerSet> {
+	async searchStickerSet(options: Omit<SearchStickerSet, '@type'>): Promise<StickerSet> {
 		return this._request({
 			...options,
 			'@type': 'searchStickerSet',
@@ -25540,20 +31447,7 @@ Name of the sticker set.
 	/**
 Searches for installed sticker sets by looking for specified query in their title and name.
 */
-	async searchInstalledStickerSets(options: {
-		/**
-Type of the sticker sets to search for.
-*/
-		sticker_type: StickerType;
-		/**
-Query to search for.
-*/
-		query: string;
-		/**
-The maximum number of sticker sets to return.
-*/
-		limit: number;
-	}): Promise<StickerSets> {
+	async searchInstalledStickerSets(options: Omit<SearchInstalledStickerSets, '@type'>): Promise<StickerSets> {
 		return this._request({
 			...options,
 			'@type': 'searchInstalledStickerSets',
@@ -25564,12 +31458,7 @@ The maximum number of sticker sets to return.
 Searches for ordinary sticker sets by looking for specified query in their title and name. Excludes installed sticker
 sets from the results.
 */
-	async searchStickerSets(options: {
-		/**
-Query to search for.
-*/
-		query: string;
-	}): Promise<StickerSets> {
+	async searchStickerSets(options: Omit<SearchStickerSets, '@type'>): Promise<StickerSets> {
 		return this._request({
 			...options,
 			'@type': 'searchStickerSets',
@@ -25579,20 +31468,7 @@ Query to search for.
 	/**
 Installs/uninstalls or activates/archives a sticker set.
 */
-	async changeStickerSet(options: {
-		/**
-Identifier of the sticker set.
-*/
-		set_id: string;
-		/**
-The new value of is_installed.
-*/
-		is_installed?: boolean;
-		/**
-The new value of is_archived. A sticker set can't be installed and archived simultaneously.
-*/
-		is_archived?: boolean;
-	}): Promise<Ok> {
+	async changeStickerSet(options: Omit<ChangeStickerSet, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'changeStickerSet',
@@ -25602,12 +31478,7 @@ The new value of is_archived. A sticker set can't be installed and archived simu
 	/**
 Informs the server that some trending sticker sets have been viewed by the user.
 */
-	async viewTrendingStickerSets(options: {
-		/**
-Identifiers of viewed trending sticker sets.
-*/
-		sticker_set_ids: string[];
-	}): Promise<Ok> {
+	async viewTrendingStickerSets(options: Omit<ViewTrendingStickerSets, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'viewTrendingStickerSets',
@@ -25617,16 +31488,7 @@ Identifiers of viewed trending sticker sets.
 	/**
 Changes the order of installed sticker sets.
 */
-	async reorderInstalledStickerSets(options: {
-		/**
-Type of the sticker sets to reorder.
-*/
-		sticker_type: StickerType;
-		/**
-Identifiers of installed sticker sets in the new correct order.
-*/
-		sticker_set_ids: string[];
-	}): Promise<Ok> {
+	async reorderInstalledStickerSets(options: Omit<ReorderInstalledStickerSets, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'reorderInstalledStickerSets',
@@ -25636,13 +31498,7 @@ Identifiers of installed sticker sets in the new correct order.
 	/**
 Returns a list of recently used stickers.
 */
-	async getRecentStickers(options: {
-		/**
-Pass true to return stickers and masks that were recently attached to photos or video files; pass false to return
-recently sent stickers.
-*/
-		is_attached?: boolean;
-	}): Promise<Stickers> {
+	async getRecentStickers(options: Omit<GetRecentStickers, '@type'>): Promise<Stickers> {
 		return this._request({
 			...options,
 			'@type': 'getRecentStickers',
@@ -25654,17 +31510,7 @@ Manually adds a new sticker to the list of recently used stickers. The new stick
 the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be
 added to this list. Emoji stickers can't be added to recent stickers.
 */
-	async addRecentSticker(options: {
-		/**
-Pass true to add the sticker to the list of stickers recently attached to photo or video files; pass false to add the
-sticker to the list of recently sent stickers.
-*/
-		is_attached?: boolean;
-		/**
-Sticker file to add.
-*/
-		sticker: InputFile;
-	}): Promise<Stickers> {
+	async addRecentSticker(options: Omit<AddRecentSticker, '@type'>): Promise<Stickers> {
 		return this._request({
 			...options,
 			'@type': 'addRecentSticker',
@@ -25674,17 +31520,7 @@ Sticker file to add.
 	/**
 Removes a sticker from the list of recently used stickers.
 */
-	async removeRecentSticker(options: {
-		/**
-Pass true to remove the sticker from the list of stickers recently attached to photo or video files; pass false to
-remove the sticker from the list of recently sent stickers.
-*/
-		is_attached?: boolean;
-		/**
-Sticker file to delete.
-*/
-		sticker: InputFile;
-	}): Promise<Ok> {
+	async removeRecentSticker(options: Omit<RemoveRecentSticker, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeRecentSticker',
@@ -25694,13 +31530,7 @@ Sticker file to delete.
 	/**
 Clears the list of recently used stickers.
 */
-	async clearRecentStickers(options: {
-		/**
-Pass true to clear the list of stickers recently attached to photo or video files; pass false to clear the list of
-recently sent stickers.
-*/
-		is_attached?: boolean;
-	}): Promise<Ok> {
+	async clearRecentStickers(options: Omit<ClearRecentStickers, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'clearRecentStickers',
@@ -25721,12 +31551,7 @@ Adds a new sticker to the list of favorite stickers. The new sticker is added to
 already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be added to this
 list. Emoji stickers can't be added to favorite stickers.
 */
-	async addFavoriteSticker(options: {
-		/**
-Sticker file to add.
-*/
-		sticker: InputFile;
-	}): Promise<Ok> {
+	async addFavoriteSticker(options: Omit<AddFavoriteSticker, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addFavoriteSticker',
@@ -25736,12 +31561,7 @@ Sticker file to add.
 	/**
 Removes a sticker from the list of favorite stickers.
 */
-	async removeFavoriteSticker(options: {
-		/**
-Sticker file to delete from the list.
-*/
-		sticker: InputFile;
-	}): Promise<Ok> {
+	async removeFavoriteSticker(options: Omit<RemoveFavoriteSticker, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeFavoriteSticker',
@@ -25752,12 +31572,7 @@ Sticker file to delete from the list.
 Returns emoji corresponding to a sticker. The list is only for informational purposes, because a sticker is always sent
 with a fixed emoji from the corresponding Sticker object.
 */
-	async getStickerEmojis(options: {
-		/**
-Sticker file identifier.
-*/
-		sticker: InputFile;
-	}): Promise<Emojis> {
+	async getStickerEmojis(options: Omit<GetStickerEmojis, '@type'>): Promise<Emojis> {
 		return this._request({
 			...options,
 			'@type': 'getStickerEmojis',
@@ -25767,20 +31582,7 @@ Sticker file identifier.
 	/**
 Searches for emojis by keywords. Supported only if the file database is enabled.
 */
-	async searchEmojis(options: {
-		/**
-Text to search for.
-*/
-		text: string;
-		/**
-Pass true if only emojis, which exactly match the text, needs to be returned.
-*/
-		exact_match?: boolean;
-		/**
-List of possible IETF language tags of the user's input language; may be empty if unknown.
-*/
-		input_language_codes: string[];
-	}): Promise<Emojis> {
+	async searchEmojis(options: Omit<SearchEmojis, '@type'>): Promise<Emojis> {
 		return this._request({
 			...options,
 			'@type': 'searchEmojis',
@@ -25790,12 +31592,7 @@ List of possible IETF language tags of the user's input language; may be empty i
 	/**
 Returns an animated emoji corresponding to a given emoji. Returns a 404 error if the emoji has no animated emoji.
 */
-	async getAnimatedEmoji(options: {
-		/**
-The emoji.
-*/
-		emoji: string;
-	}): Promise<AnimatedEmoji> {
+	async getAnimatedEmoji(options: Omit<GetAnimatedEmoji, '@type'>): Promise<AnimatedEmoji> {
 		return this._request({
 			...options,
 			'@type': 'getAnimatedEmoji',
@@ -25806,12 +31603,7 @@ The emoji.
 Returns an HTTP URL which can be used to automatically log in to the translation platform and suggest new emoji
 replacements. The URL will be valid for 30 seconds after generation.
 */
-	async getEmojiSuggestionsUrl(options: {
-		/**
-Language code for which the emoji replacements will be suggested.
-*/
-		language_code: string;
-	}): Promise<HttpUrl> {
+	async getEmojiSuggestionsUrl(options: Omit<GetEmojiSuggestionsUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getEmojiSuggestionsUrl',
@@ -25822,12 +31614,7 @@ Language code for which the emoji replacements will be suggested.
 Returns list of custom emoji stickers by their identifiers. Stickers are returned in arbitrary order. Only found
 stickers are returned.
 */
-	async getCustomEmojiStickers(options: {
-		/**
-Identifiers of custom emoji stickers. At most 200 custom emoji stickers can be received simultaneously.
-*/
-		custom_emoji_ids: string[];
-	}): Promise<Stickers> {
+	async getCustomEmojiStickers(options: Omit<GetCustomEmojiStickers, '@type'>): Promise<Stickers> {
 		return this._request({
 			...options,
 			'@type': 'getCustomEmojiStickers',
@@ -25848,13 +31635,7 @@ Manually adds a new animation to the list of saved animations. The new animation
 If the animation was already in the list, it is removed first. Only non-secret video animations with MIME type
 "video/mp4" can be added to the list.
 */
-	async addSavedAnimation(options: {
-		/**
-The animation file to be added. Only animations known to the server (i.e., successfully sent via a message) can be added
-to the list.
-*/
-		animation: InputFile;
-	}): Promise<Ok> {
+	async addSavedAnimation(options: Omit<AddSavedAnimation, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addSavedAnimation',
@@ -25864,12 +31645,7 @@ to the list.
 	/**
 Removes an animation from the list of saved animations.
 */
-	async removeSavedAnimation(options: {
-		/**
-Animation file to be removed.
-*/
-		animation: InputFile;
-	}): Promise<Ok> {
+	async removeSavedAnimation(options: Omit<RemoveSavedAnimation, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeSavedAnimation',
@@ -25888,16 +31664,7 @@ Returns up to 20 recently used inline bots in the order of their last usage.
 	/**
 Searches for recently used hashtags by their prefix.
 */
-	async searchHashtags(options: {
-		/**
-Hashtag prefix to search for.
-*/
-		prefix: string;
-		/**
-The maximum number of hashtags to be returned.
-*/
-		limit: number;
-	}): Promise<Hashtags> {
+	async searchHashtags(options: Omit<SearchHashtags, '@type'>): Promise<Hashtags> {
 		return this._request({
 			...options,
 			'@type': 'searchHashtags',
@@ -25907,12 +31674,7 @@ The maximum number of hashtags to be returned.
 	/**
 Removes a hashtag from the list of recently used hashtags.
 */
-	async removeRecentHashtag(options: {
-		/**
-Hashtag to delete.
-*/
-		hashtag: string;
-	}): Promise<Ok> {
+	async removeRecentHashtag(options: Omit<RemoveRecentHashtag, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeRecentHashtag',
@@ -25923,12 +31685,7 @@ Hashtag to delete.
 Returns a web page preview by the text of the message. Do not call this function too often. Returns a 404 error if the
 web page has no preview.
 */
-	async getWebPagePreview(options: {
-		/**
-Message text with formatting.
-*/
-		text: FormattedText;
-	}): Promise<WebPage> {
+	async getWebPagePreview(options: Omit<GetWebPagePreview, '@type'>): Promise<WebPage> {
 		return this._request({
 			...options,
 			'@type': 'getWebPagePreview',
@@ -25939,16 +31696,7 @@ Message text with formatting.
 Returns an instant view version of a web page if available. Returns a 404 error if the web page has no instant view
 page.
 */
-	async getWebPageInstantView(options: {
-		/**
-The web page URL.
-*/
-		url: string;
-		/**
-Pass true to get full instant view for the web page.
-*/
-		force_full?: boolean;
-	}): Promise<WebPageInstantView> {
+	async getWebPageInstantView(options: Omit<GetWebPageInstantView, '@type'>): Promise<WebPageInstantView> {
 		return this._request({
 			...options,
 			'@type': 'getWebPageInstantView',
@@ -25958,12 +31706,7 @@ Pass true to get full instant view for the web page.
 	/**
 Changes a profile photo for the current user.
 */
-	async setProfilePhoto(options: {
-		/**
-Profile photo to set.
-*/
-		photo: InputChatPhoto;
-	}): Promise<Ok> {
+	async setProfilePhoto(options: Omit<SetProfilePhoto, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setProfilePhoto',
@@ -25973,12 +31716,7 @@ Profile photo to set.
 	/**
 Deletes a profile photo.
 */
-	async deleteProfilePhoto(options: {
-		/**
-Identifier of the profile photo to delete.
-*/
-		profile_photo_id: string;
-	}): Promise<Ok> {
+	async deleteProfilePhoto(options: Omit<DeleteProfilePhoto, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteProfilePhoto',
@@ -25988,16 +31726,7 @@ Identifier of the profile photo to delete.
 	/**
 Changes the first and last name of the current user.
 */
-	async setName(options: {
-		/**
-The new value of the first name for the current user; 1-64 characters.
-*/
-		first_name: string;
-		/**
-The new value of the optional last name for the current user; 0-64 characters.
-*/
-		last_name: string;
-	}): Promise<Ok> {
+	async setName(options: Omit<SetName, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setName',
@@ -26007,12 +31736,7 @@ The new value of the optional last name for the current user; 0-64 characters.
 	/**
 Changes the bio of the current user.
 */
-	async setBio(options: {
-		/**
-The new value of the user bio; 0-GetOption("bio_length_max") characters without line feeds.
-*/
-		bio: string;
-	}): Promise<Ok> {
+	async setBio(options: Omit<SetBio, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setBio',
@@ -26022,12 +31746,7 @@ The new value of the user bio; 0-GetOption("bio_length_max") characters without 
 	/**
 Changes the username of the current user.
 */
-	async setUsername(options: {
-		/**
-The new value of the username. Use an empty string to remove the username.
-*/
-		username: string;
-	}): Promise<Ok> {
+	async setUsername(options: Omit<SetUsername, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setUsername',
@@ -26038,12 +31757,7 @@ The new value of the username. Use an empty string to remove the username.
 Changes the location of the current user. Needs to be called if GetOption("is_location_visible") is true and location
 changes for more than 1 kilometer.
 */
-	async setLocation(options: {
-		/**
-The new location of the user.
-*/
-		location: Location;
-	}): Promise<Ok> {
+	async setLocation(options: Omit<SetLocation, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setLocation',
@@ -26054,16 +31768,7 @@ The new location of the user.
 Changes the phone number of the user and sends an authentication code to the user's new phone number. On success,
 returns information about the sent code.
 */
-	async changePhoneNumber(options: {
-		/**
-The new phone number of the user in international format.
-*/
-		phone_number: string;
-		/**
-Settings for the authentication of the user's phone number; pass null to use default settings.
-*/
-		settings: PhoneNumberAuthenticationSettings;
-	}): Promise<AuthenticationCodeInfo> {
+	async changePhoneNumber(options: Omit<ChangePhoneNumber, '@type'>): Promise<AuthenticationCodeInfo> {
 		return this._request({
 			...options,
 			'@type': 'changePhoneNumber',
@@ -26083,12 +31788,7 @@ received authenticationCodeInfo next_code_type was not null and the server-speci
 	/**
 Checks the authentication code sent to confirm a new phone number of the user.
 */
-	async checkChangePhoneNumberCode(options: {
-		/**
-Authentication code to check.
-*/
-		code: string;
-	}): Promise<Ok> {
+	async checkChangePhoneNumberCode(options: Omit<CheckChangePhoneNumberCode, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkChangePhoneNumberCode',
@@ -26098,21 +31798,7 @@ Authentication code to check.
 	/**
 Sets the list of commands supported by the bot for the given user scope and language; for bots only.
 */
-	async setCommands(options: {
-		/**
-The scope to which the commands are relevant; pass null to change commands in the default bot command scope.
-*/
-		scope: BotCommandScope;
-		/**
-A two-letter ISO 639-1 language code. If empty, the commands will be applied to all users from the given scope, for
-which language there are no dedicated commands.
-*/
-		language_code: string;
-		/**
-List of the bot's commands.
-*/
-		commands: BotCommand[];
-	}): Promise<Ok> {
+	async setCommands(options: Omit<SetCommands, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setCommands',
@@ -26122,16 +31808,7 @@ List of the bot's commands.
 	/**
 Deletes commands supported by the bot for the given user scope and language; for bots only.
 */
-	async deleteCommands(options: {
-		/**
-The scope to which the commands are relevant; pass null to delete commands in the default bot command scope.
-*/
-		scope: BotCommandScope;
-		/**
-A two-letter ISO 639-1 language code or an empty string.
-*/
-		language_code: string;
-	}): Promise<Ok> {
+	async deleteCommands(options: Omit<DeleteCommands, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteCommands',
@@ -26141,16 +31818,7 @@ A two-letter ISO 639-1 language code or an empty string.
 	/**
 Returns the list of commands supported by the bot for the given user scope and language; for bots only.
 */
-	async getCommands(options: {
-		/**
-The scope to which the commands are relevant; pass null to get commands in the default bot command scope.
-*/
-		scope: BotCommandScope;
-		/**
-A two-letter ISO 639-1 language code or an empty string.
-*/
-		language_code: string;
-	}): Promise<BotCommands> {
+	async getCommands(options: Omit<GetCommands, '@type'>): Promise<BotCommands> {
 		return this._request({
 			...options,
 			'@type': 'getCommands',
@@ -26160,16 +31828,7 @@ A two-letter ISO 639-1 language code or an empty string.
 	/**
 Sets menu button for the given user or for all users; for bots only.
 */
-	async setMenuButton(options: {
-		/**
-Identifier of the user or 0 to set menu button for all users.
-*/
-		user_id: number;
-		/**
-New menu button.
-*/
-		menu_button: BotMenuButton;
-	}): Promise<Ok> {
+	async setMenuButton(options: Omit<SetMenuButton, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setMenuButton',
@@ -26179,12 +31838,7 @@ New menu button.
 	/**
 Returns menu button set by the bot for the given user; for bots only.
 */
-	async getMenuButton(options: {
-		/**
-Identifier of the user or 0 to get the default menu button.
-*/
-		user_id: number;
-	}): Promise<BotMenuButton> {
+	async getMenuButton(options: Omit<GetMenuButton, '@type'>): Promise<BotMenuButton> {
 		return this._request({
 			...options,
 			'@type': 'getMenuButton',
@@ -26194,12 +31848,7 @@ Identifier of the user or 0 to get the default menu button.
 	/**
 Sets default administrator rights for adding the bot to basic group and supergroup chats; for bots only.
 */
-	async setDefaultGroupAdministratorRights(options: {
-		/**
-Default administrator rights for adding the bot to basic group and supergroup chats; may be null.
-*/
-		default_group_administrator_rights: ChatAdministratorRights;
-	}): Promise<Ok> {
+	async setDefaultGroupAdministratorRights(options: Omit<SetDefaultGroupAdministratorRights, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setDefaultGroupAdministratorRights',
@@ -26209,12 +31858,7 @@ Default administrator rights for adding the bot to basic group and supergroup ch
 	/**
 Sets default administrator rights for adding the bot to channel chats; for bots only.
 */
-	async setDefaultChannelAdministratorRights(options: {
-		/**
-Default administrator rights for adding the bot to channels; may be null.
-*/
-		default_channel_administrator_rights: ChatAdministratorRights;
-	}): Promise<Ok> {
+	async setDefaultChannelAdministratorRights(options: Omit<SetDefaultChannelAdministratorRights, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setDefaultChannelAdministratorRights',
@@ -26233,12 +31877,7 @@ Returns all active sessions of the current user.
 	/**
 Terminates a session of the current user.
 */
-	async terminateSession(options: {
-		/**
-Session identifier.
-*/
-		session_id: string;
-	}): Promise<Ok> {
+	async terminateSession(options: Omit<TerminateSession, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'terminateSession',
@@ -26257,16 +31896,7 @@ Terminates all other sessions of the current user.
 	/**
 Toggles whether a session can accept incoming calls.
 */
-	async toggleSessionCanAcceptCalls(options: {
-		/**
-Session identifier.
-*/
-		session_id: string;
-		/**
-Pass true to allow accepting incoming calls by the session; pass false otherwise.
-*/
-		can_accept_calls?: boolean;
-	}): Promise<Ok> {
+	async toggleSessionCanAcceptCalls(options: Omit<ToggleSessionCanAcceptCalls, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleSessionCanAcceptCalls',
@@ -26276,16 +31906,7 @@ Pass true to allow accepting incoming calls by the session; pass false otherwise
 	/**
 Toggles whether a session can accept incoming secret chats.
 */
-	async toggleSessionCanAcceptSecretChats(options: {
-		/**
-Session identifier.
-*/
-		session_id: string;
-		/**
-Pass true to allow accepring secret chats by the session; pass false otherwise.
-*/
-		can_accept_secret_chats?: boolean;
-	}): Promise<Ok> {
+	async toggleSessionCanAcceptSecretChats(options: Omit<ToggleSessionCanAcceptSecretChats, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleSessionCanAcceptSecretChats',
@@ -26295,12 +31916,7 @@ Pass true to allow accepring secret chats by the session; pass false otherwise.
 	/**
 Changes the period of inactivity after which sessions will automatically be terminated.
 */
-	async setInactiveSessionTtl(options: {
-		/**
-New number of days of inactivity before sessions will be automatically terminated; 1-366 days.
-*/
-		inactive_session_ttl_days: number;
-	}): Promise<Ok> {
+	async setInactiveSessionTtl(options: Omit<SetInactiveSessionTtl, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setInactiveSessionTtl',
@@ -26319,12 +31935,7 @@ Returns all website where the current user used Telegram to log in.
 	/**
 Disconnects website from the current user's Telegram account.
 */
-	async disconnectWebsite(options: {
-		/**
-Website identifier.
-*/
-		website_id: string;
-	}): Promise<Ok> {
+	async disconnectWebsite(options: Omit<DisconnectWebsite, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'disconnectWebsite',
@@ -26343,16 +31954,7 @@ Disconnects all websites from the current user's Telegram account.
 	/**
 Changes the username of a supergroup or channel, requires owner privileges in the supergroup or channel.
 */
-	async setSupergroupUsername(options: {
-		/**
-Identifier of the supergroup or channel.
-*/
-		supergroup_id: number;
-		/**
-New value of the username. Use an empty string to remove the username.
-*/
-		username: string;
-	}): Promise<Ok> {
+	async setSupergroupUsername(options: Omit<SetSupergroupUsername, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setSupergroupUsername',
@@ -26362,16 +31964,7 @@ New value of the username. Use an empty string to remove the username.
 	/**
 Changes the sticker set of a supergroup; requires can_change_info administrator right.
 */
-	async setSupergroupStickerSet(options: {
-		/**
-Identifier of the supergroup.
-*/
-		supergroup_id: number;
-		/**
-New value of the supergroup sticker set identifier. Use 0 to remove the supergroup sticker set.
-*/
-		sticker_set_id: string;
-	}): Promise<Ok> {
+	async setSupergroupStickerSet(options: Omit<SetSupergroupStickerSet, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setSupergroupStickerSet',
@@ -26381,16 +31974,7 @@ New value of the supergroup sticker set identifier. Use 0 to remove the supergro
 	/**
 Toggles whether sender signature is added to sent messages in a channel; requires can_change_info administrator right.
 */
-	async toggleSupergroupSignMessages(options: {
-		/**
-Identifier of the channel.
-*/
-		supergroup_id: number;
-		/**
-New value of sign_messages.
-*/
-		sign_messages?: boolean;
-	}): Promise<Ok> {
+	async toggleSupergroupSignMessages(options: Omit<ToggleSupergroupSignMessages, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleSupergroupSignMessages',
@@ -26401,16 +31985,7 @@ New value of sign_messages.
 Toggles whether joining is mandatory to send messages to a discussion supergroup; requires can_restrict_members
 administrator right.
 */
-	async toggleSupergroupJoinToSendMessages(options: {
-		/**
-Identifier of the supergroup.
-*/
-		supergroup_id: number;
-		/**
-New value of join_to_send_messages.
-*/
-		join_to_send_messages?: boolean;
-	}): Promise<Ok> {
+	async toggleSupergroupJoinToSendMessages(options: Omit<ToggleSupergroupJoinToSendMessages, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleSupergroupJoinToSendMessages',
@@ -26421,16 +31996,7 @@ New value of join_to_send_messages.
 Toggles whether all users directly joining the supergroup need to be approved by supergroup administrators; requires
 can_restrict_members administrator right.
 */
-	async toggleSupergroupJoinByRequest(options: {
-		/**
-Identifier of the channel.
-*/
-		supergroup_id: number;
-		/**
-New value of join_by_request.
-*/
-		join_by_request?: boolean;
-	}): Promise<Ok> {
+	async toggleSupergroupJoinByRequest(options: Omit<ToggleSupergroupJoinByRequest, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleSupergroupJoinByRequest',
@@ -26441,16 +32007,7 @@ New value of join_by_request.
 Toggles whether the message history of a supergroup is available to new members; requires can_change_info administrator
 right.
 */
-	async toggleSupergroupIsAllHistoryAvailable(options: {
-		/**
-The identifier of the supergroup.
-*/
-		supergroup_id: number;
-		/**
-The new value of is_all_history_available.
-*/
-		is_all_history_available?: boolean;
-	}): Promise<Ok> {
+	async toggleSupergroupIsAllHistoryAvailable(options: Omit<ToggleSupergroupIsAllHistoryAvailable, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleSupergroupIsAllHistoryAvailable',
@@ -26460,12 +32017,7 @@ The new value of is_all_history_available.
 	/**
 Upgrades supergroup to a broadcast group; requires owner privileges in the supergroup.
 */
-	async toggleSupergroupIsBroadcastGroup(options: {
-		/**
-Identifier of the supergroup.
-*/
-		supergroup_id: number;
-	}): Promise<Ok> {
+	async toggleSupergroupIsBroadcastGroup(options: Omit<ToggleSupergroupIsBroadcastGroup, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleSupergroupIsBroadcastGroup',
@@ -26475,16 +32027,7 @@ Identifier of the supergroup.
 	/**
 Reports messages in a supergroup as spam; requires administrator rights in the supergroup.
 */
-	async reportSupergroupSpam(options: {
-		/**
-Supergroup identifier.
-*/
-		supergroup_id: number;
-		/**
-Identifiers of messages to report.
-*/
-		message_ids: number[];
-	}): Promise<Ok> {
+	async reportSupergroupSpam(options: Omit<ReportSupergroupSpam, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'reportSupergroupSpam',
@@ -26495,24 +32038,7 @@ Identifiers of messages to report.
 Returns information about members or banned users in a supergroup or channel. Can be used only if
 supergroupFullInfo.can_get_members == true; additionally, administrator privileges may be required for some filters.
 */
-	async getSupergroupMembers(options: {
-		/**
-Identifier of the supergroup or channel.
-*/
-		supergroup_id: number;
-		/**
-The type of users to return; pass null to use supergroupMembersFilterRecent.
-*/
-		filter: SupergroupMembersFilter;
-		/**
-Number of users to skip.
-*/
-		offset: number;
-		/**
-The maximum number of users be returned; up to 200.
-*/
-		limit: number;
-	}): Promise<ChatMembers> {
+	async getSupergroupMembers(options: Omit<GetSupergroupMembers, '@type'>): Promise<ChatMembers> {
 		return this._request({
 			...options,
 			'@type': 'getSupergroupMembers',
@@ -26522,12 +32048,7 @@ The maximum number of users be returned; up to 200.
 	/**
 Closes a secret chat, effectively transferring its state to secretChatStateClosed.
 */
-	async closeSecretChat(options: {
-		/**
-Secret chat identifier.
-*/
-		secret_chat_id: number;
-	}): Promise<Ok> {
+	async closeSecretChat(options: Omit<CloseSecretChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'closeSecretChat',
@@ -26539,32 +32060,7 @@ Returns a list of service actions taken by chat members and administrators in th
 supergroups and channels. Requires administrator rights. Returns results in reverse chronological order (i.e., in order
 of decreasing event_id).
 */
-	async getChatEventLog(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Search query by which to filter events.
-*/
-		query: string;
-		/**
-Identifier of an event from which to return results. Use 0 to get results from the latest events.
-*/
-		from_event_id: string;
-		/**
-The maximum number of events to return; up to 100.
-*/
-		limit: number;
-		/**
-The types of events to return; pass null to get chat events of all types.
-*/
-		filters: ChatEventLogFilters;
-		/**
-User identifiers by which to filter events. By default, events relating to all users will be returned.
-*/
-		user_ids: number[];
-	}): Promise<ChatEvents> {
+	async getChatEventLog(options: Omit<GetChatEventLog, '@type'>): Promise<ChatEvents> {
 		return this._request({
 			...options,
 			'@type': 'getChatEventLog',
@@ -26574,16 +32070,7 @@ User identifiers by which to filter events. By default, events relating to all u
 	/**
 Returns an invoice payment form. This method must be called when the user presses inlineKeyboardButtonBuy.
 */
-	async getPaymentForm(options: {
-		/**
-The invoice.
-*/
-		input_invoice: InputInvoice;
-		/**
-Preferred payment form theme; pass null to use the default theme.
-*/
-		theme: ThemeParameters;
-	}): Promise<PaymentForm> {
+	async getPaymentForm(options: Omit<GetPaymentForm, '@type'>): Promise<PaymentForm> {
 		return this._request({
 			...options,
 			'@type': 'getPaymentForm',
@@ -26593,20 +32080,7 @@ Preferred payment form theme; pass null to use the default theme.
 	/**
 Validates the order information provided by a user and returns the available shipping options for a flexible invoice.
 */
-	async validateOrderInfo(options: {
-		/**
-The invoice.
-*/
-		input_invoice: InputInvoice;
-		/**
-The order information, provided by the user; pass null if empty.
-*/
-		order_info: OrderInfo;
-		/**
-Pass true to save the order information.
-*/
-		allow_save?: boolean;
-	}): Promise<ValidatedOrderInfo> {
+	async validateOrderInfo(options: Omit<ValidateOrderInfo, '@type'>): Promise<ValidatedOrderInfo> {
 		return this._request({
 			...options,
 			'@type': 'validateOrderInfo',
@@ -26616,32 +32090,7 @@ Pass true to save the order information.
 	/**
 Sends a filled-out payment form to the bot for final verification.
 */
-	async sendPaymentForm(options: {
-		/**
-The invoice.
-*/
-		input_invoice: InputInvoice;
-		/**
-Payment form identifier returned by getPaymentForm.
-*/
-		payment_form_id: string;
-		/**
-Identifier returned by validateOrderInfo, or an empty string.
-*/
-		order_info_id: string;
-		/**
-Identifier of a chosen shipping option, if applicable.
-*/
-		shipping_option_id: string;
-		/**
-The credentials chosen by user for payment.
-*/
-		credentials: InputCredentials;
-		/**
-Chosen by the user amount of tip in the smallest units of the currency.
-*/
-		tip_amount: number;
-	}): Promise<PaymentResult> {
+	async sendPaymentForm(options: Omit<SendPaymentForm, '@type'>): Promise<PaymentResult> {
 		return this._request({
 			...options,
 			'@type': 'sendPaymentForm',
@@ -26651,16 +32100,7 @@ Chosen by the user amount of tip in the smallest units of the currency.
 	/**
 Returns information about a successful payment.
 */
-	async getPaymentReceipt(options: {
-		/**
-Chat identifier of the PaymentSuccessful message.
-*/
-		chat_id: number;
-		/**
-Message identifier.
-*/
-		message_id: number;
-	}): Promise<PaymentReceipt> {
+	async getPaymentReceipt(options: Omit<GetPaymentReceipt, '@type'>): Promise<PaymentReceipt> {
 		return this._request({
 			...options,
 			'@type': 'getPaymentReceipt',
@@ -26697,12 +32137,7 @@ Deletes saved credentials for all payment provider bots.
 	/**
 Creates a link for the given invoice; for bots only.
 */
-	async createInvoiceLink(options: {
-		/**
-Information about the invoice of the type inputMessageInvoice.
-*/
-		invoice: InputMessageContent;
-	}): Promise<HttpUrl> {
+	async createInvoiceLink(options: Omit<CreateInvoiceLink, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'createInvoiceLink',
@@ -26721,12 +32156,7 @@ Returns a user that can be contacted to get support.
 	/**
 Returns backgrounds installed by the user.
 */
-	async getBackgrounds(options: {
-		/**
-Pass true to order returned backgrounds for a dark theme.
-*/
-		for_dark_theme?: boolean;
-	}): Promise<Backgrounds> {
+	async getBackgrounds(options: Omit<GetBackgrounds, '@type'>): Promise<Backgrounds> {
 		return this._request({
 			...options,
 			'@type': 'getBackgrounds',
@@ -26736,16 +32166,7 @@ Pass true to order returned backgrounds for a dark theme.
 	/**
 Constructs a persistent HTTP URL for a background.
 */
-	async getBackgroundUrl(options: {
-		/**
-Background name.
-*/
-		name: string;
-		/**
-Background type.
-*/
-		type: BackgroundType;
-	}): Promise<HttpUrl> {
+	async getBackgroundUrl(options: Omit<GetBackgroundUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getBackgroundUrl',
@@ -26755,12 +32176,7 @@ Background type.
 	/**
 Searches for a background by its name.
 */
-	async searchBackground(options: {
-		/**
-The name of the background.
-*/
-		name: string;
-	}): Promise<Background> {
+	async searchBackground(options: Omit<SearchBackground, '@type'>): Promise<Background> {
 		return this._request({
 			...options,
 			'@type': 'searchBackground',
@@ -26770,20 +32186,7 @@ The name of the background.
 	/**
 Changes the background selected by the user; adds background to the list of installed backgrounds.
 */
-	async setBackground(options: {
-		/**
-The input background to use; pass null to create a new filled backgrounds or to remove the current background.
-*/
-		background: InputBackground;
-		/**
-Background type; pass null to use the default type of the remote background or to remove the current background.
-*/
-		type: BackgroundType;
-		/**
-Pass true if the background is changed for a dark theme.
-*/
-		for_dark_theme?: boolean;
-	}): Promise<Background> {
+	async setBackground(options: Omit<SetBackground, '@type'>): Promise<Background> {
 		return this._request({
 			...options,
 			'@type': 'setBackground',
@@ -26793,12 +32196,7 @@ Pass true if the background is changed for a dark theme.
 	/**
 Removes background from the list of installed backgrounds.
 */
-	async removeBackground(options: {
-		/**
-The background identifier.
-*/
-		background_id: string;
-	}): Promise<Ok> {
+	async removeBackground(options: Omit<RemoveBackground, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeBackground',
@@ -26818,12 +32216,7 @@ Resets list of installed backgrounds to its default value.
 Returns information about the current localization target. This is an offline request if only_local is true. Can be
 called before authorization.
 */
-	async getLocalizationTargetInfo(options: {
-		/**
-Pass true to get only locally available information without sending network requests.
-*/
-		only_local?: boolean;
-	}): Promise<LocalizationTargetInfo> {
+	async getLocalizationTargetInfo(options: Omit<GetLocalizationTargetInfo, '@type'>): Promise<LocalizationTargetInfo> {
 		return this._request({
 			...options,
 			'@type': 'getLocalizationTargetInfo',
@@ -26834,12 +32227,7 @@ Pass true to get only locally available information without sending network requ
 Returns information about a language pack. Returned language pack identifier may be different from a provided one. Can
 be called before authorization.
 */
-	async getLanguagePackInfo(options: {
-		/**
-Language pack identifier.
-*/
-		language_pack_id: string;
-	}): Promise<LanguagePackInfo> {
+	async getLanguagePackInfo(options: Omit<GetLanguagePackInfo, '@type'>): Promise<LanguagePackInfo> {
 		return this._request({
 			...options,
 			'@type': 'getLanguagePackInfo',
@@ -26850,16 +32238,7 @@ Language pack identifier.
 Returns strings from a language pack in the current localization target by their keys. Can be called before
 authorization.
 */
-	async getLanguagePackStrings(options: {
-		/**
-Language pack identifier of the strings to be returned.
-*/
-		language_pack_id: string;
-		/**
-Language pack keys of the strings to be returned; leave empty to request all available strings.
-*/
-		keys: string[];
-	}): Promise<LanguagePackStrings> {
+	async getLanguagePackStrings(options: Omit<GetLanguagePackStrings, '@type'>): Promise<LanguagePackStrings> {
 		return this._request({
 			...options,
 			'@type': 'getLanguagePackStrings',
@@ -26871,12 +32250,7 @@ Fetches the latest versions of all strings from a language pack in the current l
 method doesn't need to be called explicitly for the current used/base language packs. Can be called before
 authorization.
 */
-	async synchronizeLanguagePack(options: {
-		/**
-Language pack identifier.
-*/
-		language_pack_id: string;
-	}): Promise<Ok> {
+	async synchronizeLanguagePack(options: Omit<SynchronizeLanguagePack, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'synchronizeLanguagePack',
@@ -26887,13 +32261,7 @@ Language pack identifier.
 Adds a custom server language pack to the list of installed language packs in current localization target. Can be called
 before authorization.
 */
-	async addCustomServerLanguagePack(options: {
-		/**
-Identifier of a language pack to be added; may be different from a name that is used in an "https://t.me/setlanguage/"
-link.
-*/
-		language_pack_id: string;
-	}): Promise<Ok> {
+	async addCustomServerLanguagePack(options: Omit<AddCustomServerLanguagePack, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addCustomServerLanguagePack',
@@ -26903,17 +32271,7 @@ link.
 	/**
 Adds or changes a custom local language pack to the current localization target.
 */
-	async setCustomLanguagePack(options: {
-		/**
-Information about the language pack. Language pack ID must start with 'X', consist only of English letters, digits and
-hyphens, and must not exceed 64 characters. Can be called before authorization.
-*/
-		info: LanguagePackInfo;
-		/**
-Strings of the new language pack.
-*/
-		strings: LanguagePackString[];
-	}): Promise<Ok> {
+	async setCustomLanguagePack(options: Omit<SetCustomLanguagePack, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setCustomLanguagePack',
@@ -26924,12 +32282,7 @@ Strings of the new language pack.
 Edits information about a custom local language pack in the current localization target. Can be called before
 authorization.
 */
-	async editCustomLanguagePackInfo(options: {
-		/**
-New information about the custom local language pack.
-*/
-		info: LanguagePackInfo;
-	}): Promise<Ok> {
+	async editCustomLanguagePackInfo(options: Omit<EditCustomLanguagePackInfo, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'editCustomLanguagePackInfo',
@@ -26939,16 +32292,7 @@ New information about the custom local language pack.
 	/**
 Adds, edits or deletes a string in a custom local language pack. Can be called before authorization.
 */
-	async setCustomLanguagePackString(options: {
-		/**
-Identifier of a previously added custom local language pack in the current localization target.
-*/
-		language_pack_id: string;
-		/**
-New language pack string.
-*/
-		new_string: LanguagePackString;
-	}): Promise<Ok> {
+	async setCustomLanguagePackString(options: Omit<SetCustomLanguagePackString, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setCustomLanguagePackString',
@@ -26959,12 +32303,7 @@ New language pack string.
 Deletes all information about a language pack in the current localization target. The language pack which is currently
 in use (including base language pack) or is being synchronized can't be deleted. Can be called before authorization.
 */
-	async deleteLanguagePack(options: {
-		/**
-Identifier of the language pack to delete.
-*/
-		language_pack_id: string;
-	}): Promise<Ok> {
+	async deleteLanguagePack(options: Omit<DeleteLanguagePack, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteLanguagePack',
@@ -26975,16 +32314,7 @@ Identifier of the language pack to delete.
 Registers the currently used device for receiving push notifications. Returns a globally unique identifier of the push
 notification subscription.
 */
-	async registerDevice(options: {
-		/**
-Device token.
-*/
-		device_token: DeviceToken;
-		/**
-List of user identifiers of other users currently using the application.
-*/
-		other_user_ids: number[];
-	}): Promise<PushReceiverId> {
+	async registerDevice(options: Omit<RegisterDevice, '@type'>): Promise<PushReceiverId> {
 		return this._request({
 			...options,
 			'@type': 'registerDevice',
@@ -26995,13 +32325,7 @@ List of user identifiers of other users currently using the application.
 Handles a push notification. Returns error with code 406 if the push notification is not supported and connection to the
 server is required to fetch new data. Can be called before authorization.
 */
-	async processPushNotification(options: {
-		/**
-JSON-encoded push notification payload with all fields sent by the server, and "google.sent_time" and
-"google.notification.sound" fields added.
-*/
-		payload: string;
-	}): Promise<Ok> {
+	async processPushNotification(options: Omit<ProcessPushNotification, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'processPushNotification',
@@ -27012,12 +32336,7 @@ JSON-encoded push notification payload with all fields sent by the server, and "
 Returns a globally unique push notification subscription identifier for identification of an account, which has received
 a push notification. Can be called synchronously.
 */
-	async getPushReceiverId(options: {
-		/**
-JSON-encoded push notification payload.
-*/
-		payload: string;
-	}): Promise<PushReceiverId> {
+	async getPushReceiverId(options: Omit<GetPushReceiverId, '@type'>): Promise<PushReceiverId> {
 		return this._request({
 			...options,
 			'@type': 'getPushReceiverId',
@@ -27027,12 +32346,7 @@ JSON-encoded push notification payload.
 	/**
 Returns t.me URLs recently visited by a newly registered user.
 */
-	async getRecentlyVisitedTMeUrls(options: {
-		/**
-Google Play referrer to identify the user.
-*/
-		referrer: string;
-	}): Promise<TMeUrls> {
+	async getRecentlyVisitedTMeUrls(options: Omit<GetRecentlyVisitedTMeUrls, '@type'>): Promise<TMeUrls> {
 		return this._request({
 			...options,
 			'@type': 'getRecentlyVisitedTMeUrls',
@@ -27042,16 +32356,7 @@ Google Play referrer to identify the user.
 	/**
 Changes user privacy settings.
 */
-	async setUserPrivacySettingRules(options: {
-		/**
-The privacy setting.
-*/
-		setting: UserPrivacySetting;
-		/**
-The new privacy rules.
-*/
-		rules: UserPrivacySettingRules;
-	}): Promise<Ok> {
+	async setUserPrivacySettingRules(options: Omit<SetUserPrivacySettingRules, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setUserPrivacySettingRules',
@@ -27061,12 +32366,7 @@ The new privacy rules.
 	/**
 Returns the current privacy settings.
 */
-	async getUserPrivacySettingRules(options: {
-		/**
-The privacy setting.
-*/
-		setting: UserPrivacySetting;
-	}): Promise<UserPrivacySettingRules> {
+	async getUserPrivacySettingRules(options: Omit<GetUserPrivacySettingRules, '@type'>): Promise<UserPrivacySettingRules> {
 		return this._request({
 			...options,
 			'@type': 'getUserPrivacySettingRules',
@@ -27078,12 +32378,7 @@ Returns the value of an option by its name. (Check the list of available options
 https://core.telegram.org/tdlib/options.) Can be called before authorization. Can be called synchronously for options
 "version" and "commit_hash".
 */
-	async getOption(options: {
-		/**
-The name of the option.
-*/
-		name: string;
-	}): Promise<OptionValue> {
+	async getOption(options: Omit<GetOption, '@type'>): Promise<OptionValue> {
 		return this._request({
 			...options,
 			'@type': 'getOption',
@@ -27094,16 +32389,7 @@ The name of the option.
 Sets the value of an option. (Check the list of available options on https://core.telegram.org/tdlib/options.) Only
 writable options can be set. Can be called before authorization.
 */
-	async setOption(options: {
-		/**
-The name of the option.
-*/
-		name: string;
-		/**
-The new value of the option; pass null to reset option value to a default value.
-*/
-		value: OptionValue;
-	}): Promise<Ok> {
+	async setOption(options: Omit<SetOption, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setOption',
@@ -27113,12 +32399,7 @@ The new value of the option; pass null to reset option value to a default value.
 	/**
 Changes the period of inactivity after which the account of the current user will automatically be deleted.
 */
-	async setAccountTtl(options: {
-		/**
-New account TTL.
-*/
-		ttl: AccountTtl;
-	}): Promise<Ok> {
+	async setAccountTtl(options: Omit<SetAccountTtl, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setAccountTtl',
@@ -27139,17 +32420,7 @@ Deletes the account of the current user, deleting all information associated wit
 number of the account can be used to create a new account. Can be called before authorization when the current
 authorization state is authorizationStateWaitPassword.
 */
-	async deleteAccount(options: {
-		/**
-The reason why the account was deleted; optional.
-*/
-		reason: string;
-		/**
-The 2-step verification password of the current user. If not specified, account deletion can be canceled within one
-week.
-*/
-		password: string;
-	}): Promise<Ok> {
+	async deleteAccount(options: Omit<DeleteAccount, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteAccount',
@@ -27159,12 +32430,7 @@ week.
 	/**
 Removes a chat action bar without any other action.
 */
-	async removeChatActionBar(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-	}): Promise<Ok> {
+	async removeChatActionBar(options: Omit<RemoveChatActionBar, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeChatActionBar',
@@ -27175,24 +32441,7 @@ Chat identifier.
 Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if
 chat.can_be_reported.
 */
-	async reportChat(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifiers of reported messages; may be empty to report the whole chat.
-*/
-		message_ids: number[];
-		/**
-The reason for reporting the chat.
-*/
-		reason: ChatReportReason;
-		/**
-Additional report details; 0-1024 characters.
-*/
-		text: string;
-	}): Promise<Ok> {
+	async reportChat(options: Omit<ReportChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'reportChat',
@@ -27202,24 +32451,7 @@ Additional report details; 0-1024 characters.
 	/**
 Reports a chat photo to the Telegram moderators. A chat photo can be reported only if chat.can_be_reported.
 */
-	async reportChatPhoto(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Identifier of the photo to report. Only full photos from chatPhoto can be reported.
-*/
-		file_id: number;
-		/**
-The reason for reporting the chat photo.
-*/
-		reason: ChatReportReason;
-		/**
-Additional report details; 0-1024 characters.
-*/
-		text: string;
-	}): Promise<Ok> {
+	async reportChatPhoto(options: Omit<ReportChatPhoto, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'reportChatPhoto',
@@ -27230,16 +32462,7 @@ Additional report details; 0-1024 characters.
 Returns detailed statistics about a chat. Currently, this method can be used only for supergroups and channels. Can be
 used only if supergroupFullInfo.can_get_statistics == true.
 */
-	async getChatStatistics(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Pass true if a dark theme is used by the application.
-*/
-		is_dark?: boolean;
-	}): Promise<ChatStatistics> {
+	async getChatStatistics(options: Omit<GetChatStatistics, '@type'>): Promise<ChatStatistics> {
 		return this._request({
 			...options,
 			'@type': 'getChatStatistics',
@@ -27249,20 +32472,7 @@ Pass true if a dark theme is used by the application.
 	/**
 Returns detailed statistics about a message. Can be used only if message.can_get_statistics == true.
 */
-	async getMessageStatistics(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-Message identifier.
-*/
-		message_id: number;
-		/**
-Pass true if a dark theme is used by the application.
-*/
-		is_dark?: boolean;
-	}): Promise<MessageStatistics> {
+	async getMessageStatistics(options: Omit<GetMessageStatistics, '@type'>): Promise<MessageStatistics> {
 		return this._request({
 			...options,
 			'@type': 'getMessageStatistics',
@@ -27272,20 +32482,7 @@ Pass true if a dark theme is used by the application.
 	/**
 Loads an asynchronous or a zoomed in statistical graph.
 */
-	async getStatisticalGraph(options: {
-		/**
-Chat identifier.
-*/
-		chat_id: number;
-		/**
-The token for graph loading.
-*/
-		token: string;
-		/**
-X-value for zoomed in graph or 0 otherwise.
-*/
-		x: number;
-	}): Promise<StatisticalGraph> {
+	async getStatisticalGraph(options: Omit<GetStatisticalGraph, '@type'>): Promise<StatisticalGraph> {
 		return this._request({
 			...options,
 			'@type': 'getStatisticalGraph',
@@ -27295,14 +32492,7 @@ X-value for zoomed in graph or 0 otherwise.
 	/**
 Returns storage usage statistics. Can be called before authorization.
 */
-	async getStorageStatistics(options: {
-		/**
-The maximum number of chats with the largest storage usage for which separate statistics need to be returned. All other
-chats will be grouped in entries with chat_id == 0. If the chat info database is not used, the chat_limit is ignored and
-is always set to 0.
-*/
-		chat_limit: number;
-	}): Promise<StorageStatistics> {
+	async getStorageStatistics(options: Omit<GetStorageStatistics, '@type'>): Promise<StorageStatistics> {
 		return this._request({
 			...options,
 			'@type': 'getStorageStatistics',
@@ -27331,50 +32521,7 @@ Returns database statistics.
 Optimizes storage usage, i.e. deletes some files and returns new storage usage statistics. Secret thumbnails can't be
 deleted.
 */
-	async optimizeStorage(options: {
-		/**
-Limit on the total size of files after deletion, in bytes. Pass -1 to use the default limit.
-*/
-		size: number;
-		/**
-Limit on the time that has passed since the last time a file was accessed (or creation time for some filesystems). Pass
--1 to use the default limit.
-*/
-		ttl: number;
-		/**
-Limit on the total number of files after deletion. Pass -1 to use the default limit.
-*/
-		count: number;
-		/**
-The amount of time after the creation of a file during which it can't be deleted, in seconds. Pass -1 to use the default
-value.
-*/
-		immunity_delay: number;
-		/**
-If non-empty, only files with the given types are considered. By default, all types except thumbnails, profile photos,
-stickers and wallpapers are deleted.
-*/
-		file_types: FileType[];
-		/**
-If non-empty, only files from the given chats are considered. Use 0 as chat identifier to delete files not belonging to
-any chat (e.g., profile photos).
-*/
-		chat_ids: number[];
-		/**
-If non-empty, files from the given chats are excluded. Use 0 as chat identifier to exclude all files not belonging to
-any chat (e.g., profile photos).
-*/
-		exclude_chat_ids: number[];
-		/**
-Pass true if statistics about the files that were deleted must be returned instead of the whole storage usage
-statistics. Affects only returned statistics.
-*/
-		return_deleted_file_statistics?: boolean;
-		/**
-Same as in getStorageStatistics. Affects only returned statistics.
-*/
-		chat_limit: number;
-	}): Promise<StorageStatistics> {
+	async optimizeStorage(options: Omit<OptimizeStorage, '@type'>): Promise<StorageStatistics> {
 		return this._request({
 			...options,
 			'@type': 'optimizeStorage',
@@ -27387,12 +32534,7 @@ reopen, mitigating the delay in switching between different networks, so it must
 changed, even if the network type remains the same. Network type is used to check whether the library can use the
 network at all and also for collecting detailed network data usage statistics.
 */
-	async setNetworkType(options: {
-		/**
-The new network type; pass null to set network type to networkTypeOther.
-*/
-		type: NetworkType;
-	}): Promise<Ok> {
+	async setNetworkType(options: Omit<SetNetworkType, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setNetworkType',
@@ -27402,12 +32544,7 @@ The new network type; pass null to set network type to networkTypeOther.
 	/**
 Returns network data usage statistics. Can be called before authorization.
 */
-	async getNetworkStatistics(options: {
-		/**
-Pass true to get statistics only for the current library launch.
-*/
-		only_current?: boolean;
-	}): Promise<NetworkStatistics> {
+	async getNetworkStatistics(options: Omit<GetNetworkStatistics, '@type'>): Promise<NetworkStatistics> {
 		return this._request({
 			...options,
 			'@type': 'getNetworkStatistics',
@@ -27417,12 +32554,7 @@ Pass true to get statistics only for the current library launch.
 	/**
 Adds the specified data to data usage statistics. Can be called before authorization.
 */
-	async addNetworkStatistics(options: {
-		/**
-The network statistics entry with the data to be added to statistics.
-*/
-		entry: NetworkStatisticsEntry;
-	}): Promise<Ok> {
+	async addNetworkStatistics(options: Omit<AddNetworkStatistics, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addNetworkStatistics',
@@ -27450,16 +32582,7 @@ Returns auto-download settings presets for the current user.
 	/**
 Sets auto-download settings.
 */
-	async setAutoDownloadSettings(options: {
-		/**
-New user auto-download settings.
-*/
-		settings: AutoDownloadSettings;
-		/**
-Type of the network for which the new settings are relevant.
-*/
-		type: NetworkType;
-	}): Promise<Ok> {
+	async setAutoDownloadSettings(options: Omit<SetAutoDownloadSettings, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setAutoDownloadSettings',
@@ -27469,12 +32592,7 @@ Type of the network for which the new settings are relevant.
 	/**
 Returns information about a bank card.
 */
-	async getBankCardInfo(options: {
-		/**
-The bank card number.
-*/
-		bank_card_number: string;
-	}): Promise<BankCardInfo> {
+	async getBankCardInfo(options: Omit<GetBankCardInfo, '@type'>): Promise<BankCardInfo> {
 		return this._request({
 			...options,
 			'@type': 'getBankCardInfo',
@@ -27484,16 +32602,7 @@ The bank card number.
 	/**
 Returns one of the available Telegram Passport elements.
 */
-	async getPassportElement(options: {
-		/**
-Telegram Passport element type.
-*/
-		type: PassportElementType;
-		/**
-The 2-step verification password of the current user.
-*/
-		password: string;
-	}): Promise<PassportElement> {
+	async getPassportElement(options: Omit<GetPassportElement, '@type'>): Promise<PassportElement> {
 		return this._request({
 			...options,
 			'@type': 'getPassportElement',
@@ -27503,12 +32612,7 @@ The 2-step verification password of the current user.
 	/**
 Returns all available Telegram Passport elements.
 */
-	async getAllPassportElements(options: {
-		/**
-The 2-step verification password of the current user.
-*/
-		password: string;
-	}): Promise<PassportElements> {
+	async getAllPassportElements(options: Omit<GetAllPassportElements, '@type'>): Promise<PassportElements> {
 		return this._request({
 			...options,
 			'@type': 'getAllPassportElements',
@@ -27519,16 +32623,7 @@ The 2-step verification password of the current user.
 Adds an element to the user's Telegram Passport. May return an error with a message "PHONE_VERIFICATION_NEEDED" or
 "EMAIL_VERIFICATION_NEEDED" if the chosen phone number or the chosen email address must be verified first.
 */
-	async setPassportElement(options: {
-		/**
-Input Telegram Passport element.
-*/
-		element: InputPassportElement;
-		/**
-The 2-step verification password of the current user.
-*/
-		password: string;
-	}): Promise<PassportElement> {
+	async setPassportElement(options: Omit<SetPassportElement, '@type'>): Promise<PassportElement> {
 		return this._request({
 			...options,
 			'@type': 'setPassportElement',
@@ -27538,12 +32633,7 @@ The 2-step verification password of the current user.
 	/**
 Deletes a Telegram Passport element.
 */
-	async deletePassportElement(options: {
-		/**
-Element type.
-*/
-		type: PassportElementType;
-	}): Promise<Ok> {
+	async deletePassportElement(options: Omit<DeletePassportElement, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deletePassportElement',
@@ -27554,16 +32644,7 @@ Element type.
 Informs the user that some of the elements in their Telegram Passport contain errors; for bots only. The user will not
 be able to resend the elements, until the errors are fixed.
 */
-	async setPassportElementErrors(options: {
-		/**
-User identifier.
-*/
-		user_id: number;
-		/**
-The errors.
-*/
-		errors: InputPassportElementError[];
-	}): Promise<Ok> {
+	async setPassportElementErrors(options: Omit<SetPassportElementErrors, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setPassportElementErrors',
@@ -27574,12 +32655,7 @@ The errors.
 Returns an IETF language tag of the language preferred in the country, which must be used to fill native fields in
 Telegram Passport personal details. Returns a 404 error if unknown.
 */
-	async getPreferredCountryLanguage(options: {
-		/**
-A two-letter ISO 3166-1 alpha-2 country code.
-*/
-		country_code: string;
-	}): Promise<Text> {
+	async getPreferredCountryLanguage(options: Omit<GetPreferredCountryLanguage, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getPreferredCountryLanguage',
@@ -27589,16 +32665,7 @@ A two-letter ISO 3166-1 alpha-2 country code.
 	/**
 Sends a code to verify a phone number to be added to a user's Telegram Passport.
 */
-	async sendPhoneNumberVerificationCode(options: {
-		/**
-The phone number of the user, in international format.
-*/
-		phone_number: string;
-		/**
-Settings for the authentication of the user's phone number; pass null to use default settings.
-*/
-		settings: PhoneNumberAuthenticationSettings;
-	}): Promise<AuthenticationCodeInfo> {
+	async sendPhoneNumberVerificationCode(options: Omit<SendPhoneNumberVerificationCode, '@type'>): Promise<AuthenticationCodeInfo> {
 		return this._request({
 			...options,
 			'@type': 'sendPhoneNumberVerificationCode',
@@ -27617,12 +32684,7 @@ Re-sends the code to verify a phone number to be added to a user's Telegram Pass
 	/**
 Checks the phone number verification code for Telegram Passport.
 */
-	async checkPhoneNumberVerificationCode(options: {
-		/**
-Verification code to check.
-*/
-		code: string;
-	}): Promise<Ok> {
+	async checkPhoneNumberVerificationCode(options: Omit<CheckPhoneNumberVerificationCode, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkPhoneNumberVerificationCode',
@@ -27632,12 +32694,7 @@ Verification code to check.
 	/**
 Sends a code to verify an email address to be added to a user's Telegram Passport.
 */
-	async sendEmailAddressVerificationCode(options: {
-		/**
-Email address.
-*/
-		email_address: string;
-	}): Promise<EmailAddressAuthenticationCodeInfo> {
+	async sendEmailAddressVerificationCode(options: Omit<SendEmailAddressVerificationCode, '@type'>): Promise<EmailAddressAuthenticationCodeInfo> {
 		return this._request({
 			...options,
 			'@type': 'sendEmailAddressVerificationCode',
@@ -27656,12 +32713,7 @@ Re-sends the code to verify an email address to be added to a user's Telegram Pa
 	/**
 Checks the email address verification code for Telegram Passport.
 */
-	async checkEmailAddressVerificationCode(options: {
-		/**
-Verification code to check.
-*/
-		code: string;
-	}): Promise<Ok> {
+	async checkEmailAddressVerificationCode(options: Omit<CheckEmailAddressVerificationCode, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkEmailAddressVerificationCode',
@@ -27671,24 +32723,7 @@ Verification code to check.
 	/**
 Returns a Telegram Passport authorization form for sharing data with a service.
 */
-	async getPassportAuthorizationForm(options: {
-		/**
-User identifier of the service's bot.
-*/
-		bot_user_id: number;
-		/**
-Telegram Passport element types requested by the service.
-*/
-		scope: string;
-		/**
-Service's public key.
-*/
-		public_key: string;
-		/**
-Unique request identifier provided by the service.
-*/
-		nonce: string;
-	}): Promise<PassportAuthorizationForm> {
+	async getPassportAuthorizationForm(options: Omit<GetPassportAuthorizationForm, '@type'>): Promise<PassportAuthorizationForm> {
 		return this._request({
 			...options,
 			'@type': 'getPassportAuthorizationForm',
@@ -27699,16 +32734,7 @@ Unique request identifier provided by the service.
 Returns already available Telegram Passport elements suitable for completing a Telegram Passport authorization form.
 Result can be received only once for each authorization form.
 */
-	async getPassportAuthorizationFormAvailableElements(options: {
-		/**
-Authorization form identifier.
-*/
-		autorization_form_id: number;
-		/**
-The 2-step verification password of the current user.
-*/
-		password: string;
-	}): Promise<PassportElementsWithErrors> {
+	async getPassportAuthorizationFormAvailableElements(options: Omit<GetPassportAuthorizationFormAvailableElements, '@type'>): Promise<PassportElementsWithErrors> {
 		return this._request({
 			...options,
 			'@type': 'getPassportAuthorizationFormAvailableElements',
@@ -27719,16 +32745,7 @@ The 2-step verification password of the current user.
 Sends a Telegram Passport authorization form, effectively sharing data with the service. This method must be called
 after getPassportAuthorizationFormAvailableElements if some previously available elements are going to be reused.
 */
-	async sendPassportAuthorizationForm(options: {
-		/**
-Authorization form identifier.
-*/
-		autorization_form_id: number;
-		/**
-Types of Telegram Passport elements chosen by user to complete the authorization form.
-*/
-		types: PassportElementType[];
-	}): Promise<Ok> {
+	async sendPassportAuthorizationForm(options: Omit<SendPassportAuthorizationForm, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'sendPassportAuthorizationForm',
@@ -27738,20 +32755,7 @@ Types of Telegram Passport elements chosen by user to complete the authorization
 	/**
 Sends phone number confirmation code to handle links of the type internalLinkTypePhoneNumberConfirmation.
 */
-	async sendPhoneNumberConfirmationCode(options: {
-		/**
-Hash value from the link.
-*/
-		hash: string;
-		/**
-Phone number value from the link.
-*/
-		phone_number: string;
-		/**
-Settings for the authentication of the user's phone number; pass null to use default settings.
-*/
-		settings: PhoneNumberAuthenticationSettings;
-	}): Promise<AuthenticationCodeInfo> {
+	async sendPhoneNumberConfirmationCode(options: Omit<SendPhoneNumberConfirmationCode, '@type'>): Promise<AuthenticationCodeInfo> {
 		return this._request({
 			...options,
 			'@type': 'sendPhoneNumberConfirmationCode',
@@ -27770,12 +32774,7 @@ Resends phone number confirmation code.
 	/**
 Checks phone number confirmation code.
 */
-	async checkPhoneNumberConfirmationCode(options: {
-		/**
-Confirmation code to check.
-*/
-		code: string;
-	}): Promise<Ok> {
+	async checkPhoneNumberConfirmationCode(options: Omit<CheckPhoneNumberConfirmationCode, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'checkPhoneNumberConfirmationCode',
@@ -27786,16 +32785,7 @@ Confirmation code to check.
 Informs the server about the number of pending bot updates if they haven't been processed for a long time; for bots
 only.
 */
-	async setBotUpdatesStatus(options: {
-		/**
-The number of pending updates.
-*/
-		pending_update_count: number;
-		/**
-The last error message.
-*/
-		error_message: string;
-	}): Promise<Ok> {
+	async setBotUpdatesStatus(options: Omit<SetBotUpdatesStatus, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setBotUpdatesStatus',
@@ -27805,16 +32795,7 @@ The last error message.
 	/**
 Uploads a file with a sticker; returns the uploaded file.
 */
-	async uploadStickerFile(options: {
-		/**
-Sticker file owner; ignored for regular users.
-*/
-		user_id: number;
-		/**
-Sticker file to upload.
-*/
-		sticker: InputSticker;
-	}): Promise<File> {
+	async uploadStickerFile(options: Omit<UploadStickerFile, '@type'>): Promise<File> {
 		return this._request({
 			...options,
 			'@type': 'uploadStickerFile',
@@ -27824,12 +32805,7 @@ Sticker file to upload.
 	/**
 Returns a suggested name for a new sticker set with a given title.
 */
-	async getSuggestedStickerSetName(options: {
-		/**
-Sticker set title; 1-64 characters.
-*/
-		title: string;
-	}): Promise<Text> {
+	async getSuggestedStickerSetName(options: Omit<GetSuggestedStickerSetName, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
 			'@type': 'getSuggestedStickerSetName',
@@ -27839,12 +32815,7 @@ Sticker set title; 1-64 characters.
 	/**
 Checks whether a name can be used for a new sticker set.
 */
-	async checkStickerSetName(options: {
-		/**
-Name to be checked.
-*/
-		name: string;
-	}): Promise<CheckStickerSetNameResult> {
+	async checkStickerSetName(options: Omit<CheckStickerSetName, '@type'>): Promise<CheckStickerSetNameResult> {
 		return this._request({
 			...options,
 			'@type': 'checkStickerSetName',
@@ -27854,34 +32825,7 @@ Name to be checked.
 	/**
 Creates a new sticker set. Returns the newly created sticker set.
 */
-	async createNewStickerSet(options: {
-		/**
-Sticker set owner; ignored for regular users.
-*/
-		user_id: number;
-		/**
-Sticker set title; 1-64 characters.
-*/
-		title: string;
-		/**
-Sticker set name. Can contain only English letters, digits and underscores. Must end with *"_by_<bot username>"*
-(*<bot_username>* is case insensitive) for bots; 1-64 characters.
-*/
-		name: string;
-		/**
-Type of the stickers in the set.
-*/
-		sticker_type: StickerType;
-		/**
-List of stickers to be added to the set; must be non-empty. All stickers must have the same format. For TGS stickers,
-uploadStickerFile must be used before the sticker is shown.
-*/
-		stickers: InputSticker[];
-		/**
-Source of the sticker set; may be empty if unknown.
-*/
-		source: string;
-	}): Promise<StickerSet> {
+	async createNewStickerSet(options: Omit<CreateNewStickerSet, '@type'>): Promise<StickerSet> {
 		return this._request({
 			...options,
 			'@type': 'createNewStickerSet',
@@ -27891,20 +32835,7 @@ Source of the sticker set; may be empty if unknown.
 	/**
 Adds a new sticker to a set; for bots only. Returns the sticker set.
 */
-	async addStickerToSet(options: {
-		/**
-Sticker set owner.
-*/
-		user_id: number;
-		/**
-Sticker set name.
-*/
-		name: string;
-		/**
-Sticker to add to the set.
-*/
-		sticker: InputSticker;
-	}): Promise<StickerSet> {
+	async addStickerToSet(options: Omit<AddStickerToSet, '@type'>): Promise<StickerSet> {
 		return this._request({
 			...options,
 			'@type': 'addStickerToSet',
@@ -27914,21 +32845,7 @@ Sticker to add to the set.
 	/**
 Sets a sticker set thumbnail; for bots only. Returns the sticker set.
 */
-	async setStickerSetThumbnail(options: {
-		/**
-Sticker set owner.
-*/
-		user_id: number;
-		/**
-Sticker set name.
-*/
-		name: string;
-		/**
-Thumbnail to set in PNG, TGS, or WEBM format; pass null to remove the sticker set thumbnail. Thumbnail format must match
-the format of stickers in the set.
-*/
-		thumbnail: InputFile;
-	}): Promise<StickerSet> {
+	async setStickerSetThumbnail(options: Omit<SetStickerSetThumbnail, '@type'>): Promise<StickerSet> {
 		return this._request({
 			...options,
 			'@type': 'setStickerSetThumbnail',
@@ -27939,16 +32856,7 @@ the format of stickers in the set.
 Changes the position of a sticker in the set to which it belongs; for bots only. The sticker set must have been created
 by the bot.
 */
-	async setStickerPositionInSet(options: {
-		/**
-Sticker.
-*/
-		sticker: InputFile;
-		/**
-New position of the sticker in the set, 0-based.
-*/
-		position: number;
-	}): Promise<Ok> {
+	async setStickerPositionInSet(options: Omit<SetStickerPositionInSet, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setStickerPositionInSet',
@@ -27958,12 +32866,7 @@ New position of the sticker in the set, 0-based.
 	/**
 Removes a sticker from the set to which it belongs; for bots only. The sticker set must have been created by the bot.
 */
-	async removeStickerFromSet(options: {
-		/**
-Sticker.
-*/
-		sticker: InputFile;
-	}): Promise<Ok> {
+	async removeStickerFromSet(options: Omit<RemoveStickerFromSet, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeStickerFromSet',
@@ -27974,32 +32877,7 @@ Sticker.
 Returns information about a file with a map thumbnail in PNG format. Only map thumbnail files with size less than 1MB
 can be downloaded.
 */
-	async getMapThumbnailFile(options: {
-		/**
-Location of the map center.
-*/
-		location: Location;
-		/**
-Map zoom level; 13-20.
-*/
-		zoom: number;
-		/**
-Map width in pixels before applying scale; 16-1024.
-*/
-		width: number;
-		/**
-Map height in pixels before applying scale; 16-1024.
-*/
-		height: number;
-		/**
-Map scale; 1-3.
-*/
-		scale: number;
-		/**
-Identifier of a chat in which the thumbnail will be shown. Use 0 if unknown.
-*/
-		chat_id: number;
-	}): Promise<File> {
+	async getMapThumbnailFile(options: Omit<GetMapThumbnailFile, '@type'>): Promise<File> {
 		return this._request({
 			...options,
 			'@type': 'getMapThumbnailFile',
@@ -28009,12 +32887,7 @@ Identifier of a chat in which the thumbnail will be shown. Use 0 if unknown.
 	/**
 Returns information about a limit, increased for Premium users. Returns a 404 error if the limit is unknown.
 */
-	async getPremiumLimit(options: {
-		/**
-Type of the limit.
-*/
-		limit_type: PremiumLimitType;
-	}): Promise<PremiumLimit> {
+	async getPremiumLimit(options: Omit<GetPremiumLimit, '@type'>): Promise<PremiumLimit> {
 		return this._request({
 			...options,
 			'@type': 'getPremiumLimit',
@@ -28024,12 +32897,7 @@ Type of the limit.
 	/**
 Returns information about features, available to Premium users.
 */
-	async getPremiumFeatures(options: {
-		/**
-Source of the request; pass null if the method is called from some non-standard source.
-*/
-		source: PremiumSource;
-	}): Promise<PremiumFeatures> {
+	async getPremiumFeatures(options: Omit<GetPremiumFeatures, '@type'>): Promise<PremiumFeatures> {
 		return this._request({
 			...options,
 			'@type': 'getPremiumFeatures',
@@ -28048,12 +32916,7 @@ Returns examples of premium stickers for demonstration purposes.
 	/**
 Informs TDLib that the user viewed detailed information about a Premium feature on the Premium features screen.
 */
-	async viewPremiumFeature(options: {
-		/**
-The viewed premium feature.
-*/
-		feature: PremiumFeature;
-	}): Promise<Ok> {
+	async viewPremiumFeature(options: Omit<ViewPremiumFeature, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'viewPremiumFeature',
@@ -28081,12 +32944,7 @@ Returns state of Telegram Premium subscription and promotion videos for Premium 
 	/**
 Checks whether Telegram Premium purchase is possible. Must be called before in-store Premium purchase.
 */
-	async canPurchasePremium(options: {
-		/**
-Transaction purpose.
-*/
-		purpose: StorePaymentPurpose;
-	}): Promise<Ok> {
+	async canPurchasePremium(options: Omit<CanPurchasePremium, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'canPurchasePremium',
@@ -28096,16 +32954,7 @@ Transaction purpose.
 	/**
 Informs server about a purchase through App Store. For official applications only.
 */
-	async assignAppStoreTransaction(options: {
-		/**
-App Store receipt.
-*/
-		receipt: string;
-		/**
-Transaction purpose.
-*/
-		purpose: StorePaymentPurpose;
-	}): Promise<Ok> {
+	async assignAppStoreTransaction(options: Omit<AssignAppStoreTransaction, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'assignAppStoreTransaction',
@@ -28115,24 +32964,7 @@ Transaction purpose.
 	/**
 Informs server about a purchase through Google Play. For official applications only.
 */
-	async assignGooglePlayTransaction(options: {
-		/**
-Application package name.
-*/
-		package_name: string;
-		/**
-Identifier of the purchased store product.
-*/
-		store_product_id: string;
-		/**
-Google Play purchase token.
-*/
-		purchase_token: string;
-		/**
-Transaction purpose.
-*/
-		purpose: StorePaymentPurpose;
-	}): Promise<Ok> {
+	async assignGooglePlayTransaction(options: Omit<AssignGooglePlayTransaction, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'assignGooglePlayTransaction',
@@ -28142,12 +32974,7 @@ Transaction purpose.
 	/**
 Accepts Telegram terms of services.
 */
-	async acceptTermsOfService(options: {
-		/**
-Terms of service identifier.
-*/
-		terms_of_service_id: string;
-	}): Promise<Ok> {
+	async acceptTermsOfService(options: Omit<AcceptTermsOfService, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'acceptTermsOfService',
@@ -28157,16 +32984,7 @@ Terms of service identifier.
 	/**
 Sends a custom request; for bots only.
 */
-	async sendCustomRequest(options: {
-		/**
-The method name.
-*/
-		method: string;
-		/**
-JSON-serialized method parameters.
-*/
-		parameters: string;
-	}): Promise<CustomRequestResult> {
+	async sendCustomRequest(options: Omit<SendCustomRequest, '@type'>): Promise<CustomRequestResult> {
 		return this._request({
 			...options,
 			'@type': 'sendCustomRequest',
@@ -28176,16 +32994,7 @@ JSON-serialized method parameters.
 	/**
 Answers a custom query; for bots only.
 */
-	async answerCustomQuery(options: {
-		/**
-Identifier of a custom query.
-*/
-		custom_query_id: string;
-		/**
-JSON-serialized answer to the query.
-*/
-		data: string;
-	}): Promise<Ok> {
+	async answerCustomQuery(options: Omit<AnswerCustomQuery, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'answerCustomQuery',
@@ -28195,12 +33004,7 @@ JSON-serialized answer to the query.
 	/**
 Succeeds after a specified amount of time has passed. Can be called before initialization.
 */
-	async setAlarm(options: {
-		/**
-Number of seconds before the function returns.
-*/
-		seconds: number;
-	}): Promise<Ok> {
+	async setAlarm(options: Omit<SetAlarm, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setAlarm',
@@ -28229,12 +33033,7 @@ called before authorization.
 	/**
 Returns information about a phone number by its prefix. Can be called before authorization.
 */
-	async getPhoneNumberInfo(options: {
-		/**
-The phone number prefix.
-*/
-		phone_number_prefix: string;
-	}): Promise<PhoneNumberInfo> {
+	async getPhoneNumberInfo(options: Omit<GetPhoneNumberInfo, '@type'>): Promise<PhoneNumberInfo> {
 		return this._request({
 			...options,
 			'@type': 'getPhoneNumberInfo',
@@ -28246,16 +33045,7 @@ Returns information about a phone number by its prefix synchronously. getCountri
 changing localization to the specified language if properly localized country information is expected. Can be called
 synchronously.
 */
-	async getPhoneNumberInfoSync(options: {
-		/**
-A two-letter ISO 639-1 language code for country information localization.
-*/
-		language_code: string;
-		/**
-The phone number prefix.
-*/
-		phone_number_prefix: string;
-	}): Promise<PhoneNumberInfo> {
+	async getPhoneNumberInfoSync(options: Omit<GetPhoneNumberInfoSync, '@type'>): Promise<PhoneNumberInfo> {
 		return this._request({
 			...options,
 			'@type': 'getPhoneNumberInfoSync',
@@ -28276,12 +33066,7 @@ Telegram.
 Returns information about a tg:// deep link. Use "tg://need_update_for_some_feature" or "tg:some_unsupported_feature"
 for testing. Returns a 404 error for unknown links. Can be called before authorization.
 */
-	async getDeepLinkInfo(options: {
-		/**
-The link.
-*/
-		link: string;
-	}): Promise<DeepLinkInfo> {
+	async getDeepLinkInfo(options: Omit<GetDeepLinkInfo, '@type'>): Promise<DeepLinkInfo> {
 		return this._request({
 			...options,
 			'@type': 'getDeepLinkInfo',
@@ -28300,20 +33085,7 @@ Returns application config, provided by the server. Can be called before authori
 	/**
 Saves application log event on the server. Can be called before authorization.
 */
-	async saveApplicationLogEvent(options: {
-		/**
-Event type.
-*/
-		type: string;
-		/**
-Optional chat identifier, associated with the event.
-*/
-		chat_id: number;
-		/**
-The log event data.
-*/
-		data: JsonValue;
-	}): Promise<Ok> {
+	async saveApplicationLogEvent(options: Omit<SaveAppLogEvent, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'saveApplicationLogEvent',
@@ -28323,24 +33095,7 @@ The log event data.
 	/**
 Adds a proxy server for network requests. Can be called before authorization.
 */
-	async addProxy(options: {
-		/**
-Proxy server IP address.
-*/
-		server: string;
-		/**
-Proxy server port.
-*/
-		port: number;
-		/**
-Pass true to immediately enable the proxy.
-*/
-		enable?: boolean;
-		/**
-Proxy type.
-*/
-		type: ProxyType;
-	}): Promise<Proxy> {
+	async addProxy(options: Omit<AddProxy, '@type'>): Promise<Proxy> {
 		return this._request({
 			...options,
 			'@type': 'addProxy',
@@ -28350,28 +33105,7 @@ Proxy type.
 	/**
 Edits an existing proxy server for network requests. Can be called before authorization.
 */
-	async editProxy(options: {
-		/**
-Proxy identifier.
-*/
-		proxy_id: number;
-		/**
-Proxy server IP address.
-*/
-		server: string;
-		/**
-Proxy server port.
-*/
-		port: number;
-		/**
-Pass true to immediately enable the proxy.
-*/
-		enable?: boolean;
-		/**
-Proxy type.
-*/
-		type: ProxyType;
-	}): Promise<Proxy> {
+	async editProxy(options: Omit<EditProxy, '@type'>): Promise<Proxy> {
 		return this._request({
 			...options,
 			'@type': 'editProxy',
@@ -28381,12 +33115,7 @@ Proxy type.
 	/**
 Enables a proxy. Only one proxy can be enabled at a time. Can be called before authorization.
 */
-	async enableProxy(options: {
-		/**
-Proxy identifier.
-*/
-		proxy_id: number;
-	}): Promise<Ok> {
+	async enableProxy(options: Omit<EnableProxy, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'enableProxy',
@@ -28405,12 +33134,7 @@ Disables the currently enabled proxy. Can be called before authorization.
 	/**
 Removes a proxy server. Can be called before authorization.
 */
-	async removeProxy(options: {
-		/**
-Proxy identifier.
-*/
-		proxy_id: number;
-	}): Promise<Ok> {
+	async removeProxy(options: Omit<RemoveProxy, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'removeProxy',
@@ -28430,12 +33154,7 @@ Returns list of proxies that are currently set up. Can be called before authoriz
 Returns an HTTPS link, which can be used to add a proxy. Available only for SOCKS5 and MTProto proxies. Can be called
 before authorization.
 */
-	async getProxyLink(options: {
-		/**
-Proxy identifier.
-*/
-		proxy_id: number;
-	}): Promise<HttpUrl> {
+	async getProxyLink(options: Omit<GetProxyLink, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getProxyLink',
@@ -28445,12 +33164,7 @@ Proxy identifier.
 	/**
 Computes time needed to receive a response from a Telegram server through a proxy. Can be called before authorization.
 */
-	async pingProxy(options: {
-		/**
-Proxy identifier. Use 0 to ping a Telegram server without a proxy.
-*/
-		proxy_id: number;
-	}): Promise<Seconds> {
+	async pingProxy(options: Omit<PingProxy, '@type'>): Promise<Seconds> {
 		return this._request({
 			...options,
 			'@type': 'pingProxy',
@@ -28460,12 +33174,7 @@ Proxy identifier. Use 0 to ping a Telegram server without a proxy.
 	/**
 Sets new log stream for internal logging of TDLib. Can be called synchronously.
 */
-	async setLogStream(options: {
-		/**
-New log stream.
-*/
-		log_stream: LogStream;
-	}): Promise<Ok> {
+	async setLogStream(options: Omit<SetLogStream, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setLogStream',
@@ -28484,14 +33193,7 @@ Returns information about currently used log stream for internal logging of TDLi
 	/**
 Sets the verbosity level of the internal logging of TDLib. Can be called synchronously.
 */
-	async setLogVerbosityLevel(options: {
-		/**
-New value of the verbosity level for logging. Value 0 corresponds to fatal errors, value 1 corresponds to errors, value
-2 corresponds to warnings and debug warnings, value 3 corresponds to informational, value 4 corresponds to debug, value
-5 corresponds to verbose debug, value greater than 5 and up to 1023 can be used to enable even more logging.
-*/
-		new_verbosity_level: number;
-	}): Promise<Ok> {
+	async setLogVerbosityLevel(options: Omit<SetLogVerbosityLevel, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setLogVerbosityLevel',
@@ -28520,16 +33222,7 @@ Returns list of available TDLib internal log tags, for example, ["actor", "binlo
 	/**
 Sets the verbosity level for a specified TDLib internal log tag. Can be called synchronously.
 */
-	async setLogTagVerbosityLevel(options: {
-		/**
-Logging tag to change verbosity level.
-*/
-		tag: string;
-		/**
-New verbosity level; 1-1024.
-*/
-		new_verbosity_level: number;
-	}): Promise<Ok> {
+	async setLogTagVerbosityLevel(options: Omit<SetLogTagVerbosityLevel, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setLogTagVerbosityLevel',
@@ -28539,12 +33232,7 @@ New verbosity level; 1-1024.
 	/**
 Returns current verbosity level for a specified TDLib internal log tag. Can be called synchronously.
 */
-	async getLogTagVerbosityLevel(options: {
-		/**
-Logging tag to change verbosity level.
-*/
-		tag: string;
-	}): Promise<LogVerbosityLevel> {
+	async getLogTagVerbosityLevel(options: Omit<GetLogTagVerbosityLevel, '@type'>): Promise<LogVerbosityLevel> {
 		return this._request({
 			...options,
 			'@type': 'getLogTagVerbosityLevel',
@@ -28554,16 +33242,7 @@ Logging tag to change verbosity level.
 	/**
 Adds a message to TDLib internal log. Can be called synchronously.
 */
-	async addLogMessage(options: {
-		/**
-The minimum verbosity level needed for the message to be logged; 0-1023.
-*/
-		verbosity_level: number;
-		/**
-Text of a message to log.
-*/
-		text: string;
-	}): Promise<Ok> {
+	async addLogMessage(options: Omit<AddLogMessage, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addLogMessage',
@@ -28573,12 +33252,7 @@ Text of a message to log.
 	/**
 Returns support information for the given user; for Telegram support only.
 */
-	async getUserSupportInfo(options: {
-		/**
-User identifier.
-*/
-		user_id: number;
-	}): Promise<UserSupportInfo> {
+	async getUserSupportInfo(options: Omit<GetUserSupportInfo, '@type'>): Promise<UserSupportInfo> {
 		return this._request({
 			...options,
 			'@type': 'getUserSupportInfo',
@@ -28588,16 +33262,7 @@ User identifier.
 	/**
 Sets support information for the given user; for Telegram support only.
 */
-	async setUserSupportInfo(options: {
-		/**
-User identifier.
-*/
-		user_id: number;
-		/**
-New information message.
-*/
-		message: FormattedText;
-	}): Promise<UserSupportInfo> {
+	async setUserSupportInfo(options: Omit<SetUserSupportInfo, '@type'>): Promise<UserSupportInfo> {
 		return this._request({
 			...options,
 			'@type': 'setUserSupportInfo',
@@ -28616,12 +33281,7 @@ Does nothing; for testing only. This is an offline method. Can be called before 
 	/**
 Returns the received string; for testing only. This is an offline method. Can be called before authorization.
 */
-	async testCallString(options: {
-		/**
-String to return.
-*/
-		x: string;
-	}): Promise<TestString> {
+	async testCallString(options: Omit<TestCallString, '@type'>): Promise<TestString> {
 		return this._request({
 			...options,
 			'@type': 'testCallString',
@@ -28631,12 +33291,7 @@ String to return.
 	/**
 Returns the received bytes; for testing only. This is an offline method. Can be called before authorization.
 */
-	async testCallBytes(options: {
-		/**
-Bytes to return.
-*/
-		x: string;
-	}): Promise<TestBytes> {
+	async testCallBytes(options: Omit<TestCallBytes, '@type'>): Promise<TestBytes> {
 		return this._request({
 			...options,
 			'@type': 'testCallBytes',
@@ -28646,12 +33301,7 @@ Bytes to return.
 	/**
 Returns the received vector of numbers; for testing only. This is an offline method. Can be called before authorization.
 */
-	async testCallVectorInt(options: {
-		/**
-Vector of numbers to return.
-*/
-		x: number[];
-	}): Promise<TestVectorInt> {
+	async testCallVectorInt(options: Omit<TestCallVectorInt, '@type'>): Promise<TestVectorInt> {
 		return this._request({
 			...options,
 			'@type': 'testCallVectorInt',
@@ -28662,12 +33312,7 @@ Vector of numbers to return.
 Returns the received vector of objects containing a number; for testing only. This is an offline method. Can be called
 before authorization.
 */
-	async testCallVectorIntObject(options: {
-		/**
-Vector of objects to return.
-*/
-		x: TestInt[];
-	}): Promise<TestVectorIntObject> {
+	async testCallVectorIntObject(options: Omit<TestCallVectorIntObject, '@type'>): Promise<TestVectorIntObject> {
 		return this._request({
 			...options,
 			'@type': 'testCallVectorIntObject',
@@ -28677,12 +33322,7 @@ Vector of objects to return.
 	/**
 Returns the received vector of strings; for testing only. This is an offline method. Can be called before authorization.
 */
-	async testCallVectorString(options: {
-		/**
-Vector of strings to return.
-*/
-		x: string[];
-	}): Promise<TestVectorString> {
+	async testCallVectorString(options: Omit<TestCallVectorString, '@type'>): Promise<TestVectorString> {
 		return this._request({
 			...options,
 			'@type': 'testCallVectorString',
@@ -28693,12 +33333,7 @@ Vector of strings to return.
 Returns the received vector of objects containing a string; for testing only. This is an offline method. Can be called
 before authorization.
 */
-	async testCallVectorStringObject(options: {
-		/**
-Vector of objects to return.
-*/
-		x: TestString[];
-	}): Promise<TestVectorStringObject> {
+	async testCallVectorStringObject(options: Omit<TestCallVectorStringObject, '@type'>): Promise<TestVectorStringObject> {
 		return this._request({
 			...options,
 			'@type': 'testCallVectorStringObject',
@@ -28708,12 +33343,7 @@ Vector of objects to return.
 	/**
 Returns the squared received number; for testing only. This is an offline method. Can be called before authorization.
 */
-	async testSquareInt(options: {
-		/**
-Number to square.
-*/
-		x: number;
-	}): Promise<TestInt> {
+	async testSquareInt(options: Omit<TestSquareInt, '@type'>): Promise<TestInt> {
 		return this._request({
 			...options,
 			'@type': 'testSquareInt',
@@ -28732,28 +33362,7 @@ Sends a simple network request to the Telegram servers; for testing only. Can be
 	/**
 Sends a simple network request to the Telegram servers via proxy; for testing only. Can be called before authorization.
 */
-	async testProxy(options: {
-		/**
-Proxy server IP address.
-*/
-		server: string;
-		/**
-Proxy server port.
-*/
-		port: number;
-		/**
-Proxy type.
-*/
-		type: ProxyType;
-		/**
-Identifier of a datacenter with which to test connection.
-*/
-		dc_id: number;
-		/**
-The maximum overall timeout for the request.
-*/
-		timeout: number;
-	}): Promise<Ok> {
+	async testProxy(options: Omit<TestProxy, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'testProxy',
@@ -28782,12 +33391,7 @@ before authorization.
 	/**
 Returns the specified error and ensures that the Error object is used; for testing only. Can be called synchronously.
 */
-	async testReturnError(options: {
-		/**
-The error to be returned.
-*/
-		error: Error;
-	}): Promise<Error> {
+	async testReturnError(options: Omit<TestReturnError, '@type'>): Promise<Error> {
 		return this._request({
 			...options,
 			'@type': 'testReturnError',
@@ -28797,5 +33401,5 @@ The error to be returned.
 	/**
 	Send a request to the actual libtdjson.so here. Do not forget to handle {@link Error} responses and timeouts.
 	*/
-	protected abstract _request(message: any): Promise<any>;
+	protected abstract _request<R extends Request>(message: R): Promise<any>;
 }
