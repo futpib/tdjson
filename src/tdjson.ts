@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
+
 /**
 An object of this type can be returned on every function call, in case of an error.
 */
@@ -14,6 +15,7 @@ Error message; subject to future changes.
 */
 	message: string;
 }
+
 /**
 An object of this type is returned on a successful function call for certain functions.
 */
@@ -21,6 +23,7 @@ export interface Ok {
 	'@type': 'ok';
 
 }
+
 /**
 Contains parameters for TDLib initialization.
 */
@@ -90,6 +93,7 @@ possible to the original name.
 */
 	ignore_file_names?: boolean;
 }
+
 /**
 Provides information about the method by which an authentication code is delivered to the user.
 Subtype of {@link AuthenticationCodeType}.
@@ -101,6 +105,7 @@ Length of the code.
 */
 	length: number;
 }
+
 /**
 An authentication code is delivered via an SMS message to the specified phone number.
 Subtype of {@link AuthenticationCodeType}.
@@ -112,6 +117,7 @@ Length of the code.
 */
 	length: number;
 }
+
 /**
 An authentication code is delivered via a phone call to the specified phone number.
 Subtype of {@link AuthenticationCodeType}.
@@ -123,6 +129,7 @@ Length of the code.
 */
 	length: number;
 }
+
 /**
 An authentication code is delivered by an immediately canceled call to the specified phone number. The phone number that
 calls is the code that must be entered automatically.
@@ -135,6 +142,7 @@ Pattern of the phone number from which the call will be made.
 */
 	pattern: string;
 }
+
 /**
 An authentication code is delivered by an immediately canceled call to the specified phone number. The last digits of
 the phone number that calls are the code that must be entered manually by the user.
@@ -151,6 +159,7 @@ Number of digits in the code, excluding the prefix.
 */
 	length: number;
 }
+
 /**
 Information about the authentication code that was sent.
 */
@@ -173,6 +182,7 @@ Timeout before the code can be re-sent, in seconds.
 */
 	timeout: number;
 }
+
 /**
 Information about the email address authentication code that was sent.
 */
@@ -187,6 +197,7 @@ Length of the code; 0 if unknown.
 */
 	length: number;
 }
+
 /**
 Represents a part of the text that needs to be formatted in some unusual way.
 */
@@ -205,6 +216,7 @@ Type of the entity.
 */
 	type: TextEntityType;
 }
+
 /**
 Contains a list of text entities.
 */
@@ -215,6 +227,7 @@ List of text entities.
 */
 	entities: TextEntity[];
 }
+
 /**
 A text with some entities.
 */
@@ -231,6 +244,7 @@ and to be contained in all other entities. All other entities can't contain each
 */
 	entities: TextEntity[];
 }
+
 /**
 Contains Telegram terms of service.
 */
@@ -249,6 +263,7 @@ True, if a blocking popup with terms of service must be shown to the user.
 */
 	show_popup?: boolean;
 }
+
 /**
 Represents the current authorization state of the TDLib client.
 Subtype of {@link AuthorizationState}.
@@ -257,6 +272,7 @@ export interface AuthorizationStateWaitTdlibParameters {
 	'@type': 'authorizationStateWaitTdlibParameters';
 
 }
+
 /**
 TDLib needs an encryption key to decrypt the local database.
 Subtype of {@link AuthorizationState}.
@@ -268,6 +284,7 @@ True, if the database is currently encrypted.
 */
 	is_encrypted?: boolean;
 }
+
 /**
 TDLib needs the user's phone number to authorize. Call `setAuthenticationPhoneNumber` to provide the phone number, or
 use `requestQrCodeAuthentication`, or `checkAuthenticationBotToken` for other authentication options.
@@ -277,6 +294,7 @@ export interface AuthorizationStateWaitPhoneNumber {
 	'@type': 'authorizationStateWaitPhoneNumber';
 
 }
+
 /**
 TDLib needs the user's authentication code to authorize.
 Subtype of {@link AuthorizationState}.
@@ -288,6 +306,7 @@ Information about the authorization code that was sent.
 */
 	code_info: AuthenticationCodeInfo;
 }
+
 /**
 The user needs to confirm authorization on another logged in device by scanning a QR code with the provided link.
 Subtype of {@link AuthorizationState}.
@@ -299,6 +318,7 @@ A tg:// URL for the QR code. The link will be updated frequently.
 */
 	link: string;
 }
+
 /**
 The user is unregistered and need to accept terms of service and enter their first name and last name to finish
 registration.
@@ -311,6 +331,7 @@ Telegram terms of service.
 */
 	terms_of_service: TermsOfService;
 }
+
 /**
 The user has been authorized, but needs to enter a 2-step verification password to start using the application.
 Subtype of {@link AuthorizationState}.
@@ -330,6 +351,7 @@ Pattern of the email address to which the recovery email was sent; empty until a
 */
 	recovery_email_address_pattern: string;
 }
+
 /**
 The user has been successfully authorized. TDLib is now ready to answer queries.
 Subtype of {@link AuthorizationState}.
@@ -338,6 +360,7 @@ export interface AuthorizationStateReady {
 	'@type': 'authorizationStateReady';
 
 }
+
 /**
 The user is currently logging out.
 Subtype of {@link AuthorizationState}.
@@ -346,6 +369,7 @@ export interface AuthorizationStateLoggingOut {
 	'@type': 'authorizationStateLoggingOut';
 
 }
+
 /**
 TDLib is closing, all subsequent queries will be answered with the error 500. Note that closing TDLib can take a while.
 All resources will be freed only after authorizationStateClosed has been received.
@@ -355,6 +379,7 @@ export interface AuthorizationStateClosing {
 	'@type': 'authorizationStateClosing';
 
 }
+
 /**
 TDLib client is in its final state. All databases are closed and all resources are released. No other updates will be
 received after this. All queries will be responded to with error code 500. To continue working, one must create a new
@@ -365,6 +390,7 @@ export interface AuthorizationStateClosed {
 	'@type': 'authorizationStateClosed';
 
 }
+
 /**
 Represents the current state of 2-step verification.
 */
@@ -396,6 +422,7 @@ resetPassword.
 */
 	pending_reset_date: number;
 }
+
 /**
 Contains information about the current recovery email address.
 */
@@ -406,6 +433,7 @@ Recovery email address.
 */
 	recovery_email_address: string;
 }
+
 /**
 Returns information about the availability of a temporary password, which can be used for payments.
 */
@@ -420,6 +448,7 @@ Time left before the temporary password expires, in seconds.
 */
 	valid_for: number;
 }
+
 /**
 Represents a local file.
 */
@@ -460,6 +489,7 @@ bigger, and some parts of it may contain garbage.
 */
 	downloaded_size: number;
 }
+
 /**
 Represents a remote file.
 */
@@ -493,6 +523,7 @@ Size of the remote available part of the file, in bytes; 0 if unknown.
 */
 	uploaded_size: number;
 }
+
 /**
 Represents a file.
 */
@@ -519,6 +550,7 @@ Information about the remote copy of the file.
 */
 	remote: RemoteFile;
 }
+
 /**
 Points to a file.
 Subtype of {@link InputFile}.
@@ -530,6 +562,7 @@ Unique file identifier.
 */
 	id: number;
 }
+
 /**
 A file defined by its remote ID. The remote ID is guaranteed to be usable only if the corresponding file is still
 accessible to the user and known to TDLib. For example, if the file is from a message, then the message must be not
@@ -544,6 +577,7 @@ Remote file identifier.
 */
 	id: string;
 }
+
 /**
 A file defined by a local path.
 Subtype of {@link InputFile}.
@@ -555,6 +589,7 @@ Local path to the file.
 */
 	path: string;
 }
+
 /**
 A file generated by the application.
 Subtype of {@link InputFile}.
@@ -575,6 +610,7 @@ Expected size of the generated file, in bytes; 0 if unknown.
 */
 	expected_size: number;
 }
+
 /**
 Describes an image in JPEG format.
 */
@@ -601,6 +637,7 @@ Sizes of progressive JPEG file prefixes, which can be used to preliminarily show
 */
 	progressive_sizes: number[];
 }
+
 /**
 Thumbnail image of a very poor quality and low resolution.
 */
@@ -619,6 +656,7 @@ The thumbnail in JPEG format.
 */
 	data: string;
 }
+
 /**
 Describes format of a thumbnail.
 Subtype of {@link ThumbnailFormat}.
@@ -627,6 +665,7 @@ export interface ThumbnailFormatJpeg {
 	'@type': 'thumbnailFormatJpeg';
 
 }
+
 /**
 The thumbnail is in static GIF format. It will be used only for some bot inline results.
 Subtype of {@link ThumbnailFormat}.
@@ -635,6 +674,7 @@ export interface ThumbnailFormatGif {
 	'@type': 'thumbnailFormatGif';
 
 }
+
 /**
 The thumbnail is in MPEG4 format. It will be used only for some animations and videos.
 Subtype of {@link ThumbnailFormat}.
@@ -643,6 +683,7 @@ export interface ThumbnailFormatMpeg4 {
 	'@type': 'thumbnailFormatMpeg4';
 
 }
+
 /**
 The thumbnail is in PNG format. It will be used only for background patterns.
 Subtype of {@link ThumbnailFormat}.
@@ -651,6 +692,7 @@ export interface ThumbnailFormatPng {
 	'@type': 'thumbnailFormatPng';
 
 }
+
 /**
 The thumbnail is in TGS format. It will be used only for TGS sticker sets.
 Subtype of {@link ThumbnailFormat}.
@@ -659,6 +701,7 @@ export interface ThumbnailFormatTgs {
 	'@type': 'thumbnailFormatTgs';
 
 }
+
 /**
 The thumbnail is in WEBM format. It will be used only for WEBM sticker sets.
 Subtype of {@link ThumbnailFormat}.
@@ -667,6 +710,7 @@ export interface ThumbnailFormatWebm {
 	'@type': 'thumbnailFormatWebm';
 
 }
+
 /**
 The thumbnail is in WEBP format. It will be used only for some stickers.
 Subtype of {@link ThumbnailFormat}.
@@ -675,6 +719,7 @@ export interface ThumbnailFormatWebp {
 	'@type': 'thumbnailFormatWebp';
 
 }
+
 /**
 Represents a thumbnail.
 */
@@ -697,6 +742,7 @@ The thumbnail.
 */
 	file: File;
 }
+
 /**
 Part of the face, relative to which a mask is placed.
 Subtype of {@link MaskPoint}.
@@ -705,6 +751,7 @@ export interface MaskPointForehead {
 	'@type': 'maskPointForehead';
 
 }
+
 /**
 The mask is placed relatively to the eyes.
 Subtype of {@link MaskPoint}.
@@ -713,6 +760,7 @@ export interface MaskPointEyes {
 	'@type': 'maskPointEyes';
 
 }
+
 /**
 The mask is placed relatively to the mouth.
 Subtype of {@link MaskPoint}.
@@ -721,6 +769,7 @@ export interface MaskPointMouth {
 	'@type': 'maskPointMouth';
 
 }
+
 /**
 The mask is placed relatively to the chin.
 Subtype of {@link MaskPoint}.
@@ -729,6 +778,7 @@ export interface MaskPointChin {
 	'@type': 'maskPointChin';
 
 }
+
 /**
 Position on a photo where a mask is placed.
 */
@@ -753,6 +803,7 @@ Mask scaling coefficient. (For example, 2.0 means a doubled size).
 */
 	scale: number;
 }
+
 /**
 Describes format of a sticker.
 Subtype of {@link StickerFormat}.
@@ -761,6 +812,7 @@ export interface StickerFormatWebp {
 	'@type': 'stickerFormatWebp';
 
 }
+
 /**
 The sticker is an animation in TGS format.
 Subtype of {@link StickerFormat}.
@@ -769,6 +821,7 @@ export interface StickerFormatTgs {
 	'@type': 'stickerFormatTgs';
 
 }
+
 /**
 The sticker is a video in WEBM format.
 Subtype of {@link StickerFormat}.
@@ -777,6 +830,7 @@ export interface StickerFormatWebm {
 	'@type': 'stickerFormatWebm';
 
 }
+
 /**
 Describes type of a sticker.
 Subtype of {@link StickerType}.
@@ -785,6 +839,7 @@ export interface StickerTypeRegular {
 	'@type': 'stickerTypeRegular';
 
 }
+
 /**
 The sticker is a mask in WEBP format to be placed on photos or videos.
 Subtype of {@link StickerType}.
@@ -793,6 +848,7 @@ export interface StickerTypeMask {
 	'@type': 'stickerTypeMask';
 
 }
+
 /**
 The sticker is a custom emoji to be used inside message text and caption.
 Subtype of {@link StickerType}.
@@ -801,6 +857,7 @@ export interface StickerTypeCustomEmoji {
 	'@type': 'stickerTypeCustomEmoji';
 
 }
+
 /**
 Represents a closed vector path. The path begins at the end point of the last command.
 */
@@ -811,6 +868,7 @@ List of vector path commands.
 */
 	commands: VectorPathCommand[];
 }
+
 /**
 Describes one answer option of a poll.
 */
@@ -837,6 +895,7 @@ True, if the option is being chosen by a pending setPollAnswer request.
 */
 	is_being_chosen?: boolean;
 }
+
 /**
 Describes the type of a poll.
 Subtype of {@link PollType}.
@@ -848,6 +907,7 @@ True, if multiple answer options can be chosen simultaneously.
 */
 	allow_multiple_answers?: boolean;
 }
+
 /**
 A poll in quiz mode, which has exactly one correct answer option and can be answered only once.
 Subtype of {@link PollType}.
@@ -864,6 +924,7 @@ line feeds; empty for a yet unanswered poll.
 */
 	explanation: FormattedText;
 }
+
 /**
 Describes an animation file. The animation must be encoded in GIF or MPEG4 format.
 */
@@ -907,6 +968,7 @@ File containing the animation.
 */
 	animation: File;
 }
+
 /**
 Describes an audio file. Audio is usually in MP3 or M4A format.
 */
@@ -951,6 +1013,7 @@ File containing the audio.
 */
 	audio: File;
 }
+
 /**
 Describes a document of any type.
 */
@@ -978,6 +1041,7 @@ File containing the document.
 */
 	document: File;
 }
+
 /**
 Describes a photo.
 */
@@ -997,6 +1061,7 @@ Available variants of the photo, in different sizes.
 */
 	sizes: PhotoSize[];
 }
+
 /**
 Describes a sticker.
 */
@@ -1056,6 +1121,7 @@ File containing the sticker.
 */
 	sticker: File;
 }
+
 /**
 Describes a video file.
 */
@@ -1103,6 +1169,7 @@ File containing the video.
 */
 	video: File;
 }
+
 /**
 Describes a video note. The video must be equal in width and height, cropped to a circle, and stored in MPEG4 format.
 */
@@ -1129,6 +1196,7 @@ File containing the video.
 */
 	video: File;
 }
+
 /**
 Describes a voice note. The voice note must be encoded with the Opus codec, and stored inside an OGG container. Voice
 notes can have only a single audio channel.
@@ -1156,6 +1224,7 @@ File containing the voice note.
 */
 	voice: File;
 }
+
 /**
 Describes an animated or custom representation of an emoji.
 */
@@ -1176,6 +1245,7 @@ codec, and stored inside an OGG container.
 */
 	sound: File;
 }
+
 /**
 Describes a user contact.
 */
@@ -1202,6 +1272,7 @@ Identifier of the user, if known; otherwise 0.
 */
 	user_id: number;
 }
+
 /**
 Describes a location on planet Earth.
 */
@@ -1220,6 +1291,7 @@ The estimated horizontal accuracy of the location, in meters; as defined by the 
 */
 	horizontal_accuracy: number;
 }
+
 /**
 Describes a venue.
 */
@@ -1251,6 +1323,7 @@ Type of the venue in the provider database; as defined by the sender.
 */
 	type: string;
 }
+
 /**
 Describes a game.
 */
@@ -1285,6 +1358,7 @@ Game animation; may be null.
 */
 	animation: Animation;
 }
+
 /**
 Describes a poll.
 */
@@ -1331,6 +1405,7 @@ True, if the poll is closed.
 */
 	is_closed?: boolean;
 }
+
 /**
 Describes a user profile photo.
 */
@@ -1357,6 +1432,7 @@ True, if the photo has animated variant.
 */
 	has_animation?: boolean;
 }
+
 /**
 Contains basic information about the photo of a chat.
 */
@@ -1379,6 +1455,7 @@ True, if the photo has animated variant.
 */
 	has_animation?: boolean;
 }
+
 /**
 Represents the type of a user. The following types are possible: regular users, deleted users and bots.
 Subtype of {@link UserType}.
@@ -1387,6 +1464,7 @@ export interface UserTypeRegular {
 	'@type': 'userTypeRegular';
 
 }
+
 /**
 A deleted user or deleted bot. No information on the user besides the user identifier is available. It is not possible
 to perform any active actions on this type of user.
@@ -1396,6 +1474,7 @@ export interface UserTypeDeleted {
 	'@type': 'userTypeDeleted';
 
 }
+
 /**
 A bot (see https://core.telegram.org/bots).
 Subtype of {@link UserType}.
@@ -1428,6 +1507,7 @@ True, if the bot can be added to attachment menu.
 */
 	can_be_added_to_attachment_menu?: boolean;
 }
+
 /**
 No information on the user besides the user identifier is available, yet this user has not been deleted. This object is
 extremely rare and must be handled like a deleted user. It is not possible to perform any actions on users of this type.
@@ -1437,6 +1517,7 @@ export interface UserTypeUnknown {
 	'@type': 'userTypeUnknown';
 
 }
+
 /**
 Represents a command supported by a bot.
 */
@@ -1451,6 +1532,7 @@ Represents a command supported by a bot.
 */
 	description: string;
 }
+
 /**
 Contains a list of bot commands.
 */
@@ -1465,6 +1547,7 @@ List of bot commands.
 */
 	commands: BotCommand[];
 }
+
 /**
 Describes a button to be shown instead of bot commands menu button.
 */
@@ -1479,6 +1562,7 @@ URL to be passed to openWebApp.
 */
 	url: string;
 }
+
 /**
 Represents a location to which a chat is connected.
 */
@@ -1493,6 +1577,7 @@ Location address; 1-64 characters, as defined by the chat owner.
 */
 	address: string;
 }
+
 /**
 Animated variant of a chat photo in MPEG4 format.
 */
@@ -1511,6 +1596,7 @@ Timestamp of the frame, used as a static chat photo.
 */
 	main_frame_timestamp: number;
 }
+
 /**
 Describes a chat or user profile photo.
 */
@@ -1541,6 +1627,7 @@ A small (160x160) animated variant of the photo in MPEG4 format; may be null eve
 */
 	small_animation: AnimatedChatPhoto;
 }
+
 /**
 Contains a list of chat or user profile photos.
 */
@@ -1555,6 +1642,7 @@ List of photos.
 */
 	photos: ChatPhoto[];
 }
+
 /**
 Describes a photo to be set as a user profile or chat photo.
 Subtype of {@link InputChatPhoto}.
@@ -1566,6 +1654,7 @@ Identifier of the current user's profile photo to reuse.
 */
 	chat_photo_id: string;
 }
+
 /**
 A static photo in JPEG format.
 Subtype of {@link InputChatPhoto}.
@@ -1577,6 +1666,7 @@ Photo to be set as profile photo. Only inputFileLocal and inputFileGenerated are
 */
 	photo: InputFile;
 }
+
 /**
 An animation in MPEG4 format; must be square, at most 10 seconds long, have width between 160 and 800 and be at most 2MB
 in size.
@@ -1593,6 +1683,7 @@ Timestamp of the frame, which will be used as static chat photo.
 */
 	main_frame_timestamp: number;
 }
+
 /**
 Describes actions that a user is allowed to take in a chat.
 */
@@ -1633,6 +1724,7 @@ True, if the user can pin messages.
 */
 	can_pin_messages?: boolean;
 }
+
 /**
 Describes rights of the administrator.
 */
@@ -1687,6 +1779,7 @@ only.
 */
 	is_anonymous?: boolean;
 }
+
 /**
 Describes an option for gifting Telegram Premium to a user.
 */
@@ -1718,6 +1811,7 @@ direct payment isn't available.
 */
 	payment_link: InternalLinkType;
 }
+
 /**
 Represents a user.
 */
@@ -1801,6 +1895,7 @@ True, if the user added the current bot to attachment menu; only available to bo
 */
 	added_to_attachment_menu?: boolean;
 }
+
 /**
 Contains information about a bot.
 */
@@ -1840,6 +1935,7 @@ Default administrator rights for adding the bot to channels; may be null.
 */
 	default_channel_administrator_rights: ChatAdministratorRights;
 }
+
 /**
 Contains full information about a user.
 */
@@ -1895,6 +1991,7 @@ For bots, information about the bot; may be null.
 */
 	bot_info: BotInfo;
 }
+
 /**
 Represents a list of users.
 */
@@ -1909,6 +2006,7 @@ A list of user identifiers.
 */
 	user_ids: number[];
 }
+
 /**
 Contains information about a chat administrator.
 */
@@ -1927,6 +2025,7 @@ True, if the user is the owner of the chat.
 */
 	is_owner?: boolean;
 }
+
 /**
 Represents a list of chat administrators.
 */
@@ -1937,6 +2036,7 @@ A list of chat administrators.
 */
 	administrators: ChatAdministrator[];
 }
+
 /**
 Provides information about the status of a member in a chat.
 Subtype of {@link ChatMemberStatus}.
@@ -1956,6 +2056,7 @@ True, if the user is a member of the chat.
 */
 	is_member?: boolean;
 }
+
 /**
 The user is a member of the chat and has some additional privileges. In basic groups, administrators can edit and delete
 messages sent by others, add new members, ban unprivileged members, and manage video chats. In supergroups and channels,
@@ -1977,6 +2078,7 @@ Rights of the administrator.
 */
 	rights: ChatAdministratorRights;
 }
+
 /**
 The user is a member of the chat, without any additional privileges or restrictions.
 Subtype of {@link ChatMemberStatus}.
@@ -1985,6 +2087,7 @@ export interface ChatMemberStatusMember {
 	'@type': 'chatMemberStatusMember';
 
 }
+
 /**
 The user is under certain restrictions in the chat. Not supported in basic groups and channels.
 Subtype of {@link ChatMemberStatus}.
@@ -2005,6 +2108,7 @@ User permissions in the chat.
 */
 	permissions: ChatPermissions;
 }
+
 /**
 The user or the chat is not a chat member.
 Subtype of {@link ChatMemberStatus}.
@@ -2013,6 +2117,7 @@ export interface ChatMemberStatusLeft {
 	'@type': 'chatMemberStatusLeft';
 
 }
+
 /**
 The user or the chat was banned (and hence is not a member of the chat). Implies the user can't return to the chat, view
 messages, or be used as a participant identifier to join a video chat of the chat.
@@ -2027,6 +2132,7 @@ groups.
 */
 	banned_until_date: number;
 }
+
 /**
 Describes a user or a chat as a member of another chat.
 */
@@ -2050,6 +2156,7 @@ Status of the member in the chat.
 */
 	status: ChatMemberStatus;
 }
+
 /**
 Contains a list of chat members.
 */
@@ -2064,6 +2171,7 @@ A list of chat members.
 */
 	members: ChatMember[];
 }
+
 /**
 Specifies the kind of chat members to return in searchChatMembers.
 Subtype of {@link ChatMembersFilter}.
@@ -2072,6 +2180,7 @@ export interface ChatMembersFilterContacts {
 	'@type': 'chatMembersFilterContacts';
 
 }
+
 /**
 Returns the owner and administrators.
 Subtype of {@link ChatMembersFilter}.
@@ -2080,6 +2189,7 @@ export interface ChatMembersFilterAdministrators {
 	'@type': 'chatMembersFilterAdministrators';
 
 }
+
 /**
 Returns all chat members, including restricted chat members.
 Subtype of {@link ChatMembersFilter}.
@@ -2088,6 +2198,7 @@ export interface ChatMembersFilterMembers {
 	'@type': 'chatMembersFilterMembers';
 
 }
+
 /**
 Returns users which can be mentioned in the chat.
 Subtype of {@link ChatMembersFilter}.
@@ -2099,6 +2210,7 @@ If non-zero, the identifier of the current message thread.
 */
 	message_thread_id: number;
 }
+
 /**
 Returns users under certain restrictions in the chat; can be used only by administrators in a supergroup.
 Subtype of {@link ChatMembersFilter}.
@@ -2107,6 +2219,7 @@ export interface ChatMembersFilterRestricted {
 	'@type': 'chatMembersFilterRestricted';
 
 }
+
 /**
 Returns users banned from the chat; can be used only by administrators in a supergroup or in a channel.
 Subtype of {@link ChatMembersFilter}.
@@ -2115,6 +2228,7 @@ export interface ChatMembersFilterBanned {
 	'@type': 'chatMembersFilterBanned';
 
 }
+
 /**
 Returns bot members of the chat.
 Subtype of {@link ChatMembersFilter}.
@@ -2123,6 +2237,7 @@ export interface ChatMembersFilterBots {
 	'@type': 'chatMembersFilterBots';
 
 }
+
 /**
 Specifies the kind of chat members to return in getSupergroupMembers.
 Subtype of {@link SupergroupMembersFilter}.
@@ -2131,6 +2246,7 @@ export interface SupergroupMembersFilterRecent {
 	'@type': 'supergroupMembersFilterRecent';
 
 }
+
 /**
 Returns contacts of the user, which are members of the supergroup or channel.
 Subtype of {@link SupergroupMembersFilter}.
@@ -2142,6 +2258,7 @@ Query to search for.
 */
 	query: string;
 }
+
 /**
 Returns the owner and administrators.
 Subtype of {@link SupergroupMembersFilter}.
@@ -2150,6 +2267,7 @@ export interface SupergroupMembersFilterAdministrators {
 	'@type': 'supergroupMembersFilterAdministrators';
 
 }
+
 /**
 Used to search for supergroup or channel members via a (string) query.
 Subtype of {@link SupergroupMembersFilter}.
@@ -2161,6 +2279,7 @@ Query to search for.
 */
 	query: string;
 }
+
 /**
 Returns restricted supergroup members; can be used only by administrators.
 Subtype of {@link SupergroupMembersFilter}.
@@ -2172,6 +2291,7 @@ Query to search for.
 */
 	query: string;
 }
+
 /**
 Returns users banned from the supergroup or channel; can be used only by administrators.
 Subtype of {@link SupergroupMembersFilter}.
@@ -2183,6 +2303,7 @@ Query to search for.
 */
 	query: string;
 }
+
 /**
 Returns users which can be mentioned in the supergroup.
 Subtype of {@link SupergroupMembersFilter}.
@@ -2198,6 +2319,7 @@ If non-zero, the identifier of the current message thread.
 */
 	message_thread_id: number;
 }
+
 /**
 Returns bot members of the supergroup or channel.
 Subtype of {@link SupergroupMembersFilter}.
@@ -2206,6 +2328,7 @@ export interface SupergroupMembersFilterBots {
 	'@type': 'supergroupMembersFilterBots';
 
 }
+
 /**
 Contains a chat invite link.
 */
@@ -2262,6 +2385,7 @@ True, if the link was revoked.
 */
 	is_revoked?: boolean;
 }
+
 /**
 Contains a list of chat invite links.
 */
@@ -2276,6 +2400,7 @@ List of invite links.
 */
 	invite_links: ChatInviteLink[];
 }
+
 /**
 Describes a chat administrator with a number of active and revoked chat invite links.
 */
@@ -2294,6 +2419,7 @@ Number of revoked invite links.
 */
 	revoked_invite_link_count: number;
 }
+
 /**
 Contains a list of chat invite link counts.
 */
@@ -2304,6 +2430,7 @@ List of invite link counts.
 */
 	invite_link_counts: ChatInviteLinkCount[];
 }
+
 /**
 Describes a chat member joined a chat via an invite link.
 */
@@ -2322,6 +2449,7 @@ User identifier of the chat administrator, approved user join request.
 */
 	approver_user_id: number;
 }
+
 /**
 Contains a list of chat members joined a chat via an invite link.
 */
@@ -2336,6 +2464,7 @@ List of chat members, joined a chat via an invite link.
 */
 	members: ChatInviteLinkMember[];
 }
+
 /**
 Contains information about a chat invite link.
 */
@@ -2382,6 +2511,7 @@ True, if the chat is a public supergroup or channel, i.e. it has a username or i
 */
 	is_public?: boolean;
 }
+
 /**
 Describes a user that sent a join request and waits for administrator approval.
 */
@@ -2400,6 +2530,7 @@ A short bio of the user.
 */
 	bio: string;
 }
+
 /**
 Contains a list of requests to join a chat.
 */
@@ -2414,6 +2545,7 @@ List of the requests.
 */
 	requests: ChatJoinRequest[];
 }
+
 /**
 Contains information about pending join requests for a chat.
 */
@@ -2428,6 +2560,7 @@ Identifiers of at most 3 users sent the newest pending join requests.
 */
 	user_ids: number[];
 }
+
 /**
 Represents a basic group of 0-200 users (must be upgraded to a supergroup to accommodate more than 200 users).
 */
@@ -2454,6 +2587,7 @@ Identifier of the supergroup to which this group was upgraded; 0 if none.
 */
 	upgraded_to_supergroup_id: number;
 }
+
 /**
 Contains full information about a basic group.
 */
@@ -2485,6 +2619,7 @@ List of commands of bots in the group.
 */
 	bot_commands: BotCommands[];
 }
+
 /**
 Represents a supergroup or channel with zero or more members (subscribers in the case of channels). From the point of
 view of the system, a channel is a special kind of a supergroup: only administrators can post and see the list of
@@ -2570,6 +2705,7 @@ True, if many users reported this supergroup or channel as a fake account.
 */
 	is_fake?: boolean;
 }
+
 /**
 Contains full information about a supergroup or channel.
 */
@@ -2664,6 +2800,7 @@ Identifier of the last message in the basic group from which supergroup was upgr
 */
 	upgraded_from_max_message_id: number;
 }
+
 /**
 Describes the current secret chat state.
 Subtype of {@link SecretChatState}.
@@ -2672,6 +2809,7 @@ export interface SecretChatStatePending {
 	'@type': 'secretChatStatePending';
 
 }
+
 /**
 The secret chat is ready to use.
 Subtype of {@link SecretChatState}.
@@ -2680,6 +2818,7 @@ export interface SecretChatStateReady {
 	'@type': 'secretChatStateReady';
 
 }
+
 /**
 The secret chat is closed.
 Subtype of {@link SecretChatState}.
@@ -2688,6 +2827,7 @@ export interface SecretChatStateClosed {
 	'@type': 'secretChatStateClosed';
 
 }
+
 /**
 Represents a secret chat.
 */
@@ -2724,6 +2864,7 @@ and strikethrough entities are supported if the layer >= 101, files bigger than 
 */
 	layer: number;
 }
+
 /**
 Contains information about the sender of a message.
 Subtype of {@link MessageSender}.
@@ -2735,6 +2876,7 @@ Identifier of the user that sent the message.
 */
 	user_id: number;
 }
+
 /**
 The message was sent on behalf of a chat.
 Subtype of {@link MessageSender}.
@@ -2746,6 +2888,7 @@ Identifier of the chat that sent the message.
 */
 	chat_id: number;
 }
+
 /**
 Represents a list of message senders.
 */
@@ -2760,6 +2903,7 @@ List of message senders.
 */
 	senders: MessageSender[];
 }
+
 /**
 Contains information about the origin of a forwarded message.
 Subtype of {@link MessageForwardOrigin}.
@@ -2771,6 +2915,7 @@ Identifier of the user that originally sent the message.
 */
 	sender_user_id: number;
 }
+
 /**
 The message was originally sent on behalf of a chat.
 Subtype of {@link MessageForwardOrigin}.
@@ -2786,6 +2931,7 @@ For messages originally sent by an anonymous chat administrator, original messag
 */
 	author_signature: string;
 }
+
 /**
 The message was originally sent by a user, which is hidden by their privacy settings.
 Subtype of {@link MessageForwardOrigin}.
@@ -2797,6 +2943,7 @@ Name of the sender.
 */
 	sender_name: string;
 }
+
 /**
 The message was originally a post in a channel.
 Subtype of {@link MessageForwardOrigin}.
@@ -2816,6 +2963,7 @@ Original post author signature.
 */
 	author_signature: string;
 }
+
 /**
 The message was imported from an exported message history.
 Subtype of {@link MessageForwardOrigin}.
@@ -2827,6 +2975,7 @@ Name of the sender.
 */
 	sender_name: string;
 }
+
 /**
 Contains information about a forwarded message.
 */
@@ -2856,6 +3005,7 @@ unknown.
 */
 	from_message_id: number;
 }
+
 /**
 Contains information about replies to a message.
 */
@@ -2883,6 +3033,7 @@ Identifier of the last reply to the message.
 */
 	last_message_id: number;
 }
+
 /**
 Contains information about a reaction to a message.
 */
@@ -2906,6 +3057,7 @@ chats.
 */
 	recent_sender_ids: MessageSender[];
 }
+
 /**
 Contains information about interactions with a message.
 */
@@ -2929,6 +3081,7 @@ The list of reactions added to the message.
 */
 	reactions: MessageReaction[];
 }
+
 /**
 Contains information about an unread reaction to a message.
 */
@@ -2947,6 +3100,7 @@ True, if the reaction was added with a big animation.
 */
 	is_big?: boolean;
 }
+
 /**
 Contains information about the sending state of the message.
 Subtype of {@link MessageSendingState}.
@@ -2955,6 +3109,7 @@ export interface MessageSendingStatePending {
 	'@type': 'messageSendingStatePending';
 
 }
+
 /**
 The message failed to be sent.
 Subtype of {@link MessageSendingState}.
@@ -2982,6 +3137,7 @@ Time left before the message can be re-sent, in seconds. No update is sent when 
 */
 	retry_after: number;
 }
+
 /**
 Describes a message.
 */
@@ -3140,6 +3296,7 @@ Reply markup for the message; may be null.
 */
 	reply_markup: ReplyMarkup;
 }
+
 /**
 Contains a list of messages.
 */
@@ -3154,6 +3311,7 @@ List of messages; messages may be null.
 */
 	messages: Message[];
 }
+
 /**
 Contains a list of messages found by a search.
 */
@@ -3172,6 +3330,7 @@ The offset for the next request. If empty, there are no more results.
 */
 	next_offset: string;
 }
+
 /**
 Contains information about a message in a specific position.
 */
@@ -3190,6 +3349,7 @@ Point in time (Unix timestamp) when the message was sent.
 */
 	date: number;
 }
+
 /**
 Contains a list of message positions.
 */
@@ -3204,6 +3364,7 @@ List of message positions.
 */
 	positions: MessagePosition[];
 }
+
 /**
 Contains information about found messages sent on a specific day.
 */
@@ -3218,6 +3379,7 @@ First message sent on the day.
 */
 	message: Message;
 }
+
 /**
 Contains information about found messages, split by days according to the option "utc_time_offset".
 */
@@ -3232,6 +3394,7 @@ Information about messages sent.
 */
 	days: MessageCalendarDay[];
 }
+
 /**
 Describes a sponsored message.
 */
@@ -3264,6 +3427,7 @@ Content of the message. Currently, can be only of the type messageText.
 */
 	content: MessageContent;
 }
+
 /**
 Describes a file added to file download list.
 */
@@ -3290,6 +3454,7 @@ True, if downloading of the file is paused.
 */
 	is_paused?: boolean;
 }
+
 /**
 Contains number of being downloaded and recently downloaded files found.
 */
@@ -3308,6 +3473,7 @@ Number of completed file downloads found.
 */
 	completed_count: number;
 }
+
 /**
 Contains a list of downloaded files, found by a search.
 */
@@ -3326,6 +3492,7 @@ The offset for the next request. If empty, there are no more results.
 */
 	next_offset: string;
 }
+
 /**
 Describes the types of chats to which notification settings are relevant.
 Subtype of {@link NotificationSettingsScope}.
@@ -3334,6 +3501,7 @@ export interface NotificationSettingsScopePrivateChats {
 	'@type': 'notificationSettingsScopePrivateChats';
 
 }
+
 /**
 Notification settings applied to all basic group and supergroup chats when the corresponding chat setting has a default
 value.
@@ -3343,6 +3511,7 @@ export interface NotificationSettingsScopeGroupChats {
 	'@type': 'notificationSettingsScopeGroupChats';
 
 }
+
 /**
 Notification settings applied to all channel chats when the corresponding chat setting has a default value.
 Subtype of {@link NotificationSettingsScope}.
@@ -3351,6 +3520,7 @@ export interface NotificationSettingsScopeChannelChats {
 	'@type': 'notificationSettingsScopeChannelChats';
 
 }
+
 /**
 Contains information about notification settings for a chat.
 */
@@ -3397,6 +3567,7 @@ If true, notifications for messages with mentions will be created as for an ordi
 */
 	disable_mention_notifications?: boolean;
 }
+
 /**
 Contains information about notification settings for several chats.
 */
@@ -3423,6 +3594,7 @@ True, if notifications for messages with mentions will be created as for an ordi
 */
 	disable_mention_notifications?: boolean;
 }
+
 /**
 Contains information about a message draft.
 */
@@ -3441,6 +3613,7 @@ Content of the message draft; must be of the type inputMessageText.
 */
 	input_message_text: InputMessageContent;
 }
+
 /**
 Describes the type of a chat.
 Subtype of {@link ChatType}.
@@ -3452,6 +3625,7 @@ User identifier.
 */
 	user_id: number;
 }
+
 /**
 A basic group (a chat with 0-200 other users).
 Subtype of {@link ChatType}.
@@ -3463,6 +3637,7 @@ Basic group identifier.
 */
 	basic_group_id: number;
 }
+
 /**
 A supergroup or channel (with unlimited members).
 Subtype of {@link ChatType}.
@@ -3478,6 +3653,7 @@ True, if the supergroup is a channel.
 */
 	is_channel?: boolean;
 }
+
 /**
 A secret chat with a user.
 Subtype of {@link ChatType}.
@@ -3493,6 +3669,7 @@ User identifier of the secret chat peer.
 */
 	user_id: number;
 }
+
 /**
 Represents a filter of user chats.
 */
@@ -3560,6 +3737,7 @@ True, if channels need to be included.
 */
 	include_channels?: boolean;
 }
+
 /**
 Contains basic information about a chat filter.
 */
@@ -3580,6 +3758,7 @@ The chosen or default icon name for short filter representation. One of "All", "
 */
 	icon_name: string;
 }
+
 /**
 Describes a recommended chat filter.
 */
@@ -3594,6 +3773,7 @@ Describes a recommended chat filter.
 */
 	description: string;
 }
+
 /**
 Contains a list of recommended chat filters.
 */
@@ -3604,6 +3784,7 @@ List of recommended chat filters.
 */
 	chat_filters: RecommendedChatFilter[];
 }
+
 /**
 Describes a list of chats.
 Subtype of {@link ChatList}.
@@ -3612,6 +3793,7 @@ export interface ChatListMain {
 	'@type': 'chatListMain';
 
 }
+
 /**
 A list of chats usually located at the top of the main chat list. Unmuted chats are automatically moved from the Archive
 to the Main chat list when a new message arrives.
@@ -3621,6 +3803,7 @@ export interface ChatListArchive {
 	'@type': 'chatListArchive';
 
 }
+
 /**
 A list of chats belonging to a chat filter.
 Subtype of {@link ChatList}.
@@ -3632,6 +3815,7 @@ Chat filter identifier.
 */
 	chat_filter_id: number;
 }
+
 /**
 Contains a list of chat lists.
 */
@@ -3642,6 +3826,7 @@ List of chat lists.
 */
 	chat_lists: ChatList[];
 }
+
 /**
 Describes a reason why an external chat is shown in a chat list.
 Subtype of {@link ChatSource}.
@@ -3650,6 +3835,7 @@ export interface ChatSourceMtprotoProxy {
 	'@type': 'chatSourceMtprotoProxy';
 
 }
+
 /**
 The chat contains a public service announcement.
 Subtype of {@link ChatSource}.
@@ -3665,6 +3851,7 @@ The text of the announcement.
 */
 	text: string;
 }
+
 /**
 Describes a position of a chat in a chat list.
 */
@@ -3688,6 +3875,7 @@ Source of the chat in the chat list; may be null.
 */
 	source: ChatSource;
 }
+
 /**
 Describes a video chat.
 */
@@ -3707,6 +3895,7 @@ Default group call participant identifier to join the video chat; may be null.
 */
 	default_participant_id: MessageSender;
 }
+
 /**
 A chat. (Can be a private chat, basic group, supergroup, or secret chat).
 */
@@ -3841,6 +4030,7 @@ settings can be stored here.) Persistent if the message database is used.
 */
 	client_data: string;
 }
+
 /**
 Represents a list of chats.
 */
@@ -3855,6 +4045,7 @@ List of chat identifiers.
 */
 	chat_ids: number[];
 }
+
 /**
 Describes a chat located nearby.
 */
@@ -3869,6 +4060,7 @@ Distance to the chat location, in meters.
 */
 	distance: number;
 }
+
 /**
 Represents a list of chats located nearby.
 */
@@ -3883,6 +4075,7 @@ List of location-based supergroups nearby.
 */
 	supergroups_nearby: ChatNearby[];
 }
+
 /**
 Describes a type of public chats.
 Subtype of {@link PublicChatType}.
@@ -3891,6 +4084,7 @@ export interface PublicChatTypeHasUsername {
 	'@type': 'publicChatTypeHasUsername';
 
 }
+
 /**
 The chat is public, because it is a location-based supergroup.
 Subtype of {@link PublicChatType}.
@@ -3899,6 +4093,7 @@ export interface PublicChatTypeIsLocationBased {
 	'@type': 'publicChatTypeIsLocationBased';
 
 }
+
 /**
 Describes actions which must be possible to do through a chat action bar.
 Subtype of {@link ChatActionBar}.
@@ -3911,6 +4106,7 @@ simultaneously with setting chat notification settings to default using setChatN
 */
 	can_unarchive?: boolean;
 }
+
 /**
 The chat is a location-based supergroup, which can be reported as having unrelated location using the method reportChat
 with the reason chatReportReasonUnrelatedLocation.
@@ -3920,6 +4116,7 @@ export interface ChatActionBarReportUnrelatedLocation {
 	'@type': 'chatActionBarReportUnrelatedLocation';
 
 }
+
 /**
 The chat is a recently created group chat to which new members can be invited.
 Subtype of {@link ChatActionBar}.
@@ -3928,6 +4125,7 @@ export interface ChatActionBarInviteMembers {
 	'@type': 'chatActionBarInviteMembers';
 
 }
+
 /**
 The chat is a private or secret chat, which can be reported using the method reportChat, or the other user can be
 blocked using the method toggleMessageSenderIsBlocked, or the other user can be added to the contact list using the
@@ -3947,6 +4145,7 @@ users.
 */
 	distance: number;
 }
+
 /**
 The chat is a private or secret chat and the other user can be added to the contact list using the method addContact.
 Subtype of {@link ChatActionBar}.
@@ -3955,6 +4154,7 @@ export interface ChatActionBarAddContact {
 	'@type': 'chatActionBarAddContact';
 
 }
+
 /**
 The chat is a private or secret chat with a mutual contact and the user's phone number can be shared with the other user
 using the method sharePhoneNumber.
@@ -3964,6 +4164,7 @@ export interface ChatActionBarSharePhoneNumber {
 	'@type': 'chatActionBarSharePhoneNumber';
 
 }
+
 /**
 The chat is a private chat with an administrator of a chat to which the user sent join request.
 Subtype of {@link ChatActionBar}.
@@ -3983,6 +4184,7 @@ Point in time (Unix timestamp) when the join request was sent.
 */
 	request_date: number;
 }
+
 /**
 Describes a keyboard button type.
 Subtype of {@link KeyboardButtonType}.
@@ -3991,6 +4193,7 @@ export interface KeyboardButtonTypeText {
 	'@type': 'keyboardButtonTypeText';
 
 }
+
 /**
 A button that sends the user's phone number when pressed; available only in private chats.
 Subtype of {@link KeyboardButtonType}.
@@ -3999,6 +4202,7 @@ export interface KeyboardButtonTypeRequestPhoneNumber {
 	'@type': 'keyboardButtonTypeRequestPhoneNumber';
 
 }
+
 /**
 A button that sends the user's location when pressed; available only in private chats.
 Subtype of {@link KeyboardButtonType}.
@@ -4007,6 +4211,7 @@ export interface KeyboardButtonTypeRequestLocation {
 	'@type': 'keyboardButtonTypeRequestLocation';
 
 }
+
 /**
 A button that allows the user to create and send a poll when pressed; available only in private chats.
 Subtype of {@link KeyboardButtonType}.
@@ -4022,6 +4227,7 @@ If true, only polls in quiz mode must be allowed to create.
 */
 	force_quiz?: boolean;
 }
+
 /**
 A button that opens a Web App by calling getWebAppUrl.
 Subtype of {@link KeyboardButtonType}.
@@ -4033,6 +4239,7 @@ An HTTP URL to pass to getWebAppUrl.
 */
 	url: string;
 }
+
 /**
 Represents a single button in a bot keyboard.
 */
@@ -4047,6 +4254,7 @@ Type of the button.
 */
 	type: KeyboardButtonType;
 }
+
 /**
 Describes the type of an inline keyboard button.
 Subtype of {@link InlineKeyboardButtonType}.
@@ -4058,6 +4266,7 @@ HTTP or tg:// URL to open.
 */
 	url: string;
 }
+
 /**
 A button that opens a specified URL and automatically authorize the current user by calling getLoginUrlInfo.
 Subtype of {@link InlineKeyboardButtonType}.
@@ -4077,6 +4286,7 @@ If non-empty, new text of the button in forwarded messages.
 */
 	forward_text: string;
 }
+
 /**
 A button that opens a Web App by calling openWebApp.
 Subtype of {@link InlineKeyboardButtonType}.
@@ -4088,6 +4298,7 @@ An HTTP URL to pass to openWebApp.
 */
 	url: string;
 }
+
 /**
 A button that sends a callback query to a bot.
 Subtype of {@link InlineKeyboardButtonType}.
@@ -4099,6 +4310,7 @@ Data to be sent to the bot via a callback query.
 */
 	data: string;
 }
+
 /**
 A button that asks for the 2-step verification password of the current user and then sends a callback query to a bot.
 Subtype of {@link InlineKeyboardButtonType}.
@@ -4110,6 +4322,7 @@ Data to be sent to the bot via a callback query.
 */
 	data: string;
 }
+
 /**
 A button with a game that sends a callback query to a bot. This button must be in the first column and row of the
 keyboard and can be attached only to a message with content of the type messageGame.
@@ -4119,6 +4332,7 @@ export interface InlineKeyboardButtonTypeCallbackGame {
 	'@type': 'inlineKeyboardButtonTypeCallbackGame';
 
 }
+
 /**
 A button that forces an inline query to the bot to be inserted in the input field.
 Subtype of {@link InlineKeyboardButtonType}.
@@ -4134,6 +4348,7 @@ True, if the inline query must be sent from the current chat.
 */
 	in_current_chat?: boolean;
 }
+
 /**
 A button to buy something. This button must be in the first column and row of the keyboard and can be attached only to a
 message with content of the type messageInvoice.
@@ -4143,6 +4358,7 @@ export interface InlineKeyboardButtonTypeBuy {
 	'@type': 'inlineKeyboardButtonTypeBuy';
 
 }
+
 /**
 A button with a user reference to be handled in the same way as textEntityTypeMentionName entities.
 Subtype of {@link InlineKeyboardButtonType}.
@@ -4154,6 +4370,7 @@ User identifier.
 */
 	user_id: number;
 }
+
 /**
 Represents a single button in an inline keyboard.
 */
@@ -4168,6 +4385,7 @@ Type of the button.
 */
 	type: InlineKeyboardButtonType;
 }
+
 /**
 Contains a description of a custom keyboard and actions that can be done with it to quickly reply to bots.
 Subtype of {@link ReplyMarkup}.
@@ -4179,6 +4397,7 @@ True, if the keyboard is removed only for the mentioned users or the target user
 */
 	is_personal?: boolean;
 }
+
 /**
 Instructs application to force a reply to this message.
 Subtype of {@link ReplyMarkup}.
@@ -4195,6 +4414,7 @@ If non-empty, the placeholder to be shown in the input field when the reply is a
 */
 	input_field_placeholder: string;
 }
+
 /**
 Contains a custom keyboard layout to quickly reply to bots.
 Subtype of {@link ReplyMarkup}.
@@ -4223,6 +4443,7 @@ If non-empty, the placeholder to be shown in the input field when the keyboard i
 */
 	input_field_placeholder: string;
 }
+
 /**
 Contains an inline keyboard layout.
 Subtype of {@link ReplyMarkup}.
@@ -4234,6 +4455,7 @@ A list of rows of inline keyboard buttons.
 */
 	rows: InlineKeyboardButton[][];
 }
+
 /**
 Contains information about an inline button of type inlineKeyboardButtonTypeLoginUrl.
 Subtype of {@link LoginUrlInfo}.
@@ -4249,6 +4471,7 @@ True, if there is no need to show an ordinary open URL confirm.
 */
 	skip_confirm?: boolean;
 }
+
 /**
 An authorization confirmation dialog needs to be shown to the user.
 Subtype of {@link LoginUrlInfo}.
@@ -4272,6 +4495,7 @@ True, if the user needs to be requested to give the permission to the bot to sen
 */
 	request_write_access?: boolean;
 }
+
 /**
 Contains information about a Web App.
 */
@@ -4286,6 +4510,7 @@ A Web App URL to open in a web view.
 */
 	url: string;
 }
+
 /**
 Contains information about a message thread.
 */
@@ -4317,6 +4542,7 @@ A draft of a message in the message thread; may be null.
 */
 	draft_message: DraftMessage;
 }
+
 /**
 Describes a text object inside an instant-view web page.
 Subtype of {@link RichText}.
@@ -4328,6 +4554,7 @@ Text.
 */
 	text: string;
 }
+
 /**
 A bold rich text.
 Subtype of {@link RichText}.
@@ -4339,6 +4566,7 @@ Text.
 */
 	text: RichText;
 }
+
 /**
 An italicized rich text.
 Subtype of {@link RichText}.
@@ -4350,6 +4578,7 @@ Text.
 */
 	text: RichText;
 }
+
 /**
 An underlined rich text.
 Subtype of {@link RichText}.
@@ -4361,6 +4590,7 @@ Text.
 */
 	text: RichText;
 }
+
 /**
 A strikethrough rich text.
 Subtype of {@link RichText}.
@@ -4372,6 +4602,7 @@ Text.
 */
 	text: RichText;
 }
+
 /**
 A fixed-width rich text.
 Subtype of {@link RichText}.
@@ -4383,6 +4614,7 @@ Text.
 */
 	text: RichText;
 }
+
 /**
 A rich text URL link.
 Subtype of {@link RichText}.
@@ -4402,6 +4634,7 @@ True, if the URL has cached instant view server-side.
 */
 	is_cached?: boolean;
 }
+
 /**
 A rich text email link.
 Subtype of {@link RichText}.
@@ -4417,6 +4650,7 @@ Email address.
 */
 	email_address: string;
 }
+
 /**
 A subscript rich text.
 Subtype of {@link RichText}.
@@ -4428,6 +4662,7 @@ Text.
 */
 	text: RichText;
 }
+
 /**
 A superscript rich text.
 Subtype of {@link RichText}.
@@ -4439,6 +4674,7 @@ Text.
 */
 	text: RichText;
 }
+
 /**
 A marked rich text.
 Subtype of {@link RichText}.
@@ -4450,6 +4686,7 @@ Text.
 */
 	text: RichText;
 }
+
 /**
 A rich text phone number.
 Subtype of {@link RichText}.
@@ -4465,6 +4702,7 @@ Phone number.
 */
 	phone_number: string;
 }
+
 /**
 A small image inside the text.
 Subtype of {@link RichText}.
@@ -4484,6 +4722,7 @@ Height of a bounding box in which the image must be shown; 0 if unknown.
 */
 	height: number;
 }
+
 /**
 A reference to a richTexts object on the same web page.
 Subtype of {@link RichText}.
@@ -4503,6 +4742,7 @@ An HTTP URL, opening the reference.
 */
 	url: string;
 }
+
 /**
 An anchor.
 Subtype of {@link RichText}.
@@ -4514,6 +4754,7 @@ Anchor name.
 */
 	name: string;
 }
+
 /**
 A link to an anchor on the same web page.
 Subtype of {@link RichText}.
@@ -4533,6 +4774,7 @@ An HTTP URL, opening the anchor.
 */
 	url: string;
 }
+
 /**
 A concatenation of rich texts.
 Subtype of {@link RichText}.
@@ -4544,6 +4786,7 @@ Texts.
 */
 	texts: RichText[];
 }
+
 /**
 Contains a caption of an instant view web page block, consisting of a text and a trailing credit.
 */
@@ -4558,6 +4801,7 @@ Block credit (like HTML tag <cite>).
 */
 	credit: RichText;
 }
+
 /**
 Describes an item of a list page block.
 */
@@ -4572,6 +4816,7 @@ Item blocks.
 */
 	page_blocks: PageBlock[];
 }
+
 /**
 Describes a horizontal alignment of a table cell content.
 Subtype of {@link PageBlockHorizontalAlignment}.
@@ -4580,6 +4825,7 @@ export interface PageBlockHorizontalAlignmentLeft {
 	'@type': 'pageBlockHorizontalAlignmentLeft';
 
 }
+
 /**
 The content must be center-aligned.
 Subtype of {@link PageBlockHorizontalAlignment}.
@@ -4588,6 +4834,7 @@ export interface PageBlockHorizontalAlignmentCenter {
 	'@type': 'pageBlockHorizontalAlignmentCenter';
 
 }
+
 /**
 The content must be right-aligned.
 Subtype of {@link PageBlockHorizontalAlignment}.
@@ -4596,6 +4843,7 @@ export interface PageBlockHorizontalAlignmentRight {
 	'@type': 'pageBlockHorizontalAlignmentRight';
 
 }
+
 /**
 Describes a Vertical alignment of a table cell content.
 Subtype of {@link PageBlockVerticalAlignment}.
@@ -4604,6 +4852,7 @@ export interface PageBlockVerticalAlignmentTop {
 	'@type': 'pageBlockVerticalAlignmentTop';
 
 }
+
 /**
 The content must be middle-aligned.
 Subtype of {@link PageBlockVerticalAlignment}.
@@ -4612,6 +4861,7 @@ export interface PageBlockVerticalAlignmentMiddle {
 	'@type': 'pageBlockVerticalAlignmentMiddle';
 
 }
+
 /**
 The content must be bottom-aligned.
 Subtype of {@link PageBlockVerticalAlignment}.
@@ -4620,6 +4870,7 @@ export interface PageBlockVerticalAlignmentBottom {
 	'@type': 'pageBlockVerticalAlignmentBottom';
 
 }
+
 /**
 Represents a cell of a table.
 */
@@ -4650,6 +4901,7 @@ Vertical cell content alignment.
 */
 	valign: PageBlockVerticalAlignment;
 }
+
 /**
 Contains information about a related article.
 */
@@ -4680,6 +4932,7 @@ Point in time (Unix timestamp) when the article was published; 0 if unknown.
 */
 	publish_date: number;
 }
+
 /**
 Describes a block of an instant view web page.
 Subtype of {@link PageBlock}.
@@ -4691,6 +4944,7 @@ Title.
 */
 	title: RichText;
 }
+
 /**
 The subtitle of a page.
 Subtype of {@link PageBlock}.
@@ -4702,6 +4956,7 @@ Subtitle.
 */
 	subtitle: RichText;
 }
+
 /**
 The author and publishing date of a page.
 Subtype of {@link PageBlock}.
@@ -4717,6 +4972,7 @@ Point in time (Unix timestamp) when the article was published; 0 if unknown.
 */
 	publish_date: number;
 }
+
 /**
 A header.
 Subtype of {@link PageBlock}.
@@ -4728,6 +4984,7 @@ Header.
 */
 	header: RichText;
 }
+
 /**
 A subheader.
 Subtype of {@link PageBlock}.
@@ -4739,6 +4996,7 @@ Subheader.
 */
 	subheader: RichText;
 }
+
 /**
 A kicker.
 Subtype of {@link PageBlock}.
@@ -4750,6 +5008,7 @@ Kicker.
 */
 	kicker: RichText;
 }
+
 /**
 A text paragraph.
 Subtype of {@link PageBlock}.
@@ -4761,6 +5020,7 @@ Paragraph text.
 */
 	text: RichText;
 }
+
 /**
 A preformatted text paragraph.
 Subtype of {@link PageBlock}.
@@ -4776,6 +5036,7 @@ Programming language for which the text needs to be formatted.
 */
 	language: string;
 }
+
 /**
 The footer of a page.
 Subtype of {@link PageBlock}.
@@ -4787,6 +5048,7 @@ Footer.
 */
 	footer: RichText;
 }
+
 /**
 An empty block separating a page.
 Subtype of {@link PageBlock}.
@@ -4795,6 +5057,7 @@ export interface PageBlockDivider {
 	'@type': 'pageBlockDivider';
 
 }
+
 /**
 An invisible anchor on a page, which can be used in a URL to open the page from the specified anchor.
 Subtype of {@link PageBlock}.
@@ -4806,6 +5069,7 @@ Name of the anchor.
 */
 	name: string;
 }
+
 /**
 A list of data blocks.
 Subtype of {@link PageBlock}.
@@ -4817,6 +5081,7 @@ The items of the list.
 */
 	items: PageBlockListItem[];
 }
+
 /**
 A block quote.
 Subtype of {@link PageBlock}.
@@ -4832,6 +5097,7 @@ Quote credit.
 */
 	credit: RichText;
 }
+
 /**
 A pull quote.
 Subtype of {@link PageBlock}.
@@ -4847,6 +5113,7 @@ Quote credit.
 */
 	credit: RichText;
 }
+
 /**
 An animation.
 Subtype of {@link PageBlock}.
@@ -4866,6 +5133,7 @@ True, if the animation must be played automatically.
 */
 	need_autoplay?: boolean;
 }
+
 /**
 An audio file.
 Subtype of {@link PageBlock}.
@@ -4881,6 +5149,7 @@ Audio file caption.
 */
 	caption: PageBlockCaption;
 }
+
 /**
 A photo.
 Subtype of {@link PageBlock}.
@@ -4900,6 +5169,7 @@ URL that needs to be opened when the photo is clicked.
 */
 	url: string;
 }
+
 /**
 A video.
 Subtype of {@link PageBlock}.
@@ -4923,6 +5193,7 @@ True, if the video must be looped.
 */
 	is_looped?: boolean;
 }
+
 /**
 A voice note.
 Subtype of {@link PageBlock}.
@@ -4938,6 +5209,7 @@ Voice note caption.
 */
 	caption: PageBlockCaption;
 }
+
 /**
 A page cover.
 Subtype of {@link PageBlock}.
@@ -4949,6 +5221,7 @@ Cover.
 */
 	cover: PageBlock;
 }
+
 /**
 An embedded web page.
 Subtype of {@link PageBlock}.
@@ -4988,6 +5261,7 @@ True, if scrolling needs to be allowed.
 */
 	allow_scrolling?: boolean;
 }
+
 /**
 An embedded post.
 Subtype of {@link PageBlock}.
@@ -5019,6 +5293,7 @@ Post caption.
 */
 	caption: PageBlockCaption;
 }
+
 /**
 A collage.
 Subtype of {@link PageBlock}.
@@ -5034,6 +5309,7 @@ Block caption.
 */
 	caption: PageBlockCaption;
 }
+
 /**
 A slideshow.
 Subtype of {@link PageBlock}.
@@ -5049,6 +5325,7 @@ Block caption.
 */
 	caption: PageBlockCaption;
 }
+
 /**
 A link to a chat.
 Subtype of {@link PageBlock}.
@@ -5068,6 +5345,7 @@ Chat username by which all other information about the chat can be resolved.
 */
 	username: string;
 }
+
 /**
 A table.
 Subtype of {@link PageBlock}.
@@ -5091,6 +5369,7 @@ True, if the table is striped.
 */
 	is_striped?: boolean;
 }
+
 /**
 A collapsible block.
 Subtype of {@link PageBlock}.
@@ -5110,6 +5389,7 @@ True, if the block is open by default.
 */
 	is_open?: boolean;
 }
+
 /**
 Related articles.
 Subtype of {@link PageBlock}.
@@ -5125,6 +5405,7 @@ List of related articles.
 */
 	articles: PageBlockRelatedArticle[];
 }
+
 /**
 A map.
 Subtype of {@link PageBlock}.
@@ -5152,6 +5433,7 @@ Block caption.
 */
 	caption: PageBlockCaption;
 }
+
 /**
 Describes an instant view page for a web page.
 */
@@ -5183,6 +5465,7 @@ An internal link to be opened to leave feedback about the instant view.
 */
 	feedback_link: InternalLinkType;
 }
+
 /**
 Describes a web page preview.
 */
@@ -5273,6 +5556,7 @@ Version of instant view, available for the web page (currently, can be 1 or 2), 
 */
 	instant_view_version: number;
 }
+
 /**
 Contains information about a country.
 */
@@ -5299,6 +5583,7 @@ List of country calling codes.
 */
 	calling_codes: string[];
 }
+
 /**
 Contains information about countries.
 */
@@ -5309,6 +5594,7 @@ The list of countries.
 */
 	countries: CountryInfo[];
 }
+
 /**
 Contains information about a phone number.
 */
@@ -5328,6 +5614,7 @@ but even more digits might be entered by the user.
 */
 	formatted_phone_number: string;
 }
+
 /**
 Describes an action associated with a bank card number.
 */
@@ -5342,6 +5629,7 @@ The URL to be opened.
 */
 	url: string;
 }
+
 /**
 Information about a bank card.
 */
@@ -5356,6 +5644,7 @@ Actions that can be done with the bank card number.
 */
 	actions: BankCardActionOpenUrl[];
 }
+
 /**
 Describes an address.
 */
@@ -5386,6 +5675,7 @@ Address postal code.
 */
 	postal_code: string;
 }
+
 /**
 Contains parameters of the application theme.
 */
@@ -5420,6 +5710,7 @@ A color of text on the buttons in the RGB24 format.
 */
 	button_text_color: number;
 }
+
 /**
 Portion of the price of a product (e.g., "delivery cost", "tax amount").
 */
@@ -5434,6 +5725,7 @@ Currency amount in the smallest units of the currency.
 */
 	amount: number;
 }
+
 /**
 Product invoice.
 */
@@ -5493,6 +5785,7 @@ True, if the total price depends on the shipping method.
 */
 	is_flexible?: boolean;
 }
+
 /**
 Order information.
 */
@@ -5515,6 +5808,7 @@ Shipping address for this order; may be null.
 */
 	shipping_address: Address;
 }
+
 /**
 One shipping option.
 */
@@ -5533,6 +5827,7 @@ A list of objects used to calculate the total shipping costs.
 */
 	price_parts: LabeledPricePart[];
 }
+
 /**
 Contains information about saved payment credentials.
 */
@@ -5547,6 +5842,7 @@ Title of the saved credentials.
 */
 	title: string;
 }
+
 /**
 Contains information about the payment method chosen by the user.
 Subtype of {@link InputCredentials}.
@@ -5558,6 +5854,7 @@ Identifier of the saved credentials.
 */
 	saved_credentials_id: string;
 }
+
 /**
 Applies if a user enters new credentials on a payment provider website.
 Subtype of {@link InputCredentials}.
@@ -5573,6 +5870,7 @@ True, if the credential identifier can be saved on the server side.
 */
 	allow_save?: boolean;
 }
+
 /**
 Applies if a user enters new credentials using Apple Pay.
 Subtype of {@link InputCredentials}.
@@ -5584,6 +5882,7 @@ JSON-encoded data with the credential identifier.
 */
 	data: string;
 }
+
 /**
 Applies if a user enters new credentials using Google Pay.
 Subtype of {@link InputCredentials}.
@@ -5595,6 +5894,7 @@ JSON-encoded data with the credential identifier.
 */
 	data: string;
 }
+
 /**
 Contains information about a payment provider.
 Subtype of {@link PaymentProvider}.
@@ -5606,6 +5906,7 @@ Public payment token.
 */
 	public_token: string;
 }
+
 /**
 Stripe payment provider.
 Subtype of {@link PaymentProvider}.
@@ -5629,6 +5930,7 @@ True, if the cardholder name must be provided.
 */
 	need_cardholder_name?: boolean;
 }
+
 /**
 Some other payment provider, for which a web payment form must be shown.
 Subtype of {@link PaymentProvider}.
@@ -5640,6 +5942,7 @@ Payment form URL.
 */
 	url: string;
 }
+
 /**
 Describes an additional payment option.
 */
@@ -5654,6 +5957,7 @@ Payment form URL to be opened in a web view.
 */
 	url: string;
 }
+
 /**
 Contains information about an invoice payment form.
 */
@@ -5712,6 +6016,7 @@ Product photo; may be null.
 */
 	product_photo: Photo;
 }
+
 /**
 Contains a temporary identifier of validated order information, which is stored for one hour. Also contains the
 available shipping options.
@@ -5727,6 +6032,7 @@ Available shipping options.
 */
 	shipping_options: ShippingOption[];
 }
+
 /**
 Contains the result of a payment request.
 */
@@ -5741,6 +6047,7 @@ URL for additional payment credentials verification.
 */
 	verification_url: string;
 }
+
 /**
 Contains information about a successful payment.
 */
@@ -5791,6 +6098,7 @@ The amount of tip chosen by the buyer in the smallest units of the currency.
 */
 	tip_amount: number;
 }
+
 /**
 Describe an invoice to process.
 Subtype of {@link InputInvoice}.
@@ -5806,6 +6114,7 @@ Message identifier.
 */
 	message_id: number;
 }
+
 /**
 An invoice from a link of the type internalLinkTypeInvoice.
 Subtype of {@link InputInvoice}.
@@ -5817,6 +6126,7 @@ Name of the invoice.
 */
 	name: string;
 }
+
 /**
 File with the date it was uploaded.
 */
@@ -5831,6 +6141,7 @@ Point in time (Unix timestamp) when the file was uploaded.
 */
 	date: number;
 }
+
 /**
 Contains the type of a Telegram Passport element.
 Subtype of {@link PassportElementType}.
@@ -5839,6 +6150,7 @@ export interface PassportElementTypePersonalDetails {
 	'@type': 'passportElementTypePersonalDetails';
 
 }
+
 /**
 A Telegram Passport element containing the user's passport.
 Subtype of {@link PassportElementType}.
@@ -5847,6 +6159,7 @@ export interface PassportElementTypePassport {
 	'@type': 'passportElementTypePassport';
 
 }
+
 /**
 A Telegram Passport element containing the user's driver license.
 Subtype of {@link PassportElementType}.
@@ -5855,6 +6168,7 @@ export interface PassportElementTypeDriverLicense {
 	'@type': 'passportElementTypeDriverLicense';
 
 }
+
 /**
 A Telegram Passport element containing the user's identity card.
 Subtype of {@link PassportElementType}.
@@ -5863,6 +6177,7 @@ export interface PassportElementTypeIdentityCard {
 	'@type': 'passportElementTypeIdentityCard';
 
 }
+
 /**
 A Telegram Passport element containing the user's internal passport.
 Subtype of {@link PassportElementType}.
@@ -5871,6 +6186,7 @@ export interface PassportElementTypeInternalPassport {
 	'@type': 'passportElementTypeInternalPassport';
 
 }
+
 /**
 A Telegram Passport element containing the user's address.
 Subtype of {@link PassportElementType}.
@@ -5879,6 +6195,7 @@ export interface PassportElementTypeAddress {
 	'@type': 'passportElementTypeAddress';
 
 }
+
 /**
 A Telegram Passport element containing the user's utility bill.
 Subtype of {@link PassportElementType}.
@@ -5887,6 +6204,7 @@ export interface PassportElementTypeUtilityBill {
 	'@type': 'passportElementTypeUtilityBill';
 
 }
+
 /**
 A Telegram Passport element containing the user's bank statement.
 Subtype of {@link PassportElementType}.
@@ -5895,6 +6213,7 @@ export interface PassportElementTypeBankStatement {
 	'@type': 'passportElementTypeBankStatement';
 
 }
+
 /**
 A Telegram Passport element containing the user's rental agreement.
 Subtype of {@link PassportElementType}.
@@ -5903,6 +6222,7 @@ export interface PassportElementTypeRentalAgreement {
 	'@type': 'passportElementTypeRentalAgreement';
 
 }
+
 /**
 A Telegram Passport element containing the registration page of the user's passport.
 Subtype of {@link PassportElementType}.
@@ -5911,6 +6231,7 @@ export interface PassportElementTypePassportRegistration {
 	'@type': 'passportElementTypePassportRegistration';
 
 }
+
 /**
 A Telegram Passport element containing the user's temporary registration.
 Subtype of {@link PassportElementType}.
@@ -5919,6 +6240,7 @@ export interface PassportElementTypeTemporaryRegistration {
 	'@type': 'passportElementTypeTemporaryRegistration';
 
 }
+
 /**
 A Telegram Passport element containing the user's phone number.
 Subtype of {@link PassportElementType}.
@@ -5927,6 +6249,7 @@ export interface PassportElementTypePhoneNumber {
 	'@type': 'passportElementTypePhoneNumber';
 
 }
+
 /**
 A Telegram Passport element containing the user's email address.
 Subtype of {@link PassportElementType}.
@@ -5935,6 +6258,7 @@ export interface PassportElementTypeEmailAddress {
 	'@type': 'passportElementTypeEmailAddress';
 
 }
+
 /**
 Represents a date according to the Gregorian calendar.
 */
@@ -5953,6 +6277,7 @@ Year; 1-9999.
 */
 	year: number;
 }
+
 /**
 Contains the user's personal details.
 */
@@ -5999,6 +6324,7 @@ A two-letter ISO 3166-1 alpha-2 country code of the user's residence country.
 */
 	residence_country_code: string;
 }
+
 /**
 An identity document.
 */
@@ -6029,6 +6355,7 @@ List of files containing a certified English translation of the document.
 */
 	translation: DatedFile[];
 }
+
 /**
 An identity document to be saved to Telegram Passport.
 */
@@ -6059,6 +6386,7 @@ List of files containing a certified English translation of the document.
 */
 	translation: InputFile[];
 }
+
 /**
 A personal document, containing some information about a user.
 */
@@ -6073,6 +6401,7 @@ List of files containing a certified English translation of the document.
 */
 	translation: DatedFile[];
 }
+
 /**
 A personal document to be saved to Telegram Passport.
 */
@@ -6087,6 +6416,7 @@ List of files containing a certified English translation of the document.
 */
 	translation: InputFile[];
 }
+
 /**
 Contains information about a Telegram Passport element.
 Subtype of {@link PassportElement}.
@@ -6098,6 +6428,7 @@ Personal details of the user.
 */
 	personal_details: PersonalDetails;
 }
+
 /**
 A Telegram Passport element containing the user's passport.
 Subtype of {@link PassportElement}.
@@ -6109,6 +6440,7 @@ Passport.
 */
 	passport: IdentityDocument;
 }
+
 /**
 A Telegram Passport element containing the user's driver license.
 Subtype of {@link PassportElement}.
@@ -6120,6 +6452,7 @@ Driver license.
 */
 	driver_license: IdentityDocument;
 }
+
 /**
 A Telegram Passport element containing the user's identity card.
 Subtype of {@link PassportElement}.
@@ -6131,6 +6464,7 @@ Identity card.
 */
 	identity_card: IdentityDocument;
 }
+
 /**
 A Telegram Passport element containing the user's internal passport.
 Subtype of {@link PassportElement}.
@@ -6142,6 +6476,7 @@ Internal passport.
 */
 	internal_passport: IdentityDocument;
 }
+
 /**
 A Telegram Passport element containing the user's address.
 Subtype of {@link PassportElement}.
@@ -6153,6 +6488,7 @@ Address.
 */
 	address: Address;
 }
+
 /**
 A Telegram Passport element containing the user's utility bill.
 Subtype of {@link PassportElement}.
@@ -6164,6 +6500,7 @@ Utility bill.
 */
 	utility_bill: PersonalDocument;
 }
+
 /**
 A Telegram Passport element containing the user's bank statement.
 Subtype of {@link PassportElement}.
@@ -6175,6 +6512,7 @@ Bank statement.
 */
 	bank_statement: PersonalDocument;
 }
+
 /**
 A Telegram Passport element containing the user's rental agreement.
 Subtype of {@link PassportElement}.
@@ -6186,6 +6524,7 @@ Rental agreement.
 */
 	rental_agreement: PersonalDocument;
 }
+
 /**
 A Telegram Passport element containing the user's passport registration pages.
 Subtype of {@link PassportElement}.
@@ -6197,6 +6536,7 @@ Passport registration pages.
 */
 	passport_registration: PersonalDocument;
 }
+
 /**
 A Telegram Passport element containing the user's temporary registration.
 Subtype of {@link PassportElement}.
@@ -6208,6 +6548,7 @@ Temporary registration.
 */
 	temporary_registration: PersonalDocument;
 }
+
 /**
 A Telegram Passport element containing the user's phone number.
 Subtype of {@link PassportElement}.
@@ -6219,6 +6560,7 @@ Phone number.
 */
 	phone_number: string;
 }
+
 /**
 A Telegram Passport element containing the user's email address.
 Subtype of {@link PassportElement}.
@@ -6230,6 +6572,7 @@ Email address.
 */
 	email_address: string;
 }
+
 /**
 Contains information about a Telegram Passport element to be saved.
 Subtype of {@link InputPassportElement}.
@@ -6241,6 +6584,7 @@ Personal details of the user.
 */
 	personal_details: PersonalDetails;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's passport.
 Subtype of {@link InputPassportElement}.
@@ -6252,6 +6596,7 @@ The passport to be saved.
 */
 	passport: InputIdentityDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's driver license.
 Subtype of {@link InputPassportElement}.
@@ -6263,6 +6608,7 @@ The driver license to be saved.
 */
 	driver_license: InputIdentityDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's identity card.
 Subtype of {@link InputPassportElement}.
@@ -6274,6 +6620,7 @@ The identity card to be saved.
 */
 	identity_card: InputIdentityDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's internal passport.
 Subtype of {@link InputPassportElement}.
@@ -6285,6 +6632,7 @@ The internal passport to be saved.
 */
 	internal_passport: InputIdentityDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's address.
 Subtype of {@link InputPassportElement}.
@@ -6296,6 +6644,7 @@ The address to be saved.
 */
 	address: Address;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's utility bill.
 Subtype of {@link InputPassportElement}.
@@ -6307,6 +6656,7 @@ The utility bill to be saved.
 */
 	utility_bill: InputPersonalDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's bank statement.
 Subtype of {@link InputPassportElement}.
@@ -6318,6 +6668,7 @@ The bank statement to be saved.
 */
 	bank_statement: InputPersonalDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's rental agreement.
 Subtype of {@link InputPassportElement}.
@@ -6329,6 +6680,7 @@ The rental agreement to be saved.
 */
 	rental_agreement: InputPersonalDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's passport registration.
 Subtype of {@link InputPassportElement}.
@@ -6340,6 +6692,7 @@ The passport registration page to be saved.
 */
 	passport_registration: InputPersonalDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's temporary registration.
 Subtype of {@link InputPassportElement}.
@@ -6351,6 +6704,7 @@ The temporary registration document to be saved.
 */
 	temporary_registration: InputPersonalDocument;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's phone number.
 Subtype of {@link InputPassportElement}.
@@ -6362,6 +6716,7 @@ The phone number to be saved.
 */
 	phone_number: string;
 }
+
 /**
 A Telegram Passport element to be saved containing the user's email address.
 Subtype of {@link InputPassportElement}.
@@ -6373,6 +6728,7 @@ The email address to be saved.
 */
 	email_address: string;
 }
+
 /**
 Contains information about saved Telegram Passport elements.
 */
@@ -6383,6 +6739,7 @@ Telegram Passport elements.
 */
 	elements: PassportElement[];
 }
+
 /**
 Contains the description of an error in a Telegram Passport element.
 Subtype of {@link PassportElementErrorSource}.
@@ -6391,6 +6748,7 @@ export interface PassportElementErrorSourceUnspecified {
 	'@type': 'passportElementErrorSourceUnspecified';
 
 }
+
 /**
 One of the data fields contains an error. The error will be considered resolved when the value of the field changes.
 Subtype of {@link PassportElementErrorSource}.
@@ -6402,6 +6760,7 @@ Field name.
 */
 	field_name: string;
 }
+
 /**
 The front side of the document contains an error. The error will be considered resolved when the file with the front
 side changes.
@@ -6411,6 +6770,7 @@ export interface PassportElementErrorSourceFrontSide {
 	'@type': 'passportElementErrorSourceFrontSide';
 
 }
+
 /**
 The reverse side of the document contains an error. The error will be considered resolved when the file with the reverse
 side changes.
@@ -6420,6 +6780,7 @@ export interface PassportElementErrorSourceReverseSide {
 	'@type': 'passportElementErrorSourceReverseSide';
 
 }
+
 /**
 The selfie with the document contains an error. The error will be considered resolved when the file with the selfie
 changes.
@@ -6429,6 +6790,7 @@ export interface PassportElementErrorSourceSelfie {
 	'@type': 'passportElementErrorSourceSelfie';
 
 }
+
 /**
 One of files with the translation of the document contains an error. The error will be considered resolved when the file
 changes.
@@ -6441,6 +6803,7 @@ Index of a file with the error.
 */
 	file_index: number;
 }
+
 /**
 The translation of the document contains an error. The error will be considered resolved when the list of translation
 files changes.
@@ -6450,6 +6813,7 @@ export interface PassportElementErrorSourceTranslationFiles {
 	'@type': 'passportElementErrorSourceTranslationFiles';
 
 }
+
 /**
 The file contains an error. The error will be considered resolved when the file changes.
 Subtype of {@link PassportElementErrorSource}.
@@ -6461,6 +6825,7 @@ Index of a file with the error.
 */
 	file_index: number;
 }
+
 /**
 The list of attached files contains an error. The error will be considered resolved when the list of files changes.
 Subtype of {@link PassportElementErrorSource}.
@@ -6469,6 +6834,7 @@ export interface PassportElementErrorSourceFiles {
 	'@type': 'passportElementErrorSourceFiles';
 
 }
+
 /**
 Contains the description of an error in a Telegram Passport element.
 */
@@ -6487,6 +6853,7 @@ Error source.
 */
 	source: PassportElementErrorSource;
 }
+
 /**
 Contains information about a Telegram Passport element that was requested by a service.
 */
@@ -6509,6 +6876,7 @@ True, if personal details must include the user's name in the language of their 
 */
 	is_native_name_required?: boolean;
 }
+
 /**
 Contains a description of the required Telegram Passport element that was requested by a service.
 */
@@ -6519,6 +6887,7 @@ List of Telegram Passport elements any of which is enough to provide.
 */
 	suitable_elements: PassportSuitableElement[];
 }
+
 /**
 Contains information about a Telegram Passport authorization form that was requested.
 */
@@ -6537,6 +6906,7 @@ URL for the privacy policy of the service; may be empty.
 */
 	privacy_policy_url: string;
 }
+
 /**
 Contains information about a Telegram Passport elements and corresponding errors.
 */
@@ -6551,6 +6921,7 @@ Errors in the elements that are already available.
 */
 	errors: PassportElementError[];
 }
+
 /**
 Contains encrypted Telegram Passport data credentials.
 */
@@ -6569,6 +6940,7 @@ Secret for data decryption, encrypted with the service's public key.
 */
 	secret: string;
 }
+
 /**
 Contains information about an encrypted Telegram Passport element; for bots only.
 */
@@ -6611,6 +6983,7 @@ Hash of the entire element.
 */
 	hash: string;
 }
+
 /**
 Contains the description of an error in a Telegram Passport element; for bots only.
 Subtype of {@link InputPassportElementErrorSource}.
@@ -6622,6 +6995,7 @@ Current hash of the entire element.
 */
 	element_hash: string;
 }
+
 /**
 A data field contains an error. The error is considered resolved when the field's value changes.
 Subtype of {@link InputPassportElementErrorSource}.
@@ -6637,6 +7011,7 @@ Current data hash.
 */
 	data_hash: string;
 }
+
 /**
 The front side of the document contains an error. The error is considered resolved when the file with the front side of
 the document changes.
@@ -6649,6 +7024,7 @@ Current hash of the file containing the front side.
 */
 	file_hash: string;
 }
+
 /**
 The reverse side of the document contains an error. The error is considered resolved when the file with the reverse side
 of the document changes.
@@ -6661,6 +7037,7 @@ Current hash of the file containing the reverse side.
 */
 	file_hash: string;
 }
+
 /**
 The selfie contains an error. The error is considered resolved when the file with the selfie changes.
 Subtype of {@link InputPassportElementErrorSource}.
@@ -6672,6 +7049,7 @@ Current hash of the file containing the selfie.
 */
 	file_hash: string;
 }
+
 /**
 One of the files containing the translation of the document contains an error. The error is considered resolved when the
 file with the translation changes.
@@ -6684,6 +7062,7 @@ Current hash of the file containing the translation.
 */
 	file_hash: string;
 }
+
 /**
 The translation of the document contains an error. The error is considered resolved when the list of files changes.
 Subtype of {@link InputPassportElementErrorSource}.
@@ -6695,6 +7074,7 @@ Current hashes of all files with the translation.
 */
 	file_hashes: string[];
 }
+
 /**
 The file contains an error. The error is considered resolved when the file changes.
 Subtype of {@link InputPassportElementErrorSource}.
@@ -6706,6 +7086,7 @@ Current hash of the file which has the error.
 */
 	file_hash: string;
 }
+
 /**
 The list of attached files contains an error. The error is considered resolved when the file list changes.
 Subtype of {@link InputPassportElementErrorSource}.
@@ -6717,6 +7098,7 @@ Current hashes of all attached files.
 */
 	file_hashes: string[];
 }
+
 /**
 Contains the description of an error in a Telegram Passport element; for bots only.
 */
@@ -6735,6 +7117,7 @@ Error source.
 */
 	source: InputPassportElementErrorSource;
 }
+
 /**
 Contains the content of a message.
 Subtype of {@link MessageContent}.
@@ -6750,6 +7133,7 @@ A preview of the web page that's mentioned in the text; may be null.
 */
 	web_page: WebPage;
 }
+
 /**
 An animation message (GIF-style).
 Subtype of {@link MessageContent}.
@@ -6769,6 +7153,7 @@ True, if the animation thumbnail must be blurred and the animation must be shown
 */
 	is_secret?: boolean;
 }
+
 /**
 An audio message.
 Subtype of {@link MessageContent}.
@@ -6784,6 +7169,7 @@ Audio caption.
 */
 	caption: FormattedText;
 }
+
 /**
 A document message (general file).
 Subtype of {@link MessageContent}.
@@ -6799,6 +7185,7 @@ Document caption.
 */
 	caption: FormattedText;
 }
+
 /**
 A photo message.
 Subtype of {@link MessageContent}.
@@ -6818,6 +7205,7 @@ True, if the photo must be blurred and must be shown only while tapped.
 */
 	is_secret?: boolean;
 }
+
 /**
 An expired photo message (self-destructed after TTL has elapsed).
 Subtype of {@link MessageContent}.
@@ -6826,6 +7214,7 @@ export interface MessageExpiredPhoto {
 	'@type': 'messageExpiredPhoto';
 
 }
+
 /**
 A sticker message.
 Subtype of {@link MessageContent}.
@@ -6841,6 +7230,7 @@ True, if premium animation of the sticker must be played.
 */
 	is_premium?: boolean;
 }
+
 /**
 A video message.
 Subtype of {@link MessageContent}.
@@ -6860,6 +7250,7 @@ True, if the video thumbnail must be blurred and the video must be shown only wh
 */
 	is_secret?: boolean;
 }
+
 /**
 An expired video message (self-destructed after TTL has elapsed).
 Subtype of {@link MessageContent}.
@@ -6868,6 +7259,7 @@ export interface MessageExpiredVideo {
 	'@type': 'messageExpiredVideo';
 
 }
+
 /**
 A video note message.
 Subtype of {@link MessageContent}.
@@ -6887,6 +7279,7 @@ True, if the video note thumbnail must be blurred and the video note must be sho
 */
 	is_secret?: boolean;
 }
+
 /**
 A voice note message.
 Subtype of {@link MessageContent}.
@@ -6906,6 +7299,7 @@ True, if at least one of the recipients has listened to the voice note.
 */
 	is_listened?: boolean;
 }
+
 /**
 A message with a location.
 Subtype of {@link MessageContent}.
@@ -6934,6 +7328,7 @@ notification is disabled. Available only for the message sender.
 */
 	proximity_alert_radius: number;
 }
+
 /**
 A message with information about a venue.
 Subtype of {@link MessageContent}.
@@ -6945,6 +7340,7 @@ The venue description.
 */
 	venue: Venue;
 }
+
 /**
 A message with a user contact.
 Subtype of {@link MessageContent}.
@@ -6956,6 +7352,7 @@ The contact description.
 */
 	contact: Contact;
 }
+
 /**
 A message with an animated emoji.
 Subtype of {@link MessageContent}.
@@ -6971,6 +7368,7 @@ The corresponding emoji.
 */
 	emoji: string;
 }
+
 /**
 A dice message. The dice value is randomly generated by the server.
 Subtype of {@link MessageContent}.
@@ -7001,6 +7399,7 @@ updateMessageSendSucceeded.
 */
 	success_animation_frame_number: number;
 }
+
 /**
 A message with a game.
 Subtype of {@link MessageContent}.
@@ -7012,6 +7411,7 @@ The game description.
 */
 	game: Game;
 }
+
 /**
 A message with a poll.
 Subtype of {@link MessageContent}.
@@ -7023,6 +7423,7 @@ The poll description.
 */
 	poll: Poll;
 }
+
 /**
 A message with an invoice from a bot.
 Subtype of {@link MessageContent}.
@@ -7066,6 +7467,7 @@ The identifier of the message with the receipt, after the product has been purch
 */
 	receipt_message_id: number;
 }
+
 /**
 A message with information about an ended call.
 Subtype of {@link MessageContent}.
@@ -7085,6 +7487,7 @@ Call duration, in seconds.
 */
 	duration: number;
 }
+
 /**
 A new video chat was scheduled.
 Subtype of {@link MessageContent}.
@@ -7100,6 +7503,7 @@ Point in time (Unix timestamp) when the group call is supposed to be started by 
 */
 	start_date: number;
 }
+
 /**
 A newly created video chat.
 Subtype of {@link MessageContent}.
@@ -7111,6 +7515,7 @@ Identifier of the video chat. The video chat can be received through the method 
 */
 	group_call_id: number;
 }
+
 /**
 A message with information about an ended video chat.
 Subtype of {@link MessageContent}.
@@ -7122,6 +7527,7 @@ Call duration, in seconds.
 */
 	duration: number;
 }
+
 /**
 A message with information about an invite to a video chat.
 Subtype of {@link MessageContent}.
@@ -7137,6 +7543,7 @@ Invited user identifiers.
 */
 	user_ids: number[];
 }
+
 /**
 A newly created basic group.
 Subtype of {@link MessageContent}.
@@ -7152,6 +7559,7 @@ User identifiers of members in the basic group.
 */
 	member_user_ids: number[];
 }
+
 /**
 A newly created supergroup or channel.
 Subtype of {@link MessageContent}.
@@ -7163,6 +7571,7 @@ Title of the supergroup or channel.
 */
 	title: string;
 }
+
 /**
 An updated chat title.
 Subtype of {@link MessageContent}.
@@ -7174,6 +7583,7 @@ New chat title.
 */
 	title: string;
 }
+
 /**
 An updated chat photo.
 Subtype of {@link MessageContent}.
@@ -7185,6 +7595,7 @@ New chat photo.
 */
 	photo: ChatPhoto;
 }
+
 /**
 A deleted chat photo.
 Subtype of {@link MessageContent}.
@@ -7193,6 +7604,7 @@ export interface MessageChatDeletePhoto {
 	'@type': 'messageChatDeletePhoto';
 
 }
+
 /**
 New chat members were added.
 Subtype of {@link MessageContent}.
@@ -7204,6 +7616,7 @@ User identifiers of the new members.
 */
 	member_user_ids: number[];
 }
+
 /**
 A new member joined the chat via an invite link.
 Subtype of {@link MessageContent}.
@@ -7212,6 +7625,7 @@ export interface MessageChatJoinByLink {
 	'@type': 'messageChatJoinByLink';
 
 }
+
 /**
 A new member was accepted to the chat by an administrator.
 Subtype of {@link MessageContent}.
@@ -7220,6 +7634,7 @@ export interface MessageChatJoinByRequest {
 	'@type': 'messageChatJoinByRequest';
 
 }
+
 /**
 A chat member was deleted.
 Subtype of {@link MessageContent}.
@@ -7231,6 +7646,7 @@ User identifier of the deleted chat member.
 */
 	user_id: number;
 }
+
 /**
 A basic group was upgraded to a supergroup and was deactivated as the result.
 Subtype of {@link MessageContent}.
@@ -7242,6 +7658,7 @@ Identifier of the supergroup to which the basic group was upgraded.
 */
 	supergroup_id: number;
 }
+
 /**
 A supergroup has been created from a basic group.
 Subtype of {@link MessageContent}.
@@ -7257,6 +7674,7 @@ The identifier of the original basic group.
 */
 	basic_group_id: number;
 }
+
 /**
 A message has been pinned.
 Subtype of {@link MessageContent}.
@@ -7268,6 +7686,7 @@ Identifier of the pinned message, can be an identifier of a deleted message or 0
 */
 	message_id: number;
 }
+
 /**
 A screenshot of a message in the chat has been taken.
 Subtype of {@link MessageContent}.
@@ -7276,6 +7695,7 @@ export interface MessageScreenshotTaken {
 	'@type': 'messageScreenshotTaken';
 
 }
+
 /**
 A theme in the chat has been changed.
 Subtype of {@link MessageContent}.
@@ -7287,6 +7707,7 @@ If non-empty, name of a new theme, set for the chat. Otherwise chat theme was re
 */
 	theme_name: string;
 }
+
 /**
 The TTL (Time To Live) setting for messages in the chat has been changed.
 Subtype of {@link MessageContent}.
@@ -7298,6 +7719,7 @@ New message TTL.
 */
 	ttl: number;
 }
+
 /**
 A non-standard action has happened in the chat.
 Subtype of {@link MessageContent}.
@@ -7309,6 +7731,7 @@ Message text to be shown in the chat.
 */
 	text: string;
 }
+
 /**
 A new high score was achieved in a game.
 Subtype of {@link MessageContent}.
@@ -7328,6 +7751,7 @@ New score.
 */
 	score: number;
 }
+
 /**
 A payment has been completed.
 Subtype of {@link MessageContent}.
@@ -7363,6 +7787,7 @@ Name of the invoice; may be empty if unknown.
 */
 	invoice_name: string;
 }
+
 /**
 A payment has been completed; for bots only.
 Subtype of {@link MessageContent}.
@@ -7406,6 +7831,7 @@ Provider payment identifier.
 */
 	provider_payment_charge_id: string;
 }
+
 /**
 Telegram Premium was gifted to the user.
 Subtype of {@link MessageContent}.
@@ -7429,6 +7855,7 @@ A sticker to be shown in the message; may be null if unknown.
 */
 	sticker: Sticker;
 }
+
 /**
 A contact has registered with Telegram.
 Subtype of {@link MessageContent}.
@@ -7437,6 +7864,7 @@ export interface MessageContactRegistered {
 	'@type': 'messageContactRegistered';
 
 }
+
 /**
 The current user has connected a website by logging in using Telegram Login Widget on it.
 Subtype of {@link MessageContent}.
@@ -7448,6 +7876,7 @@ Domain name of the connected website.
 */
 	domain_name: string;
 }
+
 /**
 Data from a Web App has been sent to a bot.
 Subtype of {@link MessageContent}.
@@ -7459,6 +7888,7 @@ Text of the keyboardButtonTypeWebApp button, which opened the Web App.
 */
 	button_text: string;
 }
+
 /**
 Data from a Web App has been received; for bots only.
 Subtype of {@link MessageContent}.
@@ -7474,6 +7904,7 @@ Received data.
 */
 	data: string;
 }
+
 /**
 Telegram Passport data has been sent to a bot.
 Subtype of {@link MessageContent}.
@@ -7485,6 +7916,7 @@ List of Telegram Passport element types sent.
 */
 	types: PassportElementType[];
 }
+
 /**
 Telegram Passport data has been received; for bots only.
 Subtype of {@link MessageContent}.
@@ -7500,6 +7932,7 @@ Encrypted data credentials.
 */
 	credentials: EncryptedCredentials;
 }
+
 /**
 A user in the chat came within proximity alert range.
 Subtype of {@link MessageContent}.
@@ -7519,6 +7952,7 @@ The distance between the users.
 */
 	distance: number;
 }
+
 /**
 Message content that is not supported in the current TDLib version.
 Subtype of {@link MessageContent}.
@@ -7527,6 +7961,7 @@ export interface MessageUnsupported {
 	'@type': 'messageUnsupported';
 
 }
+
 /**
 Represents a part of the text which must be formatted differently.
 Subtype of {@link TextEntityType}.
@@ -7535,6 +7970,7 @@ export interface TextEntityTypeMention {
 	'@type': 'textEntityTypeMention';
 
 }
+
 /**
 A hashtag text, beginning with "#".
 Subtype of {@link TextEntityType}.
@@ -7543,6 +7979,7 @@ export interface TextEntityTypeHashtag {
 	'@type': 'textEntityTypeHashtag';
 
 }
+
 /**
 A cashtag text, beginning with "$" and consisting of capital English letters (e.g., "$USD").
 Subtype of {@link TextEntityType}.
@@ -7551,6 +7988,7 @@ export interface TextEntityTypeCashtag {
 	'@type': 'textEntityTypeCashtag';
 
 }
+
 /**
 A bot command, beginning with "/".
 Subtype of {@link TextEntityType}.
@@ -7559,6 +7997,7 @@ export interface TextEntityTypeBotCommand {
 	'@type': 'textEntityTypeBotCommand';
 
 }
+
 /**
 An HTTP URL.
 Subtype of {@link TextEntityType}.
@@ -7567,6 +8006,7 @@ export interface TextEntityTypeUrl {
 	'@type': 'textEntityTypeUrl';
 
 }
+
 /**
 An email address.
 Subtype of {@link TextEntityType}.
@@ -7575,6 +8015,7 @@ export interface TextEntityTypeEmailAddress {
 	'@type': 'textEntityTypeEmailAddress';
 
 }
+
 /**
 A phone number.
 Subtype of {@link TextEntityType}.
@@ -7583,6 +8024,7 @@ export interface TextEntityTypePhoneNumber {
 	'@type': 'textEntityTypePhoneNumber';
 
 }
+
 /**
 A bank card number. The getBankCardInfo method can be used to get information about the bank card.
 Subtype of {@link TextEntityType}.
@@ -7591,6 +8033,7 @@ export interface TextEntityTypeBankCardNumber {
 	'@type': 'textEntityTypeBankCardNumber';
 
 }
+
 /**
 A bold text.
 Subtype of {@link TextEntityType}.
@@ -7599,6 +8042,7 @@ export interface TextEntityTypeBold {
 	'@type': 'textEntityTypeBold';
 
 }
+
 /**
 An italic text.
 Subtype of {@link TextEntityType}.
@@ -7607,6 +8051,7 @@ export interface TextEntityTypeItalic {
 	'@type': 'textEntityTypeItalic';
 
 }
+
 /**
 An underlined text.
 Subtype of {@link TextEntityType}.
@@ -7615,6 +8060,7 @@ export interface TextEntityTypeUnderline {
 	'@type': 'textEntityTypeUnderline';
 
 }
+
 /**
 A strikethrough text.
 Subtype of {@link TextEntityType}.
@@ -7623,6 +8069,7 @@ export interface TextEntityTypeStrikethrough {
 	'@type': 'textEntityTypeStrikethrough';
 
 }
+
 /**
 A spoiler text.
 Subtype of {@link TextEntityType}.
@@ -7631,6 +8078,7 @@ export interface TextEntityTypeSpoiler {
 	'@type': 'textEntityTypeSpoiler';
 
 }
+
 /**
 Text that must be formatted as if inside a code HTML tag.
 Subtype of {@link TextEntityType}.
@@ -7639,6 +8087,7 @@ export interface TextEntityTypeCode {
 	'@type': 'textEntityTypeCode';
 
 }
+
 /**
 Text that must be formatted as if inside a pre HTML tag.
 Subtype of {@link TextEntityType}.
@@ -7647,6 +8096,7 @@ export interface TextEntityTypePre {
 	'@type': 'textEntityTypePre';
 
 }
+
 /**
 Text that must be formatted as if inside pre, and code HTML tags.
 Subtype of {@link TextEntityType}.
@@ -7658,6 +8108,7 @@ Programming language of the code; as defined by the sender.
 */
 	language: string;
 }
+
 /**
 A text description shown instead of a raw URL.
 Subtype of {@link TextEntityType}.
@@ -7669,6 +8120,7 @@ HTTP or tg:// URL to be opened when the link is clicked.
 */
 	url: string;
 }
+
 /**
 A text shows instead of a raw mention of the user (e.g., when the user has no username).
 Subtype of {@link TextEntityType}.
@@ -7680,6 +8132,7 @@ Identifier of the mentioned user.
 */
 	user_id: number;
 }
+
 /**
 A custom emoji. The text behind a custom emoji must be an emoji. Only premium users can use premium custom emoji.
 Subtype of {@link TextEntityType}.
@@ -7691,6 +8144,7 @@ Unique identifier of the custom emoji.
 */
 	custom_emoji_id: string;
 }
+
 /**
 A media timestamp.
 Subtype of {@link TextEntityType}.
@@ -7703,6 +8157,7 @@ or the web page preview of the current message, or in the same places in the rep
 */
 	media_timestamp: number;
 }
+
 /**
 A thumbnail to be sent along with a file; must be in JPEG or WEBP format for stickers, and less than 200 KB in size.
 */
@@ -7721,6 +8176,7 @@ Thumbnail height, usually shouldn't exceed 320. Use 0 if unknown.
 */
 	height: number;
 }
+
 /**
 Contains information about the time when a scheduled message will be sent.
 Subtype of {@link MessageSchedulingState}.
@@ -7732,6 +8188,7 @@ Date the message will be sent. The date must be within 367 days in the future.
 */
 	send_date: number;
 }
+
 /**
 The message will be sent when the peer will be online. Applicable to private chats only and when the exact online status
 of the peer is known.
@@ -7741,6 +8198,7 @@ export interface MessageSchedulingStateSendWhenOnline {
 	'@type': 'messageSchedulingStateSendWhenOnline';
 
 }
+
 /**
 Options to be used when a message is sent.
 */
@@ -7764,6 +8222,7 @@ and self-destructing messages can't be scheduled.
 */
 	scheduling_state: MessageSchedulingState;
 }
+
 /**
 Options to be used when a message content is copied without reference to the original sender. Service messages and
 messageInvoice can't be copied.
@@ -7784,6 +8243,7 @@ New message caption; pass null to copy message without caption. Ignored if repla
 */
 	new_caption: FormattedText;
 }
+
 /**
 The content of a message to send.
 Subtype of {@link InputMessageContent}.
@@ -7805,6 +8265,7 @@ True, if a chat message draft must be deleted.
 */
 	clear_draft?: boolean;
 }
+
 /**
 An animation message (GIF-style).
 Subtype of {@link InputMessageContent}.
@@ -7840,6 +8301,7 @@ Animation caption; pass null to use an empty caption; 0-GetOption("message_capti
 */
 	caption: FormattedText;
 }
+
 /**
 An audio message.
 Subtype of {@link InputMessageContent}.
@@ -7871,6 +8333,7 @@ Audio caption; pass null to use an empty caption; 0-GetOption("message_caption_l
 */
 	caption: FormattedText;
 }
+
 /**
 A document message (general file).
 Subtype of {@link InputMessageContent}.
@@ -7895,6 +8358,7 @@ Document caption; pass null to use an empty caption; 0-GetOption("message_captio
 */
 	caption: FormattedText;
 }
+
 /**
 A photo message.
 Subtype of {@link InputMessageContent}.
@@ -7932,6 +8396,7 @@ Photo TTL (Time To Live), in seconds (0-60). A non-zero TTL can be specified onl
 */
 	ttl: number;
 }
+
 /**
 A sticker message.
 Subtype of {@link InputMessageContent}.
@@ -7959,6 +8424,7 @@ Emoji used to choose the sticker.
 */
 	emoji: string;
 }
+
 /**
 A video message.
 Subtype of {@link InputMessageContent}.
@@ -8002,6 +8468,7 @@ Video TTL (Time To Live), in seconds (0-60). A non-zero TTL can be specified onl
 */
 	ttl: number;
 }
+
 /**
 A video note message.
 Subtype of {@link InputMessageContent}.
@@ -8025,6 +8492,7 @@ Video width and height; must be positive and not greater than 640.
 */
 	length: number;
 }
+
 /**
 A voice note message.
 Subtype of {@link InputMessageContent}.
@@ -8048,6 +8516,7 @@ Voice note caption; pass null to use an empty caption; 0-GetOption("message_capt
 */
 	caption: FormattedText;
 }
+
 /**
 A message with a location.
 Subtype of {@link InputMessageContent}.
@@ -8073,6 +8542,7 @@ notification is disabled. Can't be enabled in channels and Saved Messages.
 */
 	proximity_alert_radius: number;
 }
+
 /**
 A message with information about a venue.
 Subtype of {@link InputMessageContent}.
@@ -8084,6 +8554,7 @@ Venue to send.
 */
 	venue: Venue;
 }
+
 /**
 A message containing a user contact.
 Subtype of {@link InputMessageContent}.
@@ -8095,6 +8566,7 @@ Contact to send.
 */
 	contact: Contact;
 }
+
 /**
 A dice message.
 Subtype of {@link InputMessageContent}.
@@ -8110,6 +8582,7 @@ True, if the chat message draft must be deleted.
 */
 	clear_draft?: boolean;
 }
+
 /**
 A message with a game; not supported for channels or secret chats.
 Subtype of {@link InputMessageContent}.
@@ -8125,6 +8598,7 @@ Short name of the game.
 */
 	game_short_name: string;
 }
+
 /**
 A message with an invoice; can be used only by bots.
 Subtype of {@link InputMessageContent}.
@@ -8177,6 +8651,7 @@ directly from forwards of the invoice message.
 */
 	start_parameter: string;
 }
+
 /**
 A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot.
 Subtype of {@link InputMessageContent}.
@@ -8212,6 +8687,7 @@ True, if the poll needs to be sent already closed; for bots only.
 */
 	is_closed?: boolean;
 }
+
 /**
 A forwarded message.
 Subtype of {@link InputMessageContent}.
@@ -8236,6 +8712,7 @@ message as usual.
 */
 	copy_options: MessageCopyOptions;
 }
+
 /**
 Represents a filter for message search results.
 Subtype of {@link SearchMessagesFilter}.
@@ -8244,6 +8721,7 @@ export interface SearchMessagesFilterEmpty {
 	'@type': 'searchMessagesFilterEmpty';
 
 }
+
 /**
 Returns only animation messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8252,6 +8730,7 @@ export interface SearchMessagesFilterAnimation {
 	'@type': 'searchMessagesFilterAnimation';
 
 }
+
 /**
 Returns only audio messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8260,6 +8739,7 @@ export interface SearchMessagesFilterAudio {
 	'@type': 'searchMessagesFilterAudio';
 
 }
+
 /**
 Returns only document messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8268,6 +8748,7 @@ export interface SearchMessagesFilterDocument {
 	'@type': 'searchMessagesFilterDocument';
 
 }
+
 /**
 Returns only photo messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8276,6 +8757,7 @@ export interface SearchMessagesFilterPhoto {
 	'@type': 'searchMessagesFilterPhoto';
 
 }
+
 /**
 Returns only video messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8284,6 +8766,7 @@ export interface SearchMessagesFilterVideo {
 	'@type': 'searchMessagesFilterVideo';
 
 }
+
 /**
 Returns only voice note messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8292,6 +8775,7 @@ export interface SearchMessagesFilterVoiceNote {
 	'@type': 'searchMessagesFilterVoiceNote';
 
 }
+
 /**
 Returns only photo and video messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8300,6 +8784,7 @@ export interface SearchMessagesFilterPhotoAndVideo {
 	'@type': 'searchMessagesFilterPhotoAndVideo';
 
 }
+
 /**
 Returns only messages containing URLs.
 Subtype of {@link SearchMessagesFilter}.
@@ -8308,6 +8793,7 @@ export interface SearchMessagesFilterUrl {
 	'@type': 'searchMessagesFilterUrl';
 
 }
+
 /**
 Returns only messages containing chat photos.
 Subtype of {@link SearchMessagesFilter}.
@@ -8316,6 +8802,7 @@ export interface SearchMessagesFilterChatPhoto {
 	'@type': 'searchMessagesFilterChatPhoto';
 
 }
+
 /**
 Returns only video note messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8324,6 +8811,7 @@ export interface SearchMessagesFilterVideoNote {
 	'@type': 'searchMessagesFilterVideoNote';
 
 }
+
 /**
 Returns only voice and video note messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8332,6 +8820,7 @@ export interface SearchMessagesFilterVoiceAndVideoNote {
 	'@type': 'searchMessagesFilterVoiceAndVideoNote';
 
 }
+
 /**
 Returns only messages with mentions of the current user, or messages that are replies to their messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8340,6 +8829,7 @@ export interface SearchMessagesFilterMention {
 	'@type': 'searchMessagesFilterMention';
 
 }
+
 /**
 Returns only messages with unread mentions of the current user, or messages that are replies to their messages. When
 using this filter the results can't be additionally filtered by a query, a message thread or by the sending user.
@@ -8349,6 +8839,7 @@ export interface SearchMessagesFilterUnreadMention {
 	'@type': 'searchMessagesFilterUnreadMention';
 
 }
+
 /**
 Returns only messages with unread reactions for the current user. When using this filter the results can't be
 additionally filtered by a query, a message thread or by the sending user.
@@ -8358,6 +8849,7 @@ export interface SearchMessagesFilterUnreadReaction {
 	'@type': 'searchMessagesFilterUnreadReaction';
 
 }
+
 /**
 Returns only failed to send messages. This filter can be used only if the message database is used.
 Subtype of {@link SearchMessagesFilter}.
@@ -8366,6 +8858,7 @@ export interface SearchMessagesFilterFailedToSend {
 	'@type': 'searchMessagesFilterFailedToSend';
 
 }
+
 /**
 Returns only pinned messages.
 Subtype of {@link SearchMessagesFilter}.
@@ -8374,6 +8867,7 @@ export interface SearchMessagesFilterPinned {
 	'@type': 'searchMessagesFilterPinned';
 
 }
+
 /**
 Describes the different types of activity in a chat.
 Subtype of {@link ChatAction}.
@@ -8382,6 +8876,7 @@ export interface ChatActionTyping {
 	'@type': 'chatActionTyping';
 
 }
+
 /**
 The user is recording a video.
 Subtype of {@link ChatAction}.
@@ -8390,6 +8885,7 @@ export interface ChatActionRecordingVideo {
 	'@type': 'chatActionRecordingVideo';
 
 }
+
 /**
 The user is uploading a video.
 Subtype of {@link ChatAction}.
@@ -8401,6 +8897,7 @@ Upload progress, as a percentage.
 */
 	progress: number;
 }
+
 /**
 The user is recording a voice note.
 Subtype of {@link ChatAction}.
@@ -8409,6 +8906,7 @@ export interface ChatActionRecordingVoiceNote {
 	'@type': 'chatActionRecordingVoiceNote';
 
 }
+
 /**
 The user is uploading a voice note.
 Subtype of {@link ChatAction}.
@@ -8420,6 +8918,7 @@ Upload progress, as a percentage.
 */
 	progress: number;
 }
+
 /**
 The user is uploading a photo.
 Subtype of {@link ChatAction}.
@@ -8431,6 +8930,7 @@ Upload progress, as a percentage.
 */
 	progress: number;
 }
+
 /**
 The user is uploading a document.
 Subtype of {@link ChatAction}.
@@ -8442,6 +8942,7 @@ Upload progress, as a percentage.
 */
 	progress: number;
 }
+
 /**
 The user is picking a sticker to send.
 Subtype of {@link ChatAction}.
@@ -8450,6 +8951,7 @@ export interface ChatActionChoosingSticker {
 	'@type': 'chatActionChoosingSticker';
 
 }
+
 /**
 The user is picking a location or venue to send.
 Subtype of {@link ChatAction}.
@@ -8458,6 +8960,7 @@ export interface ChatActionChoosingLocation {
 	'@type': 'chatActionChoosingLocation';
 
 }
+
 /**
 The user is picking a contact to send.
 Subtype of {@link ChatAction}.
@@ -8466,6 +8969,7 @@ export interface ChatActionChoosingContact {
 	'@type': 'chatActionChoosingContact';
 
 }
+
 /**
 The user has started to play a game.
 Subtype of {@link ChatAction}.
@@ -8474,6 +8978,7 @@ export interface ChatActionStartPlayingGame {
 	'@type': 'chatActionStartPlayingGame';
 
 }
+
 /**
 The user is recording a video note.
 Subtype of {@link ChatAction}.
@@ -8482,6 +8987,7 @@ export interface ChatActionRecordingVideoNote {
 	'@type': 'chatActionRecordingVideoNote';
 
 }
+
 /**
 The user is uploading a video note.
 Subtype of {@link ChatAction}.
@@ -8493,6 +8999,7 @@ Upload progress, as a percentage.
 */
 	progress: number;
 }
+
 /**
 The user is watching animations sent by the other party by clicking on an animated emoji.
 Subtype of {@link ChatAction}.
@@ -8504,6 +9011,7 @@ The animated emoji.
 */
 	emoji: string;
 }
+
 /**
 The user has canceled the previous action.
 Subtype of {@link ChatAction}.
@@ -8512,6 +9020,7 @@ export interface ChatActionCancel {
 	'@type': 'chatActionCancel';
 
 }
+
 /**
 Describes the last time the user was online.
 Subtype of {@link UserStatus}.
@@ -8520,6 +9029,7 @@ export interface UserStatusEmpty {
 	'@type': 'userStatusEmpty';
 
 }
+
 /**
 The user is online.
 Subtype of {@link UserStatus}.
@@ -8531,6 +9041,7 @@ Point in time (Unix timestamp) when the user's online status will expire.
 */
 	expires: number;
 }
+
 /**
 The user is offline.
 Subtype of {@link UserStatus}.
@@ -8542,6 +9053,7 @@ Point in time (Unix timestamp) when the user was last online.
 */
 	was_online: number;
 }
+
 /**
 The user was online recently.
 Subtype of {@link UserStatus}.
@@ -8550,6 +9062,7 @@ export interface UserStatusRecently {
 	'@type': 'userStatusRecently';
 
 }
+
 /**
 The user is offline, but was online last week.
 Subtype of {@link UserStatus}.
@@ -8558,6 +9071,7 @@ export interface UserStatusLastWeek {
 	'@type': 'userStatusLastWeek';
 
 }
+
 /**
 The user is offline, but was online last month.
 Subtype of {@link UserStatus}.
@@ -8566,6 +9080,7 @@ export interface UserStatusLastMonth {
 	'@type': 'userStatusLastMonth';
 
 }
+
 /**
 Represents a list of stickers.
 */
@@ -8576,6 +9091,7 @@ List of stickers.
 */
 	stickers: Sticker[];
 }
+
 /**
 Represents a list of emoji.
 */
@@ -8586,6 +9102,7 @@ List of emojis.
 */
 	emojis: string[];
 }
+
 /**
 Represents a sticker set.
 */
@@ -8647,6 +9164,7 @@ sticker is always sent with a fixed emoji from the corresponding Sticker object.
 */
 	emojis: Emojis[];
 }
+
 /**
 Represents short information about a sticker set.
 */
@@ -8707,6 +9225,7 @@ sticker set needs to be requested.
 */
 	covers: Sticker[];
 }
+
 /**
 Represents a list of sticker sets.
 */
@@ -8721,6 +9240,7 @@ List of sticker sets.
 */
 	sets: StickerSetInfo[];
 }
+
 /**
 Represents a list of trending sticker sets.
 */
@@ -8739,6 +9259,7 @@ True, if the list contains sticker sets with premium stickers.
 */
 	is_premium?: boolean;
 }
+
 /**
 Describes the reason why a call was discarded.
 Subtype of {@link CallDiscardReason}.
@@ -8747,6 +9268,7 @@ export interface CallDiscardReasonEmpty {
 	'@type': 'callDiscardReasonEmpty';
 
 }
+
 /**
 The call was ended before the conversation started. It was canceled by the caller or missed by the other party.
 Subtype of {@link CallDiscardReason}.
@@ -8755,6 +9277,7 @@ export interface CallDiscardReasonMissed {
 	'@type': 'callDiscardReasonMissed';
 
 }
+
 /**
 The call was ended before the conversation started. It was declined by the other party.
 Subtype of {@link CallDiscardReason}.
@@ -8763,6 +9286,7 @@ export interface CallDiscardReasonDeclined {
 	'@type': 'callDiscardReasonDeclined';
 
 }
+
 /**
 The call was ended during the conversation because the users were disconnected.
 Subtype of {@link CallDiscardReason}.
@@ -8771,6 +9295,7 @@ export interface CallDiscardReasonDisconnected {
 	'@type': 'callDiscardReasonDisconnected';
 
 }
+
 /**
 The call was ended because one of the parties hung up.
 Subtype of {@link CallDiscardReason}.
@@ -8779,6 +9304,7 @@ export interface CallDiscardReasonHungUp {
 	'@type': 'callDiscardReasonHungUp';
 
 }
+
 /**
 Specifies the supported call protocols.
 */
@@ -8805,6 +9331,7 @@ List of supported tgcalls versions.
 */
 	library_versions: string[];
 }
+
 /**
 Describes the type of a call server.
 Subtype of {@link CallServerType}.
@@ -8820,6 +9347,7 @@ True, if the server uses TCP instead of UDP.
 */
 	is_tcp?: boolean;
 }
+
 /**
 A WebRTC server.
 Subtype of {@link CallServerType}.
@@ -8843,6 +9371,7 @@ True, if the server supports STUN.
 */
 	supports_stun?: boolean;
 }
+
 /**
 Describes a server for relaying call data.
 */
@@ -8869,6 +9398,7 @@ Server type.
 */
 	type: CallServerType;
 }
+
 /**
 Contains the call identifier.
 */
@@ -8879,6 +9409,7 @@ Call identifier.
 */
 	id: number;
 }
+
 /**
 Contains the group call identifier.
 */
@@ -8889,6 +9420,7 @@ Group call identifier.
 */
 	id: number;
 }
+
 /**
 Describes the current call state.
 Subtype of {@link CallState}.
@@ -8904,6 +9436,7 @@ True, if the call has already been received by the other party.
 */
 	is_received?: boolean;
 }
+
 /**
 The call has been answered and encryption keys are being exchanged.
 Subtype of {@link CallState}.
@@ -8912,6 +9445,7 @@ export interface CallStateExchangingKeys {
 	'@type': 'callStateExchangingKeys';
 
 }
+
 /**
 The call is ready to use.
 Subtype of {@link CallState}.
@@ -8943,6 +9477,7 @@ True, if peer-to-peer connection is allowed by users privacy settings.
 */
 	allow_p2p?: boolean;
 }
+
 /**
 The call is hanging up after discardCall has been called.
 Subtype of {@link CallState}.
@@ -8951,6 +9486,7 @@ export interface CallStateHangingUp {
 	'@type': 'callStateHangingUp';
 
 }
+
 /**
 The call has ended successfully.
 Subtype of {@link CallState}.
@@ -8974,6 +9510,7 @@ True, if the call log must be sent to the server.
 */
 	need_log?: boolean;
 }
+
 /**
 The call has ended with an error.
 Subtype of {@link CallState}.
@@ -8985,6 +9522,7 @@ Error. An error with the code 4005000 will be returned if an outgoing call is mi
 */
 	error: Error;
 }
+
 /**
 Describes the quality of a group call video.
 Subtype of {@link GroupCallVideoQuality}.
@@ -8993,6 +9531,7 @@ export interface GroupCallVideoQualityThumbnail {
 	'@type': 'groupCallVideoQualityThumbnail';
 
 }
+
 /**
 The medium video quality.
 Subtype of {@link GroupCallVideoQuality}.
@@ -9001,6 +9540,7 @@ export interface GroupCallVideoQualityMedium {
 	'@type': 'groupCallVideoQualityMedium';
 
 }
+
 /**
 The best available video quality.
 Subtype of {@link GroupCallVideoQuality}.
@@ -9009,6 +9549,7 @@ export interface GroupCallVideoQualityFull {
 	'@type': 'groupCallVideoQualityFull';
 
 }
+
 /**
 Describes an available stream in a group call.
 */
@@ -9027,6 +9568,7 @@ Point in time when the stream currently ends; Unix timestamp in milliseconds.
 */
 	time_offset: number;
 }
+
 /**
 Represents a list of group call streams.
 */
@@ -9037,6 +9579,7 @@ A list of group call streams.
 */
 	streams: GroupCallStream[];
 }
+
 /**
 Represents an RTMP url.
 */
@@ -9051,6 +9594,7 @@ Stream key.
 */
 	stream_key: string;
 }
+
 /**
 Describes a recently speaking participant in a group call.
 */
@@ -9065,6 +9609,7 @@ True, is the user has spoken recently.
 */
 	is_speaking?: boolean;
 }
+
 /**
 Describes a group call.
 */
@@ -9157,6 +9702,7 @@ Call duration, in seconds; for ended calls only.
 */
 	duration: number;
 }
+
 /**
 Describes a group of video synchronization source identifiers.
 */
@@ -9171,6 +9717,7 @@ The list of synchronization source identifiers.
 */
 	source_ids: number[];
 }
+
 /**
 Contains information about a group call participant's video channel.
 */
@@ -9189,6 +9736,7 @@ True if the video is paused. This flag needs to be ignored, if new video frames 
 */
 	is_paused?: boolean;
 }
+
 /**
 Represents a group call participant.
 */
@@ -9269,6 +9817,7 @@ higher is user in the list. If order is empty, the user must be removed from the
 */
 	order: string;
 }
+
 /**
 Describes the exact type of a problem with a call.
 Subtype of {@link CallProblem}.
@@ -9277,6 +9826,7 @@ export interface CallProblemEcho {
 	'@type': 'callProblemEcho';
 
 }
+
 /**
 The user heard background noise.
 Subtype of {@link CallProblem}.
@@ -9285,6 +9835,7 @@ export interface CallProblemNoise {
 	'@type': 'callProblemNoise';
 
 }
+
 /**
 The other side kept disappearing.
 Subtype of {@link CallProblem}.
@@ -9293,6 +9844,7 @@ export interface CallProblemInterruptions {
 	'@type': 'callProblemInterruptions';
 
 }
+
 /**
 The speech was distorted.
 Subtype of {@link CallProblem}.
@@ -9301,6 +9853,7 @@ export interface CallProblemDistortedSpeech {
 	'@type': 'callProblemDistortedSpeech';
 
 }
+
 /**
 The user couldn't hear the other side.
 Subtype of {@link CallProblem}.
@@ -9309,6 +9862,7 @@ export interface CallProblemSilentLocal {
 	'@type': 'callProblemSilentLocal';
 
 }
+
 /**
 The other side couldn't hear the user.
 Subtype of {@link CallProblem}.
@@ -9317,6 +9871,7 @@ export interface CallProblemSilentRemote {
 	'@type': 'callProblemSilentRemote';
 
 }
+
 /**
 The call ended unexpectedly.
 Subtype of {@link CallProblem}.
@@ -9325,6 +9880,7 @@ export interface CallProblemDropped {
 	'@type': 'callProblemDropped';
 
 }
+
 /**
 The video was distorted.
 Subtype of {@link CallProblem}.
@@ -9333,6 +9889,7 @@ export interface CallProblemDistortedVideo {
 	'@type': 'callProblemDistortedVideo';
 
 }
+
 /**
 The video was pixelated.
 Subtype of {@link CallProblem}.
@@ -9341,6 +9898,7 @@ export interface CallProblemPixelatedVideo {
 	'@type': 'callProblemPixelatedVideo';
 
 }
+
 /**
 Describes a call.
 */
@@ -9367,6 +9925,7 @@ Call state.
 */
 	state: CallState;
 }
+
 /**
 Contains settings for the authentication of the user's phone number.
 */
@@ -9396,6 +9955,7 @@ out sessions.
 */
 	authentication_tokens: string[];
 }
+
 /**
 Represents a reaction applied to a message.
 */
@@ -9410,6 +9970,7 @@ Identifier of the chat member, applied the reaction.
 */
 	sender_id: MessageSender;
 }
+
 /**
 Represents a list of reactions added to a message.
 */
@@ -9428,6 +9989,7 @@ The offset for the next request. If empty, there are no more results.
 */
 	next_offset: string;
 }
+
 /**
 Represents an available reaction.
 */
@@ -9442,6 +10004,7 @@ True, if Telegram Premium is needed to send the reaction.
 */
 	needs_premium?: boolean;
 }
+
 /**
 Represents a list of available reactions.
 */
@@ -9452,6 +10015,7 @@ List of reactions.
 */
 	reactions: AvailableReaction[];
 }
+
 /**
 Contains stickers which must be used for reaction animation rendering.
 */
@@ -9502,6 +10066,7 @@ Center animation for the reaction; may be null.
 */
 	center_animation: Sticker;
 }
+
 /**
 Represents a list of animations.
 */
@@ -9512,6 +10077,7 @@ List of animations.
 */
 	animations: Animation[];
 }
+
 /**
 Contains animated stickers which must be used for dice animation rendering.
 Subtype of {@link DiceStickers}.
@@ -9523,6 +10089,7 @@ The animated sticker with the dice animation.
 */
 	sticker: Sticker;
 }
+
 /**
 Animated stickers to be combined into a slot machine.
 Subtype of {@link DiceStickers}.
@@ -9551,6 +10118,7 @@ The animated sticker with the right reel.
 */
 	right_reel: Sticker;
 }
+
 /**
 Represents the result of an ImportContacts request.
 */
@@ -9566,6 +10134,7 @@ The number of users that imported the corresponding contact; 0 for already regis
 */
 	importer_count: number[];
 }
+
 /**
 Describes result of speech recognition in a voice note.
 Subtype of {@link SpeechRecognitionResult}.
@@ -9577,6 +10146,7 @@ Partially recognized text.
 */
 	partial_text: string;
 }
+
 /**
 The speech recognition successfully finished.
 Subtype of {@link SpeechRecognitionResult}.
@@ -9588,6 +10158,7 @@ Recognized text.
 */
 	text: string;
 }
+
 /**
 The speech recognition failed.
 Subtype of {@link SpeechRecognitionResult}.
@@ -9599,6 +10170,7 @@ Received error.
 */
 	error: Error;
 }
+
 /**
 Describes a color to highlight a bot added to attachment menu.
 */
@@ -9613,6 +10185,7 @@ Color in the RGB24 format for dark themes.
 */
 	dark_color: number;
 }
+
 /**
 Represents a bot added to attachment menu.
 */
@@ -9683,6 +10256,7 @@ Default placeholder for opened Web Apps in SVG format; may be null.
 */
 	web_app_placeholder: File;
 }
+
 /**
 Information about the message sent by answerWebAppQuery.
 */
@@ -9693,6 +10267,7 @@ Identifier of the sent inline message, if known.
 */
 	inline_message_id: string;
 }
+
 /**
 Contains an HTTP URL.
 */
@@ -9703,6 +10278,7 @@ The URL.
 */
 	url: string;
 }
+
 /**
 Represents a single result of an inline query; for bots only.
 Subtype of {@link InputInlineQueryResult}.
@@ -9755,6 +10331,7 @@ inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageCont
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a link to an article or web page.
 Subtype of {@link InputInlineQueryResult}.
@@ -9803,6 +10380,7 @@ inputMessageLocation, inputMessageVenue or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a link to an MP3 audio file.
 Subtype of {@link InputInlineQueryResult}.
@@ -9839,6 +10417,7 @@ inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageCont
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a user contact.
 Subtype of {@link InputInlineQueryResult}.
@@ -9875,6 +10454,7 @@ inputMessageLocation, inputMessageVenue or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a link to a file.
 Subtype of {@link InputInlineQueryResult}.
@@ -9923,6 +10503,7 @@ inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageCont
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a game.
 Subtype of {@link InputInlineQueryResult}.
@@ -9942,6 +10523,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 }
+
 /**
 Represents a point on the map.
 Subtype of {@link InputInlineQueryResult}.
@@ -9986,6 +10568,7 @@ inputMessageLocation, inputMessageVenue or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents link to a JPEG image.
 Subtype of {@link InputInlineQueryResult}.
@@ -10030,6 +10613,7 @@ inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageCont
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a link to a WEBP, TGS, or WEBM sticker.
 Subtype of {@link InputInlineQueryResult}.
@@ -10066,6 +10650,7 @@ inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageCont
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents information about a venue.
 Subtype of {@link InputInlineQueryResult}.
@@ -10102,6 +10687,7 @@ inputMessageLocation, inputMessageVenue or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a link to a page containing an embedded video player or a video file.
 Subtype of {@link InputInlineQueryResult}.
@@ -10154,6 +10740,7 @@ inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageCont
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a link to an opus-encoded audio file within an OGG container, single channel audio.
 Subtype of {@link InputInlineQueryResult}.
@@ -10186,6 +10773,7 @@ inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageCont
 */
 	input_message_content: InputMessageContent;
 }
+
 /**
 Represents a single result of an inline query.
 Subtype of {@link InlineQueryResult}.
@@ -10217,6 +10805,7 @@ Result thumbnail in JPEG format; may be null.
 */
 	thumbnail: Thumbnail;
 }
+
 /**
 Represents a user contact.
 Subtype of {@link InlineQueryResult}.
@@ -10236,6 +10825,7 @@ Result thumbnail in JPEG format; may be null.
 */
 	thumbnail: Thumbnail;
 }
+
 /**
 Represents a point on the map.
 Subtype of {@link InlineQueryResult}.
@@ -10259,6 +10849,7 @@ Result thumbnail in JPEG format; may be null.
 */
 	thumbnail: Thumbnail;
 }
+
 /**
 Represents information about a venue.
 Subtype of {@link InlineQueryResult}.
@@ -10278,6 +10869,7 @@ Result thumbnail in JPEG format; may be null.
 */
 	thumbnail: Thumbnail;
 }
+
 /**
 Represents information about a game.
 Subtype of {@link InlineQueryResult}.
@@ -10293,6 +10885,7 @@ Game result.
 */
 	game: Game;
 }
+
 /**
 Represents an animation file.
 Subtype of {@link InlineQueryResult}.
@@ -10312,6 +10905,7 @@ Animation title.
 */
 	title: string;
 }
+
 /**
 Represents an audio file.
 Subtype of {@link InlineQueryResult}.
@@ -10327,6 +10921,7 @@ Audio file.
 */
 	audio: Audio;
 }
+
 /**
 Represents a document.
 Subtype of {@link InlineQueryResult}.
@@ -10350,6 +10945,7 @@ Represents a document.
 */
 	description: string;
 }
+
 /**
 Represents a photo.
 Subtype of {@link InlineQueryResult}.
@@ -10373,6 +10969,7 @@ Represents a photo.
 */
 	description: string;
 }
+
 /**
 Represents a sticker.
 Subtype of {@link InlineQueryResult}.
@@ -10388,6 +10985,7 @@ Sticker.
 */
 	sticker: Sticker;
 }
+
 /**
 Represents a video.
 Subtype of {@link InlineQueryResult}.
@@ -10411,6 +11009,7 @@ Represents a video.
 */
 	description: string;
 }
+
 /**
 Represents a voice note.
 Subtype of {@link InlineQueryResult}.
@@ -10430,6 +11029,7 @@ Title of the voice note.
 */
 	title: string;
 }
+
 /**
 Represents the results of the inline query. Use sendInlineQueryResultMessage to send the result of the query.
 */
@@ -10457,6 +11057,7 @@ Parameter for the bot start message.
 */
 	switch_pm_parameter: string;
 }
+
 /**
 Represents a payload of a callback query.
 Subtype of {@link CallbackQueryPayload}.
@@ -10468,6 +11069,7 @@ Data that was attached to the callback button.
 */
 	data: string;
 }
+
 /**
 The payload for a callback button requiring password.
 Subtype of {@link CallbackQueryPayload}.
@@ -10483,6 +11085,7 @@ Data that was attached to the callback button.
 */
 	data: string;
 }
+
 /**
 The payload for a game callback button.
 Subtype of {@link CallbackQueryPayload}.
@@ -10494,6 +11097,7 @@ A short name of the game that was attached to the callback button.
 */
 	game_short_name: string;
 }
+
 /**
 Contains a bot's answer to a callback query.
 */
@@ -10512,6 +11116,7 @@ URL to be opened.
 */
 	url: string;
 }
+
 /**
 Contains the result of a custom request.
 */
@@ -10522,6 +11127,7 @@ A JSON-serialized result.
 */
 	result: string;
 }
+
 /**
 Contains one row of the game high score table.
 */
@@ -10540,6 +11146,7 @@ User score.
 */
 	score: number;
 }
+
 /**
 Contains a list of game high scores.
 */
@@ -10550,6 +11157,7 @@ A list of game high scores.
 */
 	scores: GameHighScore[];
 }
+
 /**
 Represents a chat event.
 Subtype of {@link ChatEventAction}.
@@ -10565,6 +11173,7 @@ The message after it was edited.
 */
 	new_message: Message;
 }
+
 /**
 A message was deleted.
 Subtype of {@link ChatEventAction}.
@@ -10576,6 +11185,7 @@ Deleted message.
 */
 	message: Message;
 }
+
 /**
 A message was pinned.
 Subtype of {@link ChatEventAction}.
@@ -10587,6 +11197,7 @@ Pinned message.
 */
 	message: Message;
 }
+
 /**
 A message was unpinned.
 Subtype of {@link ChatEventAction}.
@@ -10598,6 +11209,7 @@ Unpinned message.
 */
 	message: Message;
 }
+
 /**
 A poll in a message was stopped.
 Subtype of {@link ChatEventAction}.
@@ -10609,6 +11221,7 @@ The message with the poll.
 */
 	message: Message;
 }
+
 /**
 A new member joined the chat.
 Subtype of {@link ChatEventAction}.
@@ -10617,6 +11230,7 @@ export interface ChatEventMemberJoined {
 	'@type': 'chatEventMemberJoined';
 
 }
+
 /**
 A new member joined the chat via an invite link.
 Subtype of {@link ChatEventAction}.
@@ -10628,6 +11242,7 @@ Invite link used to join the chat.
 */
 	invite_link: ChatInviteLink;
 }
+
 /**
 A new member was accepted to the chat by an administrator.
 Subtype of {@link ChatEventAction}.
@@ -10643,6 +11258,7 @@ Invite link used to join the chat; may be null.
 */
 	invite_link: ChatInviteLink;
 }
+
 /**
 A new chat member was invited.
 Subtype of {@link ChatEventAction}.
@@ -10658,6 +11274,7 @@ New member status.
 */
 	status: ChatMemberStatus;
 }
+
 /**
 A member left the chat.
 Subtype of {@link ChatEventAction}.
@@ -10666,6 +11283,7 @@ export interface ChatEventMemberLeft {
 	'@type': 'chatEventMemberLeft';
 
 }
+
 /**
 A chat member has gained/lost administrator status, or the list of their administrator privileges has changed.
 Subtype of {@link ChatEventAction}.
@@ -10685,6 +11303,7 @@ New status of the chat member.
 */
 	new_status: ChatMemberStatus;
 }
+
 /**
 A chat member was restricted/unrestricted or banned/unbanned, or the list of their restrictions has changed.
 Subtype of {@link ChatEventAction}.
@@ -10704,6 +11323,7 @@ New status of the chat member.
 */
 	new_status: ChatMemberStatus;
 }
+
 /**
 The chat available reactions were changed.
 Subtype of {@link ChatEventAction}.
@@ -10719,6 +11339,7 @@ New chat available reactions.
 */
 	new_available_reactions: string[];
 }
+
 /**
 The chat description was changed.
 Subtype of {@link ChatEventAction}.
@@ -10734,6 +11355,7 @@ New chat description.
 */
 	new_description: string;
 }
+
 /**
 The linked chat of a supergroup was changed.
 Subtype of {@link ChatEventAction}.
@@ -10749,6 +11371,7 @@ New supergroup linked chat identifier.
 */
 	new_linked_chat_id: number;
 }
+
 /**
 The supergroup location was changed.
 Subtype of {@link ChatEventAction}.
@@ -10764,6 +11387,7 @@ New location; may be null.
 */
 	new_location: ChatLocation;
 }
+
 /**
 The message TTL was changed.
 Subtype of {@link ChatEventAction}.
@@ -10779,6 +11403,7 @@ New value of message_ttl.
 */
 	new_message_ttl: number;
 }
+
 /**
 The chat permissions was changed.
 Subtype of {@link ChatEventAction}.
@@ -10794,6 +11419,7 @@ New chat permissions.
 */
 	new_permissions: ChatPermissions;
 }
+
 /**
 The chat photo was changed.
 Subtype of {@link ChatEventAction}.
@@ -10809,6 +11435,7 @@ New chat photo value; may be null.
 */
 	new_photo: ChatPhoto;
 }
+
 /**
 The slow_mode_delay setting of a supergroup was changed.
 Subtype of {@link ChatEventAction}.
@@ -10824,6 +11451,7 @@ New value of slow_mode_delay, in seconds.
 */
 	new_slow_mode_delay: number;
 }
+
 /**
 The supergroup sticker set was changed.
 Subtype of {@link ChatEventAction}.
@@ -10839,6 +11467,7 @@ New identifier of the chat sticker set; 0 if none.
 */
 	new_sticker_set_id: string;
 }
+
 /**
 The chat title was changed.
 Subtype of {@link ChatEventAction}.
@@ -10854,6 +11483,7 @@ New chat title.
 */
 	new_title: string;
 }
+
 /**
 The chat username was changed.
 Subtype of {@link ChatEventAction}.
@@ -10869,6 +11499,7 @@ New chat username.
 */
 	new_username: string;
 }
+
 /**
 The has_protected_content setting of a channel was toggled.
 Subtype of {@link ChatEventAction}.
@@ -10880,6 +11511,7 @@ New value of has_protected_content.
 */
 	has_protected_content?: boolean;
 }
+
 /**
 The can_invite_users permission of a supergroup chat was toggled.
 Subtype of {@link ChatEventAction}.
@@ -10891,6 +11523,7 @@ New value of can_invite_users permission.
 */
 	can_invite_users?: boolean;
 }
+
 /**
 The is_all_history_available setting of a supergroup was toggled.
 Subtype of {@link ChatEventAction}.
@@ -10902,6 +11535,7 @@ New value of is_all_history_available.
 */
 	is_all_history_available?: boolean;
 }
+
 /**
 The sign_messages setting of a channel was toggled.
 Subtype of {@link ChatEventAction}.
@@ -10913,6 +11547,7 @@ New value of sign_messages.
 */
 	sign_messages?: boolean;
 }
+
 /**
 A chat invite link was edited.
 Subtype of {@link ChatEventAction}.
@@ -10928,6 +11563,7 @@ New information about the invite link.
 */
 	new_invite_link: ChatInviteLink;
 }
+
 /**
 A chat invite link was revoked.
 Subtype of {@link ChatEventAction}.
@@ -10939,6 +11575,7 @@ The invite link.
 */
 	invite_link: ChatInviteLink;
 }
+
 /**
 A revoked chat invite link was deleted.
 Subtype of {@link ChatEventAction}.
@@ -10950,6 +11587,7 @@ The invite link.
 */
 	invite_link: ChatInviteLink;
 }
+
 /**
 A video chat was created.
 Subtype of {@link ChatEventAction}.
@@ -10961,6 +11599,7 @@ Identifier of the video chat. The video chat can be received through the method 
 */
 	group_call_id: number;
 }
+
 /**
 A video chat was ended.
 Subtype of {@link ChatEventAction}.
@@ -10972,6 +11611,7 @@ Identifier of the video chat. The video chat can be received through the method 
 */
 	group_call_id: number;
 }
+
 /**
 The mute_new_participants setting of a video chat was toggled.
 Subtype of {@link ChatEventAction}.
@@ -10983,6 +11623,7 @@ New value of the mute_new_participants setting.
 */
 	mute_new_participants?: boolean;
 }
+
 /**
 A video chat participant was muted or unmuted.
 Subtype of {@link ChatEventAction}.
@@ -10998,6 +11639,7 @@ New value of is_muted.
 */
 	is_muted?: boolean;
 }
+
 /**
 A video chat participant volume level was changed.
 Subtype of {@link ChatEventAction}.
@@ -11013,6 +11655,7 @@ New value of volume_level; 1-20000 in hundreds of percents.
 */
 	volume_level: number;
 }
+
 /**
 Represents a chat event.
 */
@@ -11035,6 +11678,7 @@ The action.
 */
 	action: ChatEventAction;
 }
+
 /**
 Contains a list of chat events.
 */
@@ -11045,6 +11689,7 @@ List of events.
 */
 	events: ChatEvent[];
 }
+
 /**
 Represents a set of filters used to obtain a chat event log.
 */
@@ -11099,6 +11744,7 @@ True, if video chat actions need to be returned.
 */
 	video_chat_changes?: boolean;
 }
+
 /**
 Represents the value of a string in a language pack.
 Subtype of {@link LanguagePackStringValue}.
@@ -11110,6 +11756,7 @@ String value.
 */
 	value: string;
 }
+
 /**
 A language pack string which has different forms based on the number of some object it mentions. See
 https://www.unicode.org/cldr/charts/latest/supplemental/language_plural_rules.html for more information.
@@ -11142,6 +11789,7 @@ Default value.
 */
 	other_value: string;
 }
+
 /**
 A deleted language pack string, the value must be taken from the built-in English language pack.
 Subtype of {@link LanguagePackStringValue}.
@@ -11150,6 +11798,7 @@ export interface LanguagePackStringValueDeleted {
 	'@type': 'languagePackStringValueDeleted';
 
 }
+
 /**
 Represents one language pack string.
 */
@@ -11164,6 +11813,7 @@ String value; pass null if the string needs to be taken from the built-in Englis
 */
 	value: LanguagePackStringValue;
 }
+
 /**
 Contains a list of language pack strings.
 */
@@ -11174,6 +11824,7 @@ A list of language pack strings.
 */
 	strings: LanguagePackString[];
 }
+
 /**
 Contains information about a language pack.
 */
@@ -11234,6 +11885,7 @@ Link to language translation interface; empty for custom local language packs.
 */
 	translation_url: string;
 }
+
 /**
 Contains information about the current localization target.
 */
@@ -11244,6 +11896,7 @@ List of available language packs for this application.
 */
 	language_packs: LanguagePackInfo[];
 }
+
 /**
 Describes type of a limit, increased for Premium users.
 Subtype of {@link PremiumLimitType}.
@@ -11252,6 +11905,7 @@ export interface PremiumLimitTypeSupergroupCount {
 	'@type': 'premiumLimitTypeSupergroupCount';
 
 }
+
 /**
 The maximum number of pinned chats in the main chat list.
 Subtype of {@link PremiumLimitType}.
@@ -11260,6 +11914,7 @@ export interface PremiumLimitTypePinnedChatCount {
 	'@type': 'premiumLimitTypePinnedChatCount';
 
 }
+
 /**
 The maximum number of created public chats.
 Subtype of {@link PremiumLimitType}.
@@ -11268,6 +11923,7 @@ export interface PremiumLimitTypeCreatedPublicChatCount {
 	'@type': 'premiumLimitTypeCreatedPublicChatCount';
 
 }
+
 /**
 The maximum number of saved animations.
 Subtype of {@link PremiumLimitType}.
@@ -11276,6 +11932,7 @@ export interface PremiumLimitTypeSavedAnimationCount {
 	'@type': 'premiumLimitTypeSavedAnimationCount';
 
 }
+
 /**
 The maximum number of favorite stickers.
 Subtype of {@link PremiumLimitType}.
@@ -11284,6 +11941,7 @@ export interface PremiumLimitTypeFavoriteStickerCount {
 	'@type': 'premiumLimitTypeFavoriteStickerCount';
 
 }
+
 /**
 The maximum number of chat filters.
 Subtype of {@link PremiumLimitType}.
@@ -11292,6 +11950,7 @@ export interface PremiumLimitTypeChatFilterCount {
 	'@type': 'premiumLimitTypeChatFilterCount';
 
 }
+
 /**
 The maximum number of pinned and always included, or always excluded chats in a chat filter.
 Subtype of {@link PremiumLimitType}.
@@ -11300,6 +11959,7 @@ export interface PremiumLimitTypeChatFilterChosenChatCount {
 	'@type': 'premiumLimitTypeChatFilterChosenChatCount';
 
 }
+
 /**
 The maximum number of pinned chats in the archive chat list.
 Subtype of {@link PremiumLimitType}.
@@ -11308,6 +11968,7 @@ export interface PremiumLimitTypePinnedArchivedChatCount {
 	'@type': 'premiumLimitTypePinnedArchivedChatCount';
 
 }
+
 /**
 The maximum length of sent media caption.
 Subtype of {@link PremiumLimitType}.
@@ -11316,6 +11977,7 @@ export interface PremiumLimitTypeCaptionLength {
 	'@type': 'premiumLimitTypeCaptionLength';
 
 }
+
 /**
 The maximum length of the user's bio.
 Subtype of {@link PremiumLimitType}.
@@ -11324,6 +11986,7 @@ export interface PremiumLimitTypeBioLength {
 	'@type': 'premiumLimitTypeBioLength';
 
 }
+
 /**
 Describes a feature available to Premium users.
 Subtype of {@link PremiumFeature}.
@@ -11332,6 +11995,7 @@ export interface PremiumFeatureIncreasedLimits {
 	'@type': 'premiumFeatureIncreasedLimits';
 
 }
+
 /**
 Increased maximum upload file size.
 Subtype of {@link PremiumFeature}.
@@ -11340,6 +12004,7 @@ export interface PremiumFeatureIncreasedUploadFileSize {
 	'@type': 'premiumFeatureIncreasedUploadFileSize';
 
 }
+
 /**
 Improved download speed.
 Subtype of {@link PremiumFeature}.
@@ -11348,6 +12013,7 @@ export interface PremiumFeatureImprovedDownloadSpeed {
 	'@type': 'premiumFeatureImprovedDownloadSpeed';
 
 }
+
 /**
 The ability to convert voice notes to text.
 Subtype of {@link PremiumFeature}.
@@ -11356,6 +12022,7 @@ export interface PremiumFeatureVoiceRecognition {
 	'@type': 'premiumFeatureVoiceRecognition';
 
 }
+
 /**
 Disabled ads.
 Subtype of {@link PremiumFeature}.
@@ -11364,6 +12031,7 @@ export interface PremiumFeatureDisabledAds {
 	'@type': 'premiumFeatureDisabledAds';
 
 }
+
 /**
 Allowed to use more reactions.
 Subtype of {@link PremiumFeature}.
@@ -11372,6 +12040,7 @@ export interface PremiumFeatureUniqueReactions {
 	'@type': 'premiumFeatureUniqueReactions';
 
 }
+
 /**
 Allowed to use premium stickers with unique effects.
 Subtype of {@link PremiumFeature}.
@@ -11380,6 +12049,7 @@ export interface PremiumFeatureUniqueStickers {
 	'@type': 'premiumFeatureUniqueStickers';
 
 }
+
 /**
 Allowed to use custom emoji stickers in message texts and captions.
 Subtype of {@link PremiumFeature}.
@@ -11388,6 +12058,7 @@ export interface PremiumFeatureCustomEmoji {
 	'@type': 'premiumFeatureCustomEmoji';
 
 }
+
 /**
 Ability to change position of the main chat list, archive and mute all new chats from non-contacts, and completely
 disable notifications about the user's contacts joined Telegram.
@@ -11397,6 +12068,7 @@ export interface PremiumFeatureAdvancedChatManagement {
 	'@type': 'premiumFeatureAdvancedChatManagement';
 
 }
+
 /**
 A badge in the user's profile.
 Subtype of {@link PremiumFeature}.
@@ -11405,6 +12077,7 @@ export interface PremiumFeatureProfileBadge {
 	'@type': 'premiumFeatureProfileBadge';
 
 }
+
 /**
 Profile photo animation on message and chat screens.
 Subtype of {@link PremiumFeature}.
@@ -11413,6 +12086,7 @@ export interface PremiumFeatureAnimatedProfilePhoto {
 	'@type': 'premiumFeatureAnimatedProfilePhoto';
 
 }
+
 /**
 Allowed to set a premium appllication icons.
 Subtype of {@link PremiumFeature}.
@@ -11421,6 +12095,7 @@ export interface PremiumFeatureAppIcons {
 	'@type': 'premiumFeatureAppIcons';
 
 }
+
 /**
 Contains information about a limit, increased for Premium users.
 */
@@ -11439,6 +12114,7 @@ Value of the limit for Premium users.
 */
 	premium_value: number;
 }
+
 /**
 Contains information about features, available to Premium users.
 */
@@ -11458,6 +12134,7 @@ isn't available.
 */
 	payment_link: InternalLinkType;
 }
+
 /**
 Describes a source from which the Premium features screen is opened.
 Subtype of {@link PremiumSource}.
@@ -11469,6 +12146,7 @@ Type of the exceeded limit.
 */
 	limit_type: PremiumLimitType;
 }
+
 /**
 A user tried to use a Premium feature.
 Subtype of {@link PremiumSource}.
@@ -11480,6 +12158,7 @@ The used feature.
 */
 	feature: PremiumFeature;
 }
+
 /**
 A user opened an internal link of the type internalLinkTypePremiumFeatures.
 Subtype of {@link PremiumSource}.
@@ -11491,6 +12170,7 @@ The referrer from the link.
 */
 	referrer: string;
 }
+
 /**
 A user opened the Premium features screen from settings.
 Subtype of {@link PremiumSource}.
@@ -11499,6 +12179,7 @@ export interface PremiumSourceSettings {
 	'@type': 'premiumSourceSettings';
 
 }
+
 /**
 Describes a promotion animation for a Premium feature.
 */
@@ -11513,6 +12194,7 @@ Promotion animation for the feature.
 */
 	animation: Animation;
 }
+
 /**
 Contains state of Telegram Premium subscription and promotion videos for Premium features.
 */
@@ -11536,6 +12218,7 @@ The list of available promotion animations for Premium features.
 */
 	animations: PremiumFeaturePromotionAnimation[];
 }
+
 /**
 Describes a purpose of an in-store payment.
 Subtype of {@link StorePaymentPurpose}.
@@ -11547,6 +12230,7 @@ Pass true if this is a restore of a Telegram Premium purchase; only for App Stor
 */
 	is_restore?: boolean;
 }
+
 /**
 The user gifted Telegram Premium to another user.
 Subtype of {@link StorePaymentPurpose}.
@@ -11566,6 +12250,7 @@ Paid amount, in the smallest units of the currency.
 */
 	amount: number;
 }
+
 /**
 Represents a data needed to subscribe for push notifications through registerDevice method. To use specific push
 notification service, the correct application platform must be specified and a valid server authentication data must be
@@ -11583,6 +12268,7 @@ True, if push notifications must be additionally encrypted.
 */
 	encrypt?: boolean;
 }
+
 /**
 A token for Apple Push Notification service.
 Subtype of {@link DeviceToken}.
@@ -11598,6 +12284,7 @@ True, if App Sandbox is enabled.
 */
 	is_app_sandbox?: boolean;
 }
+
 /**
 A token for Apple Push Notification service VoIP notifications.
 Subtype of {@link DeviceToken}.
@@ -11617,6 +12304,7 @@ True, if push notifications must be additionally encrypted.
 */
 	encrypt?: boolean;
 }
+
 /**
 A token for Windows Push Notification Services.
 Subtype of {@link DeviceToken}.
@@ -11628,6 +12316,7 @@ The access token that will be used to send notifications; may be empty to deregi
 */
 	access_token: string;
 }
+
 /**
 A token for Microsoft Push Notification Service.
 Subtype of {@link DeviceToken}.
@@ -11639,6 +12328,7 @@ Push notification channel URI; may be empty to deregister a device.
 */
 	channel_uri: string;
 }
+
 /**
 A token for Microsoft Push Notification Service VoIP channel.
 Subtype of {@link DeviceToken}.
@@ -11650,6 +12340,7 @@ Push notification channel URI; may be empty to deregister a device.
 */
 	channel_uri: string;
 }
+
 /**
 A token for web Push API.
 Subtype of {@link DeviceToken}.
@@ -11670,6 +12361,7 @@ Base64url-encoded authentication secret.
 */
 	auth_base64url: string;
 }
+
 /**
 A token for Simple Push API for Firefox OS.
 Subtype of {@link DeviceToken}.
@@ -11682,6 +12374,7 @@ a device.
 */
 	endpoint: string;
 }
+
 /**
 A token for Ubuntu Push Client service.
 Subtype of {@link DeviceToken}.
@@ -11693,6 +12386,7 @@ Token; may be empty to deregister a device.
 */
 	token: string;
 }
+
 /**
 A token for BlackBerry Push Service.
 Subtype of {@link DeviceToken}.
@@ -11704,6 +12398,7 @@ Token; may be empty to deregister a device.
 */
 	token: string;
 }
+
 /**
 A token for Tizen Push Service.
 Subtype of {@link DeviceToken}.
@@ -11715,6 +12410,7 @@ Push service registration identifier; may be empty to deregister a device.
 */
 	reg_id: string;
 }
+
 /**
 Contains a globally unique push receiver identifier, which can be used to identify which account has received a push
 notification.
@@ -11726,6 +12422,7 @@ The globally unique identifier of push notification subscription.
 */
 	id: string;
 }
+
 /**
 Describes a fill of a background.
 Subtype of {@link BackgroundFill}.
@@ -11737,6 +12434,7 @@ A color of the background in the RGB24 format.
 */
 	color: number;
 }
+
 /**
 Describes a gradient fill of a background.
 Subtype of {@link BackgroundFill}.
@@ -11756,6 +12454,7 @@ Clockwise rotation angle of the gradient, in degrees; 0-359. Must be always divi
 */
 	rotation_angle: number;
 }
+
 /**
 Describes a freeform gradient fill of a background.
 Subtype of {@link BackgroundFill}.
@@ -11767,6 +12466,7 @@ A list of 3 or 4 colors of the freeform gradients in the RGB24 format.
 */
 	colors: number[];
 }
+
 /**
 Describes the type of a background.
 Subtype of {@link BackgroundType}.
@@ -11782,6 +12482,7 @@ True, if the background needs to be slightly moved when device is tilted.
 */
 	is_moving?: boolean;
 }
+
 /**
 A PNG or TGV (gzipped subset of SVG with MIME type "application/x-tgwallpattern") pattern to be combined with the
 background fill chosen by the user.
@@ -11807,6 +12508,7 @@ True, if the background needs to be slightly moved when device is tilted.
 */
 	is_moving?: boolean;
 }
+
 /**
 A filled background.
 Subtype of {@link BackgroundType}.
@@ -11818,6 +12520,7 @@ The background fill.
 */
 	fill: BackgroundFill;
 }
+
 /**
 Describes a chat background.
 */
@@ -11848,6 +12551,7 @@ Type of the background.
 */
 	type: BackgroundType;
 }
+
 /**
 Contains a list of backgrounds.
 */
@@ -11858,6 +12562,7 @@ A list of backgrounds.
 */
 	backgrounds: Background[];
 }
+
 /**
 Contains information about background to set.
 Subtype of {@link InputBackground}.
@@ -11870,6 +12575,7 @@ wallpapers and in PNG format for patterns.
 */
 	background: InputFile;
 }
+
 /**
 A background from the server.
 Subtype of {@link InputBackground}.
@@ -11881,6 +12587,7 @@ The background identifier.
 */
 	background_id: string;
 }
+
 /**
 Describes theme settings.
 */
@@ -11907,6 +12614,7 @@ Accent color of outgoing messages in ARGB format.
 */
 	outgoing_message_accent_color: number;
 }
+
 /**
 Describes a chat theme.
 */
@@ -11925,6 +12633,7 @@ Theme settings for a dark chat theme.
 */
 	dark_settings: ThemeSettings;
 }
+
 /**
 Contains a list of hashtags.
 */
@@ -11935,6 +12644,7 @@ A list of hashtags.
 */
 	hashtags: string[];
 }
+
 /**
 Represents result of checking whether the current session can be used to transfer a chat ownership to another user.
 Subtype of {@link CanTransferOwnershipResult}.
@@ -11943,6 +12653,7 @@ export interface CanTransferOwnershipResultOk {
 	'@type': 'canTransferOwnershipResultOk';
 
 }
+
 /**
 The 2-step verification needs to be enabled first.
 Subtype of {@link CanTransferOwnershipResult}.
@@ -11951,6 +12662,7 @@ export interface CanTransferOwnershipResultPasswordNeeded {
 	'@type': 'canTransferOwnershipResultPasswordNeeded';
 
 }
+
 /**
 The 2-step verification was enabled recently, user needs to wait.
 Subtype of {@link CanTransferOwnershipResult}.
@@ -11962,6 +12674,7 @@ Time left before the session can be used to transfer ownership of a chat, in sec
 */
 	retry_after: number;
 }
+
 /**
 The session was created recently, user needs to wait.
 Subtype of {@link CanTransferOwnershipResult}.
@@ -11973,6 +12686,7 @@ Time left before the session can be used to transfer ownership of a chat, in sec
 */
 	retry_after: number;
 }
+
 /**
 Represents result of checking whether a username can be set for a chat.
 Subtype of {@link CheckChatUsernameResult}.
@@ -11981,6 +12695,7 @@ export interface CheckChatUsernameResultOk {
 	'@type': 'checkChatUsernameResultOk';
 
 }
+
 /**
 The username is invalid.
 Subtype of {@link CheckChatUsernameResult}.
@@ -11989,6 +12704,7 @@ export interface CheckChatUsernameResultUsernameInvalid {
 	'@type': 'checkChatUsernameResultUsernameInvalid';
 
 }
+
 /**
 The username is occupied.
 Subtype of {@link CheckChatUsernameResult}.
@@ -11997,6 +12713,7 @@ export interface CheckChatUsernameResultUsernameOccupied {
 	'@type': 'checkChatUsernameResultUsernameOccupied';
 
 }
+
 /**
 The user has too many chats with username, one of them must be made private first.
 Subtype of {@link CheckChatUsernameResult}.
@@ -12005,6 +12722,7 @@ export interface CheckChatUsernameResultPublicChatsTooMuch {
 	'@type': 'checkChatUsernameResultPublicChatsTooMuch';
 
 }
+
 /**
 The user can't be a member of a public supergroup.
 Subtype of {@link CheckChatUsernameResult}.
@@ -12013,6 +12731,7 @@ export interface CheckChatUsernameResultPublicGroupsUnavailable {
 	'@type': 'checkChatUsernameResultPublicGroupsUnavailable';
 
 }
+
 /**
 Represents result of checking whether a name can be used for a new sticker set.
 Subtype of {@link CheckStickerSetNameResult}.
@@ -12021,6 +12740,7 @@ export interface CheckStickerSetNameResultOk {
 	'@type': 'checkStickerSetNameResultOk';
 
 }
+
 /**
 The name is invalid.
 Subtype of {@link CheckStickerSetNameResult}.
@@ -12029,6 +12749,7 @@ export interface CheckStickerSetNameResultNameInvalid {
 	'@type': 'checkStickerSetNameResultNameInvalid';
 
 }
+
 /**
 The name is occupied.
 Subtype of {@link CheckStickerSetNameResult}.
@@ -12037,6 +12758,7 @@ export interface CheckStickerSetNameResultNameOccupied {
 	'@type': 'checkStickerSetNameResultNameOccupied';
 
 }
+
 /**
 Represents result of 2-step verification password reset.
 Subtype of {@link ResetPasswordResult}.
@@ -12045,6 +12767,7 @@ export interface ResetPasswordResultOk {
 	'@type': 'resetPasswordResultOk';
 
 }
+
 /**
 The password reset request is pending.
 Subtype of {@link ResetPasswordResult}.
@@ -12056,6 +12779,7 @@ Point in time (Unix timestamp) after which the password can be reset immediately
 */
 	pending_reset_date: number;
 }
+
 /**
 The password reset request was declined.
 Subtype of {@link ResetPasswordResult}.
@@ -12067,6 +12791,7 @@ Point in time (Unix timestamp) when the password reset can be retried.
 */
 	retry_date: number;
 }
+
 /**
 Contains information about a file with messages exported from another app.
 Subtype of {@link MessageFileType}.
@@ -12078,6 +12803,7 @@ Name of the other party; may be empty if unrecognized.
 */
 	name: string;
 }
+
 /**
 The messages was exported from a group chat.
 Subtype of {@link MessageFileType}.
@@ -12089,6 +12815,7 @@ Title of the group chat; may be empty if unrecognized.
 */
 	title: string;
 }
+
 /**
 The messages was exported from a chat of unknown type.
 Subtype of {@link MessageFileType}.
@@ -12097,6 +12824,7 @@ export interface MessageFileTypeUnknown {
 	'@type': 'messageFileTypeUnknown';
 
 }
+
 /**
 Contains content of a push message notification.
 Subtype of {@link PushMessageContent}.
@@ -12108,6 +12836,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 An animation message (GIF-style).
 Subtype of {@link PushMessageContent}.
@@ -12127,6 +12856,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 An audio message.
 Subtype of {@link PushMessageContent}.
@@ -12142,6 +12872,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A message with a user contact.
 Subtype of {@link PushMessageContent}.
@@ -12157,6 +12888,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A contact has registered with Telegram.
 Subtype of {@link PushMessageContent}.
@@ -12165,6 +12897,7 @@ export interface PushMessageContentContactRegistered {
 	'@type': 'pushMessageContentContactRegistered';
 
 }
+
 /**
 A document message (a general file).
 Subtype of {@link PushMessageContent}.
@@ -12180,6 +12913,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A message with a game.
 Subtype of {@link PushMessageContent}.
@@ -12195,6 +12929,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A new high score was achieved in a game.
 Subtype of {@link PushMessageContent}.
@@ -12214,6 +12949,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A message with an invoice from a bot.
 Subtype of {@link PushMessageContent}.
@@ -12229,6 +12965,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A message with a location.
 Subtype of {@link PushMessageContent}.
@@ -12244,6 +12981,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A photo message.
 Subtype of {@link PushMessageContent}.
@@ -12267,6 +13005,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A message with a poll.
 Subtype of {@link PushMessageContent}.
@@ -12286,6 +13025,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A screenshot of a message in the chat has been taken.
 Subtype of {@link PushMessageContent}.
@@ -12294,6 +13034,7 @@ export interface PushMessageContentScreenshotTaken {
 	'@type': 'pushMessageContentScreenshotTaken';
 
 }
+
 /**
 A message with a sticker.
 Subtype of {@link PushMessageContent}.
@@ -12313,6 +13054,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A text message.
 Subtype of {@link PushMessageContent}.
@@ -12328,6 +13070,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A video message.
 Subtype of {@link PushMessageContent}.
@@ -12351,6 +13094,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A video note message.
 Subtype of {@link PushMessageContent}.
@@ -12366,6 +13110,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A voice note message.
 Subtype of {@link PushMessageContent}.
@@ -12381,6 +13126,7 @@ True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
 }
+
 /**
 A newly created basic group.
 Subtype of {@link PushMessageContent}.
@@ -12389,6 +13135,7 @@ export interface PushMessageContentBasicGroupChatCreate {
 	'@type': 'pushMessageContentBasicGroupChatCreate';
 
 }
+
 /**
 New chat members were invited to a group.
 Subtype of {@link PushMessageContent}.
@@ -12408,6 +13155,7 @@ True, if the user has returned to the group themselves.
 */
 	is_returned?: boolean;
 }
+
 /**
 A chat photo was edited.
 Subtype of {@link PushMessageContent}.
@@ -12416,6 +13164,7 @@ export interface PushMessageContentChatChangePhoto {
 	'@type': 'pushMessageContentChatChangePhoto';
 
 }
+
 /**
 A chat title was edited.
 Subtype of {@link PushMessageContent}.
@@ -12427,6 +13176,7 @@ New chat title.
 */
 	title: string;
 }
+
 /**
 A chat theme was edited.
 Subtype of {@link PushMessageContent}.
@@ -12438,6 +13188,7 @@ If non-empty, name of a new theme, set for the chat. Otherwise chat theme was re
 */
 	theme_name: string;
 }
+
 /**
 A chat member was deleted.
 Subtype of {@link PushMessageContent}.
@@ -12457,6 +13208,7 @@ True, if the user has left the group themselves.
 */
 	is_left?: boolean;
 }
+
 /**
 A new member joined the chat via an invite link.
 Subtype of {@link PushMessageContent}.
@@ -12465,6 +13217,7 @@ export interface PushMessageContentChatJoinByLink {
 	'@type': 'pushMessageContentChatJoinByLink';
 
 }
+
 /**
 A new member was accepted to the chat by an administrator.
 Subtype of {@link PushMessageContent}.
@@ -12473,6 +13226,7 @@ export interface PushMessageContentChatJoinByRequest {
 	'@type': 'pushMessageContentChatJoinByRequest';
 
 }
+
 /**
 A new recurrent payment was made by the current user.
 Subtype of {@link PushMessageContent}.
@@ -12484,6 +13238,7 @@ The paid amount.
 */
 	amount: string;
 }
+
 /**
 A forwarded messages.
 Subtype of {@link PushMessageContent}.
@@ -12495,6 +13250,7 @@ Number of forwarded messages.
 */
 	total_count: number;
 }
+
 /**
 A media album.
 Subtype of {@link PushMessageContent}.
@@ -12522,6 +13278,7 @@ True, if the album has at least one document.
 */
 	has_documents?: boolean;
 }
+
 /**
 Contains detailed information about a notification.
 Subtype of {@link NotificationType}.
@@ -12537,6 +13294,7 @@ True, if message content must be displayed in notifications.
 */
 	show_preview?: boolean;
 }
+
 /**
 New secret chat was created.
 Subtype of {@link NotificationType}.
@@ -12545,6 +13303,7 @@ export interface NotificationTypeNewSecretChat {
 	'@type': 'notificationTypeNewSecretChat';
 
 }
+
 /**
 New call was received.
 Subtype of {@link NotificationType}.
@@ -12556,6 +13315,7 @@ Call identifier.
 */
 	call_id: number;
 }
+
 /**
 New message was received through a push notification.
 Subtype of {@link NotificationType}.
@@ -12584,6 +13344,7 @@ Push message content.
 */
 	content: PushMessageContent;
 }
+
 /**
 Describes the type of notifications in a notification group.
 Subtype of {@link NotificationGroupType}.
@@ -12592,6 +13353,7 @@ export interface NotificationGroupTypeMessages {
 	'@type': 'notificationGroupTypeMessages';
 
 }
+
 /**
 A group containing notifications of type notificationTypeNewMessage and notificationTypeNewPushMessage with unread
 mentions of the current user, replies to their messages, or a pinned message.
@@ -12601,6 +13363,7 @@ export interface NotificationGroupTypeMentions {
 	'@type': 'notificationGroupTypeMentions';
 
 }
+
 /**
 A group containing a notification of type notificationTypeNewSecretChat.
 Subtype of {@link NotificationGroupType}.
@@ -12609,6 +13372,7 @@ export interface NotificationGroupTypeSecretChat {
 	'@type': 'notificationGroupTypeSecretChat';
 
 }
+
 /**
 A group containing notifications of type notificationTypeNewCall.
 Subtype of {@link NotificationGroupType}.
@@ -12617,6 +13381,7 @@ export interface NotificationGroupTypeCalls {
 	'@type': 'notificationGroupTypeCalls';
 
 }
+
 /**
 Describes a notification sound in MP3 format.
 */
@@ -12647,6 +13412,7 @@ File containing the sound.
 */
 	sound: File;
 }
+
 /**
 Contains a list of notification sounds.
 */
@@ -12657,6 +13423,7 @@ A list of notification sounds.
 */
 	notification_sounds: NotificationSound[];
 }
+
 /**
 Contains information about a notification.
 */
@@ -12679,6 +13446,7 @@ Notification type.
 */
 	type: NotificationType;
 }
+
 /**
 Describes a group of notifications.
 */
@@ -12705,6 +13473,7 @@ The list of active notifications.
 */
 	notifications: Notification[];
 }
+
 /**
 Represents the value of an option.
 Subtype of {@link OptionValue}.
@@ -12716,6 +13485,7 @@ The value of the option.
 */
 	value?: boolean;
 }
+
 /**
 Represents an unknown option or an option which has a default value.
 Subtype of {@link OptionValue}.
@@ -12724,6 +13494,7 @@ export interface OptionValueEmpty {
 	'@type': 'optionValueEmpty';
 
 }
+
 /**
 Represents an integer option.
 Subtype of {@link OptionValue}.
@@ -12735,6 +13506,7 @@ The value of the option.
 */
 	value: string;
 }
+
 /**
 Represents a string option.
 Subtype of {@link OptionValue}.
@@ -12746,6 +13518,7 @@ The value of the option.
 */
 	value: string;
 }
+
 /**
 Represents one member of a JSON object.
 */
@@ -12760,6 +13533,7 @@ Member's value.
 */
 	value: JsonValue;
 }
+
 /**
 Represents a JSON value.
 Subtype of {@link JsonValue}.
@@ -12768,6 +13542,7 @@ export interface JsonValueNull {
 	'@type': 'jsonValueNull';
 
 }
+
 /**
 Represents a boolean JSON value.
 Subtype of {@link JsonValue}.
@@ -12779,6 +13554,7 @@ The value.
 */
 	value?: boolean;
 }
+
 /**
 Represents a numeric JSON value.
 Subtype of {@link JsonValue}.
@@ -12790,6 +13566,7 @@ The value.
 */
 	value: number;
 }
+
 /**
 Represents a string JSON value.
 Subtype of {@link JsonValue}.
@@ -12801,6 +13578,7 @@ The value.
 */
 	value: string;
 }
+
 /**
 Represents a JSON array.
 Subtype of {@link JsonValue}.
@@ -12812,6 +13590,7 @@ The list of array elements.
 */
 	values: JsonValue[];
 }
+
 /**
 Represents a JSON object.
 Subtype of {@link JsonValue}.
@@ -12823,6 +13602,7 @@ The list of object members.
 */
 	members: JsonObjectMember[];
 }
+
 /**
 Represents a single rule for managing privacy settings.
 Subtype of {@link UserPrivacySettingRule}.
@@ -12831,6 +13611,7 @@ export interface UserPrivacySettingRuleAllowAll {
 	'@type': 'userPrivacySettingRuleAllowAll';
 
 }
+
 /**
 A rule to allow all of a user's contacts to do something.
 Subtype of {@link UserPrivacySettingRule}.
@@ -12839,6 +13620,7 @@ export interface UserPrivacySettingRuleAllowContacts {
 	'@type': 'userPrivacySettingRuleAllowContacts';
 
 }
+
 /**
 A rule to allow certain specified users to do something.
 Subtype of {@link UserPrivacySettingRule}.
@@ -12850,6 +13632,7 @@ The user identifiers, total number of users in all rules must not exceed 1000.
 */
 	user_ids: number[];
 }
+
 /**
 A rule to allow all members of certain specified basic groups and supergroups to doing something.
 Subtype of {@link UserPrivacySettingRule}.
@@ -12861,6 +13644,7 @@ The chat identifiers, total number of chats in all rules must not exceed 20.
 */
 	chat_ids: number[];
 }
+
 /**
 A rule to restrict all users from doing something.
 Subtype of {@link UserPrivacySettingRule}.
@@ -12869,6 +13653,7 @@ export interface UserPrivacySettingRuleRestrictAll {
 	'@type': 'userPrivacySettingRuleRestrictAll';
 
 }
+
 /**
 A rule to restrict all contacts of a user from doing something.
 Subtype of {@link UserPrivacySettingRule}.
@@ -12877,6 +13662,7 @@ export interface UserPrivacySettingRuleRestrictContacts {
 	'@type': 'userPrivacySettingRuleRestrictContacts';
 
 }
+
 /**
 A rule to restrict all specified users from doing something.
 Subtype of {@link UserPrivacySettingRule}.
@@ -12888,6 +13674,7 @@ The user identifiers, total number of users in all rules must not exceed 1000.
 */
 	user_ids: number[];
 }
+
 /**
 A rule to restrict all members of specified basic groups and supergroups from doing something.
 Subtype of {@link UserPrivacySettingRule}.
@@ -12899,6 +13686,7 @@ The chat identifiers, total number of chats in all rules must not exceed 20.
 */
 	chat_ids: number[];
 }
+
 /**
 A list of privacy rules. Rules are matched in the specified order. The first matched rule defines the privacy setting
 for a given user. If no rule matches, the action is not allowed.
@@ -12910,6 +13698,7 @@ A list of rules.
 */
 	rules: UserPrivacySettingRule[];
 }
+
 /**
 Describes available user privacy settings.
 Subtype of {@link UserPrivacySetting}.
@@ -12918,6 +13707,7 @@ export interface UserPrivacySettingShowStatus {
 	'@type': 'userPrivacySettingShowStatus';
 
 }
+
 /**
 A privacy setting for managing whether the user's profile photo is visible.
 Subtype of {@link UserPrivacySetting}.
@@ -12926,6 +13716,7 @@ export interface UserPrivacySettingShowProfilePhoto {
 	'@type': 'userPrivacySettingShowProfilePhoto';
 
 }
+
 /**
 A privacy setting for managing whether a link to the user's account is included in forwarded messages.
 Subtype of {@link UserPrivacySetting}.
@@ -12934,6 +13725,7 @@ export interface UserPrivacySettingShowLinkInForwardedMessages {
 	'@type': 'userPrivacySettingShowLinkInForwardedMessages';
 
 }
+
 /**
 A privacy setting for managing whether the user's phone number is visible.
 Subtype of {@link UserPrivacySetting}.
@@ -12942,6 +13734,7 @@ export interface UserPrivacySettingShowPhoneNumber {
 	'@type': 'userPrivacySettingShowPhoneNumber';
 
 }
+
 /**
 A privacy setting for managing whether the user can be invited to chats.
 Subtype of {@link UserPrivacySetting}.
@@ -12950,6 +13743,7 @@ export interface UserPrivacySettingAllowChatInvites {
 	'@type': 'userPrivacySettingAllowChatInvites';
 
 }
+
 /**
 A privacy setting for managing whether the user can be called.
 Subtype of {@link UserPrivacySetting}.
@@ -12958,6 +13752,7 @@ export interface UserPrivacySettingAllowCalls {
 	'@type': 'userPrivacySettingAllowCalls';
 
 }
+
 /**
 A privacy setting for managing whether peer-to-peer connections can be used for calls.
 Subtype of {@link UserPrivacySetting}.
@@ -12966,6 +13761,7 @@ export interface UserPrivacySettingAllowPeerToPeerCalls {
 	'@type': 'userPrivacySettingAllowPeerToPeerCalls';
 
 }
+
 /**
 A privacy setting for managing whether the user can be found by their phone number. Checked only if the phone number is
 not known to the other user. Can be set only to "Allow contacts" or "Allow all".
@@ -12975,6 +13771,7 @@ export interface UserPrivacySettingAllowFindingByPhoneNumber {
 	'@type': 'userPrivacySettingAllowFindingByPhoneNumber';
 
 }
+
 /**
 A privacy setting for managing whether the user can receive voice and video messages in private chats.
 Subtype of {@link UserPrivacySetting}.
@@ -12983,6 +13780,7 @@ export interface UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages {
 	'@type': 'userPrivacySettingAllowPrivateVoiceAndVideoNoteMessages';
 
 }
+
 /**
 Contains information about the period of inactivity after which the current user's account will automatically be
 deleted.
@@ -12994,6 +13792,7 @@ Number of days of inactivity before the account will be flagged for deletion; 30
 */
 	days: number;
 }
+
 /**
 Represents the type of a session.
 Subtype of {@link SessionType}.
@@ -13002,6 +13801,7 @@ export interface SessionTypeAndroid {
 	'@type': 'sessionTypeAndroid';
 
 }
+
 /**
 The session is running on a generic Apple device.
 Subtype of {@link SessionType}.
@@ -13010,6 +13810,7 @@ export interface SessionTypeApple {
 	'@type': 'sessionTypeApple';
 
 }
+
 /**
 The session is running on the Brave browser.
 Subtype of {@link SessionType}.
@@ -13018,6 +13819,7 @@ export interface SessionTypeBrave {
 	'@type': 'sessionTypeBrave';
 
 }
+
 /**
 The session is running on the Chrome browser.
 Subtype of {@link SessionType}.
@@ -13026,6 +13828,7 @@ export interface SessionTypeChrome {
 	'@type': 'sessionTypeChrome';
 
 }
+
 /**
 The session is running on the Edge browser.
 Subtype of {@link SessionType}.
@@ -13034,6 +13837,7 @@ export interface SessionTypeEdge {
 	'@type': 'sessionTypeEdge';
 
 }
+
 /**
 The session is running on the Firefox browser.
 Subtype of {@link SessionType}.
@@ -13042,6 +13846,7 @@ export interface SessionTypeFirefox {
 	'@type': 'sessionTypeFirefox';
 
 }
+
 /**
 The session is running on an iPad device.
 Subtype of {@link SessionType}.
@@ -13050,6 +13855,7 @@ export interface SessionTypeIpad {
 	'@type': 'sessionTypeIpad';
 
 }
+
 /**
 The session is running on an iPhone device.
 Subtype of {@link SessionType}.
@@ -13058,6 +13864,7 @@ export interface SessionTypeIphone {
 	'@type': 'sessionTypeIphone';
 
 }
+
 /**
 The session is running on a Linux device.
 Subtype of {@link SessionType}.
@@ -13066,6 +13873,7 @@ export interface SessionTypeLinux {
 	'@type': 'sessionTypeLinux';
 
 }
+
 /**
 The session is running on a Mac device.
 Subtype of {@link SessionType}.
@@ -13074,6 +13882,7 @@ export interface SessionTypeMac {
 	'@type': 'sessionTypeMac';
 
 }
+
 /**
 The session is running on the Opera browser.
 Subtype of {@link SessionType}.
@@ -13082,6 +13891,7 @@ export interface SessionTypeOpera {
 	'@type': 'sessionTypeOpera';
 
 }
+
 /**
 The session is running on the Safari browser.
 Subtype of {@link SessionType}.
@@ -13090,6 +13900,7 @@ export interface SessionTypeSafari {
 	'@type': 'sessionTypeSafari';
 
 }
+
 /**
 The session is running on an Ubuntu device.
 Subtype of {@link SessionType}.
@@ -13098,6 +13909,7 @@ export interface SessionTypeUbuntu {
 	'@type': 'sessionTypeUbuntu';
 
 }
+
 /**
 The session is running on an unknown type of device.
 Subtype of {@link SessionType}.
@@ -13106,6 +13918,7 @@ export interface SessionTypeUnknown {
 	'@type': 'sessionTypeUnknown';
 
 }
+
 /**
 The session is running on the Vivaldi browser.
 Subtype of {@link SessionType}.
@@ -13114,6 +13927,7 @@ export interface SessionTypeVivaldi {
 	'@type': 'sessionTypeVivaldi';
 
 }
+
 /**
 The session is running on a Windows device.
 Subtype of {@link SessionType}.
@@ -13122,6 +13936,7 @@ export interface SessionTypeWindows {
 	'@type': 'sessionTypeWindows';
 
 }
+
 /**
 The session is running on an Xbox console.
 Subtype of {@link SessionType}.
@@ -13130,6 +13945,7 @@ export interface SessionTypeXbox {
 	'@type': 'sessionTypeXbox';
 
 }
+
 /**
 Contains information about one session in a Telegram application used by the current user. Sessions must be shown to the
 user in the returned order.
@@ -13209,6 +14025,7 @@ Region code from which the session was created, based on the IP address.
 */
 	region: string;
 }
+
 /**
 Contains a list of sessions.
 */
@@ -13223,6 +14040,7 @@ Number of days of inactivity before sessions will automatically be terminated; 1
 */
 	inactive_session_ttl_days: number;
 }
+
 /**
 Contains information about one website the current user is logged in with Telegram.
 */
@@ -13265,6 +14083,7 @@ Human-readable description of a country and a region from which the user was log
 */
 	location: string;
 }
+
 /**
 Contains a list of websites the current user is logged in with Telegram.
 */
@@ -13275,6 +14094,7 @@ List of connected websites.
 */
 	websites: ConnectedWebsite[];
 }
+
 /**
 Describes the reason why a chat is reported.
 Subtype of {@link ChatReportReason}.
@@ -13283,6 +14103,7 @@ export interface ChatReportReasonSpam {
 	'@type': 'chatReportReasonSpam';
 
 }
+
 /**
 The chat promotes violence.
 Subtype of {@link ChatReportReason}.
@@ -13291,6 +14112,7 @@ export interface ChatReportReasonViolence {
 	'@type': 'chatReportReasonViolence';
 
 }
+
 /**
 The chat contains pornographic messages.
 Subtype of {@link ChatReportReason}.
@@ -13299,6 +14121,7 @@ export interface ChatReportReasonPornography {
 	'@type': 'chatReportReasonPornography';
 
 }
+
 /**
 The chat has child abuse related content.
 Subtype of {@link ChatReportReason}.
@@ -13307,6 +14130,7 @@ export interface ChatReportReasonChildAbuse {
 	'@type': 'chatReportReasonChildAbuse';
 
 }
+
 /**
 The chat contains copyrighted content.
 Subtype of {@link ChatReportReason}.
@@ -13315,6 +14139,7 @@ export interface ChatReportReasonCopyright {
 	'@type': 'chatReportReasonCopyright';
 
 }
+
 /**
 The location-based chat is unrelated to its stated location.
 Subtype of {@link ChatReportReason}.
@@ -13323,6 +14148,7 @@ export interface ChatReportReasonUnrelatedLocation {
 	'@type': 'chatReportReasonUnrelatedLocation';
 
 }
+
 /**
 The chat represents a fake account.
 Subtype of {@link ChatReportReason}.
@@ -13331,6 +14157,7 @@ export interface ChatReportReasonFake {
 	'@type': 'chatReportReasonFake';
 
 }
+
 /**
 The chat has illegal drugs related content.
 Subtype of {@link ChatReportReason}.
@@ -13339,6 +14166,7 @@ export interface ChatReportReasonIllegalDrugs {
 	'@type': 'chatReportReasonIllegalDrugs';
 
 }
+
 /**
 The chat contains messages with personal details.
 Subtype of {@link ChatReportReason}.
@@ -13347,6 +14175,7 @@ export interface ChatReportReasonPersonalDetails {
 	'@type': 'chatReportReasonPersonalDetails';
 
 }
+
 /**
 A custom reason provided by the user.
 Subtype of {@link ChatReportReason}.
@@ -13355,6 +14184,7 @@ export interface ChatReportReasonCustom {
 	'@type': 'chatReportReasonCustom';
 
 }
+
 /**
 Describes the target chat to be opened.
 Subtype of {@link TargetChat}.
@@ -13363,6 +14193,7 @@ export interface TargetChatCurrent {
 	'@type': 'targetChatCurrent';
 
 }
+
 /**
 The chat needs to be chosen by the user among chats of the specified types.
 Subtype of {@link TargetChat}.
@@ -13386,6 +14217,7 @@ True, if channel chats are allowed.
 */
 	allow_channel_chats?: boolean;
 }
+
 /**
 The chat needs to be open with the provided internal link.
 Subtype of {@link TargetChat}.
@@ -13397,6 +14229,7 @@ An internal link pointing to the chat.
 */
 	link: InternalLinkType;
 }
+
 /**
 Describes an internal https://t.me or tg: link, which must be processed by the application in a special way.
 Subtype of {@link InternalLinkType}.
@@ -13405,6 +14238,7 @@ export interface InternalLinkTypeActiveSessions {
 	'@type': 'internalLinkTypeActiveSessions';
 
 }
+
 /**
 The link is a link to an attachment menu bot to be opened in the specified or a chosen chat. Process given target_chat
 to open the chat. Then call searchPublicChat with the given bot username, check that the user is a bot and can be added
@@ -13429,6 +14263,7 @@ URL to be passed to openWebApp.
 */
 	url: string;
 }
+
 /**
 The link contains an authentication code. Call checkAuthenticationCode with the code if the current authorization state
 is authorizationStateWaitCode.
@@ -13441,6 +14276,7 @@ The authentication code.
 */
 	code: string;
 }
+
 /**
 The link is a link to a background. Call searchBackground with the given background name to process the link.
 Subtype of {@link InternalLinkType}.
@@ -13452,6 +14288,7 @@ Name of the background.
 */
 	background_name: string;
 }
+
 /**
 The link is a link to a chat with a Telegram bot. Call searchPublicChat with the given bot username, check that the user
 is a bot, show START button in the chat with the bot, and then call sendBotStartMessage with the given start parameter
@@ -13473,6 +14310,7 @@ True, if sendBotStartMessage must be called automatically without showing the ST
 */
 	autostart?: boolean;
 }
+
 /**
 The link is a link to a Telegram bot, which is supposed to be added to a group chat. Call searchPublicChat with the
 given bot username, check that the user is a bot and can be added to groups, ask the current user to select a basic
@@ -13501,6 +14339,7 @@ Expected administrator rights for the bot; may be null.
 */
 	administrator_rights: ChatAdministratorRights;
 }
+
 /**
 The link is a link to a Telegram bot, which is supposed to be added to a channel chat as an administrator. Call
 searchPublicChat with the given bot username and check that the user is a bot, ask the current user to select a channel
@@ -13521,6 +14360,7 @@ Expected administrator rights for the bot.
 */
 	administrator_rights: ChatAdministratorRights;
 }
+
 /**
 The link is a link to the change phone number section of the app.
 Subtype of {@link InternalLinkType}.
@@ -13529,6 +14369,7 @@ export interface InternalLinkTypeChangePhoneNumber {
 	'@type': 'internalLinkTypeChangePhoneNumber';
 
 }
+
 /**
 The link is a chat invite link. Call checkChatInviteLink with the given invite link to process the link.
 Subtype of {@link InternalLinkType}.
@@ -13540,6 +14381,7 @@ Internal representation of the invite link.
 */
 	invite_link: string;
 }
+
 /**
 The link is a link to the filter settings section of the app.
 Subtype of {@link InternalLinkType}.
@@ -13548,6 +14390,7 @@ export interface InternalLinkTypeFilterSettings {
 	'@type': 'internalLinkTypeFilterSettings';
 
 }
+
 /**
 The link is a link to a game. Call searchPublicChat with the given bot username, check that the user is a bot, ask the
 current user to select a chat to send the game, and then call sendMessage with inputMessageGame.
@@ -13564,6 +14407,7 @@ Short name of the game.
 */
 	game_short_name: string;
 }
+
 /**
 The link is a link to an invoice. Call getPaymentForm with the given invoice name to process the link.
 Subtype of {@link InternalLinkType}.
@@ -13575,6 +14419,7 @@ Name of the invoice.
 */
 	invoice_name: string;
 }
+
 /**
 The link is a link to a language pack. Call getLanguagePackInfo with the given language pack identifier to process the
 link.
@@ -13587,6 +14432,7 @@ Language pack identifier.
 */
 	language_pack_id: string;
 }
+
 /**
 The link is a link to the language settings section of the app.
 Subtype of {@link InternalLinkType}.
@@ -13595,6 +14441,7 @@ export interface InternalLinkTypeLanguageSettings {
 	'@type': 'internalLinkTypeLanguageSettings';
 
 }
+
 /**
 The link is a link to a Telegram message. Call getMessageLinkInfo with the given URL to process the link.
 Subtype of {@link InternalLinkType}.
@@ -13606,6 +14453,7 @@ URL to be passed to getMessageLinkInfo.
 */
 	url: string;
 }
+
 /**
 The link contains a message draft text. A share screen needs to be shown to the user, then the chosen chat must be
 opened and the text is added to the input field.
@@ -13623,6 +14471,7 @@ link must be selected.
 */
 	contains_link?: boolean;
 }
+
 /**
 The link contains a request of Telegram passport data. Call getPassportAuthorizationForm with the given parameters to
 process the link if the link was received from outside of the application, otherwise ignore it.
@@ -13653,6 +14502,7 @@ tgbot{bot_user_id}://passport/cancel needs to be opened instead.
 */
 	callback_url: string;
 }
+
 /**
 The link can be used to confirm ownership of a phone number to prevent account deletion. Call
 sendPhoneNumberConfirmationCode with the given hash and phone number to process the link.
@@ -13669,6 +14519,7 @@ Phone number value from the link.
 */
 	phone_number: string;
 }
+
 /**
 The link is a link to the Premium features screen of the applcation from which the user can subscribe to Telegram
 Premium. Call getPremiumFeatures with the given referrer to process the link.
@@ -13681,6 +14532,7 @@ Referrer specified in the link.
 */
 	referrer: string;
 }
+
 /**
 The link is a link to the privacy and security settings section of the app.
 Subtype of {@link InternalLinkType}.
@@ -13689,6 +14541,7 @@ export interface InternalLinkTypePrivacyAndSecuritySettings {
 	'@type': 'internalLinkTypePrivacyAndSecuritySettings';
 
 }
+
 /**
 The link is a link to a proxy. Call addProxy with the given parameters to process the link and add the proxy.
 Subtype of {@link InternalLinkType}.
@@ -13708,6 +14561,7 @@ Type of the proxy.
 */
 	type: ProxyType;
 }
+
 /**
 The link is a link to a chat by its username. Call searchPublicChat with the given chat username to process the link.
 Subtype of {@link InternalLinkType}.
@@ -13719,6 +14573,7 @@ Username of the chat.
 */
 	chat_username: string;
 }
+
 /**
 The link can be used to login the current user on another device, but it must be scanned from QR-code using in-app
 camera. An alert similar to "This code can be used to allow someone to log in to your Telegram account. To confirm
@@ -13729,6 +14584,7 @@ export interface InternalLinkTypeQrCodeAuthentication {
 	'@type': 'internalLinkTypeQrCodeAuthentication';
 
 }
+
 /**
 The link forces restore of App Store purchases when opened. For official iOS application only.
 Subtype of {@link InternalLinkType}.
@@ -13737,6 +14593,7 @@ export interface InternalLinkTypeRestorePurchases {
 	'@type': 'internalLinkTypeRestorePurchases';
 
 }
+
 /**
 The link is a link to application settings.
 Subtype of {@link InternalLinkType}.
@@ -13745,6 +14602,7 @@ export interface InternalLinkTypeSettings {
 	'@type': 'internalLinkTypeSettings';
 
 }
+
 /**
 The link is a link to a sticker set. Call searchStickerSet with the given sticker set name to process the link and show
 the sticker set.
@@ -13757,6 +14615,7 @@ Name of the sticker set.
 */
 	sticker_set_name: string;
 }
+
 /**
 The link is a link to a theme. TDLib has no theme support yet.
 Subtype of {@link InternalLinkType}.
@@ -13768,6 +14627,7 @@ Name of the theme.
 */
 	theme_name: string;
 }
+
 /**
 The link is a link to the theme settings section of the app.
 Subtype of {@link InternalLinkType}.
@@ -13776,6 +14636,7 @@ export interface InternalLinkTypeThemeSettings {
 	'@type': 'internalLinkTypeThemeSettings';
 
 }
+
 /**
 The link is an unknown tg: link. Call getDeepLinkInfo to process the link.
 Subtype of {@link InternalLinkType}.
@@ -13787,6 +14648,7 @@ Link to be passed to getDeepLinkInfo.
 */
 	link: string;
 }
+
 /**
 The link is a link to an unsupported proxy. An alert can be shown to the user.
 Subtype of {@link InternalLinkType}.
@@ -13795,6 +14657,7 @@ export interface InternalLinkTypeUnsupportedProxy {
 	'@type': 'internalLinkTypeUnsupportedProxy';
 
 }
+
 /**
 The link is a link to a user by its phone number. Call searchUserByPhoneNumber with the given phone number to process
 the link.
@@ -13807,6 +14670,7 @@ Phone number of the user.
 */
 	phone_number: string;
 }
+
 /**
 The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGroupCall with the
 given invite hash to process the link.
@@ -13827,6 +14691,7 @@ True, if the video chat is expected to be a live stream in a channel or a broadc
 */
 	is_live_stream?: boolean;
 }
+
 /**
 Contains an HTTPS link to a message in a supergroup or channel.
 */
@@ -13841,6 +14706,7 @@ True, if the link will work for non-members of the chat.
 */
 	is_public?: boolean;
 }
+
 /**
 Contains information about a link to a message in a chat.
 */
@@ -13872,6 +14738,7 @@ True, if the message is linked as a channel post comment or from a message threa
 */
 	for_comment?: boolean;
 }
+
 /**
 Contains a part of a file.
 */
@@ -13882,6 +14749,7 @@ File bytes.
 */
 	data: string;
 }
+
 /**
 Represents the type of a file.
 Subtype of {@link FileType}.
@@ -13890,6 +14758,7 @@ export interface FileTypeNone {
 	'@type': 'fileTypeNone';
 
 }
+
 /**
 The file is an animation.
 Subtype of {@link FileType}.
@@ -13898,6 +14767,7 @@ export interface FileTypeAnimation {
 	'@type': 'fileTypeAnimation';
 
 }
+
 /**
 The file is an audio file.
 Subtype of {@link FileType}.
@@ -13906,6 +14776,7 @@ export interface FileTypeAudio {
 	'@type': 'fileTypeAudio';
 
 }
+
 /**
 The file is a document.
 Subtype of {@link FileType}.
@@ -13914,6 +14785,7 @@ export interface FileTypeDocument {
 	'@type': 'fileTypeDocument';
 
 }
+
 /**
 The file is a notification sound.
 Subtype of {@link FileType}.
@@ -13922,6 +14794,7 @@ export interface FileTypeNotificationSound {
 	'@type': 'fileTypeNotificationSound';
 
 }
+
 /**
 The file is a photo.
 Subtype of {@link FileType}.
@@ -13930,6 +14803,7 @@ export interface FileTypePhoto {
 	'@type': 'fileTypePhoto';
 
 }
+
 /**
 The file is a profile photo.
 Subtype of {@link FileType}.
@@ -13938,6 +14812,7 @@ export interface FileTypeProfilePhoto {
 	'@type': 'fileTypeProfilePhoto';
 
 }
+
 /**
 The file was sent to a secret chat (the file type is not known to the server).
 Subtype of {@link FileType}.
@@ -13946,6 +14821,7 @@ export interface FileTypeSecret {
 	'@type': 'fileTypeSecret';
 
 }
+
 /**
 The file is a thumbnail of a file from a secret chat.
 Subtype of {@link FileType}.
@@ -13954,6 +14830,7 @@ export interface FileTypeSecretThumbnail {
 	'@type': 'fileTypeSecretThumbnail';
 
 }
+
 /**
 The file is a file from Secure storage used for storing Telegram Passport files.
 Subtype of {@link FileType}.
@@ -13962,6 +14839,7 @@ export interface FileTypeSecure {
 	'@type': 'fileTypeSecure';
 
 }
+
 /**
 The file is a sticker.
 Subtype of {@link FileType}.
@@ -13970,6 +14848,7 @@ export interface FileTypeSticker {
 	'@type': 'fileTypeSticker';
 
 }
+
 /**
 The file is a thumbnail of another file.
 Subtype of {@link FileType}.
@@ -13978,6 +14857,7 @@ export interface FileTypeThumbnail {
 	'@type': 'fileTypeThumbnail';
 
 }
+
 /**
 The file type is not yet known.
 Subtype of {@link FileType}.
@@ -13986,6 +14866,7 @@ export interface FileTypeUnknown {
 	'@type': 'fileTypeUnknown';
 
 }
+
 /**
 The file is a video.
 Subtype of {@link FileType}.
@@ -13994,6 +14875,7 @@ export interface FileTypeVideo {
 	'@type': 'fileTypeVideo';
 
 }
+
 /**
 The file is a video note.
 Subtype of {@link FileType}.
@@ -14002,6 +14884,7 @@ export interface FileTypeVideoNote {
 	'@type': 'fileTypeVideoNote';
 
 }
+
 /**
 The file is a voice note.
 Subtype of {@link FileType}.
@@ -14010,6 +14893,7 @@ export interface FileTypeVoiceNote {
 	'@type': 'fileTypeVoiceNote';
 
 }
+
 /**
 The file is a wallpaper or a background pattern.
 Subtype of {@link FileType}.
@@ -14018,6 +14902,7 @@ export interface FileTypeWallpaper {
 	'@type': 'fileTypeWallpaper';
 
 }
+
 /**
 Contains the storage usage statistics for a specific file type.
 */
@@ -14036,6 +14921,7 @@ Total number of files.
 */
 	count: number;
 }
+
 /**
 Contains the storage usage statistics for a specific chat.
 */
@@ -14058,6 +14944,7 @@ Statistics split by file types.
 */
 	by_file_type: StorageStatisticsByFileType[];
 }
+
 /**
 Contains the exact storage usage statistics split by chats and file type.
 */
@@ -14076,6 +14963,7 @@ Statistics split by chats.
 */
 	by_chat: StorageStatisticsByChat[];
 }
+
 /**
 Contains approximate storage usage statistics, excluding files of unknown file type.
 */
@@ -14102,6 +14990,7 @@ Size of the TDLib internal log.
 */
 	log_size: number;
 }
+
 /**
 Contains database statistics.
 */
@@ -14112,6 +15001,7 @@ Database statistics in an unspecified human-readable format.
 */
 	statistics: string;
 }
+
 /**
 Represents the type of a network.
 Subtype of {@link NetworkType}.
@@ -14120,6 +15010,7 @@ export interface NetworkTypeNone {
 	'@type': 'networkTypeNone';
 
 }
+
 /**
 A mobile network.
 Subtype of {@link NetworkType}.
@@ -14128,6 +15019,7 @@ export interface NetworkTypeMobile {
 	'@type': 'networkTypeMobile';
 
 }
+
 /**
 A mobile roaming network.
 Subtype of {@link NetworkType}.
@@ -14136,6 +15028,7 @@ export interface NetworkTypeMobileRoaming {
 	'@type': 'networkTypeMobileRoaming';
 
 }
+
 /**
 A Wi-Fi network.
 Subtype of {@link NetworkType}.
@@ -14144,6 +15037,7 @@ export interface NetworkTypeWiFi {
 	'@type': 'networkTypeWiFi';
 
 }
+
 /**
 A different network type (e.g., Ethernet network).
 Subtype of {@link NetworkType}.
@@ -14152,6 +15046,7 @@ export interface NetworkTypeOther {
 	'@type': 'networkTypeOther';
 
 }
+
 /**
 Contains statistics about network usage.
 Subtype of {@link NetworkStatisticsEntry}.
@@ -14175,6 +15070,7 @@ Total number of bytes received.
 */
 	received_bytes: number;
 }
+
 /**
 Contains information about the total amount of data that was used for calls.
 Subtype of {@link NetworkStatisticsEntry}.
@@ -14198,6 +15094,7 @@ Total call duration, in seconds.
 */
 	duration: number;
 }
+
 /**
 A full list of available network statistic entries.
 */
@@ -14212,6 +15109,7 @@ Network statistics entries.
 */
 	entries: NetworkStatisticsEntry[];
 }
+
 /**
 Contains auto-download settings.
 */
@@ -14250,6 +15148,7 @@ True, if "use less data for calls" option needs to be enabled.
 */
 	use_less_data_for_calls?: boolean;
 }
+
 /**
 Contains auto-download settings presets for the current user.
 */
@@ -14268,6 +15167,7 @@ Preset with highest settings; supposed to be used by default when connected on W
 */
 	high: AutoDownloadSettings;
 }
+
 /**
 Describes the current state of the connection to Telegram servers.
 Subtype of {@link ConnectionState}.
@@ -14276,6 +15176,7 @@ export interface ConnectionStateWaitingForNetwork {
 	'@type': 'connectionStateWaitingForNetwork';
 
 }
+
 /**
 Currently establishing a connection with a proxy server.
 Subtype of {@link ConnectionState}.
@@ -14284,6 +15185,7 @@ export interface ConnectionStateConnectingToProxy {
 	'@type': 'connectionStateConnectingToProxy';
 
 }
+
 /**
 Currently establishing a connection to the Telegram servers.
 Subtype of {@link ConnectionState}.
@@ -14292,6 +15194,7 @@ export interface ConnectionStateConnecting {
 	'@type': 'connectionStateConnecting';
 
 }
+
 /**
 Downloading data received while the application was offline.
 Subtype of {@link ConnectionState}.
@@ -14300,6 +15203,7 @@ export interface ConnectionStateUpdating {
 	'@type': 'connectionStateUpdating';
 
 }
+
 /**
 There is a working connection to the Telegram servers.
 Subtype of {@link ConnectionState}.
@@ -14308,6 +15212,7 @@ export interface ConnectionStateReady {
 	'@type': 'connectionStateReady';
 
 }
+
 /**
 Represents the categories of chats for which a list of frequently used chats can be retrieved.
 Subtype of {@link TopChatCategory}.
@@ -14316,6 +15221,7 @@ export interface TopChatCategoryUsers {
 	'@type': 'topChatCategoryUsers';
 
 }
+
 /**
 A category containing frequently used private chats with bot users.
 Subtype of {@link TopChatCategory}.
@@ -14324,6 +15230,7 @@ export interface TopChatCategoryBots {
 	'@type': 'topChatCategoryBots';
 
 }
+
 /**
 A category containing frequently used basic groups and supergroups.
 Subtype of {@link TopChatCategory}.
@@ -14332,6 +15239,7 @@ export interface TopChatCategoryGroups {
 	'@type': 'topChatCategoryGroups';
 
 }
+
 /**
 A category containing frequently used channels.
 Subtype of {@link TopChatCategory}.
@@ -14340,6 +15248,7 @@ export interface TopChatCategoryChannels {
 	'@type': 'topChatCategoryChannels';
 
 }
+
 /**
 A category containing frequently used chats with inline bots sorted by their usage in inline mode.
 Subtype of {@link TopChatCategory}.
@@ -14348,6 +15257,7 @@ export interface TopChatCategoryInlineBots {
 	'@type': 'topChatCategoryInlineBots';
 
 }
+
 /**
 A category containing frequently used chats used for calls.
 Subtype of {@link TopChatCategory}.
@@ -14356,6 +15266,7 @@ export interface TopChatCategoryCalls {
 	'@type': 'topChatCategoryCalls';
 
 }
+
 /**
 A category containing frequently used chats used to forward messages.
 Subtype of {@link TopChatCategory}.
@@ -14364,6 +15275,7 @@ export interface TopChatCategoryForwardChats {
 	'@type': 'topChatCategoryForwardChats';
 
 }
+
 /**
 Describes the type of a URL linking to an internal Telegram entity.
 Subtype of {@link TMeUrlType}.
@@ -14375,6 +15287,7 @@ Identifier of the user.
 */
 	user_id: number;
 }
+
 /**
 A URL linking to a public supergroup or channel.
 Subtype of {@link TMeUrlType}.
@@ -14386,6 +15299,7 @@ Identifier of the supergroup or channel.
 */
 	supergroup_id: number;
 }
+
 /**
 A chat invite link.
 Subtype of {@link TMeUrlType}.
@@ -14397,6 +15311,7 @@ Information about the chat invite link.
 */
 	info: ChatInviteLinkInfo;
 }
+
 /**
 A URL linking to a sticker set.
 Subtype of {@link TMeUrlType}.
@@ -14408,6 +15323,7 @@ Identifier of the sticker set.
 */
 	sticker_set_id: string;
 }
+
 /**
 Represents a URL linking to an internal Telegram entity.
 */
@@ -14422,6 +15338,7 @@ Type of the URL.
 */
 	type: TMeUrlType;
 }
+
 /**
 Contains a list of t.me URLs.
 */
@@ -14432,6 +15349,7 @@ List of URLs.
 */
 	urls: TMeUrl[];
 }
+
 /**
 Describes an action suggested to the current user.
 Subtype of {@link SuggestedAction}.
@@ -14440,6 +15358,7 @@ export interface SuggestedActionEnableArchiveAndMuteNewChats {
 	'@type': 'suggestedActionEnableArchiveAndMuteNewChats';
 
 }
+
 /**
 Suggests the user to check whether they still remember their 2-step verification password.
 Subtype of {@link SuggestedAction}.
@@ -14448,6 +15367,7 @@ export interface SuggestedActionCheckPassword {
 	'@type': 'suggestedActionCheckPassword';
 
 }
+
 /**
 Suggests the user to check whether authorization phone number is correct and change the phone number if it is
 inaccessible.
@@ -14457,6 +15377,7 @@ export interface SuggestedActionCheckPhoneNumber {
 	'@type': 'suggestedActionCheckPhoneNumber';
 
 }
+
 /**
 Suggests the user to view a hint about the meaning of one and two check marks on sent messages.
 Subtype of {@link SuggestedAction}.
@@ -14465,6 +15386,7 @@ export interface SuggestedActionViewChecksHint {
 	'@type': 'suggestedActionViewChecksHint';
 
 }
+
 /**
 Suggests the user to convert specified supergroup to a broadcast group.
 Subtype of {@link SuggestedAction}.
@@ -14476,6 +15398,7 @@ Supergroup identifier.
 */
 	supergroup_id: number;
 }
+
 /**
 Suggests the user to set a 2-step verification password to be able to log in again.
 Subtype of {@link SuggestedAction}.
@@ -14487,6 +15410,7 @@ The number of days to pass between consecutive authorizations if the user declin
 */
 	authorization_delay: number;
 }
+
 /**
 Contains a counter.
 */
@@ -14497,6 +15421,7 @@ Count.
 */
 	count: number;
 }
+
 /**
 Contains some text.
 */
@@ -14507,6 +15432,7 @@ Text.
 */
 	text: string;
 }
+
 /**
 Contains a value representing a number of seconds.
 */
@@ -14517,6 +15443,7 @@ Number of seconds.
 */
 	seconds: number;
 }
+
 /**
 Contains size of downloaded prefix of a file.
 */
@@ -14527,6 +15454,7 @@ The prefix size, in bytes.
 */
 	size: number;
 }
+
 /**
 Contains information about a tg: deep link.
 */
@@ -14541,6 +15469,7 @@ True, if the user must be asked to update the application.
 */
 	need_update_application?: boolean;
 }
+
 /**
 Describes the way the text needs to be parsed for TextEntities.
 Subtype of {@link TextParseMode}.
@@ -14552,6 +15481,7 @@ Version of the parser: 0 or 1 - Telegram Bot API "Markdown" parse mode, 2 - Tele
 */
 	version: number;
 }
+
 /**
 The text uses HTML-style formatting. The same as Telegram Bot API "HTML" parse mode.
 Subtype of {@link TextParseMode}.
@@ -14560,6 +15490,7 @@ export interface TextParseModeHtml {
 	'@type': 'textParseModeHTML';
 
 }
+
 /**
 Describes the type of a proxy server.
 Subtype of {@link ProxyType}.
@@ -14575,6 +15506,7 @@ Password for logging in; may be empty.
 */
 	password: string;
 }
+
 /**
 A HTTP transparent proxy server.
 Subtype of {@link ProxyType}.
@@ -14595,6 +15527,7 @@ method.
 */
 	http_only?: boolean;
 }
+
 /**
 An MTProto proxy server.
 Subtype of {@link ProxyType}.
@@ -14606,6 +15539,7 @@ The proxy's secret in hexadecimal encoding.
 */
 	secret: string;
 }
+
 /**
 Contains information about a proxy server.
 */
@@ -14636,6 +15570,7 @@ Type of the proxy.
 */
 	type: ProxyType;
 }
+
 /**
 Represents a list of proxy servers.
 */
@@ -14646,6 +15581,7 @@ List of proxy servers.
 */
 	proxies: Proxy[];
 }
+
 /**
 A sticker to be added to a sticker set.
 */
@@ -14670,6 +15606,7 @@ Position where the mask is placed; pass null if not specified.
 */
 	mask_position: MaskPosition;
 }
+
 /**
 Represents a date range.
 */
@@ -14684,6 +15621,7 @@ Point in time (Unix timestamp) at which the date range ends.
 */
 	end_date: number;
 }
+
 /**
 A value with information about its recent changes.
 */
@@ -14702,6 +15640,7 @@ The growth rate of the value, as a percentage.
 */
 	growth_rate_percentage: number;
 }
+
 /**
 Describes a statistical graph.
 Subtype of {@link StatisticalGraph}.
@@ -14717,6 +15656,7 @@ If non-empty, a token which can be used to receive a zoomed in graph.
 */
 	zoom_token: string;
 }
+
 /**
 The graph data to be asynchronously loaded through getStatisticalGraph.
 Subtype of {@link StatisticalGraph}.
@@ -14728,6 +15668,7 @@ The token to use for data loading.
 */
 	token: string;
 }
+
 /**
 An error message to be shown to the user instead of the graph.
 Subtype of {@link StatisticalGraph}.
@@ -14739,6 +15680,7 @@ The error message.
 */
 	error_message: string;
 }
+
 /**
 Contains statistics about interactions with a message.
 */
@@ -14757,6 +15699,7 @@ Number of times the message was forwarded.
 */
 	forward_count: number;
 }
+
 /**
 Contains statistics about messages sent by a user.
 */
@@ -14775,6 +15718,7 @@ Average number of characters in sent messages; 0 if unknown.
 */
 	average_character_count: number;
 }
+
 /**
 Contains statistics about administrator actions done by a user.
 */
@@ -14797,6 +15741,7 @@ Number of users restricted by the administrator.
 */
 	restricted_user_count: number;
 }
+
 /**
 Contains statistics about number of new members invited by a user.
 */
@@ -14811,6 +15756,7 @@ Number of new members invited by the user.
 */
 	added_member_count: number;
 }
+
 /**
 Contains a detailed statistics about a chat.
 Subtype of {@link ChatStatistics}.
@@ -14882,6 +15828,7 @@ List of most active inviters of new members in the last week.
 */
 	top_inviters: ChatStatisticsInviterInfo[];
 }
+
 /**
 A detailed statistics about a channel chat.
 Subtype of {@link ChatStatistics}.
@@ -14949,6 +15896,7 @@ Detailed statistics about number of views and shares of recently sent messages.
 */
 	recent_message_interactions: ChatStatisticsMessageInteractionInfo[];
 }
+
 /**
 A detailed statistics about a message.
 */
@@ -14959,6 +15907,7 @@ A graph containing number of message views and shares.
 */
 	message_interaction_graph: StatisticalGraph;
 }
+
 /**
 A point on a Cartesian plane.
 */
@@ -14973,6 +15922,7 @@ The point's second coordinate.
 */
 	y: number;
 }
+
 /**
 Represents a vector path command.
 Subtype of {@link VectorPathCommand}.
@@ -14984,6 +15934,7 @@ The end point of the straight line.
 */
 	end_point: Point;
 }
+
 /**
 A cubic Bézier curve to a given point.
 Subtype of {@link VectorPathCommand}.
@@ -15003,6 +15954,7 @@ The end point of the curve.
 */
 	end_point: Point;
 }
+
 /**
 Represents the scope to which bot commands are relevant.
 Subtype of {@link BotCommandScope}.
@@ -15011,6 +15963,7 @@ export interface BotCommandScopeDefault {
 	'@type': 'botCommandScopeDefault';
 
 }
+
 /**
 A scope covering all private chats.
 Subtype of {@link BotCommandScope}.
@@ -15019,6 +15972,7 @@ export interface BotCommandScopeAllPrivateChats {
 	'@type': 'botCommandScopeAllPrivateChats';
 
 }
+
 /**
 A scope covering all group and supergroup chats.
 Subtype of {@link BotCommandScope}.
@@ -15027,6 +15981,7 @@ export interface BotCommandScopeAllGroupChats {
 	'@type': 'botCommandScopeAllGroupChats';
 
 }
+
 /**
 A scope covering all group and supergroup chat administrators.
 Subtype of {@link BotCommandScope}.
@@ -15035,6 +15990,7 @@ export interface BotCommandScopeAllChatAdministrators {
 	'@type': 'botCommandScopeAllChatAdministrators';
 
 }
+
 /**
 A scope covering all members of a chat.
 Subtype of {@link BotCommandScope}.
@@ -15046,6 +16002,7 @@ Chat identifier.
 */
 	chat_id: number;
 }
+
 /**
 A scope covering all administrators of a chat.
 Subtype of {@link BotCommandScope}.
@@ -15057,6 +16014,7 @@ Chat identifier.
 */
 	chat_id: number;
 }
+
 /**
 A scope covering a member of a chat.
 Subtype of {@link BotCommandScope}.
@@ -15072,6 +16030,7 @@ User identifier.
 */
 	user_id: number;
 }
+
 /**
 Contains notifications about data changes.
 Subtype of {@link Update}.
@@ -15083,6 +16042,7 @@ New authorization state.
 */
 	authorization_state: AuthorizationState;
 }
+
 /**
 A new message was received; can also be an outgoing message.
 Subtype of {@link Update}.
@@ -15094,6 +16054,7 @@ The new message.
 */
 	message: Message;
 }
+
 /**
 A request to send a message has reached the Telegram server. This doesn't mean that the message will be sent
 successfully or even that the send message request will be processed. This update will be sent only if the option
@@ -15111,6 +16072,7 @@ A temporary message identifier.
 */
 	message_id: number;
 }
+
 /**
 A message has been successfully sent.
 Subtype of {@link Update}.
@@ -15127,6 +16089,7 @@ The previous temporary message identifier.
 */
 	old_message_id: number;
 }
+
 /**
 A message failed to send. Be aware that some messages being sent can be irrecoverably deleted, in which case
 updateDeleteMessages will be received instead of this update.
@@ -15151,6 +16114,7 @@ Error message.
 */
 	error_message: string;
 }
+
 /**
 The message content has changed.
 Subtype of {@link Update}.
@@ -15170,6 +16134,7 @@ New message content.
 */
 	new_content: MessageContent;
 }
+
 /**
 A message was edited. Changes in the message content will come in a separate updateMessageContent.
 Subtype of {@link Update}.
@@ -15193,6 +16158,7 @@ New message reply markup; may be null.
 */
 	reply_markup: ReplyMarkup;
 }
+
 /**
 The message pinned state was changed.
 Subtype of {@link Update}.
@@ -15212,6 +16178,7 @@ True, if the message is pinned.
 */
 	is_pinned?: boolean;
 }
+
 /**
 The information about interactions with a message has changed.
 Subtype of {@link Update}.
@@ -15231,6 +16198,7 @@ New information about interactions with the message; may be null.
 */
 	interaction_info: MessageInteractionInfo;
 }
+
 /**
 The message content was opened. Updates voice note messages to "listened", video note messages to "viewed" and starts
 the TTL timer for self-destructing messages.
@@ -15247,6 +16215,7 @@ Message identifier.
 */
 	message_id: number;
 }
+
 /**
 A message with an unread mention was read.
 Subtype of {@link Update}.
@@ -15266,6 +16235,7 @@ The new number of unread mention messages left in the chat.
 */
 	unread_mention_count: number;
 }
+
 /**
 The list of unread reactions added to a message was changed.
 Subtype of {@link Update}.
@@ -15289,6 +16259,7 @@ The new number of messages with unread reactions left in the chat.
 */
 	unread_reaction_count: number;
 }
+
 /**
 A message with a live location was viewed. When the update is received, the application is supposed to update the live
 location.
@@ -15305,6 +16276,7 @@ Identifier of the message with live location.
 */
 	message_id: number;
 }
+
 /**
 A new chat has been loaded/created. This update is guaranteed to come before the chat identifier is returned to the
 application. The chat field changes will be reported through separate updates.
@@ -15317,6 +16289,7 @@ The chat.
 */
 	chat: Chat;
 }
+
 /**
 The title of a chat was changed.
 Subtype of {@link Update}.
@@ -15332,6 +16305,7 @@ The new chat title.
 */
 	title: string;
 }
+
 /**
 A chat photo was changed.
 Subtype of {@link Update}.
@@ -15347,6 +16321,7 @@ The new chat photo; may be null.
 */
 	photo: ChatPhotoInfo;
 }
+
 /**
 Chat permissions was changed.
 Subtype of {@link Update}.
@@ -15362,6 +16337,7 @@ The new chat permissions.
 */
 	permissions: ChatPermissions;
 }
+
 /**
 The last message of a chat was changed. If last_message is null, then the last message in the chat became unknown. Some
 new unknown messages might be added to the chat in this case.
@@ -15382,6 +16358,7 @@ The new chat positions in the chat lists.
 */
 	positions: ChatPosition[];
 }
+
 /**
 The position of a chat in a chat list has changed. Instead of this update updateChatLastMessage or
 updateChatDraftMessage might be sent.
@@ -15398,6 +16375,7 @@ New chat position. If new order is 0, then the chat needs to be removed from the
 */
 	position: ChatPosition;
 }
+
 /**
 Incoming messages were read or the number of unread messages has been changed.
 Subtype of {@link Update}.
@@ -15417,6 +16395,7 @@ The number of unread messages left in the chat.
 */
 	unread_count: number;
 }
+
 /**
 Outgoing messages were read.
 Subtype of {@link Update}.
@@ -15432,6 +16411,7 @@ Identifier of last read outgoing message.
 */
 	last_read_outbox_message_id: number;
 }
+
 /**
 The chat action bar was changed.
 Subtype of {@link Update}.
@@ -15447,6 +16427,7 @@ The new value of the action bar; may be null.
 */
 	action_bar: ChatActionBar;
 }
+
 /**
 The chat available reactions were changed.
 Subtype of {@link Update}.
@@ -15462,6 +16443,7 @@ The new list of reactions, available in the chat.
 */
 	available_reactions: string[];
 }
+
 /**
 A chat draft has changed. Be aware that the update may come in the currently opened chat but with old content of the
 draft. If the user has changed the content of the draft, this update mustn't be applied.
@@ -15482,6 +16464,7 @@ The new chat positions in the chat lists.
 */
 	positions: ChatPosition[];
 }
+
 /**
 The message sender that is selected to send messages in a chat has changed.
 Subtype of {@link Update}.
@@ -15497,6 +16480,7 @@ New value of message_sender_id; may be null if the user can't change message sen
 */
 	message_sender_id: MessageSender;
 }
+
 /**
 The message Time To Live setting for a chat was changed.
 Subtype of {@link Update}.
@@ -15512,6 +16496,7 @@ New value of message_ttl.
 */
 	message_ttl: number;
 }
+
 /**
 Notification settings for a chat were changed.
 Subtype of {@link Update}.
@@ -15527,6 +16512,7 @@ The new notification settings.
 */
 	notification_settings: ChatNotificationSettings;
 }
+
 /**
 The chat pending join requests were changed.
 Subtype of {@link Update}.
@@ -15542,6 +16528,7 @@ The new data about pending join requests; may be null.
 */
 	pending_join_requests: ChatJoinRequestsInfo;
 }
+
 /**
 The default chat reply markup was changed. Can occur because new messages with reply markup were received or because an
 old reply markup was hidden by the user.
@@ -15559,6 +16546,7 @@ chat.
 */
 	reply_markup_message_id: number;
 }
+
 /**
 The chat theme was changed.
 Subtype of {@link Update}.
@@ -15574,6 +16562,7 @@ The new name of the chat theme; may be empty if theme was reset to default.
 */
 	theme_name: string;
 }
+
 /**
 The chat unread_mention_count has changed.
 Subtype of {@link Update}.
@@ -15589,6 +16578,7 @@ The number of unread mention messages left in the chat.
 */
 	unread_mention_count: number;
 }
+
 /**
 The chat unread_reaction_count has changed.
 Subtype of {@link Update}.
@@ -15604,6 +16594,7 @@ The number of messages with unread reactions left in the chat.
 */
 	unread_reaction_count: number;
 }
+
 /**
 A chat video chat state has changed.
 Subtype of {@link Update}.
@@ -15619,6 +16610,7 @@ New value of video_chat.
 */
 	video_chat: VideoChat;
 }
+
 /**
 The value of the default disable_notification parameter, used when a message is sent to the chat, was changed.
 Subtype of {@link Update}.
@@ -15634,6 +16626,7 @@ The new default_disable_notification value.
 */
 	default_disable_notification?: boolean;
 }
+
 /**
 A chat content was allowed or restricted for saving.
 Subtype of {@link Update}.
@@ -15649,6 +16642,7 @@ New value of has_protected_content.
 */
 	has_protected_content?: boolean;
 }
+
 /**
 A chat's has_scheduled_messages field has changed.
 Subtype of {@link Update}.
@@ -15664,6 +16658,7 @@ New value of has_scheduled_messages.
 */
 	has_scheduled_messages?: boolean;
 }
+
 /**
 A chat was blocked or unblocked.
 Subtype of {@link Update}.
@@ -15679,6 +16674,7 @@ New value of is_blocked.
 */
 	is_blocked?: boolean;
 }
+
 /**
 A chat was marked as unread or was read.
 Subtype of {@link Update}.
@@ -15694,6 +16690,7 @@ New value of is_marked_as_unread.
 */
 	is_marked_as_unread?: boolean;
 }
+
 /**
 The list of chat filters or a chat filter has changed.
 Subtype of {@link Update}.
@@ -15709,6 +16706,7 @@ Position of the main chat list among chat filters, 0-based.
 */
 	main_chat_list_position: number;
 }
+
 /**
 The number of online group members has changed. This update with non-zero number of online group members is sent only
 for currently opened chats. There is no guarantee that it will be sent just after the number of online users has
@@ -15726,6 +16724,7 @@ New number of online members in the chat, or 0 if unknown.
 */
 	online_member_count: number;
 }
+
 /**
 Notification settings for some type of chats were updated.
 Subtype of {@link Update}.
@@ -15741,6 +16740,7 @@ The new notification settings.
 */
 	notification_settings: ScopeNotificationSettings;
 }
+
 /**
 A notification was changed.
 Subtype of {@link Update}.
@@ -15756,6 +16756,7 @@ Changed notification.
 */
 	notification: Notification;
 }
+
 /**
 A list of active notifications in a notification group has changed.
 Subtype of {@link Update}.
@@ -15795,6 +16796,7 @@ Identifiers of removed group notifications, sorted by notification ID.
 */
 	removed_notification_ids: number[];
 }
+
 /**
 Contains active notifications that was shown on previous application launches. This update is sent only if the message
 database is used. In that case it comes once before any updateNotification and updateNotificationGroup update.
@@ -15807,6 +16809,7 @@ Lists of active notification groups.
 */
 	groups: NotificationGroup[];
 }
+
 /**
 Describes whether there are some pending notification updates. Can be used to prevent application from killing, while
 there are some pending notifications.
@@ -15823,6 +16826,7 @@ True, if there can be some yet unreceived notifications, which are being fetched
 */
 	have_unreceived_notifications?: boolean;
 }
+
 /**
 Some messages were deleted.
 Subtype of {@link Update}.
@@ -15846,6 +16850,7 @@ True, if the messages are deleted only from the cache and can possibly be retrie
 */
 	from_cache?: boolean;
 }
+
 /**
 A message sender activity in the chat has changed.
 Subtype of {@link Update}.
@@ -15869,6 +16874,7 @@ The action.
 */
 	action: ChatAction;
 }
+
 /**
 The user went online or offline.
 Subtype of {@link Update}.
@@ -15884,6 +16890,7 @@ New status of the user.
 */
 	status: UserStatus;
 }
+
 /**
 Some data of a user has changed. This update is guaranteed to come before the user identifier is returned to the
 application.
@@ -15896,6 +16903,7 @@ New data about the user.
 */
 	user: User;
 }
+
 /**
 Some data of a basic group has changed. This update is guaranteed to come before the basic group identifier is returned
 to the application.
@@ -15908,6 +16916,7 @@ New data about the group.
 */
 	basic_group: BasicGroup;
 }
+
 /**
 Some data of a supergroup or a channel has changed. This update is guaranteed to come before the supergroup identifier
 is returned to the application.
@@ -15920,6 +16929,7 @@ New data about the supergroup.
 */
 	supergroup: Supergroup;
 }
+
 /**
 Some data of a secret chat has changed. This update is guaranteed to come before the secret chat identifier is returned
 to the application.
@@ -15932,6 +16942,7 @@ New data about the secret chat.
 */
 	secret_chat: SecretChat;
 }
+
 /**
 Some data in userFullInfo has been changed.
 Subtype of {@link Update}.
@@ -15947,6 +16958,7 @@ New full information about the user.
 */
 	user_full_info: UserFullInfo;
 }
+
 /**
 Some data in basicGroupFullInfo has been changed.
 Subtype of {@link Update}.
@@ -15962,6 +16974,7 @@ New full information about the group.
 */
 	basic_group_full_info: BasicGroupFullInfo;
 }
+
 /**
 Some data in supergroupFullInfo has been changed.
 Subtype of {@link Update}.
@@ -15977,6 +16990,7 @@ New full information about the supergroup.
 */
 	supergroup_full_info: SupergroupFullInfo;
 }
+
 /**
 A service notification from the server was received. Upon receiving this the application must show a popup with the
 content of the notification.
@@ -15994,6 +17008,7 @@ Notification content.
 */
 	content: MessageContent;
 }
+
 /**
 Information about a file was updated.
 Subtype of {@link Update}.
@@ -16005,6 +17020,7 @@ New data about the file.
 */
 	file: File;
 }
+
 /**
 The file generation process needs to be started by the application.
 Subtype of {@link Update}.
@@ -16029,6 +17045,7 @@ HTTP/HTTPS URL of a file, which must be downloaded by the application.
 */
 	conversion: string;
 }
+
 /**
 File generation is no longer needed.
 Subtype of {@link Update}.
@@ -16040,6 +17057,7 @@ Unique identifier for the generation process.
 */
 	generation_id: string;
 }
+
 /**
 The state of the file download list has changed.
 Subtype of {@link Update}.
@@ -16059,6 +17077,7 @@ Total downloaded size of files in the file download list, in bytes.
 */
 	downloaded_size: number;
 }
+
 /**
 A file was added to the file download list. This update is sent only after file download list is loaded for the first
 time.
@@ -16075,6 +17094,7 @@ New number of being downloaded and recently downloaded files found.
 */
 	counts: DownloadedFileCounts;
 }
+
 /**
 A file download was changed. This update is sent only after file download list is loaded for the first time.
 Subtype of {@link Update}.
@@ -16098,6 +17118,7 @@ New number of being downloaded and recently downloaded files found.
 */
 	counts: DownloadedFileCounts;
 }
+
 /**
 A file was removed from the file download list. This update is sent only after file download list is loaded for the
 first time.
@@ -16114,6 +17135,7 @@ New number of being downloaded and recently downloaded files found.
 */
 	counts: DownloadedFileCounts;
 }
+
 /**
 New call was created or information about a call was updated.
 Subtype of {@link Update}.
@@ -16125,6 +17147,7 @@ New data about a call.
 */
 	call: Call;
 }
+
 /**
 Information about a group call was updated.
 Subtype of {@link Update}.
@@ -16136,6 +17159,7 @@ New data about a group call.
 */
 	group_call: GroupCall;
 }
+
 /**
 Information about a group call participant was changed. The updates are sent only after the group call is received
 through getGroupCall and only if the call is joined or being joined.
@@ -16152,6 +17176,7 @@ New data about a participant.
 */
 	participant: GroupCallParticipant;
 }
+
 /**
 New call signaling data arrived.
 Subtype of {@link Update}.
@@ -16167,6 +17192,7 @@ The data.
 */
 	data: string;
 }
+
 /**
 Some privacy setting rules have been changed.
 Subtype of {@link Update}.
@@ -16182,6 +17208,7 @@ New privacy rules.
 */
 	rules: UserPrivacySettingRules;
 }
+
 /**
 Number of unread messages in a chat list has changed. This update is sent only if the message database is used.
 Subtype of {@link Update}.
@@ -16201,6 +17228,7 @@ Total number of unread messages in unmuted chats.
 */
 	unread_unmuted_count: number;
 }
+
 /**
 Number of unread chats, i.e. with unread messages or marked as unread, has changed. This update is sent only if the
 message database is used.
@@ -16233,6 +17261,7 @@ Total number of unmuted chats marked as unread.
 */
 	marked_as_unread_unmuted_count: number;
 }
+
 /**
 An option changed its value.
 Subtype of {@link Update}.
@@ -16248,6 +17277,7 @@ The new option value.
 */
 	value: OptionValue;
 }
+
 /**
 A sticker set has changed.
 Subtype of {@link Update}.
@@ -16259,6 +17289,7 @@ The sticker set.
 */
 	sticker_set: StickerSet;
 }
+
 /**
 The list of installed sticker sets was updated.
 Subtype of {@link Update}.
@@ -16274,6 +17305,7 @@ The new list of installed ordinary sticker sets.
 */
 	sticker_set_ids: string[];
 }
+
 /**
 The list of trending sticker sets was updated or some of them were viewed.
 Subtype of {@link Update}.
@@ -16289,6 +17321,7 @@ The prefix of the list of trending sticker sets with the newest trending sticker
 */
 	sticker_sets: TrendingStickerSets;
 }
+
 /**
 The list of recently used stickers was updated.
 Subtype of {@link Update}.
@@ -16305,6 +17338,7 @@ The new list of file identifiers of recently used stickers.
 */
 	sticker_ids: number[];
 }
+
 /**
 The list of favorite stickers was updated.
 Subtype of {@link Update}.
@@ -16316,6 +17350,7 @@ The new list of file identifiers of favorite stickers.
 */
 	sticker_ids: number[];
 }
+
 /**
 The list of saved animations was updated.
 Subtype of {@link Update}.
@@ -16327,6 +17362,7 @@ The new list of file identifiers of saved animations.
 */
 	animation_ids: number[];
 }
+
 /**
 The list of saved notifications sounds was updated. This update may not be sent until information about a notification
 sound was requested for the first time.
@@ -16339,6 +17375,7 @@ The new list of identifiers of saved notification sounds.
 */
 	notification_sound_ids: string[];
 }
+
 /**
 The selected background has changed.
 Subtype of {@link Update}.
@@ -16354,6 +17391,7 @@ The new selected background; may be null.
 */
 	background: Background;
 }
+
 /**
 The list of available chat themes has changed.
 Subtype of {@link Update}.
@@ -16365,6 +17403,7 @@ The new list of chat themes.
 */
 	chat_themes: ChatTheme[];
 }
+
 /**
 Some language pack strings have been updated.
 Subtype of {@link Update}.
@@ -16384,6 +17423,7 @@ List of changed language pack strings.
 */
 	strings: LanguagePackString[];
 }
+
 /**
 The connection state has changed. This update must be used only to show a human-readable description of the connection
 state.
@@ -16396,6 +17436,7 @@ The new connection state.
 */
 	state: ConnectionState;
 }
+
 /**
 New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method
 must be called with the reason "Decline ToS update".
@@ -16412,6 +17453,7 @@ The new terms of service.
 */
 	terms_of_service: TermsOfService;
 }
+
 /**
 The list of users nearby has changed. The update is guaranteed to be sent only 60 seconds after a successful
 searchChatsNearby request.
@@ -16424,6 +17466,7 @@ The new list of users nearby.
 */
 	users_nearby: ChatNearby[];
 }
+
 /**
 The list of bots added to attachment menu has changed.
 Subtype of {@link Update}.
@@ -16435,6 +17478,7 @@ The new list of bots added to attachment menu. The bots must not be shown on sch
 */
 	bots: AttachmentMenuBot[];
 }
+
 /**
 A message was sent by an opened Web App, so the Web App needs to be closed.
 Subtype of {@link Update}.
@@ -16446,6 +17490,7 @@ Identifier of Web App launch.
 */
 	web_app_launch_id: string;
 }
+
 /**
 The list of supported reactions has changed.
 Subtype of {@link Update}.
@@ -16457,6 +17502,7 @@ The new list of supported reactions.
 */
 	reactions: Reaction[];
 }
+
 /**
 The list of supported dice emojis has changed.
 Subtype of {@link Update}.
@@ -16468,6 +17514,7 @@ The new list of supported dice emojis.
 */
 	emojis: string[];
 }
+
 /**
 Some animated emoji message was clicked and a big animated sticker must be played if the message is visible on the
 screen. chatActionWatchingAnimations with the text of the message needs to be sent if the sticker is played.
@@ -16488,6 +17535,7 @@ The animated sticker to be played.
 */
 	sticker: Sticker;
 }
+
 /**
 The parameters of animation search through GetOption("animation_search_bot_username") bot has changed.
 Subtype of {@link Update}.
@@ -16503,6 +17551,7 @@ The new list of emojis suggested for searching.
 */
 	emojis: string[];
 }
+
 /**
 The list of suggested to the user actions has changed.
 Subtype of {@link Update}.
@@ -16518,6 +17567,7 @@ Removed suggested actions.
 */
 	removed_actions: SuggestedAction[];
 }
+
 /**
 A new incoming inline query; for bots only.
 Subtype of {@link Update}.
@@ -16549,6 +17599,7 @@ Offset of the first entry to return.
 */
 	offset: string;
 }
+
 /**
 The user has chosen a result of an inline query; for bots only.
 Subtype of {@link Update}.
@@ -16576,6 +17627,7 @@ Identifier of the sent inline message, if known.
 */
 	inline_message_id: string;
 }
+
 /**
 A new incoming callback query; for bots only.
 Subtype of {@link Update}.
@@ -16607,6 +17659,7 @@ Query payload.
 */
 	payload: CallbackQueryPayload;
 }
+
 /**
 A new incoming callback query from a message sent via a bot; for bots only.
 Subtype of {@link Update}.
@@ -16634,6 +17687,7 @@ Query payload.
 */
 	payload: CallbackQueryPayload;
 }
+
 /**
 A new incoming shipping query; for bots only. Only for invoices with flexible price.
 Subtype of {@link Update}.
@@ -16657,6 +17711,7 @@ User shipping address.
 */
 	shipping_address: Address;
 }
+
 /**
 A new incoming pre-checkout query; for bots only. Contains full information about a checkout.
 Subtype of {@link Update}.
@@ -16692,6 +17747,7 @@ Information about the order; may be null.
 */
 	order_info: OrderInfo;
 }
+
 /**
 A new incoming event; for bots only.
 Subtype of {@link Update}.
@@ -16703,6 +17759,7 @@ A JSON-serialized event.
 */
 	event: string;
 }
+
 /**
 A new incoming query; for bots only.
 Subtype of {@link Update}.
@@ -16722,6 +17779,7 @@ Query timeout.
 */
 	timeout: number;
 }
+
 /**
 A poll was updated; for bots only.
 Subtype of {@link Update}.
@@ -16733,6 +17791,7 @@ New data about the poll.
 */
 	poll: Poll;
 }
+
 /**
 A user changed the answer to a poll; for bots only.
 Subtype of {@link Update}.
@@ -16752,6 +17811,7 @@ The user, who changed the answer to the poll.
 */
 	option_ids: number[];
 }
+
 /**
 User rights changed in a chat; for bots only.
 Subtype of {@link Update}.
@@ -16783,6 +17843,7 @@ New chat member.
 */
 	new_chat_member: ChatMember;
 }
+
 /**
 A user sent a join request to a chat; for bots only.
 Subtype of {@link Update}.
@@ -16802,6 +17863,7 @@ The invite link, which was used to send join request; may be null.
 */
 	invite_link: ChatInviteLink;
 }
+
 /**
 Contains a list of updates.
 */
@@ -16812,6 +17874,7 @@ List of updates.
 */
 	updates: Update[];
 }
+
 /**
 Describes a stream to which TDLib internal log is written.
 Subtype of {@link LogStream}.
@@ -16820,6 +17883,7 @@ export interface LogStreamDefault {
 	'@type': 'logStreamDefault';
 
 }
+
 /**
 The log is written to a file.
 Subtype of {@link LogStream}.
@@ -16840,6 +17904,7 @@ Pass true to additionally redirect stderr to the log file. Ignored on Windows.
 */
 	redirect_stderr?: boolean;
 }
+
 /**
 The log is written nowhere.
 Subtype of {@link LogStream}.
@@ -16848,6 +17913,7 @@ export interface LogStreamEmpty {
 	'@type': 'logStreamEmpty';
 
 }
+
 /**
 Contains a TDLib internal log verbosity level.
 */
@@ -16858,6 +17924,7 @@ Log verbosity level.
 */
 	verbosity_level: number;
 }
+
 /**
 Contains a list of available TDLib internal log tags.
 */
@@ -16868,6 +17935,7 @@ List of log tags.
 */
 	tags: string[];
 }
+
 /**
 Contains custom information about the user.
 */
@@ -16886,6 +17954,7 @@ Information change date.
 */
 	date: number;
 }
+
 /**
 A simple object containing a number; for testing only.
 */
@@ -16896,6 +17965,7 @@ Number.
 */
 	value: number;
 }
+
 /**
 A simple object containing a string; for testing only.
 */
@@ -16906,6 +17976,7 @@ String.
 */
 	value: string;
 }
+
 /**
 A simple object containing a sequence of bytes; for testing only.
 */
@@ -16916,6 +17987,7 @@ Bytes.
 */
 	value: string;
 }
+
 /**
 A simple object containing a vector of numbers; for testing only.
 */
@@ -16926,6 +17998,7 @@ Vector of numbers.
 */
 	value: number[];
 }
+
 /**
 A simple object containing a vector of objects that hold a number; for testing only.
 */
@@ -16936,6 +18009,7 @@ Vector of objects.
 */
 	value: TestInt[];
 }
+
 /**
 A simple object containing a vector of strings; for testing only.
 */
@@ -16946,6 +18020,7 @@ Vector of strings.
 */
 	value: string[];
 }
+
 /**
 A simple object containing a vector of objects that hold a string; for testing only.
 */
@@ -16956,6 +18031,7 @@ Vector of objects.
 */
 	value: TestString[];
 }
+
 export type AuthenticationCodeType =
 	| AuthenticationCodeTypeTelegramMessage
 	| AuthenticationCodeTypeSms

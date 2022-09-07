@@ -450,7 +450,7 @@ async function main() {
 		...[ ...constructorUnions.entries() ].filter(([ _, group ]) => group.size > 1).map(([ unionName, constructors ]) => stringifyConstructorUnion(unionName, constructors)),
 
 		stringifyFunctions(functions),
-	].filter(Boolean).join('\n');
+	].filter(Boolean).join('\n\n');
 
 	await fs.writeFile(path.join(__dirname, 'tdjson.ts'), typescript);
 }
