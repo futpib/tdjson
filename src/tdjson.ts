@@ -25,76 +25,6 @@ export interface Ok {
 }
 
 /**
-Contains parameters for TDLib initialization.
-*/
-export interface TdlibParameters {
-	'@type': 'tdlibParameters';
-	/**
-If set to true, the Telegram test environment will be used instead of the production environment.
-*/
-	use_test_dc?: boolean;
-	/**
-The path to the directory for the persistent database; if empty, the current working directory will be used.
-*/
-	database_directory: string;
-	/**
-The path to the directory for storing files; if empty, database_directory will be used.
-*/
-	files_directory: string;
-	/**
-If set to true, information about downloaded and uploaded files will be saved between application restarts.
-*/
-	use_file_database?: boolean;
-	/**
-If set to true, the library will maintain a cache of users, basic groups, supergroups, channels and secret chats.
-Implies use_file_database.
-*/
-	use_chat_info_database?: boolean;
-	/**
-If set to true, the library will maintain a cache of chats and messages. Implies use_chat_info_database.
-*/
-	use_message_database?: boolean;
-	/**
-If set to true, support for secret chats will be enabled.
-*/
-	use_secret_chats?: boolean;
-	/**
-Application identifier for Telegram API access, which can be obtained at https://my.telegram.org.
-*/
-	api_id: number;
-	/**
-Application identifier hash for Telegram API access, which can be obtained at https://my.telegram.org.
-*/
-	api_hash: string;
-	/**
-IETF language tag of the user's operating system language; must be non-empty.
-*/
-	system_language_code: string;
-	/**
-Model of the device the application is being run on; must be non-empty.
-*/
-	device_model: string;
-	/**
-Version of the operating system the application is being run on. If empty, the version is automatically detected by
-TDLib.
-*/
-	system_version: string;
-	/**
-Application version; must be non-empty.
-*/
-	application_version: string;
-	/**
-If set to true, old files will automatically be deleted.
-*/
-	enable_storage_optimizer?: boolean;
-	/**
-If set to true, original file names will be ignored. Otherwise, downloaded files will be saved under names as close as
-possible to the original name.
-*/
-	ignore_file_names?: boolean;
-}
-
-/**
 Provides information about the method by which an authentication code is delivered to the user.
 Subtype of {@link AuthenticationCodeType}.
 */
@@ -199,6 +129,42 @@ Length of the code; 0 if unknown.
 }
 
 /**
+Contains authentication data for a email address.
+Subtype of {@link EmailAddressAuthentication}.
+*/
+export interface EmailAddressAuthenticationCode {
+	'@type': 'emailAddressAuthenticationCode';
+	/**
+The code.
+*/
+	code: string;
+}
+
+/**
+An authentication token received through Apple ID.
+Subtype of {@link EmailAddressAuthentication}.
+*/
+export interface EmailAddressAuthenticationAppleId {
+	'@type': 'emailAddressAuthenticationAppleId';
+	/**
+The token.
+*/
+	token: string;
+}
+
+/**
+An authentication token received through Google ID.
+Subtype of {@link EmailAddressAuthentication}.
+*/
+export interface EmailAddressAuthenticationGoogleId {
+	'@type': 'emailAddressAuthenticationGoogleId';
+	/**
+The token.
+*/
+	token: string;
+}
+
+/**
 Represents a part of the text that needs to be formatted in some unusual way.
 */
 export interface TextEntity {
@@ -274,18 +240,6 @@ export interface AuthorizationStateWaitTdlibParameters {
 }
 
 /**
-TDLib needs an encryption key to decrypt the local database.
-Subtype of {@link AuthorizationState}.
-*/
-export interface AuthorizationStateWaitEncryptionKey {
-	'@type': 'authorizationStateWaitEncryptionKey';
-	/**
-True, if the database is currently encrypted.
-*/
-	is_encrypted?: boolean;
-}
-
-/**
 TDLib needs the user's phone number to authorize. Call `setAuthenticationPhoneNumber` to provide the phone number, or
 use `requestQrCodeAuthentication`, or `checkAuthenticationBotToken` for other authentication options.
 Subtype of {@link AuthorizationState}.
@@ -293,6 +247,49 @@ Subtype of {@link AuthorizationState}.
 export interface AuthorizationStateWaitPhoneNumber {
 	'@type': 'authorizationStateWaitPhoneNumber';
 
+}
+
+/**
+TDLib needs the user's email address to authorize. Call `setAuthenticationEmailAddress` to provide the email address, or
+directly call `checkAuthenticationEmailCode` with Apple ID/Google ID token if allowed.
+Subtype of {@link AuthorizationState}.
+*/
+export interface AuthorizationStateWaitEmailAddress {
+	'@type': 'authorizationStateWaitEmailAddress';
+	/**
+True, if authorization through Apple ID is allowed.
+*/
+	allow_apple_id?: boolean;
+	/**
+True, if authorization through Google ID is allowed.
+*/
+	allow_google_id?: boolean;
+}
+
+/**
+TDLib needs the user's authentication code sent to an email address to authorize. Call `checkAuthenticationEmailCode` to
+provide the code.
+Subtype of {@link AuthorizationState}.
+*/
+export interface AuthorizationStateWaitEmailCode {
+	'@type': 'authorizationStateWaitEmailCode';
+	/**
+True, if authorization through Apple ID is allowed.
+*/
+	allow_apple_id?: boolean;
+	/**
+True, if authorization through Google ID is allowed.
+*/
+	allow_google_id?: boolean;
+	/**
+Information about the sent authentication code.
+*/
+	code_info: EmailAddressAuthenticationCodeInfo;
+	/**
+Point in time (Unix timestamp) when the user will be able to authorize with a code sent to the user's phone number; 0 if
+unknown.
+*/
+	next_phone_number_authorization_date: number;
 }
 
 /**
@@ -416,6 +413,10 @@ True, if some Telegram Passport elements were saved.
 Information about the recovery email address to which the confirmation email was sent; may be null.
 */
 	recovery_email_address_code_info: EmailAddressAuthenticationCodeInfo;
+	/**
+Pattern of the email address set up for logging in.
+*/
+	login_email_address_pattern: string;
 	/**
 If not 0, point in time (Unix timestamp) after which the 2-step verification password can be reset immediately using
 resetPassword.
@@ -549,6 +550,17 @@ Information about the local copy of the file.
 Information about the remote copy of the file.
 */
 	remote: RemoteFile;
+}
+
+/**
+Represents a list of files.
+*/
+export interface Files {
+	'@type': 'files';
+	/**
+List of files.
+*/
+	files: File[];
 }
 
 /**
@@ -1781,10 +1793,10 @@ only.
 }
 
 /**
-Describes an option for gifting Telegram Premium to a user.
+Describes an option for buying Telegram Premium to a user.
 */
-export interface PremiumGiftOption {
-	'@type': 'premiumGiftOption';
+export interface PremiumPaymentOption {
+	'@type': 'premiumPaymentOption';
 	/**
 ISO 4217 currency code for Telegram Premium subscription payment.
 */
@@ -1794,7 +1806,7 @@ The amount to pay, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-The discount associated with this gift option, as a percentage.
+The discount associated with this option, as a percentage.
 */
 	discount_percentage: number;
 	/**
@@ -1806,10 +1818,34 @@ Identifier of the store product associated with the option.
 */
 	store_product_id: string;
 	/**
-An internal link to be opened for gifting Telegram Premium to the user if store payment isn't possible; may be null if
+An internal link to be opened for buying Telegram Premium to the user if store payment isn't possible; may be null if
 direct payment isn't available.
 */
 	payment_link: InternalLinkType;
+}
+
+/**
+Describes a custom emoji to be shown instead of the Telegram Premium badge.
+*/
+export interface EmojiStatus {
+	'@type': 'emojiStatus';
+	/**
+Identifier of the custom emoji in stickerFormatTgs format. If the custom emoji belongs to the sticker set
+GetOption("themed_emoji_statuses_sticker_set_id"), then it's color must be changed to the color of the Telegram Premium
+badge.
+*/
+	custom_emoji_id: string;
+}
+
+/**
+Contains a list of emoji statuses.
+*/
+export interface EmojiStatuses {
+	'@type': 'emojiStatuses';
+	/**
+The list of emoji statuses.
+*/
+	emoji_statuses: EmojiStatus[];
 }
 
 /**
@@ -1845,6 +1881,10 @@ Current online status of the user.
 Profile photo of the user; may be null.
 */
 	profile_photo: ProfilePhoto;
+	/**
+Emoji status to be shown instead of the default Telegram Premium badge; may be null. For Telegram Premium users only.
+*/
+	emoji_status: EmojiStatus;
 	/**
 The user is a contact of the current user.
 */
@@ -1981,7 +2021,7 @@ A short user bio; may be null for bots.
 	/**
 The list of available options for gifting Telegram Premium to the user.
 */
-	premium_gift_options: PremiumGiftOption[];
+	premium_gift_options: PremiumPaymentOption[];
 	/**
 Number of group chats where both the other user and the current user are a member; 0 for the current user.
 */
@@ -2977,6 +3017,30 @@ Name of the sender.
 }
 
 /**
+Describes type of message reaction.
+Subtype of {@link ReactionType}.
+*/
+export interface ReactionTypeEmoji {
+	'@type': 'reactionTypeEmoji';
+	/**
+Text representation of the reaction.
+*/
+	emoji: string;
+}
+
+/**
+A reaction with a custom emoji.
+Subtype of {@link ReactionType}.
+*/
+export interface ReactionTypeCustomEmoji {
+	'@type': 'reactionTypeCustomEmoji';
+	/**
+Unique identifier of the custom emoji.
+*/
+	custom_emoji_id: string;
+}
+
+/**
 Contains information about a forwarded message.
 */
 export interface MessageForwardInfo {
@@ -3040,9 +3104,9 @@ Contains information about a reaction to a message.
 export interface MessageReaction {
 	'@type': 'messageReaction';
 	/**
-Text representation of the reaction.
+Type of the reaction.
 */
-	reaction: string;
+	type: ReactionType;
 	/**
 Number of times the reaction was added.
 */
@@ -3088,9 +3152,9 @@ Contains information about an unread reaction to a message.
 export interface UnreadReaction {
 	'@type': 'unreadReaction';
 	/**
-Text representation of the reaction.
+Type of the reaction.
 */
-	reaction: string;
+	type: ReactionType;
 	/**
 Identifier of the sender, added the reaction.
 */
@@ -3213,6 +3277,10 @@ True, if media timestamp links can be generated for media timestamp entities in 
 description through getMessageLink.
 */
 	can_get_media_timestamp_links?: boolean;
+	/**
+True, if reactions on the message can be reported through reportMessageReactions.
+*/
+	can_report_reactions?: boolean;
 	/**
 True, if media timestamp entities refers to a media in this message as opposed to a media in the replied message.
 */
@@ -3877,6 +3945,27 @@ Source of the chat in the chat list; may be null.
 }
 
 /**
+Describes reactions available in the chat.
+Subtype of {@link ChatAvailableReactions}.
+*/
+export interface ChatAvailableReactionsAll {
+	'@type': 'chatAvailableReactionsAll';
+
+}
+
+/**
+Only specific reactions are available in the chat.
+Subtype of {@link ChatAvailableReactions}.
+*/
+export interface ChatAvailableReactionsSome {
+	'@type': 'chatAvailableReactionsSome';
+	/**
+The list of reactions.
+*/
+	reactions: ReactionType[];
+}
+
+/**
 Describes a video chat.
 */
 export interface VideoChat {
@@ -3991,9 +4080,9 @@ Notification settings for the chat.
 */
 	notification_settings: ChatNotificationSettings;
 	/**
-List of reactions, available in the chat.
+Types of reaction, available in the chat.
 */
-	available_reactions: string[];
+	available_reactions: ChatAvailableReactions;
 	/**
 Current message Time To Live setting (self-destruct timer) for the chat; 0 if not defined. TTL is counted from the time
 message or its content is viewed in secret chats and from the send date in other chats.
@@ -8217,6 +8306,11 @@ Pass true if the content of the message must be protected from forwarding and sa
 */
 	protect_content?: boolean;
 	/**
+Pass true if the user explicitly chosen a sticker or a custom emoji from an installed sticker set; applicable only to
+sendMessage and sendMessageAlbum.
+*/
+	update_order_of_installed_sticker_sets?: boolean;
+	/**
 Message scheduling state; pass null to send message immediately. Messages sent to a secret chat, live location messages
 and self-destructing messages can't be scheduled.
 */
@@ -9962,9 +10056,9 @@ Represents a reaction applied to a message.
 export interface AddedReaction {
 	'@type': 'addedReaction';
 	/**
-Text representation of the reaction.
+Type of the reaction.
 */
-	reaction: string;
+	type: ReactionType;
 	/**
 Identifier of the chat member, applied the reaction.
 */
@@ -9996,9 +10090,9 @@ Represents an available reaction.
 export interface AvailableReaction {
 	'@type': 'availableReaction';
 	/**
-Text representation of the reaction.
+Type of the reaction.
 */
-	reaction: string;
+	type: ReactionType;
 	/**
 True, if Telegram Premium is needed to send the reaction.
 */
@@ -10006,25 +10100,37 @@ True, if Telegram Premium is needed to send the reaction.
 }
 
 /**
-Represents a list of available reactions.
+Represents a list of reactions that can be added to a message.
 */
 export interface AvailableReactions {
 	'@type': 'availableReactions';
 	/**
-List of reactions.
+List of reactions to be shown at the top.
 */
-	reactions: AvailableReaction[];
+	top_reactions: AvailableReaction[];
+	/**
+List of recently used reactions.
+*/
+	recent_reactions: AvailableReaction[];
+	/**
+List of popular reactions.
+*/
+	popular_reactions: AvailableReaction[];
+	/**
+True, if custom emoji reactions could be added by Telegram Premium subscribers.
+*/
+	allow_custom_emoji?: boolean;
 }
 
 /**
-Contains stickers which must be used for reaction animation rendering.
+Contains information about a emoji reaction.
 */
-export interface Reaction {
-	'@type': 'reaction';
+export interface EmojiReaction {
+	'@type': 'emojiReaction';
 	/**
 Text representation of the reaction.
 */
-	reaction: string;
+	emoji: string;
 	/**
 Reaction title.
 */
@@ -10033,10 +10139,6 @@ Reaction title.
 True, if the reaction can be added to new messages and enabled in chats.
 */
 	is_active?: boolean;
-	/**
-True, if the reaction is available only for Premium users.
-*/
-	is_premium?: boolean;
 	/**
 Static icon for the reaction.
 */
@@ -11333,11 +11435,11 @@ export interface ChatEventAvailableReactionsChanged {
 	/**
 Previous chat available reactions.
 */
-	old_available_reactions: string[];
+	old_available_reactions: ChatAvailableReactions;
 	/**
 New chat available reactions.
 */
-	new_available_reactions: string[];
+	new_available_reactions: ChatAvailableReactions;
 }
 
 /**
@@ -12079,6 +12181,15 @@ export interface PremiumFeatureProfileBadge {
 }
 
 /**
+A emoji status shown along with the user's name.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureEmojiStatus {
+	'@type': 'premiumFeatureEmojiStatus';
+
+}
+
+/**
 Profile photo animation on message and chat screens.
 Subtype of {@link PremiumFeature}.
 */
@@ -12206,13 +12317,9 @@ Premium subscription.
 */
 	state: FormattedText;
 	/**
-ISO 4217 currency code for Telegram Premium subscription payment.
+The list of available options for buying Telegram Premium.
 */
-	currency: string;
-	/**
-Monthly subscription payment for Telegram Premium subscription, in the smallest units of the currency.
-*/
-	monthly_amount: number;
+	payment_options: PremiumPaymentOption[];
 	/**
 The list of available promotion animations for Premium features.
 */
@@ -14409,6 +14516,18 @@ Short name of the game.
 }
 
 /**
+The link must be opened in an Instant View. Call getWebPageInstantView with the given URL to process the link.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeInstantView {
+	'@type': 'internalLinkTypeInstantView';
+	/**
+URL to be passed to getWebPageInstantView.
+*/
+	url: string;
+}
+
+/**
 The link is a link to an invoice. Call getPaymentForm with the given invoice name to process the link.
 Subtype of {@link InternalLinkType}.
 */
@@ -16439,9 +16558,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-The new list of reactions, available in the chat.
+The new reactions, available in the chat.
 */
-	available_reactions: string[];
+	available_reactions: ChatAvailableReactions;
 }
 
 /**
@@ -17492,15 +17611,27 @@ Identifier of Web App launch.
 }
 
 /**
-The list of supported reactions has changed.
+The list of active emoji reactions has changed.
 Subtype of {@link Update}.
 */
-export interface UpdateReactions {
-	'@type': 'updateReactions';
+export interface UpdateActiveEmojiReactions {
+	'@type': 'updateActiveEmojiReactions';
 	/**
-The new list of supported reactions.
+The new list of active emoji reactions.
 */
-	reactions: Reaction[];
+	emojis: string[];
+}
+
+/**
+The type of default reaction has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateDefaultReactionType {
+	'@type': 'updateDefaultReactionType';
+	/**
+The new type of the default reaction.
+*/
+	reaction_type: ReactionType;
 }
 
 /**
@@ -18039,10 +18170,16 @@ export type AuthenticationCodeType =
 	| AuthenticationCodeTypeFlashCall
 	| AuthenticationCodeTypeMissedCall;
 
+export type EmailAddressAuthentication =
+	| EmailAddressAuthenticationCode
+	| EmailAddressAuthenticationAppleId
+	| EmailAddressAuthenticationGoogleId;
+
 export type AuthorizationState =
 	| AuthorizationStateWaitTdlibParameters
-	| AuthorizationStateWaitEncryptionKey
 	| AuthorizationStateWaitPhoneNumber
+	| AuthorizationStateWaitEmailAddress
+	| AuthorizationStateWaitEmailCode
 	| AuthorizationStateWaitCode
 	| AuthorizationStateWaitOtherDeviceConfirmation
 	| AuthorizationStateWaitRegistration
@@ -18141,6 +18278,10 @@ export type MessageForwardOrigin =
 	| MessageForwardOriginChannel
 	| MessageForwardOriginMessageImport;
 
+export type ReactionType =
+	| ReactionTypeEmoji
+	| ReactionTypeCustomEmoji;
+
 export type MessageSendingState =
 	| MessageSendingStatePending
 	| MessageSendingStateFailed;
@@ -18164,6 +18305,10 @@ export type ChatList =
 export type ChatSource =
 	| ChatSourceMtprotoProxy
 	| ChatSourcePublicServiceAnnouncement;
+
+export type ChatAvailableReactions =
+	| ChatAvailableReactionsAll
+	| ChatAvailableReactionsSome;
 
 export type PublicChatType =
 	| PublicChatTypeHasUsername
@@ -18633,6 +18778,7 @@ export type PremiumFeature =
 	| PremiumFeatureCustomEmoji
 	| PremiumFeatureAdvancedChatManagement
 	| PremiumFeatureProfileBadge
+	| PremiumFeatureEmojiStatus
 	| PremiumFeatureAnimatedProfilePhoto
 	| PremiumFeatureAppIcons;
 
@@ -18827,6 +18973,7 @@ export type InternalLinkType =
 	| InternalLinkTypeChatInvite
 	| InternalLinkTypeFilterSettings
 	| InternalLinkTypeGame
+	| InternalLinkTypeInstantView
 	| InternalLinkTypeInvoice
 	| InternalLinkTypeLanguagePack
 	| InternalLinkTypeLanguageSettings
@@ -19027,7 +19174,8 @@ export type Update =
 	| UpdateUsersNearby
 	| UpdateAttachmentMenuBots
 	| UpdateWebAppMessageSent
-	| UpdateReactions
+	| UpdateActiveEmojiReactions
+	| UpdateDefaultReactionType
 	| UpdateDiceEmojis
 	| UpdateAnimatedEmojiMessageClicked
 	| UpdateAnimationSearchParameters
@@ -19068,22 +19216,72 @@ Request type for {@link Tdjson#setTdlibParameters}.
 export interface SetTdlibParameters {
 	'@type': 'setTdlibParameters';
 	/**
-Parameters for TDLib initialization.
+Pass true to use Telegram test environment instead of the production environment.
 */
-	parameters: TdlibParameters;
-}
-
-/**
-Checks the database encryption key for correctness. Works only when the current authorization state is
-authorizationStateWaitEncryptionKey.
-Request type for {@link Tdjson#checkDatabaseEncryptionKey}.
-*/
-export interface CheckDatabaseEncryptionKey {
-	'@type': 'checkDatabaseEncryptionKey';
+	use_test_dc?: boolean;
 	/**
-Encryption key to check or set up.
+The path to the directory for the persistent database; if empty, the current working directory will be used.
 */
-	encryption_key: string;
+	database_directory: string;
+	/**
+The path to the directory for storing files; if empty, database_directory will be used.
+*/
+	files_directory: string;
+	/**
+Encryption key for the database.
+*/
+	database_encryption_key: string;
+	/**
+Pass true to keep information about downloaded and uploaded files between application restarts.
+*/
+	use_file_database?: boolean;
+	/**
+Pass true to keep cache of users, basic groups, supergroups, channels and secret chats between restarts. Implies
+use_file_database.
+*/
+	use_chat_info_database?: boolean;
+	/**
+Pass true to keep cache of chats and messages between restarts. Implies use_chat_info_database.
+*/
+	use_message_database?: boolean;
+	/**
+Pass true to enable support for secret chats.
+*/
+	use_secret_chats?: boolean;
+	/**
+Application identifier for Telegram API access, which can be obtained at https://my.telegram.org.
+*/
+	api_id: number;
+	/**
+Application identifier hash for Telegram API access, which can be obtained at https://my.telegram.org.
+*/
+	api_hash: string;
+	/**
+IETF language tag of the user's operating system language; must be non-empty.
+*/
+	system_language_code: string;
+	/**
+Model of the device the application is being run on; must be non-empty.
+*/
+	device_model: string;
+	/**
+Version of the operating system the application is being run on. If empty, the version is automatically detected by
+TDLib.
+*/
+	system_version: string;
+	/**
+Application version; must be non-empty.
+*/
+	application_version: string;
+	/**
+Pass true to automatically delete old files in background.
+*/
+	enable_storage_optimizer?: boolean;
+	/**
+Pass true to ignore original file names for downloaded files. Otherwise, downloaded files are saved under names as close
+as possible to the original name.
+*/
+	ignore_file_names?: boolean;
 }
 
 /**
@@ -19106,13 +19304,40 @@ Settings for the authentication of the user's phone number; pass null to use def
 }
 
 /**
-Re-sends an authentication code to the user. Works only when the current authorization state is
-authorizationStateWaitCode, the next_code_type of the result is not null and the server-specified timeout has passed.
+Sets the email address of the user and sends an authentication code to the email address. Works only when the current
+authorization state is authorizationStateWaitEmailAddress.
+Request type for {@link Tdjson#setAuthenticationEmailAddress}.
+*/
+export interface SetAuthenticationEmailAddress {
+	'@type': 'setAuthenticationEmailAddress';
+	/**
+The email address of the user.
+*/
+	email_address: string;
+}
+
+/**
+Resends an authentication code to the user. Works only when the current authorization state is
+authorizationStateWaitCode, the next_code_type of the result is not null and the server-specified timeout has passed, or
+when the current authorization state is authorizationStateWaitEmailCode.
 Request type for {@link Tdjson#resendAuthenticationCode}.
 */
 export interface ResendAuthenticationCode {
 	'@type': 'resendAuthenticationCode';
 
+}
+
+/**
+Checks the authentication of a email address. Works only when the current authorization state is
+authorizationStateWaitEmailCode.
+Request type for {@link Tdjson#checkAuthenticationEmailCode}.
+*/
+export interface CheckAuthenticationEmailCode {
+	'@type': 'checkAuthenticationEmailCode';
+	/**
+Email address authentication to check.
+*/
+	code: EmailAddressAuthentication;
 }
 
 /**
@@ -19331,6 +19556,41 @@ Pass true to change also the recovery email address.
 New recovery email address; may be empty.
 */
 	new_recovery_email_address: string;
+}
+
+/**
+Changes the login email address of the user. The change will not be applied until the new login email address is
+confirmed with `checkLoginEmailAddressCode`. To use Apple ID/Google ID instead of a email address, call
+`checkLoginEmailAddressCode` directly.
+Request type for {@link Tdjson#setLoginEmailAddress}.
+*/
+export interface SetLoginEmailAddress {
+	'@type': 'setLoginEmailAddress';
+	/**
+New login email address.
+*/
+	new_login_email_address: string;
+}
+
+/**
+Resends the login email address verification code.
+Request type for {@link Tdjson#resendLoginEmailAddressCode}.
+*/
+export interface ResendLoginEmailAddressCode {
+	'@type': 'resendLoginEmailAddressCode';
+
+}
+
+/**
+Checks the login email address authentication.
+Request type for {@link Tdjson#checkLoginEmailAddressCode}.
+*/
+export interface CheckLoginEmailAddressCode {
+	'@type': 'checkLoginEmailAddressCode';
+	/**
+Email address authentication to check.
+*/
+	code: EmailAddressAuthentication;
 }
 
 /**
@@ -21194,7 +21454,28 @@ The new message scheduling state; pass null to send the message immediately.
 }
 
 /**
-Returns reactions, which can be added to a message. The list can change after updateReactions,
+Returns information about a emoji reaction. Returns a 404 error if the reaction is not found.
+Request type for {@link Tdjson#getEmojiReaction}.
+*/
+export interface GetEmojiReaction {
+	'@type': 'getEmojiReaction';
+	/**
+Text representation of the reaction.
+*/
+	emoji: string;
+}
+
+/**
+Returns TGS files with generic animations for custom emoji reactions.
+Request type for {@link Tdjson#getCustomEmojiReactionAnimations}.
+*/
+export interface GetCustomEmojiReactionAnimations {
+	'@type': 'getCustomEmojiReactionAnimations';
+
+}
+
+/**
+Returns reactions, which can be added to a message. The list can change after updateActiveEmojiReactions,
 updateChatAvailableReactions for the chat, or updateMessageInteractionInfo for the message.
 Request type for {@link Tdjson#getMessageAvailableReactions}.
 */
@@ -21208,14 +21489,28 @@ Identifier of the chat to which the message belongs.
 Identifier of the message.
 */
 	message_id: number;
+	/**
+Number of reaction per row, 5-25.
+*/
+	row_size: number;
 }
 
 /**
-Changes chosen reaction for a message.
-Request type for {@link Tdjson#setMessageReaction}.
+Clears the list of recently used reactions.
+Request type for {@link Tdjson#clearRecentReactions}.
 */
-export interface SetMessageReaction {
-	'@type': 'setMessageReaction';
+export interface ClearRecentReactions {
+	'@type': 'clearRecentReactions';
+
+}
+
+/**
+Adds a reaction to a message. Use getMessageAvailableReactions to receive the list of available reactions for the
+message.
+Request type for {@link Tdjson#addMessageReaction}.
+*/
+export interface AddMessageReaction {
+	'@type': 'addMessageReaction';
 	/**
 Identifier of the chat to which the message belongs.
 */
@@ -21225,14 +21520,37 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Text representation of the new chosen reaction. Can be an empty string or the currently chosen non-big reaction to
-remove the reaction.
+Type of the reaction to add.
 */
-	reaction: string;
+	reaction_type: ReactionType;
 	/**
 Pass true if the reaction is added with a big animation.
 */
 	is_big?: boolean;
+	/**
+Pass true if the reaction needs to be added to recent reactions.
+*/
+	update_recent_reactions?: boolean;
+}
+
+/**
+Removes a reaction from a message. A chosen reaction can always be removed.
+Request type for {@link Tdjson#removeMessageReaction}.
+*/
+export interface RemoveMessageReaction {
+	'@type': 'removeMessageReaction';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Type of the reaction to remove.
+*/
+	reaction_type: ReactionType;
 }
 
 /**
@@ -21250,9 +21568,9 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-If non-empty, only added reactions with the specified text representation will be returned.
+Type of the reactions to return; pass null to return all added reactions.
 */
-	reaction: string;
+	reaction_type: ReactionType;
 	/**
 Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
 results.
@@ -21262,6 +21580,18 @@ results.
 The maximum number of reactions to be returned; must be positive and can't be greater than 100.
 */
 	limit: number;
+}
+
+/**
+Changes type of default reaction for the current user.
+Request type for {@link Tdjson#setDefaultReactionType}.
+*/
+export interface SetDefaultReactionType {
+	'@type': 'setDefaultReactionType';
+	/**
+New type of the default reaction.
+*/
+	reaction_type: ReactionType;
 }
 
 /**
@@ -21636,6 +21966,10 @@ The URL from the keyboardButtonTypeWebApp button.
 Preferred Web App theme; pass null to use the default theme.
 */
 	theme: ThemeParameters;
+	/**
+Short name of the application; 0-64 English letters, digits, and underscores.
+*/
+	application_name: string;
 }
 
 /**
@@ -21683,6 +22017,10 @@ link, or an empty string otherwise.
 Preferred Web App theme; pass null to use the default theme.
 */
 	theme: ThemeParameters;
+	/**
+Short name of the application; 0-64 English letters, digits, and underscores.
+*/
+	application_name: string;
 	/**
 Identifier of the replied message for the message sent by the Web App; 0 if none.
 */
@@ -22529,9 +22867,9 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-New list of reactions, available in the chat. All reactions must be active.
+Reactions available in the chat. All emoji reactions must be active.
 */
-	available_reactions: string[];
+	available_reactions: ChatAvailableReactions;
 }
 
 /**
@@ -23054,6 +23392,42 @@ Bot's user identifier.
 Pass true to add the bot to attachment menu; pass false to remove the bot from attachment menu.
 */
 	is_added?: boolean;
+}
+
+/**
+Returns up to 8 themed emoji statuses, which color must be changed to the color of the Telegram Premium badge.
+Request type for {@link Tdjson#getThemedEmojiStatuses}.
+*/
+export interface GetThemedEmojiStatuses {
+	'@type': 'getThemedEmojiStatuses';
+
+}
+
+/**
+Returns recent emoji statuses.
+Request type for {@link Tdjson#getRecentEmojiStatuses}.
+*/
+export interface GetRecentEmojiStatuses {
+	'@type': 'getRecentEmojiStatuses';
+
+}
+
+/**
+Returns default emoji statuses.
+Request type for {@link Tdjson#getDefaultEmojiStatuses}.
+*/
+export interface GetDefaultEmojiStatuses {
+	'@type': 'getDefaultEmojiStatuses';
+
+}
+
+/**
+Clears the list of recently used emoji statuses.
+Request type for {@link Tdjson#clearRecentEmojiStatuses}.
+*/
+export interface ClearRecentEmojiStatuses {
+	'@type': 'clearRecentEmojiStatuses';
+
 }
 
 /**
@@ -25156,6 +25530,22 @@ The new value of the username. Use an empty string to remove the username.
 }
 
 /**
+Changes the emoji status of the current user; for Telegram Premium users only.
+Request type for {@link Tdjson#setEmojiStatus}.
+*/
+export interface SetEmojiStatus {
+	'@type': 'setEmojiStatus';
+	/**
+New emoji status; pass null to switch to the default badge.
+*/
+	emoji_status: EmojiStatus;
+	/**
+Duration of the status, in seconds; pass 0 to keep the status active until it will be changed manually.
+*/
+	duration: number;
+}
+
+/**
 Changes the location of the current user. Needs to be called if GetOption("is_location_visible") is true and location
 changes for more than 1 kilometer.
 Request type for {@link Tdjson#setLocation}.
@@ -25186,7 +25576,7 @@ Settings for the authentication of the user's phone number; pass null to use def
 }
 
 /**
-Re-sends the authentication code sent to confirm a new phone number for the current user. Works only if the previously
+Resends the authentication code sent to confirm a new phone number for the current user. Works only if the previously
 received authenticationCodeInfo next_code_type was not null and the server-specified timeout has passed.
 Request type for {@link Tdjson#resendChangePhoneNumberCode}.
 */
@@ -26174,6 +26564,27 @@ Additional report details; 0-1024 characters.
 }
 
 /**
+Reports reactions set on a message to the Telegram moderators. Reactions on a message can be reported only if
+message.can_report_reactions.
+Request type for {@link Tdjson#reportMessageReactions}.
+*/
+export interface ReportMessageReactions {
+	'@type': 'reportMessageReactions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+Identifier of the sender, which added the reaction.
+*/
+	sender_id: MessageSender;
+}
+
+/**
 Returns detailed statistics about a chat. Currently, this method can be used only for supergroups and channels. Can be
 used only if supergroupFullInfo.can_get_statistics == true.
 Request type for {@link Tdjson#getChatStatistics}.
@@ -26502,7 +26913,7 @@ Settings for the authentication of the user's phone number; pass null to use def
 }
 
 /**
-Re-sends the code to verify a phone number to be added to a user's Telegram Passport.
+Resends the code to verify a phone number to be added to a user's Telegram Passport.
 Request type for {@link Tdjson#resendPhoneNumberVerificationCode}.
 */
 export interface ResendPhoneNumberVerificationCode {
@@ -26535,7 +26946,7 @@ Email address.
 }
 
 /**
-Re-sends the code to verify an email address to be added to a user's Telegram Passport.
+Resends the code to verify an email address to be added to a user's Telegram Passport.
 Request type for {@link Tdjson#resendEmailAddressVerificationCode}.
 */
 export interface ResendEmailAddressVerificationCode {
@@ -27531,9 +27942,10 @@ The error to be returned.
 export type Request =
 	| GetAuthorizationState
 	| SetTdlibParameters
-	| CheckDatabaseEncryptionKey
 	| SetAuthenticationPhoneNumber
+	| SetAuthenticationEmailAddress
 	| ResendAuthenticationCode
+	| CheckAuthenticationEmailCode
 	| CheckAuthenticationCode
 	| RequestQrCodeAuthentication
 	| RegisterUser
@@ -27550,6 +27962,9 @@ export type Request =
 	| SetDatabaseEncryptionKey
 	| GetPasswordState
 	| SetPassword
+	| SetLoginEmailAddress
+	| ResendLoginEmailAddressCode
+	| CheckLoginEmailAddressCode
 	| GetRecoveryEmailAddress
 	| SetRecoveryEmailAddress
 	| CheckRecoveryEmailAddressCode
@@ -27650,9 +28065,14 @@ export type Request =
 	| EditInlineMessageCaption
 	| EditInlineMessageReplyMarkup
 	| EditMessageSchedulingState
+	| GetEmojiReaction
+	| GetCustomEmojiReactionAnimations
 	| GetMessageAvailableReactions
-	| SetMessageReaction
+	| ClearRecentReactions
+	| AddMessageReaction
+	| RemoveMessageReaction
 	| GetMessageAddedReactions
+	| SetDefaultReactionType
 	| GetTextEntities
 	| ParseTextEntities
 	| ParseMarkdown
@@ -27757,6 +28177,10 @@ export type Request =
 	| SetPinnedChats
 	| GetAttachmentMenuBot
 	| ToggleBotIsAddedToAttachmentMenu
+	| GetThemedEmojiStatuses
+	| GetRecentEmojiStatuses
+	| GetDefaultEmojiStatuses
+	| ClearRecentEmojiStatuses
 	| DownloadFile
 	| GetFileDownloadedPrefixSize
 	| CancelDownloadFile
@@ -27882,6 +28306,7 @@ export type Request =
 	| SetName
 	| SetBio
 	| SetUsername
+	| SetEmojiStatus
 	| SetLocation
 	| ChangePhoneNumber
 	| ResendChangePhoneNumberCode
@@ -27951,6 +28376,7 @@ export type Request =
 	| RemoveChatActionBar
 	| ReportChat
 	| ReportChatPhoto
+	| ReportMessageReactions
 	| GetChatStatistics
 	| GetMessageStatistics
 	| GetStatisticalGraph
@@ -28069,17 +28495,6 @@ authorizationStateWaitTdlibParameters.
 	}
 
 	/**
-Checks the database encryption key for correctness. Works only when the current authorization state is
-authorizationStateWaitEncryptionKey.
-*/
-	async checkDatabaseEncryptionKey(options: Omit<CheckDatabaseEncryptionKey, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'checkDatabaseEncryptionKey',
-		});
-	}
-
-	/**
 Sets the phone number of the user and sends an authentication code to the user. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
 authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
@@ -28093,12 +28508,35 @@ authorizationStateWaitPassword.
 	}
 
 	/**
-Re-sends an authentication code to the user. Works only when the current authorization state is
-authorizationStateWaitCode, the next_code_type of the result is not null and the server-specified timeout has passed.
+Sets the email address of the user and sends an authentication code to the email address. Works only when the current
+authorization state is authorizationStateWaitEmailAddress.
+*/
+	async setAuthenticationEmailAddress(options: Omit<SetAuthenticationEmailAddress, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setAuthenticationEmailAddress',
+		});
+	}
+
+	/**
+Resends an authentication code to the user. Works only when the current authorization state is
+authorizationStateWaitCode, the next_code_type of the result is not null and the server-specified timeout has passed, or
+when the current authorization state is authorizationStateWaitEmailCode.
 */
 	async resendAuthenticationCode(): Promise<Ok> {
 		return this._request({
 			'@type': 'resendAuthenticationCode',
+		});
+	}
+
+	/**
+Checks the authentication of a email address. Works only when the current authorization state is
+authorizationStateWaitEmailCode.
+*/
+	async checkAuthenticationEmailCode(options: Omit<CheckAuthenticationEmailCode, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'checkAuthenticationEmailCode',
 		});
 	}
 
@@ -28269,6 +28707,37 @@ change will not be applied until the new recovery email address is confirmed.
 		return this._request({
 			...options,
 			'@type': 'setPassword',
+		});
+	}
+
+	/**
+Changes the login email address of the user. The change will not be applied until the new login email address is
+confirmed with `checkLoginEmailAddressCode`. To use Apple ID/Google ID instead of a email address, call
+`checkLoginEmailAddressCode` directly.
+*/
+	async setLoginEmailAddress(options: Omit<SetLoginEmailAddress, '@type'>): Promise<EmailAddressAuthenticationCodeInfo> {
+		return this._request({
+			...options,
+			'@type': 'setLoginEmailAddress',
+		});
+	}
+
+	/**
+Resends the login email address verification code.
+*/
+	async resendLoginEmailAddressCode(): Promise<EmailAddressAuthenticationCodeInfo> {
+		return this._request({
+			'@type': 'resendLoginEmailAddressCode',
+		});
+	}
+
+	/**
+Checks the login email address authentication.
+*/
+	async checkLoginEmailAddressCode(options: Omit<CheckLoginEmailAddressCode, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'checkLoginEmailAddressCode',
 		});
 	}
 
@@ -29343,7 +29812,26 @@ together with the message will be also changed.
 	}
 
 	/**
-Returns reactions, which can be added to a message. The list can change after updateReactions,
+Returns information about a emoji reaction. Returns a 404 error if the reaction is not found.
+*/
+	async getEmojiReaction(options: Omit<GetEmojiReaction, '@type'>): Promise<EmojiReaction> {
+		return this._request({
+			...options,
+			'@type': 'getEmojiReaction',
+		});
+	}
+
+	/**
+Returns TGS files with generic animations for custom emoji reactions.
+*/
+	async getCustomEmojiReactionAnimations(): Promise<Files> {
+		return this._request({
+			'@type': 'getCustomEmojiReactionAnimations',
+		});
+	}
+
+	/**
+Returns reactions, which can be added to a message. The list can change after updateActiveEmojiReactions,
 updateChatAvailableReactions for the chat, or updateMessageInteractionInfo for the message.
 */
 	async getMessageAvailableReactions(options: Omit<GetMessageAvailableReactions, '@type'>): Promise<AvailableReactions> {
@@ -29354,12 +29842,32 @@ updateChatAvailableReactions for the chat, or updateMessageInteractionInfo for t
 	}
 
 	/**
-Changes chosen reaction for a message.
+Clears the list of recently used reactions.
 */
-	async setMessageReaction(options: Omit<SetMessageReaction, '@type'>): Promise<Ok> {
+	async clearRecentReactions(): Promise<Ok> {
+		return this._request({
+			'@type': 'clearRecentReactions',
+		});
+	}
+
+	/**
+Adds a reaction to a message. Use getMessageAvailableReactions to receive the list of available reactions for the
+message.
+*/
+	async addMessageReaction(options: Omit<AddMessageReaction, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'setMessageReaction',
+			'@type': 'addMessageReaction',
+		});
+	}
+
+	/**
+Removes a reaction from a message. A chosen reaction can always be removed.
+*/
+	async removeMessageReaction(options: Omit<RemoveMessageReaction, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeMessageReaction',
 		});
 	}
 
@@ -29370,6 +29878,16 @@ Returns reactions added for a message, along with their sender.
 		return this._request({
 			...options,
 			'@type': 'getMessageAddedReactions',
+		});
+	}
+
+	/**
+Changes type of default reaction for the current user.
+*/
+	async setDefaultReactionType(options: Omit<SetDefaultReactionType, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setDefaultReactionType',
 		});
 	}
 
@@ -30464,6 +30982,42 @@ userTypeBot.can_be_added_to_attachment_menu == true.
 		return this._request({
 			...options,
 			'@type': 'toggleBotIsAddedToAttachmentMenu',
+		});
+	}
+
+	/**
+Returns up to 8 themed emoji statuses, which color must be changed to the color of the Telegram Premium badge.
+*/
+	async getThemedEmojiStatuses(): Promise<EmojiStatuses> {
+		return this._request({
+			'@type': 'getThemedEmojiStatuses',
+		});
+	}
+
+	/**
+Returns recent emoji statuses.
+*/
+	async getRecentEmojiStatuses(): Promise<EmojiStatuses> {
+		return this._request({
+			'@type': 'getRecentEmojiStatuses',
+		});
+	}
+
+	/**
+Returns default emoji statuses.
+*/
+	async getDefaultEmojiStatuses(): Promise<EmojiStatuses> {
+		return this._request({
+			'@type': 'getDefaultEmojiStatuses',
+		});
+	}
+
+	/**
+Clears the list of recently used emoji statuses.
+*/
+	async clearRecentEmojiStatuses(): Promise<Ok> {
+		return this._request({
+			'@type': 'clearRecentEmojiStatuses',
 		});
 	}
 
@@ -31754,6 +32308,16 @@ Changes the username of the current user.
 	}
 
 	/**
+Changes the emoji status of the current user; for Telegram Premium users only.
+*/
+	async setEmojiStatus(options: Omit<SetEmojiStatus, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setEmojiStatus',
+		});
+	}
+
+	/**
 Changes the location of the current user. Needs to be called if GetOption("is_location_visible") is true and location
 changes for more than 1 kilometer.
 */
@@ -31776,7 +32340,7 @@ returns information about the sent code.
 	}
 
 	/**
-Re-sends the authentication code sent to confirm a new phone number for the current user. Works only if the previously
+Resends the authentication code sent to confirm a new phone number for the current user. Works only if the previously
 received authenticationCodeInfo next_code_type was not null and the server-specified timeout has passed.
 */
 	async resendChangePhoneNumberCode(): Promise<AuthenticationCodeInfo> {
@@ -32459,6 +33023,17 @@ Reports a chat photo to the Telegram moderators. A chat photo can be reported on
 	}
 
 	/**
+Reports reactions set on a message to the Telegram moderators. Reactions on a message can be reported only if
+message.can_report_reactions.
+*/
+	async reportMessageReactions(options: Omit<ReportMessageReactions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reportMessageReactions',
+		});
+	}
+
+	/**
 Returns detailed statistics about a chat. Currently, this method can be used only for supergroups and channels. Can be
 used only if supergroupFullInfo.can_get_statistics == true.
 */
@@ -32673,7 +33248,7 @@ Sends a code to verify a phone number to be added to a user's Telegram Passport.
 	}
 
 	/**
-Re-sends the code to verify a phone number to be added to a user's Telegram Passport.
+Resends the code to verify a phone number to be added to a user's Telegram Passport.
 */
 	async resendPhoneNumberVerificationCode(): Promise<AuthenticationCodeInfo> {
 		return this._request({
@@ -32702,7 +33277,7 @@ Sends a code to verify an email address to be added to a user's Telegram Passpor
 	}
 
 	/**
-Re-sends the code to verify an email address to be added to a user's Telegram Passport.
+Resends the code to verify an email address to be added to a user's Telegram Passport.
 */
 	async resendEmailAddressVerificationCode(): Promise<EmailAddressAuthenticationCodeInfo> {
 		return this._request({
