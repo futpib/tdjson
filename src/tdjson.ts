@@ -553,17 +553,6 @@ Information about the remote copy of the file.
 }
 
 /**
-Represents a list of files.
-*/
-export interface Files {
-	'@type': 'files';
-	/**
-List of files.
-*/
-	files: File[];
-}
-
-/**
 Points to a file.
 Subtype of {@link InputFile}.
 */
@@ -1247,6 +1236,14 @@ Sticker for the emoji; may be null if yet unknown for a custom emoji. If the sti
 arbitrary format different from stickerFormatTgs.
 */
 	sticker: Sticker;
+	/**
+Expected width of the sticker, which can be used if the sticker is null.
+*/
+	sticker_width: number;
+	/**
+Expected height of the sticker, which can be used if the sticker is null.
+*/
+	sticker_height: number;
 	/**
 Emoji modifier fitzpatrick type; 0-6; 0 if none.
 */
@@ -2682,7 +2679,7 @@ created, in case the user is not a member.
 */
 	date: number;
 	/**
-Status of the current user in the supergroup or channel; custom title will be always empty.
+Status of the current user in the supergroup or channel; custom title will always be empty.
 */
 	status: ChatMemberStatus;
 	/**
@@ -2942,6 +2939,32 @@ Approximate total number of messages senders found.
 List of message senders.
 */
 	senders: MessageSender[];
+}
+
+/**
+Represents a message sender, which can be used to send messages in a chat.
+*/
+export interface ChatMessageSender {
+	'@type': 'chatMessageSender';
+	/**
+Available message senders.
+*/
+	sender: MessageSender;
+	/**
+True, if Telegram Premium is needed to use the message sender.
+*/
+	needs_premium?: boolean;
+}
+
+/**
+Represents a list of message senders, which can be used to send messages in a chat.
+*/
+export interface ChatMessageSenders {
+	'@type': 'chatMessageSenders';
+	/**
+List of available message senders.
+*/
+	senders: ChatMessageSender[];
 }
 
 /**
@@ -6189,7 +6212,7 @@ The amount of tip chosen by the buyer in the smallest units of the currency.
 }
 
 /**
-Describe an invoice to process.
+Describes an invoice to process.
 Subtype of {@link InputInvoice}.
 */
 export interface InputInvoiceMessage {
@@ -6214,6 +6237,78 @@ export interface InputInvoiceName {
 Name of the invoice.
 */
 	name: string;
+}
+
+/**
+Describes a media, which is attached to an invoice.
+Subtype of {@link MessageExtendedMedia}.
+*/
+export interface MessageExtendedMediaPreview {
+	'@type': 'messageExtendedMediaPreview';
+	/**
+Media width; 0 if unknown.
+*/
+	width: number;
+	/**
+Media height; 0 if unknown.
+*/
+	height: number;
+	/**
+Media duration; 0 if unknown.
+*/
+	duration: number;
+	/**
+Media minithumbnail; may be null.
+*/
+	minithumbnail: Minithumbnail;
+	/**
+Media caption.
+*/
+	caption: FormattedText;
+}
+
+/**
+The media is a photo.
+Subtype of {@link MessageExtendedMedia}.
+*/
+export interface MessageExtendedMediaPhoto {
+	'@type': 'messageExtendedMediaPhoto';
+	/**
+The photo.
+*/
+	photo: Photo;
+	/**
+Photo caption.
+*/
+	caption: FormattedText;
+}
+
+/**
+The media is a video.
+Subtype of {@link MessageExtendedMedia}.
+*/
+export interface MessageExtendedMediaVideo {
+	'@type': 'messageExtendedMediaVideo';
+	/**
+The video.
+*/
+	video: Video;
+	/**
+Photo caption.
+*/
+	caption: FormattedText;
+}
+
+/**
+The media is unuspported.
+Subtype of {@link MessageExtendedMedia}.
+*/
+export interface MessageExtendedMediaUnsupported {
+	'@type': 'messageExtendedMediaUnsupported';
+	/**
+Media caption.
+*/
+	caption: FormattedText;
 }
 
 /**
@@ -7555,6 +7650,10 @@ True, if the shipping address must be specified.
 The identifier of the message with the receipt, after the product has been purchased.
 */
 	receipt_message_id: number;
+	/**
+Extended media attached to the invoice; may be null.
+*/
+	extended_media: MessageExtendedMedia;
 }
 
 /**
@@ -8443,7 +8542,7 @@ Document thumbnail; pass null to skip thumbnail uploading.
 */
 	thumbnail: InputThumbnail;
 	/**
-If true, automatic file type detection will be disabled and the document will be always sent as file. Always true for
+If true, automatic file type detection will be disabled and the document will always be sent as file. Always true for
 files sent to secret chats.
 */
 	disable_content_type_detection?: boolean;
@@ -8744,6 +8843,11 @@ Unique invoice bot deep link parameter for the generation of this invoice. If em
 directly from forwards of the invoice message.
 */
 	start_parameter: string;
+	/**
+The content of extended media attached to the invoice. The content of the message to be sent. Must be one of the
+following types: inputMessagePhoto, inputMessageVideo.
+*/
+	extended_media_content: InputMessageContent;
 }
 
 /**
@@ -12557,7 +12661,7 @@ A bottom color of the background in the RGB24 format.
 */
 	bottom_color: number;
 	/**
-Clockwise rotation angle of the gradient, in degrees; 0-359. Must be always divisible by 45.
+Clockwise rotation angle of the gradient, in degrees; 0-359. Must always be divisible by 45.
 */
 	rotation_angle: number;
 }
@@ -14525,6 +14629,10 @@ export interface InternalLinkTypeInstantView {
 URL to be passed to getWebPageInstantView.
 */
 	url: string;
+	/**
+An URL to open if getWebPageInstantView fails.
+*/
+	fallback_url: string;
 }
 
 /**
@@ -18426,6 +18534,12 @@ export type InputInvoice =
 	| InputInvoiceMessage
 	| InputInvoiceName;
 
+export type MessageExtendedMedia =
+	| MessageExtendedMediaPreview
+	| MessageExtendedMediaPhoto
+	| MessageExtendedMediaVideo
+	| MessageExtendedMediaUnsupported;
+
 export type PassportElementType =
 	| PassportElementTypePersonalDetails
 	| PassportElementTypePassport
@@ -20672,6 +20786,32 @@ locally.
 }
 
 /**
+Returns approximate 1-based position of a message among messages, which can be found by the specified filter in the
+chat. Cannot be used in secret chats.
+Request type for {@link Tdjson#getChatMessagePosition}.
+*/
+export interface GetChatMessagePosition {
+	'@type': 'getChatMessagePosition';
+	/**
+Identifier of the chat in which to find message position.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+Filter for message content; searchMessagesFilterEmpty, searchMessagesFilterUnreadMention,
+searchMessagesFilterUnreadReaction, and searchMessagesFilterFailedToSend are unsupported in this function.
+*/
+	filter: SearchMessagesFilter;
+	/**
+If not 0, only messages in the specified thread will be considered; supergroups only.
+*/
+	message_thread_id: number;
+}
+
+/**
 Returns all scheduled messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of
 decreasing message_id).
 Request type for {@link Tdjson#getChatScheduledMessages}.
@@ -21466,7 +21606,7 @@ Text representation of the reaction.
 }
 
 /**
-Returns TGS files with generic animations for custom emoji reactions.
+Returns TGS stickers with generic animations for custom emoji reactions.
 Request type for {@link Tdjson#getCustomEmojiReactionAnimations}.
 */
 export interface GetCustomEmojiReactionAnimations {
@@ -24971,26 +25111,26 @@ The maximum number of photos to be returned; up to 100.
 }
 
 /**
-Returns stickers from the installed sticker sets that correspond to a given emoji. If the emoji is non-empty, then
-favorite, recently used or trending stickers may also be returned.
+Returns stickers from the installed sticker sets that correspond to a given emoji or can be found by sticker-specific
+keywords. If the query is non-empty, then favorite, recently used or trending stickers may also be returned.
 Request type for {@link Tdjson#getStickers}.
 */
 export interface GetStickers {
 	'@type': 'getStickers';
 	/**
-Type of the sticker sets to return.
+Type of the stickers to return.
 */
 	sticker_type: StickerType;
 	/**
-String representation of emoji. If empty, returns all known installed stickers.
+Search query; an emoji or a keyword prefix. If empty, returns all known installed stickers.
 */
-	emoji: string;
+	query: string;
 	/**
 The maximum number of stickers to be returned.
 */
 	limit: number;
 	/**
-Chat identifier for which to return stickers. Available custom emoji may be different for different chats.
+Chat identifier for which to return stickers. Available custom emoji stickers may be different for different chats.
 */
 	chat_id: number;
 }
@@ -28030,6 +28170,7 @@ export type Request =
 	| GetChatSparseMessagePositions
 	| GetChatMessageCalendar
 	| GetChatMessageCount
+	| GetChatMessagePosition
 	| GetChatScheduledMessages
 	| GetMessagePublicForwards
 	| GetChatSponsoredMessage
@@ -29434,6 +29575,17 @@ Returns approximate number of messages of the specified type in the chat.
 	}
 
 	/**
+Returns approximate 1-based position of a message among messages, which can be found by the specified filter in the
+chat. Cannot be used in secret chats.
+*/
+	async getChatMessagePosition(options: Omit<GetChatMessagePosition, '@type'>): Promise<Count> {
+		return this._request({
+			...options,
+			'@type': 'getChatMessagePosition',
+		});
+	}
+
+	/**
 Returns all scheduled messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of
 decreasing message_id).
 */
@@ -29554,7 +29706,7 @@ Rates recognized speech in a voice note message.
 	/**
 Returns list of message sender identifiers, which can be used to send messages in a chat.
 */
-	async getChatAvailableMessageSenders(options: Omit<GetChatAvailableMessageSenders, '@type'>): Promise<MessageSenders> {
+	async getChatAvailableMessageSenders(options: Omit<GetChatAvailableMessageSenders, '@type'>): Promise<ChatMessageSenders> {
 		return this._request({
 			...options,
 			'@type': 'getChatAvailableMessageSenders',
@@ -29822,9 +29974,9 @@ Returns information about a emoji reaction. Returns a 404 error if the reaction 
 	}
 
 	/**
-Returns TGS files with generic animations for custom emoji reactions.
+Returns TGS stickers with generic animations for custom emoji reactions.
 */
-	async getCustomEmojiReactionAnimations(): Promise<Files> {
+	async getCustomEmojiReactionAnimations(): Promise<Stickers> {
 		return this._request({
 			'@type': 'getCustomEmojiReactionAnimations',
 		});
@@ -31907,8 +32059,8 @@ already.
 	}
 
 	/**
-Returns stickers from the installed sticker sets that correspond to a given emoji. If the emoji is non-empty, then
-favorite, recently used or trending stickers may also be returned.
+Returns stickers from the installed sticker sets that correspond to a given emoji or can be found by sticker-specific
+keywords. If the query is non-empty, then favorite, recently used or trending stickers may also be returned.
 */
 	async getStickers(options: Omit<GetStickers, '@type'>): Promise<Stickers> {
 		return this._request({
