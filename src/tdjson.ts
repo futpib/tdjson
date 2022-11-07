@@ -206,7 +206,7 @@ The text.
 	/**
 Entities contained in the text. Entities can be nested, but must not mutually intersect with each other. Pre, Code and
 PreCode entities can't contain other entities. Bold, Italic, Underline, Strikethrough, and Spoiler entities can contain
-and to be contained in all other entities. All other entities can't contain each other.
+and can be part of any other entities. All other entities can't contain each other.
 */
 	entities: TextEntity[];
 }
@@ -1181,6 +1181,10 @@ Duration of the video, in seconds; as defined by the sender.
 */
 	duration: number;
 	/**
+A waveform representation of the video note's audio in 5-bit format; may be empty if unknown.
+*/
+	waveform: string;
+	/**
 Video width and height; as defined by the sender.
 */
 	length: number;
@@ -1192,6 +1196,10 @@ Video minithumbnail; may be null.
 Video thumbnail in JPEG format; as defined by the sender; may be null.
 */
 	thumbnail: Thumbnail;
+	/**
+Result of speech recognition in the video note; may be null.
+*/
+	speech_recognition_result: SpeechRecognitionResult;
 	/**
 File containing the video.
 */
@@ -1732,6 +1740,10 @@ True, if the user can invite new users to the chat.
 True, if the user can pin messages.
 */
 	can_pin_messages?: boolean;
+	/**
+True, if the user can manage topics.
+*/
+	can_manage_topics?: boolean;
 }
 
 /**
@@ -1773,6 +1785,10 @@ True, if the administrator can restrict, ban, or unban chat members; always true
 True, if the administrator can pin messages; applicable to basic groups and supergroups only.
 */
 	can_pin_messages?: boolean;
+	/**
+True, if the administrator can manage topics; applicable to forum supergroups only.
+*/
+	can_manage_topics?: boolean;
 	/**
 True, if the administrator can add new administrators with a subset of their own privileges or demote administrators
 that were directly or indirectly promoted by them.
@@ -1846,6 +1862,27 @@ The list of emoji statuses.
 }
 
 /**
+Describes usernames assigned to a user, a supergroup, or a channel.
+*/
+export interface Usernames {
+	'@type': 'usernames';
+	/**
+List of active usernames; the first one must be shown as the primary username. The order of active usernames can be
+changed with reorderActiveUsernames or reorderSupergroupActiveUsernames.
+*/
+	active_usernames: string[];
+	/**
+List of currently disabled usernames; the username can be activated with
+toggleUsernameIsActive/toggleSupergroupUsernameIsActive.
+*/
+	disabled_usernames: string[];
+	/**
+The active username, which can be changed with setUsername/setSupergroupUsername.
+*/
+	editable_username: string;
+}
+
+/**
 Represents a user.
 */
 export interface User {
@@ -1863,9 +1900,9 @@ Last name of the user.
 */
 	last_name: string;
 	/**
-Username of the user.
+Usernames of the user; may be null.
 */
-	username: string;
+	usernames: Usernames;
 	/**
 Phone number of the user.
 */
@@ -1979,7 +2016,8 @@ Contains full information about a user.
 export interface UserFullInfo {
 	'@type': 'userFullInfo';
 	/**
-User profile photo; may be null.
+User profile photo; may be null if empty or unknown. If non-null, then it is the same photo as in user.profile_photo and
+chat.photo.
 */
 	photo: ChatPhoto;
 	/**
@@ -2631,7 +2669,7 @@ Contains full information about a basic group.
 export interface BasicGroupFullInfo {
 	'@type': 'basicGroupFullInfo';
 	/**
-Chat photo; may be null.
+Chat photo; may be null if empty or unknown. If non-null, then it is the same photo as in chat.photo.
 */
 	photo: ChatPhoto;
 	/**
@@ -2670,9 +2708,9 @@ Supergroup or channel identifier.
 */
 	id: number;
 	/**
-Username of the supergroup or channel; empty for private supergroups or channels.
+Usernames of the supergroup or channel; may be null.
 */
-	username: string;
+	usernames: Usernames;
 	/**
 Point in time (Unix timestamp) when the current user joined, or the point in time when the supergroup or channel was
 created, in case the user is not a member.
@@ -2725,6 +2763,10 @@ number of members.
 */
 	is_broadcast_group?: boolean;
 	/**
+True, if the supergroup must be shown as a forum by default.
+*/
+	is_forum?: boolean;
+	/**
 True, if the supergroup or channel is verified.
 */
 	is_verified?: boolean;
@@ -2749,7 +2791,7 @@ Contains full information about a supergroup or channel.
 export interface SupergroupFullInfo {
 	'@type': 'supergroupFullInfo';
 	/**
-Chat photo; may be null.
+Chat photo; may be null if empty or unknown. If non-null, then it is the same photo as in chat.photo.
 */
 	photo: ChatPhoto;
 	/**
@@ -2807,8 +2849,8 @@ True, if the supergroup or channel statistics are available.
 */
 	can_get_statistics?: boolean;
 	/**
-True, if new chat members will have access to old messages. In public or discussion groups and both public and private
-channels, old messages are always available, so this option affects only private supergroups without a linked chat. The
+True, if new chat members will have access to old messages. In public, discussion, of forum groups and all channels, old
+messages are always available, so this option affects only private non-forum supergroups without a linked chat. The
 value of this field is only available for chat administrators.
 */
 	is_all_history_available?: boolean;
@@ -3314,6 +3356,10 @@ posts.
 */
 	is_channel_post?: boolean;
 	/**
+True, if the message is a forum topic message.
+*/
+	is_topic_message?: boolean;
+	/**
 True, if the message contains an unread mention for the current user.
 */
 	contains_unread_mention?: boolean;
@@ -3509,6 +3555,10 @@ Information about the sponsor chat; may be null unless sponsor_chat_id == 0.
 */
 	sponsor_chat_info: ChatInviteLinkInfo;
 	/**
+True, if the sponsor's chat photo must be shown.
+*/
+	show_chat_photo?: boolean;
+	/**
 An internal link to be opened when the sponsored message is clicked; may be null if the sponsor chat needs to be opened
 instead.
 */
@@ -3517,6 +3567,22 @@ instead.
 Content of the message. Currently, can be only of the type messageText.
 */
 	content: MessageContent;
+}
+
+/**
+Contains a list of sponsored messages.
+*/
+export interface SponsoredMessages {
+	'@type': 'sponsoredMessages';
+	/**
+List of sponsored messages.
+*/
+	messages: SponsoredMessage[];
+	/**
+The minimum number of messages between shown sponsored messages, or 0 if only one sponsored message must be shown after
+all ordinary messages.
+*/
+	messages_between: number;
 }
 
 /**
@@ -4241,7 +4307,8 @@ export interface ChatActionBarInviteMembers {
 /**
 The chat is a private or secret chat, which can be reported using the method reportChat, or the other user can be
 blocked using the method toggleMessageSenderIsBlocked, or the other user can be added to the contact list using the
-method addContact.
+method addContact. If the chat is a private chat with a user with an emoji status, then a notice about emoji status
+usage must be shown.
 Subtype of {@link ChatActionBar}.
 */
 export interface ChatActionBarReportAddBlock {
@@ -4637,7 +4704,7 @@ Message thread identifier, unique within the chat.
 */
 	message_thread_id: number;
 	/**
-Information about the message thread.
+Information about the message thread; may be null for forum topic threads.
 */
 	reply_info: MessageReplyInfo;
 	/**
@@ -4651,6 +4718,103 @@ decreasing message_id).
 	messages: Message[];
 	/**
 A draft of a message in the message thread; may be null.
+*/
+	draft_message: DraftMessage;
+}
+
+/**
+Describes a forum topic icon.
+*/
+export interface ForumTopicIcon {
+	'@type': 'forumTopicIcon';
+	/**
+Color of the topic icon in RGB format.
+*/
+	color: number;
+	/**
+Unique identifier of the custom emoji shown on the topic icon; 0 if none.
+*/
+	custom_emoji_id: string;
+}
+
+/**
+Contains basic information about a forum topic.
+*/
+export interface ForumTopicInfo {
+	'@type': 'forumTopicInfo';
+	/**
+Message thread identifier of the topic.
+*/
+	message_thread_id: number;
+	/**
+Name of the topic.
+*/
+	name: string;
+	/**
+Icon of the topic.
+*/
+	icon: ForumTopicIcon;
+	/**
+Date the topic was created.
+*/
+	creation_date: number;
+	/**
+Identifier of the creator of the topic.
+*/
+	creator_id: MessageSender;
+	/**
+True, if the topic was created by the current user.
+*/
+	is_outgoing?: boolean;
+	/**
+True, if the topic is closed.
+*/
+	is_closed?: boolean;
+}
+
+/**
+Describes a forum topic.
+*/
+export interface ForumTopic {
+	'@type': 'forumTopic';
+	/**
+Basic information about the topic.
+*/
+	info: ForumTopicInfo;
+	/**
+Last message in the topic; may be null.
+*/
+	last_message: Message;
+	/**
+True, if the topic is pinned in the topic list.
+*/
+	is_pinned?: boolean;
+	/**
+Number of unread messages in the topic.
+*/
+	unread_count: number;
+	/**
+Identifier of the last read incoming message.
+*/
+	last_read_inbox_message_id: number;
+	/**
+Identifier of the last read outgoing message.
+*/
+	last_read_outbox_message_id: number;
+	/**
+Number of unread messages with a mention/reply in the topic.
+*/
+	unread_mention_count: number;
+	/**
+Number of messages with unread reactions in the topic.
+*/
+	unread_reaction_count: number;
+	/**
+Notification settings for the topic.
+*/
+	notification_settings: ChatNotificationSettings;
+	/**
+A draft of a message in the topic; may be null.
 */
 	draft_message: DraftMessage;
 }
@@ -7909,6 +8073,55 @@ New message TTL.
 }
 
 /**
+A forum topic has been created.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageForumTopicCreated {
+	'@type': 'messageForumTopicCreated';
+	/**
+Name of the topic.
+*/
+	name: string;
+	/**
+Icon of the topic.
+*/
+	icon: ForumTopicIcon;
+}
+
+/**
+A forum topic has been edited.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageForumTopicEdited {
+	'@type': 'messageForumTopicEdited';
+	/**
+If non-empty, the new name of the topic.
+*/
+	name: string;
+	/**
+True, if icon's custom_emoji_id is changed.
+*/
+	edit_icon_custom_emoji_id?: boolean;
+	/**
+New unique identifier of the custom emoji shown on the topic icon; 0 if none. Must be ignored if
+edit_icon_custom_emoji_id is false.
+*/
+	icon_custom_emoji_id: string;
+}
+
+/**
+A forum topic has been closed or opened.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageForumTopicIsClosedToggled {
+	'@type': 'messageForumTopicIsClosedToggled';
+	/**
+True if the topic was closed or reopened.
+*/
+	is_closed?: boolean;
+}
+
+/**
 A non-standard action has happened in the chat.
 Subtype of {@link MessageContent}.
 */
@@ -7947,7 +8160,7 @@ Subtype of {@link MessageContent}.
 export interface MessagePaymentSuccessful {
 	'@type': 'messagePaymentSuccessful';
 	/**
-Identifier of the chat, containing the corresponding invoice message; 0 if unknown.
+Identifier of the chat, containing the corresponding invoice message.
 */
 	invoice_chat_id: number;
 	/**
@@ -8701,7 +8914,7 @@ Duration of the voice note, in seconds.
 */
 	duration: number;
 	/**
-Waveform representation of the voice note, in 5-bit format.
+Waveform representation of the voice note in 5-bit format.
 */
 	waveform: string;
 	/**
@@ -11691,7 +11904,7 @@ New chat title.
 }
 
 /**
-The chat username was changed.
+The chat editable username was changed.
 Subtype of {@link ChatEventAction}.
 */
 export interface ChatEventUsernameChanged {
@@ -11704,6 +11917,22 @@ Previous chat username.
 New chat username.
 */
 	new_username: string;
+}
+
+/**
+The chat active usernames were changed.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventActiveUsernamesChanged {
+	'@type': 'chatEventActiveUsernamesChanged';
+	/**
+Previous list of active usernames.
+*/
+	old_usernames: string[];
+	/**
+New list of active usernames.
+*/
+	new_usernames: string[];
 }
 
 /**
@@ -11863,6 +12092,86 @@ New value of volume_level; 1-20000 in hundreds of percents.
 }
 
 /**
+The is_forum setting of a channel was toggled.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventIsForumToggled {
+	'@type': 'chatEventIsForumToggled';
+	/**
+New value of is_forum.
+*/
+	is_forum?: boolean;
+}
+
+/**
+A new forum topic was created.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventForumTopicCreated {
+	'@type': 'chatEventForumTopicCreated';
+	/**
+Information about the topic.
+*/
+	topic_info: ForumTopicInfo;
+}
+
+/**
+A forum topic was edited.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventForumTopicEdited {
+	'@type': 'chatEventForumTopicEdited';
+	/**
+Old information about the topic.
+*/
+	old_topic_info: ForumTopicInfo;
+	/**
+New information about the topic.
+*/
+	new_topic_info: ForumTopicInfo;
+}
+
+/**
+A forum topic was closed or reopened.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventForumTopicToggleIsClosed {
+	'@type': 'chatEventForumTopicToggleIsClosed';
+	/**
+New information about the topic.
+*/
+	topic_info: ForumTopicInfo;
+}
+
+/**
+A forum topic was deleted.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventForumTopicDeleted {
+	'@type': 'chatEventForumTopicDeleted';
+	/**
+Information about the topic.
+*/
+	topic_info: ForumTopicInfo;
+}
+
+/**
+A pinned forum topic was changed.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventForumTopicPinned {
+	'@type': 'chatEventForumTopicPinned';
+	/**
+Information about the old pinned topic; may be null.
+*/
+	old_topic_info: ForumTopicInfo;
+	/**
+Information about the new pinned topic; may be null.
+*/
+	new_topic_info: ForumTopicInfo;
+}
+
+/**
 Represents a chat event.
 */
 export interface ChatEvent {
@@ -11949,6 +12258,10 @@ True, if changes to invite links need to be returned.
 True, if video chat actions need to be returned.
 */
 	video_chat_changes?: boolean;
+	/**
+True, if forum-related actions need to be returned.
+*/
+	forum_changes?: boolean;
 }
 
 /**
@@ -12299,6 +12612,15 @@ Subtype of {@link PremiumFeature}.
 */
 export interface PremiumFeatureAnimatedProfilePhoto {
 	'@type': 'premiumFeatureAnimatedProfilePhoto';
+
+}
+
+/**
+The ability to set a custom emoji as a forum topic icon.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureForumTopicIcon {
+	'@type': 'premiumFeatureForumTopicIcon';
 
 }
 
@@ -14948,6 +15270,10 @@ If found, identifier of the chat to which the message belongs, 0 otherwise.
 */
 	chat_id: number;
 	/**
+If found, identifier of the message thread in which to open the message, or which to open in case of a missing message.
+*/
+	message_thread_id: number;
+	/**
 If found, the linked message; may be null.
 */
 	message: Message;
@@ -14960,10 +15286,6 @@ can be in the message content or in its web page preview.
 True, if the whole media album to which the message belongs is linked.
 */
 	for_album?: boolean;
-	/**
-True, if the message is linked as a channel post comment or from a message thread.
-*/
-	for_comment?: boolean;
 }
 
 /**
@@ -16953,6 +17275,22 @@ New number of online members in the chat, or 0 if unknown.
 }
 
 /**
+Basic information about a topic in a forum chat was changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateForumTopicInfo {
+	'@type': 'updateForumTopicInfo';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New information about the topic.
+*/
+	info: ForumTopicInfo;
+}
+
+/**
 Notification settings for some type of chats were updated.
 Subtype of {@link Update}.
 */
@@ -18647,6 +18985,9 @@ export type MessageContent =
 	| MessageScreenshotTaken
 	| MessageChatSetTheme
 	| MessageChatSetTtl
+	| MessageForumTopicCreated
+	| MessageForumTopicEdited
+	| MessageForumTopicIsClosedToggled
 	| MessageCustomServiceAction
 	| MessageGameScore
 	| MessagePaymentSuccessful
@@ -18851,6 +19192,7 @@ export type ChatEventAction =
 	| ChatEventStickerSetChanged
 	| ChatEventTitleChanged
 	| ChatEventUsernameChanged
+	| ChatEventActiveUsernamesChanged
 	| ChatEventHasProtectedContentToggled
 	| ChatEventInvitesToggled
 	| ChatEventIsAllHistoryAvailableToggled
@@ -18862,7 +19204,13 @@ export type ChatEventAction =
 	| ChatEventVideoChatEnded
 	| ChatEventVideoChatMuteNewParticipantsToggled
 	| ChatEventVideoChatParticipantIsMutedToggled
-	| ChatEventVideoChatParticipantVolumeLevelChanged;
+	| ChatEventVideoChatParticipantVolumeLevelChanged
+	| ChatEventIsForumToggled
+	| ChatEventForumTopicCreated
+	| ChatEventForumTopicEdited
+	| ChatEventForumTopicToggleIsClosed
+	| ChatEventForumTopicDeleted
+	| ChatEventForumTopicPinned;
 
 export type LanguagePackStringValue =
 	| LanguagePackStringValueOrdinary
@@ -18894,6 +19242,7 @@ export type PremiumFeature =
 	| PremiumFeatureProfileBadge
 	| PremiumFeatureEmojiStatus
 	| PremiumFeatureAnimatedProfilePhoto
+	| PremiumFeatureForumTopicIcon
 	| PremiumFeatureAppIcons;
 
 export type PremiumSource =
@@ -19242,6 +19591,7 @@ export type Update =
 	| UpdateChatIsMarkedAsUnread
 	| UpdateChatFilters
 	| UpdateChatOnlineMemberCount
+	| UpdateForumTopicInfo
 	| UpdateScopeNotificationSettings
 	| UpdateNotification
 	| UpdateNotificationGroup
@@ -20478,7 +20828,7 @@ Pass true to delete chat history for all users.
 
 /**
 Deletes a chat along with all messages in the corresponding chat for all chat members. For group chats this will release
-the username and remove all members. Use the field chat.can_be_deleted_for_all_users to find whether the method can be
+the usernames and remove all members. Use the field chat.can_be_deleted_for_all_users to find whether the method can be
 applied to the chat.
 Request type for {@link Tdjson#deleteChat}.
 */
@@ -20494,7 +20844,8 @@ Chat identifier.
 Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of
 decreasing message_id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
 instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit.
+TDLib and can be smaller than the specified limit. A combination of query, sender_id, filter and message_thread_id
+search criteria is expected to be supported, only if it is required for Telegram official application implementation.
 Request type for {@link Tdjson#searchChatMessages}.
 */
 export interface SearchChatMessages {
@@ -20852,12 +21203,11 @@ the number of returned messages is chosen by TDLib and can be smaller than the s
 }
 
 /**
-Returns sponsored message to be shown in a chat; for channel chats only. Returns a 404 error if there is no sponsored
-message in the chat.
-Request type for {@link Tdjson#getChatSponsoredMessage}.
+Returns sponsored messages to be shown in a chat; for channel chats only.
+Request type for {@link Tdjson#getChatSponsoredMessages}.
 */
-export interface GetChatSponsoredMessage {
-	'@type': 'getChatSponsoredMessage';
+export interface GetChatSponsoredMessages {
+	'@type': 'getChatSponsoredMessages';
 	/**
 Identifier of the chat.
 */
@@ -20923,9 +21273,9 @@ Pass true to create a link for the whole media album.
 */
 	for_album?: boolean;
 	/**
-Pass true to create a link to the message as a channel post comment, or from a message thread.
+Pass true to create a link to the message as a channel post comment, in a message thread, or a forum topic.
 */
-	for_comment?: boolean;
+	in_message_thread?: boolean;
 }
 
 /**
@@ -20983,8 +21333,8 @@ A two-letter ISO 639-1 language code of the language to which the message is tra
 }
 
 /**
-Recognizes speech in a voice note message. The message must be successfully sent and must not be scheduled. May return
-an error with a message "MSG_VOICE_TOO_LONG" if the voice note is too long to be recognized.
+Recognizes speech in a video note or a voice note message. The message must be successfully sent and must not be
+scheduled. May return an error with a message "MSG_VOICE_TOO_LONG" if media duration is too big to be recognized.
 Request type for {@link Tdjson#recognizeSpeech}.
 */
 export interface RecognizeSpeech {
@@ -21000,7 +21350,7 @@ Identifier of the message.
 }
 
 /**
-Rates recognized speech in a voice note message.
+Rates recognized speech in a video note or a voice note message.
 Request type for {@link Tdjson#rateSpeechRecognition}.
 */
 export interface RateSpeechRecognition {
@@ -21184,6 +21534,10 @@ export interface ForwardMessages {
 Identifier of the chat to which to forward messages.
 */
 	chat_id: number;
+	/**
+If not 0, a message thread identifier in which the message will be sent; for forum threads only.
+*/
+	message_thread_id: number;
 	/**
 Identifier of the chat from which to forward messages.
 */
@@ -21594,6 +21948,101 @@ The new message scheduling state; pass null to send the message immediately.
 }
 
 /**
+Returns list of custom emojis, which can be used as forum topic icon by all users.
+Request type for {@link Tdjson#getForumTopicDefaultIcons}.
+*/
+export interface GetForumTopicDefaultIcons {
+	'@type': 'getForumTopicDefaultIcons';
+
+}
+
+/**
+Creates a topic in a forum supergroup chat; requires can_manage_topics rights in the supergroup.
+Request type for {@link Tdjson#createForumTopic}.
+*/
+export interface CreateForumTopic {
+	'@type': 'createForumTopic';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Name of the topic; 1-128 characters.
+*/
+	name: string;
+	/**
+Icon of the topic. Icon color must be one of 0x6FB9F0, 0xFFD67E, 0xCB86DB, 0x8EEE98, 0xFF93B2, or 0xFB6F5F. Telegram
+Premium users can use any custom emoji as topic icon, other users can use only a custom emoji returned by
+getForumTopicDefaultIcons.
+*/
+	icon: ForumTopicIcon;
+}
+
+/**
+Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics administrator rights in the
+supergroup unless the user is creator of the topic.
+Request type for {@link Tdjson#editForumTopic}.
+*/
+export interface EditForumTopic {
+	'@type': 'editForumTopic';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Message thread identifier of the forum topic.
+*/
+	message_thread_id: number;
+	/**
+New name of the topic; 1-128 characters.
+*/
+	name: string;
+	/**
+Identifier of the new custom emoji for topic icon. Telegram Premium users can use any custom emoji, other users can use
+only a custom emoji returned by getForumTopicDefaultIcons.
+*/
+	icon_custom_emoji_id: string;
+}
+
+/**
+Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics administrator rights in the
+supergroup unless the user is creator of the topic.
+Request type for {@link Tdjson#toggleForumTopicIsClosed}.
+*/
+export interface ToggleForumTopicIsClosed {
+	'@type': 'toggleForumTopicIsClosed';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Message thread identifier of the forum topic.
+*/
+	message_thread_id: number;
+	/**
+Pass true to close the topic; pass false to reopen it.
+*/
+	is_closed?: boolean;
+}
+
+/**
+Deletes all messages in a forum topic; requires can_delete_messages administrator rights in the supergroup unless the
+user is creator of the topic, the topic has no messages from other users and has at most 11 messages.
+Request type for {@link Tdjson#deleteForumTopic}.
+*/
+export interface DeleteForumTopic {
+	'@type': 'deleteForumTopic';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Message thread identifier of the forum topic.
+*/
+	message_thread_id: number;
+}
+
+/**
 Returns information about a emoji reaction. Returns a 404 error if the reaction is not found.
 Request type for {@link Tdjson#getEmojiReaction}.
 */
@@ -21735,8 +22184,8 @@ New type of the default reaction.
 }
 
 /**
-Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses)
-contained in the text. Can be called synchronously.
+Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses) found in
+the text. Can be called synchronously.
 Request type for {@link Tdjson#getTextEntities}.
 */
 export interface GetTextEntities {
@@ -21749,7 +22198,7 @@ The text in which to look for entites.
 
 /**
 Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName
-entities contained in the text. Can be called synchronously.
+entities from a marked-up text. Can be called synchronously.
 Request type for {@link Tdjson#parseTextEntities}.
 */
 export interface ParseTextEntities {
@@ -22162,6 +22611,10 @@ Short name of the application; 0-64 English letters, digits, and underscores.
 */
 	application_name: string;
 	/**
+If not 0, a message thread identifier in which the message will be sent.
+*/
+	message_thread_id: number;
+	/**
 Identifier of the replied message for the message sent by the Web App; 0 if none.
 */
 	reply_to_message_id: number;
@@ -22560,7 +23013,23 @@ Chat identifier.
 }
 
 /**
-Marks all reactions in a chat as read.
+Marks all mentions in a forum topic as read.
+Request type for {@link Tdjson#readAllMessageThreadMentions}.
+*/
+export interface ReadAllMessageThreadMentions {
+	'@type': 'readAllMessageThreadMentions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message thread identifier in which mentions are marked as read.
+*/
+	message_thread_id: number;
+}
+
+/**
+Marks all reactions in a chat or a forum topic as read.
 Request type for {@link Tdjson#readAllChatReactions}.
 */
 export interface ReadAllChatReactions {
@@ -22569,6 +23038,22 @@ export interface ReadAllChatReactions {
 Chat identifier.
 */
 	chat_id: number;
+}
+
+/**
+Marks all reactions in a forum topic as read.
+Request type for {@link Tdjson#readAllMessageThreadReactions}.
+*/
+export interface ReadAllMessageThreadReactions {
+	'@type': 'readAllMessageThreadReactions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message thread identifier in which reactions are marked as read.
+*/
+	message_thread_id: number;
 }
 
 /**
@@ -23156,6 +23641,22 @@ Identifier of the chat.
 }
 
 /**
+Removes all pinned messages from a forum topic; requires can_pin_messages rights in the supergroup.
+Request type for {@link Tdjson#unpinAllMessageThreadMessages}.
+*/
+export interface UnpinAllMessageThreadMessages {
+	'@type': 'unpinAllMessageThreadMessages';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Message thread identifier in which messages will be unpinned.
+*/
+	message_thread_id: number;
+}
+
+/**
 Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method. May return
 an error with a message "INVITE_REQUEST_SENT" if only a join request was created.
 Request type for {@link Tdjson#joinChat}.
@@ -23318,7 +23819,7 @@ Member identifier.
 }
 
 /**
-Searches for a specified query in the first name, last name and username of the members of a specified chat. Requires
+Searches for a specified query in the first name, last name and usernames of the members of a specified chat. Requires
 administrator rights in channels.
 Request type for {@link Tdjson#searchChatMembers}.
 */
@@ -25658,15 +26159,45 @@ The new value of the user bio; 0-GetOption("bio_length_max") characters without 
 }
 
 /**
-Changes the username of the current user.
+Changes the editable username of the current user.
 Request type for {@link Tdjson#setUsername}.
 */
 export interface SetUsername {
 	'@type': 'setUsername';
 	/**
-The new value of the username. Use an empty string to remove the username.
+The new value of the username. Use an empty string to remove the username. The username can't be completely removed if
+there is another active or disabled username.
 */
 	username: string;
+}
+
+/**
+Changes active state for a username of the current user. The editable username can't be disabled. May return an error
+with a message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum number of active usernames has been reached.
+Request type for {@link Tdjson#toggleUsernameIsActive}.
+*/
+export interface ToggleUsernameIsActive {
+	'@type': 'toggleUsernameIsActive';
+	/**
+The username to change.
+*/
+	username: string;
+	/**
+Pass true to activate the username; pass false to disable it.
+*/
+	is_active?: boolean;
+}
+
+/**
+Changes order of active usernames of the current user.
+Request type for {@link Tdjson#reorderActiveUsernames}.
+*/
+export interface ReorderActiveUsernames {
+	'@type': 'reorderActiveUsernames';
+	/**
+The new order of active usernames. All currently active usernames must be specified.
+*/
+	usernames: string[];
 }
 
 /**
@@ -25947,7 +26478,7 @@ export interface DisconnectAllWebsites {
 }
 
 /**
-Changes the username of a supergroup or channel, requires owner privileges in the supergroup or channel.
+Changes the editable username of a supergroup or channel, requires owner privileges in the supergroup or channel.
 Request type for {@link Tdjson#setSupergroupUsername}.
 */
 export interface SetSupergroupUsername {
@@ -25957,9 +26488,61 @@ Identifier of the supergroup or channel.
 */
 	supergroup_id: number;
 	/**
-New value of the username. Use an empty string to remove the username.
+New value of the username. Use an empty string to remove the username. The username can't be completely removed if there
+is another active or disabled username.
 */
 	username: string;
+}
+
+/**
+Changes active state for a username of a supergroup or channel, requires owner privileges in the supergroup or channel.
+The editable username can't be disabled. May return an error with a message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum
+number of active usernames has been reached.
+Request type for {@link Tdjson#toggleSupergroupUsernameIsActive}.
+*/
+export interface ToggleSupergroupUsernameIsActive {
+	'@type': 'toggleSupergroupUsernameIsActive';
+	/**
+Identifier of the supergroup or channel.
+*/
+	supergroup_id: number;
+	/**
+The username to change.
+*/
+	username: string;
+	/**
+Pass true to activate the username; pass false to disable it.
+*/
+	is_active?: boolean;
+}
+
+/**
+Disables all active non-editable usernames of a supergroup or channel, requires owner privileges in the supergroup or
+channel.
+Request type for {@link Tdjson#disableAllSupergroupUsernames}.
+*/
+export interface DisableAllSupergroupUsernames {
+	'@type': 'disableAllSupergroupUsernames';
+	/**
+Identifier of the supergroup or channel.
+*/
+	supergroup_id: number;
+}
+
+/**
+Changes order of active usernames of a supergroup or channel, requires owner privileges in the supergroup or channel.
+Request type for {@link Tdjson#reorderSupergroupActiveUsernames}.
+*/
+export interface ReorderSupergroupActiveUsernames {
+	'@type': 'reorderSupergroupActiveUsernames';
+	/**
+Identifier of the supergroup or channel.
+*/
+	supergroup_id: number;
+	/**
+The new order of active usernames. All currently active usernames must be specified.
+*/
+	usernames: string[];
 }
 
 /**
@@ -26043,6 +26626,23 @@ The identifier of the supergroup.
 The new value of is_all_history_available.
 */
 	is_all_history_available?: boolean;
+}
+
+/**
+Toggles whether the supergroup is a forum; requires owner privileges in the supergroup.
+Request type for {@link Tdjson#toggleSupergroupIsForum}.
+*/
+export interface ToggleSupergroupIsForum {
+	'@type': 'toggleSupergroupIsForum';
+	/**
+Identifier of the supergroup.
+*/
+	supergroup_id: number;
+	/**
+New value of is_forum. A supergroup can be converted to a forum, only if it has at least
+GetOption("forum_member_count_min") members.
+*/
+	is_forum?: boolean;
 }
 
 /**
@@ -28173,7 +28773,7 @@ export type Request =
 	| GetChatMessagePosition
 	| GetChatScheduledMessages
 	| GetMessagePublicForwards
-	| GetChatSponsoredMessage
+	| GetChatSponsoredMessages
 	| RemoveNotification
 	| RemoveNotificationGroup
 	| GetMessageLink
@@ -28206,6 +28806,11 @@ export type Request =
 	| EditInlineMessageCaption
 	| EditInlineMessageReplyMarkup
 	| EditMessageSchedulingState
+	| GetForumTopicDefaultIcons
+	| CreateForumTopic
+	| EditForumTopic
+	| ToggleForumTopicIsClosed
+	| DeleteForumTopic
 	| GetEmojiReaction
 	| GetCustomEmojiReactionAnimations
 	| GetMessageAvailableReactions
@@ -28257,7 +28862,9 @@ export type Request =
 	| GetExternalLinkInfo
 	| GetExternalLink
 	| ReadAllChatMentions
+	| ReadAllMessageThreadMentions
 	| ReadAllChatReactions
+	| ReadAllMessageThreadReactions
 	| CreatePrivateChat
 	| CreateBasicGroupChat
 	| CreateSupergroupChat
@@ -28294,6 +28901,7 @@ export type Request =
 	| PinChatMessage
 	| UnpinChatMessage
 	| UnpinAllChatMessages
+	| UnpinAllMessageThreadMessages
 	| JoinChat
 	| LeaveChat
 	| AddChatMember
@@ -28447,6 +29055,8 @@ export type Request =
 	| SetName
 	| SetBio
 	| SetUsername
+	| ToggleUsernameIsActive
+	| ReorderActiveUsernames
 	| SetEmojiStatus
 	| SetLocation
 	| ChangePhoneNumber
@@ -28469,11 +29079,15 @@ export type Request =
 	| DisconnectWebsite
 	| DisconnectAllWebsites
 	| SetSupergroupUsername
+	| ToggleSupergroupUsernameIsActive
+	| DisableAllSupergroupUsernames
+	| ReorderSupergroupActiveUsernames
 	| SetSupergroupStickerSet
 	| ToggleSupergroupSignMessages
 	| ToggleSupergroupJoinToSendMessages
 	| ToggleSupergroupJoinByRequest
 	| ToggleSupergroupIsAllHistoryAvailable
+	| ToggleSupergroupIsForum
 	| ToggleSupergroupIsBroadcastGroup
 	| ReportSupergroupSpam
 	| GetSupergroupMembers
@@ -29431,7 +30045,7 @@ find whether and how the method can be applied to the chat.
 
 	/**
 Deletes a chat along with all messages in the corresponding chat for all chat members. For group chats this will release
-the username and remove all members. Use the field chat.can_be_deleted_for_all_users to find whether the method can be
+the usernames and remove all members. Use the field chat.can_be_deleted_for_all_users to find whether the method can be
 applied to the chat.
 */
 	async deleteChat(options: Omit<DeleteChat, '@type'>): Promise<Ok> {
@@ -29445,7 +30059,8 @@ applied to the chat.
 Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of
 decreasing message_id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
 instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit.
+TDLib and can be smaller than the specified limit. A combination of query, sender_id, filter and message_thread_id
+search criteria is expected to be supported, only if it is required for Telegram official application implementation.
 */
 	async searchChatMessages(options: Omit<SearchChatMessages, '@type'>): Promise<Messages> {
 		return this._request({
@@ -29608,13 +30223,12 @@ returned messages is chosen by TDLib.
 	}
 
 	/**
-Returns sponsored message to be shown in a chat; for channel chats only. Returns a 404 error if there is no sponsored
-message in the chat.
+Returns sponsored messages to be shown in a chat; for channel chats only.
 */
-	async getChatSponsoredMessage(options: Omit<GetChatSponsoredMessage, '@type'>): Promise<SponsoredMessage> {
+	async getChatSponsoredMessages(options: Omit<GetChatSponsoredMessages, '@type'>): Promise<SponsoredMessages> {
 		return this._request({
 			...options,
-			'@type': 'getChatSponsoredMessage',
+			'@type': 'getChatSponsoredMessages',
 		});
 	}
 
@@ -29683,8 +30297,8 @@ Translates a text to the given language. Returns a 404 error if the translation 
 	}
 
 	/**
-Recognizes speech in a voice note message. The message must be successfully sent and must not be scheduled. May return
-an error with a message "MSG_VOICE_TOO_LONG" if the voice note is too long to be recognized.
+Recognizes speech in a video note or a voice note message. The message must be successfully sent and must not be
+scheduled. May return an error with a message "MSG_VOICE_TOO_LONG" if media duration is too big to be recognized.
 */
 	async recognizeSpeech(options: Omit<RecognizeSpeech, '@type'>): Promise<Ok> {
 		return this._request({
@@ -29694,7 +30308,7 @@ an error with a message "MSG_VOICE_TOO_LONG" if the voice note is too long to be
 	}
 
 	/**
-Rates recognized speech in a voice note message.
+Rates recognized speech in a video note or a voice note message.
 */
 	async rateSpeechRecognition(options: Omit<RateSpeechRecognition, '@type'>): Promise<Ok> {
 		return this._request({
@@ -29964,6 +30578,58 @@ together with the message will be also changed.
 	}
 
 	/**
+Returns list of custom emojis, which can be used as forum topic icon by all users.
+*/
+	async getForumTopicDefaultIcons(): Promise<Stickers> {
+		return this._request({
+			'@type': 'getForumTopicDefaultIcons',
+		});
+	}
+
+	/**
+Creates a topic in a forum supergroup chat; requires can_manage_topics rights in the supergroup.
+*/
+	async createForumTopic(options: Omit<CreateForumTopic, '@type'>): Promise<ForumTopicInfo> {
+		return this._request({
+			...options,
+			'@type': 'createForumTopic',
+		});
+	}
+
+	/**
+Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics administrator rights in the
+supergroup unless the user is creator of the topic.
+*/
+	async editForumTopic(options: Omit<EditForumTopic, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editForumTopic',
+		});
+	}
+
+	/**
+Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics administrator rights in the
+supergroup unless the user is creator of the topic.
+*/
+	async toggleForumTopicIsClosed(options: Omit<ToggleForumTopicIsClosed, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleForumTopicIsClosed',
+		});
+	}
+
+	/**
+Deletes all messages in a forum topic; requires can_delete_messages administrator rights in the supergroup unless the
+user is creator of the topic, the topic has no messages from other users and has at most 11 messages.
+*/
+	async deleteForumTopic(options: Omit<DeleteForumTopic, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteForumTopic',
+		});
+	}
+
+	/**
 Returns information about a emoji reaction. Returns a 404 error if the reaction is not found.
 */
 	async getEmojiReaction(options: Omit<GetEmojiReaction, '@type'>): Promise<EmojiReaction> {
@@ -30044,8 +30710,8 @@ Changes type of default reaction for the current user.
 	}
 
 	/**
-Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses)
-contained in the text. Can be called synchronously.
+Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses) found in
+the text. Can be called synchronously.
 */
 	async getTextEntities(options: Omit<GetTextEntities, '@type'>): Promise<TextEntities> {
 		return this._request({
@@ -30056,7 +30722,7 @@ contained in the text. Can be called synchronously.
 
 	/**
 Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName
-entities contained in the text. Can be called synchronously.
+entities from a marked-up text. Can be called synchronously.
 */
 	async parseTextEntities(options: Omit<ParseTextEntities, '@type'>): Promise<FormattedText> {
 		return this._request({
@@ -30502,12 +31168,32 @@ Marks all mentions in a chat as read.
 	}
 
 	/**
-Marks all reactions in a chat as read.
+Marks all mentions in a forum topic as read.
+*/
+	async readAllMessageThreadMentions(options: Omit<ReadAllMessageThreadMentions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readAllMessageThreadMentions',
+		});
+	}
+
+	/**
+Marks all reactions in a chat or a forum topic as read.
 */
 	async readAllChatReactions(options: Omit<ReadAllChatReactions, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'readAllChatReactions',
+		});
+	}
+
+	/**
+Marks all reactions in a forum topic as read.
+*/
+	async readAllMessageThreadReactions(options: Omit<ReadAllMessageThreadReactions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readAllMessageThreadReactions',
 		});
 	}
 
@@ -30887,6 +31573,16 @@ the channel.
 	}
 
 	/**
+Removes all pinned messages from a forum topic; requires can_pin_messages rights in the supergroup.
+*/
+	async unpinAllMessageThreadMessages(options: Omit<UnpinAllMessageThreadMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'unpinAllMessageThreadMessages',
+		});
+	}
+
+	/**
 Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method. May return
 an error with a message "INVITE_REQUEST_SENT" if only a join request was created.
 */
@@ -30983,7 +31679,7 @@ Returns information about a single member of a chat.
 	}
 
 	/**
-Searches for a specified query in the first name, last name and username of the members of a specified chat. Requires
+Searches for a specified query in the first name, last name and usernames of the members of a specified chat. Requires
 administrator rights in channels.
 */
 	async searchChatMembers(options: Omit<SearchChatMembers, '@type'>): Promise<ChatMembers> {
@@ -32450,12 +33146,33 @@ Changes the bio of the current user.
 	}
 
 	/**
-Changes the username of the current user.
+Changes the editable username of the current user.
 */
 	async setUsername(options: Omit<SetUsername, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setUsername',
+		});
+	}
+
+	/**
+Changes active state for a username of the current user. The editable username can't be disabled. May return an error
+with a message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum number of active usernames has been reached.
+*/
+	async toggleUsernameIsActive(options: Omit<ToggleUsernameIsActive, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleUsernameIsActive',
+		});
+	}
+
+	/**
+Changes order of active usernames of the current user.
+*/
+	async reorderActiveUsernames(options: Omit<ReorderActiveUsernames, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reorderActiveUsernames',
 		});
 	}
 
@@ -32668,12 +33385,45 @@ Disconnects all websites from the current user's Telegram account.
 	}
 
 	/**
-Changes the username of a supergroup or channel, requires owner privileges in the supergroup or channel.
+Changes the editable username of a supergroup or channel, requires owner privileges in the supergroup or channel.
 */
 	async setSupergroupUsername(options: Omit<SetSupergroupUsername, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setSupergroupUsername',
+		});
+	}
+
+	/**
+Changes active state for a username of a supergroup or channel, requires owner privileges in the supergroup or channel.
+The editable username can't be disabled. May return an error with a message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum
+number of active usernames has been reached.
+*/
+	async toggleSupergroupUsernameIsActive(options: Omit<ToggleSupergroupUsernameIsActive, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleSupergroupUsernameIsActive',
+		});
+	}
+
+	/**
+Disables all active non-editable usernames of a supergroup or channel, requires owner privileges in the supergroup or
+channel.
+*/
+	async disableAllSupergroupUsernames(options: Omit<DisableAllSupergroupUsernames, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'disableAllSupergroupUsernames',
+		});
+	}
+
+	/**
+Changes order of active usernames of a supergroup or channel, requires owner privileges in the supergroup or channel.
+*/
+	async reorderSupergroupActiveUsernames(options: Omit<ReorderSupergroupActiveUsernames, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reorderSupergroupActiveUsernames',
 		});
 	}
 
@@ -32727,6 +33477,16 @@ right.
 		return this._request({
 			...options,
 			'@type': 'toggleSupergroupIsAllHistoryAvailable',
+		});
+	}
+
+	/**
+Toggles whether the supergroup is a forum; requires owner privileges in the supergroup.
+*/
+	async toggleSupergroupIsForum(options: Omit<ToggleSupergroupIsForum, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleSupergroupIsForum',
 		});
 	}
 
