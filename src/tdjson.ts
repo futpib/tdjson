@@ -91,6 +91,23 @@ Number of digits in the code, excluding the prefix.
 }
 
 /**
+An authentication code is delivered to https://fragment.com. The user must be logged in there via a wallet owning the
+phone number's NFT.
+Subtype of {@link AuthenticationCodeType}.
+*/
+export interface AuthenticationCodeTypeFragment {
+	'@type': 'authenticationCodeTypeFragment';
+	/**
+URL to open to receive the code.
+*/
+	url: string;
+	/**
+Length of the code.
+*/
+	length: number;
+}
+
+/**
 Information about the authentication code that was sent.
 */
 export interface AuthenticationCodeInfo {
@@ -1844,7 +1861,7 @@ export interface EmojiStatus {
 	'@type': 'emojiStatus';
 	/**
 Identifier of the custom emoji in stickerFormatTgs format. If the custom emoji belongs to the sticker set
-GetOption("themed_emoji_statuses_sticker_set_id"), then it's color must be changed to the color of the Telegram Premium
+getOption("themed_emoji_statuses_sticker_set_id"), then it's color must be changed to the color of the Telegram Premium
 badge.
 */
 	custom_emoji_id: string;
@@ -1940,6 +1957,10 @@ True, if the user is Telegram support account.
 */
 	is_support?: boolean;
 	/**
+True, if the user's phone number was bought on Fragment and isn't tied to a SIM card.
+*/
+	has_anonymous_phone_number?: boolean;
+	/**
 If non-empty, it contains a human-readable description of the reason why access to this user must be restricted.
 */
 	restriction_reason: string;
@@ -1953,7 +1974,7 @@ True, if many users reported this user as a fake account.
 	is_fake?: boolean;
 	/**
 If false, the user is inaccessible, and the only information known about the user is inside this class. Identifier of
-the user can't be passed to any method except GetUser.
+the user can't be passed to any method.
 */
 	have_access?: boolean;
 	/**
@@ -2223,7 +2244,7 @@ Identifier of a user that invited/promoted/banned this member in the chat; 0 if 
 */
 	inviter_user_id: number;
 	/**
-Point in time (Unix timestamp) when the user joined the chat.
+Point in time (Unix timestamp) when the user joined/was promoted/was banned in the chat.
 */
 	joined_chat_date: number;
 	/**
@@ -2854,6 +2875,11 @@ messages are always available, so this option affects only private non-forum sup
 value of this field is only available for chat administrators.
 */
 	is_all_history_available?: boolean;
+	/**
+True, if aggressive anti-spam checks are enabled in the supergroup. The value of this field is only available for chat
+administrators.
+*/
+	is_aggressive_anti_spam_enabled?: boolean;
 	/**
 Identifier of the supergroup sticker set; 0 if none.
 */
@@ -3679,12 +3705,12 @@ export interface NotificationSettingsScopeChannelChats {
 }
 
 /**
-Contains information about notification settings for a chat.
+Contains information about notification settings for a chat or a froum topic.
 */
 export interface ChatNotificationSettings {
 	'@type': 'chatNotificationSettings';
 	/**
-If true, mute_for is ignored and the value for the relevant type of chat is used instead.
+If true, mute_for is ignored and the value for the relevant type of chat or the forum chat is used instead.
 */
 	use_default_mute_for?: boolean;
 	/**
@@ -3692,7 +3718,7 @@ Time left before notifications will be unmuted, in seconds.
 */
 	mute_for: number;
 	/**
-If true, the value for the relevant type of chat is used instead of sound_id.
+If true, the value for the relevant type of chat or the forum chat is used instead of sound_id.
 */
 	use_default_sound?: boolean;
 	/**
@@ -3700,7 +3726,7 @@ Identifier of the notification sound to be played; 0 if sound is disabled.
 */
 	sound_id: string;
 	/**
-If true, show_preview is ignored and the value for the relevant type of chat is used instead.
+If true, show_preview is ignored and the value for the relevant type of chat or the forum chat is used instead.
 */
 	use_default_show_preview?: boolean;
 	/**
@@ -3708,7 +3734,8 @@ True, if message content must be displayed in notifications.
 */
 	show_preview?: boolean;
 	/**
-If true, disable_pinned_message_notifications is ignored and the value for the relevant type of chat is used instead.
+If true, disable_pinned_message_notifications is ignored and the value for the relevant type of chat or the forum chat
+is used instead.
 */
 	use_default_disable_pinned_message_notifications?: boolean;
 	/**
@@ -3716,7 +3743,8 @@ If true, notifications for incoming pinned messages will be created as for an or
 */
 	disable_pinned_message_notifications?: boolean;
 	/**
-If true, disable_mention_notifications is ignored and the value for the relevant type of chat is used instead.
+If true, disable_mention_notifications is ignored and the value for the relevant type of chat or the forum chat is used
+instead.
 */
 	use_default_disable_mention_notifications?: boolean;
 	/**
@@ -3845,19 +3873,19 @@ The chosen icon name for short filter representation. If non-empty, must be one 
 	icon_name: string;
 	/**
 The chat identifiers of pinned chats in the filtered chat list. There can be up to
-GetOption("chat_filter_chosen_chat_count_max") pinned and always included non-secret chats and the same number of secret
+getOption("chat_filter_chosen_chat_count_max") pinned and always included non-secret chats and the same number of secret
 chats, but the limit can be increased with Telegram Premium.
 */
 	pinned_chat_ids: number[];
 	/**
 The chat identifiers of always included chats in the filtered chat list. There can be up to
-GetOption("chat_filter_chosen_chat_count_max") pinned and always included non-secret chats and the same number of secret
+getOption("chat_filter_chosen_chat_count_max") pinned and always included non-secret chats and the same number of secret
 chats, but the limit can be increased with Telegram Premium.
 */
 	included_chat_ids: number[];
 	/**
 The chat identifiers of always excluded chats in the filtered chat list. There can be up to
-GetOption("chat_filter_chosen_chat_count_max") always excluded non-secret chats and the same number of secret chats, but
+getOption("chat_filter_chosen_chat_count_max") always excluded non-secret chats and the same number of secret chats, but
 the limit can be increased with Telegram Premium.
 */
 	excluded_chat_ids: number[];
@@ -4763,6 +4791,10 @@ Identifier of the creator of the topic.
 */
 	creator_id: MessageSender;
 	/**
+True, if the topic is the General topic list.
+*/
+	is_general?: boolean;
+	/**
 True, if the topic was created by the current user.
 */
 	is_outgoing?: boolean;
@@ -4770,6 +4802,10 @@ True, if the topic was created by the current user.
 True, if the topic is closed.
 */
 	is_closed?: boolean;
+	/**
+True, if the topic is hidden above the topic list and closed; for General topic only.
+*/
+	is_hidden?: boolean;
 }
 
 /**
@@ -4782,7 +4818,7 @@ Basic information about the topic.
 */
 	info: ForumTopicInfo;
 	/**
-Last message in the topic; may be null.
+Last message in the topic; may be null if unknown.
 */
 	last_message: Message;
 	/**
@@ -4817,6 +4853,33 @@ Notification settings for the topic.
 A draft of a message in the topic; may be null.
 */
 	draft_message: DraftMessage;
+}
+
+/**
+Describes a list of forum topics.
+*/
+export interface ForumTopics {
+	'@type': 'forumTopics';
+	/**
+Approximate total number of forum topics found.
+*/
+	total_count: number;
+	/**
+List of forum topics.
+*/
+	topics: ForumTopic[];
+	/**
+Offset date for the next getForumTopics request.
+*/
+	next_offset_date: number;
+	/**
+Offset message identifier for the next getForumTopics request.
+*/
+	next_offset_message_id: number;
+	/**
+Offset message thread identifier for the next getForumTopics request.
+*/
+	next_offset_message_thread_id: number;
 }
 
 /**
@@ -8070,6 +8133,10 @@ export interface MessageChatSetTtl {
 New message TTL.
 */
 	ttl: number;
+	/**
+If not 0, a user identifier, which default setting was automatically applied.
+*/
+	from_user_id: number;
 }
 
 /**
@@ -8116,9 +8183,21 @@ Subtype of {@link MessageContent}.
 export interface MessageForumTopicIsClosedToggled {
 	'@type': 'messageForumTopicIsClosedToggled';
 	/**
-True if the topic was closed or reopened.
+True, if the topic was closed, otherwise the topic was reopened.
 */
 	is_closed?: boolean;
+}
+
+/**
+A General forum topic has been hidden or unhidden.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageForumTopicIsHiddenToggled {
+	'@type': 'messageForumTopicIsHiddenToggled';
+	/**
+True, if the topic was hidden, otherwise the topic was unhidden.
+*/
+	is_hidden?: boolean;
 }
 
 /**
@@ -8657,7 +8736,7 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageText {
 	'@type': 'inputMessageText';
 	/**
-Formatted text to be sent; 1-GetOption("message_text_length_max") characters. Only Bold, Italic, Underline,
+Formatted text to be sent; 1-getOption("message_text_length_max") characters. Only Bold, Italic, Underline,
 Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified
 manually.
 */
@@ -8703,7 +8782,7 @@ Height of the animation; may be replaced by the server.
 */
 	height: number;
 	/**
-Animation caption; pass null to use an empty caption; 0-GetOption("message_caption_length_max") characters.
+Animation caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
 }
@@ -8735,7 +8814,7 @@ Performer of the audio; 0-64 characters, may be replaced by the server.
 */
 	performer: string;
 	/**
-Audio caption; pass null to use an empty caption; 0-GetOption("message_caption_length_max") characters.
+Audio caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
 }
@@ -8760,7 +8839,7 @@ files sent to secret chats.
 */
 	disable_content_type_detection?: boolean;
 	/**
-Document caption; pass null to use an empty caption; 0-GetOption("message_caption_length_max") characters.
+Document caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
 }
@@ -8794,7 +8873,7 @@ Photo height.
 */
 	height: number;
 	/**
-Photo caption; pass null to use an empty caption; 0-GetOption("message_caption_length_max") characters.
+Photo caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
 	/**
@@ -8866,7 +8945,7 @@ True, if the video is supposed to be streamed.
 */
 	supports_streaming?: boolean;
 	/**
-Video caption; pass null to use an empty caption; 0-GetOption("message_caption_length_max") characters.
+Video caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
 	/**
@@ -8918,7 +8997,7 @@ Waveform representation of the voice note in 5-bit format.
 */
 	waveform: string;
 	/**
-Voice note caption; pass null to use an empty caption; 0-GetOption("message_caption_length_max") characters.
+Voice note caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
 }
@@ -10143,7 +10222,7 @@ Video channel endpoint identifier.
 */
 	endpoint_id: string;
 	/**
-True if the video is paused. This flag needs to be ignored, if new video frames are received.
+True, if the video is paused. This flag needs to be ignored, if new video frames are received.
 */
 	is_paused?: boolean;
 }
@@ -10539,7 +10618,7 @@ The animated sticker with the right reel.
 }
 
 /**
-Represents the result of an ImportContacts request.
+Represents the result of an importContacts request.
 */
 export interface ImportedContacts {
 	'@type': 'importedContacts';
@@ -10696,6 +10775,21 @@ export interface HttpUrl {
 The URL.
 */
 	url: string;
+}
+
+/**
+Contains an HTTPS URL, which can be used to get information about a user.
+*/
+export interface UserLink {
+	'@type': 'userLink';
+	/**
+The URL.
+*/
+	url: string;
+	/**
+Left time for which the link is valid, in seconds; 0 if the link is a public username link.
+*/
+	expires_in: number;
 }
 
 /**
@@ -11603,6 +11697,10 @@ export interface ChatEventMessageDeleted {
 Deleted message.
 */
 	message: Message;
+	/**
+True, if the message deletion can be reported via reportSupergroupAntiSpamFalsePositive.
+*/
+	can_report_anti_spam_false_positive?: boolean;
 }
 
 /**
@@ -11972,6 +12070,18 @@ New value of is_all_history_available.
 }
 
 /**
+The is_aggressive_anti_spam_enabled setting of a supergroup was toggled.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventIsAggressiveAntiSpamEnabledToggled {
+	'@type': 'chatEventIsAggressiveAntiSpamEnabledToggled';
+	/**
+New value of is_aggressive_anti_spam_enabled.
+*/
+	is_aggressive_anti_spam_enabled?: boolean;
+}
+
+/**
 The sign_messages setting of a channel was toggled.
 Subtype of {@link ChatEventAction}.
 */
@@ -12137,6 +12247,18 @@ Subtype of {@link ChatEventAction}.
 */
 export interface ChatEventForumTopicToggleIsClosed {
 	'@type': 'chatEventForumTopicToggleIsClosed';
+	/**
+New information about the topic.
+*/
+	topic_info: ForumTopicInfo;
+}
+
+/**
+The General forum topic was hidden or unhidden.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventForumTopicToggleIsHidden {
+	'@type': 'chatEventForumTopicToggleIsHidden';
 	/**
 New information about the topic.
 */
@@ -13248,11 +13370,20 @@ export interface CheckChatUsernameResultUsernameOccupied {
 }
 
 /**
+The username can be purchased at fragment.com.
+Subtype of {@link CheckChatUsernameResult}.
+*/
+export interface CheckChatUsernameResultUsernamePurchasable {
+	'@type': 'checkChatUsernameResultUsernamePurchasable';
+
+}
+
+/**
 The user has too many chats with username, one of them must be made private first.
 Subtype of {@link CheckChatUsernameResult}.
 */
-export interface CheckChatUsernameResultPublicChatsTooMuch {
-	'@type': 'checkChatUsernameResultPublicChatsTooMuch';
+export interface CheckChatUsernameResultPublicChatsTooMany {
+	'@type': 'checkChatUsernameResultPublicChatsTooMany';
 
 }
 
@@ -14327,6 +14458,17 @@ Number of days of inactivity before the account will be flagged for deletion; 30
 }
 
 /**
+Contains default message Time To Live setting (self-destruct timer) for new chats.
+*/
+export interface MessageTtl {
+	'@type': 'messageTtl';
+	/**
+Message TTL setting, in seconds. If 0, then messages aren't deleted automatically.
+*/
+	ttl: number;
+}
+
+/**
 Represents the type of a session.
 Subtype of {@link SessionType}.
 */
@@ -14992,7 +15134,8 @@ export interface InternalLinkTypeLanguageSettings {
 }
 
 /**
-The link is a link to a Telegram message. Call getMessageLinkInfo with the given URL to process the link.
+The link is a link to a Telegram message or a forum topic. Call getMessageLinkInfo with the given URL to process the
+link.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeMessage {
@@ -15221,6 +15364,18 @@ Phone number of the user.
 }
 
 /**
+The link is a link to a user by a temporary token. Call searchUserByToken with the given token to process the link.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeUserToken {
+	'@type': 'internalLinkTypeUserToken';
+	/**
+The token.
+*/
+	token: string;
+}
+
+/**
 The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGroupCall with the
 given invite hash to process the link.
 Subtype of {@link InternalLinkType}.
@@ -15257,7 +15412,7 @@ True, if the link will work for non-members of the chat.
 }
 
 /**
-Contains information about a link to a message in a chat.
+Contains information about a link to a message or a forum topic in a chat.
 */
 export interface MessageLinkInfo {
 	'@type': 'messageLinkInfo';
@@ -15270,7 +15425,8 @@ If found, identifier of the chat to which the message belongs, 0 otherwise.
 */
 	chat_id: number;
 	/**
-If found, identifier of the message thread in which to open the message, or which to open in case of a missing message.
+If found, identifier of the message thread in which to open the message, or a forum topic to open if the message is
+missing.
 */
 	message_thread_id: number;
 	/**
@@ -16020,7 +16176,7 @@ True, if the user must be asked to update the application.
 }
 
 /**
-Describes the way the text needs to be parsed for TextEntities.
+Describes the way the text needs to be parsed for text entities.
 Subtype of {@link TextParseMode}.
 */
 export interface TextParseModeMarkdown {
@@ -18114,7 +18270,7 @@ The animated sticker to be played.
 }
 
 /**
-The parameters of animation search through GetOption("animation_search_bot_username") bot has changed.
+The parameters of animation search through getOption("animation_search_bot_username") bot has changed.
 Subtype of {@link Update}.
 */
 export interface UpdateAnimationSearchParameters {
@@ -18614,7 +18770,8 @@ export type AuthenticationCodeType =
 	| AuthenticationCodeTypeSms
 	| AuthenticationCodeTypeCall
 	| AuthenticationCodeTypeFlashCall
-	| AuthenticationCodeTypeMissedCall;
+	| AuthenticationCodeTypeMissedCall
+	| AuthenticationCodeTypeFragment;
 
 export type EmailAddressAuthentication =
 	| EmailAddressAuthenticationCode
@@ -18988,6 +19145,7 @@ export type MessageContent =
 	| MessageForumTopicCreated
 	| MessageForumTopicEdited
 	| MessageForumTopicIsClosedToggled
+	| MessageForumTopicIsHiddenToggled
 	| MessageCustomServiceAction
 	| MessageGameScore
 	| MessagePaymentSuccessful
@@ -19196,6 +19354,7 @@ export type ChatEventAction =
 	| ChatEventHasProtectedContentToggled
 	| ChatEventInvitesToggled
 	| ChatEventIsAllHistoryAvailableToggled
+	| ChatEventIsAggressiveAntiSpamEnabledToggled
 	| ChatEventSignMessagesToggled
 	| ChatEventInviteLinkEdited
 	| ChatEventInviteLinkRevoked
@@ -19209,6 +19368,7 @@ export type ChatEventAction =
 	| ChatEventForumTopicCreated
 	| ChatEventForumTopicEdited
 	| ChatEventForumTopicToggleIsClosed
+	| ChatEventForumTopicToggleIsHidden
 	| ChatEventForumTopicDeleted
 	| ChatEventForumTopicPinned;
 
@@ -19292,7 +19452,8 @@ export type CheckChatUsernameResult =
 	| CheckChatUsernameResultOk
 	| CheckChatUsernameResultUsernameInvalid
 	| CheckChatUsernameResultUsernameOccupied
-	| CheckChatUsernameResultPublicChatsTooMuch
+	| CheckChatUsernameResultUsernamePurchasable
+	| CheckChatUsernameResultPublicChatsTooMany
 	| CheckChatUsernameResultPublicGroupsUnavailable;
 
 export type CheckStickerSetNameResult =
@@ -19457,6 +19618,7 @@ export type InternalLinkType =
 	| InternalLinkTypeUnknownDeepLink
 	| InternalLinkTypeUnsupportedProxy
 	| InternalLinkTypeUserPhoneNumber
+	| InternalLinkTypeUserToken
 	| InternalLinkTypeVideoChat;
 
 export type FileType =
@@ -19963,7 +20125,7 @@ A link from a QR code. The link must be scanned by the in-app camera.
 
 /**
 Returns all updates needed to restore current TDLib state, i.e. all actual
-UpdateAuthorizationState/UpdateUser/UpdateNewChat and others. This is especially useful if TDLib is run in a separate
+updateAuthorizationState/updateUser/updateNewChat and others. This is especially useful if TDLib is run in a separate
 process. Can be called before initialization.
 Request type for {@link Tdjson#getCurrentState}.
 */
@@ -20335,8 +20497,8 @@ Identifier of the message to get.
 
 /**
 Returns information about a message that is replied by a given message. Also returns the pinned message, the game
-message, and the invoice message for messages of the types messagePinMessage, messageGameScore, and
-messagePaymentSuccessful respectively.
+message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
+messageGameScore, messagePaymentSuccessful, and topic messages without replied message respectively.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
 export interface GetRepliedMessage {
@@ -21517,8 +21679,8 @@ Identifier of the inline result.
 	result_id: string;
 	/**
 Pass true to hide the bot, via which the message is sent. Can be used only for bots
-GetOption("animation_search_bot_username"), GetOption("photo_search_bot_username"), and
-GetOption("venue_search_bot_username").
+getOption("animation_search_bot_username"), getOption("photo_search_bot_username"), and
+getOption("venue_search_bot_username").
 */
 	hide_via_bot?: boolean;
 }
@@ -21794,7 +21956,7 @@ The new message reply markup; pass null if none; for bots only.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New message content caption; 0-GetOption("message_caption_length_max") characters; pass null to remove caption.
+New message content caption; 0-getOption("message_caption_length_max") characters; pass null to remove caption.
 */
 	caption: FormattedText;
 }
@@ -21905,7 +22067,7 @@ The new message reply markup; pass null if none.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New message content caption; pass null to remove caption; 0-GetOption("message_caption_length_max") characters.
+New message content caption; pass null to remove caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
 }
@@ -21994,14 +22156,107 @@ Message thread identifier of the forum topic.
 */
 	message_thread_id: number;
 	/**
-New name of the topic; 1-128 characters.
+New name of the topic; 0-128 characters. If empty, the previous topic name is kept.
 */
 	name: string;
 	/**
-Identifier of the new custom emoji for topic icon. Telegram Premium users can use any custom emoji, other users can use
-only a custom emoji returned by getForumTopicDefaultIcons.
+Pass true to edit the icon of the topic. Icon of the General topic can't be edited.
+*/
+	edit_icon_custom_emoji?: boolean;
+	/**
+Identifier of the new custom emoji for topic icon; pass 0 to remove the custom emoji. Ignored if edit_icon_custom_emoji
+is false. Telegram Premium users can use any custom emoji, other users can use only a custom emoji returned by
+getForumTopicDefaultIcons.
 */
 	icon_custom_emoji_id: string;
+}
+
+/**
+Returns information about a forum topic.
+Request type for {@link Tdjson#getForumTopic}.
+*/
+export interface GetForumTopic {
+	'@type': 'getForumTopic';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Message thread identifier of the forum topic.
+*/
+	message_thread_id: number;
+}
+
+/**
+Returns an HTTPS link to a topic in a forum chat. This is an offline request.
+Request type for {@link Tdjson#getForumTopicLink}.
+*/
+export interface GetForumTopicLink {
+	'@type': 'getForumTopicLink';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Message thread identifier of the forum topic.
+*/
+	message_thread_id: number;
+}
+
+/**
+Returns found forum topics in a forum chat. This is a temporary method for getting information about topic list from the
+server.
+Request type for {@link Tdjson#getForumTopics}.
+*/
+export interface GetForumTopics {
+	'@type': 'getForumTopics';
+	/**
+Identifier of the forum chat.
+*/
+	chat_id: number;
+	/**
+Query to search for in the forum topic's name.
+*/
+	query: string;
+	/**
+The date starting from which the results need to be fetched. Use 0 or any date in the future to get results from the
+last topic.
+*/
+	offset_date: number;
+	/**
+The message identifier of the last message in the last found topic, or 0 for the first request.
+*/
+	offset_message_id: number;
+	/**
+The message thread identifier of the last found topic, or 0 for the first request.
+*/
+	offset_message_thread_id: number;
+	/**
+The maximum number of forum topics to be returned; up to 100. For optimal performance, the number of returned forum
+topics is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Changes the notification settings of a forum topic.
+Request type for {@link Tdjson#setForumTopicNotificationSettings}.
+*/
+export interface SetForumTopicNotificationSettings {
+	'@type': 'setForumTopicNotificationSettings';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message thread identifier of the forum topic.
+*/
+	message_thread_id: number;
+	/**
+New notification settings for the forum topic. If the topic is muted for more than 366 days, it is considered to be
+muted forever.
+*/
+	notification_settings: ChatNotificationSettings;
 }
 
 /**
@@ -22023,6 +22278,23 @@ Message thread identifier of the forum topic.
 Pass true to close the topic; pass false to reopen it.
 */
 	is_closed?: boolean;
+}
+
+/**
+Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics administrator rights in
+the supergroup.
+Request type for {@link Tdjson#toggleGeneralForumTopicIsHidden}.
+*/
+export interface ToggleGeneralForumTopicIsHidden {
+	'@type': 'toggleGeneralForumTopicIsHidden';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Pass true to hide and close the General topic; pass false to unhide it.
+*/
+	is_hidden?: boolean;
 }
 
 /**
@@ -22834,8 +23106,8 @@ User identifier.
 }
 
 /**
-Deletes the default reply markup from a chat. Must be called after a one-time keyboard or a ForceReply reply markup has
-been used. UpdateChatReplyMarkup will be sent if the reply markup is changed.
+Deletes the default reply markup from a chat. Must be called after a one-time keyboard or a replyMarkupForceReply reply
+markup has been used. An updateChatReplyMarkup update will be sent if the reply markup is changed.
 Request type for {@link Tdjson#deleteChatReplyMarkup}.
 */
 export interface DeleteChatReplyMarkup {
@@ -23133,6 +23405,11 @@ Identifiers of users to be added to the basic group.
 Title of the new basic group; 1-128 characters.
 */
 	title: string;
+	/**
+Message TTL value, in seconds; must be from 0 up to 365 * 86400 and be divisible by 86400. If 0, then messages aren't
+deleted automatically.
+*/
+	message_ttl: number;
 }
 
 /**
@@ -23159,6 +23436,11 @@ chat.
 Chat location if a location-based supergroup is being created; pass null to create an ordinary supergroup chat.
 */
 	location: ChatLocation;
+	/**
+Message TTL value, in seconds; must be from 0 up to 365 * 86400 and be divisible by 86400. If 0, then messages aren't
+deleted automatically.
+*/
+	message_ttl: number;
 	/**
 Pass true to create a supergroup for importing messages using importMessage.
 */
@@ -23233,7 +23515,7 @@ Chat filter identifier.
 
 /**
 Creates new chat filter. Returns information about the created chat filter. There can be up to
-GetOption("chat_filter_count_max") chat filters, but the limit can be increased with Telegram Premium.
+getOption("chat_filter_count_max") chat filters, but the limit can be increased with Telegram Premium.
 Request type for {@link Tdjson#createChatFilter}.
 */
 export interface CreateChatFilter {
@@ -23344,8 +23626,8 @@ New chat photo; pass null to delete the chat photo.
 }
 
 /**
-Changes the message TTL in a chat. Requires can_delete_messages administrator right in basic groups, supergroups and
-channels Message TTL can't be changed in a chat with the current user (Saved Messages) and the chat 777000 (Telegram).
+Changes the message TTL in a chat. Requires change_info administrator right in basic groups, supergroups and channels
+Message TTL can't be changed in a chat with the current user (Saved Messages) and the chat 777000 (Telegram).
 Request type for {@link Tdjson#setChatMessageTtl}.
 */
 export interface SetChatMessageTtl {
@@ -23355,7 +23637,8 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-New TTL value, in seconds; unless the chat is secret, it must be from 0 up to 365 * 86400 and be divisible by 86400.
+New TTL value, in seconds; unless the chat is secret, it must be from 0 up to 365 * 86400 and be divisible by 86400. If
+0, then messages aren't deleted automatically.
 */
 	ttl: number;
 }
@@ -23970,7 +24253,7 @@ export interface ResetAllNotificationSettings {
 
 /**
 Changes the pinned state of a chat. There can be up to
-GetOption("pinned_chat_count_max")/GetOption("pinned_archived_chat_count_max") pinned non-secret chats and the same
+getOption("pinned_chat_count_max")/getOption("pinned_archived_chat_count_max") pinned non-secret chats and the same
 number of secret chats in the main/archive chat list. The limit can be increased with Telegram Premium.
 Request type for {@link Tdjson#toggleChatIsPinned}.
 */
@@ -25082,7 +25365,7 @@ Group call identifier.
 */
 	group_call_id: number;
 	/**
-True if screen sharing is paused.
+True, if screen sharing is paused.
 */
 	is_paused?: boolean;
 }
@@ -26153,7 +26436,7 @@ Request type for {@link Tdjson#setBio}.
 export interface SetBio {
 	'@type': 'setBio';
 	/**
-The new value of the user bio; 0-GetOption("bio_length_max") characters without line feeds.
+The new value of the user bio; 0-getOption("bio_length_max") characters without line feeds.
 */
 	bio: string;
 }
@@ -26217,7 +26500,7 @@ Duration of the status, in seconds; pass 0 to keep the status active until it wi
 }
 
 /**
-Changes the location of the current user. Needs to be called if GetOption("is_location_visible") is true and location
+Changes the location of the current user. Needs to be called if getOption("is_location_visible") is true and location
 changes for more than 1 kilometer.
 Request type for {@link Tdjson#setLocation}.
 */
@@ -26266,6 +26549,27 @@ export interface CheckChangePhoneNumberCode {
 Authentication code to check.
 */
 	code: string;
+}
+
+/**
+Returns an HTTPS link, which can be used to get information about the current user.
+Request type for {@link Tdjson#getUserLink}.
+*/
+export interface GetUserLink {
+	'@type': 'getUserLink';
+
+}
+
+/**
+Searches a user by a token from the user's link.
+Request type for {@link Tdjson#searchUserByToken}.
+*/
+export interface SearchUserByToken {
+	'@type': 'searchUserByToken';
+	/**
+Token to search for.
+*/
+	token: string;
 }
 
 /**
@@ -26629,6 +26933,24 @@ The new value of is_all_history_available.
 }
 
 /**
+Toggles whether aggressive anti-spam checks are enabled in the supergroup; requires can_delete_messages administrator
+right. Can be called only if the supergroup has at least getOption("aggressive_anti_spam_supergroup_member_count_min")
+members.
+Request type for {@link Tdjson#toggleSupergroupIsAggressiveAntiSpamEnabled}.
+*/
+export interface ToggleSupergroupIsAggressiveAntiSpamEnabled {
+	'@type': 'toggleSupergroupIsAggressiveAntiSpamEnabled';
+	/**
+The identifier of the supergroup, which isn't a broadcast group.
+*/
+	supergroup_id: number;
+	/**
+The new value of is_aggressive_anti_spam_enabled.
+*/
+	is_aggressive_anti_spam_enabled?: boolean;
+}
+
+/**
 Toggles whether the supergroup is a forum; requires owner privileges in the supergroup.
 Request type for {@link Tdjson#toggleSupergroupIsForum}.
 */
@@ -26640,7 +26962,7 @@ Identifier of the supergroup.
 	supergroup_id: number;
 	/**
 New value of is_forum. A supergroup can be converted to a forum, only if it has at least
-GetOption("forum_member_count_min") members.
+getOption("forum_member_count_min") members.
 */
 	is_forum?: boolean;
 }
@@ -26671,6 +26993,23 @@ Supergroup identifier.
 Identifiers of messages to report.
 */
 	message_ids: number[];
+}
+
+/**
+Reports a false deletion of a message by aggressive anti-spam checks; requires administrator rights in the supergroup.
+Can be called only for messages from chatEventMessageDeleted with can_report_anti_spam_false_positive == true.
+Request type for {@link Tdjson#reportSupergroupAntiSpamFalsePositive}.
+*/
+export interface ReportSupergroupAntiSpamFalsePositive {
+	'@type': 'reportSupergroupAntiSpamFalsePositive';
+	/**
+Supergroup identifier.
+*/
+	supergroup_id: number;
+	/**
+Identifier of the erroneously deleted message.
+*/
+	message_id: number;
 }
 
 /**
@@ -26819,7 +27158,7 @@ Request type for {@link Tdjson#getPaymentReceipt}.
 export interface GetPaymentReceipt {
 	'@type': 'getPaymentReceipt';
 	/**
-Chat identifier of the PaymentSuccessful message.
+Chat identifier of the messagePaymentSuccessful message.
 */
 	chat_id: number;
 	/**
@@ -27240,6 +27579,28 @@ The 2-step verification password of the current user. If not specified, account 
 week.
 */
 	password: string;
+}
+
+/**
+Changes the default message Time To Live setting (self-destruct timer) for new chats.
+Request type for {@link Tdjson#setDefaultMessageTtl}.
+*/
+export interface SetDefaultMessageTtl {
+	'@type': 'setDefaultMessageTtl';
+	/**
+New message TTL; must be from 0 up to 365 * 86400 and be divisible by 86400. If 0, then messages aren't deleted
+automatically.
+*/
+	ttl: MessageTtl;
+}
+
+/**
+Returns default message Time To Live setting (self-destruct timer) for new chats.
+Request type for {@link Tdjson#getDefaultMessageTtl}.
+*/
+export interface GetDefaultMessageTtl {
+	'@type': 'getDefaultMessageTtl';
+
 }
 
 /**
@@ -28809,7 +29170,12 @@ export type Request =
 	| GetForumTopicDefaultIcons
 	| CreateForumTopic
 	| EditForumTopic
+	| GetForumTopic
+	| GetForumTopicLink
+	| GetForumTopics
+	| SetForumTopicNotificationSettings
 	| ToggleForumTopicIsClosed
+	| ToggleGeneralForumTopicIsHidden
 	| DeleteForumTopic
 	| GetEmojiReaction
 	| GetCustomEmojiReactionAnimations
@@ -29062,6 +29428,8 @@ export type Request =
 	| ChangePhoneNumber
 	| ResendChangePhoneNumberCode
 	| CheckChangePhoneNumberCode
+	| GetUserLink
+	| SearchUserByToken
 	| SetCommands
 	| DeleteCommands
 	| GetCommands
@@ -29087,9 +29455,11 @@ export type Request =
 	| ToggleSupergroupJoinToSendMessages
 	| ToggleSupergroupJoinByRequest
 	| ToggleSupergroupIsAllHistoryAvailable
+	| ToggleSupergroupIsAggressiveAntiSpamEnabled
 	| ToggleSupergroupIsForum
 	| ToggleSupergroupIsBroadcastGroup
 	| ReportSupergroupSpam
+	| ReportSupergroupAntiSpamFalsePositive
 	| GetSupergroupMembers
 	| CloseSecretChat
 	| GetChatEventLog
@@ -29128,6 +29498,8 @@ export type Request =
 	| SetAccountTtl
 	| GetAccountTtl
 	| DeleteAccount
+	| SetDefaultMessageTtl
+	| GetDefaultMessageTtl
 	| RemoveChatActionBar
 	| ReportChat
 	| ReportChatPhoto
@@ -29426,7 +29798,7 @@ Confirms QR code authentication on another device. Returns created session on su
 
 	/**
 Returns all updates needed to restore current TDLib state, i.e. all actual
-UpdateAuthorizationState/UpdateUser/UpdateNewChat and others. This is especially useful if TDLib is run in a separate
+updateAuthorizationState/updateUser/updateNewChat and others. This is especially useful if TDLib is run in a separate
 process. Can be called before initialization.
 */
 	async getCurrentState(): Promise<Updates> {
@@ -29718,8 +30090,8 @@ Returns information about a message, if it is available without sending network 
 
 	/**
 Returns information about a message that is replied by a given message. Also returns the pinned message, the game
-message, and the invoice message for messages of the types messagePinMessage, messageGameScore, and
-messagePaymentSuccessful respectively.
+message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
+messageGameScore, messagePaymentSuccessful, and topic messages without replied message respectively.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -30608,6 +30980,47 @@ supergroup unless the user is creator of the topic.
 	}
 
 	/**
+Returns information about a forum topic.
+*/
+	async getForumTopic(options: Omit<GetForumTopic, '@type'>): Promise<ForumTopic> {
+		return this._request({
+			...options,
+			'@type': 'getForumTopic',
+		});
+	}
+
+	/**
+Returns an HTTPS link to a topic in a forum chat. This is an offline request.
+*/
+	async getForumTopicLink(options: Omit<GetForumTopicLink, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getForumTopicLink',
+		});
+	}
+
+	/**
+Returns found forum topics in a forum chat. This is a temporary method for getting information about topic list from the
+server.
+*/
+	async getForumTopics(options: Omit<GetForumTopics, '@type'>): Promise<ForumTopics> {
+		return this._request({
+			...options,
+			'@type': 'getForumTopics',
+		});
+	}
+
+	/**
+Changes the notification settings of a forum topic.
+*/
+	async setForumTopicNotificationSettings(options: Omit<SetForumTopicNotificationSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setForumTopicNotificationSettings',
+		});
+	}
+
+	/**
 Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics administrator rights in the
 supergroup unless the user is creator of the topic.
 */
@@ -30615,6 +31028,17 @@ supergroup unless the user is creator of the topic.
 		return this._request({
 			...options,
 			'@type': 'toggleForumTopicIsClosed',
+		});
+	}
+
+	/**
+Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics administrator rights in
+the supergroup.
+*/
+	async toggleGeneralForumTopicIsHidden(options: Omit<ToggleGeneralForumTopicIsHidden, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleGeneralForumTopicIsHidden',
 		});
 	}
 
@@ -31047,8 +31471,8 @@ Returns game high scores and some part of the high score table in the range of t
 	}
 
 	/**
-Deletes the default reply markup from a chat. Must be called after a one-time keyboard or a ForceReply reply markup has
-been used. UpdateChatReplyMarkup will be sent if the reply markup is changed.
+Deletes the default reply markup from a chat. Must be called after a one-time keyboard or a replyMarkupForceReply reply
+markup has been used. An updateChatReplyMarkup update will be sent if the reply markup is changed.
 */
 	async deleteChatReplyMarkup(options: Omit<DeleteChatReplyMarkup, '@type'>): Promise<Ok> {
 		return this._request({
@@ -31312,7 +31736,7 @@ Returns information about a chat filter by its identifier.
 
 	/**
 Creates new chat filter. Returns information about the created chat filter. There can be up to
-GetOption("chat_filter_count_max") chat filters, but the limit can be increased with Telegram Premium.
+getOption("chat_filter_count_max") chat filters, but the limit can be increased with Telegram Premium.
 */
 	async createChatFilter(options: Omit<CreateChatFilter, '@type'>): Promise<ChatFilterInfo> {
 		return this._request({
@@ -31393,8 +31817,8 @@ administrator right.
 	}
 
 	/**
-Changes the message TTL in a chat. Requires can_delete_messages administrator right in basic groups, supergroups and
-channels Message TTL can't be changed in a chat with the current user (Saved Messages) and the chat 777000 (Telegram).
+Changes the message TTL in a chat. Requires change_info administrator right in basic groups, supergroups and channels
+Message TTL can't be changed in a chat with the current user (Saved Messages) and the chat 777000 (Telegram).
 */
 	async setChatMessageTtl(options: Omit<SetChatMessageTtl, '@type'>): Promise<Ok> {
 		return this._request({
@@ -31792,7 +32216,7 @@ shown.
 
 	/**
 Changes the pinned state of a chat. There can be up to
-GetOption("pinned_chat_count_max")/GetOption("pinned_archived_chat_count_max") pinned non-secret chats and the same
+getOption("pinned_chat_count_max")/getOption("pinned_archived_chat_count_max") pinned non-secret chats and the same
 number of secret chats in the main/archive chat list. The limit can be increased with Telegram Premium.
 */
 	async toggleChatIsPinned(options: Omit<ToggleChatIsPinned, '@type'>): Promise<Ok> {
@@ -33187,7 +33611,7 @@ Changes the emoji status of the current user; for Telegram Premium users only.
 	}
 
 	/**
-Changes the location of the current user. Needs to be called if GetOption("is_location_visible") is true and location
+Changes the location of the current user. Needs to be called if getOption("is_location_visible") is true and location
 changes for more than 1 kilometer.
 */
 	async setLocation(options: Omit<SetLocation, '@type'>): Promise<Ok> {
@@ -33225,6 +33649,25 @@ Checks the authentication code sent to confirm a new phone number of the user.
 		return this._request({
 			...options,
 			'@type': 'checkChangePhoneNumberCode',
+		});
+	}
+
+	/**
+Returns an HTTPS link, which can be used to get information about the current user.
+*/
+	async getUserLink(): Promise<UserLink> {
+		return this._request({
+			'@type': 'getUserLink',
+		});
+	}
+
+	/**
+Searches a user by a token from the user's link.
+*/
+	async searchUserByToken(options: Omit<SearchUserByToken, '@type'>): Promise<User> {
+		return this._request({
+			...options,
+			'@type': 'searchUserByToken',
 		});
 	}
 
@@ -33481,6 +33924,18 @@ right.
 	}
 
 	/**
+Toggles whether aggressive anti-spam checks are enabled in the supergroup; requires can_delete_messages administrator
+right. Can be called only if the supergroup has at least getOption("aggressive_anti_spam_supergroup_member_count_min")
+members.
+*/
+	async toggleSupergroupIsAggressiveAntiSpamEnabled(options: Omit<ToggleSupergroupIsAggressiveAntiSpamEnabled, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleSupergroupIsAggressiveAntiSpamEnabled',
+		});
+	}
+
+	/**
 Toggles whether the supergroup is a forum; requires owner privileges in the supergroup.
 */
 	async toggleSupergroupIsForum(options: Omit<ToggleSupergroupIsForum, '@type'>): Promise<Ok> {
@@ -33507,6 +33962,17 @@ Reports messages in a supergroup as spam; requires administrator rights in the s
 		return this._request({
 			...options,
 			'@type': 'reportSupergroupSpam',
+		});
+	}
+
+	/**
+Reports a false deletion of a message by aggressive anti-spam checks; requires administrator rights in the supergroup.
+Can be called only for messages from chatEventMessageDeleted with can_report_anti_spam_false_positive == true.
+*/
+	async reportSupergroupAntiSpamFalsePositive(options: Omit<ReportSupergroupAntiSpamFalsePositive, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reportSupergroupAntiSpamFalsePositive',
 		});
 	}
 
@@ -33900,6 +34366,25 @@ authorization state is authorizationStateWaitPassword.
 		return this._request({
 			...options,
 			'@type': 'deleteAccount',
+		});
+	}
+
+	/**
+Changes the default message Time To Live setting (self-destruct timer) for new chats.
+*/
+	async setDefaultMessageTtl(options: Omit<SetDefaultMessageTtl, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setDefaultMessageTtl',
+		});
+	}
+
+	/**
+Returns default message Time To Live setting (self-destruct timer) for new chats.
+*/
+	async getDefaultMessageTtl(): Promise<MessageTtl> {
+		return this._request({
+			'@type': 'getDefaultMessageTtl',
 		});
 	}
 
