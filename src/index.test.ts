@@ -44,17 +44,15 @@ test('setTdlibParameters - booleans are optional (default to false)', async t =>
 	const { tdjson } = t.context;
 
 	await tdjson.setTdlibParameters({
-		parameters: {
-			'@type': 'tdlibParameters',
-			api_id: 0,
-			api_hash: '1',
-			database_directory: '/',
-			files_directory: '/',
-			system_language_code: 'en',
-			device_model: 'model',
-			application_version: '1.0',
-			system_version: '1.0',
-		},
+		api_id: 0,
+		api_hash: '1',
+		database_directory: '/',
+		database_encryption_key: '',
+		files_directory: '/',
+		system_language_code: 'en',
+		device_model: 'model',
+		application_version: '1.0',
+		system_version: '1.0',
 	});
 
 	t.snapshot(tdjson.log);
