@@ -1330,7 +1330,7 @@ Additional data about the user in a form of vCard; 0-2048 bytes in length.
 */
 	vcard: string;
 	/**
-Identifier of the user, if known; otherwise 0.
+Identifier of the user, if known; 0 otherwise.
 */
 	user_id: number;
 }
@@ -2068,19 +2068,19 @@ export interface UserFullInfo {
 	'@type': 'userFullInfo';
 	/**
 User profile photo set by the current user for the contact; may be null. If null and user.profile_photo is null, then
-the photo is empty, otherwise unknown. If non-null, then it is the same photo as in user.profile_photo and chat.photo.
-This photo isn't returned in the list of user photos.
+the photo is empty; otherwise, it is unknown. If non-null, then it is the same photo as in user.profile_photo and
+chat.photo. This photo isn't returned in the list of user photos.
 */
 	personal_photo: ChatPhoto;
 	/**
-User profile photo; may be null. If null and user.profile_photo is null, then the photo is empty, otherwise unknown. If
-non-null and personal_photo is null, then it is the same photo as in user.profile_photo and chat.photo.
+User profile photo; may be null. If null and user.profile_photo is null, then the photo is empty; otherwise, it is
+unknown. If non-null and personal_photo is null, then it is the same photo as in user.profile_photo and chat.photo.
 */
 	photo: ChatPhoto;
 	/**
 User profile photo visible if the main photo is hidden by privacy settings; may be null. If null and user.profile_photo
-is null, then the photo is empty, otherwise unknown. If non-null and both photo and personal_photo are null, then it is
-the same photo as in user.profile_photo and chat.photo. This photo isn't returned in the list of user photos.
+is null, then the photo is empty; otherwise, it is unknown. If non-null and both photo and personal_photo are null, then
+it is the same photo as in user.profile_photo and chat.photo. This photo isn't returned in the list of user photos.
 */
 	public_photo: ChatPhoto;
 	/**
@@ -3016,7 +3016,7 @@ State of the secret chat.
 */
 	state: SecretChatState;
 	/**
-True, if the chat was created by the current user; otherwise false.
+True, if the chat was created by the current user; false otherwise.
 */
 	is_outbound?: boolean;
 	/**
@@ -4723,7 +4723,7 @@ A list of rows of bot keyboard buttons.
 */
 	rows: KeyboardButton[][];
 	/**
-True, if the keyboard is supposed to be always shown when the ordinary keyboard is hidden.
+True, if the keyboard is supposed to always be shown when the ordinary keyboard is hidden.
 */
 	is_persistent?: boolean;
 	/**
@@ -6455,8 +6455,8 @@ Product photo; may be null.
 }
 
 /**
-Contains a temporary identifier of validated order information, which is stored for one hour. Also contains the
-available shipping options.
+Contains a temporary identifier of validated order information, which is stored for one hour, and the available shipping
+options.
 */
 export interface ValidatedOrderInfo {
 	'@type': 'validatedOrderInfo';
@@ -6476,7 +6476,7 @@ Contains the result of a payment request.
 export interface PaymentResult {
 	'@type': 'paymentResult';
 	/**
-True, if the payment request was successful; otherwise the verification_url will be non-empty.
+True, if the payment request was successful; otherwise, the verification_url will be non-empty.
 */
 	success?: boolean;
 	/**
@@ -8228,7 +8228,7 @@ Subtype of {@link MessageContent}.
 export interface MessageChatSetTheme {
 	'@type': 'messageChatSetTheme';
 	/**
-If non-empty, name of a new theme, set for the chat. Otherwise chat theme was reset to the default one.
+If non-empty, name of a new theme, set for the chat. Otherwise, chat theme was reset to the default one.
 */
 	theme_name: string;
 }
@@ -8293,7 +8293,7 @@ Subtype of {@link MessageContent}.
 export interface MessageForumTopicIsClosedToggled {
 	'@type': 'messageForumTopicIsClosedToggled';
 	/**
-True, if the topic was closed, otherwise the topic was reopened.
+True, if the topic was closed; otherwise, the topic was reopened.
 */
 	is_closed?: boolean;
 }
@@ -8305,7 +8305,7 @@ Subtype of {@link MessageContent}.
 export interface MessageForumTopicIsHiddenToggled {
 	'@type': 'messageForumTopicIsHiddenToggled';
 	/**
-True, if the topic was hidden, otherwise the topic was unhidden.
+True, if the topic was hidden; otherwise, the topic was unhidden.
 */
 	is_hidden?: boolean;
 }
@@ -13995,7 +13995,7 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentChatSetTheme {
 	'@type': 'pushMessageContentChatSetTheme';
 	/**
-If non-empty, name of a new theme, set for the chat. Otherwise chat theme was reset to the default one.
+If non-empty, name of a new theme, set for the chat. Otherwise, the chat theme was reset to the default one.
 */
 	theme_name: string;
 }
@@ -15072,8 +15072,8 @@ export interface InternalLinkTypeActiveSessions {
 
 /**
 The link is a link to an attachment menu bot to be opened in the specified or a chosen chat. Process given target_chat
-to open the chat. Then call searchPublicChat with the given bot username, check that the user is a bot and can be added
-to attachment menu. Then use getAttachmentMenuBot to receive information about the bot. If the bot isn't added to
+to open the chat. Then, call searchPublicChat with the given bot username, check that the user is a bot and can be added
+to attachment menu. Then, use getAttachmentMenuBot to receive information about the bot. If the bot isn't added to
 attachment menu, then user needs to confirm adding the bot to attachment menu. If user confirms adding, then use
 toggleBotIsAddedToAttachmentMenu to add it. If the attachment menu bot can't be used in the opened chat, show an error
 to the user. If the bot is added to attachment menu and can be used in the chat, then use openWebApp with the given URL.
@@ -15150,9 +15150,9 @@ administrators of the supergroup. If administrator rights are provided by the li
 current bot rights in the chat and if the bot already is an administrator, check that the current user can edit its
 administrator rights, combine received rights with the requested administrator rights, show confirmation box to the
 user, and call setChatMemberStatus with the chosen chat and confirmed administrator rights. Before call to
-setChatMemberStatus it may be required to upgrade the chosen basic group chat to a supergroup chat. Then if
-start_parameter isn't empty, call sendBotStartMessage with the given start parameter and the chosen chat, otherwise just
-send /start message with bot's username added to the chat.
+setChatMemberStatus it may be required to upgrade the chosen basic group chat to a supergroup chat. Then, if
+start_parameter isn't empty, call sendBotStartMessage with the given start parameter and the chosen chat; otherwise,
+just send /start message with bot's username added to the chat.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeBotStartInGroup {
@@ -15174,10 +15174,10 @@ Expected administrator rights for the bot; may be null.
 /**
 The link is a link to a Telegram bot, which is supposed to be added to a channel chat as an administrator. Call
 searchPublicChat with the given bot username and check that the user is a bot, ask the current user to select a channel
-chat to add the bot to as an administrator. Then call getChatMember to receive the current bot rights in the chat and if
-the bot already is an administrator, check that the current user can edit its administrator rights and combine received
-rights with the requested administrator rights. Then show confirmation box to the user, and call setChatMemberStatus
-with the chosen chat and confirmed rights.
+chat to add the bot to as an administrator. Then, call getChatMember to receive the current bot rights in the chat and
+if the bot already is an administrator, check that the current user can edit its administrator rights and combine
+received rights with the requested administrator rights. Then, show confirmation box to the user, and call
+setChatMemberStatus with the chosen chat and confirmed rights.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeBotAddToChannel {
@@ -15340,7 +15340,7 @@ link must be selected.
 
 /**
 The link contains a request of Telegram passport data. Call getPassportAuthorizationForm with the given parameters to
-process the link if the link was received from outside of the application, otherwise ignore it.
+process the link if the link was received from outside of the application; otherwise, ignore it.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePassportDataRequest {
@@ -15362,9 +15362,10 @@ Unique request identifier provided by the service.
 */
 	nonce: string;
 	/**
-An HTTP URL to open once the request is finished or canceled with the parameter tg_passport=success or
-tg_passport=cancel respectively. If empty, then the link tgbot{bot_user_id}://passport/success or
-tgbot{bot_user_id}://passport/cancel needs to be opened instead.
+An HTTP URL to open once the request is finished, canceled, or failed with the parameters tg_passport=success,
+tg_passport=cancel, or tg_passport=error&error=... respectively. If empty, then onActivityResult method must be used to
+return response on Android, or the link tgbot{bot_user_id}://passport/success or tgbot{bot_user_id}://passport/cancel
+must be opened otherwise.
 */
 	callback_url: string;
 }
@@ -17243,8 +17244,8 @@ The new chat positions in the chat lists.
 }
 
 /**
-The position of a chat in a chat list has changed. Instead of this update updateChatLastMessage or
-updateChatDraftMessage might be sent.
+The position of a chat in a chat list has changed. An updateChatLastMessage or updateChatDraftMessage update might be
+sent instead of the update.
 Subtype of {@link Update}.
 */
 export interface UpdateChatPosition {
@@ -18228,7 +18229,7 @@ Subtype of {@link Update}.
 export interface UpdateRecentStickers {
 	'@type': 'updateRecentStickers';
 	/**
-True, if the list of stickers attached to photo or video files was updated, otherwise the list of sent stickers is
+True, if the list of stickers attached to photo or video files was updated; otherwise, the list of sent stickers is
 updated.
 */
 	is_attached?: boolean;
@@ -20101,8 +20102,8 @@ as possible to the original name.
 /**
 Sets the phone number of the user and sends an authentication code to the user. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
-authorizationStateWaitPassword.
+authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
+authorizationStateWaitRegistration, or authorizationStateWaitPassword.
 Request type for {@link Tdjson#setAuthenticationPhoneNumber}.
 */
 export interface SetAuthenticationPhoneNumber {
@@ -20169,8 +20170,8 @@ Authentication code to check.
 /**
 Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
-authorizationStateWaitPassword.
+authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
+authorizationStateWaitRegistration, or authorizationStateWaitPassword.
 Request type for {@link Tdjson#requestQrCodeAuthentication}.
 */
 export interface RequestQrCodeAuthentication {
@@ -20684,7 +20685,7 @@ Identifier of the message to get.
 }
 
 /**
-Returns information about a message that is replied by a given message. Also returns the pinned message, the game
+Returns information about a message that is replied by a given message. Also, returns the pinned message, the game
 message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
 messageGameScore, messagePaymentSuccessful, and topic messages without replied message respectively.
 Request type for {@link Tdjson#getRepliedMessage}.
@@ -20852,7 +20853,7 @@ The maximum number of chats to be returned.
 
 /**
 Searches a public chat by its username. Currently, only private chats, supergroups and channels can be public. Returns
-the chat if found; otherwise an error is returned.
+the chat if found; otherwise, an error is returned.
 Request type for {@link Tdjson#searchPublicChat}.
 */
 export interface SearchPublicChat {
@@ -29904,8 +29905,8 @@ authorizationStateWaitTdlibParameters.
 	/**
 Sets the phone number of the user and sends an authentication code to the user. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
-authorizationStateWaitPassword.
+authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
+authorizationStateWaitRegistration, or authorizationStateWaitPassword.
 */
 	async setAuthenticationPhoneNumber(options: Omit<SetAuthenticationPhoneNumber, '@type'>): Promise<Ok> {
 		return this._request({
@@ -29960,8 +29961,8 @@ Checks the authentication code. Works only when the current authorization state 
 	/**
 Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
-authorizationStateWaitPassword.
+authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
+authorizationStateWaitRegistration, or authorizationStateWaitPassword.
 */
 	async requestQrCodeAuthentication(options: Omit<RequestQrCodeAuthentication, '@type'>): Promise<Ok> {
 		return this._request({
@@ -30369,7 +30370,7 @@ Returns information about a message, if it is available without sending network 
 	}
 
 	/**
-Returns information about a message that is replied by a given message. Also returns the pinned message, the game
+Returns information about a message that is replied by a given message. Also, returns the pinned message, the game
 message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
 messageGameScore, messagePaymentSuccessful, and topic messages without replied message respectively.
 */
@@ -30480,7 +30481,7 @@ updates processing instead to maintain chat lists in a consistent state.
 
 	/**
 Searches a public chat by its username. Currently, only private chats, supergroups and channels can be public. Returns
-the chat if found; otherwise an error is returned.
+the chat if found; otherwise, an error is returned.
 */
 	async searchPublicChat(options: Omit<SearchPublicChat, '@type'>): Promise<Chat> {
 		return this._request({
