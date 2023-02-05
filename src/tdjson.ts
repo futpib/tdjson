@@ -108,6 +108,43 @@ Length of the code.
 }
 
 /**
+An authentication code is delivered via Firebase Authentication to the official Android application.
+Subtype of {@link AuthenticationCodeType}.
+*/
+export interface AuthenticationCodeTypeFirebaseAndroid {
+	'@type': 'authenticationCodeTypeFirebaseAndroid';
+	/**
+Nonce to pass to the SafetyNet Attestation API.
+*/
+	nonce: string;
+	/**
+Length of the code.
+*/
+	length: number;
+}
+
+/**
+An authentication code is delivered via Firebase Authentication to the official iOS application.
+Subtype of {@link AuthenticationCodeType}.
+*/
+export interface AuthenticationCodeTypeFirebaseIos {
+	'@type': 'authenticationCodeTypeFirebaseIos';
+	/**
+Receipt of successful applikation token validation to compare with receipt from push notification.
+*/
+	receipt: string;
+	/**
+Time after the next authentication method is supposed to be used if verification push notification isn't received, in
+seconds.
+*/
+	push_timeout: number;
+	/**
+Length of the code.
+*/
+	length: number;
+}
+
+/**
 Information about the authentication code that was sent.
 */
 export interface AuthenticationCodeInfo {
@@ -915,7 +952,7 @@ Identifier of the custom emoji.
 	custom_emoji_id: string;
 	/**
 True, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium badge in emoji
-status, or another appropriate color in other places.
+status, or another appropriate color in other places. The sticker must not be repainted on chat photos.
 */
 	needs_repainting?: boolean;
 }
@@ -1130,6 +1167,10 @@ Describes a sticker.
 export interface Sticker {
 	'@type': 'sticker';
 	/**
+Unique sticker identifier within the set; 0 if none.
+*/
+	id: string;
+	/**
 The identifier of the sticker set to which the sticker belongs; 0 if none.
 */
 	set_id: string;
@@ -1330,7 +1371,7 @@ Additional data about the user in a form of vCard; 0-2048 bytes in length.
 */
 	vcard: string;
 	/**
-Identifier of the user, if known; otherwise 0.
+Identifier of the user, if known; 0 otherwise.
 */
 	user_id: number;
 }
@@ -1649,6 +1690,50 @@ Location address; 1-64 characters, as defined by the chat owner.
 }
 
 /**
+Describes type of a sticker, which was used to create a chat photo.
+Subtype of {@link ChatPhotoStickerType}.
+*/
+export interface ChatPhotoStickerTypeRegularOrMask {
+	'@type': 'chatPhotoStickerTypeRegularOrMask';
+	/**
+Sticker set identifier.
+*/
+	sticker_set_id: string;
+	/**
+Identifier of the sticker in the set.
+*/
+	sticker_id: string;
+}
+
+/**
+Information about the custom emoji, which was used to create the chat photo.
+Subtype of {@link ChatPhotoStickerType}.
+*/
+export interface ChatPhotoStickerTypeCustomEmoji {
+	'@type': 'chatPhotoStickerTypeCustomEmoji';
+	/**
+Identifier of the custom emoji.
+*/
+	custom_emoji_id: string;
+}
+
+/**
+Information about the sticker, which was used to create the chat photo. The sticker is shown at the center of the photo
+and occupies at most 67% of it.
+*/
+export interface ChatPhotoSticker {
+	'@type': 'chatPhotoSticker';
+	/**
+Type of the sticker.
+*/
+	type: ChatPhotoStickerType;
+	/**
+The fill to be used as background for the sticker; rotation angle in backgroundFillGradient isn't supported.
+*/
+	background_fill: BackgroundFill;
+}
+
+/**
 Animated variant of a chat photo in MPEG4 format.
 */
 export interface AnimatedChatPhoto {
@@ -1689,13 +1774,17 @@ Available variants of the photo in JPEG format, in different size.
 */
 	sizes: PhotoSize[];
 	/**
-A big (640x640) animated variant of the photo in MPEG4 format; may be null.
+A big (up to 1280x1280) animated variant of the photo in MPEG4 format; may be null.
 */
 	animation: AnimatedChatPhoto;
 	/**
 A small (160x160) animated variant of the photo in MPEG4 format; may be null even the big animation is available.
 */
 	small_animation: AnimatedChatPhoto;
+	/**
+Sticker-based version of the chat photo; may be null.
+*/
+	sticker: ChatPhotoSticker;
 }
 
 /**
@@ -1738,8 +1827,8 @@ Photo to be set as profile photo. Only inputFileLocal and inputFileGenerated are
 }
 
 /**
-An animation in MPEG4 format; must be square, at most 10 seconds long, have width between 160 and 800 and be at most 2MB
-in size.
+An animation in MPEG4 format; must be square, at most 10 seconds long, have width between 160 and 1280 and be at most
+2MB in size.
 Subtype of {@link InputChatPhoto}.
 */
 export interface InputChatPhotoAnimation {
@@ -1755,30 +1844,60 @@ Timestamp of the frame, which will be used as static chat photo.
 }
 
 /**
+A sticker on a custom background.
+Subtype of {@link InputChatPhoto}.
+*/
+export interface InputChatPhotoSticker {
+	'@type': 'inputChatPhotoSticker';
+	/**
+Information about the sticker.
+*/
+	sticker: ChatPhotoSticker;
+}
+
+/**
 Describes actions that a user is allowed to take in a chat.
 */
 export interface ChatPermissions {
 	'@type': 'chatPermissions';
 	/**
-True, if the user can send text messages, contacts, locations, and venues.
+True, if the user can send text messages, contacts, invoices, locations, and venues.
 */
 	can_send_messages?: boolean;
 	/**
-True, if the user can send audio files, documents, photos, videos, video notes, and voice notes. Implies
-can_send_messages permissions.
+True, if the user can send music files.
 */
-	can_send_media_messages?: boolean;
+	can_send_audios?: boolean;
 	/**
-True, if the user can send polls. Implies can_send_messages permissions.
+True, if the user can send documents.
+*/
+	can_send_documents?: boolean;
+	/**
+True, if the user can send audio photos.
+*/
+	can_send_photos?: boolean;
+	/**
+True, if the user can send audio videos.
+*/
+	can_send_videos?: boolean;
+	/**
+True, if the user can send video notes.
+*/
+	can_send_video_notes?: boolean;
+	/**
+True, if the user can send voice notes.
+*/
+	can_send_voice_notes?: boolean;
+	/**
+True, if the user can send polls.
 */
 	can_send_polls?: boolean;
 	/**
-True, if the user can send animations, games, stickers, and dice and use inline bots. Implies can_send_messages
-permissions.
+True, if the user can send animations, games, stickers, and dice and use inline bots.
 */
 	can_send_other_messages?: boolean;
 	/**
-True, if the user may add a web page preview to their messages. Implies can_send_messages permissions.
+True, if the user may add a web page preview to their messages.
 */
 	can_add_web_page_previews?: boolean;
 	/**
@@ -1888,6 +2007,29 @@ An internal link to be opened for buying Telegram Premium to the user if store p
 direct payment isn't available.
 */
 	payment_link: InternalLinkType;
+}
+
+/**
+Describes an option for buying or upgrading Telegram Premium for self.
+*/
+export interface PremiumStatePaymentOption {
+	'@type': 'premiumStatePaymentOption';
+	/**
+Information about the payment option.
+*/
+	payment_option: PremiumPaymentOption;
+	/**
+True, if this is the currently used Telegram Premium subscription option.
+*/
+	is_current?: boolean;
+	/**
+True, if the payment option can be used to upgrade the existing Telegram Premium subscription.
+*/
+	is_upgrade?: boolean;
+	/**
+Identifier of the last in-store transaction for the currently used option.
+*/
+	last_transaction_id: string;
 }
 
 /**
@@ -2068,19 +2210,19 @@ export interface UserFullInfo {
 	'@type': 'userFullInfo';
 	/**
 User profile photo set by the current user for the contact; may be null. If null and user.profile_photo is null, then
-the photo is empty, otherwise unknown. If non-null, then it is the same photo as in user.profile_photo and chat.photo.
-This photo isn't returned in the list of user photos.
+the photo is empty; otherwise, it is unknown. If non-null, then it is the same photo as in user.profile_photo and
+chat.photo. This photo isn't returned in the list of user photos.
 */
 	personal_photo: ChatPhoto;
 	/**
-User profile photo; may be null. If null and user.profile_photo is null, then the photo is empty, otherwise unknown. If
-non-null and personal_photo is null, then it is the same photo as in user.profile_photo and chat.photo.
+User profile photo; may be null. If null and user.profile_photo is null, then the photo is empty; otherwise, it is
+unknown. If non-null and personal_photo is null, then it is the same photo as in user.profile_photo and chat.photo.
 */
 	photo: ChatPhoto;
 	/**
 User profile photo visible if the main photo is hidden by privacy settings; may be null. If null and user.profile_photo
-is null, then the photo is empty, otherwise unknown. If non-null and both photo and personal_photo are null, then it is
-the same photo as in user.profile_photo and chat.photo. This photo isn't returned in the list of user photos.
+is null, then the photo is empty; otherwise, it is unknown. If non-null and both photo and personal_photo are null, then
+it is the same photo as in user.profile_photo and chat.photo. This photo isn't returned in the list of user photos.
 */
 	public_photo: ChatPhoto;
 	/**
@@ -3016,7 +3158,7 @@ State of the secret chat.
 */
 	state: SecretChatState;
 	/**
-True, if the chat was created by the current user; otherwise false.
+True, if the chat was created by the current user; false otherwise.
 */
 	is_outbound?: boolean;
 	/**
@@ -4234,6 +4376,10 @@ True, if chat content can't be saved locally, forwarded, or copied.
 */
 	has_protected_content?: boolean;
 	/**
+True, if translation of all messages in the chat must be suggested to the user.
+*/
+	is_translatable?: boolean;
+	/**
 True, if the chat is marked as unread.
 */
 	is_marked_as_unread?: boolean;
@@ -4526,6 +4672,88 @@ If true, only polls in quiz mode must be allowed to create.
 }
 
 /**
+A button that requests a user to be shared by the current user; available only in private chats. Use the method
+shareUserWithBot to complete the request.
+Subtype of {@link KeyboardButtonType}.
+*/
+export interface KeyboardButtonTypeRequestUser {
+	'@type': 'keyboardButtonTypeRequestUser';
+	/**
+Unique button identifier.
+*/
+	id: number;
+	/**
+True, if the shared user must or must not be a bot.
+*/
+	restrict_user_is_bot?: boolean;
+	/**
+True, if the shared user must be a bot; otherwise, the shared user must no be a bot. Ignored if restrict_user_is_bot is
+false.
+*/
+	user_is_bot?: boolean;
+	/**
+True, if the shared user must or must not be a Telegram Premium user.
+*/
+	restrict_user_is_premium?: boolean;
+	/**
+True, if the shared user must be a Telegram Premium user; otherwise, the shared user must no be a Telegram Premium user.
+Ignored if restrict_user_is_premium is false.
+*/
+	user_is_premium?: boolean;
+}
+
+/**
+A button that requests a chat to be shared by the current user; available only in private chats. Use the method
+shareChatWithBot to complete the request.
+Subtype of {@link KeyboardButtonType}.
+*/
+export interface KeyboardButtonTypeRequestChat {
+	'@type': 'keyboardButtonTypeRequestChat';
+	/**
+Unique button identifier.
+*/
+	id: number;
+	/**
+True, if the chat must be a channel; otherwise, a basic group or a supergroup chat is shared.
+*/
+	chat_is_channel?: boolean;
+	/**
+True, if the chat must or must not be a forum supergroup.
+*/
+	restrict_chat_is_forum?: boolean;
+	/**
+True, if the chat must be a forum supergroup; otherwise, the chat must not be a forum supergroup. Ignored if
+restrict_chat_is_forum is false.
+*/
+	chat_is_forum?: boolean;
+	/**
+True, if the chat must or must not have a username.
+*/
+	restrict_chat_has_username?: boolean;
+	/**
+True, if the chat must have a username; otherwise, the chat must not have a username. Ignored if
+restrict_chat_has_username is false.
+*/
+	chat_has_username?: boolean;
+	/**
+True, if the chat must be created by the current user.
+*/
+	chat_is_created?: boolean;
+	/**
+Expected user administrator rights in the chat; may be null if they aren't restricted.
+*/
+	user_administrator_rights: ChatAdministratorRights;
+	/**
+Expected bot administrator rights in the chat; may be null if they aren't restricted.
+*/
+	bot_administrator_rights: ChatAdministratorRights;
+	/**
+True, if the bot must be a member of the chat; for basic group and supergroup chats only.
+*/
+	bot_is_member?: boolean;
+}
+
+/**
 A button that opens a Web App by calling getWebAppUrl.
 Subtype of {@link KeyboardButtonType}.
 */
@@ -4723,7 +4951,7 @@ A list of rows of bot keyboard buttons.
 */
 	rows: KeyboardButton[][];
 	/**
-True, if the keyboard is supposed to be always shown when the ordinary keyboard is hidden.
+True, if the keyboard is supposed to always be shown when the ordinary keyboard is hidden.
 */
 	is_persistent?: boolean;
 	/**
@@ -6455,8 +6683,8 @@ Product photo; may be null.
 }
 
 /**
-Contains a temporary identifier of validated order information, which is stored for one hour. Also contains the
-available shipping options.
+Contains a temporary identifier of validated order information, which is stored for one hour, and the available shipping
+options.
 */
 export interface ValidatedOrderInfo {
 	'@type': 'validatedOrderInfo';
@@ -6476,7 +6704,7 @@ Contains the result of a payment request.
 export interface PaymentResult {
 	'@type': 'paymentResult';
 	/**
-True, if the payment request was successful; otherwise the verification_url will be non-empty.
+True, if the payment request was successful; otherwise, the verification_url will be non-empty.
 */
 	success?: boolean;
 	/**
@@ -8228,7 +8456,7 @@ Subtype of {@link MessageContent}.
 export interface MessageChatSetTheme {
 	'@type': 'messageChatSetTheme';
 	/**
-If non-empty, name of a new theme, set for the chat. Otherwise chat theme was reset to the default one.
+If non-empty, name of a new theme, set for the chat. Otherwise, chat theme was reset to the default one.
 */
 	theme_name: string;
 }
@@ -8293,7 +8521,7 @@ Subtype of {@link MessageContent}.
 export interface MessageForumTopicIsClosedToggled {
 	'@type': 'messageForumTopicIsClosedToggled';
 	/**
-True, if the topic was closed, otherwise the topic was reopened.
+True, if the topic was closed; otherwise, the topic was reopened.
 */
 	is_closed?: boolean;
 }
@@ -8305,7 +8533,7 @@ Subtype of {@link MessageContent}.
 export interface MessageForumTopicIsHiddenToggled {
 	'@type': 'messageForumTopicIsHiddenToggled';
 	/**
-True, if the topic was hidden, otherwise the topic was unhidden.
+True, if the topic was hidden; otherwise, the topic was unhidden.
 */
 	is_hidden?: boolean;
 }
@@ -8465,6 +8693,38 @@ Subtype of {@link MessageContent}.
 export interface MessageContactRegistered {
 	'@type': 'messageContactRegistered';
 
+}
+
+/**
+The current user shared a user, which was requested by the bot.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageUserShared {
+	'@type': 'messageUserShared';
+	/**
+Identifier of the shared user.
+*/
+	user_id: number;
+	/**
+Identifier of the keyboard button with the request.
+*/
+	button_id: number;
+}
+
+/**
+The current user shared a chat, which was requested by the bot.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatShared {
+	'@type': 'messageChatShared';
+	/**
+Identifier of the shared chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the keyboard button with the request.
+*/
+	button_id: number;
 }
 
 /**
@@ -9894,6 +10154,63 @@ True, if the list contains sticker sets with premium stickers.
 }
 
 /**
+Contains a list of similar emoji to search for in getStickers and searchStickers.
+*/
+export interface EmojiCategory {
+	'@type': 'emojiCategory';
+	/**
+Name of the category.
+*/
+	name: string;
+	/**
+Unique identifier of the custom emoji, which represents icon of the category.
+*/
+	icon_custom_emoji_id: string;
+	/**
+List of emojis in the category.
+*/
+	emojis: string[];
+}
+
+/**
+Represents a list of emoji categories.
+*/
+export interface EmojiCategories {
+	'@type': 'emojiCategories';
+	/**
+List of categories.
+*/
+	categories: EmojiCategory[];
+}
+
+/**
+Describes type of an emoji category.
+Subtype of {@link EmojiCategoryType}.
+*/
+export interface EmojiCategoryTypeDefault {
+	'@type': 'emojiCategoryTypeDefault';
+
+}
+
+/**
+The category must be used for emoji status selection.
+Subtype of {@link EmojiCategoryType}.
+*/
+export interface EmojiCategoryTypeEmojiStatus {
+	'@type': 'emojiCategoryTypeEmojiStatus';
+
+}
+
+/**
+The category must be used for chat photo emoji selection.
+Subtype of {@link EmojiCategoryType}.
+*/
+export interface EmojiCategoryTypeChatPhoto {
+	'@type': 'emojiCategoryTypeChatPhoto';
+
+}
+
+/**
 Describes the reason why a call was discarded.
 Subtype of {@link CallDiscardReason}.
 */
@@ -10214,7 +10531,7 @@ A list of group call streams.
 }
 
 /**
-Represents an RTMP url.
+Represents an RTMP URL.
 */
 export interface RtmpUrl {
 	'@type': 'rtmpUrl';
@@ -10560,6 +10877,31 @@ Call state.
 }
 
 /**
+Contains settings for Firebase Authentication in the official applications.
+Subtype of {@link FirebaseAuthenticationSettings}.
+*/
+export interface FirebaseAuthenticationSettingsAndroid {
+	'@type': 'firebaseAuthenticationSettingsAndroid';
+
+}
+
+/**
+Settings for Firebase Authentication in the official iOS application.
+Subtype of {@link FirebaseAuthenticationSettings}.
+*/
+export interface FirebaseAuthenticationSettingsIos {
+	'@type': 'firebaseAuthenticationSettingsIos';
+	/**
+Device token from Apple Push Notification service.
+*/
+	device_token: string;
+	/**
+True, if App Sandbox is enabled.
+*/
+	is_app_sandbox?: boolean;
+}
+
+/**
 Contains settings for the authentication of the user's phone number.
 */
 export interface PhoneNumberAuthenticationSettings {
@@ -10582,6 +10924,10 @@ Services >= 10.2) to automatically receive the authentication code from the SMS.
 https://developers.google.com/identity/sms-retriever/ for more details.
 */
 	allow_sms_retriever_api?: boolean;
+	/**
+For official Android and iOS applications only; pass null otherwise. Settings for Firebase Authentication.
+*/
+	firebase_authentication_settings: FirebaseAuthenticationSettings;
 	/**
 List of up to 20 authentication tokens, recently received in updateOption("authentication_token") in previously logged
 out sessions.
@@ -12903,6 +13249,15 @@ export interface PremiumFeatureAppIcons {
 }
 
 /**
+Allowed to translate chat messages real-time.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureRealTimeChatTranslation {
+	'@type': 'premiumFeatureRealTimeChatTranslation';
+
+}
+
+/**
 Contains information about a limit, increased for Premium users.
 */
 export interface PremiumLimit {
@@ -13014,7 +13369,7 @@ Premium subscription.
 	/**
 The list of available options for buying Telegram Premium.
 */
-	payment_options: PremiumPaymentOption[];
+	payment_options: PremiumStatePaymentOption[];
 	/**
 The list of available promotion animations for Premium features.
 */
@@ -13031,6 +13386,10 @@ export interface StorePaymentPurposePremiumSubscription {
 Pass true if this is a restore of a Telegram Premium purchase; only for App Store.
 */
 	is_restore?: boolean;
+	/**
+Pass true if this is an upgrade from a monthly subscription to early subscription; only for App Store.
+*/
+	is_upgrade?: boolean;
 }
 
 /**
@@ -13211,6 +13570,22 @@ export interface DeviceTokenTizenPush {
 Push service registration identifier; may be empty to deregister a device.
 */
 	reg_id: string;
+}
+
+/**
+A token for HUAWEI Push Service.
+Subtype of {@link DeviceToken}.
+*/
+export interface DeviceTokenHuaweiPush {
+	'@type': 'deviceTokenHuaweiPush';
+	/**
+Device registration token; may be empty to deregister a device.
+*/
+	token: string;
+	/**
+True, if push notifications must be additionally encrypted.
+*/
+	encrypt?: boolean;
 }
 
 /**
@@ -13995,7 +14370,7 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentChatSetTheme {
 	'@type': 'pushMessageContentChatSetTheme';
 	/**
-If non-empty, name of a new theme, set for the chat. Otherwise chat theme was reset to the default one.
+If non-empty, name of a new theme, set for the chat. Otherwise, the chat theme was reset to the default one.
 */
 	theme_name: string;
 }
@@ -15072,8 +15447,8 @@ export interface InternalLinkTypeActiveSessions {
 
 /**
 The link is a link to an attachment menu bot to be opened in the specified or a chosen chat. Process given target_chat
-to open the chat. Then call searchPublicChat with the given bot username, check that the user is a bot and can be added
-to attachment menu. Then use getAttachmentMenuBot to receive information about the bot. If the bot isn't added to
+to open the chat. Then, call searchPublicChat with the given bot username, check that the user is a bot and can be added
+to attachment menu. Then, use getAttachmentMenuBot to receive information about the bot. If the bot isn't added to
 attachment menu, then user needs to confirm adding the bot to attachment menu. If user confirms adding, then use
 toggleBotIsAddedToAttachmentMenu to add it. If the attachment menu bot can't be used in the opened chat, show an error
 to the user. If the bot is added to attachment menu and can be used in the chat, then use openWebApp with the given URL.
@@ -15150,9 +15525,9 @@ administrators of the supergroup. If administrator rights are provided by the li
 current bot rights in the chat and if the bot already is an administrator, check that the current user can edit its
 administrator rights, combine received rights with the requested administrator rights, show confirmation box to the
 user, and call setChatMemberStatus with the chosen chat and confirmed administrator rights. Before call to
-setChatMemberStatus it may be required to upgrade the chosen basic group chat to a supergroup chat. Then if
-start_parameter isn't empty, call sendBotStartMessage with the given start parameter and the chosen chat, otherwise just
-send /start message with bot's username added to the chat.
+setChatMemberStatus it may be required to upgrade the chosen basic group chat to a supergroup chat. Then, if
+start_parameter isn't empty, call sendBotStartMessage with the given start parameter and the chosen chat; otherwise,
+just send /start message with bot's username added to the chat.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeBotStartInGroup {
@@ -15174,10 +15549,10 @@ Expected administrator rights for the bot; may be null.
 /**
 The link is a link to a Telegram bot, which is supposed to be added to a channel chat as an administrator. Call
 searchPublicChat with the given bot username and check that the user is a bot, ask the current user to select a channel
-chat to add the bot to as an administrator. Then call getChatMember to receive the current bot rights in the chat and if
-the bot already is an administrator, check that the current user can edit its administrator rights and combine received
-rights with the requested administrator rights. Then show confirmation box to the user, and call setChatMemberStatus
-with the chosen chat and confirmed rights.
+chat to add the bot to as an administrator. Then, call getChatMember to receive the current bot rights in the chat and
+if the bot already is an administrator, check that the current user can edit its administrator rights and combine
+received rights with the requested administrator rights. Then, show confirmation box to the user, and call
+setChatMemberStatus with the chosen chat and confirmed rights.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeBotAddToChannel {
@@ -15340,7 +15715,7 @@ link must be selected.
 
 /**
 The link contains a request of Telegram passport data. Call getPassportAuthorizationForm with the given parameters to
-process the link if the link was received from outside of the application, otherwise ignore it.
+process the link if the link was received from outside of the application; otherwise, ignore it.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePassportDataRequest {
@@ -15362,9 +15737,10 @@ Unique request identifier provided by the service.
 */
 	nonce: string;
 	/**
-An HTTP URL to open once the request is finished or canceled with the parameter tg_passport=success or
-tg_passport=cancel respectively. If empty, then the link tgbot{bot_user_id}://passport/success or
-tgbot{bot_user_id}://passport/cancel needs to be opened instead.
+An HTTP URL to open once the request is finished, canceled, or failed with the parameters tg_passport=success,
+tg_passport=cancel, or tg_passport=error&error=... respectively. If empty, then onActivityResult method must be used to
+return response on Android, or the link tgbot{bot_user_id}://passport/success or tgbot{bot_user_id}://passport/cancel
+must be opened otherwise.
 */
 	callback_url: string;
 }
@@ -16052,6 +16428,102 @@ Preset with highest settings; supposed to be used by default when connected on W
 }
 
 /**
+Describes scope of autosave settings.
+Subtype of {@link AutosaveSettingsScope}.
+*/
+export interface AutosaveSettingsScopePrivateChats {
+	'@type': 'autosaveSettingsScopePrivateChats';
+
+}
+
+/**
+Autosave settings applied to all basic group and supergroup chats without chat-specific settings.
+Subtype of {@link AutosaveSettingsScope}.
+*/
+export interface AutosaveSettingsScopeGroupChats {
+	'@type': 'autosaveSettingsScopeGroupChats';
+
+}
+
+/**
+Autosave settings applied to all channel chats without chat-specific settings.
+Subtype of {@link AutosaveSettingsScope}.
+*/
+export interface AutosaveSettingsScopeChannelChats {
+	'@type': 'autosaveSettingsScopeChannelChats';
+
+}
+
+/**
+Autosave settings applied to a chat.
+Subtype of {@link AutosaveSettingsScope}.
+*/
+export interface AutosaveSettingsScopeChat {
+	'@type': 'autosaveSettingsScopeChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Contains autosave settings for an autosave settings scope.
+*/
+export interface ScopeAutosaveSettings {
+	'@type': 'scopeAutosaveSettings';
+	/**
+True, if photo autosave is enabled.
+*/
+	autosave_photos?: boolean;
+	/**
+True, if video autosave is enabled.
+*/
+	autosave_videos?: boolean;
+	/**
+The maximum size of a video file to be autosaved, in bytes; 512 KB - 4000 MB.
+*/
+	max_video_file_size: number;
+}
+
+/**
+Contains autosave settings for a chat, which overrides default settings for the corresponding scope.
+*/
+export interface AutosaveSettingsException {
+	'@type': 'autosaveSettingsException';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Autosave settings for the chat.
+*/
+	settings: ScopeAutosaveSettings;
+}
+
+/**
+Describes autosave settings.
+*/
+export interface AutosaveSettings {
+	'@type': 'autosaveSettings';
+	/**
+Default autosave settings for private chats.
+*/
+	private_chat_settings: ScopeAutosaveSettings;
+	/**
+Default autosave settings for basic group and supergroup chats.
+*/
+	group_settings: ScopeAutosaveSettings;
+	/**
+Default autosave settings for channel chats.
+*/
+	channel_settings: ScopeAutosaveSettings;
+	/**
+Autosave settings for specific chats.
+*/
+	exceptions: AutosaveSettingsException[];
+}
+
+/**
 Describes the current state of the connection to Telegram servers.
 Subtype of {@link ConnectionState}.
 */
@@ -16289,9 +16761,28 @@ Subtype of {@link SuggestedAction}.
 export interface SuggestedActionSetPassword {
 	'@type': 'suggestedActionSetPassword';
 	/**
-The number of days to pass between consecutive authorizations if the user declines to set password.
+The number of days to pass between consecutive authorizations if the user declines to set password; if 0, then the user
+is advised to set the password for security reasons.
 */
 	authorization_delay: number;
+}
+
+/**
+Suggests the user to upgrade the Premium subscription from monthly payments to annual payments.
+Subtype of {@link SuggestedAction}.
+*/
+export interface SuggestedActionUpgradePremium {
+	'@type': 'suggestedActionUpgradePremium';
+
+}
+
+/**
+Suggests the user to subscribe to the Premium subscription with annual payments.
+Subtype of {@link SuggestedAction}.
+*/
+export interface SuggestedActionSubscribeToAnnualPremium {
+	'@type': 'suggestedActionSubscribeToAnnualPremium';
+
 }
 
 /**
@@ -17243,8 +17734,8 @@ The new chat positions in the chat lists.
 }
 
 /**
-The position of a chat in a chat list has changed. Instead of this update updateChatLastMessage or
-updateChatDraftMessage might be sent.
+The position of a chat in a chat list has changed. An updateChatLastMessage or updateChatDraftMessage update might be
+sent instead of the update.
 Subtype of {@link Update}.
 */
 export interface UpdateChatPosition {
@@ -17527,19 +18018,35 @@ New value of has_protected_content.
 }
 
 /**
-A chat's has_scheduled_messages field has changed.
+Translation of chat messages was enabled or disabled.
 Subtype of {@link Update}.
 */
-export interface UpdateChatHasScheduledMessages {
-	'@type': 'updateChatHasScheduledMessages';
+export interface UpdateChatIsTranslatable {
+	'@type': 'updateChatIsTranslatable';
 	/**
 Chat identifier.
 */
 	chat_id: number;
 	/**
-New value of has_scheduled_messages.
+New value of is_translatable.
 */
-	has_scheduled_messages?: boolean;
+	is_translatable?: boolean;
+}
+
+/**
+A chat was marked as unread or was read.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatIsMarkedAsUnread {
+	'@type': 'updateChatIsMarkedAsUnread';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of is_marked_as_unread.
+*/
+	is_marked_as_unread?: boolean;
 }
 
 /**
@@ -17559,19 +18066,19 @@ New value of is_blocked.
 }
 
 /**
-A chat was marked as unread or was read.
+A chat's has_scheduled_messages field has changed.
 Subtype of {@link Update}.
 */
-export interface UpdateChatIsMarkedAsUnread {
-	'@type': 'updateChatIsMarkedAsUnread';
+export interface UpdateChatHasScheduledMessages {
+	'@type': 'updateChatHasScheduledMessages';
 	/**
 Chat identifier.
 */
 	chat_id: number;
 	/**
-New value of is_marked_as_unread.
+New value of has_scheduled_messages.
 */
-	is_marked_as_unread?: boolean;
+	has_scheduled_messages?: boolean;
 }
 
 /**
@@ -18228,7 +18735,7 @@ Subtype of {@link Update}.
 export interface UpdateRecentStickers {
 	'@type': 'updateRecentStickers';
 	/**
-True, if the list of stickers attached to photo or video files was updated, otherwise the list of sent stickers is
+True, if the list of stickers attached to photo or video files was updated; otherwise, the list of sent stickers is
 updated.
 */
 	is_attached?: boolean;
@@ -18477,6 +18984,22 @@ Added suggested actions.
 Removed suggested actions.
 */
 	removed_actions: SuggestedAction[];
+}
+
+/**
+Autosave settings for some type of chats were updated.
+Subtype of {@link Update}.
+*/
+export interface UpdateAutosaveSettings {
+	'@type': 'updateAutosaveSettings';
+	/**
+Type of chats for which autosave settings were updated.
+*/
+	scope: AutosaveSettingsScope;
+	/**
+The new autosave settings; may be null if the settings are reset to default.
+*/
+	settings: ScopeAutosaveSettings;
 }
 
 /**
@@ -18770,6 +19293,10 @@ Join request.
 */
 	request: ChatJoinRequest;
 	/**
+Chat identifier of the private chat with the user.
+*/
+	user_chat_id: number;
+	/**
 The invite link, which was used to send join request; may be null.
 */
 	invite_link: ChatInviteLink;
@@ -18949,7 +19476,9 @@ export type AuthenticationCodeType =
 	| AuthenticationCodeTypeCall
 	| AuthenticationCodeTypeFlashCall
 	| AuthenticationCodeTypeMissedCall
-	| AuthenticationCodeTypeFragment;
+	| AuthenticationCodeTypeFragment
+	| AuthenticationCodeTypeFirebaseAndroid
+	| AuthenticationCodeTypeFirebaseIos;
 
 export type EmailAddressAuthentication =
 	| EmailAddressAuthenticationCode
@@ -19016,10 +19545,15 @@ export type UserType =
 	| UserTypeBot
 	| UserTypeUnknown;
 
+export type ChatPhotoStickerType =
+	| ChatPhotoStickerTypeRegularOrMask
+	| ChatPhotoStickerTypeCustomEmoji;
+
 export type InputChatPhoto =
 	| InputChatPhotoPrevious
 	| InputChatPhotoStatic
-	| InputChatPhotoAnimation;
+	| InputChatPhotoAnimation
+	| InputChatPhotoSticker;
 
 export type ChatMemberStatus =
 	| ChatMemberStatusCreator
@@ -19114,6 +19648,8 @@ export type KeyboardButtonType =
 	| KeyboardButtonTypeRequestPhoneNumber
 	| KeyboardButtonTypeRequestLocation
 	| KeyboardButtonTypeRequestPoll
+	| KeyboardButtonTypeRequestUser
+	| KeyboardButtonTypeRequestChat
 	| KeyboardButtonTypeWebApp;
 
 export type InlineKeyboardButtonType =
@@ -19336,6 +19872,8 @@ export type MessageContent =
 	| MessagePaymentSuccessfulBot
 	| MessageGiftedPremium
 	| MessageContactRegistered
+	| MessageUserShared
+	| MessageChatShared
 	| MessageWebsiteConnected
 	| MessageBotWriteAccessAllowed
 	| MessageWebAppDataSent
@@ -19434,6 +19972,11 @@ export type UserStatus =
 	| UserStatusLastWeek
 	| UserStatusLastMonth;
 
+export type EmojiCategoryType =
+	| EmojiCategoryTypeDefault
+	| EmojiCategoryTypeEmojiStatus
+	| EmojiCategoryTypeChatPhoto;
+
 export type CallDiscardReason =
 	| CallDiscardReasonEmpty
 	| CallDiscardReasonMissed
@@ -19468,6 +20011,10 @@ export type CallProblem =
 	| CallProblemDropped
 	| CallProblemDistortedVideo
 	| CallProblemPixelatedVideo;
+
+export type FirebaseAuthenticationSettings =
+	| FirebaseAuthenticationSettingsAndroid
+	| FirebaseAuthenticationSettingsIos;
 
 export type DiceStickers =
 	| DiceStickersRegular
@@ -19588,7 +20135,8 @@ export type PremiumFeature =
 	| PremiumFeatureEmojiStatus
 	| PremiumFeatureAnimatedProfilePhoto
 	| PremiumFeatureForumTopicIcon
-	| PremiumFeatureAppIcons;
+	| PremiumFeatureAppIcons
+	| PremiumFeatureRealTimeChatTranslation;
 
 export type PremiumSource =
 	| PremiumSourceLimitExceeded
@@ -19611,7 +20159,8 @@ export type DeviceToken =
 	| DeviceTokenSimplePush
 	| DeviceTokenUbuntuPush
 	| DeviceTokenBlackBerryPush
-	| DeviceTokenTizenPush;
+	| DeviceTokenTizenPush
+	| DeviceTokenHuaweiPush;
 
 export type BackgroundFill =
 	| BackgroundFillSolid
@@ -19839,6 +20388,12 @@ export type NetworkStatisticsEntry =
 	| NetworkStatisticsEntryFile
 	| NetworkStatisticsEntryCall;
 
+export type AutosaveSettingsScope =
+	| AutosaveSettingsScopePrivateChats
+	| AutosaveSettingsScopeGroupChats
+	| AutosaveSettingsScopeChannelChats
+	| AutosaveSettingsScopeChat;
+
 export type ConnectionState =
 	| ConnectionStateWaitingForNetwork
 	| ConnectionStateConnectingToProxy
@@ -19867,7 +20422,9 @@ export type SuggestedAction =
 	| SuggestedActionCheckPhoneNumber
 	| SuggestedActionViewChecksHint
 	| SuggestedActionConvertToBroadcastGroup
-	| SuggestedActionSetPassword;
+	| SuggestedActionSetPassword
+	| SuggestedActionUpgradePremium
+	| SuggestedActionSubscribeToAnnualPremium;
 
 export type TextParseMode =
 	| TextParseModeMarkdown
@@ -19936,9 +20493,10 @@ export type Update =
 	| UpdateChatVideoChat
 	| UpdateChatDefaultDisableNotification
 	| UpdateChatHasProtectedContent
-	| UpdateChatHasScheduledMessages
-	| UpdateChatIsBlocked
+	| UpdateChatIsTranslatable
 	| UpdateChatIsMarkedAsUnread
+	| UpdateChatIsBlocked
+	| UpdateChatHasScheduledMessages
 	| UpdateChatFilters
 	| UpdateChatOnlineMemberCount
 	| UpdateForumTopicInfo
@@ -19994,6 +20552,7 @@ export type Update =
 	| UpdateAnimatedEmojiMessageClicked
 	| UpdateAnimationSearchParameters
 	| UpdateSuggestedActions
+	| UpdateAutosaveSettings
 	| UpdateNewInlineQuery
 	| UpdateNewChosenInlineResult
 	| UpdateNewCallbackQuery
@@ -20101,8 +20660,8 @@ as possible to the original name.
 /**
 Sets the phone number of the user and sends an authentication code to the user. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
-authorizationStateWaitPassword.
+authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
+authorizationStateWaitRegistration, or authorizationStateWaitPassword.
 Request type for {@link Tdjson#setAuthenticationPhoneNumber}.
 */
 export interface SetAuthenticationPhoneNumber {
@@ -20169,8 +20728,8 @@ Authentication code to check.
 /**
 Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
-authorizationStateWaitPassword.
+authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
+authorizationStateWaitRegistration, or authorizationStateWaitPassword.
 Request type for {@link Tdjson#requestQrCodeAuthentication}.
 */
 export interface RequestQrCodeAuthentication {
@@ -20252,6 +20811,20 @@ New 2-step verification password of the user; may be empty to remove the passwor
 New password hint; may be empty.
 */
 	new_hint: string;
+}
+
+/**
+Sends Firebase Authentication SMS to the phone number of the user. Works only when the current authorization state is
+authorizationStateWaitCode and the server returned code of the type authenticationCodeTypeFirebaseAndroid or
+authenticationCodeTypeFirebaseIos.
+Request type for {@link Tdjson#sendAuthenticationFirebaseSms}.
+*/
+export interface SendAuthenticationFirebaseSms {
+	'@type': 'sendAuthenticationFirebaseSms';
+	/**
+SafetyNet Attestation API token for the Android application, or secret from push notification for the iOS application.
+*/
+	token: string;
 }
 
 /**
@@ -20684,7 +21257,7 @@ Identifier of the message to get.
 }
 
 /**
-Returns information about a message that is replied by a given message. Also returns the pinned message, the game
+Returns information about a message that is replied by a given message. Also, returns the pinned message, the game
 message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
 messageGameScore, messagePaymentSuccessful, and topic messages without replied message respectively.
 Request type for {@link Tdjson#getRepliedMessage}.
@@ -20852,7 +21425,7 @@ The maximum number of chats to be returned.
 
 /**
 Searches a public chat by its username. Currently, only private chats, supergroups and channels can be public. Returns
-the chat if found; otherwise an error is returned.
+the chat if found; otherwise, an error is returned.
 Request type for {@link Tdjson#searchPublicChat}.
 */
 export interface SearchPublicChat {
@@ -21655,7 +22228,8 @@ The message link.
 }
 
 /**
-Translates a text to the given language. Returns a 404 error if the translation can't be performed.
+Translates a text to the given language. If the current user is a Telegram Premium user, then text formatting is
+preserved.
 Request type for {@link Tdjson#translateText}.
 */
 export interface TranslateText {
@@ -21663,14 +22237,42 @@ export interface TranslateText {
 	/**
 Text to translate.
 */
-	text: string;
+	text: FormattedText;
 	/**
-A two-letter ISO 639-1 language code of the language from which the message is translated. If empty, the language will
-be detected automatically.
+ISO language code of the language to which the message is translated. Must be one of "af", "sq", "am", "ar", "hy", "az",
+"eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh", "zh-Hans", "zh-TW", "zh-Hant", "co", "hr", "cs", "da", "nl",
+"en", "eo", "et", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "iw", "hi", "hmn", "hu",
+"is", "ig", "id", "in", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb",
+"mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "or", "ps", "fa", "pl", "pt", "pa", "ro", "ru",
+"sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tl", "tg", "ta", "tt", "te", "th",
+"tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "ji", "yo", "zu".
 */
-	from_language_code: string;
+	to_language_code: string;
+}
+
+/**
+Extracts text or caption of the given message and translates it to the given language. If the current user is a Telegram
+Premium user, then text formatting is preserved.
+Request type for {@link Tdjson#translateMessageText}.
+*/
+export interface TranslateMessageText {
+	'@type': 'translateMessageText';
 	/**
-A two-letter ISO 639-1 language code of the language to which the message is translated.
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+ISO language code of the language to which the message is translated. Must be one of "af", "sq", "am", "ar", "hy", "az",
+"eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh", "zh-Hans", "zh-TW", "zh-Hant", "co", "hr", "cs", "da", "nl",
+"en", "eo", "et", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "iw", "hi", "hmn", "hu",
+"is", "ig", "id", "in", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb",
+"mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "or", "ps", "fa", "pl", "pt", "pa", "ro", "ru",
+"sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tl", "tg", "ta", "tt", "te", "th",
+"tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "ji", "yo", "zu".
 */
 	to_language_code: string;
 }
@@ -22961,6 +23563,66 @@ Pass true to allow the bot to send messages to the current user.
 }
 
 /**
+Shares a user after pressing a keyboardButtonTypeRequestUser button with the bot.
+Request type for {@link Tdjson#shareUserWithBot}.
+*/
+export interface ShareUserWithBot {
+	'@type': 'shareUserWithBot';
+	/**
+Identifier of the chat with the bot.
+*/
+	chat_id: number;
+	/**
+Identifier of the message with the button.
+*/
+	message_id: number;
+	/**
+Identifier of the button.
+*/
+	button_id: number;
+	/**
+Identifier of the shared user.
+*/
+	shared_user_id: number;
+	/**
+Pass true to check that the user can be shared by the button instead of actually sharing them.
+*/
+	only_check?: boolean;
+}
+
+/**
+Shares a chat after pressing a keyboardButtonTypeRequestChat button with the bot.
+Request type for {@link Tdjson#shareChatWithBot}.
+*/
+export interface ShareChatWithBot {
+	'@type': 'shareChatWithBot';
+	/**
+Identifier of the chat with the bot.
+*/
+	chat_id: number;
+	/**
+Identifier of the message with the button.
+*/
+	message_id: number;
+	/**
+Identifier of the button.
+*/
+	button_id: number;
+	/**
+Identifier of the shared chat.
+*/
+	shared_chat_id: number;
+	/**
+Pass true to check that the chat can be shared by the button instead of actually sharing it. Doesn't check bot_is_member
+and bot_administrator_rights restrictions. If the bot must be a member, then all chats from getGroupsInCommon and all
+chats, where the user can add the bot, are suitable. In the latter case the bot will be automatically added to the chat.
+If the bot must be an administrator, then all chats, where the bot already has requested rights or can be added to
+administrators by the user, are suitable. In the latter case the bot will be automatically granted requested rights.
+*/
+	only_check?: boolean;
+}
+
+/**
 Sends an inline query to a bot and returns its results. Returns an error with code 502 if the bot fails to answer the
 query before the query timeout expires.
 Request type for {@link Tdjson#getInlineQueryResults}.
@@ -23642,7 +24304,11 @@ Title of the new chat; 1-128 characters.
 */
 	title: string;
 	/**
-Pass true to create a channel chat.
+Pass true to create a forum supergroup chat.
+*/
+	is_forum?: boolean;
+	/**
+Pass true to create a channel chat; ignored if a forum is created.
 */
 	is_channel?: boolean;
 	/**
@@ -23948,6 +24614,22 @@ Chat identifier.
 New value of has_protected_content.
 */
 	has_protected_content?: boolean;
+}
+
+/**
+Changes the tranlatable state of a chat; for Telegram Premium users only.
+Request type for {@link Tdjson#toggleChatIsTranslatable}.
+*/
+export interface ToggleChatIsTranslatable {
+	'@type': 'toggleChatIsTranslatable';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of is_translatable.
+*/
+	is_translatable?: boolean;
 }
 
 /**
@@ -26149,8 +26831,9 @@ The maximum number of photos to be returned; up to 100.
 }
 
 /**
-Returns stickers from the installed sticker sets that correspond to a given emoji or can be found by sticker-specific
-keywords. If the query is non-empty, then favorite, recently used or trending stickers may also be returned.
+Returns stickers from the installed sticker sets that correspond to any of the given emoji or can be found by
+sticker-specific keywords. If the query is non-empty, then favorite, recently used or trending stickers may also be
+returned.
 Request type for {@link Tdjson#getStickers}.
 */
 export interface GetStickers {
@@ -26160,7 +26843,7 @@ Type of the stickers to return.
 */
 	sticker_type: StickerType;
 	/**
-Search query; an emoji or a keyword prefix. If empty, returns all known installed stickers.
+Search query; a space-separated list of emoji or a keyword prefix. If empty, returns all known installed stickers.
 */
 	query: string;
 	/**
@@ -26174,15 +26857,19 @@ Chat identifier for which to return stickers. Available custom emoji stickers ma
 }
 
 /**
-Searches for stickers from public sticker sets that correspond to a given emoji.
+Searches for stickers from public sticker sets that correspond to any of the given emoji.
 Request type for {@link Tdjson#searchStickers}.
 */
 export interface SearchStickers {
 	'@type': 'searchStickers';
 	/**
-String representation of emoji; must be non-empty.
+Type of the stickers to return.
 */
-	emoji: string;
+	sticker_type: StickerType;
+	/**
+Space-separated list of emoji to search for; must be non-empty.
+*/
+	emojis: string;
 	/**
 The maximum number of stickers to be returned; 0-100.
 */
@@ -26504,6 +27191,18 @@ List of possible IETF language tags of the user's input language; may be empty i
 }
 
 /**
+Returns available emojis categories.
+Request type for {@link Tdjson#getEmojiCategories}.
+*/
+export interface GetEmojiCategories {
+	'@type': 'getEmojiCategories';
+	/**
+Type of emoji categories to return; pass null to get default emoji categories.
+*/
+	type: EmojiCategoryType;
+}
+
+/**
 Returns an animated emoji corresponding to a given emoji. Returns a 404 error if the emoji has no animated emoji.
 Request type for {@link Tdjson#getAnimatedEmoji}.
 */
@@ -26539,6 +27238,24 @@ export interface GetCustomEmojiStickers {
 Identifiers of custom emoji stickers. At most 200 custom emoji stickers can be received simultaneously.
 */
 	custom_emoji_ids: string[];
+}
+
+/**
+Returns default list of custom emoji stickers for placing on a chat photo.
+Request type for {@link Tdjson#getDefaultChatPhotoCustomEmojiStickers}.
+*/
+export interface GetDefaultChatPhotoCustomEmojiStickers {
+	'@type': 'getDefaultChatPhotoCustomEmojiStickers';
+
+}
+
+/**
+Returns default list of custom emoji stickers for placing on a profile photo.
+Request type for {@link Tdjson#getDefaultProfilePhotoCustomEmojiStickers}.
+*/
+export interface GetDefaultProfilePhotoCustomEmojiStickers {
+	'@type': 'getDefaultProfilePhotoCustomEmojiStickers';
+
 }
 
 /**
@@ -26869,7 +27586,7 @@ A two-letter ISO 639-1 language code or an empty string.
 }
 
 /**
-Returns the list of commands supported by the bot for the given user scope and language; for bots only.
+Returns list of commands supported by the bot for the given user scope and language; for bots only.
 Request type for {@link Tdjson#getCommands}.
 */
 export interface GetCommands {
@@ -28174,6 +28891,40 @@ Type of the network for which the new settings are relevant.
 }
 
 /**
+Returns autosave settings for the current user.
+Request type for {@link Tdjson#getAutosaveSettings}.
+*/
+export interface GetAutosaveSettings {
+	'@type': 'getAutosaveSettings';
+
+}
+
+/**
+Sets autosave settings for the given scope.
+Request type for {@link Tdjson#setAutosaveSettings}.
+*/
+export interface SetAutosaveSettings {
+	'@type': 'setAutosaveSettings';
+	/**
+Autosave settings scope.
+*/
+	scope: AutosaveSettingsScope;
+	/**
+New autosave settings for the scope; pass null to set autosave settings to default.
+*/
+	settings: ScopeAutosaveSettings;
+}
+
+/**
+Clears the list of all autosave settings exceptions.
+Request type for {@link Tdjson#clearAutosaveSettingsExceptions}.
+*/
+export interface ClearAutosaveSettingsExceptions {
+	'@type': 'clearAutosaveSettingsExceptions';
+
+}
+
+/**
 Returns information about a bank card.
 Request type for {@link Tdjson#getBankCardInfo}.
 */
@@ -29329,6 +30080,7 @@ export type Request =
 	| RequestAuthenticationPasswordRecovery
 	| CheckAuthenticationPasswordRecoveryCode
 	| RecoverAuthenticationPassword
+	| SendAuthenticationFirebaseSms
 	| CheckAuthenticationBotToken
 	| LogOut
 	| Close
@@ -29416,6 +30168,7 @@ export type Request =
 	| GetMessageEmbeddingCode
 	| GetMessageLinkInfo
 	| TranslateText
+	| TranslateMessageText
 	| RecognizeSpeech
 	| RateSpeechRecognition
 	| GetChatAvailableMessageSenders
@@ -29479,6 +30232,8 @@ export type Request =
 	| HideSuggestedAction
 	| GetLoginUrlInfo
 	| GetLoginUrl
+	| ShareUserWithBot
+	| ShareChatWithBot
 	| GetInlineQueryResults
 	| AnswerInlineQuery
 	| GetWebAppUrl
@@ -29533,6 +30288,7 @@ export type Request =
 	| SetChatDraftMessage
 	| SetChatNotificationSettings
 	| ToggleChatHasProtectedContent
+	| ToggleChatIsTranslatable
 	| ToggleChatIsMarkedAsUnread
 	| ToggleChatDefaultDisableNotification
 	| SetChatAvailableReactions
@@ -29684,9 +30440,12 @@ export type Request =
 	| RemoveFavoriteSticker
 	| GetStickerEmojis
 	| SearchEmojis
+	| GetEmojiCategories
 	| GetAnimatedEmoji
 	| GetEmojiSuggestionsUrl
 	| GetCustomEmojiStickers
+	| GetDefaultChatPhotoCustomEmojiStickers
+	| GetDefaultProfilePhotoCustomEmojiStickers
 	| GetSavedAnimations
 	| AddSavedAnimation
 	| RemoveSavedAnimation
@@ -29797,6 +30556,9 @@ export type Request =
 	| ResetNetworkStatistics
 	| GetAutoDownloadSettingsPresets
 	| SetAutoDownloadSettings
+	| GetAutosaveSettings
+	| SetAutosaveSettings
+	| ClearAutosaveSettingsExceptions
 	| GetBankCardInfo
 	| GetPassportElement
 	| GetAllPassportElements
@@ -29904,8 +30666,8 @@ authorizationStateWaitTdlibParameters.
 	/**
 Sets the phone number of the user and sends an authentication code to the user. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
-authorizationStateWaitPassword.
+authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
+authorizationStateWaitRegistration, or authorizationStateWaitPassword.
 */
 	async setAuthenticationPhoneNumber(options: Omit<SetAuthenticationPhoneNumber, '@type'>): Promise<Ok> {
 		return this._request({
@@ -29960,8 +30722,8 @@ Checks the authentication code. Works only when the current authorization state 
 	/**
 Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitCode, authorizationStateWaitRegistration, or
-authorizationStateWaitPassword.
+authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
+authorizationStateWaitRegistration, or authorizationStateWaitPassword.
 */
 	async requestQrCodeAuthentication(options: Omit<RequestQrCodeAuthentication, '@type'>): Promise<Ok> {
 		return this._request({
@@ -30020,6 +30782,18 @@ up. Works only when the current authorization state is authorizationStateWaitPas
 		return this._request({
 			...options,
 			'@type': 'recoverAuthenticationPassword',
+		});
+	}
+
+	/**
+Sends Firebase Authentication SMS to the phone number of the user. Works only when the current authorization state is
+authorizationStateWaitCode and the server returned code of the type authenticationCodeTypeFirebaseAndroid or
+authenticationCodeTypeFirebaseIos.
+*/
+	async sendAuthenticationFirebaseSms(options: Omit<SendAuthenticationFirebaseSms, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'sendAuthenticationFirebaseSms',
 		});
 	}
 
@@ -30369,7 +31143,7 @@ Returns information about a message, if it is available without sending network 
 	}
 
 	/**
-Returns information about a message that is replied by a given message. Also returns the pinned message, the game
+Returns information about a message that is replied by a given message. Also, returns the pinned message, the game
 message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
 messageGameScore, messagePaymentSuccessful, and topic messages without replied message respectively.
 */
@@ -30480,7 +31254,7 @@ updates processing instead to maintain chat lists in a consistent state.
 
 	/**
 Searches a public chat by its username. Currently, only private chats, supergroups and channels can be public. Returns
-the chat if found; otherwise an error is returned.
+the chat if found; otherwise, an error is returned.
 */
 	async searchPublicChat(options: Omit<SearchPublicChat, '@type'>): Promise<Chat> {
 		return this._request({
@@ -30939,12 +31713,24 @@ internalLinkTypeMessage.
 	}
 
 	/**
-Translates a text to the given language. Returns a 404 error if the translation can't be performed.
+Translates a text to the given language. If the current user is a Telegram Premium user, then text formatting is
+preserved.
 */
-	async translateText(options: Omit<TranslateText, '@type'>): Promise<Text> {
+	async translateText(options: Omit<TranslateText, '@type'>): Promise<FormattedText> {
 		return this._request({
 			...options,
 			'@type': 'translateText',
+		});
+	}
+
+	/**
+Extracts text or caption of the given message and translates it to the given language. If the current user is a Telegram
+Premium user, then text formatting is preserved.
+*/
+	async translateMessageText(options: Omit<TranslateMessageText, '@type'>): Promise<FormattedText> {
+		return this._request({
+			...options,
+			'@type': 'translateMessageText',
 		});
 	}
 
@@ -31616,6 +32402,26 @@ needed. If an error is returned, then the button must be handled as an ordinary 
 	}
 
 	/**
+Shares a user after pressing a keyboardButtonTypeRequestUser button with the bot.
+*/
+	async shareUserWithBot(options: Omit<ShareUserWithBot, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'shareUserWithBot',
+		});
+	}
+
+	/**
+Shares a chat after pressing a keyboardButtonTypeRequestChat button with the bot.
+*/
+	async shareChatWithBot(options: Omit<ShareChatWithBot, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'shareChatWithBot',
+		});
+	}
+
+	/**
 Sends an inline query to a bot and returns its results. Returns an error with code 502 if the bot fails to answer the
 query before the query timeout expires.
 */
@@ -32179,6 +32985,16 @@ channels. Requires owner privileges.
 		return this._request({
 			...options,
 			'@type': 'toggleChatHasProtectedContent',
+		});
+	}
+
+	/**
+Changes the tranlatable state of a chat; for Telegram Premium users only.
+*/
+	async toggleChatIsTranslatable(options: Omit<ToggleChatIsTranslatable, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleChatIsTranslatable',
 		});
 	}
 
@@ -33500,8 +34316,9 @@ Returns the profile photos of a user. Personal and public photo aren't returned.
 	}
 
 	/**
-Returns stickers from the installed sticker sets that correspond to a given emoji or can be found by sticker-specific
-keywords. If the query is non-empty, then favorite, recently used or trending stickers may also be returned.
+Returns stickers from the installed sticker sets that correspond to any of the given emoji or can be found by
+sticker-specific keywords. If the query is non-empty, then favorite, recently used or trending stickers may also be
+returned.
 */
 	async getStickers(options: Omit<GetStickers, '@type'>): Promise<Stickers> {
 		return this._request({
@@ -33511,7 +34328,7 @@ keywords. If the query is non-empty, then favorite, recently used or trending st
 	}
 
 	/**
-Searches for stickers from public sticker sets that correspond to a given emoji.
+Searches for stickers from public sticker sets that correspond to any of the given emoji.
 */
 	async searchStickers(options: Omit<SearchStickers, '@type'>): Promise<Stickers> {
 		return this._request({
@@ -33738,6 +34555,16 @@ Searches for emojis by keywords. Supported only if the file database is enabled.
 	}
 
 	/**
+Returns available emojis categories.
+*/
+	async getEmojiCategories(options: Omit<GetEmojiCategories, '@type'>): Promise<EmojiCategories> {
+		return this._request({
+			...options,
+			'@type': 'getEmojiCategories',
+		});
+	}
+
+	/**
 Returns an animated emoji corresponding to a given emoji. Returns a 404 error if the emoji has no animated emoji.
 */
 	async getAnimatedEmoji(options: Omit<GetAnimatedEmoji, '@type'>): Promise<AnimatedEmoji> {
@@ -33766,6 +34593,24 @@ stickers are returned.
 		return this._request({
 			...options,
 			'@type': 'getCustomEmojiStickers',
+		});
+	}
+
+	/**
+Returns default list of custom emoji stickers for placing on a chat photo.
+*/
+	async getDefaultChatPhotoCustomEmojiStickers(): Promise<Stickers> {
+		return this._request({
+			'@type': 'getDefaultChatPhotoCustomEmojiStickers',
+		});
+	}
+
+	/**
+Returns default list of custom emoji stickers for placing on a profile photo.
+*/
+	async getDefaultProfilePhotoCustomEmojiStickers(): Promise<Stickers> {
+		return this._request({
+			'@type': 'getDefaultProfilePhotoCustomEmojiStickers',
 		});
 	}
 
@@ -34014,7 +34859,7 @@ Deletes commands supported by the bot for the given user scope and language; for
 	}
 
 	/**
-Returns the list of commands supported by the bot for the given user scope and language; for bots only.
+Returns list of commands supported by the bot for the given user scope and language; for bots only.
 */
 	async getCommands(options: Omit<GetCommands, '@type'>): Promise<BotCommands> {
 		return this._request({
@@ -34891,6 +35736,34 @@ Sets auto-download settings.
 		return this._request({
 			...options,
 			'@type': 'setAutoDownloadSettings',
+		});
+	}
+
+	/**
+Returns autosave settings for the current user.
+*/
+	async getAutosaveSettings(): Promise<AutosaveSettings> {
+		return this._request({
+			'@type': 'getAutosaveSettings',
+		});
+	}
+
+	/**
+Sets autosave settings for the given scope.
+*/
+	async setAutosaveSettings(options: Omit<SetAutosaveSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setAutosaveSettings',
+		});
+	}
+
+	/**
+Clears the list of all autosave settings exceptions.
+*/
+	async clearAutosaveSettingsExceptions(): Promise<Ok> {
+		return this._request({
+			'@type': 'clearAutosaveSettingsExceptions',
 		});
 	}
 
