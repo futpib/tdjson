@@ -37,7 +37,8 @@ Length of the code.
 }
 
 /**
-An authentication code is delivered via an SMS message to the specified phone number.
+An authentication code is delivered via an SMS message to the specified phone number; applications may not receive this
+type of code.
 Subtype of {@link AuthenticationCodeType}.
 */
 export interface AuthenticationCodeTypeSms {
@@ -130,7 +131,7 @@ Subtype of {@link AuthenticationCodeType}.
 export interface AuthenticationCodeTypeFirebaseIos {
 	'@type': 'authenticationCodeTypeFirebaseIos';
 	/**
-Receipt of successful applikation token validation to compare with receipt from push notification.
+Receipt of successful application token validation to compare with receipt from push notification.
 */
 	receipt: string;
 	/**
@@ -216,6 +217,32 @@ export interface EmailAddressAuthenticationGoogleId {
 The token.
 */
 	token: string;
+}
+
+/**
+Describes reset state of a email address.
+Subtype of {@link EmailAddressResetState}.
+*/
+export interface EmailAddressResetStateAvailable {
+	'@type': 'emailAddressResetStateAvailable';
+	/**
+Time required to wait before the email address can be reset; 0 if the user is subscribed to Telegram Premium.
+*/
+	wait_period: number;
+}
+
+/**
+Email address reset has already been requested. Call resetAuthenticationEmailAddress to check whether immediate reset is
+possible.
+Subtype of {@link EmailAddressResetState}.
+*/
+export interface EmailAddressResetStatePending {
+	'@type': 'emailAddressResetStatePending';
+	/**
+Left time before the email address will be reset, in seconds. updateAuthorizationState is not sent when this field
+changes.
+*/
+	reset_in: number;
 }
 
 /**
@@ -340,10 +367,9 @@ Information about the sent authentication code.
 */
 	code_info: EmailAddressAuthenticationCodeInfo;
 	/**
-Point in time (Unix timestamp) when the user will be able to authorize with a code sent to the user's phone number; 0 if
-unknown.
+Reset state of the email address; may be null if the email address can't be reset.
 */
-	next_phone_number_authorization_date: number;
+	email_address_reset_state: EmailAddressResetState;
 }
 
 /**
@@ -399,6 +425,10 @@ Hint for the password; may be empty.
 True, if a recovery email address has been set up.
 */
 	has_recovery_email_address?: boolean;
+	/**
+True, if some Telegram Passport elements were saved.
+*/
+	has_passport_data?: boolean;
 	/**
 Pattern of the email address to which the recovery email was sent; empty until a recovery email has been sent.
 */
@@ -952,7 +982,7 @@ Identifier of the custom emoji.
 	custom_emoji_id: string;
 	/**
 True, if the sticker must be repainted to a text color in messages, the color of the Telegram Premium badge in emoji
-status, or another appropriate color in other places. The sticker must not be repainted on chat photos.
+status, white color on chat photos, or another appropriate color in other places.
 */
 	needs_repainting?: boolean;
 }
@@ -1428,7 +1458,7 @@ Type of the venue in the provider database; as defined by the sender.
 }
 
 /**
-Describes a game.
+Describes a game. Use getInternalLink with internalLinkTypeGame to share the game.
 */
 export interface Game {
 	'@type': 'game';
@@ -1437,7 +1467,7 @@ Unique game identifier.
 */
 	id: string;
 	/**
-Game short name. To share a game use the URL https://t.me/{bot_username}?game={game_short_name}.
+Game short name.
 */
 	short_name: string;
 	/**
@@ -1449,7 +1479,7 @@ Game text, usually containing scoreboards for a game.
 */
 	text: FormattedText;
 	/**
-Describes a game.
+Describes a game. Use getInternalLink with internalLinkTypeGame to share the game.
 */
 	description: string;
 	/**
@@ -1458,6 +1488,33 @@ Game photo.
 	photo: Photo;
 	/**
 Game animation; may be null.
+*/
+	animation: Animation;
+}
+
+/**
+Describes a Web App. Use getInternalLink with internalLinkTypeWebApp to share the Web App.
+*/
+export interface WebApp {
+	'@type': 'webApp';
+	/**
+Web App short name.
+*/
+	short_name: string;
+	/**
+Web App title.
+*/
+	title: string;
+	/**
+Describes a Web App. Use getInternalLink with internalLinkTypeWebApp to share the Web App.
+*/
+	description: string;
+	/**
+Web App photo.
+*/
+	photo: Photo;
+	/**
+Web App animation; may be null.
 */
 	animation: Animation;
 }
@@ -1863,7 +1920,7 @@ export interface ChatPermissions {
 	/**
 True, if the user can send text messages, contacts, invoices, locations, and venues.
 */
-	can_send_messages?: boolean;
+	can_send_basic_messages?: boolean;
 	/**
 True, if the user can send music files.
 */
@@ -2171,7 +2228,7 @@ export interface BotInfo {
 	/**
 The text that is shown on the bot's profile page and is sent together with the link when users share the bot.
 */
-	share_text: string;
+	short_description: string;
 	/**
 Contains information about a bot.
 */
@@ -3243,6 +3300,32 @@ List of available message senders.
 }
 
 /**
+Represents a viewer of a message.
+*/
+export interface MessageViewer {
+	'@type': 'messageViewer';
+	/**
+User identifier of the viewer.
+*/
+	user_id: number;
+	/**
+Approximate point in time (Unix timestamp) when the message was viewed.
+*/
+	view_date: number;
+}
+
+/**
+Represents a list of message viewers.
+*/
+export interface MessageViewers {
+	'@type': 'messageViewers';
+	/**
+List of message viewers.
+*/
+	viewers: MessageViewer[];
+}
+
+/**
 Contains information about the origin of a forwarded message.
 Subtype of {@link MessageForwardOrigin}.
 */
@@ -3469,7 +3552,10 @@ Subtype of {@link MessageSendingState}.
 */
 export interface MessageSendingStatePending {
 	'@type': 'messageSendingStatePending';
-
+	/**
+Non-persistent message sending identifier, specified by the application.
+*/
+	sending_id: number;
 }
 
 /**
@@ -3790,6 +3876,87 @@ Information about messages sent.
 }
 
 /**
+Describes source of a message.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceChatHistory {
+	'@type': 'messageSourceChatHistory';
+
+}
+
+/**
+The message is from a message thread history.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceMessageThreadHistory {
+	'@type': 'messageSourceMessageThreadHistory';
+
+}
+
+/**
+The message is from a forum topic history.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceForumTopicHistory {
+	'@type': 'messageSourceForumTopicHistory';
+
+}
+
+/**
+The message is from chat, message thread or forum topic history preview.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceHistoryPreview {
+	'@type': 'messageSourceHistoryPreview';
+
+}
+
+/**
+The message is from a chat list or a forum topic list.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceChatList {
+	'@type': 'messageSourceChatList';
+
+}
+
+/**
+The message is from search results, including file downloads, local file list, outgoing document messages, calendar.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceSearch {
+	'@type': 'messageSourceSearch';
+
+}
+
+/**
+The message is from a chat event log.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceChatEventLog {
+	'@type': 'messageSourceChatEventLog';
+
+}
+
+/**
+The message is from a notification.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceNotification {
+	'@type': 'messageSourceNotification';
+
+}
+
+/**
+The message is from some other source.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceOther {
+	'@type': 'messageSourceOther';
+
+}
+
+/**
 Describes a sponsored message.
 */
 export interface SponsoredMessage {
@@ -3824,6 +3991,14 @@ instead.
 Content of the message. Currently, can be only of the type messageText.
 */
 	content: MessageContent;
+	/**
+If non-empty, information about the sponsor to be shown along with the message.
+*/
+	sponsor_info: string;
+	/**
+If non-empty, additional information about the sponsored message to be shown along with the message.
+*/
+	additional_info: string;
 }
 
 /**
@@ -4996,9 +5171,9 @@ The URL to open.
 */
 	url: string;
 	/**
-True, if there is no need to show an ordinary open URL confirm.
+True, if there is no need to show an ordinary open URL confirmation.
 */
-	skip_confirm?: boolean;
+	skip_confirmation?: boolean;
 }
 
 /**
@@ -5020,9 +5195,29 @@ User identifier of a bot linked with the website.
 */
 	bot_user_id: number;
 	/**
-True, if the user needs to be requested to give the permission to the bot to send them messages.
+True, if the user must be asked for the permission to the bot to send them messages.
 */
 	request_write_access?: boolean;
+}
+
+/**
+Contains information about a Web App found by its short name.
+*/
+export interface FoundWebApp {
+	'@type': 'foundWebApp';
+	/**
+The Web App.
+*/
+	web_app: WebApp;
+	/**
+True, if the user must be asked for the permission to the bot to send them messages.
+*/
+	request_write_access?: boolean;
+	/**
+True, if there is no need to show an ordinary open URL confirmation before opening the Web App. The field must be
+ignored and confirmation must be shown anyway if the Web App link was hidden.
+*/
+	skip_confirmation?: boolean;
 }
 
 /**
@@ -8174,7 +8369,7 @@ The poll description.
 }
 
 /**
-A message with an invoice from a bot.
+A message with an invoice from a bot. Use getInternalLink with internalLinkTypeBotStart to share the invoice.
 Subtype of {@link MessageContent}.
 */
 export interface MessageInvoice {
@@ -8184,7 +8379,7 @@ Product title.
 */
 	title: string;
 	/**
-A message with an invoice from a bot.
+A message with an invoice from a bot. Use getInternalLink with internalLinkTypeBotStart to share the invoice.
 */
 	description: FormattedText;
 	/**
@@ -8200,7 +8395,7 @@ Product total price in the smallest units of the currency.
 */
 	total_amount: number;
 	/**
-Unique invoice bot start_parameter. To share an invoice use the URL https://t.me/{bot_username}?start={start_parameter}.
+Unique invoice bot start_parameter to be passed to getInternalLink.
 */
 	start_parameter: string;
 	/**
@@ -8745,7 +8940,11 @@ Subtype of {@link MessageContent}.
 */
 export interface MessageBotWriteAccessAllowed {
 	'@type': 'messageBotWriteAccessAllowed';
-
+	/**
+Information about the Web App, which requested the access; may be null if none or the Web App was opened from the
+attachment menu.
+*/
+	web_app: WebApp;
 }
 
 /**
@@ -9097,6 +9296,11 @@ Message scheduling state; pass null to send message immediately. Messages sent t
 and self-destructing messages can't be scheduled.
 */
 	scheduling_state: MessageSchedulingState;
+	/**
+Non-persistent identifier, which will be returned back in messageSendingStatePending object and can be used to match
+sent messages and corresponding updateNewMessage updates.
+*/
+	sending_id: number;
 }
 
 /**
@@ -10163,9 +10367,9 @@ Name of the category.
 */
 	name: string;
 	/**
-Unique identifier of the custom emoji, which represents icon of the category.
+Custom emoji sticker, which represents icon of the category.
 */
-	icon_custom_emoji_id: string;
+	icon: Sticker;
 	/**
 List of emojis in the category.
 */
@@ -10948,6 +11152,10 @@ Type of the reaction.
 Identifier of the chat member, applied the reaction.
 */
 	sender_id: MessageSender;
+	/**
+Point in time (Unix timestamp) when the reaction was added.
+*/
+	date: number;
 }
 
 /**
@@ -11207,7 +11415,7 @@ True, if the bot supports "settings_button_pressed" event.
 */
 	supports_settings?: boolean;
 	/**
-True, if the user needs to be requested to give the permission to the bot to send them messages.
+True, if the user must be asked for the permission to the bot to send them messages.
 */
 	request_write_access?: boolean;
 	/**
@@ -12037,6 +12245,45 @@ Title of the voice note.
 }
 
 /**
+Represents a type of a button in results of inline query.
+Subtype of {@link InlineQueryResultsButtonType}.
+*/
+export interface InlineQueryResultsButtonTypeStartBot {
+	'@type': 'inlineQueryResultsButtonTypeStartBot';
+	/**
+The parameter for the bot start message.
+*/
+	parameter: string;
+}
+
+/**
+Describes the button that opens a Web App by calling getWebAppUrl.
+Subtype of {@link InlineQueryResultsButtonType}.
+*/
+export interface InlineQueryResultsButtonTypeWebApp {
+	'@type': 'inlineQueryResultsButtonTypeWebApp';
+	/**
+An HTTP URL to pass to getWebAppUrl.
+*/
+	url: string;
+}
+
+/**
+Represents a button to be shown above inline query results.
+*/
+export interface InlineQueryResultsButton {
+	'@type': 'inlineQueryResultsButton';
+	/**
+The text of the button.
+*/
+	text: string;
+	/**
+Type of the button.
+*/
+	type: InlineQueryResultsButtonType;
+}
+
+/**
 Represents the results of the inline query. Use sendInlineQueryResultMessage to send the result of the query.
 */
 export interface InlineQueryResults {
@@ -12046,22 +12293,17 @@ Unique identifier of the inline query.
 */
 	inline_query_id: string;
 	/**
-The offset for the next request. If empty, there are no more results.
+Button to be shown above inline query results; may be null.
 */
-	next_offset: string;
+	button: InlineQueryResultsButton;
 	/**
 Results of the query.
 */
 	results: InlineQueryResult[];
 	/**
-If non-empty, this text must be shown on the button, which opens a private chat with the bot and sends the bot a start
-message with the switch_pm_parameter.
+The offset for the next request. If empty, there are no more results.
 */
-	switch_pm_text: string;
-	/**
-Parameter for the bot start message.
-*/
-	switch_pm_parameter: string;
+	next_offset: string;
 }
 
 /**
@@ -15496,6 +15738,27 @@ Name of the background.
 }
 
 /**
+The link is a link to a Telegram bot, which is supposed to be added to a channel chat as an administrator. Call
+searchPublicChat with the given bot username and check that the user is a bot, ask the current user to select a channel
+chat to add the bot to as an administrator. Then, call getChatMember to receive the current bot rights in the chat and
+if the bot already is an administrator, check that the current user can edit its administrator rights and combine
+received rights with the requested administrator rights. Then, show confirmation box to the user, and call
+setChatMemberStatus with the chosen chat and confirmed rights.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeBotAddToChannel {
+	'@type': 'internalLinkTypeBotAddToChannel';
+	/**
+Username of the bot.
+*/
+	bot_username: string;
+	/**
+Expected administrator rights for the bot.
+*/
+	administrator_rights: ChatAdministratorRights;
+}
+
+/**
 The link is a link to a chat with a Telegram bot. Call searchPublicChat with the given bot username, check that the user
 is a bot, show START button in the chat with the bot, and then call sendBotStartMessage with the given start parameter
 after the button is pressed.
@@ -15542,27 +15805,6 @@ The parameter to be passed to sendBotStartMessage.
 	start_parameter: string;
 	/**
 Expected administrator rights for the bot; may be null.
-*/
-	administrator_rights: ChatAdministratorRights;
-}
-
-/**
-The link is a link to a Telegram bot, which is supposed to be added to a channel chat as an administrator. Call
-searchPublicChat with the given bot username and check that the user is a bot, ask the current user to select a channel
-chat to add the bot to as an administrator. Then, call getChatMember to receive the current bot rights in the chat and
-if the bot already is an administrator, check that the current user can edit its administrator rights and combine
-received rights with the requested administrator rights. Then, show confirmation box to the user, and call
-setChatMemberStatus with the chosen chat and confirmed rights.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeBotAddToChannel {
-	'@type': 'internalLinkTypeBotAddToChannel';
-	/**
-Username of the bot.
-*/
-	bot_username: string;
-	/**
-Expected administrator rights for the bot.
 */
 	administrator_rights: ChatAdministratorRights;
 }
@@ -15763,7 +16005,7 @@ Phone number value from the link.
 }
 
 /**
-The link is a link to the Premium features screen of the applcation from which the user can subscribe to Telegram
+The link is a link to the Premium features screen of the application from which the user can subscribe to Telegram
 Premium. Call getPremiumFeatures with the given referrer to process the link.
 Subtype of {@link InternalLinkType}.
 */
@@ -15948,6 +16190,28 @@ If non-empty, invite hash to be used to join the video chat without being muted 
 True, if the video chat is expected to be a live stream in a channel or a broadcast group.
 */
 	is_live_stream?: boolean;
+}
+
+/**
+The link is a link to a Web App. Call searchPublicChat with the given bot username, check that the user is a bot, then
+call searchWebApp with the received bot and the given web_app_short_name. Process received foundWebApp by showing a
+confirmation dialog if needed, then calling getWebAppLinkUrl and opening the returned URL.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeWebApp {
+	'@type': 'internalLinkTypeWebApp';
+	/**
+Username of the bot that owns the Web App.
+*/
+	bot_username: string;
+	/**
+Short name of the Web App.
+*/
+	web_app_short_name: string;
+	/**
+Start parameter to be passed to getWebAppLinkUrl.
+*/
+	start_parameter: string;
 }
 
 /**
@@ -16962,23 +17226,23 @@ A sticker to be added to a sticker set.
 export interface InputSticker {
 	'@type': 'inputSticker';
 	/**
-File with the sticker; must fit in a 512x512 square. For WEBP stickers and masks the file must be in PNG format, which
-will be converted to WEBP server-side. Otherwise, the file must be local or uploaded within a week. See
-https://core.telegram.org/animated_stickers#technical-requirements for technical requirements.
+File with the sticker; must fit in a 512x512 square. For WEBP stickers the file must be in WEBP or PNG format, which
+will be converted to WEBP server-side. See https://core.telegram.org/animated_stickers#technical-requirements for
+technical requirements.
 */
 	sticker: InputFile;
 	/**
-Emojis corresponding to the sticker.
+String with 1-20 emoji corresponding to the sticker.
 */
 	emojis: string;
-	/**
-Sticker format.
-*/
-	format: StickerFormat;
 	/**
 Position where the mask is placed; pass null if not specified.
 */
 	mask_position: MaskPosition;
+	/**
+List of up to 20 keywords with total length up to 64 characters, which can be used to find the sticker.
+*/
+	keywords: string[];
 }
 
 /**
@@ -18825,7 +19089,7 @@ Identifier of the updated language pack.
 */
 	language_pack_id: string;
 	/**
-List of changed language pack strings.
+List of changed language pack strings; empty if all strings have changed.
 */
 	strings: LanguagePackString[];
 }
@@ -18984,6 +19248,23 @@ Added suggested actions.
 Removed suggested actions.
 */
 	removed_actions: SuggestedAction[];
+}
+
+/**
+Adding users to a chat has failed because of their privacy settings. An invite link can be shared with the users if
+appropriate.
+Subtype of {@link Update}.
+*/
+export interface UpdateAddChatMembersPrivacyForbidden {
+	'@type': 'updateAddChatMembersPrivacyForbidden';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifiers of users, which weren't added because of their privacy settings.
+*/
+	user_ids: number[];
 }
 
 /**
@@ -19485,6 +19766,10 @@ export type EmailAddressAuthentication =
 	| EmailAddressAuthenticationAppleId
 	| EmailAddressAuthenticationGoogleId;
 
+export type EmailAddressResetState =
+	| EmailAddressResetStateAvailable
+	| EmailAddressResetStatePending;
+
 export type AuthorizationState =
 	| AuthorizationStateWaitTdlibParameters
 	| AuthorizationStateWaitPhoneNumber
@@ -19605,6 +19890,17 @@ export type ReactionType =
 export type MessageSendingState =
 	| MessageSendingStatePending
 	| MessageSendingStateFailed;
+
+export type MessageSource =
+	| MessageSourceChatHistory
+	| MessageSourceMessageThreadHistory
+	| MessageSourceForumTopicHistory
+	| MessageSourceHistoryPreview
+	| MessageSourceChatList
+	| MessageSourceSearch
+	| MessageSourceChatEventLog
+	| MessageSourceNotification
+	| MessageSourceOther;
 
 export type NotificationSettingsScope =
 	| NotificationSettingsScopePrivateChats
@@ -20053,6 +20349,10 @@ export type InlineQueryResult =
 	| InlineQueryResultVideo
 	| InlineQueryResultVoiceNote;
 
+export type InlineQueryResultsButtonType =
+	| InlineQueryResultsButtonTypeStartBot
+	| InlineQueryResultsButtonTypeWebApp;
+
 export type CallbackQueryPayload =
 	| CallbackQueryPayloadData
 	| CallbackQueryPayloadDataWithPassword
@@ -20325,9 +20625,9 @@ export type InternalLinkType =
 	| InternalLinkTypeAttachmentMenuBot
 	| InternalLinkTypeAuthenticationCode
 	| InternalLinkTypeBackground
+	| InternalLinkTypeBotAddToChannel
 	| InternalLinkTypeBotStart
 	| InternalLinkTypeBotStartInGroup
-	| InternalLinkTypeBotAddToChannel
 	| InternalLinkTypeChangePhoneNumber
 	| InternalLinkTypeChatInvite
 	| InternalLinkTypeDefaultMessageAutoDeleteTimerSettings
@@ -20356,7 +20656,8 @@ export type InternalLinkType =
 	| InternalLinkTypeUnsupportedProxy
 	| InternalLinkTypeUserPhoneNumber
 	| InternalLinkTypeUserToken
-	| InternalLinkTypeVideoChat;
+	| InternalLinkTypeVideoChat
+	| InternalLinkTypeWebApp;
 
 export type FileType =
 	| FileTypeNone
@@ -20552,6 +20853,7 @@ export type Update =
 	| UpdateAnimatedEmojiMessageClicked
 	| UpdateAnimationSearchParameters
 	| UpdateSuggestedActions
+	| UpdateAddChatMembersPrivacyForbidden
 	| UpdateAutosaveSettings
 	| UpdateNewInlineQuery
 	| UpdateNewChosenInlineResult
@@ -20757,6 +21059,17 @@ The last name of the user; 0-64 characters.
 }
 
 /**
+Resets the login email address. May return an error with a message "TASK_ALREADY_EXISTS" if reset is still pending.
+Works only when the current authorization state is authorizationStateWaitEmailCode and
+authorization_state.can_reset_email_address == true.
+Request type for {@link Tdjson#resetAuthenticationEmailAddress}.
+*/
+export interface ResetAuthenticationEmailAddress {
+	'@type': 'resetAuthenticationEmailAddress';
+
+}
+
+/**
 Checks the 2-step verification password for correctness. Works only when the current authorization state is
 authorizationStateWaitPassword.
 Request type for {@link Tdjson#checkAuthenticationPassword}.
@@ -20946,8 +21259,9 @@ New recovery email address; may be empty.
 }
 
 /**
-Changes the login email address of the user. The change will not be applied until the new login email address is
-confirmed with checkLoginEmailAddressCode. To use Apple ID/Google ID instead of a email address, call
+Changes the login email address of the user. The email address can be changed only if the current user already has login
+email and passwordState.login_email_address_pattern is non-empty. The change will not be applied until the new login
+email address is confirmed with checkLoginEmailAddressCode. To use Apple ID/Google ID instead of a email address, call
 checkLoginEmailAddressCode directly.
 Request type for {@link Tdjson#setLoginEmailAddress}.
 */
@@ -22239,7 +22553,7 @@ Text to translate.
 */
 	text: FormattedText;
 	/**
-ISO language code of the language to which the message is translated. Must be one of "af", "sq", "am", "ar", "hy", "az",
+Language code of the language to which the message is translated. Must be one of "af", "sq", "am", "ar", "hy", "az",
 "eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh", "zh-Hans", "zh-TW", "zh-Hant", "co", "hr", "cs", "da", "nl",
 "en", "eo", "et", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "iw", "hi", "hmn", "hu",
 "is", "ig", "id", "in", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb",
@@ -22266,7 +22580,7 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-ISO language code of the language to which the message is translated. Must be one of "af", "sq", "am", "ar", "hy", "az",
+Language code of the language to which the message is translated. Must be one of "af", "sq", "am", "ar", "hy", "az",
 "eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh", "zh-Hans", "zh-TW", "zh-Hant", "co", "hr", "cs", "da", "nl",
 "en", "eo", "et", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "iw", "hi", "hmn", "hu",
 "is", "ig", "id", "in", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb",
@@ -23667,6 +23981,10 @@ returned to any user who sends the same query.
 */
 	is_personal?: boolean;
 	/**
+Button to be shown above inline query results; pass null if none.
+*/
+	button: InlineQueryResultsButton;
+	/**
 The results of the query.
 */
 	results: InputInlineQueryResult[];
@@ -23678,19 +23996,63 @@ Allowed time to cache the results of the query, in seconds.
 Offset for the next inline query; pass an empty string if there are no more results.
 */
 	next_offset: string;
-	/**
-If non-empty, this text must be shown on the button that opens a private chat with the bot and sends a start message to
-the bot with the parameter switch_pm_parameter.
-*/
-	switch_pm_text: string;
-	/**
-The parameter for the bot start message.
-*/
-	switch_pm_parameter: string;
 }
 
 /**
-Returns an HTTPS URL of a Web App to open after keyboardButtonTypeWebApp button is pressed.
+Returns information about a Web App by its short name. Returns a 404 error if the Web App is not found.
+Request type for {@link Tdjson#searchWebApp}.
+*/
+export interface SearchWebApp {
+	'@type': 'searchWebApp';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+Short name of the Web App.
+*/
+	web_app_short_name: string;
+}
+
+/**
+Returns an HTTPS URL of a Web App to open after a link of the type internalLinkTypeWebApp is clicked.
+Request type for {@link Tdjson#getWebAppLinkUrl}.
+*/
+export interface GetWebAppLinkUrl {
+	'@type': 'getWebAppLinkUrl';
+	/**
+Identifier of the chat in which the link was clicked; pass 0 if none.
+*/
+	chat_id: number;
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+Short name of the Web App.
+*/
+	web_app_short_name: string;
+	/**
+Start parameter from internalLinkTypeWebApp.
+*/
+	start_parameter: string;
+	/**
+Preferred Web App theme; pass null to use the default theme.
+*/
+	theme: ThemeParameters;
+	/**
+Short name of the application; 0-64 English letters, digits, and underscores.
+*/
+	application_name: string;
+	/**
+Pass true if the current user allowed the bot to send them messages.
+*/
+	allow_write_access?: boolean;
+}
+
+/**
+Returns an HTTPS URL of a Web App to open after keyboardButtonTypeWebApp or inlineQueryResultsButtonTypeWebApp button is
+pressed.
 Request type for {@link Tdjson#getWebAppUrl}.
 */
 export interface GetWebAppUrl {
@@ -23700,7 +24062,7 @@ Identifier of the target bot.
 */
 	bot_user_id: number;
 	/**
-The URL from the keyboardButtonTypeWebApp button.
+The URL from the keyboardButtonTypeWebApp or inlineQueryResultsButtonTypeWebApp button.
 */
 	url: string;
 	/**
@@ -23742,7 +24104,7 @@ Request type for {@link Tdjson#openWebApp}.
 export interface OpenWebApp {
 	'@type': 'openWebApp';
 	/**
-Identifier of the chat in which the Web App is opened.
+Identifier of the chat in which the Web App is opened. The Web App can't be opened in secret chats.
 */
 	chat_id: number;
 	/**
@@ -24061,13 +24423,13 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-If not 0, a message thread identifier in which the messages are being viewed.
-*/
-	message_thread_id: number;
-	/**
 The identifiers of the messages being viewed.
 */
 	message_ids: number[];
+	/**
+Source of the message view; pass null to guess the source based on chat open state.
+*/
+	source: MessageSource;
 	/**
 Pass true to mark as read the specified messages even the chat is closed.
 */
@@ -24107,6 +24469,22 @@ Chat identifier of the message.
 Identifier of the clicked message.
 */
 	message_id: number;
+}
+
+/**
+Returns an HTTPS or a tg: link with the given type. Can be called before authorization.
+Request type for {@link Tdjson#getInternalLink}.
+*/
+export interface GetInternalLink {
+	'@type': 'getInternalLink';
+	/**
+Expected type of the link.
+*/
+	type: InternalLinkType;
+	/**
+Pass true to create an HTTPS link (only available for some link types); pass false to create a tg: link.
+*/
+	is_http?: boolean;
 }
 
 /**
@@ -24278,7 +24656,7 @@ Request type for {@link Tdjson#createNewBasicGroupChat}.
 export interface CreateNewBasicGroupChat {
 	'@type': 'createNewBasicGroupChat';
 	/**
-Identifiers of users to be added to the basic group.
+Identifiers of users to be added to the basic group; may be empty to create a basic group without other members.
 */
 	user_ids: number[];
 	/**
@@ -27654,6 +28032,65 @@ Default administrator rights for adding the bot to channels; may be null.
 }
 
 /**
+Sets the text shown in the chat with the bot if the chat is empty; bots only.
+Request type for {@link Tdjson#setBotInfoDescription}.
+*/
+export interface SetBotInfoDescription {
+	'@type': 'setBotInfoDescription';
+	/**
+A two-letter ISO 639-1 language code. If empty, the description will be shown to all users, for which language there are
+no dedicated description.
+*/
+	language_code: string;
+	/**
+Sets the text shown in the chat with the bot if the chat is empty; bots only.
+*/
+	description: string;
+}
+
+/**
+Returns the text shown in the chat with the bot if the chat is empty in the given language; bots only.
+Request type for {@link Tdjson#getBotInfoDescription}.
+*/
+export interface GetBotInfoDescription {
+	'@type': 'getBotInfoDescription';
+	/**
+A two-letter ISO 639-1 language code or an empty string.
+*/
+	language_code: string;
+}
+
+/**
+Sets the text shown on the bot's profile page and sent together with the link when users share the bot; bots only.
+Request type for {@link Tdjson#setBotInfoShortDescription}.
+*/
+export interface SetBotInfoShortDescription {
+	'@type': 'setBotInfoShortDescription';
+	/**
+A two-letter ISO 639-1 language code. If empty, the short description will be shown to all users, for which language
+there are no dedicated description.
+*/
+	language_code: string;
+	/**
+New bot's short description on the specified language.
+*/
+	short_description: string;
+}
+
+/**
+Returns the text shown on the bot's profile page and sent together with the link when users share the bot in the given
+language; bots only.
+Request type for {@link Tdjson#getBotInfoShortDescription}.
+*/
+export interface GetBotInfoShortDescription {
+	'@type': 'getBotInfoShortDescription';
+	/**
+A two-letter ISO 639-1 language code or an empty string.
+*/
+	language_code: string;
+}
+
+/**
 Returns all active sessions of the current user.
 Request type for {@link Tdjson#getActiveSessions}.
 */
@@ -28353,8 +28790,7 @@ Request type for {@link Tdjson#addCustomServerLanguagePack}.
 export interface AddCustomServerLanguagePack {
 	'@type': 'addCustomServerLanguagePack';
 	/**
-Identifier of a language pack to be added; may be different from a name that is used in an "https://t.me/setlanguage/"
-link.
+Identifier of a language pack to be added.
 */
 	language_pack_id: string;
 }
@@ -28900,7 +29336,8 @@ export interface GetAutosaveSettings {
 }
 
 /**
-Sets autosave settings for the given scope.
+Sets autosave settings for the given scope. The method is guaranteed to work only after at least one call to
+getAutosaveSettings.
 Request type for {@link Tdjson#setAutosaveSettings}.
 */
 export interface SetAutosaveSettings {
@@ -28916,7 +29353,8 @@ New autosave settings for the scope; pass null to set autosave settings to defau
 }
 
 /**
-Clears the list of all autosave settings exceptions.
+Clears the list of all autosave settings exceptions. The method is guaranteed to work only after at least one call to
+getAutosaveSettings.
 Request type for {@link Tdjson#clearAutosaveSettingsExceptions}.
 */
 export interface ClearAutosaveSettingsExceptions {
@@ -29220,9 +29658,15 @@ Sticker file owner; ignored for regular users.
 */
 	user_id: number;
 	/**
-Sticker file to upload.
+Sticker format.
 */
-	sticker: InputSticker;
+	sticker_format: StickerFormat;
+	/**
+File file to upload; must fit in a 512x512 square. For WEBP stickers the file must be in WEBP or PNG format, which will
+be converted to WEBP server-side. See https://core.telegram.org/animated_stickers#technical-requirements for technical
+requirements.
+*/
+	sticker: InputFile;
 }
 
 /**
@@ -29269,9 +29713,17 @@ Sticker set name. Can contain only English letters, digits and underscores. Must
 */
 	name: string;
 	/**
+Format of the stickers in the set.
+*/
+	sticker_format: StickerFormat;
+	/**
 Type of the stickers in the set.
 */
 	sticker_type: StickerType;
+	/**
+Pass true if stickers in the sticker set must be repainted; for custom emoji sticker sets only.
+*/
+	needs_repainting?: boolean;
 	/**
 List of stickers to be added to the set; must be non-empty. All stickers must have the same format. For TGS stickers,
 uploadStickerFile must be used before the sticker is shown.
@@ -29284,7 +29736,7 @@ Source of the sticker set; may be empty if unknown.
 }
 
 /**
-Adds a new sticker to a set; for bots only. Returns the sticker set.
+Adds a new sticker to a set; for bots only.
 Request type for {@link Tdjson#addStickerToSet}.
 */
 export interface AddStickerToSet {
@@ -29304,7 +29756,7 @@ Sticker to add to the set.
 }
 
 /**
-Sets a sticker set thumbnail; for bots only. Returns the sticker set.
+Sets a sticker set thumbnail; for bots only.
 Request type for {@link Tdjson#setStickerSetThumbnail}.
 */
 export interface SetStickerSetThumbnail {
@@ -29322,6 +29774,51 @@ Thumbnail to set in PNG, TGS, or WEBM format; pass null to remove the sticker se
 the format of stickers in the set.
 */
 	thumbnail: InputFile;
+}
+
+/**
+Sets a custom emoji sticker set thumbnail; for bots only.
+Request type for {@link Tdjson#setCustomEmojiStickerSetThumbnail}.
+*/
+export interface SetCustomEmojiStickerSetThumbnail {
+	'@type': 'setCustomEmojiStickerSetThumbnail';
+	/**
+Sticker set name.
+*/
+	name: string;
+	/**
+Identifier of the custom emoji from the sticker set, which will be set as sticker set thumbnail; pass 0 to remove the
+sticker set thumbnail.
+*/
+	custom_emoji_id: string;
+}
+
+/**
+Sets a sticker set title; for bots only.
+Request type for {@link Tdjson#setStickerSetTitle}.
+*/
+export interface SetStickerSetTitle {
+	'@type': 'setStickerSetTitle';
+	/**
+Sticker set name.
+*/
+	name: string;
+	/**
+New sticker set title.
+*/
+	title: string;
+}
+
+/**
+Deleted a sticker set; for bots only.
+Request type for {@link Tdjson#deleteStickerSet}.
+*/
+export interface DeleteStickerSet {
+	'@type': 'deleteStickerSet';
+	/**
+Sticker set name.
+*/
+	name: string;
 }
 
 /**
@@ -29351,6 +29848,57 @@ export interface RemoveStickerFromSet {
 Sticker.
 */
 	sticker: InputFile;
+}
+
+/**
+Changes the list of emoji corresponding to a sticker; for bots only. The sticker must belong to a regular or custom
+emoji sticker set created by the bot.
+Request type for {@link Tdjson#setStickerEmojis}.
+*/
+export interface SetStickerEmojis {
+	'@type': 'setStickerEmojis';
+	/**
+Sticker.
+*/
+	sticker: InputFile;
+	/**
+New string with 1-20 emoji corresponding to the sticker.
+*/
+	emojis: string;
+}
+
+/**
+Changes the list of keywords of a sticker; for bots only. The sticker must belong to a regular or custom emoji sticker
+set created by the bot.
+Request type for {@link Tdjson#setStickerKeywords}.
+*/
+export interface SetStickerKeywords {
+	'@type': 'setStickerKeywords';
+	/**
+Sticker.
+*/
+	sticker: InputFile;
+	/**
+List of up to 20 keywords with total length up to 64 characters, which can be used to find the sticker.
+*/
+	keywords: string[];
+}
+
+/**
+Changes the mask position of a mask sticker; for bots only. The sticker must belong to a mask sticker set created by the
+bot.
+Request type for {@link Tdjson#setStickerMaskPosition}.
+*/
+export interface SetStickerMaskPosition {
+	'@type': 'setStickerMaskPosition';
+	/**
+Sticker.
+*/
+	sticker: InputFile;
+	/**
+Position where the mask is placed; pass null to remove mask position.
+*/
+	mask_position: MaskPosition;
 }
 
 /**
@@ -29607,16 +30155,6 @@ The phone number prefix.
 }
 
 /**
-Returns the link for downloading official Telegram application to be used when the current user invites friends to
-Telegram.
-Request type for {@link Tdjson#getApplicationDownloadLink}.
-*/
-export interface GetAppDownloadLink {
-	'@type': 'getApplicationDownloadLink';
-
-}
-
-/**
 Returns information about a tg:// deep link. Use "tg://need_update_for_some_feature" or "tg:some_unsupported_feature"
 for testing. Returns a 404 error for unknown links. Can be called before authorization.
 Request type for {@link Tdjson#getDeepLinkInfo}.
@@ -29639,6 +30177,19 @@ export interface GetAppConfig {
 }
 
 /**
+Adds server-provided application changelog as messages to the chat 777000 (Telegram); for official applications only.
+Returns a 404 error if nothing changed.
+Request type for {@link Tdjson#addApplicationChangelog}.
+*/
+export interface AddAppChangelog {
+	'@type': 'addApplicationChangelog';
+	/**
+The previous application version.
+*/
+	previous_application_version: string;
+}
+
+/**
 Saves application log event on the server. Can be called before authorization.
 Request type for {@link Tdjson#saveApplicationLogEvent}.
 */
@@ -29656,6 +30207,16 @@ Optional chat identifier, associated with the event.
 The log event data.
 */
 	data: JsonValue;
+}
+
+/**
+Returns the link for downloading official Telegram application to be used when the current user invites friends to
+Telegram.
+Request type for {@link Tdjson#getApplicationDownloadLink}.
+*/
+export interface GetAppDownloadLink {
+	'@type': 'getApplicationDownloadLink';
+
 }
 
 /**
@@ -29904,6 +30465,15 @@ New information message.
 }
 
 /**
+Returns localized name of the Telegram support user; for Telegram support only.
+Request type for {@link Tdjson#getSupportName}.
+*/
+export interface GetSupportName {
+	'@type': 'getSupportName';
+
+}
+
+/**
 Does nothing; for testing only. This is an offline method. Can be called before authorization.
 Request type for {@link Tdjson#testCallEmpty}.
 */
@@ -30076,6 +30646,7 @@ export type Request =
 	| CheckAuthenticationCode
 	| RequestQrCodeAuthentication
 	| RegisterUser
+	| ResetAuthenticationEmailAddress
 	| CheckAuthenticationPassword
 	| RequestAuthenticationPasswordRecovery
 	| CheckAuthenticationPasswordRecoveryCode
@@ -30236,6 +30807,8 @@ export type Request =
 	| ShareChatWithBot
 	| GetInlineQueryResults
 	| AnswerInlineQuery
+	| SearchWebApp
+	| GetWebAppLinkUrl
 	| GetWebAppUrl
 	| SendWebAppData
 	| OpenWebApp
@@ -30256,6 +30829,7 @@ export type Request =
 	| ViewMessages
 	| OpenMessageContent
 	| ClickAnimatedEmojiMessage
+	| GetInternalLink
 	| GetInternalLinkType
 	| GetExternalLinkInfo
 	| GetExternalLink
@@ -30475,6 +31049,10 @@ export type Request =
 	| GetMenuButton
 	| SetDefaultGroupAdministratorRights
 	| SetDefaultChannelAdministratorRights
+	| SetBotInfoDescription
+	| GetBotInfoDescription
+	| SetBotInfoShortDescription
+	| GetBotInfoShortDescription
 	| GetActiveSessions
 	| TerminateSession
 	| TerminateAllOtherSessions
@@ -30585,8 +31163,14 @@ export type Request =
 	| CreateNewStickerSet
 	| AddStickerToSet
 	| SetStickerSetThumbnail
+	| SetCustomEmojiStickerSetThumbnail
+	| SetStickerSetTitle
+	| DeleteStickerSet
 	| SetStickerPositionInSet
 	| RemoveStickerFromSet
+	| SetStickerEmojis
+	| SetStickerKeywords
+	| SetStickerMaskPosition
 	| GetMapThumbnailFile
 	| GetPremiumLimit
 	| GetPremiumFeatures
@@ -30605,10 +31189,11 @@ export type Request =
 	| GetCountryCode
 	| GetPhoneNumberInfo
 	| GetPhoneNumberInfoSync
-	| GetAppDownloadLink
 	| GetDeepLinkInfo
 	| GetAppConfig
+	| AddAppChangelog
 	| SaveAppLogEvent
+	| GetAppDownloadLink
 	| AddProxy
 	| EditProxy
 	| EnableProxy
@@ -30627,6 +31212,7 @@ export type Request =
 	| AddLogMessage
 	| GetUserSupportInfo
 	| SetUserSupportInfo
+	| GetSupportName
 	| TestCallEmpty
 	| TestCallString
 	| TestCallBytes
@@ -30739,6 +31325,17 @@ Finishes user registration. Works only when the current authorization state is a
 		return this._request({
 			...options,
 			'@type': 'registerUser',
+		});
+	}
+
+	/**
+Resets the login email address. May return an error with a message "TASK_ALREADY_EXISTS" if reset is still pending.
+Works only when the current authorization state is authorizationStateWaitEmailCode and
+authorization_state.can_reset_email_address == true.
+*/
+	async resetAuthenticationEmailAddress(): Promise<Ok> {
+		return this._request({
+			'@type': 'resetAuthenticationEmailAddress',
 		});
 	}
 
@@ -30892,8 +31489,9 @@ change will not be applied until the new recovery email address is confirmed.
 	}
 
 	/**
-Changes the login email address of the user. The change will not be applied until the new login email address is
-confirmed with checkLoginEmailAddressCode. To use Apple ID/Google ID instead of a email address, call
+Changes the login email address of the user. The email address can be changed only if the current user already has login
+email and passwordState.login_email_address_pattern is non-empty. The change will not be applied until the new login
+email address is confirmed with checkLoginEmailAddressCode. To use Apple ID/Google ID instead of a email address, call
 checkLoginEmailAddressCode directly.
 */
 	async setLoginEmailAddress(options: Omit<SetLoginEmailAddress, '@type'>): Promise<EmailAddressAuthenticationCodeInfo> {
@@ -31198,7 +31796,7 @@ Returns information about a message thread. Can be used only if message.can_get_
 Returns viewers of a recent outgoing message in a basic group or a supergroup chat. For video notes and voice notes only
 users, opened content of the message, are returned. The method can be called if message.can_get_viewers == true.
 */
-	async getMessageViewers(options: Omit<GetMessageViewers, '@type'>): Promise<Users> {
+	async getMessageViewers(options: Omit<GetMessageViewers, '@type'>): Promise<MessageViewers> {
 		return this._request({
 			...options,
 			'@type': 'getMessageViewers',
@@ -32443,7 +33041,28 @@ Sets the result of an inline query; for bots only.
 	}
 
 	/**
-Returns an HTTPS URL of a Web App to open after keyboardButtonTypeWebApp button is pressed.
+Returns information about a Web App by its short name. Returns a 404 error if the Web App is not found.
+*/
+	async searchWebApp(options: Omit<SearchWebApp, '@type'>): Promise<FoundWebApp> {
+		return this._request({
+			...options,
+			'@type': 'searchWebApp',
+		});
+	}
+
+	/**
+Returns an HTTPS URL of a Web App to open after a link of the type internalLinkTypeWebApp is clicked.
+*/
+	async getWebAppLinkUrl(options: Omit<GetWebAppLinkUrl, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getWebAppLinkUrl',
+		});
+	}
+
+	/**
+Returns an HTTPS URL of a Web App to open after keyboardButtonTypeWebApp or inlineQueryResultsButtonTypeWebApp button is
+pressed.
 */
 	async getWebAppUrl(options: Omit<GetWebAppUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
@@ -32652,6 +33271,16 @@ or a 404 error if usual animation needs to be played.
 		return this._request({
 			...options,
 			'@type': 'clickAnimatedEmojiMessage',
+		});
+	}
+
+	/**
+Returns an HTTPS or a tg: link with the given type. Can be called before authorization.
+*/
+	async getInternalLink(options: Omit<GetInternalLink, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getInternalLink',
 		});
 	}
 
@@ -34909,6 +35538,47 @@ Sets default administrator rights for adding the bot to channel chats; for bots 
 	}
 
 	/**
+Sets the text shown in the chat with the bot if the chat is empty; bots only.
+*/
+	async setBotInfoDescription(options: Omit<SetBotInfoDescription, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBotInfoDescription',
+		});
+	}
+
+	/**
+Returns the text shown in the chat with the bot if the chat is empty in the given language; bots only.
+*/
+	async getBotInfoDescription(options: Omit<GetBotInfoDescription, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'getBotInfoDescription',
+		});
+	}
+
+	/**
+Sets the text shown on the bot's profile page and sent together with the link when users share the bot; bots only.
+*/
+	async setBotInfoShortDescription(options: Omit<SetBotInfoShortDescription, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBotInfoShortDescription',
+		});
+	}
+
+	/**
+Returns the text shown on the bot's profile page and sent together with the link when users share the bot in the given
+language; bots only.
+*/
+	async getBotInfoShortDescription(options: Omit<GetBotInfoShortDescription, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'getBotInfoShortDescription',
+		});
+	}
+
+	/**
 Returns all active sessions of the current user.
 */
 	async getActiveSessions(): Promise<Sessions> {
@@ -35749,7 +36419,8 @@ Returns autosave settings for the current user.
 	}
 
 	/**
-Sets autosave settings for the given scope.
+Sets autosave settings for the given scope. The method is guaranteed to work only after at least one call to
+getAutosaveSettings.
 */
 	async setAutosaveSettings(options: Omit<SetAutosaveSettings, '@type'>): Promise<Ok> {
 		return this._request({
@@ -35759,7 +36430,8 @@ Sets autosave settings for the given scope.
 	}
 
 	/**
-Clears the list of all autosave settings exceptions.
+Clears the list of all autosave settings exceptions. The method is guaranteed to work only after at least one call to
+getAutosaveSettings.
 */
 	async clearAutosaveSettingsExceptions(): Promise<Ok> {
 		return this._request({
@@ -36011,9 +36683,9 @@ Creates a new sticker set. Returns the newly created sticker set.
 	}
 
 	/**
-Adds a new sticker to a set; for bots only. Returns the sticker set.
+Adds a new sticker to a set; for bots only.
 */
-	async addStickerToSet(options: Omit<AddStickerToSet, '@type'>): Promise<StickerSet> {
+	async addStickerToSet(options: Omit<AddStickerToSet, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'addStickerToSet',
@@ -36021,12 +36693,42 @@ Adds a new sticker to a set; for bots only. Returns the sticker set.
 	}
 
 	/**
-Sets a sticker set thumbnail; for bots only. Returns the sticker set.
+Sets a sticker set thumbnail; for bots only.
 */
-	async setStickerSetThumbnail(options: Omit<SetStickerSetThumbnail, '@type'>): Promise<StickerSet> {
+	async setStickerSetThumbnail(options: Omit<SetStickerSetThumbnail, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setStickerSetThumbnail',
+		});
+	}
+
+	/**
+Sets a custom emoji sticker set thumbnail; for bots only.
+*/
+	async setCustomEmojiStickerSetThumbnail(options: Omit<SetCustomEmojiStickerSetThumbnail, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setCustomEmojiStickerSetThumbnail',
+		});
+	}
+
+	/**
+Sets a sticker set title; for bots only.
+*/
+	async setStickerSetTitle(options: Omit<SetStickerSetTitle, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setStickerSetTitle',
+		});
+	}
+
+	/**
+Deleted a sticker set; for bots only.
+*/
+	async deleteStickerSet(options: Omit<DeleteStickerSet, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteStickerSet',
 		});
 	}
 
@@ -36048,6 +36750,39 @@ Removes a sticker from the set to which it belongs; for bots only. The sticker s
 		return this._request({
 			...options,
 			'@type': 'removeStickerFromSet',
+		});
+	}
+
+	/**
+Changes the list of emoji corresponding to a sticker; for bots only. The sticker must belong to a regular or custom
+emoji sticker set created by the bot.
+*/
+	async setStickerEmojis(options: Omit<SetStickerEmojis, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setStickerEmojis',
+		});
+	}
+
+	/**
+Changes the list of keywords of a sticker; for bots only. The sticker must belong to a regular or custom emoji sticker
+set created by the bot.
+*/
+	async setStickerKeywords(options: Omit<SetStickerKeywords, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setStickerKeywords',
+		});
+	}
+
+	/**
+Changes the mask position of a mask sticker; for bots only. The sticker must belong to a mask sticker set created by the
+bot.
+*/
+	async setStickerMaskPosition(options: Omit<SetStickerMaskPosition, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setStickerMaskPosition',
 		});
 	}
 
@@ -36231,16 +36966,6 @@ synchronously.
 	}
 
 	/**
-Returns the link for downloading official Telegram application to be used when the current user invites friends to
-Telegram.
-*/
-	async getApplicationDownloadLink(): Promise<HttpUrl> {
-		return this._request({
-			'@type': 'getApplicationDownloadLink',
-		});
-	}
-
-	/**
 Returns information about a tg:// deep link. Use "tg://need_update_for_some_feature" or "tg:some_unsupported_feature"
 for testing. Returns a 404 error for unknown links. Can be called before authorization.
 */
@@ -36261,12 +36986,33 @@ Returns application config, provided by the server. Can be called before authori
 	}
 
 	/**
+Adds server-provided application changelog as messages to the chat 777000 (Telegram); for official applications only.
+Returns a 404 error if nothing changed.
+*/
+	async addApplicationChangelog(options: Omit<AddAppChangelog, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addApplicationChangelog',
+		});
+	}
+
+	/**
 Saves application log event on the server. Can be called before authorization.
 */
 	async saveApplicationLogEvent(options: Omit<SaveAppLogEvent, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'saveApplicationLogEvent',
+		});
+	}
+
+	/**
+Returns the link for downloading official Telegram application to be used when the current user invites friends to
+Telegram.
+*/
+	async getApplicationDownloadLink(): Promise<HttpUrl> {
+		return this._request({
+			'@type': 'getApplicationDownloadLink',
 		});
 	}
 
@@ -36444,6 +37190,15 @@ Sets support information for the given user; for Telegram support only.
 		return this._request({
 			...options,
 			'@type': 'setUserSupportInfo',
+		});
+	}
+
+	/**
+Returns localized name of the Telegram support user; for Telegram support only.
+*/
+	async getSupportName(): Promise<Text> {
+		return this._request({
+			'@type': 'getSupportName',
 		});
 	}
 
