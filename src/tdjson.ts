@@ -1201,7 +1201,7 @@ Unique sticker identifier within the set; 0 if none.
 */
 	id: string;
 	/**
-The identifier of the sticker set to which the sticker belongs; 0 if none.
+Identifier of the sticker set to which the sticker belongs; 0 if none.
 */
 	set_id: string;
 	/**
@@ -1567,6 +1567,63 @@ True, if the poll is closed.
 }
 
 /**
+Describes a chat background.
+*/
+export interface Background {
+	'@type': 'background';
+	/**
+Unique background identifier.
+*/
+	id: string;
+	/**
+True, if this is one of default backgrounds.
+*/
+	is_default?: boolean;
+	/**
+True, if the background is dark and is recommended to be used with dark theme.
+*/
+	is_dark?: boolean;
+	/**
+Unique background name.
+*/
+	name: string;
+	/**
+Document with the background; may be null. Null only for filled backgrounds.
+*/
+	document: Document;
+	/**
+Type of the background.
+*/
+	type: BackgroundType;
+}
+
+/**
+Contains a list of backgrounds.
+*/
+export interface Backgrounds {
+	'@type': 'backgrounds';
+	/**
+A list of backgrounds.
+*/
+	backgrounds: Background[];
+}
+
+/**
+Describes a background set for a specific chat.
+*/
+export interface ChatBackground {
+	'@type': 'chatBackground';
+	/**
+The background.
+*/
+	background: Background;
+	/**
+Dimming of the background in dark themes, as a percentage; 0-100.
+*/
+	dark_theme_dimming: number;
+}
+
+/**
 Describes a user profile photo.
 */
 export interface ProfilePhoto {
@@ -1649,6 +1706,11 @@ Subtype of {@link UserType}.
 */
 export interface UserTypeBot {
 	'@type': 'userTypeBot';
+	/**
+True, if the bot is owned by the current user and can be edited using the methods toggleBotUsernameIsActive,
+reorderBotActiveUsernames, setBotProfilePhoto, setBotName, setBotInfoDescription, and setBotInfoShortDescription.
+*/
+	can_be_edited?: boolean;
 	/**
 True, if the bot can be invited to basic group and supergroup chats.
 */
@@ -2118,16 +2180,16 @@ export interface Usernames {
 	'@type': 'usernames';
 	/**
 List of active usernames; the first one must be shown as the primary username. The order of active usernames can be
-changed with reorderActiveUsernames or reorderSupergroupActiveUsernames.
+changed with reorderActiveUsernames, reorderBotActiveUsernames or reorderSupergroupActiveUsernames.
 */
 	active_usernames: string[];
 	/**
-List of currently disabled usernames; the username can be activated with
-toggleUsernameIsActive/toggleSupergroupUsernameIsActive.
+List of currently disabled usernames; the username can be activated with toggleUsernameIsActive,
+toggleBotUsernameIsActive, or toggleSupergroupUsernameIsActive.
 */
 	disabled_usernames: string[];
 	/**
-The active username, which can be changed with setUsername/setSupergroupUsername.
+The active username, which can be changed with setUsername or setSupergroupUsername.
 */
 	editable_username: string;
 }
@@ -2258,6 +2320,23 @@ Default administrator rights for adding the bot to basic group and supergroup ch
 Default administrator rights for adding the bot to channels; may be null.
 */
 	default_channel_administrator_rights: ChatAdministratorRights;
+	/**
+The internal link, which can be used to edit bot commands; may be null.
+*/
+	edit_commands_link: InternalLinkType;
+	/**
+The internal link, which can be used to edit bot description; may be null.
+*/
+	edit_description_link: InternalLinkType;
+	/**
+The internal link, which can be used to edit the photo or animation shown in the chat with the bot if the chat is empty;
+may be null.
+*/
+	edit_description_media_link: InternalLinkType;
+	/**
+The internal link, which can be used to edit bot settings; may be null.
+*/
+	edit_settings_link: InternalLinkType;
 }
 
 /**
@@ -2782,6 +2861,10 @@ Point in time (Unix timestamp) when the user joined the chat.
 */
 	joined_chat_date: number;
 	/**
+True, if the user has joined the chat using an invite link for a chat folder.
+*/
+	via_chat_folder_invite_link?: boolean;
+	/**
 User identifier of the chat administrator, approved user join request.
 */
 	approver_user_id: number;
@@ -2995,7 +3078,8 @@ Status of the current user in the supergroup or channel; custom title will alway
 	/**
 Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the
 supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats,
-getSuitableDiscussionChats, getGroupsInCommon, or getUserPrivacySettingRules.
+getSuitableDiscussionChats, getGroupsInCommon, getUserPrivacySettingRules, or in
+chatFolderInviteLinkInfo.missing_chat_ids.
 */
 	member_count: number;
 	/**
@@ -4111,7 +4195,7 @@ export interface NotificationSettingsScopeChannelChats {
 }
 
 /**
-Contains information about notification settings for a chat or a froum topic.
+Contains information about notification settings for a chat or a forum topic.
 */
 export interface ChatNotificationSettings {
 	'@type': 'chatNotificationSettings';
@@ -4262,36 +4346,51 @@ User identifier of the secret chat peer.
 }
 
 /**
-Represents a filter of user chats.
+Represents an icon for a chat folder.
 */
-export interface ChatFilter {
-	'@type': 'chatFilter';
+export interface ChatFolderIcon {
+	'@type': 'chatFolderIcon';
 	/**
-The title of the filter; 1-12 characters without line feeds.
+The chosen icon name for short folder representation; one of "All", "Unread", "Unmuted", "Bots", "Channels", "Groups",
+"Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party", "Sport",
+"Study", "Trade", "Travel", "Work", "Airplane", "Book", "Light", "Like", "Money", "Note", "Palette".
+*/
+	name: string;
+}
+
+/**
+Represents a folder for user chats.
+*/
+export interface ChatFolder {
+	'@type': 'chatFolder';
+	/**
+The title of the folder; 1-12 characters without line feeds.
 */
 	title: string;
 	/**
-The chosen icon name for short filter representation. If non-empty, must be one of "All", "Unread", "Unmuted", "Bots",
-"Channels", "Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love",
-"Mask", "Party", "Sport", "Study", "Trade", "Travel", "Work", "Airplane", "Book", "Light", "Like", "Money", "Note",
-"Palette". If empty, use getChatFilterDefaultIconName to get default icon name for the filter.
+The chosen icon for the chat folder; may be null. If null, use getChatFolderDefaultIconName to get default icon name for
+the folder.
 */
-	icon_name: string;
+	icon: ChatFolderIcon;
 	/**
-The chat identifiers of pinned chats in the filtered chat list. There can be up to
-getOption("chat_filter_chosen_chat_count_max") pinned and always included non-secret chats and the same number of secret
-chats, but the limit can be increased with Telegram Premium.
+True, if at least one link has been created for the folder.
+*/
+	is_shareable?: boolean;
+	/**
+The chat identifiers of pinned chats in the folder. There can be up to getOption("chat_folder_chosen_chat_count_max")
+pinned and always included non-secret chats and the same number of secret chats, but the limit can be increased with
+Telegram Premium.
 */
 	pinned_chat_ids: number[];
 	/**
-The chat identifiers of always included chats in the filtered chat list. There can be up to
-getOption("chat_filter_chosen_chat_count_max") pinned and always included non-secret chats and the same number of secret
+The chat identifiers of always included chats in the folder. There can be up to
+getOption("chat_folder_chosen_chat_count_max") pinned and always included non-secret chats and the same number of secret
 chats, but the limit can be increased with Telegram Premium.
 */
 	included_chat_ids: number[];
 	/**
-The chat identifiers of always excluded chats in the filtered chat list. There can be up to
-getOption("chat_filter_chosen_chat_count_max") always excluded non-secret chats and the same number of secret chats, but
+The chat identifiers of always excluded chats in the folder. There can be up to
+getOption("chat_folder_chosen_chat_count_max") always excluded non-secret chats and the same number of secret chats, but
 the limit can be increased with Telegram Premium.
 */
 	excluded_chat_ids: number[];
@@ -4330,50 +4429,101 @@ True, if channels need to be included.
 }
 
 /**
-Contains basic information about a chat filter.
+Contains basic information about a chat folder.
 */
-export interface ChatFilterInfo {
-	'@type': 'chatFilterInfo';
+export interface ChatFolderInfo {
+	'@type': 'chatFolderInfo';
 	/**
-Unique chat filter identifier.
+Unique chat folder identifier.
 */
 	id: number;
 	/**
-The title of the filter; 1-12 characters without line feeds.
+The title of the folder; 1-12 characters without line feeds.
 */
 	title: string;
 	/**
-The chosen or default icon name for short filter representation. One of "All", "Unread", "Unmuted", "Bots", "Channels",
-"Groups", "Private", "Custom", "Setup", "Cat", "Crown", "Favorite", "Flower", "Game", "Home", "Love", "Mask", "Party",
-"Sport", "Study", "Trade", "Travel", "Work", "Airplane", "Book", "Light", "Like", "Money", "Note", "Palette".
+The chosen or default icon for the chat folder.
 */
-	icon_name: string;
+	icon: ChatFolderIcon;
+	/**
+True, if the chat folder has invite links created by the current user.
+*/
+	has_my_invite_links?: boolean;
 }
 
 /**
-Describes a recommended chat filter.
+Contains a chat folder invite link.
 */
-export interface RecommendedChatFilter {
-	'@type': 'recommendedChatFilter';
+export interface ChatFolderInviteLink {
+	'@type': 'chatFolderInviteLink';
 	/**
-The chat filter.
+The chat folder invite link.
 */
-	filter: ChatFilter;
+	invite_link: string;
 	/**
-Describes a recommended chat filter.
+Name of the link.
+*/
+	name: string;
+	/**
+Identifiers of chats, included in the link.
+*/
+	chat_ids: number[];
+}
+
+/**
+Represents a list of chat folder invite links.
+*/
+export interface ChatFolderInviteLinks {
+	'@type': 'chatFolderInviteLinks';
+	/**
+List of the invite links.
+*/
+	invite_links: ChatFolderInviteLink[];
+}
+
+/**
+Contains information about an invite link to a chat folder.
+*/
+export interface ChatFolderInviteLinkInfo {
+	'@type': 'chatFolderInviteLinkInfo';
+	/**
+Basic information about the chat folder; chat folder identifier will be 0 if the user didn't have the chat folder yet.
+*/
+	chat_folder_info: ChatFolderInfo;
+	/**
+Identifiers of the chats from the link, which aren't added to the folder yet.
+*/
+	missing_chat_ids: number[];
+	/**
+Identifiers of the chats from the link, which are added to the folder already.
+*/
+	added_chat_ids: number[];
+}
+
+/**
+Describes a recommended chat folder.
+*/
+export interface RecommendedChatFolder {
+	'@type': 'recommendedChatFolder';
+	/**
+The chat folder.
+*/
+	folder: ChatFolder;
+	/**
+Describes a recommended chat folder.
 */
 	description: string;
 }
 
 /**
-Contains a list of recommended chat filters.
+Contains a list of recommended chat folders.
 */
-export interface RecommendedChatFilters {
-	'@type': 'recommendedChatFilters';
+export interface RecommendedChatFolders {
+	'@type': 'recommendedChatFolders';
 	/**
-List of recommended chat filters.
+List of recommended chat folders.
 */
-	chat_filters: RecommendedChatFilter[];
+	chat_folders: RecommendedChatFolder[];
 }
 
 /**
@@ -4396,15 +4546,15 @@ export interface ChatListArchive {
 }
 
 /**
-A list of chats belonging to a chat filter.
+A list of chats added to a chat folder.
 Subtype of {@link ChatList}.
 */
-export interface ChatListFilter {
-	'@type': 'chatListFilter';
+export interface ChatListFolder {
+	'@type': 'chatListFolder';
 	/**
-Chat filter identifier.
+Chat folder identifier.
 */
-	chat_filter_id: number;
+	chat_folder_id: number;
 }
 
 /**
@@ -4616,6 +4766,10 @@ in secret chats starts after the message or its content is viewed. Auto-delete t
 date.
 */
 	message_auto_delete_time: number;
+	/**
+Background set for the chat; may be null if none.
+*/
+	background: ChatBackground;
 	/**
 If non-empty, name of a theme, set for the chat.
 */
@@ -5044,9 +5198,9 @@ Inline query to be sent to the bot.
 */
 	query: string;
 	/**
-True, if the inline query must be sent from the current chat.
+Target chat from which to send the inline query.
 */
-	in_current_chat?: boolean;
+	target_chat: TargetChat;
 }
 
 /**
@@ -7048,7 +7202,7 @@ Photo caption.
 }
 
 /**
-The media is unuspported.
+The media is unsupported.
 Subtype of {@link MessageExtendedMedia}.
 */
 export interface MessageExtendedMediaUnsupported {
@@ -8645,6 +8799,22 @@ export interface MessageScreenshotTaken {
 }
 
 /**
+A new background was set in the chat.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatSetBackground {
+	'@type': 'messageChatSetBackground';
+	/**
+Identifier of the message with a previously set same background; 0 if none. Can be an identifier of a deleted message.
+*/
+	old_background_message_id: number;
+	/**
+The new background.
+*/
+	background: ChatBackground;
+}
+
+/**
 A theme in the chat has been changed.
 Subtype of {@link MessageContent}.
 */
@@ -8864,6 +9034,10 @@ Subtype of {@link MessageContent}.
 export interface MessageGiftedPremium {
 	'@type': 'messageGiftedPremium';
 	/**
+The identifier of a user that gifted Telegram Premium; 0 if the gift was anonymous.
+*/
+	gifter_user_id: number;
+	/**
 Currency for the paid amount.
 */
 	currency: string;
@@ -8871,6 +9045,14 @@ Currency for the paid amount.
 The paid amount, in the smallest units of the currency.
 */
 	amount: number;
+	/**
+Cryptocurrency used to pay for the gift; may be empty if none.
+*/
+	cryptocurrency: string;
+	/**
+The paid amount, in the smallest units of the cryptocurrency.
+*/
+	cryptocurrency_amount: string;
 	/**
 Number of month the Telegram Premium subscription will be active.
 */
@@ -8970,7 +9152,7 @@ Text of the keyboardButtonTypeWebApp button, which opened the Web App.
 */
 	button_text: string;
 	/**
-Received data.
+The data.
 */
 	data: string;
 }
@@ -11361,7 +11543,7 @@ Subtype of {@link SpeechRecognitionResult}.
 export interface SpeechRecognitionResultError {
 	'@type': 'speechRecognitionResultError';
 	/**
-Received error.
+Recognition error.
 */
 	error: Error;
 }
@@ -12493,6 +12675,10 @@ export interface ChatEventMemberJoinedByInviteLink {
 Invite link used to join the chat.
 */
 	invite_link: ChatInviteLink;
+	/**
+True, if the user has joined the chat using an invite link for a chat folder.
+*/
+	via_chat_folder_invite_link?: boolean;
 }
 
 /**
@@ -13319,20 +13505,20 @@ export interface PremiumLimitTypeFavoriteStickerCount {
 }
 
 /**
-The maximum number of chat filters.
+The maximum number of chat folders.
 Subtype of {@link PremiumLimitType}.
 */
-export interface PremiumLimitTypeChatFilterCount {
-	'@type': 'premiumLimitTypeChatFilterCount';
+export interface PremiumLimitTypeChatFolderCount {
+	'@type': 'premiumLimitTypeChatFolderCount';
 
 }
 
 /**
-The maximum number of pinned and always included, or always excluded chats in a chat filter.
+The maximum number of pinned and always included, or always excluded chats in a chat folder.
 Subtype of {@link PremiumLimitType}.
 */
-export interface PremiumLimitTypeChatFilterChosenChatCount {
-	'@type': 'premiumLimitTypeChatFilterChosenChatCount';
+export interface PremiumLimitTypeChatFolderChosenChatCount {
+	'@type': 'premiumLimitTypeChatFolderChosenChatCount';
 
 }
 
@@ -13360,6 +13546,24 @@ Subtype of {@link PremiumLimitType}.
 */
 export interface PremiumLimitTypeBioLength {
 	'@type': 'premiumLimitTypeBioLength';
+
+}
+
+/**
+The maximum number of invite links for a chat folder.
+Subtype of {@link PremiumLimitType}.
+*/
+export interface PremiumLimitTypeChatFolderInviteLinkCount {
+	'@type': 'premiumLimitTypeChatFolderInviteLinkCount';
+
+}
+
+/**
+The maximum number of added shareable chat folders.
+Subtype of {@link PremiumLimitType}.
+*/
+export interface PremiumLimitTypeShareableChatFolderCount {
+	'@type': 'premiumLimitTypeShareableChatFolderCount';
 
 }
 
@@ -13482,7 +13686,7 @@ export interface PremiumFeatureForumTopicIcon {
 }
 
 /**
-Allowed to set a premium appllication icons.
+Allowed to set a premium application icons.
 Subtype of {@link PremiumFeature}.
 */
 export interface PremiumFeatureAppIcons {
@@ -13941,48 +14145,6 @@ The background fill.
 }
 
 /**
-Describes a chat background.
-*/
-export interface Background {
-	'@type': 'background';
-	/**
-Unique background identifier.
-*/
-	id: string;
-	/**
-True, if this is one of default backgrounds.
-*/
-	is_default?: boolean;
-	/**
-True, if the background is dark and is recommended to be used with dark theme.
-*/
-	is_dark?: boolean;
-	/**
-Unique background name.
-*/
-	name: string;
-	/**
-Document with the background; may be null. Null only for filled backgrounds.
-*/
-	document: Document;
-	/**
-Type of the background.
-*/
-	type: BackgroundType;
-}
-
-/**
-Contains a list of backgrounds.
-*/
-export interface Backgrounds {
-	'@type': 'backgrounds';
-	/**
-A list of backgrounds.
-*/
-	backgrounds: Background[];
-}
-
-/**
 Contains information about background to set.
 Subtype of {@link InputBackground}.
 */
@@ -14005,6 +14167,18 @@ export interface InputBackgroundRemote {
 The background identifier.
 */
 	background_id: string;
+}
+
+/**
+A background previously set in the chat; for chat backgrounds only.
+Subtype of {@link InputBackground}.
+*/
+export interface InputBackgroundPrevious {
+	'@type': 'inputBackgroundPrevious';
+	/**
+Identifier of the message with the background.
+*/
+	message_id: number;
 }
 
 /**
@@ -14603,6 +14777,18 @@ export interface PushMessageContentChatChangeTitle {
 New chat title.
 */
 	title: string;
+}
+
+/**
+A chat background was edited.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentChatSetBackground {
+	'@type': 'pushMessageContentChatSetBackground';
+	/**
+True, if the set background is the same as the background of the current user.
+*/
+	is_same?: boolean;
 }
 
 /**
@@ -15819,6 +16005,28 @@ export interface InternalLinkTypeChangePhoneNumber {
 }
 
 /**
+The link is an invite link to a chat folder. Call checkChatFolderInviteLink with the given invite link to process the
+link.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeChatFolderInvite {
+	'@type': 'internalLinkTypeChatFolderInvite';
+	/**
+Internal representation of the invite link.
+*/
+	invite_link: string;
+}
+
+/**
+The link is a link to the folder section of the app settings.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeChatFolderSettings {
+	'@type': 'internalLinkTypeChatFolderSettings';
+
+}
+
+/**
 The link is a chat invite link. Call checkChatInviteLink with the given invite link to process the link.
 Subtype of {@link InternalLinkType}.
 */
@@ -15845,15 +16053,6 @@ Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeEditProfileSettings {
 	'@type': 'internalLinkTypeEditProfileSettings';
-
-}
-
-/**
-The link is a link to the filter section of the app settings.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeFilterSettings {
-	'@type': 'internalLinkTypeFilterSettings';
 
 }
 
@@ -18186,6 +18385,22 @@ chat.
 }
 
 /**
+The chat background was changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatBackground {
+	'@type': 'updateChatBackground';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The new chat background; may be null if background was reset to default.
+*/
+	background: ChatBackground;
+}
+
+/**
 The chat theme was changed.
 Subtype of {@link Update}.
 */
@@ -18346,17 +18561,17 @@ New value of has_scheduled_messages.
 }
 
 /**
-The list of chat filters or a chat filter has changed.
+The list of chat folders or a chat folder has changed.
 Subtype of {@link Update}.
 */
-export interface UpdateChatFilters {
-	'@type': 'updateChatFilters';
+export interface UpdateChatFolders {
+	'@type': 'updateChatFolders';
 	/**
-The new list of chat filters.
+The new list of chat folders.
 */
-	chat_filters: ChatFilterInfo[];
+	chat_folders: ChatFolderInfo[];
 	/**
-Position of the main chat list among chat filters, 0-based.
+Position of the main chat list among chat folders, 0-based.
 */
 	main_chat_list_position: number;
 }
@@ -19550,6 +19765,10 @@ If user has joined the chat using an invite link, the invite link; may be null.
 */
 	invite_link: ChatInviteLink;
 	/**
+True, if the user has joined the chat using an invite link for a chat folder.
+*/
+	via_chat_folder_invite_link?: boolean;
+	/**
 Previous chat member.
 */
 	old_chat_member: ChatMember;
@@ -19916,7 +20135,7 @@ export type ChatType =
 export type ChatList =
 	| ChatListMain
 	| ChatListArchive
-	| ChatListFilter;
+	| ChatListFolder;
 
 export type ChatSource =
 	| ChatSourceMtprotoProxy
@@ -20155,6 +20374,7 @@ export type MessageContent =
 	| MessageChatUpgradeFrom
 	| MessagePinMessage
 	| MessageScreenshotTaken
+	| MessageChatSetBackground
 	| MessageChatSetTheme
 	| MessageChatSetMessageAutoDeleteTime
 	| MessageForumTopicCreated
@@ -20415,11 +20635,13 @@ export type PremiumLimitType =
 	| PremiumLimitTypeCreatedPublicChatCount
 	| PremiumLimitTypeSavedAnimationCount
 	| PremiumLimitTypeFavoriteStickerCount
-	| PremiumLimitTypeChatFilterCount
-	| PremiumLimitTypeChatFilterChosenChatCount
+	| PremiumLimitTypeChatFolderCount
+	| PremiumLimitTypeChatFolderChosenChatCount
 	| PremiumLimitTypePinnedArchivedChatCount
 	| PremiumLimitTypeCaptionLength
-	| PremiumLimitTypeBioLength;
+	| PremiumLimitTypeBioLength
+	| PremiumLimitTypeChatFolderInviteLinkCount
+	| PremiumLimitTypeShareableChatFolderCount;
 
 export type PremiumFeature =
 	| PremiumFeatureIncreasedLimits
@@ -20474,7 +20696,8 @@ export type BackgroundType =
 
 export type InputBackground =
 	| InputBackgroundLocal
-	| InputBackgroundRemote;
+	| InputBackgroundRemote
+	| InputBackgroundPrevious;
 
 export type CanTransferOwnershipResult =
 	| CanTransferOwnershipResultOk
@@ -20528,6 +20751,7 @@ export type PushMessageContent =
 	| PushMessageContentChatAddMembers
 	| PushMessageContentChatChangePhoto
 	| PushMessageContentChatChangeTitle
+	| PushMessageContentChatSetBackground
 	| PushMessageContentChatSetTheme
 	| PushMessageContentChatDeleteMember
 	| PushMessageContentChatJoinByLink
@@ -20629,10 +20853,11 @@ export type InternalLinkType =
 	| InternalLinkTypeBotStart
 	| InternalLinkTypeBotStartInGroup
 	| InternalLinkTypeChangePhoneNumber
+	| InternalLinkTypeChatFolderInvite
+	| InternalLinkTypeChatFolderSettings
 	| InternalLinkTypeChatInvite
 	| InternalLinkTypeDefaultMessageAutoDeleteTimerSettings
 	| InternalLinkTypeEditProfileSettings
-	| InternalLinkTypeFilterSettings
 	| InternalLinkTypeGame
 	| InternalLinkTypeInstantView
 	| InternalLinkTypeInvoice
@@ -20788,6 +21013,7 @@ export type Update =
 	| UpdateChatNotificationSettings
 	| UpdateChatPendingJoinRequests
 	| UpdateChatReplyMarkup
+	| UpdateChatBackground
 	| UpdateChatTheme
 	| UpdateChatUnreadMentionCount
 	| UpdateChatUnreadReactionCount
@@ -20798,7 +21024,7 @@ export type Update =
 	| UpdateChatIsMarkedAsUnread
 	| UpdateChatIsBlocked
 	| UpdateChatHasScheduledMessages
-	| UpdateChatFilters
+	| UpdateChatFolders
 	| UpdateChatOnlineMemberCount
 	| UpdateForumTopicInfo
 	| UpdateScopeNotificationSettings
@@ -21573,7 +21799,8 @@ Identifier of the message to get.
 /**
 Returns information about a message that is replied by a given message. Also, returns the pinned message, the game
 message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
-messageGameScore, messagePaymentSuccessful, and topic messages without replied message respectively.
+messageGameScore, messagePaymentSuccessful, messageChatSetBackground and topic messages without replied message
+respectively.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
 export interface GetRepliedMessage {
@@ -23597,7 +23824,7 @@ Request type for {@link Tdjson#getTextEntities}.
 export interface GetTextEntities {
 	'@type': 'getTextEntities';
 	/**
-The text in which to look for entites.
+The text in which to look for entities.
 */
 	text: string;
 }
@@ -23944,7 +24171,7 @@ Request type for {@link Tdjson#getInlineQueryResults}.
 export interface GetInlineQueryResults {
 	'@type': 'getInlineQueryResults';
 	/**
-The identifier of the target bot.
+Identifier of the target bot.
 */
 	bot_user_id: number;
 	/**
@@ -24090,7 +24317,7 @@ Text of the keyboardButtonTypeWebApp button, which opened the Web App.
 */
 	button_text: string;
 	/**
-Received data.
+The data.
 */
 	data: string;
 }
@@ -24764,93 +24991,255 @@ The chat list. Use getChatListsToAddChat to get suitable chat lists.
 }
 
 /**
-Returns information about a chat filter by its identifier.
-Request type for {@link Tdjson#getChatFilter}.
+Returns information about a chat folder by its identifier.
+Request type for {@link Tdjson#getChatFolder}.
 */
-export interface GetChatFilter {
-	'@type': 'getChatFilter';
+export interface GetChatFolder {
+	'@type': 'getChatFolder';
 	/**
-Chat filter identifier.
+Chat folder identifier.
 */
-	chat_filter_id: number;
+	chat_folder_id: number;
 }
 
 /**
-Creates new chat filter. Returns information about the created chat filter. There can be up to
-getOption("chat_filter_count_max") chat filters, but the limit can be increased with Telegram Premium.
-Request type for {@link Tdjson#createChatFilter}.
+Creates new chat folder. Returns information about the created chat folder. There can be up to
+getOption("chat_folder_count_max") chat folders, but the limit can be increased with Telegram Premium.
+Request type for {@link Tdjson#createChatFolder}.
 */
-export interface CreateChatFilter {
-	'@type': 'createChatFilter';
+export interface CreateChatFolder {
+	'@type': 'createChatFolder';
 	/**
-Chat filter.
+The new chat folder.
 */
-	filter: ChatFilter;
+	folder: ChatFolder;
 }
 
 /**
-Edits existing chat filter. Returns information about the edited chat filter.
-Request type for {@link Tdjson#editChatFilter}.
+Edits existing chat folder. Returns information about the edited chat folder.
+Request type for {@link Tdjson#editChatFolder}.
 */
-export interface EditChatFilter {
-	'@type': 'editChatFilter';
+export interface EditChatFolder {
+	'@type': 'editChatFolder';
 	/**
-Chat filter identifier.
+Chat folder identifier.
 */
-	chat_filter_id: number;
+	chat_folder_id: number;
 	/**
-The edited chat filter.
+The edited chat folder.
 */
-	filter: ChatFilter;
+	folder: ChatFolder;
 }
 
 /**
-Deletes existing chat filter.
-Request type for {@link Tdjson#deleteChatFilter}.
+Deletes existing chat folder.
+Request type for {@link Tdjson#deleteChatFolder}.
 */
-export interface DeleteChatFilter {
-	'@type': 'deleteChatFilter';
+export interface DeleteChatFolder {
+	'@type': 'deleteChatFolder';
 	/**
-Chat filter identifier.
+Chat folder identifier.
 */
-	chat_filter_id: number;
+	chat_folder_id: number;
+	/**
+Identifiers of the chats to leave. The chats must be pinned or always included in the folder.
+*/
+	leave_chat_ids: number[];
 }
 
 /**
-Changes the order of chat filters.
-Request type for {@link Tdjson#reorderChatFilters}.
+Returns identifiers of pinned or always included chats from a chat folder, which are suggested to be left when the chat
+folder is deleted.
+Request type for {@link Tdjson#getChatFolderChatsToLeave}.
 */
-export interface ReorderChatFilters {
-	'@type': 'reorderChatFilters';
+export interface GetChatFolderChatsToLeave {
+	'@type': 'getChatFolderChatsToLeave';
 	/**
-Identifiers of chat filters in the new correct order.
+Chat folder identifier.
 */
-	chat_filter_ids: number[];
+	chat_folder_id: number;
+}
+
+/**
+Changes the order of chat folders.
+Request type for {@link Tdjson#reorderChatFolders}.
+*/
+export interface ReorderChatFolders {
+	'@type': 'reorderChatFolders';
 	/**
-Position of the main chat list among chat filters, 0-based. Can be non-zero only for Premium users.
+Identifiers of chat folders in the new correct order.
+*/
+	chat_folder_ids: number[];
+	/**
+Position of the main chat list among chat folders, 0-based. Can be non-zero only for Premium users.
 */
 	main_chat_list_position: number;
 }
 
 /**
-Returns recommended chat filters for the current user.
-Request type for {@link Tdjson#getRecommendedChatFilters}.
+Returns recommended chat folders for the current user.
+Request type for {@link Tdjson#getRecommendedChatFolders}.
 */
-export interface GetRecommendedChatFilters {
-	'@type': 'getRecommendedChatFilters';
+export interface GetRecommendedChatFolders {
+	'@type': 'getRecommendedChatFolders';
 
 }
 
 /**
-Returns default icon name for a filter. Can be called synchronously.
-Request type for {@link Tdjson#getChatFilterDefaultIconName}.
+Returns default icon name for a folder. Can be called synchronously.
+Request type for {@link Tdjson#getChatFolderDefaultIconName}.
 */
-export interface GetChatFilterDefaultIconName {
-	'@type': 'getChatFilterDefaultIconName';
+export interface GetChatFolderDefaultIconName {
+	'@type': 'getChatFolderDefaultIconName';
 	/**
-Chat filter.
+Chat folder.
 */
-	filter: ChatFilter;
+	folder: ChatFolder;
+}
+
+/**
+Returns identifiers of chats from a chat folder, suitable for adding to a chat folder invite link.
+Request type for {@link Tdjson#getChatsForChatFolderInviteLink}.
+*/
+export interface GetChatsForChatFolderInviteLink {
+	'@type': 'getChatsForChatFolderInviteLink';
+	/**
+Chat folder identifier.
+*/
+	chat_folder_id: number;
+}
+
+/**
+Creates a new invite link for a chat folder. A link can be created for a chat folder if it has only pinned and included
+chats.
+Request type for {@link Tdjson#createChatFolderInviteLink}.
+*/
+export interface CreateChatFolderInviteLink {
+	'@type': 'createChatFolderInviteLink';
+	/**
+Chat folder identifier.
+*/
+	chat_folder_id: number;
+	/**
+Name of the link; 0-32 characters.
+*/
+	name: string;
+	/**
+Identifiers of chats to be accessible by the invite link. Use getChatsForChatFolderInviteLink to get suitable chats.
+Basic groups will be automatically converted to supergroups before link creation.
+*/
+	chat_ids: number[];
+}
+
+/**
+Returns invite links created by the current user for a shareable chat folder.
+Request type for {@link Tdjson#getChatFolderInviteLinks}.
+*/
+export interface GetChatFolderInviteLinks {
+	'@type': 'getChatFolderInviteLinks';
+	/**
+Chat folder identifier.
+*/
+	chat_folder_id: number;
+}
+
+/**
+Edits an invite link for a chat folder.
+Request type for {@link Tdjson#editChatFolderInviteLink}.
+*/
+export interface EditChatFolderInviteLink {
+	'@type': 'editChatFolderInviteLink';
+	/**
+Chat folder identifier.
+*/
+	chat_folder_id: number;
+	/**
+Invite link to be edited.
+*/
+	invite_link: string;
+	/**
+New name of the link; 0-32 characters.
+*/
+	name: string;
+	/**
+New identifiers of chats to be accessible by the invite link. Use getChatsForChatFolderInviteLink to get suitable chats.
+Basic groups will be automatically converted to supergroups before link editing.
+*/
+	chat_ids: number[];
+}
+
+/**
+Deletes an invite link for a chat folder.
+Request type for {@link Tdjson#deleteChatFolderInviteLink}.
+*/
+export interface DeleteChatFolderInviteLink {
+	'@type': 'deleteChatFolderInviteLink';
+	/**
+Chat folder identifier.
+*/
+	chat_folder_id: number;
+	/**
+Invite link to be deleted.
+*/
+	invite_link: string;
+}
+
+/**
+Checks the validity of an invite link for a chat folder and returns information about the corresponding chat folder.
+Request type for {@link Tdjson#checkChatFolderInviteLink}.
+*/
+export interface CheckChatFolderInviteLink {
+	'@type': 'checkChatFolderInviteLink';
+	/**
+Invite link to be checked.
+*/
+	invite_link: string;
+}
+
+/**
+Adds a chat folder by an invite link.
+Request type for {@link Tdjson#addChatFolderByInviteLink}.
+*/
+export interface AddChatFolderByInviteLink {
+	'@type': 'addChatFolderByInviteLink';
+	/**
+Invite link for the chat folder.
+*/
+	invite_link: string;
+	/**
+Identifiers of the chats added to the chat folder. The chats are automatically joined if they aren't joined yet.
+*/
+	chat_ids: number[];
+}
+
+/**
+Returns new chats added to a shareable chat folder by its owner. The method must be called at most once in
+getOption("chat_folder_new_chats_update_period") for the given chat folder.
+Request type for {@link Tdjson#getChatFolderNewChats}.
+*/
+export interface GetChatFolderNewChats {
+	'@type': 'getChatFolderNewChats';
+	/**
+Chat folder identifier.
+*/
+	chat_folder_id: number;
+}
+
+/**
+Process new chats added to a shareable chat folder by its owner.
+Request type for {@link Tdjson#processChatFolderNewChats}.
+*/
+export interface ProcessChatFolderNewChats {
+	'@type': 'processChatFolderNewChats';
+	/**
+Chat folder identifier.
+*/
+	chat_folder_id: number;
+	/**
+Identifiers of the new chats, which are added to the chat folder. The chats are automatically joined if they aren't
+joined yet.
+*/
+	added_chat_ids: number[];
 }
 
 /**
@@ -24921,6 +25310,30 @@ Chat identifier.
 New non-administrator members permissions in the chat.
 */
 	permissions: ChatPermissions;
+}
+
+/**
+Changes the background in a specific chat. Supported only in private and secret chats with non-deleted users.
+Request type for {@link Tdjson#setChatBackground}.
+*/
+export interface SetChatBackground {
+	'@type': 'setChatBackground';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The input background to use; pass null to create a new filled background or to remove the current background.
+*/
+	background: InputBackground;
+	/**
+Background type; pass null to remove the current background.
+*/
+	type: BackgroundType;
+	/**
+Dimming of the background in dark themes, as a percentage; 0-100.
+*/
+	dark_theme_dimming: number;
 }
 
 /**
@@ -24995,7 +25408,7 @@ New value of has_protected_content.
 }
 
 /**
-Changes the tranlatable state of a chat; for Telegram Premium users only.
+Changes the translatable state of a chat; for Telegram Premium users only.
 Request type for {@link Tdjson#toggleChatIsTranslatable}.
 */
 export interface ToggleChatIsTranslatable {
@@ -25566,6 +25979,18 @@ Chat list in which to change the order of pinned chats.
 The new list of pinned chats.
 */
 	chat_ids: number[];
+}
+
+/**
+Traverse all chats in a chat list and marks all messages in the chats as read.
+Request type for {@link Tdjson#readChatList}.
+*/
+export interface ReadChatList {
+	'@type': 'readChatList';
+	/**
+Chat list in which to mark all chats as read.
+*/
+	chat_list: ChatList;
 }
 
 /**
@@ -28032,28 +28457,36 @@ Default administrator rights for adding the bot to channels; may be null.
 }
 
 /**
-Sets the text shown in the chat with the bot if the chat is empty; bots only.
-Request type for {@link Tdjson#setBotInfoDescription}.
+Sets the name of a bot. Can be called only if userTypeBot.can_be_edited == true.
+Request type for {@link Tdjson#setBotName}.
 */
-export interface SetBotInfoDescription {
-	'@type': 'setBotInfoDescription';
+export interface SetBotName {
+	'@type': 'setBotName';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
 	/**
 A two-letter ISO 639-1 language code. If empty, the description will be shown to all users, for which language there are
 no dedicated description.
 */
 	language_code: string;
 	/**
-Sets the text shown in the chat with the bot if the chat is empty; bots only.
+New bot's name on the specified language; 0-64 characters; must be non-empty if language code is empty.
 */
-	description: string;
+	name: string;
 }
 
 /**
-Returns the text shown in the chat with the bot if the chat is empty in the given language; bots only.
-Request type for {@link Tdjson#getBotInfoDescription}.
+Returns the name of a bot in the given language. Can be called only if userTypeBot.can_be_edited == true.
+Request type for {@link Tdjson#getBotName}.
 */
-export interface GetBotInfoDescription {
-	'@type': 'getBotInfoDescription';
+export interface GetBotName {
+	'@type': 'getBotName';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
 	/**
 A two-letter ISO 639-1 language code or an empty string.
 */
@@ -28061,11 +28494,110 @@ A two-letter ISO 639-1 language code or an empty string.
 }
 
 /**
-Sets the text shown on the bot's profile page and sent together with the link when users share the bot; bots only.
+Changes a profile photo for a bot.
+Request type for {@link Tdjson#setBotProfilePhoto}.
+*/
+export interface SetBotProfilePhoto {
+	'@type': 'setBotProfilePhoto';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+Profile photo to set; pass null to delete the chat photo.
+*/
+	photo: InputChatPhoto;
+}
+
+/**
+Changes active state for a username of a bot. The editable username can't be disabled. May return an error with a
+message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum number of active usernames has been reached. Can be called only if
+userTypeBot.can_be_edited == true.
+Request type for {@link Tdjson#toggleBotUsernameIsActive}.
+*/
+export interface ToggleBotUsernameIsActive {
+	'@type': 'toggleBotUsernameIsActive';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+The username to change.
+*/
+	username: string;
+	/**
+Pass true to activate the username; pass false to disable it.
+*/
+	is_active?: boolean;
+}
+
+/**
+Changes order of active usernames of a bot. Can be called only if userTypeBot.can_be_edited == true.
+Request type for {@link Tdjson#reorderActiveBotUsernames}.
+*/
+export interface ReorderActiveBotUsernames {
+	'@type': 'reorderActiveBotUsernames';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+The new order of active usernames. All currently active usernames must be specified.
+*/
+	usernames: string[];
+}
+
+/**
+Sets the text shown in the chat with a bot if the chat is empty. Can be called only if userTypeBot.can_be_edited ==
+true.
+Request type for {@link Tdjson#setBotInfoDescription}.
+*/
+export interface SetBotInfoDescription {
+	'@type': 'setBotInfoDescription';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+A two-letter ISO 639-1 language code. If empty, the description will be shown to all users, for which language there are
+no dedicated description.
+*/
+	language_code: string;
+	/**
+Sets the text shown in the chat with a bot if the chat is empty. Can be called only if userTypeBot.can_be_edited ==
+true.
+*/
+	description: string;
+}
+
+/**
+Returns the text shown in the chat with a bot if the chat is empty in the given language. Can be called only if
+userTypeBot.can_be_edited == true.
+Request type for {@link Tdjson#getBotInfoDescription}.
+*/
+export interface GetBotInfoDescription {
+	'@type': 'getBotInfoDescription';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+A two-letter ISO 639-1 language code or an empty string.
+*/
+	language_code: string;
+}
+
+/**
+Sets the text shown on a bot's profile page and sent together with the link when users share the bot. Can be called only
+if userTypeBot.can_be_edited == true.
 Request type for {@link Tdjson#setBotInfoShortDescription}.
 */
 export interface SetBotInfoShortDescription {
 	'@type': 'setBotInfoShortDescription';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
 	/**
 A two-letter ISO 639-1 language code. If empty, the short description will be shown to all users, for which language
 there are no dedicated description.
@@ -28078,12 +28610,16 @@ New bot's short description on the specified language.
 }
 
 /**
-Returns the text shown on the bot's profile page and sent together with the link when users share the bot in the given
-language; bots only.
+Returns the text shown on a bot's profile page and sent together with the link when users share the bot in the given
+language. Can be called only if userTypeBot.can_be_edited == true.
 Request type for {@link Tdjson#getBotInfoShortDescription}.
 */
 export interface GetBotInfoShortDescription {
 	'@type': 'getBotInfoShortDescription';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
 	/**
 A two-letter ISO 639-1 language code or an empty string.
 */
@@ -28147,7 +28683,7 @@ Session identifier.
 */
 	session_id: string;
 	/**
-Pass true to allow accepring secret chats by the session; pass false otherwise.
+Pass true to allow accepting secret chats by the session; pass false otherwise.
 */
 	can_accept_secret_chats?: boolean;
 }
@@ -28691,7 +29227,7 @@ Request type for {@link Tdjson#setBackground}.
 export interface SetBackground {
 	'@type': 'setBackground';
 	/**
-The input background to use; pass null to create a new filled backgrounds or to remove the current background.
+The input background to use; pass null to create a new filled background or to remove the current background.
 */
 	background: InputBackground;
 	/**
@@ -30847,17 +31383,28 @@ export type Request =
 	| UpgradeBasicGroupChatToSupergroupChat
 	| GetChatListsToAddChat
 	| AddChatToList
-	| GetChatFilter
-	| CreateChatFilter
-	| EditChatFilter
-	| DeleteChatFilter
-	| ReorderChatFilters
-	| GetRecommendedChatFilters
-	| GetChatFilterDefaultIconName
+	| GetChatFolder
+	| CreateChatFolder
+	| EditChatFolder
+	| DeleteChatFolder
+	| GetChatFolderChatsToLeave
+	| ReorderChatFolders
+	| GetRecommendedChatFolders
+	| GetChatFolderDefaultIconName
+	| GetChatsForChatFolderInviteLink
+	| CreateChatFolderInviteLink
+	| GetChatFolderInviteLinks
+	| EditChatFolderInviteLink
+	| DeleteChatFolderInviteLink
+	| CheckChatFolderInviteLink
+	| AddChatFolderByInviteLink
+	| GetChatFolderNewChats
+	| ProcessChatFolderNewChats
 	| SetChatTitle
 	| SetChatPhoto
 	| SetChatMessageAutoDeleteTime
 	| SetChatPermissions
+	| SetChatBackground
 	| SetChatTheme
 	| SetChatDraftMessage
 	| SetChatNotificationSettings
@@ -30897,6 +31444,7 @@ export type Request =
 	| ResetAllNotificationSettings
 	| ToggleChatIsPinned
 	| SetPinnedChats
+	| ReadChatList
 	| GetAttachmentMenuBot
 	| ToggleBotIsAddedToAttachmentMenu
 	| GetThemedEmojiStatuses
@@ -31049,6 +31597,11 @@ export type Request =
 	| GetMenuButton
 	| SetDefaultGroupAdministratorRights
 	| SetDefaultChannelAdministratorRights
+	| SetBotName
+	| GetBotName
+	| SetBotProfilePhoto
+	| ToggleBotUsernameIsActive
+	| ReorderActiveBotUsernames
 	| SetBotInfoDescription
 	| GetBotInfoDescription
 	| SetBotInfoShortDescription
@@ -31743,7 +32296,8 @@ Returns information about a message, if it is available without sending network 
 	/**
 Returns information about a message that is replied by a given message. Also, returns the pinned message, the game
 message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
-messageGameScore, messagePaymentSuccessful, and topic messages without replied message respectively.
+messageGameScore, messagePaymentSuccessful, messageChatSetBackground and topic messages without replied message
+respectively.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -33461,72 +34015,175 @@ removed from another one if needed.
 	}
 
 	/**
-Returns information about a chat filter by its identifier.
+Returns information about a chat folder by its identifier.
 */
-	async getChatFilter(options: Omit<GetChatFilter, '@type'>): Promise<ChatFilter> {
+	async getChatFolder(options: Omit<GetChatFolder, '@type'>): Promise<ChatFolder> {
 		return this._request({
 			...options,
-			'@type': 'getChatFilter',
+			'@type': 'getChatFolder',
 		});
 	}
 
 	/**
-Creates new chat filter. Returns information about the created chat filter. There can be up to
-getOption("chat_filter_count_max") chat filters, but the limit can be increased with Telegram Premium.
+Creates new chat folder. Returns information about the created chat folder. There can be up to
+getOption("chat_folder_count_max") chat folders, but the limit can be increased with Telegram Premium.
 */
-	async createChatFilter(options: Omit<CreateChatFilter, '@type'>): Promise<ChatFilterInfo> {
+	async createChatFolder(options: Omit<CreateChatFolder, '@type'>): Promise<ChatFolderInfo> {
 		return this._request({
 			...options,
-			'@type': 'createChatFilter',
+			'@type': 'createChatFolder',
 		});
 	}
 
 	/**
-Edits existing chat filter. Returns information about the edited chat filter.
+Edits existing chat folder. Returns information about the edited chat folder.
 */
-	async editChatFilter(options: Omit<EditChatFilter, '@type'>): Promise<ChatFilterInfo> {
+	async editChatFolder(options: Omit<EditChatFolder, '@type'>): Promise<ChatFolderInfo> {
 		return this._request({
 			...options,
-			'@type': 'editChatFilter',
+			'@type': 'editChatFolder',
 		});
 	}
 
 	/**
-Deletes existing chat filter.
+Deletes existing chat folder.
 */
-	async deleteChatFilter(options: Omit<DeleteChatFilter, '@type'>): Promise<Ok> {
+	async deleteChatFolder(options: Omit<DeleteChatFolder, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'deleteChatFilter',
+			'@type': 'deleteChatFolder',
 		});
 	}
 
 	/**
-Changes the order of chat filters.
+Returns identifiers of pinned or always included chats from a chat folder, which are suggested to be left when the chat
+folder is deleted.
 */
-	async reorderChatFilters(options: Omit<ReorderChatFilters, '@type'>): Promise<Ok> {
+	async getChatFolderChatsToLeave(options: Omit<GetChatFolderChatsToLeave, '@type'>): Promise<Chats> {
 		return this._request({
 			...options,
-			'@type': 'reorderChatFilters',
+			'@type': 'getChatFolderChatsToLeave',
 		});
 	}
 
 	/**
-Returns recommended chat filters for the current user.
+Changes the order of chat folders.
 */
-	async getRecommendedChatFilters(): Promise<RecommendedChatFilters> {
+	async reorderChatFolders(options: Omit<ReorderChatFolders, '@type'>): Promise<Ok> {
 		return this._request({
-			'@type': 'getRecommendedChatFilters',
+			...options,
+			'@type': 'reorderChatFolders',
 		});
 	}
 
 	/**
-Returns default icon name for a filter. Can be called synchronously.
+Returns recommended chat folders for the current user.
 */
-	async getChatFilterDefaultIconName(options: Omit<GetChatFilterDefaultIconName, '@type'>): Promise<Text> {
+	async getRecommendedChatFolders(): Promise<RecommendedChatFolders> {
+		return this._request({
+			'@type': 'getRecommendedChatFolders',
+		});
+	}
+
+	/**
+Returns default icon name for a folder. Can be called synchronously.
+*/
+	async getChatFolderDefaultIconName(options: Omit<GetChatFolderDefaultIconName, '@type'>): Promise<ChatFolderIcon> {
 		return this._request({
 			...options,
-			'@type': 'getChatFilterDefaultIconName',
+			'@type': 'getChatFolderDefaultIconName',
+		});
+	}
+
+	/**
+Returns identifiers of chats from a chat folder, suitable for adding to a chat folder invite link.
+*/
+	async getChatsForChatFolderInviteLink(options: Omit<GetChatsForChatFolderInviteLink, '@type'>): Promise<Chats> {
+		return this._request({
+			...options,
+			'@type': 'getChatsForChatFolderInviteLink',
+		});
+	}
+
+	/**
+Creates a new invite link for a chat folder. A link can be created for a chat folder if it has only pinned and included
+chats.
+*/
+	async createChatFolderInviteLink(options: Omit<CreateChatFolderInviteLink, '@type'>): Promise<ChatFolderInviteLink> {
+		return this._request({
+			...options,
+			'@type': 'createChatFolderInviteLink',
+		});
+	}
+
+	/**
+Returns invite links created by the current user for a shareable chat folder.
+*/
+	async getChatFolderInviteLinks(options: Omit<GetChatFolderInviteLinks, '@type'>): Promise<ChatFolderInviteLinks> {
+		return this._request({
+			...options,
+			'@type': 'getChatFolderInviteLinks',
+		});
+	}
+
+	/**
+Edits an invite link for a chat folder.
+*/
+	async editChatFolderInviteLink(options: Omit<EditChatFolderInviteLink, '@type'>): Promise<ChatFolderInviteLink> {
+		return this._request({
+			...options,
+			'@type': 'editChatFolderInviteLink',
+		});
+	}
+
+	/**
+Deletes an invite link for a chat folder.
+*/
+	async deleteChatFolderInviteLink(options: Omit<DeleteChatFolderInviteLink, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteChatFolderInviteLink',
+		});
+	}
+
+	/**
+Checks the validity of an invite link for a chat folder and returns information about the corresponding chat folder.
+*/
+	async checkChatFolderInviteLink(options: Omit<CheckChatFolderInviteLink, '@type'>): Promise<ChatFolderInviteLinkInfo> {
+		return this._request({
+			...options,
+			'@type': 'checkChatFolderInviteLink',
+		});
+	}
+
+	/**
+Adds a chat folder by an invite link.
+*/
+	async addChatFolderByInviteLink(options: Omit<AddChatFolderByInviteLink, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addChatFolderByInviteLink',
+		});
+	}
+
+	/**
+Returns new chats added to a shareable chat folder by its owner. The method must be called at most once in
+getOption("chat_folder_new_chats_update_period") for the given chat folder.
+*/
+	async getChatFolderNewChats(options: Omit<GetChatFolderNewChats, '@type'>): Promise<Chats> {
+		return this._request({
+			...options,
+			'@type': 'getChatFolderNewChats',
+		});
+	}
+
+	/**
+Process new chats added to a shareable chat folder by its owner.
+*/
+	async processChatFolderNewChats(options: Omit<ProcessChatFolderNewChats, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'processChatFolderNewChats',
 		});
 	}
 
@@ -33576,6 +34233,16 @@ administrator right.
 	}
 
 	/**
+Changes the background in a specific chat. Supported only in private and secret chats with non-deleted users.
+*/
+	async setChatBackground(options: Omit<SetChatBackground, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setChatBackground',
+		});
+	}
+
+	/**
 Changes the chat theme. Supported only in private and secret chats.
 */
 	async setChatTheme(options: Omit<SetChatTheme, '@type'>): Promise<Ok> {
@@ -33618,7 +34285,7 @@ channels. Requires owner privileges.
 	}
 
 	/**
-Changes the tranlatable state of a chat; for Telegram Premium users only.
+Changes the translatable state of a chat; for Telegram Premium users only.
 */
 	async toggleChatIsTranslatable(options: Omit<ToggleChatIsTranslatable, '@type'>): Promise<Ok> {
 		return this._request({
@@ -33980,6 +34647,16 @@ Changes the order of pinned chats.
 		return this._request({
 			...options,
 			'@type': 'setPinnedChats',
+		});
+	}
+
+	/**
+Traverse all chats in a chat list and marks all messages in the chats as read.
+*/
+	async readChatList(options: Omit<ReadChatList, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readChatList',
 		});
 	}
 
@@ -35538,7 +36215,60 @@ Sets default administrator rights for adding the bot to channel chats; for bots 
 	}
 
 	/**
-Sets the text shown in the chat with the bot if the chat is empty; bots only.
+Sets the name of a bot. Can be called only if userTypeBot.can_be_edited == true.
+*/
+	async setBotName(options: Omit<SetBotName, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBotName',
+		});
+	}
+
+	/**
+Returns the name of a bot in the given language. Can be called only if userTypeBot.can_be_edited == true.
+*/
+	async getBotName(options: Omit<GetBotName, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'getBotName',
+		});
+	}
+
+	/**
+Changes a profile photo for a bot.
+*/
+	async setBotProfilePhoto(options: Omit<SetBotProfilePhoto, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBotProfilePhoto',
+		});
+	}
+
+	/**
+Changes active state for a username of a bot. The editable username can't be disabled. May return an error with a
+message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum number of active usernames has been reached. Can be called only if
+userTypeBot.can_be_edited == true.
+*/
+	async toggleBotUsernameIsActive(options: Omit<ToggleBotUsernameIsActive, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleBotUsernameIsActive',
+		});
+	}
+
+	/**
+Changes order of active usernames of a bot. Can be called only if userTypeBot.can_be_edited == true.
+*/
+	async reorderActiveBotUsernames(options: Omit<ReorderActiveBotUsernames, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reorderActiveBotUsernames',
+		});
+	}
+
+	/**
+Sets the text shown in the chat with a bot if the chat is empty. Can be called only if userTypeBot.can_be_edited ==
+true.
 */
 	async setBotInfoDescription(options: Omit<SetBotInfoDescription, '@type'>): Promise<Ok> {
 		return this._request({
@@ -35548,7 +36278,8 @@ Sets the text shown in the chat with the bot if the chat is empty; bots only.
 	}
 
 	/**
-Returns the text shown in the chat with the bot if the chat is empty in the given language; bots only.
+Returns the text shown in the chat with a bot if the chat is empty in the given language. Can be called only if
+userTypeBot.can_be_edited == true.
 */
 	async getBotInfoDescription(options: Omit<GetBotInfoDescription, '@type'>): Promise<Text> {
 		return this._request({
@@ -35558,7 +36289,8 @@ Returns the text shown in the chat with the bot if the chat is empty in the give
 	}
 
 	/**
-Sets the text shown on the bot's profile page and sent together with the link when users share the bot; bots only.
+Sets the text shown on a bot's profile page and sent together with the link when users share the bot. Can be called only
+if userTypeBot.can_be_edited == true.
 */
 	async setBotInfoShortDescription(options: Omit<SetBotInfoShortDescription, '@type'>): Promise<Ok> {
 		return this._request({
@@ -35568,8 +36300,8 @@ Sets the text shown on the bot's profile page and sent together with the link wh
 	}
 
 	/**
-Returns the text shown on the bot's profile page and sent together with the link when users share the bot in the given
-language; bots only.
+Returns the text shown on a bot's profile page and sent together with the link when users share the bot in the given
+language. Can be called only if userTypeBot.can_be_edited == true.
 */
 	async getBotInfoShortDescription(options: Omit<GetBotInfoShortDescription, '@type'>): Promise<Text> {
 		return this._request({
