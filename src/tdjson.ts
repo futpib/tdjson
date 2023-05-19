@@ -14842,7 +14842,7 @@ export interface PushMessageContentChatJoinByRequest {
 }
 
 /**
-A new recurrent payment was made by the current user.
+A new recurring payment was made by the current user.
 Subtype of {@link PushMessageContent}.
 */
 export interface PushMessageContentRecurringPayment {
@@ -28292,8 +28292,8 @@ The new location of the user.
 }
 
 /**
-Changes the phone number of the user and sends an authentication code to the user's new phone number. On success,
-returns information about the sent code.
+Changes the phone number of the user and sends an authentication code to the user's new phone number; for official
+Android and iOS applications only. On success, returns information about the sent code.
 Request type for {@link Tdjson#changePhoneNumber}.
 */
 export interface ChangePhoneNumber {
@@ -28467,8 +28467,8 @@ Identifier of the target bot.
 */
 	bot_user_id: number;
 	/**
-A two-letter ISO 639-1 language code. If empty, the description will be shown to all users, for which language there are
-no dedicated description.
+A two-letter ISO 639-1 language code. If empty, the name will be shown to all users for whose languages there is no
+dedicated name.
 */
 	language_code: string;
 	/**
@@ -28559,7 +28559,7 @@ Identifier of the target bot.
 */
 	bot_user_id: number;
 	/**
-A two-letter ISO 639-1 language code. If empty, the description will be shown to all users, for which language there are
+A two-letter ISO 639-1 language code. If empty, the description will be shown to all users for whose languages there is
 no dedicated description.
 */
 	language_code: string;
@@ -28599,8 +28599,8 @@ Identifier of the target bot.
 */
 	bot_user_id: number;
 	/**
-A two-letter ISO 639-1 language code. If empty, the short description will be shown to all users, for which language
-there are no dedicated description.
+A two-letter ISO 639-1 language code. If empty, the short description will be shown to all users for whose languages
+there is no dedicated description.
 */
 	language_code: string;
 	/**
@@ -36095,8 +36095,8 @@ changes for more than 1 kilometer.
 	}
 
 	/**
-Changes the phone number of the user and sends an authentication code to the user's new phone number. On success,
-returns information about the sent code.
+Changes the phone number of the user and sends an authentication code to the user's new phone number; for official
+Android and iOS applications only. On success, returns information about the sent code.
 */
 	async changePhoneNumber(options: Omit<ChangePhoneNumber, '@type'>): Promise<AuthenticationCodeInfo> {
 		return this._request({
