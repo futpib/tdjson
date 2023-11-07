@@ -25,7 +25,7 @@ Subtype of <a href="../types/MessageReplyTo.html" class="tsd-kind-type-alias">Me
 <ul class="tsd-hierarchy">
 <li><span class="target">MessageReplyToMessage</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3763">tdjson.ts:3763</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3994">tdjson.ts:3994</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -35,7 +35,12 @@ Subtype of <a href="../types/MessageReplyTo.html" class="tsd-kind-type-alias">Me
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="MessageReplyToMessage.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
 <a href="MessageReplyToMessage.html#chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a>
+<a href="MessageReplyToMessage.html#content" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>content</span></a>
+<a href="MessageReplyToMessage.html#is_quote_manual" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>quote_<wbr/>manual?</span></a>
 <a href="MessageReplyToMessage.html#message_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>id</span></a>
+<a href="MessageReplyToMessage.html#origin" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>origin</span></a>
+<a href="MessageReplyToMessage.html#origin_send_date" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>origin_<wbr/>send_<wbr/>date</span></a>
+<a href="MessageReplyToMessage.html#quote" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>quote</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -43,24 +48,70 @@ Subtype of <a href="../types/MessageReplyTo.html" class="tsd-kind-type-alias">Me
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;messageReplyToMessage&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3764">tdjson.ts:3764</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3995">tdjson.ts:3995</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>The identifier of the chat to which the replied message belongs; ignored for outgoing replies. For example, messages in
-the Replies chat are replies to messages in different chats.</p>
+<div class="tsd-comment tsd-typography"><p>The identifier of the chat to which the message belongs; may be 0 if the replied message is in unknown chat.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3769">tdjson.ts:3769</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3999">tdjson.ts:3999</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="content" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>content</span><a href="#content" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">content</span><span class="tsd-signature-symbol">:</span> <a href="../types/MessageContent.html" class="tsd-signature-type tsd-kind-type-alias">MessageContent</a></div>
+<div class="tsd-comment tsd-typography"><p>Media content of the message if the message was replied from another chat; may be null for messages from the same chat
+and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageContact,
+messageDice, messageDocument, messageGame, messageInvoice, messageLocation, messagePhoto, messagePoll,
+messagePremiumGiveaway, messageSticker, messageStory, messageText (for link preview), messageVenue, messageVideo,
+messageVideoNote, or messageVoiceNote.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4030">tdjson.ts:4030</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="is_quote_manual" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>is_<wbr/>quote_<wbr/>manual</span><a href="#is_quote_manual" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">is_<wbr/>quote_<wbr/>manual</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>True, if the quote was manually chosen by the message sender.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4012">tdjson.ts:4012</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="message_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>message_<wbr/>id</span><a href="#message_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">message_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>The identifier of the replied message.</p>
+<div class="tsd-comment tsd-typography"><p>The identifier of the message; may be 0 if the replied message is in unknown chat.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3773">tdjson.ts:3773</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4003">tdjson.ts:4003</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="origin" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>origin</span><a href="#origin" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">origin</span><span class="tsd-signature-symbol">:</span> <a href="../types/MessageOrigin.html" class="tsd-signature-type tsd-kind-type-alias">MessageOrigin</a></div>
+<div class="tsd-comment tsd-typography"><p>Information about origin of the message if the message was replied from another chat; may be null for messages from the
+same chat.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4017">tdjson.ts:4017</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="origin_send_date" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>origin_<wbr/>send_<wbr/>date</span><a href="#origin_send_date" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">origin_<wbr/>send_<wbr/>date</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-comment tsd-typography"><p>Point in time (Unix timestamp) when the message was sent if the message was replied from another chat; 0 for messages
+from the same chat.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4022">tdjson.ts:4022</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="quote" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>quote</span><a href="#quote" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">quote</span><span class="tsd-signature-symbol">:</span> <a href="FormattedText.html" class="tsd-signature-type tsd-kind-interface">FormattedText</a></div>
+<div class="tsd-comment tsd-typography"><p>Manually or automatically chosen quote from the replied message; may be null if none. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities can be present in the quote.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4008">tdjson.ts:4008</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -82,11 +133,17 @@ the Replies chat are replies to messages in different chats.</p>
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
 <li><a href="#chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a></li>
-<li><a href="#message_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>id</span></a></li></ul></div></details></div>
+<li><a href="#content" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>content</span></a></li>
+<li><a href="#is_quote_manual" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>quote_<wbr/>manual</span></a></li>
+<li><a href="#message_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>id</span></a></li>
+<li><a href="#origin" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>origin</span></a></li>
+<li><a href="#origin_send_date" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>origin_<wbr/>send_<wbr/>date</span></a></li>
+<li><a href="#quote" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>quote</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
 <li><a href="../classes/Tdjson.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg>Tdjson</a></li>
+<li><a href="AccentColor.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccentColor</a></li>
 <li><a href="AcceptCall.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptCall</a></li>
 <li><a href="AcceptTermsOfService.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptTermsOfService</a></li>
 <li><a href="AccountTtl.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccountTtl</a></li>
@@ -106,7 +163,6 @@ the Replies chat are replies to messages in different chats.</p>
 <li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
 <li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
 <li><a href="AddRecentSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentSticker</a></li>
-<li><a href="AddRecentlyFoundChat.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentlyFoundChat</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>

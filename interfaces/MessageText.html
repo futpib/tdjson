@@ -25,7 +25,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <ul class="tsd-hierarchy">
 <li><span class="target">MessageText</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L8487">tdjson.ts:8487</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L8912">tdjson.ts:8912</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -34,6 +34,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="MessageText.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
+<a href="MessageText.html#link_preview_options" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>link_<wbr/>preview_<wbr/>options</span></a>
 <a href="MessageText.html#text" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>text</span></a>
 <a href="MessageText.html#web_page" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>web_<wbr/>page</span></a>
 </div></section></div></details></section></section>
@@ -43,7 +44,15 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;messageText&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L8488">tdjson.ts:8488</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L8913">tdjson.ts:8913</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="link_preview_options" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>link_<wbr/>preview_<wbr/>options</span><a href="#link_preview_options" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">link_<wbr/>preview_<wbr/>options</span><span class="tsd-signature-symbol">:</span> <a href="LinkPreviewOptions.html" class="tsd-signature-type tsd-kind-interface">LinkPreviewOptions</a></div>
+<div class="tsd-comment tsd-typography"><p>Options which was used for generation of the link preview; may be null if default options were used.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L8925">tdjson.ts:8925</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="text" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>text</span><a href="#text" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">text</span><span class="tsd-signature-symbol">:</span> <a href="FormattedText.html" class="tsd-signature-type tsd-kind-interface">FormattedText</a></div>
@@ -51,15 +60,15 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L8492">tdjson.ts:8492</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L8917">tdjson.ts:8917</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="web_page" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>web_<wbr/>page</span><a href="#web_page" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">web_<wbr/>page</span><span class="tsd-signature-symbol">:</span> <a href="WebPage.html" class="tsd-signature-type tsd-kind-interface">WebPage</a></div>
-<div class="tsd-comment tsd-typography"><p>A preview of the web page that&#39;s mentioned in the text; may be null.</p>
+<div class="tsd-comment tsd-typography"><p>A link preview attached to the message; may be null.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L8496">tdjson.ts:8496</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L8921">tdjson.ts:8921</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -80,12 +89,14 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
+<li><a href="#link_preview_options" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>link_<wbr/>preview_<wbr/>options</span></a></li>
 <li><a href="#text" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>text</span></a></li>
 <li><a href="#web_page" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>web_<wbr/>page</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
 <li><a href="../classes/Tdjson.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg>Tdjson</a></li>
+<li><a href="AccentColor.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccentColor</a></li>
 <li><a href="AcceptCall.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptCall</a></li>
 <li><a href="AcceptTermsOfService.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptTermsOfService</a></li>
 <li><a href="AccountTtl.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccountTtl</a></li>
@@ -105,7 +116,6 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
 <li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
 <li><a href="AddRecentSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentSticker</a></li>
-<li><a href="AddRecentlyFoundChat.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentlyFoundChat</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>

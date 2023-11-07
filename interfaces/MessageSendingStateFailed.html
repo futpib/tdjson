@@ -25,7 +25,7 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 <ul class="tsd-hierarchy">
 <li><span class="target">MessageSendingStateFailed</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3739">tdjson.ts:3739</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3961">tdjson.ts:3961</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -36,7 +36,9 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 <div class="tsd-index-list"><a href="MessageSendingStateFailed.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
 <a href="MessageSendingStateFailed.html#can_retry" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>can_<wbr/>retry?</span></a>
 <a href="MessageSendingStateFailed.html#error" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>error</span></a>
+<a href="MessageSendingStateFailed.html#need_another_reply_quote" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>need_<wbr/>another_<wbr/>reply_<wbr/>quote?</span></a>
 <a href="MessageSendingStateFailed.html#need_another_sender" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>need_<wbr/>another_<wbr/>sender?</span></a>
+<a href="MessageSendingStateFailed.html#need_drop_reply" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>need_<wbr/>drop_<wbr/>reply?</span></a>
 <a href="MessageSendingStateFailed.html#retry_after" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>retry_<wbr/>after</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
@@ -45,7 +47,7 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;messageSendingStateFailed&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3740">tdjson.ts:3740</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3962">tdjson.ts:3962</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="can_retry" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>can_<wbr/>retry</span><a href="#can_retry" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">can_<wbr/>retry</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -53,7 +55,7 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3748">tdjson.ts:3748</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3970">tdjson.ts:3970</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="error" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>error</span><a href="#error" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">error</span><span class="tsd-signature-symbol">:</span> <a href="Error.html" class="tsd-signature-type tsd-kind-interface">Error</a></div>
@@ -61,7 +63,15 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3744">tdjson.ts:3744</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3966">tdjson.ts:3966</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="need_another_reply_quote" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>need_<wbr/>another_<wbr/>reply_<wbr/>quote</span><a href="#need_another_reply_quote" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">need_<wbr/>another_<wbr/>reply_<wbr/>quote</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>True, if the message can be re-sent only if another quote is chosen in the message that is replied by the given message.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3978">tdjson.ts:3978</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="need_another_sender" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>need_<wbr/>another_<wbr/>sender</span><a href="#need_another_sender" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">need_<wbr/>another_<wbr/>sender</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -69,7 +79,16 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3752">tdjson.ts:3752</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3974">tdjson.ts:3974</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="need_drop_reply" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>need_<wbr/>drop_<wbr/>reply</span><a href="#need_drop_reply" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">need_<wbr/>drop_<wbr/>reply</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>True, if the message can be re-sent only if the message to be replied is removed. This will be done automatically by
+resendMessages.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3983">tdjson.ts:3983</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="retry_after" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>retry_<wbr/>after</span><a href="#retry_after" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">retry_<wbr/>after</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -77,7 +96,7 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/daccfef/src/tdjson.ts#L3756">tdjson.ts:3756</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L3987">tdjson.ts:3987</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -100,12 +119,15 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
 <li><a href="#can_retry" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>can_<wbr/>retry</span></a></li>
 <li><a href="#error" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>error</span></a></li>
+<li><a href="#need_another_reply_quote" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>need_<wbr/>another_<wbr/>reply_<wbr/>quote</span></a></li>
 <li><a href="#need_another_sender" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>need_<wbr/>another_<wbr/>sender</span></a></li>
+<li><a href="#need_drop_reply" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>need_<wbr/>drop_<wbr/>reply</span></a></li>
 <li><a href="#retry_after" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>retry_<wbr/>after</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
 <li><a href="../classes/Tdjson.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg>Tdjson</a></li>
+<li><a href="AccentColor.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccentColor</a></li>
 <li><a href="AcceptCall.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptCall</a></li>
 <li><a href="AcceptTermsOfService.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptTermsOfService</a></li>
 <li><a href="AccountTtl.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccountTtl</a></li>
@@ -125,7 +147,6 @@ Subtype of <a href="../types/MessageSendingState.html" class="tsd-kind-type-alia
 <li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
 <li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
 <li><a href="AddRecentSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentSticker</a></li>
-<li><a href="AddRecentlyFoundChat.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentlyFoundChat</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
