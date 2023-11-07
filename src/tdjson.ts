@@ -286,8 +286,9 @@ The text.
 	text: string;
 	/**
 Entities contained in the text. Entities can be nested, but must not mutually intersect with each other. Pre, Code and
-PreCode entities can't contain other entities. Bold, Italic, Underline, Strikethrough, and Spoiler entities can contain
-and can be part of any other entities. All other entities can't contain each other.
+PreCode entities can't contain other entities. BlockQuote entities can't contain other BlockQuote entities. Bold,
+Italic, Underline, Strikethrough, and Spoiler entities can contain and can be part of any other entities. All other
+entities can't contain each other.
 */
 	entities: TextEntity[];
 }
@@ -1980,7 +1981,7 @@ Describes actions that a user is allowed to take in a chat.
 export interface ChatPermissions {
 	'@type': 'chatPermissions';
 	/**
-True, if the user can send text messages, contacts, invoices, locations, and venues.
+True, if the user can send text messages, contacts, giveaways, invoices, locations, and venues.
 */
 	can_send_basic_messages?: boolean;
 	/**
@@ -2167,6 +2168,215 @@ Identifier of the last in-store transaction for the currently used option.
 }
 
 /**
+Describes an option for creating Telegram Premium gift codes.
+*/
+export interface PremiumGiftCodePaymentOption {
+	'@type': 'premiumGiftCodePaymentOption';
+	/**
+ISO 4217 currency code for Telegram Premium gift code payment.
+*/
+	currency: string;
+	/**
+The amount to pay, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of users which will be able to activate the gift codes.
+*/
+	user_count: number;
+	/**
+Number of month the Telegram Premium subscription will be active.
+*/
+	month_count: number;
+	/**
+Identifier of the store product associated with the option; may be empty if none.
+*/
+	store_product_id: string;
+	/**
+Number of times the store product must be paid.
+*/
+	store_product_quantity: number;
+}
+
+/**
+Contains a list of options for creating Telegram Premium gift codes.
+*/
+export interface PremiumGiftCodePaymentOptions {
+	'@type': 'premiumGiftCodePaymentOptions';
+	/**
+The list of options.
+*/
+	options: PremiumGiftCodePaymentOption[];
+}
+
+/**
+Contains information about a Telegram Premium gift code.
+*/
+export interface PremiumGiftCodeInfo {
+	'@type': 'premiumGiftCodeInfo';
+	/**
+Identifier of a chat or a user that created the gift code.
+*/
+	creator_id: MessageSender;
+	/**
+Point in time (Unix timestamp) when the code was created.
+*/
+	creation_date: number;
+	/**
+True, if the gift code was created for a giveaway.
+*/
+	is_from_giveaway?: boolean;
+	/**
+Identifier of the corresponding giveaway message; can be 0 or an identifier of a deleted message.
+*/
+	giveaway_message_id: number;
+	/**
+Number of month the Telegram Premium subscription will be active after code activation.
+*/
+	month_count: number;
+	/**
+Identifier of a user for which the code was created; 0 if none.
+*/
+	user_id: number;
+	/**
+Point in time (Unix timestamp) when the code was activated; 0 if none.
+*/
+	use_date: number;
+}
+
+/**
+Contains information about status of a user in a Telegram Premium giveaway.
+Subtype of {@link PremiumGiveawayParticipantStatus}.
+*/
+export interface PremiumGiveawayParticipantStatusEligible {
+	'@type': 'premiumGiveawayParticipantStatusEligible';
+
+}
+
+/**
+The user participates in the giveaway.
+Subtype of {@link PremiumGiveawayParticipantStatus}.
+*/
+export interface PremiumGiveawayParticipantStatusParticipating {
+	'@type': 'premiumGiveawayParticipantStatusParticipating';
+
+}
+
+/**
+The user can't participate in the giveaway, because they have already been member of the chat.
+Subtype of {@link PremiumGiveawayParticipantStatus}.
+*/
+export interface PremiumGiveawayParticipantStatusAlreadyWasMember {
+	'@type': 'premiumGiveawayParticipantStatusAlreadyWasMember';
+	/**
+Point in time (Unix timestamp) when the user joined the chat.
+*/
+	joined_chat_date: number;
+}
+
+/**
+The user can't participate in the giveaway, because they are an administrator in one of the chats that created the
+giveaway.
+Subtype of {@link PremiumGiveawayParticipantStatus}.
+*/
+export interface PremiumGiveawayParticipantStatusAdministrator {
+	'@type': 'premiumGiveawayParticipantStatusAdministrator';
+	/**
+Identifier of the chat administered by the user.
+*/
+	chat_id: number;
+}
+
+/**
+The user can't participate in the giveaway, because they phone number is from a disallowed country.
+Subtype of {@link PremiumGiveawayParticipantStatus}.
+*/
+export interface PremiumGiveawayParticipantStatusDisallowedCountry {
+	'@type': 'premiumGiveawayParticipantStatusDisallowedCountry';
+	/**
+A two-letter ISO 3166-1 alpha-2 country code of the user's country.
+*/
+	user_country_code: string;
+}
+
+/**
+Contains information about Telegram Premium giveaway.
+Subtype of {@link PremiumGiveawayInfo}.
+*/
+export interface PremiumGiveawayInfoOngoing {
+	'@type': 'premiumGiveawayInfoOngoing';
+	/**
+Point in time (Unix timestamp) when the giveaway was created.
+*/
+	creation_date: number;
+	/**
+Status of the current user in the giveaway.
+*/
+	status: PremiumGiveawayParticipantStatus;
+	/**
+True, if the giveaway has ended and results are being prepared.
+*/
+	is_ended?: boolean;
+}
+
+/**
+Describes a completed giveaway.
+Subtype of {@link PremiumGiveawayInfo}.
+*/
+export interface PremiumGiveawayInfoCompleted {
+	'@type': 'premiumGiveawayInfoCompleted';
+	/**
+Point in time (Unix timestamp) when the giveaway was created.
+*/
+	creation_date: number;
+	/**
+Point in time (Unix timestamp) when the winners were selected. May be bigger than winners selection date specified in
+parameters of the giveaway.
+*/
+	actual_winners_selection_date: number;
+	/**
+True, if the giveaway was canceled and was fully refunded.
+*/
+	was_refunded?: boolean;
+	/**
+Number of winners in the giveaway.
+*/
+	winner_count: number;
+	/**
+Number of winners, which activated their gift codes.
+*/
+	activation_count: number;
+	/**
+Telegram Premium gift code that was received by the current user; empty if the user isn't a winner in the giveaway.
+*/
+	gift_code: string;
+}
+
+/**
+Contains information about supported accent color for user/chat name, background of empty chat photo, replies to
+messages and link previews.
+*/
+export interface AccentColor {
+	'@type': 'accentColor';
+	/**
+Accent color identifier.
+*/
+	id: number;
+	/**
+Identifier of a built-in color to use in places, where only one color is needed; 0-6.
+*/
+	built_in_accent_color_id: number;
+	/**
+The list of 1-3 colors in RGB format, describing the accent color, as expected to be shown in light themes.
+*/
+	light_theme_colors: number[];
+	/**
+The list of 1-3 colors in RGB format, describing the accent color, as expected to be shown in dark themes.
+*/
+	dark_theme_colors: number[];
+}
+
+/**
 Describes a custom emoji to be shown instead of the Telegram Premium badge.
 */
 export interface EmojiStatus {
@@ -2246,6 +2456,14 @@ Current online status of the user.
 Profile photo of the user; may be null.
 */
 	profile_photo: ProfilePhoto;
+	/**
+Identifier of the accent color for name, and backgrounds of profile photo, reply header, and link preview.
+*/
+	accent_color_id: number;
+	/**
+Identifier of a custom emoji to be shown on the reply header background; 0 if none. For Telegram Premium users only.
+*/
+	background_custom_emoji_id: string;
 	/**
 Emoji status to be shown instead of the default Telegram Premium badge; may be null. For Telegram Premium users only.
 */
@@ -2973,6 +3191,10 @@ Chat photo; may be null.
 */
 	photo: ChatPhotoInfo;
 	/**
+Identifier of the accent color for chat title and background of chat photo.
+*/
+	accent_color_id: number;
+	/**
 Contains information about a chat invite link.
 */
 	description: string;
@@ -3492,11 +3714,11 @@ List of message viewers.
 }
 
 /**
-Contains information about the origin of a forwarded message.
-Subtype of {@link MessageForwardOrigin}.
+Contains information about the origin of a message.
+Subtype of {@link MessageOrigin}.
 */
-export interface MessageForwardOriginUser {
-	'@type': 'messageForwardOriginUser';
+export interface MessageOriginUser {
+	'@type': 'messageOriginUser';
 	/**
 Identifier of the user that originally sent the message.
 */
@@ -3504,11 +3726,23 @@ Identifier of the user that originally sent the message.
 }
 
 /**
-The message was originally sent on behalf of a chat.
-Subtype of {@link MessageForwardOrigin}.
+The message was originally sent by a user, which is hidden by their privacy settings.
+Subtype of {@link MessageOrigin}.
 */
-export interface MessageForwardOriginChat {
-	'@type': 'messageForwardOriginChat';
+export interface MessageOriginHiddenUser {
+	'@type': 'messageOriginHiddenUser';
+	/**
+Name of the sender.
+*/
+	sender_name: string;
+}
+
+/**
+The message was originally sent on behalf of a chat.
+Subtype of {@link MessageOrigin}.
+*/
+export interface MessageOriginChat {
+	'@type': 'messageOriginChat';
 	/**
 Identifier of the chat that originally sent the message.
 */
@@ -3520,25 +3754,13 @@ For messages originally sent by an anonymous chat administrator, original messag
 }
 
 /**
-The message was originally sent by a user, which is hidden by their privacy settings.
-Subtype of {@link MessageForwardOrigin}.
-*/
-export interface MessageForwardOriginHiddenUser {
-	'@type': 'messageForwardOriginHiddenUser';
-	/**
-Name of the sender.
-*/
-	sender_name: string;
-}
-
-/**
 The message was originally a post in a channel.
-Subtype of {@link MessageForwardOrigin}.
+Subtype of {@link MessageOrigin}.
 */
-export interface MessageForwardOriginChannel {
-	'@type': 'messageForwardOriginChannel';
+export interface MessageOriginChannel {
+	'@type': 'messageOriginChannel';
 	/**
-Identifier of the chat from which the message was originally forwarded.
+Identifier of the channel chat to which the message was originally sent.
 */
 	chat_id: number;
 	/**
@@ -3581,9 +3803,9 @@ Contains information about a forwarded message.
 export interface MessageForwardInfo {
 	'@type': 'messageForwardInfo';
 	/**
-Origin of a forwarded message.
+Origin of the forwarded message.
 */
-	origin: MessageForwardOrigin;
+	origin: MessageOrigin;
 	/**
 Point in time (Unix timestamp) when the message was originally sent.
 */
@@ -3751,6 +3973,15 @@ True, if the message can be re-sent only on behalf of a different sender.
 */
 	need_another_sender?: boolean;
 	/**
+True, if the message can be re-sent only if another quote is chosen in the message that is replied by the given message.
+*/
+	need_another_reply_quote?: boolean;
+	/**
+True, if the message can be re-sent only if the message to be replied is removed. This will be done automatically by
+resendMessages.
+*/
+	need_drop_reply?: boolean;
+	/**
 Time left before the message can be re-sent, in seconds. No update is sent when this field changes.
 */
 	retry_after: number;
@@ -3763,28 +3994,94 @@ Subtype of {@link MessageReplyTo}.
 export interface MessageReplyToMessage {
 	'@type': 'messageReplyToMessage';
 	/**
-The identifier of the chat to which the replied message belongs; ignored for outgoing replies. For example, messages in
-the Replies chat are replies to messages in different chats.
+The identifier of the chat to which the message belongs; may be 0 if the replied message is in unknown chat.
 */
 	chat_id: number;
 	/**
-The identifier of the replied message.
+The identifier of the message; may be 0 if the replied message is in unknown chat.
 */
 	message_id: number;
+	/**
+Manually or automatically chosen quote from the replied message; may be null if none. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities can be present in the quote.
+*/
+	quote: FormattedText;
+	/**
+True, if the quote was manually chosen by the message sender.
+*/
+	is_quote_manual?: boolean;
+	/**
+Information about origin of the message if the message was replied from another chat; may be null for messages from the
+same chat.
+*/
+	origin: MessageOrigin;
+	/**
+Point in time (Unix timestamp) when the message was sent if the message was replied from another chat; 0 for messages
+from the same chat.
+*/
+	origin_send_date: number;
+	/**
+Media content of the message if the message was replied from another chat; may be null for messages from the same chat
+and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageContact,
+messageDice, messageDocument, messageGame, messageInvoice, messageLocation, messagePhoto, messagePoll,
+messagePremiumGiveaway, messageSticker, messageStory, messageText (for link preview), messageVenue, messageVideo,
+messageVideoNote, or messageVoiceNote.
+*/
+	content: MessageContent;
 }
 
 /**
-Describes a replied story.
+Describes a story replied by a given message.
 Subtype of {@link MessageReplyTo}.
 */
 export interface MessageReplyToStory {
 	'@type': 'messageReplyToStory';
 	/**
-The identifier of the sender of the replied story. Currently, stories can be replied only in the sender's chat.
+The identifier of the sender of the story.
 */
 	story_sender_chat_id: number;
 	/**
-The identifier of the replied story.
+The identifier of the story.
+*/
+	story_id: number;
+}
+
+/**
+Contains information about the message or the story to be replied.
+Subtype of {@link InputMessageReplyTo}.
+*/
+export interface InputMessageReplyToMessage {
+	'@type': 'inputMessageReplyToMessage';
+	/**
+The identifier of the chat to which the message to be replied belongs; pass 0 if the message to be replied is in the
+same chat. Must always be 0 for replies in secret chats. A message can be replied in another chat only if
+message.can_be_replied_in_another_chat.
+*/
+	chat_id: number;
+	/**
+The identifier of the message to be replied in the same or the specified chat.
+*/
+	message_id: number;
+	/**
+Manually chosen quote from the message to be replied; pass null if none; 0-getOption("message_reply_quote_length_max")
+characters. Must always be null for replies in secret chats. Only Bold, Italic, Underline, Strikethrough, Spoiler, and
+CustomEmoji entities are allowed to be kept and must be kept in the quote.
+*/
+	quote: FormattedText;
+}
+
+/**
+Describes a story to be replied.
+Subtype of {@link InputMessageReplyTo}.
+*/
+export interface InputMessageReplyToStory {
+	'@type': 'inputMessageReplyToStory';
+	/**
+The identifier of the sender of the story. Currently, stories can be replied only in the sender's chat.
+*/
+	story_sender_chat_id: number;
+	/**
+The identifier of the story.
 */
 	story_id: number;
 }
@@ -3831,6 +4128,10 @@ editMessageLiveLocation or stopPoll can be used with this message by the applica
 True, if the message can be forwarded.
 */
 	can_be_forwarded?: boolean;
+	/**
+True, if the message can be replied in another chat.
+*/
+	can_be_replied_in_another_chat?: boolean;
 	/**
 True, if content of the message can be saved locally or copied.
 */
@@ -4510,9 +4811,9 @@ Contains information about a message draft.
 export interface DraftMessage {
 	'@type': 'draftMessage';
 	/**
-Identifier of the replied message; 0 if none.
+Information about the message to be replied; must be of the type inputMessageReplyToMessage; may be null if none.
 */
-	reply_to_message_id: number;
+	reply_to: InputMessageReplyTo;
 	/**
 Point in time (Unix timestamp) when the draft was created.
 */
@@ -4938,6 +5239,15 @@ Chat title.
 Chat photo; may be null.
 */
 	photo: ChatPhotoInfo;
+	/**
+Identifier of the accent color for message sender name, and backgrounds of chat photo, reply header, and link preview.
+*/
+	accent_color_id: number;
+	/**
+Identifier of a custom emoji to be shown on the reply header background in replies to messages sent by the chat; 0 if
+none.
+*/
+	background_custom_emoji_id: string;
 	/**
 Actions that non-administrator chat members are allowed to take in the chat.
 */
@@ -5623,10 +5933,6 @@ The Web App.
 */
 	web_app: WebApp;
 	/**
-True, if the app supports "settings_button_pressed" event.
-*/
-	supports_settings?: boolean;
-	/**
 True, if the user must be asked for the permission to the bot to send them messages.
 */
 	request_write_access?: boolean;
@@ -5814,6 +6120,34 @@ Offset message identifier for the next getForumTopics request.
 Offset message thread identifier for the next getForumTopics request.
 */
 	next_offset_message_thread_id: number;
+}
+
+/**
+Options to be used for generation of a link preview.
+*/
+export interface LinkPreviewOptions {
+	'@type': 'linkPreviewOptions';
+	/**
+True, if link preview must be disabled.
+*/
+	is_disabled?: boolean;
+	/**
+URL to use for link preview. If empty, then the first URL found in the message text will be used.
+*/
+	url: string;
+	/**
+True, if shown media preview must be small; ignored in secret chats or if the URL isn't explicitly specified.
+*/
+	force_small_media?: boolean;
+	/**
+True, if shown media preview must be large; ignored in secret chats or if the URL isn't explicitly specified.
+*/
+	force_large_media?: boolean;
+	/**
+True, if link preview must be shown above message text; otherwise, the link preview will be shown below the message
+text; ignored in secret chats.
+*/
+	show_above_text?: boolean;
 }
 
 /**
@@ -6614,6 +6948,10 @@ Chat photo; may be null.
 */
 	photo: ChatPhotoInfo;
 	/**
+Identifier of the accent color for chat title and background of chat photo.
+*/
+	accent_color_id: number;
+	/**
 Chat username by which all other information about the chat can be resolved.
 */
 	username: string;
@@ -6740,7 +7078,7 @@ An internal link to be opened to leave feedback about the instant view.
 }
 
 /**
-Describes a web page preview.
+Describes a link preview.
 */
 export interface WebPage {
 	'@type': 'webPage';
@@ -6765,7 +7103,7 @@ Title of the content.
 */
 	title: string;
 	/**
-Describes a web page preview.
+Describes a link preview.
 */
 	description: FormattedText;
 	/**
@@ -6796,6 +7134,24 @@ Duration of the content, in seconds.
 Author of the content.
 */
 	author: string;
+	/**
+True, if the preview has large media and its appearance can be changed.
+*/
+	has_large_media?: boolean;
+	/**
+True, if large media preview must be shown.
+*/
+	show_large_media?: boolean;
+	/**
+True, if there is no need to show an ordinary open URL confirmation, when opening the URL from the preview, because the
+URL is shown in the message text in clear.
+*/
+	skip_confirmation?: boolean;
+	/**
+True, if the link preview must be shown above message text; otherwise, the link preview must be shown below the message
+text.
+*/
+	show_above_text?: boolean;
 	/**
 Preview of the content as an animation, if available; may be null.
 */
@@ -6975,9 +7331,33 @@ A secondary color for the background in the RGB24 format.
 */
 	secondary_background_color: number;
 	/**
+A color of the header background in the RGB24 format.
+*/
+	header_background_color: number;
+	/**
+A color of the section background in the RGB24 format.
+*/
+	section_background_color: number;
+	/**
 A color of text in the RGB24 format.
 */
 	text_color: number;
+	/**
+An accent color of the text in the RGB24 format.
+*/
+	accent_text_color: number;
+	/**
+A color of text on the section headers in the RGB24 format.
+*/
+	section_header_text_color: number;
+	/**
+A color of the subtitle text in the RGB24 format.
+*/
+	subtitle_text_color: number;
+	/**
+A color of the text for destructive actions in the RGB24 format.
+*/
+	destructive_text_color: number;
 	/**
 A color of hints in the RGB24 format.
 */
@@ -7418,6 +7798,18 @@ Name of the invoice.
 }
 
 /**
+An invoice for a payment toward Telegram; must not be used in the in-store apps.
+Subtype of {@link InputInvoice}.
+*/
+export interface InputInvoiceTelegram {
+	'@type': 'inputInvoiceTelegram';
+	/**
+Transaction purpose.
+*/
+	purpose: TelegramPaymentPurpose;
+}
+
+/**
 Describes a media, which is attached to an invoice.
 Subtype of {@link MessageExtendedMedia}.
 */
@@ -7487,6 +7879,39 @@ export interface MessageExtendedMediaUnsupported {
 Media caption.
 */
 	caption: FormattedText;
+}
+
+/**
+Describes parameters of a Telegram Premium giveaway.
+*/
+export interface PremiumGiveawayParameters {
+	'@type': 'premiumGiveawayParameters';
+	/**
+Identifier of the channel chat, which will be automatically boosted by the winners of the giveaway for duration of the
+Premium subscription.
+*/
+	boosted_chat_id: number;
+	/**
+Identifiers of other channel chats that must be subscribed by the users to be eligible for the giveaway. There can be up
+to getOption("giveaway_additional_chat_count_max") additional chats.
+*/
+	additional_chat_ids: number[];
+	/**
+Point in time (Unix timestamp) when the giveaway is expected to be performed; must be
+60-getOption("giveaway_duration_max") seconds in the future in scheduled giveaways.
+*/
+	winners_selection_date: number;
+	/**
+True, if only new subscribers of the chats will be eligible for the giveaway.
+*/
+	only_new_members?: boolean;
+	/**
+The list of two-letter ISO 3166-1 alpha-2 codes of countries, users from which will be eligible for the giveaway. If
+empty, then all users can participate in the giveaway. There can be up to getOption("giveaway_country_count_max") chosen
+countries. Users with phone number that was bought on Fragment can participate in any giveaway and the country code "FT"
+must not be specified in the list.
+*/
+	country_codes: string[];
 }
 
 /**
@@ -8491,9 +8916,13 @@ Text of the message.
 */
 	text: FormattedText;
 	/**
-A preview of the web page that's mentioned in the text; may be null.
+A link preview attached to the message; may be null.
 */
 	web_page: WebPage;
+	/**
+Options which was used for generation of the link preview; may be null if default options were used.
+*/
+	link_preview_options: LinkPreviewOptions;
 }
 
 /**
@@ -9360,6 +9789,71 @@ A sticker to be shown in the message; may be null if unknown.
 }
 
 /**
+A Telegram Premium gift code was created for the user.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePremiumGiftCode {
+	'@type': 'messagePremiumGiftCode';
+	/**
+Identifier of a chat or a user that created the gift code.
+*/
+	creator_id: MessageSender;
+	/**
+True, if the gift code was created for a giveaway.
+*/
+	is_from_giveaway?: boolean;
+	/**
+True, if the winner for the corresponding Telegram Premium subscription wasn't chosen.
+*/
+	is_unclaimed?: boolean;
+	/**
+Number of month the Telegram Premium subscription will be active after code activation.
+*/
+	month_count: number;
+	/**
+A sticker to be shown in the message; may be null if unknown.
+*/
+	sticker: Sticker;
+	/**
+The gift code.
+*/
+	code: string;
+}
+
+/**
+A Telegram Premium giveaway was created for the chat.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePremiumGiveawayCreated {
+	'@type': 'messagePremiumGiveawayCreated';
+
+}
+
+/**
+A Telegram Premium giveaway.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePremiumGiveaway {
+	'@type': 'messagePremiumGiveaway';
+	/**
+Giveaway parameters.
+*/
+	parameters: PremiumGiveawayParameters;
+	/**
+Number of users which will receive Telegram Premium subscription gift codes.
+*/
+	winner_count: number;
+	/**
+Number of month the Telegram Premium subscription will be active after code activation.
+*/
+	month_count: number;
+	/**
+A sticker to be shown in the message; may be null if unknown.
+*/
+	sticker: Sticker;
+}
+
+/**
 A contact has registered with Telegram.
 Subtype of {@link MessageContent}.
 */
@@ -9645,6 +10139,15 @@ Programming language of the code; as defined by the sender.
 }
 
 /**
+Text that must be formatted as if inside a blockquote HTML tag.
+Subtype of {@link TextEntityType}.
+*/
+export interface TextEntityTypeBlockQuote {
+	'@type': 'textEntityTypeBlockQuote';
+
+}
+
+/**
 A text description shown instead of a raw URL.
 Subtype of {@link TextEntityType}.
 */
@@ -9787,11 +10290,15 @@ Non-persistent identifier, which will be returned back in messageSendingStatePen
 sent messages and corresponding updateNewMessage updates.
 */
 	sending_id: number;
+	/**
+Pass true to get a fake message instead of actually sending them.
+*/
+	only_preview?: boolean;
 }
 
 /**
-Options to be used when a message content is copied without reference to the original sender. Service messages and
-messageInvoice can't be copied.
+Options to be used when a message content is copied without reference to the original sender. Service messages, and
+messages with messageInvoice or messagePremiumGiveaway content can't be copied.
 */
 export interface MessageCopyOptions {
 	'@type': 'messageCopyOptions';
@@ -9817,15 +10324,15 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageText {
 	'@type': 'inputMessageText';
 	/**
-Formatted text to be sent; 1-getOption("message_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be specified
-manually.
+Formatted text to be sent; 0-getOption("message_text_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, CustomEmoji, BlockQuote, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be
+specified manually.
 */
 	text: FormattedText;
 	/**
-True, if rich web page previews for URLs in the message text must be disabled.
+Options to be used for generation of a link preview; pass null to use default link preview options.
 */
-	disable_web_page_preview?: boolean;
+	link_preview_options: LinkPreviewOptions;
 	/**
 True, if a chat message draft must be deleted.
 */
@@ -10299,7 +10806,7 @@ Identifier for the chat this forwarded message came from.
 */
 	from_chat_id: number;
 	/**
-Identifier of the message to forward.
+Identifier of the message to forward. A message can be forwarded only if message.can_be_forwarded.
 */
 	message_id: number;
 	/**
@@ -10751,6 +11258,10 @@ Type of the stickers in the set.
 */
 	sticker_type: StickerType;
 	/**
+True, if stickers in the sticker set are custom emoji that must be repainted; for custom emoji sticker sets only.
+*/
+	needs_repainting?: boolean;
+	/**
 True for already viewed trending sticker sets.
 */
 	is_viewed?: boolean;
@@ -10811,6 +11322,10 @@ Format of the stickers in the set.
 Type of the stickers in the set.
 */
 	sticker_type: StickerType;
+	/**
+True, if stickers in the sticker set are custom emoji that must be repainted; for custom emoji sticker sets only.
+*/
+	needs_repainting?: boolean;
 	/**
 True for already viewed trending sticker sets.
 */
@@ -11464,6 +11979,84 @@ chronological order (i.e., in order of increasing story identifiers).
 }
 
 /**
+Describes source of a chat boost.
+Subtype of {@link ChatBoostSource}.
+*/
+export interface ChatBoostSourceGiftCode {
+	'@type': 'chatBoostSourceGiftCode';
+	/**
+Identifier of a user, for which the gift code was created.
+*/
+	user_id: number;
+	/**
+The created Telegram Premium gift code, which is known only if this is a gift code for the current user, or it has
+already been claimed.
+*/
+	gift_code: string;
+}
+
+/**
+The chat created a Telegram Premium giveaway.
+Subtype of {@link ChatBoostSource}.
+*/
+export interface ChatBoostSourceGiveaway {
+	'@type': 'chatBoostSourceGiveaway';
+	/**
+Identifier of a user that won in the giveaway; 0 if none.
+*/
+	user_id: number;
+	/**
+The created Telegram Premium gift code if it was used by the user or can be claimed by the current user; an empty string
+otherwise.
+*/
+	gift_code: string;
+	/**
+Identifier of the corresponding giveaway message; can be an identifier of a deleted message.
+*/
+	giveaway_message_id: number;
+	/**
+True, if the winner for the corresponding Telegram Premium subscription wasn't chosen, because there were not enough
+participants.
+*/
+	is_unclaimed?: boolean;
+}
+
+/**
+A user with Telegram Premium subscription or gifted Telegram Premium boosted the chat.
+Subtype of {@link ChatBoostSource}.
+*/
+export interface ChatBoostSourcePremium {
+	'@type': 'chatBoostSourcePremium';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+}
+
+/**
+Describes a prepaid Telegram Premium giveaway.
+*/
+export interface PrepaidPremiumGiveaway {
+	'@type': 'prepaidPremiumGiveaway';
+	/**
+Unique identifier of the prepaid giveaway.
+*/
+	id: string;
+	/**
+Number of users which will receive Telegram Premium subscription gift codes.
+*/
+	winner_count: number;
+	/**
+Number of month the Telegram Premium subscription will be active after code activation.
+*/
+	month_count: number;
+	/**
+Point in time (Unix timestamp) when the giveaway was paid.
+*/
+	payment_date: number;
+}
+
+/**
 Describes current boost status of a chat.
 */
 export interface ChatBoostStatus {
@@ -11473,15 +12066,20 @@ An HTTP URL, which can be used to boost the chat.
 */
 	boost_url: string;
 	/**
-True, if the current user has already boosted the chat.
+Identifiers of boost slots of the current user applied to the chat.
 */
-	is_boosted?: boolean;
+	applied_slot_ids: number[];
 	/**
 Current boost level of the chat.
 */
 	level: number;
 	/**
-The number of times the chat was boosted.
+The number of boosts received by the chat from created Telegram Premium gift codes and giveaways; always 0 if the
+current user isn't an administrator in the chat.
+*/
+	gift_code_boost_count: number;
+	/**
+The number of boosts received by the chat.
 */
 	boost_count: number;
 	/**
@@ -11502,20 +12100,35 @@ A percentage of Telegram Premium subscribers joined the chat; always 0 if the cu
 chat.
 */
 	premium_member_percentage: number;
+	/**
+The list of prepaid giveaways available for the chat; only for chat administrators.
+*/
+	prepaid_giveaways: PrepaidPremiumGiveaway[];
 }
 
 /**
-Describes a boost of a chat.
+Describes a boost applied to a chat.
 */
 export interface ChatBoost {
 	'@type': 'chatBoost';
 	/**
-Identifier of a user that boosted the chat.
+Unique identifier of the boost.
 */
-	user_id: number;
+	id: string;
 	/**
-Point in time (Unix timestamp) when the boost will automatically expire if the user will not prolongate their Telegram
-Premium subscription.
+The number of identical boosts applied.
+*/
+	count: number;
+	/**
+Source of the boost.
+*/
+	source: ChatBoostSource;
+	/**
+Point in time (Unix timestamp) when the chat was boosted.
+*/
+	start_date: number;
+	/**
+Point in time (Unix timestamp) when the boost will expire.
 */
 	expiration_date: number;
 }
@@ -11537,6 +12150,44 @@ List of boosts.
 The offset for the next request. If empty, there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Describes a slot for chat boost.
+*/
+export interface ChatBoostSlot {
+	'@type': 'chatBoostSlot';
+	/**
+Unique identifier of the slot.
+*/
+	slot_id: number;
+	/**
+Identifier of the currently boosted chat; 0 if none.
+*/
+	currently_boosted_chat_id: number;
+	/**
+Point in time (Unix timestamp) when the chat was boosted; 0 if none.
+*/
+	start_date: number;
+	/**
+Point in time (Unix timestamp) when the boost will expire.
+*/
+	expiration_date: number;
+	/**
+Point in time (Unix timestamp) after which the boost can be used for another chat.
+*/
+	cooldown_until_date: number;
+}
+
+/**
+Contains a list of chat boost slots.
+*/
+export interface ChatBoostSlots {
+	'@type': 'chatBoostSlots';
+	/**
+List of boost slots.
+*/
+	slots: ChatBoostSlot[];
 }
 
 /**
@@ -12539,10 +13190,6 @@ True, if the bot supports opening from attachment menu in basic group and superg
 True, if the bot supports opening from attachment menu in channel chats.
 */
 	supports_channel_chats?: boolean;
-	/**
-True, if the bot supports "settings_button_pressed" event.
-*/
-	supports_settings?: boolean;
 	/**
 True, if the user must be asked for the permission to send messages to the bot.
 */
@@ -13973,6 +14620,38 @@ New list of active usernames.
 }
 
 /**
+The chat accent color was changed.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventAccentColorChanged {
+	'@type': 'chatEventAccentColorChanged';
+	/**
+Previous identifier of chat accent color.
+*/
+	old_accent_color_id: number;
+	/**
+New identifier of chat accent color.
+*/
+	new_accent_color_id: number;
+}
+
+/**
+The chat's custom emoji for reply background was changed.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventBackgroundCustomEmojiChanged {
+	'@type': 'chatEventBackgroundCustomEmojiChanged';
+	/**
+Previous identifier of the custom emoji; 0 if none.
+*/
+	old_background_custom_emoji_id: string;
+	/**
+New identifier of the custom emoji; 0 if none.
+*/
+	new_background_custom_emoji_id: string;
+}
+
+/**
 The has_protected_content setting of a channel was toggled.
 Subtype of {@link ChatEventAction}.
 */
@@ -14785,6 +15464,15 @@ export interface PremiumFeatureChatBoost {
 }
 
 /**
+The ability to choose accent color.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureAccentColor {
+	'@type': 'premiumFeatureAccentColor';
+
+}
+
+/**
 Describes a story feature available to Premium users.
 Subtype of {@link PremiumStoryFeature}.
 */
@@ -14986,13 +15674,13 @@ Pass true if this is an upgrade from a monthly subscription to early subscriptio
 }
 
 /**
-The user gifted Telegram Premium to another user.
+The user gifting Telegram Premium to another user.
 Subtype of {@link StorePaymentPurpose}.
 */
 export interface StorePaymentPurposeGiftedPremium {
 	'@type': 'storePaymentPurposeGiftedPremium';
 	/**
-Identifier of the user for which Premium was gifted.
+Identifier of the user to which Premium was gifted.
 */
 	user_id: number;
 	/**
@@ -15003,6 +15691,110 @@ ISO 4217 currency code of the payment currency.
 Paid amount, in the smallest units of the currency.
 */
 	amount: number;
+}
+
+/**
+The user creating Telegram Premium gift codes for other users.
+Subtype of {@link StorePaymentPurpose}.
+*/
+export interface StorePaymentPurposePremiumGiftCodes {
+	'@type': 'storePaymentPurposePremiumGiftCodes';
+	/**
+Identifier of the channel chat, which will be automatically boosted by the users for duration of the Premium
+subscription and which is administered by the user; 0 if none.
+*/
+	boosted_chat_id: number;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Identifiers of the users which can activate the gift codes.
+*/
+	user_ids: number[];
+}
+
+/**
+The user creating a Telegram Premium giveaway for subscribers of channel chats; requires can_post_messages rights in the
+channels.
+Subtype of {@link StorePaymentPurpose}.
+*/
+export interface StorePaymentPurposePremiumGiveaway {
+	'@type': 'storePaymentPurposePremiumGiveaway';
+	/**
+Giveaway parameters.
+*/
+	parameters: PremiumGiveawayParameters;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+}
+
+/**
+Describes a purpose of a payment toward Telegram.
+Subtype of {@link TelegramPaymentPurpose}.
+*/
+export interface TelegramPaymentPurposePremiumGiftCodes {
+	'@type': 'telegramPaymentPurposePremiumGiftCodes';
+	/**
+Identifier of the channel chat, which will be automatically boosted by the users for duration of the Premium
+subscription and which is administered by the user; 0 if none.
+*/
+	boosted_chat_id: number;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Identifiers of the users which can activate the gift codes.
+*/
+	user_ids: number[];
+	/**
+Number of month the Telegram Premium subscription will be active for the users.
+*/
+	month_count: number;
+}
+
+/**
+The user creating a Telegram Premium giveaway for subscribers of channel chats; requires can_post_messages rights in the
+channels.
+Subtype of {@link TelegramPaymentPurpose}.
+*/
+export interface TelegramPaymentPurposePremiumGiveaway {
+	'@type': 'telegramPaymentPurposePremiumGiveaway';
+	/**
+Giveaway parameters.
+*/
+	parameters: PremiumGiveawayParameters;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of users which will be able to activate the gift codes.
+*/
+	winner_count: number;
+	/**
+Number of month the Telegram Premium subscription will be active for the users.
+*/
+	month_count: number;
 }
 
 /**
@@ -15450,66 +16242,6 @@ Time left before the user can send the next story.
 }
 
 /**
-Represents result of checking whether the current user can boost the specific chat.
-Subtype of {@link CanBoostChatResult}.
-*/
-export interface CanBoostChatResultOk {
-	'@type': 'canBoostChatResultOk';
-	/**
-Identifier of the currently boosted chat from which boost will be removed; 0 if none.
-*/
-	currently_boosted_chat_id: number;
-}
-
-/**
-The chat can't be boosted.
-Subtype of {@link CanBoostChatResult}.
-*/
-export interface CanBoostChatResultInvalidChat {
-	'@type': 'canBoostChatResultInvalidChat';
-
-}
-
-/**
-The chat is already boosted by the user.
-Subtype of {@link CanBoostChatResult}.
-*/
-export interface CanBoostChatResultAlreadyBoosted {
-	'@type': 'canBoostChatResultAlreadyBoosted';
-
-}
-
-/**
-The user must subscribe to Telegram Premium to be able to boost chats.
-Subtype of {@link CanBoostChatResult}.
-*/
-export interface CanBoostChatResultPremiumNeeded {
-	'@type': 'canBoostChatResultPremiumNeeded';
-
-}
-
-/**
-The user must have Telegram Premium subscription instead of a gifted Telegram Premium.
-Subtype of {@link CanBoostChatResult}.
-*/
-export interface CanBoostChatResultPremiumSubscriptionNeeded {
-	'@type': 'canBoostChatResultPremiumSubscriptionNeeded';
-
-}
-
-/**
-The user must wait the specified time before the boost can be moved to another chat.
-Subtype of {@link CanBoostChatResult}.
-*/
-export interface CanBoostChatResultWaitNeeded {
-	'@type': 'canBoostChatResultWaitNeeded';
-	/**
-Time left before the user can boost another chat.
-*/
-	retry_after: number;
-}
-
-/**
 Represents result of checking whether the current session can be used to transfer a chat ownership to another user.
 Subtype of {@link CanTransferOwnershipResult}.
 */
@@ -15900,6 +16632,38 @@ True, if the message is a pinned message with the specified content.
 }
 
 /**
+A message with a Telegram Premium gift code created for the user.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentPremiumGiftCode {
+	'@type': 'pushMessageContentPremiumGiftCode';
+	/**
+Number of month the Telegram Premium subscription will be active after code activation.
+*/
+	month_count: number;
+}
+
+/**
+A message with a Telegram Premium giveaway.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentPremiumGiveaway {
+	'@type': 'pushMessageContentPremiumGiveaway';
+	/**
+Number of users which will receive Telegram Premium subscription gift codes; 0 for pinned message.
+*/
+	winner_count: number;
+	/**
+Number of month the Telegram Premium subscription will be active after code activation; 0 for pinned message.
+*/
+	month_count: number;
+	/**
+True, if the message is a pinned message with the specified content.
+*/
+	is_pinned?: boolean;
+}
+
+/**
 A screenshot of a message in the chat has been taken.
 Subtype of {@link PushMessageContent}.
 */
@@ -16230,7 +16994,7 @@ export interface NotificationTypeNewPushMessage {
 	'@type': 'notificationTypeNewPushMessage';
 	/**
 The message identifier. The message will not be available in the chat history, but the identifier can be used in
-viewMessages, or as a message to reply.
+viewMessages, or as a message to be replied in the same chat.
 */
 	message_id: number;
 	/**
@@ -17368,8 +18132,8 @@ export interface InternalLinkTypeChangePhoneNumber {
 
 /**
 The link is a link to boost a Telegram chat. Call getChatBoostLinkInfo with the given URL to process the link. If the
-chat is found, then call getChatBoostStatus and canBoostChat to get the current boost status and check whether the chat
-can be boosted. If the user wants to boost the chat and the chat can be boosted, then call boostChat.
+chat is found, then call getChatBoostStatus and getAvailableChatBoostSlots to get the current boost status and check
+whether the chat can be boosted. If the user wants to boost the chat and the chat can be boosted, then call boostChat.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeChatBoost {
@@ -17590,6 +18354,19 @@ export interface InternalLinkTypePremiumFeatures {
 Referrer specified in the link.
 */
 	referrer: string;
+}
+
+/**
+The link is a link with a Telegram Premium gift code. Call checkPremiumGiftCode with the given code to process the link.
+If the code is valid and the user wants to apply it, then call applyPremiumGiftCode.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypePremiumGiftCode {
+	'@type': 'internalLinkTypePremiumGiftCode';
+	/**
+The Telegram Premium gift code.
+*/
+	code: string;
 }
 
 /**
@@ -18579,6 +19356,17 @@ Subtype of {@link TopChatCategory}.
 export interface TopChatCategoryForwardChats {
 	'@type': 'topChatCategoryForwardChats';
 
+}
+
+/**
+Contains 0-based match position.
+*/
+export interface FoundPosition {
+	'@type': 'foundPosition';
+	/**
+The position of the match.
+*/
+	position: number;
 }
 
 /**
@@ -19667,6 +20455,38 @@ The new chat photo; may be null.
 }
 
 /**
+A chat accent color has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatAccentColor {
+	'@type': 'updateChatAccentColor';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The new chat accent color identifier.
+*/
+	accent_color_id: number;
+}
+
+/**
+A chat's custom emoji for reply background has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatBackgroundCustomEmoji {
+	'@type': 'updateChatBackgroundCustomEmoji';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The new tdentifier of a custom emoji to be shown on the reply header background.
+*/
+	background_custom_emoji_id: string;
+}
+
+/**
 Chat permissions was changed.
 Subtype of {@link Update}.
 */
@@ -19683,8 +20503,7 @@ The new chat permissions.
 }
 
 /**
-The last message of a chat was changed. If last_message is null, then the last message in the chat became unknown. Some
-new unknown messages might be added to the chat in this case.
+The last message of a chat was changed.
 Subtype of {@link Update}.
 */
 export interface UpdateChatLastMessage {
@@ -19694,7 +20513,8 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-The new last message in the chat; may be null.
+The new last message in the chat; may be null if the last message became unknown. While the last message is unknown, new
+messages can be added to the chat without corresponding updateNewMessage update.
 */
 	last_message: Message;
 	/**
@@ -20906,6 +21726,25 @@ The new list of chat themes.
 }
 
 /**
+The list of supported accent colors has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateAccentColors {
+	'@type': 'updateAccentColors';
+	/**
+Information about supported colors; colors with identifiers 0 (red), 1 (orange), 2 (purple/violet), 3 (green), 4 (cyan),
+5 (blue), 6 (pink) must always be supported and aren't included in the list. The exact colors for the accent colors with
+identifiers 0-6 must be taken from the app theme.
+*/
+	colors: AccentColor[];
+	/**
+The list of accent color identifiers, which can be set through setAccentColor and setChatAccentColor. The colors must be
+shown in the specififed order.
+*/
+	available_accent_color_ids: number[];
+}
+
+/**
 Some language pack strings have been updated.
 Subtype of {@link Update}.
 */
@@ -21431,6 +22270,22 @@ The invite link, which was used to send join request; may be null.
 }
 
 /**
+A chat boost has changed; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatBoost {
+	'@type': 'updateChatBoost';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New information about the boost.
+*/
+	boost: ChatBoost;
+}
+
+/**
 Contains a list of updates.
 */
 export interface Updates {
@@ -21687,6 +22542,17 @@ export type InputChatPhoto =
 	| InputChatPhotoAnimation
 	| InputChatPhotoSticker;
 
+export type PremiumGiveawayParticipantStatus =
+	| PremiumGiveawayParticipantStatusEligible
+	| PremiumGiveawayParticipantStatusParticipating
+	| PremiumGiveawayParticipantStatusAlreadyWasMember
+	| PremiumGiveawayParticipantStatusAdministrator
+	| PremiumGiveawayParticipantStatusDisallowedCountry;
+
+export type PremiumGiveawayInfo =
+	| PremiumGiveawayInfoOngoing
+	| PremiumGiveawayInfoCompleted;
+
 export type ChatMemberStatus =
 	| ChatMemberStatusCreator
 	| ChatMemberStatusAdministrator
@@ -21728,11 +22594,11 @@ export type MessageSender =
 	| MessageSenderUser
 	| MessageSenderChat;
 
-export type MessageForwardOrigin =
-	| MessageForwardOriginUser
-	| MessageForwardOriginChat
-	| MessageForwardOriginHiddenUser
-	| MessageForwardOriginChannel;
+export type MessageOrigin =
+	| MessageOriginUser
+	| MessageOriginHiddenUser
+	| MessageOriginChat
+	| MessageOriginChannel;
 
 export type ReactionType =
 	| ReactionTypeEmoji
@@ -21745,6 +22611,10 @@ export type MessageSendingState =
 export type MessageReplyTo =
 	| MessageReplyToMessage
 	| MessageReplyToStory;
+
+export type InputMessageReplyTo =
+	| InputMessageReplyToMessage
+	| InputMessageReplyToStory;
 
 export type MessageSource =
 	| MessageSourceChatHistory
@@ -21904,7 +22774,8 @@ export type PaymentProvider =
 
 export type InputInvoice =
 	| InputInvoiceMessage
-	| InputInvoiceName;
+	| InputInvoiceName
+	| InputInvoiceTelegram;
 
 export type MessageExtendedMedia =
 	| MessageExtendedMediaPreview
@@ -22031,6 +22902,9 @@ export type MessageContent =
 	| MessagePaymentSuccessful
 	| MessagePaymentSuccessfulBot
 	| MessageGiftedPremium
+	| MessagePremiumGiftCode
+	| MessagePremiumGiveawayCreated
+	| MessagePremiumGiveaway
 	| MessageContactRegistered
 	| MessageUserShared
 	| MessageChatShared
@@ -22059,6 +22933,7 @@ export type TextEntityType =
 	| TextEntityTypeCode
 	| TextEntityTypePre
 	| TextEntityTypePreCode
+	| TextEntityTypeBlockQuote
 	| TextEntityTypeTextUrl
 	| TextEntityTypeMentionName
 	| TextEntityTypeCustomEmoji
@@ -22164,6 +23039,11 @@ export type InputStoryContent =
 export type StoryList =
 	| StoryListMain
 	| StoryListArchive;
+
+export type ChatBoostSource =
+	| ChatBoostSourceGiftCode
+	| ChatBoostSourceGiveaway
+	| ChatBoostSourcePremium;
 
 export type CallDiscardReason =
 	| CallDiscardReasonEmpty
@@ -22281,6 +23161,8 @@ export type ChatEventAction =
 	| ChatEventTitleChanged
 	| ChatEventUsernameChanged
 	| ChatEventActiveUsernamesChanged
+	| ChatEventAccentColorChanged
+	| ChatEventBackgroundCustomEmojiChanged
 	| ChatEventHasProtectedContentToggled
 	| ChatEventInvitesToggled
 	| ChatEventIsAllHistoryAvailableToggled
@@ -22343,7 +23225,8 @@ export type PremiumFeature =
 	| PremiumFeatureAppIcons
 	| PremiumFeatureRealTimeChatTranslation
 	| PremiumFeatureUpgradedStories
-	| PremiumFeatureChatBoost;
+	| PremiumFeatureChatBoost
+	| PremiumFeatureAccentColor;
 
 export type PremiumStoryFeature =
 	| PremiumStoryFeaturePriorityOrder
@@ -22362,7 +23245,13 @@ export type PremiumSource =
 
 export type StorePaymentPurpose =
 	| StorePaymentPurposePremiumSubscription
-	| StorePaymentPurposeGiftedPremium;
+	| StorePaymentPurposeGiftedPremium
+	| StorePaymentPurposePremiumGiftCodes
+	| StorePaymentPurposePremiumGiveaway;
+
+export type TelegramPaymentPurpose =
+	| TelegramPaymentPurposePremiumGiftCodes
+	| TelegramPaymentPurposePremiumGiveaway;
 
 export type DeviceToken =
 	| DeviceTokenFirebaseCloudMessaging
@@ -22400,14 +23289,6 @@ export type CanSendStoryResult =
 	| CanSendStoryResultActiveStoryLimitExceeded
 	| CanSendStoryResultWeeklyLimitExceeded
 	| CanSendStoryResultMonthlyLimitExceeded;
-
-export type CanBoostChatResult =
-	| CanBoostChatResultOk
-	| CanBoostChatResultInvalidChat
-	| CanBoostChatResultAlreadyBoosted
-	| CanBoostChatResultPremiumNeeded
-	| CanBoostChatResultPremiumSubscriptionNeeded
-	| CanBoostChatResultWaitNeeded;
 
 export type CanTransferOwnershipResult =
 	| CanTransferOwnershipResultOk
@@ -22451,6 +23332,8 @@ export type PushMessageContent =
 	| PushMessageContentLocation
 	| PushMessageContentPhoto
 	| PushMessageContentPoll
+	| PushMessageContentPremiumGiftCode
+	| PushMessageContentPremiumGiveaway
 	| PushMessageContentScreenshotTaken
 	| PushMessageContentSticker
 	| PushMessageContentStory
@@ -22587,6 +23470,7 @@ export type InternalLinkType =
 	| InternalLinkTypePassportDataRequest
 	| InternalLinkTypePhoneNumberConfirmation
 	| InternalLinkTypePremiumFeatures
+	| InternalLinkTypePremiumGiftCode
 	| InternalLinkTypePrivacyAndSecuritySettings
 	| InternalLinkTypeProxy
 	| InternalLinkTypePublicChat
@@ -22728,6 +23612,8 @@ export type Update =
 	| UpdateNewChat
 	| UpdateChatTitle
 	| UpdateChatPhoto
+	| UpdateChatAccentColor
+	| UpdateChatBackgroundCustomEmoji
 	| UpdateChatPermissions
 	| UpdateChatLastMessage
 	| UpdateChatPosition
@@ -22802,6 +23688,7 @@ export type Update =
 	| UpdateSavedNotificationSounds
 	| UpdateSelectedBackground
 	| UpdateChatThemes
+	| UpdateAccentColors
 	| UpdateLanguagePackStrings
 	| UpdateConnectionState
 	| UpdateTermsOfService
@@ -22828,7 +23715,8 @@ export type Update =
 	| UpdatePoll
 	| UpdatePollAnswer
 	| UpdateChatMember
-	| UpdateNewChatJoinRequest;
+	| UpdateNewChatJoinRequest
+	| UpdateChatBoost;
 
 export type LogStream =
 	| LogStreamDefault
@@ -24640,9 +25528,9 @@ If not 0, a message thread identifier in which the message will be sent.
 */
 	message_thread_id: number;
 	/**
-Identifier of the replied message or story; pass null if none.
+Information about the message or story to be replied; pass null if none.
 */
-	reply_to: MessageReplyTo;
+	reply_to: InputMessageReplyTo;
 	/**
 Options to be used to send the message; pass null to use default options.
 */
@@ -24674,9 +25562,9 @@ If not 0, a message thread identifier in which the messages will be sent.
 */
 	message_thread_id: number;
 	/**
-Identifier of the replied message or story; pass null if none.
+Information about the message or story to be replied; pass null if none.
 */
-	reply_to: MessageReplyTo;
+	reply_to: InputMessageReplyTo;
 	/**
 Options to be used to send the messages; pass null to use default options.
 */
@@ -24685,10 +25573,6 @@ Options to be used to send the messages; pass null to use default options.
 Contents of messages to be sent. At most 10 messages can be added to an album.
 */
 	input_message_contents: InputMessageContent[];
-	/**
-Pass true to get fake messages instead of actually sending them.
-*/
-	only_preview?: boolean;
 }
 
 /**
@@ -24728,9 +25612,9 @@ If not 0, a message thread identifier in which the message will be sent.
 */
 	message_thread_id: number;
 	/**
-Identifier of the replied message or story; pass null if none.
+Information about the message or story to be replied; pass null if none.
 */
-	reply_to: MessageReplyTo;
+	reply_to: InputMessageReplyTo;
 	/**
 Options to be used to send the message; pass null to use default options.
 */
@@ -24772,7 +25656,7 @@ Identifier of the chat from which to forward messages.
 	from_chat_id: number;
 	/**
 Identifiers of the messages to forward. Message identifiers must be in a strictly increasing order. At most 100 messages
-can be forwarded simultaneously.
+can be forwarded simultaneously. A message can be forwarded only if message.can_be_forwarded.
 */
 	message_ids: number[];
 	/**
@@ -24788,10 +25672,6 @@ forwarded to a secret chat or are local.
 Pass true to remove media captions of message copies. Ignored if send_copy is false.
 */
 	remove_caption?: boolean;
-	/**
-Pass true to get fake messages instead of actually forwarding them.
-*/
-	only_preview?: boolean;
 }
 
 /**
@@ -24811,6 +25691,11 @@ Identifier of the chat to send messages.
 Identifiers of the messages to resend. Message identifiers must be in a strictly increasing order.
 */
 	message_ids: number[];
+	/**
+New manually chosen quote from the message to be replied; pass null if none. Ignored if more than one message is
+re-sent, or if messageSendingStateFailed.need_another_reply_quote == false.
+*/
+	quote: FormattedText;
 }
 
 /**
@@ -24829,9 +25714,9 @@ Identifier of the sender of the message.
 */
 	sender_id: MessageSender;
 	/**
-Identifier of the replied message or story; pass null if none.
+Information about the message or story to be replied; pass null if none.
 */
-	reply_to: MessageReplyTo;
+	reply_to: InputMessageReplyTo;
 	/**
 Pass true to disable notification for the message.
 */
@@ -25547,6 +26432,27 @@ New type of the default reaction.
 }
 
 /**
+Searches for a given quote in a text. Returns found quote start position in UTF-16 code units. Returns a 404 error if
+the quote is not found. Can be called synchronously.
+Request type for {@link Tdjson#searchQuote}.
+*/
+export interface SearchQuote {
+	'@type': 'searchQuote';
+	/**
+Text in which to search for the quote.
+*/
+	text: FormattedText;
+	/**
+Quote to search for.
+*/
+	quote: FormattedText;
+	/**
+Approximate quote position in UTF-16 code units.
+*/
+	quote_position: number;
+}
+
+/**
 Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses) found in
 the text. Can be called synchronously.
 Request type for {@link Tdjson#getTextEntities}.
@@ -25560,8 +26466,8 @@ The text in which to look for entities.
 }
 
 /**
-Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName
-entities from a marked-up text. Can be called synchronously.
+Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, BlockQuote, Code, Pre, PreCode, TextUrl and
+MentionName entities from a marked-up text. Can be called synchronously.
 Request type for {@link Tdjson#parseTextEntities}.
 */
 export interface ParseTextEntities {
@@ -26087,9 +26993,9 @@ If not 0, a message thread identifier in which the message will be sent.
 */
 	message_thread_id: number;
 	/**
-Identifier of the replied message or story for the message sent by the Web App; pass null if none.
+Information about the message or story to be replied in the message sent by the Web App; pass null if none.
 */
-	reply_to: MessageReplyTo;
+	reply_to: InputMessageReplyTo;
 }
 
 /**
@@ -27039,6 +27945,27 @@ Chat identifier.
 New chat photo; pass null to delete the chat photo.
 */
 	photo: InputChatPhoto;
+}
+
+/**
+Changes accent color and background custom emoji of a chat. Supported only for channels with
+getOption("channel_custom_accent_color_boost_level_min") boost level. Requires can_change_info administrator right.
+Request type for {@link Tdjson#setChatAccentColor}.
+*/
+export interface SetChatAccentColor {
+	'@type': 'setChatAccentColor';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the accent color to use.
+*/
+	accent_color_id: number;
+	/**
+Identifier of a custom emoji to be shown on the reply header background; 0 if none.
+*/
+	background_custom_emoji_id: string;
 }
 
 /**
@@ -28161,6 +29088,15 @@ export interface ActivateStoryStealthMode {
 }
 
 /**
+Returns the list of available chat boost slots for the current user.
+Request type for {@link Tdjson#getAvailableChatBoostSlots}.
+*/
+export interface GetAvailableChatBoostSlots {
+	'@type': 'getAvailableChatBoostSlots';
+
+}
+
+/**
 Returns the current boost status for a channel chat.
 Request type for {@link Tdjson#getChatBoostStatus}.
 */
@@ -28173,19 +29109,7 @@ Identifier of the channel chat.
 }
 
 /**
-Checks whether the current user can boost a chat.
-Request type for {@link Tdjson#canBoostChat}.
-*/
-export interface CanBoostChat {
-	'@type': 'canBoostChat';
-	/**
-Identifier of the chat.
-*/
-	chat_id: number;
-}
-
-/**
-Boosts a chat.
+Boosts a chat and returns the list of available chat boost slots for the current user after the boost.
 Request type for {@link Tdjson#boostChat}.
 */
 export interface BoostChat {
@@ -28194,6 +29118,10 @@ export interface BoostChat {
 Identifier of the chat.
 */
 	chat_id: number;
+	/**
+Identifiers of boost slots of the current user from which to apply boosts to the chat.
+*/
+	slot_ids: number[];
 }
 
 /**
@@ -28222,8 +29150,7 @@ The link to boost a chat.
 }
 
 /**
-Returns list of boosts applied to a chat. The user must be an administrator in the channel chat to get the list of
-boosts.
+Returns list of boosts applied to a chat; requires administrator rights in the channel chat.
 Request type for {@link Tdjson#getChatBoosts}.
 */
 export interface GetChatBoosts {
@@ -28232,6 +29159,10 @@ export interface GetChatBoosts {
 Identifier of the chat.
 */
 	chat_id: number;
+	/**
+Pass true to receive only boosts received from gift codes and giveaways created by the chat.
+*/
+	only_gift_codes?: boolean;
 	/**
 Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
 results.
@@ -28242,6 +29173,23 @@ The maximum number of boosts to be returned; up to 100. For optimal performance,
 smaller than the specified limit.
 */
 	limit: number;
+}
+
+/**
+Returns list of boosts applied to a chat by a given user; requires administrator rights in the channel chat; for bots
+only.
+Request type for {@link Tdjson#getUserChatBoosts}.
+*/
+export interface GetUserChatBoosts {
+	'@type': 'getUserChatBoosts';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the user.
+*/
+	user_id: number;
 }
 
 /**
@@ -30363,6 +31311,15 @@ export interface GetDefaultProfilePhotoCustomEmojiStickers {
 }
 
 /**
+Returns default list of custom emoji stickers for reply background.
+Request type for {@link Tdjson#getDefaultBackgroundCustomEmojiStickers}.
+*/
+export interface GetDefaultBackgroundCustomEmojiStickers {
+	'@type': 'getDefaultBackgroundCustomEmojiStickers';
+
+}
+
+/**
 Returns saved animations.
 Request type for {@link Tdjson#getSavedAnimations}.
 */
@@ -30436,8 +31393,8 @@ Hashtag to delete.
 }
 
 /**
-Returns a web page preview by the text of the message. Do not call this function too often. Returns a 404 error if the
-web page has no preview.
+Returns a link preview by the text of a message. Do not call this function too often. Returns a 404 error if the text
+has no link preview.
 Request type for {@link Tdjson#getWebPagePreview}.
 */
 export interface GetWebPagePreview {
@@ -30446,6 +31403,10 @@ export interface GetWebPagePreview {
 Message text with formatting.
 */
 	text: FormattedText;
+	/**
+Options to be used for generation of the link preview; pass null to use default link preview options.
+*/
+	link_preview_options: LinkPreviewOptions;
 }
 
 /**
@@ -30491,6 +31452,22 @@ export interface DeleteProfilePhoto {
 Identifier of the profile photo to delete.
 */
 	profile_photo_id: string;
+}
+
+/**
+Changes accent color and background custom emoji for the current user; for Telegram Premium users only.
+Request type for {@link Tdjson#setAccentColor}.
+*/
+export interface SetAccentColor {
+	'@type': 'setAccentColor';
+	/**
+Identifier of the accent color to use.
+*/
+	accent_color_id: number;
+	/**
+Identifier of a custom emoji to be shown on the reply header background; 0 if none.
+*/
+	background_custom_emoji_id: string;
 }
 
 /**
@@ -32916,6 +33893,76 @@ export interface GetPremiumState {
 }
 
 /**
+Returns available options for Telegram Premium gift code or giveaway creation.
+Request type for {@link Tdjson#getPremiumGiftCodePaymentOptions}.
+*/
+export interface GetPremiumGiftCodePaymentOptions {
+	'@type': 'getPremiumGiftCodePaymentOptions';
+	/**
+Identifier of the channel chat, which will be automatically boosted by receivers of the gift codes and which is
+administered by the user; 0 if none.
+*/
+	boosted_chat_id: number;
+}
+
+/**
+Return information about a Telegram Premium gift code.
+Request type for {@link Tdjson#checkPremiumGiftCode}.
+*/
+export interface CheckPremiumGiftCode {
+	'@type': 'checkPremiumGiftCode';
+	/**
+The code to check.
+*/
+	code: string;
+}
+
+/**
+Applies a Telegram Premium gift code.
+Request type for {@link Tdjson#applyPremiumGiftCode}.
+*/
+export interface ApplyPremiumGiftCode {
+	'@type': 'applyPremiumGiftCode';
+	/**
+The code to apply.
+*/
+	code: string;
+}
+
+/**
+Launches a prepaid Telegram Premium giveaway for subscribers of channel chats; requires can_post_messages rights in the
+channels.
+Request type for {@link Tdjson#launchPrepaidPremiumGiveaway}.
+*/
+export interface LaunchPrepaidPremiumGiveaway {
+	'@type': 'launchPrepaidPremiumGiveaway';
+	/**
+Unique identifier of the prepaid giveaway.
+*/
+	giveaway_id: string;
+	/**
+Giveaway parameters.
+*/
+	parameters: PremiumGiveawayParameters;
+}
+
+/**
+Returns information about a Telegram Premium giveaway.
+Request type for {@link Tdjson#getPremiumGiveawayInfo}.
+*/
+export interface GetPremiumGiveawayInfo {
+	'@type': 'getPremiumGiveawayInfo';
+	/**
+Identifier of the channel chat which started the giveaway.
+*/
+	chat_id: number;
+	/**
+Identifier of the giveaway message in the chat.
+*/
+	message_id: number;
+}
+
+/**
 Checks whether Telegram Premium purchase is possible. Must be called before in-store Premium purchase.
 Request type for {@link Tdjson#canPurchasePremium}.
 */
@@ -33729,6 +34776,7 @@ export type Request =
 	| RemoveMessageReaction
 	| GetMessageAddedReactions
 	| SetDefaultReactionType
+	| SearchQuote
 	| GetTextEntities
 	| ParseTextEntities
 	| ParseMarkdown
@@ -33812,6 +34860,7 @@ export type Request =
 	| SetArchiveChatListSettings
 	| SetChatTitle
 	| SetChatPhoto
+	| SetChatAccentColor
 	| SetChatMessageAutoDeleteTime
 	| SetChatPermissions
 	| SetChatBackground
@@ -33876,12 +34925,13 @@ export type Request =
 	| GetStoryViewers
 	| ReportStory
 	| ActivateStoryStealthMode
+	| GetAvailableChatBoostSlots
 	| GetChatBoostStatus
-	| CanBoostChat
 	| BoostChat
 	| GetChatBoostLink
 	| GetChatBoostLinkInfo
 	| GetChatBoosts
+	| GetUserChatBoosts
 	| GetAttachmentMenuBot
 	| ToggleBotIsAddedToAttachmentMenu
 	| GetThemedEmojiStatuses
@@ -34008,6 +35058,7 @@ export type Request =
 	| GetCustomEmojiStickers
 	| GetDefaultChatPhotoCustomEmojiStickers
 	| GetDefaultProfilePhotoCustomEmojiStickers
+	| GetDefaultBackgroundCustomEmojiStickers
 	| GetSavedAnimations
 	| AddSavedAnimation
 	| RemoveSavedAnimation
@@ -34018,6 +35069,7 @@ export type Request =
 	| GetWebPageInstantView
 	| SetProfilePhoto
 	| DeleteProfilePhoto
+	| SetAccentColor
 	| SetName
 	| SetBio
 	| SetUsername
@@ -34176,6 +35228,11 @@ export type Request =
 	| ViewPremiumFeature
 	| ClickPremiumSubscriptionButton
 	| GetPremiumState
+	| GetPremiumGiftCodePaymentOptions
+	| CheckPremiumGiftCode
+	| ApplyPremiumGiftCode
+	| LaunchPrepaidPremiumGiveaway
+	| GetPremiumGiveawayInfo
 	| CanPurchasePremium
 	| AssignAppStoreTransaction
 	| AssignGooglePlayTransaction
@@ -35819,6 +36876,17 @@ Changes type of default reaction for the current user.
 	}
 
 	/**
+Searches for a given quote in a text. Returns found quote start position in UTF-16 code units. Returns a 404 error if
+the quote is not found. Can be called synchronously.
+*/
+	async searchQuote(options: Omit<SearchQuote, '@type'>): Promise<FoundPosition> {
+		return this._request({
+			...options,
+			'@type': 'searchQuote',
+		});
+	}
+
+	/**
 Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses) found in
 the text. Can be called synchronously.
 */
@@ -35830,8 +36898,8 @@ the text. Can be called synchronously.
 	}
 
 	/**
-Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Code, Pre, PreCode, TextUrl and MentionName
-entities from a marked-up text. Can be called synchronously.
+Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, BlockQuote, Code, Pre, PreCode, TextUrl and
+MentionName entities from a marked-up text. Can be called synchronously.
 */
 	async parseTextEntities(options: Omit<ParseTextEntities, '@type'>): Promise<FormattedText> {
 		return this._request({
@@ -36686,6 +37754,17 @@ administrator right.
 	}
 
 	/**
+Changes accent color and background custom emoji of a chat. Supported only for channels with
+getOption("channel_custom_accent_color_boost_level_min") boost level. Requires can_change_info administrator right.
+*/
+	async setChatAccentColor(options: Omit<SetChatAccentColor, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setChatAccentColor',
+		});
+	}
+
+	/**
 Changes the message auto-delete or self-destruct (for secret chats) time in a chat. Requires change_info administrator
 right in basic groups, supergroups and channels Message auto-delete time can't be changed in a chat with the current
 user (Saved Messages) and the chat 777000 (Telegram).
@@ -37353,6 +38432,15 @@ Premium users only.
 	}
 
 	/**
+Returns the list of available chat boost slots for the current user.
+*/
+	async getAvailableChatBoostSlots(): Promise<ChatBoostSlots> {
+		return this._request({
+			'@type': 'getAvailableChatBoostSlots',
+		});
+	}
+
+	/**
 Returns the current boost status for a channel chat.
 */
 	async getChatBoostStatus(options: Omit<GetChatBoostStatus, '@type'>): Promise<ChatBoostStatus> {
@@ -37363,19 +38451,9 @@ Returns the current boost status for a channel chat.
 	}
 
 	/**
-Checks whether the current user can boost a chat.
+Boosts a chat and returns the list of available chat boost slots for the current user after the boost.
 */
-	async canBoostChat(options: Omit<CanBoostChat, '@type'>): Promise<CanBoostChatResult> {
-		return this._request({
-			...options,
-			'@type': 'canBoostChat',
-		});
-	}
-
-	/**
-Boosts a chat.
-*/
-	async boostChat(options: Omit<BoostChat, '@type'>): Promise<Ok> {
+	async boostChat(options: Omit<BoostChat, '@type'>): Promise<ChatBoostSlots> {
 		return this._request({
 			...options,
 			'@type': 'boostChat',
@@ -37404,13 +38482,23 @@ internalLinkTypeChatBoost.
 	}
 
 	/**
-Returns list of boosts applied to a chat. The user must be an administrator in the channel chat to get the list of
-boosts.
+Returns list of boosts applied to a chat; requires administrator rights in the channel chat.
 */
 	async getChatBoosts(options: Omit<GetChatBoosts, '@type'>): Promise<FoundChatBoosts> {
 		return this._request({
 			...options,
 			'@type': 'getChatBoosts',
+		});
+	}
+
+	/**
+Returns list of boosts applied to a chat by a given user; requires administrator rights in the channel chat; for bots
+only.
+*/
+	async getUserChatBoosts(options: Omit<GetUserChatBoosts, '@type'>): Promise<FoundChatBoosts> {
+		return this._request({
+			...options,
+			'@type': 'getUserChatBoosts',
 		});
 	}
 
@@ -38705,6 +39793,15 @@ Returns default list of custom emoji stickers for placing on a profile photo.
 	}
 
 	/**
+Returns default list of custom emoji stickers for reply background.
+*/
+	async getDefaultBackgroundCustomEmojiStickers(): Promise<Stickers> {
+		return this._request({
+			'@type': 'getDefaultBackgroundCustomEmojiStickers',
+		});
+	}
+
+	/**
 Returns saved animations.
 */
 	async getSavedAnimations(): Promise<Animations> {
@@ -38765,8 +39862,8 @@ Removes a hashtag from the list of recently used hashtags.
 	}
 
 	/**
-Returns a web page preview by the text of the message. Do not call this function too often. Returns a 404 error if the
-web page has no preview.
+Returns a link preview by the text of a message. Do not call this function too often. Returns a 404 error if the text
+has no link preview.
 */
 	async getWebPagePreview(options: Omit<GetWebPagePreview, '@type'>): Promise<WebPage> {
 		return this._request({
@@ -38803,6 +39900,16 @@ Deletes a profile photo.
 		return this._request({
 			...options,
 			'@type': 'deleteProfilePhoto',
+		});
+	}
+
+	/**
+Changes accent color and background custom emoji for the current user; for Telegram Premium users only.
+*/
+	async setAccentColor(options: Omit<SetAccentColor, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setAccentColor',
 		});
 	}
 
@@ -40420,6 +41527,57 @@ Returns state of Telegram Premium subscription and promotion videos for Premium 
 	async getPremiumState(): Promise<PremiumState> {
 		return this._request({
 			'@type': 'getPremiumState',
+		});
+	}
+
+	/**
+Returns available options for Telegram Premium gift code or giveaway creation.
+*/
+	async getPremiumGiftCodePaymentOptions(options: Omit<GetPremiumGiftCodePaymentOptions, '@type'>): Promise<PremiumGiftCodePaymentOptions> {
+		return this._request({
+			...options,
+			'@type': 'getPremiumGiftCodePaymentOptions',
+		});
+	}
+
+	/**
+Return information about a Telegram Premium gift code.
+*/
+	async checkPremiumGiftCode(options: Omit<CheckPremiumGiftCode, '@type'>): Promise<PremiumGiftCodeInfo> {
+		return this._request({
+			...options,
+			'@type': 'checkPremiumGiftCode',
+		});
+	}
+
+	/**
+Applies a Telegram Premium gift code.
+*/
+	async applyPremiumGiftCode(options: Omit<ApplyPremiumGiftCode, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'applyPremiumGiftCode',
+		});
+	}
+
+	/**
+Launches a prepaid Telegram Premium giveaway for subscribers of channel chats; requires can_post_messages rights in the
+channels.
+*/
+	async launchPrepaidPremiumGiveaway(options: Omit<LaunchPrepaidPremiumGiveaway, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'launchPrepaidPremiumGiveaway',
+		});
+	}
+
+	/**
+Returns information about a Telegram Premium giveaway.
+*/
+	async getPremiumGiveawayInfo(options: Omit<GetPremiumGiveawayInfo, '@type'>): Promise<PremiumGiveawayInfo> {
+		return this._request({
+			...options,
+			'@type': 'getPremiumGiveawayInfo',
 		});
 	}
 
