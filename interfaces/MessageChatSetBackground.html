@@ -25,7 +25,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <ul class="tsd-hierarchy">
 <li><span class="target">MessageChatSetBackground</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L9530">tdjson.ts:9530</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9638">tdjson.ts:9638</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -36,6 +36,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <div class="tsd-index-list"><a href="MessageChatSetBackground.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
 <a href="MessageChatSetBackground.html#background" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>background</span></a>
 <a href="MessageChatSetBackground.html#old_background_message_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>old_<wbr/>background_<wbr/>message_<wbr/>id</span></a>
+<a href="MessageChatSetBackground.html#only_for_self" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>only_<wbr/>for_<wbr/>self?</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -43,7 +44,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;messageChatSetBackground&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L9531">tdjson.ts:9531</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9639">tdjson.ts:9639</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="background" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>background</span><a href="#background" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">background</span><span class="tsd-signature-symbol">:</span> <a href="ChatBackground.html" class="tsd-signature-type tsd-kind-interface">ChatBackground</a></div>
@@ -51,7 +52,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L9539">tdjson.ts:9539</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9647">tdjson.ts:9647</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="old_background_message_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>old_<wbr/>background_<wbr/>message_<wbr/>id</span><a href="#old_background_message_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">old_<wbr/>background_<wbr/>message_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -59,7 +60,15 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L9535">tdjson.ts:9535</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9643">tdjson.ts:9643</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="only_for_self" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>only_<wbr/>for_<wbr/>self</span><a href="#only_for_self" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">only_<wbr/>for_<wbr/>self</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>True, if the background was set only for self.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9651">tdjson.ts:9651</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -81,7 +90,8 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
 <li><a href="#background" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>background</span></a></li>
-<li><a href="#old_background_message_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>old_<wbr/>background_<wbr/>message_<wbr/>id</span></a></li></ul></div></details></div>
+<li><a href="#old_background_message_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>old_<wbr/>background_<wbr/>message_<wbr/>id</span></a></li>
+<li><a href="#only_for_self" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>only_<wbr/>for_<wbr/>self</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">

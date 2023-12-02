@@ -16,7 +16,7 @@
 <li><a href="SetChatBackground.html">SetChatBackground</a></li></ul>
 <h1>Interface SetChatBackground</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Changes the background in a specific chat. Supported only in private and secret chats with non-deleted users.
+<div class="tsd-comment tsd-typography"><p>Sets the background in a specific chat. Supported only in private and secret chats with non-deleted users.
 Request type for <a href="../classes/Tdjson.html#setChatBackground" class="tsd-kind-method">Tdjson#setChatBackground</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
@@ -25,7 +25,7 @@ Request type for <a href="../classes/Tdjson.html#setChatBackground" class="tsd-k
 <ul class="tsd-hierarchy">
 <li><span class="target">SetChatBackground</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L28011">tdjson.ts:28011</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L28449">tdjson.ts:28449</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -37,6 +37,7 @@ Request type for <a href="../classes/Tdjson.html#setChatBackground" class="tsd-k
 <a href="SetChatBackground.html#background" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>background</span></a>
 <a href="SetChatBackground.html#chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a>
 <a href="SetChatBackground.html#dark_theme_dimming" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>dark_<wbr/>theme_<wbr/>dimming</span></a>
+<a href="SetChatBackground.html#only_for_self" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>only_<wbr/>for_<wbr/>self?</span></a>
 <a href="SetChatBackground.html#type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>type</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
@@ -45,15 +46,15 @@ Request type for <a href="../classes/Tdjson.html#setChatBackground" class="tsd-k
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;setChatBackground&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L28012">tdjson.ts:28012</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L28450">tdjson.ts:28450</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="background" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>background</span><a href="#background" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">background</span><span class="tsd-signature-symbol">:</span> <a href="../types/InputBackground.html" class="tsd-signature-type tsd-kind-type-alias">InputBackground</a></div>
-<div class="tsd-comment tsd-typography"><p>The input background to use; pass null to create a new filled background or to remove the current background.</p>
+<div class="tsd-comment tsd-typography"><p>The input background to use; pass null to create a new filled background.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L28020">tdjson.ts:28020</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L28458">tdjson.ts:28458</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -61,7 +62,7 @@ Request type for <a href="../classes/Tdjson.html#setChatBackground" class="tsd-k
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L28016">tdjson.ts:28016</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L28454">tdjson.ts:28454</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="dark_theme_dimming" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>dark_<wbr/>theme_<wbr/>dimming</span><a href="#dark_theme_dimming" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">dark_<wbr/>theme_<wbr/>dimming</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -69,15 +70,24 @@ Request type for <a href="../classes/Tdjson.html#setChatBackground" class="tsd-k
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L28028">tdjson.ts:28028</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="type" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>type</span><a href="#type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">type</span><span class="tsd-signature-symbol">:</span> <a href="../types/BackgroundType.html" class="tsd-signature-type tsd-kind-type-alias">BackgroundType</a></div>
-<div class="tsd-comment tsd-typography"><p>Background type; pass null to remove the current background.</p>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L28466">tdjson.ts:28466</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="only_for_self" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>only_<wbr/>for_<wbr/>self</span><a href="#only_for_self" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">only_<wbr/>for_<wbr/>self</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Pass true to set background only for self; pass false to set background for both chat users. Background can be set for
+both users only by Telegram Premium users and if set background isn&#39;t of the type inputBackgroundPrevious.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L28024">tdjson.ts:28024</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L28471">tdjson.ts:28471</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="type" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>type</span><a href="#type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">type</span><span class="tsd-signature-symbol">:</span> <a href="../types/BackgroundType.html" class="tsd-signature-type tsd-kind-type-alias">BackgroundType</a></div>
+<div class="tsd-comment tsd-typography"><p>Background type; pass null to use default background type for the chosen background.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L28462">tdjson.ts:28462</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -101,6 +111,7 @@ Request type for <a href="../classes/Tdjson.html#setChatBackground" class="tsd-k
 <li><a href="#background" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>background</span></a></li>
 <li><a href="#chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a></li>
 <li><a href="#dark_theme_dimming" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>dark_<wbr/>theme_<wbr/>dimming</span></a></li>
+<li><a href="#only_for_self" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>only_<wbr/>for_<wbr/>self</span></a></li>
 <li><a href="#type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>type</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>

@@ -25,7 +25,7 @@ Subtype of <a href="../types/InputMessageReplyTo.html" class="tsd-kind-type-alia
 <ul class="tsd-hierarchy">
 <li><span class="target">InputMessageReplyToMessage</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4053">tdjson.ts:4053</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L4139">tdjson.ts:4139</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -44,17 +44,17 @@ Subtype of <a href="../types/InputMessageReplyTo.html" class="tsd-kind-type-alia
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;inputMessageReplyToMessage&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4054">tdjson.ts:4054</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L4140">tdjson.ts:4140</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 <div class="tsd-comment tsd-typography"><p>The identifier of the chat to which the message to be replied belongs; pass 0 if the message to be replied is in the
-same chat. Must always be 0 for replies in secret chats. A message can be replied in another chat only if
+same chat. Must always be 0 for replies in secret chats. A message can be replied in another chat or topic only if
 message.can_be_replied_in_another_chat.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4060">tdjson.ts:4060</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L4146">tdjson.ts:4146</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="message_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>message_<wbr/>id</span><a href="#message_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">message_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -62,17 +62,15 @@ message.can_be_replied_in_another_chat.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4064">tdjson.ts:4064</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L4150">tdjson.ts:4150</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="quote" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>quote</span><a href="#quote" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">quote</span><span class="tsd-signature-symbol">:</span> <a href="FormattedText.html" class="tsd-signature-type tsd-kind-interface">FormattedText</a></div>
-<div class="tsd-comment tsd-typography"><p>Manually chosen quote from the message to be replied; pass null if none; 0-getOption(&quot;message_reply_quote_length_max&quot;)
-characters. Must always be null for replies in secret chats. Only Bold, Italic, Underline, Strikethrough, Spoiler, and
-CustomEmoji entities are allowed to be kept and must be kept in the quote.</p>
+<div class="tsd-signature"><span class="tsd-kind-property">quote</span><span class="tsd-signature-symbol">:</span> <a href="InputTextQuote.html" class="tsd-signature-type tsd-kind-interface">InputTextQuote</a></div>
+<div class="tsd-comment tsd-typography"><p>Quote from the message to be replied; pass null if none. Must always be null for replies in secret chats.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L4070">tdjson.ts:4070</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L4154">tdjson.ts:4154</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

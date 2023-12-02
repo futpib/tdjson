@@ -16,8 +16,8 @@
 <li><a href="SearchStickerSets.html">SearchStickerSets</a></li></ul>
 <h1>Interface SearchStickerSets</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Searches for ordinary sticker sets by looking for specified query in their title and name. Excludes installed sticker
-sets from the results.
+<div class="tsd-comment tsd-typography"><p>Searches for sticker sets by looking for specified query in their title and name. Excludes installed sticker sets from
+the results.
 Request type for <a href="../classes/Tdjson.html#searchStickerSets" class="tsd-kind-method">Tdjson#searchStickerSets</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
@@ -26,7 +26,7 @@ Request type for <a href="../classes/Tdjson.html#searchStickerSets" class="tsd-k
 <ul class="tsd-hierarchy">
 <li><span class="target">SearchStickerSets</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L31059">tdjson.ts:31059</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L31569">tdjson.ts:31569</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -36,6 +36,7 @@ Request type for <a href="../classes/Tdjson.html#searchStickerSets" class="tsd-k
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="SearchStickerSets.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
 <a href="SearchStickerSets.html#query" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>query</span></a>
+<a href="SearchStickerSets.html#sticker_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>sticker_<wbr/>type</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -43,7 +44,7 @@ Request type for <a href="../classes/Tdjson.html#searchStickerSets" class="tsd-k
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;searchStickerSets&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L31060">tdjson.ts:31060</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L31570">tdjson.ts:31570</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="query" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>query</span><a href="#query" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">query</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -51,7 +52,15 @@ Request type for <a href="../classes/Tdjson.html#searchStickerSets" class="tsd-k
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/c9eda00/src/tdjson.ts#L31064">tdjson.ts:31064</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L31578">tdjson.ts:31578</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="sticker_type" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>sticker_<wbr/>type</span><a href="#sticker_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">sticker_<wbr/>type</span><span class="tsd-signature-symbol">:</span> <a href="../types/StickerType.html" class="tsd-signature-type tsd-kind-type-alias">StickerType</a></div>
+<div class="tsd-comment tsd-typography"><p>Type of the sticker sets to return.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L31574">tdjson.ts:31574</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -72,7 +81,8 @@ Request type for <a href="../classes/Tdjson.html#searchStickerSets" class="tsd-k
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
-<li><a href="#query" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>query</span></a></li></ul></div></details></div>
+<li><a href="#query" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>query</span></a></li>
+<li><a href="#sticker_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>sticker_<wbr/>type</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
