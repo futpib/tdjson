@@ -2227,7 +2227,7 @@ True, if the gift code was created for a giveaway.
 */
 	is_from_giveaway?: boolean;
 	/**
-Identifier of the corresponding giveaway message; can be 0 or an identifier of a deleted message.
+Identifier of the corresponding giveaway message in the creator_id chat; can be 0 or an identifier of a deleted message.
 */
 	giveaway_message_id: number;
 	/**
@@ -2377,6 +2377,45 @@ The list of 1-3 colors in RGB format, describing the accent color, as expected t
 }
 
 /**
+Contains information about supported accent colors for user profile photo background in RGB format.
+*/
+export interface ProfileAccentColors {
+	'@type': 'profileAccentColors';
+	/**
+The list of 1-2 colors in RGB format, describing the colors, as expected to be shown in the color palette settings.
+*/
+	palette_colors: number[];
+	/**
+The list of 1-2 colors in RGB format, describing the colors, as expected to be used for the profile photo background.
+*/
+	background_colors: number[];
+	/**
+The list of 2 colors in RGB format, describing the colors of the gradient to be used for the unread active story
+indicator around profile photo.
+*/
+	story_colors: number[];
+}
+
+/**
+Contains information about supported accent color for user profile photo background.
+*/
+export interface ProfileAccentColor {
+	'@type': 'profileAccentColor';
+	/**
+Profile accent color identifier.
+*/
+	id: number;
+	/**
+The list of 1-3 colors in RGB format, describing the accent color, as expected to be shown in light themes.
+*/
+	light_theme_colors: ProfileAccentColors;
+	/**
+The list of 1-3 colors in RGB format, describing the accent color, as expected to be shown in dark themes.
+*/
+	dark_theme_colors: ProfileAccentColors;
+}
+
+/**
 Describes a custom emoji to be shown instead of the Telegram Premium badge.
 */
 export interface EmojiStatus {
@@ -2457,13 +2496,23 @@ Profile photo of the user; may be null.
 */
 	profile_photo: ProfilePhoto;
 	/**
-Identifier of the accent color for name, and backgrounds of profile photo, reply header, and link preview.
+Identifier of the accent color for name, and backgrounds of profile photo, reply header, and link preview. For Telegram
+Premium users only.
 */
 	accent_color_id: number;
 	/**
 Identifier of a custom emoji to be shown on the reply header background; 0 if none. For Telegram Premium users only.
 */
 	background_custom_emoji_id: string;
+	/**
+Identifier of the accent color for the user's profile; -1 if none. For Telegram Premium users only.
+*/
+	profile_accent_color_id: number;
+	/**
+Identifier of a custom emoji to be shown on the background of the user's profile; 0 if none. For Telegram Premium users
+only.
+*/
+	profile_background_custom_emoji_id: string;
 	/**
 Emoji status to be shown instead of the default Telegram Premium badge; may be null. For Telegram Premium users only.
 */
@@ -2643,6 +2692,10 @@ True, if the current user needs to explicitly allow to share their phone number 
 is used.
 */
 	need_phone_number_privacy_exception?: boolean;
+	/**
+True, if the user set chat background for both chat users and it wasn't reverted yet.
+*/
+	set_chat_background?: boolean;
 	/**
 A short user bio; may be null for bots.
 */
@@ -3373,9 +3426,11 @@ Status of the current user in the supergroup or channel; custom title will alway
 	status: ChatMemberStatus;
 	/**
 Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the
-supergroup or channel was received through searchPublicChats, searchChatsNearby, getInactiveSupergroupChats,
-getSuitableDiscussionChats, getGroupsInCommon, getUserPrivacySettingRules, or in
-chatFolderInviteLinkInfo.missing_chat_ids.
+supergroup or channel was received through getChatSimilarChats, getChatsToSendStories, getCreatedPublicChats,
+getGroupsInCommon, getInactiveSupergroupChats, getSuitableDiscussionChats, getUserPrivacySettingRules,
+getVideoChatAvailableParticipants, searchChatsNearby, searchPublicChats, or in
+chatFolderInviteLinkInfo.missing_chat_ids, or for public chats in which where sent messages and posted stories from
+storyPublicForwards, or for public chats in which where sent messages from getMessagePublicForwards response.
 */
 	member_count: number;
 	/**
@@ -3415,7 +3470,7 @@ number of members.
 */
 	is_broadcast_group?: boolean;
 	/**
-True, if the supergroup must be shown as a forum by default.
+True, if the supergroup is a forum with topics.
 */
 	is_forum?: boolean;
 	/**
@@ -3667,7 +3722,7 @@ Represents a message sender, which can be used to send messages in a chat.
 export interface ChatMessageSender {
 	'@type': 'chatMessageSender';
 	/**
-Available message senders.
+The message sender.
 */
 	sender: MessageSender;
 	/**
@@ -3888,8 +3943,8 @@ True, if the reaction is chosen by the current user.
 */
 	is_chosen?: boolean;
 	/**
-Identifier of the message sender used by the current user to add the reaction; null if unknown or the reaction isn't
-chosen.
+Identifier of the message sender used by the current user to add the reaction; may be null if unknown or the reaction
+isn't chosen.
 */
 	used_sender_id: MessageSender;
 	/**
@@ -3988,6 +4043,42 @@ Time left before the message can be re-sent, in seconds. No update is sent when 
 }
 
 /**
+Describes manually or automatically chosen quote from another message.
+*/
+export interface TextQuote {
+	'@type': 'textQuote';
+	/**
+Text of the quote. Only Bold, Italic, Underline, Strikethrough, Spoiler, and CustomEmoji entities can be present in the
+text.
+*/
+	text: FormattedText;
+	/**
+Approximate quote position in the original message in UTF-16 code units.
+*/
+	position: number;
+	/**
+True, if the quote was manually chosen by the message sender.
+*/
+	is_manual?: boolean;
+}
+
+/**
+Describes manually chosen quote from another message.
+*/
+export interface InputTextQuote {
+	'@type': 'inputTextQuote';
+	/**
+Text of the quote; 0-getOption("message_reply_quote_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities are allowed to be kept and must be kept in the quote.
+*/
+	text: FormattedText;
+	/**
+Quote position in the original message in UTF-16 code units.
+*/
+	position: number;
+}
+
+/**
 Contains information about the message or the story a message is replying to.
 Subtype of {@link MessageReplyTo}.
 */
@@ -4002,26 +4093,21 @@ The identifier of the message; may be 0 if the replied message is in unknown cha
 */
 	message_id: number;
 	/**
-Manually or automatically chosen quote from the replied message; may be null if none. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities can be present in the quote.
+Chosen quote from the replied message; may be null if none.
 */
-	quote: FormattedText;
+	quote: TextQuote;
 	/**
-True, if the quote was manually chosen by the message sender.
-*/
-	is_quote_manual?: boolean;
-	/**
-Information about origin of the message if the message was replied from another chat; may be null for messages from the
+Information about origin of the message if the message was from another chat or topic; may be null for messages from the
 same chat.
 */
 	origin: MessageOrigin;
 	/**
-Point in time (Unix timestamp) when the message was sent if the message was replied from another chat; 0 for messages
+Point in time (Unix timestamp) when the message was sent if the message was from another chat or topic; 0 for messages
 from the same chat.
 */
 	origin_send_date: number;
 	/**
-Media content of the message if the message was replied from another chat; may be null for messages from the same chat
+Media content of the message if the message was from another chat or topic; may be null for messages from the same chat
 and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageContact,
 messageDice, messageDocument, messageGame, messageInvoice, messageLocation, messagePhoto, messagePoll,
 messagePremiumGiveaway, messageSticker, messageStory, messageText (for link preview), messageVenue, messageVideo,
@@ -4054,7 +4140,7 @@ export interface InputMessageReplyToMessage {
 	'@type': 'inputMessageReplyToMessage';
 	/**
 The identifier of the chat to which the message to be replied belongs; pass 0 if the message to be replied is in the
-same chat. Must always be 0 for replies in secret chats. A message can be replied in another chat only if
+same chat. Must always be 0 for replies in secret chats. A message can be replied in another chat or topic only if
 message.can_be_replied_in_another_chat.
 */
 	chat_id: number;
@@ -4063,11 +4149,9 @@ The identifier of the message to be replied in the same or the specified chat.
 */
 	message_id: number;
 	/**
-Manually chosen quote from the message to be replied; pass null if none; 0-getOption("message_reply_quote_length_max")
-characters. Must always be null for replies in secret chats. Only Bold, Italic, Underline, Strikethrough, Spoiler, and
-CustomEmoji entities are allowed to be kept and must be kept in the quote.
+Quote from the message to be replied; pass null if none. Must always be null for replies in secret chats.
 */
-	quote: FormattedText;
+	quote: InputTextQuote;
 }
 
 /**
@@ -4129,7 +4213,7 @@ True, if the message can be forwarded.
 */
 	can_be_forwarded?: boolean;
 	/**
-True, if the message can be replied in another chat.
+True, if the message can be replied in another chat or topic.
 */
 	can_be_replied_in_another_chat?: boolean;
 	/**
@@ -4289,7 +4373,7 @@ List of messages.
 */
 	messages: Message[];
 	/**
-The offset for the next request. If empty, there are no more results.
+The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
 }
@@ -4484,6 +4568,22 @@ An internal link to be opened when the sponsored message is clicked.
 }
 
 /**
+The sponsor is a web app.
+Subtype of {@link MessageSponsorType}.
+*/
+export interface MessageSponsorTypeWebApp {
+	'@type': 'messageSponsorTypeWebApp';
+	/**
+Web App title.
+*/
+	web_app_title: string;
+	/**
+An internal link to be opened when the sponsored message is clicked.
+*/
+	link: InternalLinkType;
+}
+
+/**
 The sponsor is a public channel chat.
 Subtype of {@link MessageSponsorType}.
 */
@@ -4574,6 +4674,10 @@ Information about the sponsor of the message.
 */
 	sponsor: MessageSponsor;
 	/**
+If non-empty, text for the message action button.
+*/
+	button_text: string;
+	/**
 If non-empty, additional information about the sponsored message to be shown along with the message.
 */
 	additional_info: string;
@@ -4655,7 +4759,7 @@ The list of files.
 */
 	files: FileDownload[];
 	/**
-The offset for the next request. If empty, there are no more results.
+The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
 }
@@ -4694,7 +4798,7 @@ Contains information about notification settings for a chat or a forum topic.
 export interface ChatNotificationSettings {
 	'@type': 'chatNotificationSettings';
 	/**
-If true, mute_for is ignored and the value for the relevant type of chat or the forum chat is used instead.
+If true, the value for the relevant type of chat or the forum chat is used instead of mute_for.
 */
 	use_default_mute_for?: boolean;
 	/**
@@ -4710,7 +4814,7 @@ Identifier of the notification sound to be played for messages; 0 if sound is di
 */
 	sound_id: string;
 	/**
-If true, show_preview is ignored and the value for the relevant type of chat or the forum chat is used instead.
+If true, the value for the relevant type of chat or the forum chat is used instead of show_preview.
 */
 	use_default_show_preview?: boolean;
 	/**
@@ -4718,7 +4822,7 @@ True, if message content must be displayed in notifications.
 */
 	show_preview?: boolean;
 	/**
-If true, mute_stories is ignored and the value for the relevant type of chat is used instead.
+If true, the value for the relevant type of chat is used instead of mute_stories.
 */
 	use_default_mute_stories?: boolean;
 	/**
@@ -4734,7 +4838,7 @@ Identifier of the notification sound to be played for stories; 0 if sound is dis
 */
 	story_sound_id: string;
 	/**
-If true, show_story_sender is ignored and the value for the relevant type of chat is used instead.
+If true, the value for the relevant type of chat is used instead of show_story_sender.
 */
 	use_default_show_story_sender?: boolean;
 	/**
@@ -4742,8 +4846,8 @@ True, if the sender of stories must be displayed in notifications.
 */
 	show_story_sender?: boolean;
 	/**
-If true, disable_pinned_message_notifications is ignored and the value for the relevant type of chat or the forum chat
-is used instead.
+If true, the value for the relevant type of chat or the forum chat is used instead of
+disable_pinned_message_notifications.
 */
 	use_default_disable_pinned_message_notifications?: boolean;
 	/**
@@ -4751,8 +4855,7 @@ If true, notifications for incoming pinned messages will be created as for an or
 */
 	disable_pinned_message_notifications?: boolean;
 	/**
-If true, disable_mention_notifications is ignored and the value for the relevant type of chat or the forum chat is used
-instead.
+If true, the value for the relevant type of chat or the forum chat is used instead of disable_mention_notifications.
 */
 	use_default_disable_mention_notifications?: boolean;
 	/**
@@ -4779,12 +4882,12 @@ True, if message content must be displayed in notifications.
 */
 	show_preview?: boolean;
 	/**
-If true, mute_stories is ignored and story notifications are received only for the first 5 chats from
-topChatCategoryUsers.
+If true, story notifications are received only for the first 5 chats from topChatCategoryUsers regardless of the value
+of mute_stories.
 */
 	use_default_mute_stories?: boolean;
 	/**
-True, if story notifications are disabled for the chat.
+True, if story notifications are disabled.
 */
 	mute_stories?: boolean;
 	/**
@@ -4875,7 +4978,7 @@ Secret chat identifier.
 */
 	secret_chat_id: number;
 	/**
-User identifier of the secret chat peer.
+User identifier of the other user in the secret chat.
 */
 	user_id: number;
 }
@@ -5282,6 +5385,10 @@ True, if the chat is marked as unread.
 */
 	is_marked_as_unread?: boolean;
 	/**
+True, if the chat is a forum supergroup that must be shown in the "View as topics" mode.
+*/
+	view_as_topics?: boolean;
+	/**
 True, if the chat has scheduled messages.
 */
 	has_scheduled_messages?: boolean;
@@ -5481,8 +5588,8 @@ simultaneously with setting chat notification settings to default using setChatN
 */
 	can_unarchive?: boolean;
 	/**
-If non-negative, the current user was found by the peer through searchChatsNearby and this is the distance between the
-users.
+If non-negative, the current user was found by the other user through searchChatsNearby and this is the distance between
+the users.
 */
 	distance: number;
 }
@@ -7135,11 +7242,12 @@ Author of the content.
 */
 	author: string;
 	/**
-True, if the preview has large media and its appearance can be changed.
+True, if size of media in the preview can be changed.
 */
 	has_large_media?: boolean;
 	/**
-True, if large media preview must be shown.
+True, if large media preview must be shown; otherwise, the media preview must be shown small and only the first frame
+must be shown for videos.
 */
 	show_large_media?: boolean;
 	/**
@@ -8920,7 +9028,7 @@ A link preview attached to the message; may be null.
 */
 	web_page: WebPage;
 	/**
-Options which was used for generation of the link preview; may be null if default options were used.
+Options which were used for generation of the link preview; may be null if default options were used.
 */
 	link_preview_options: LinkPreviewOptions;
 }
@@ -9537,6 +9645,10 @@ Identifier of the message with a previously set same background; 0 if none. Can 
 The new background.
 */
 	background: ChatBackground;
+	/**
+True, if the background was set only for self.
+*/
+	only_for_self?: boolean;
 }
 
 /**
@@ -9851,6 +9963,26 @@ Number of month the Telegram Premium subscription will be active after code acti
 A sticker to be shown in the message; may be null if unknown.
 */
 	sticker: Sticker;
+}
+
+/**
+A Telegram Premium giveaway has been completed for the chat.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePremiumGiveawayCompleted {
+	'@type': 'messagePremiumGiveawayCompleted';
+	/**
+Identifier of the message with the giveaway, can be an identifier of a deleted message.
+*/
+	giveaway_message_id: number;
+	/**
+Number of winners in the giveaway.
+*/
+	winner_count: number;
+	/**
+Number of undistributed prizes.
+*/
+	unclaimed_prize_count: number;
 }
 
 /**
@@ -10228,8 +10360,8 @@ Point in time (Unix timestamp) when the message will be sent. The date must be w
 }
 
 /**
-The message will be sent when the peer will be online. Applicable to private chats only and when the exact online status
-of the peer is known.
+The message will be sent when the other user is online. Applicable to private chats only and when the exact online
+status of the other user is known.
 Subtype of {@link MessageSchedulingState}.
 */
 export interface MessageSchedulingStateSendWhenOnline {
@@ -10426,8 +10558,8 @@ Document thumbnail; pass null to skip thumbnail uploading.
 */
 	thumbnail: InputThumbnail;
 	/**
-If true, automatic file type detection will be disabled and the document will always be sent as file. Always true for
-files sent to secret chats.
+True, if automatic file type detection is disabled and the document must be sent as a file. Always true for files sent
+to secret chats.
 */
 	disable_content_type_detection?: boolean;
 	/**
@@ -11473,7 +11605,7 @@ List of story viewers.
 */
 	viewers: StoryViewer[];
 	/**
-The offset for the next request. If empty, there are no more results.
+The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
 }
@@ -11800,6 +11932,49 @@ export interface StoryListArchive {
 }
 
 /**
+Contains information about the origin of a story that was reposted.
+Subtype of {@link StoryOrigin}.
+*/
+export interface StoryOriginPublicStory {
+	'@type': 'storyOriginPublicStory';
+	/**
+Identifier of the chat that posted original story.
+*/
+	chat_id: number;
+	/**
+Story identifier of the original story.
+*/
+	story_id: number;
+}
+
+/**
+The original story was sent by an unknown user.
+Subtype of {@link StoryOrigin}.
+*/
+export interface StoryOriginHiddenUser {
+	'@type': 'storyOriginHiddenUser';
+	/**
+Name of the story sender.
+*/
+	sender_name: string;
+}
+
+/**
+Contains information about original story that was reposted.
+*/
+export interface StoryRepostInfo {
+	'@type': 'storyRepostInfo';
+	/**
+Origin of the story that was reposted.
+*/
+	origin: StoryOrigin;
+	/**
+True, if story content was modified during reposting; otherwise, story wasn't modified.
+*/
+	is_content_modified?: boolean;
+}
+
+/**
 Contains information about interactions with a story.
 */
 export interface StoryInteractionInfo {
@@ -11881,6 +12056,10 @@ True, if the story's is_pinned value can be changed.
 */
 	can_toggle_is_pinned?: boolean;
 	/**
+True, if the story statistics are available through getStoryStatistics.
+*/
+	can_get_statistics?: boolean;
+	/**
 True, if users viewed the story can be received through getStoryViewers.
 */
 	can_get_viewers?: boolean;
@@ -11889,6 +12068,10 @@ True, if users viewed the story can't be received, because the story has expired
 getOption("story_viewers_expiration_delay") seconds ago.
 */
 	has_expired_viewers?: boolean;
+	/**
+Information about the original story; may be null if the story wasn't reposted.
+*/
+	repost_info: StoryRepostInfo;
 	/**
 Information about interactions with the story; may be null if the story isn't owned or there were no interactions.
 */
@@ -11928,6 +12111,21 @@ Approximate total number of stories found.
 The list of stories.
 */
 	stories: Story[];
+}
+
+/**
+Contains identifier of a story along with identifier of its sender.
+*/
+export interface StoryFullId {
+	'@type': 'storyFullId';
+	/**
+Identifier of the chat that posted the story.
+*/
+	sender_chat_id: number;
+	/**
+Unique story identifier among stories of the given sender.
+*/
+	story_id: number;
 }
 
 /**
@@ -11976,6 +12174,49 @@ Basic information about the stories; use getStory to get full information about 
 chronological order (i.e., in order of increasing story identifiers).
 */
 	stories: StoryInfo[];
+}
+
+/**
+Describes a public forward or repost of a story.
+Subtype of {@link StoryPublicForward}.
+*/
+export interface StoryPublicForwardMessage {
+	'@type': 'storyPublicForwardMessage';
+	/**
+Information about the message with the story.
+*/
+	message: Message;
+}
+
+/**
+Contains a public repost of a story as a story.
+Subtype of {@link StoryPublicForward}.
+*/
+export interface StoryPublicForwardStory {
+	'@type': 'storyPublicForwardStory';
+	/**
+Information about the reposted story.
+*/
+	story: Story;
+}
+
+/**
+Represents a list of public forwards and reposts of a story.
+*/
+export interface StoryPublicForwards {
+	'@type': 'storyPublicForwards';
+	/**
+Approximate total number of messages and stories found.
+*/
+	total_count: number;
+	/**
+List of found public forwards and reposts.
+*/
+	forwards: StoryPublicForward[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
 }
 
 /**
@@ -12147,7 +12388,7 @@ List of boosts.
 */
 	boosts: ChatBoost[];
 	/**
-The offset for the next request. If empty, there are no more results.
+The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
 }
@@ -12383,7 +12624,7 @@ Subtype of {@link CallState}.
 export interface CallStateReady {
 	'@type': 'callStateReady';
 	/**
-Call protocols supported by the peer.
+Call protocols supported by the other call participant.
 */
 	protocol: CallProtocol;
 	/**
@@ -12559,7 +12800,7 @@ active or was ended.
 */
 	scheduled_start_date: number;
 	/**
-True, if the group call is scheduled and the current user will receive a notification when the group call will start.
+True, if the group call is scheduled and the current user will receive a notification when the group call starts.
 */
 	enabled_start_notification?: boolean;
 	/**
@@ -12839,7 +13080,7 @@ Call identifier, not persistent.
 */
 	id: number;
 	/**
-Peer user identifier.
+User identifier of the other call participant.
 */
 	user_id: number;
 	/**
@@ -12952,7 +13193,7 @@ The list of added reactions.
 */
 	reactions: AddedReaction[];
 	/**
-The offset for the next request. If empty, there are no more results.
+The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
 }
@@ -12990,7 +13231,7 @@ List of popular reactions.
 */
 	popular_reactions: AvailableReaction[];
 	/**
-True, if custom emoji reactions could be added by Telegram Premium subscribers.
+True, if any custom emoji reaction can be added by Telegram Premium subscribers.
 */
 	allow_custom_emoji?: boolean;
 }
@@ -13141,7 +13382,8 @@ Subtype of {@link SpeechRecognitionResult}.
 export interface SpeechRecognitionResultError {
 	'@type': 'speechRecognitionResultError';
 	/**
-Recognition error.
+Recognition error. An error with a message "MSG_VOICE_TOO_LONG" is returned when media duration is too big to be
+recognized.
 */
 	error: Error;
 }
@@ -14148,7 +14390,7 @@ Results of the query.
 */
 	results: InlineQueryResult[];
 	/**
-The offset for the next request. If empty, there are no more results.
+The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
 }
@@ -14508,7 +14750,7 @@ New value of message_auto_delete_time.
 }
 
 /**
-The chat permissions was changed.
+The chat permissions were changed.
 Subtype of {@link ChatEventAction}.
 */
 export interface ChatEventPermissionsChanged {
@@ -15310,6 +15552,15 @@ export interface PremiumLimitTypeStorySuggestedReactionAreaCount {
 }
 
 /**
+The maximum number of received similar chats.
+Subtype of {@link PremiumLimitType}.
+*/
+export interface PremiumLimitTypeSimilarChatCount {
+	'@type': 'premiumLimitTypeSimilarChatCount';
+
+}
+
+/**
 Describes a feature available to Premium users.
 Subtype of {@link PremiumFeature}.
 */
@@ -15464,11 +15715,20 @@ export interface PremiumFeatureChatBoost {
 }
 
 /**
-The ability to choose accent color.
+The ability to choose accent color for replies and user profile.
 Subtype of {@link PremiumFeature}.
 */
 export interface PremiumFeatureAccentColor {
 	'@type': 'premiumFeatureAccentColor';
+
+}
+
+/**
+The ability to set private chat background for both users.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureBackgroundForBoth {
+	'@type': 'premiumFeatureBackgroundForBoth';
 
 }
 
@@ -16410,7 +16670,7 @@ Name of the other party; may be empty if unrecognized.
 }
 
 /**
-The messages was exported from a group chat.
+The messages were exported from a group chat.
 Subtype of {@link MessageFileType}.
 */
 export interface MessageFileTypeGroup {
@@ -16422,7 +16682,7 @@ Title of the group chat; may be empty if unrecognized.
 }
 
 /**
-The messages was exported from a chat of unknown type.
+The messages were exported from a chat of unknown type.
 Subtype of {@link MessageFileType}.
 */
 export interface MessageFileTypeUnknown {
@@ -19260,7 +19520,7 @@ export interface ConnectionStateWaitingForNetwork {
 }
 
 /**
-Currently establishing a connection with a proxy server.
+Establishing a connection with a proxy server.
 Subtype of {@link ConnectionState}.
 */
 export interface ConnectionStateConnectingToProxy {
@@ -19269,7 +19529,7 @@ export interface ConnectionStateConnectingToProxy {
 }
 
 /**
-Currently establishing a connection to the Telegram servers.
+Establishing a connection to the Telegram servers.
 Subtype of {@link ConnectionState}.
 */
 export interface ConnectionStateConnecting {
@@ -19278,7 +19538,7 @@ export interface ConnectionStateConnecting {
 }
 
 /**
-Downloading data received while the application was offline.
+Downloading data supposed to be received while the application was offline.
 Subtype of {@link ConnectionState}.
 */
 export interface ConnectionStateUpdating {
@@ -19818,22 +20078,50 @@ The error message.
 }
 
 /**
-Contains statistics about interactions with a message.
+Describes type of an object, for which statistics are provided.
+Subtype of {@link ChatStatisticsObjectType}.
 */
-export interface ChatStatisticsMessageInteractionInfo {
-	'@type': 'chatStatisticsMessageInteractionInfo';
+export interface ChatStatisticsObjectTypeMessage {
+	'@type': 'chatStatisticsObjectTypeMessage';
 	/**
 Message identifier.
 */
 	message_id: number;
+}
+
+/**
+Describes a story sent by the chat.
+Subtype of {@link ChatStatisticsObjectType}.
+*/
+export interface ChatStatisticsObjectTypeStory {
+	'@type': 'chatStatisticsObjectTypeStory';
 	/**
-Number of times the message was viewed.
+Story identifier.
+*/
+	story_id: number;
+}
+
+/**
+Contains statistics about interactions with a message sent in the chat or a story sent by the chat.
+*/
+export interface ChatStatisticsInteractionInfo {
+	'@type': 'chatStatisticsInteractionInfo';
+	/**
+Type of the object.
+*/
+	object_type: ChatStatisticsObjectType;
+	/**
+Number of times the object was viewed.
 */
 	view_count: number;
 	/**
-Number of times the message was forwarded.
+Number of times the object was forwarded.
 */
 	forward_count: number;
+	/**
+Number of times reactions were added to the object.
+*/
+	reaction_count: number;
 }
 
 /**
@@ -19980,13 +20268,29 @@ Number of members in the chat.
 */
 	member_count: StatisticalValue;
 	/**
-Mean number of times the recently sent messages was viewed.
+Mean number of times the recently sent messages were viewed.
 */
-	mean_view_count: StatisticalValue;
+	mean_message_view_count: StatisticalValue;
 	/**
-Mean number of times the recently sent messages was shared.
+Mean number of times the recently sent messages were shared.
 */
-	mean_share_count: StatisticalValue;
+	mean_message_share_count: StatisticalValue;
+	/**
+Mean number of times reactions were added to the recently sent messages.
+*/
+	mean_message_reaction_count: StatisticalValue;
+	/**
+Mean number of times the recently sent stories were viewed.
+*/
+	mean_story_view_count: StatisticalValue;
+	/**
+Mean number of times the recently sent stories were shared.
+*/
+	mean_story_share_count: StatisticalValue;
+	/**
+Mean number of times reactions were added to the recently sent stories.
+*/
+	mean_story_reaction_count: StatisticalValue;
 	/**
 A percentage of users with enabled notifications for the chat; 0-100.
 */
@@ -20024,13 +20328,25 @@ A graph containing number of chat message views and shares.
 */
 	message_interaction_graph: StatisticalGraph;
 	/**
+A graph containing number of reactions on messages.
+*/
+	message_reaction_graph: StatisticalGraph;
+	/**
+A graph containing number of story views and shares.
+*/
+	story_interaction_graph: StatisticalGraph;
+	/**
+A graph containing number of reactions on stories.
+*/
+	story_reaction_graph: StatisticalGraph;
+	/**
 A graph containing number of views of associated with the chat instant views.
 */
 	instant_view_interaction_graph: StatisticalGraph;
 	/**
-Detailed statistics about number of views and shares of recently sent messages.
+Detailed statistics about number of views and shares of recently sent messages and stories.
 */
-	recent_message_interactions: ChatStatisticsMessageInteractionInfo[];
+	recent_interactions: ChatStatisticsInteractionInfo[];
 }
 
 /**
@@ -20042,6 +20358,25 @@ export interface MessageStatistics {
 A graph containing number of message views and shares.
 */
 	message_interaction_graph: StatisticalGraph;
+	/**
+A graph containing number of message reactions.
+*/
+	message_reaction_graph: StatisticalGraph;
+}
+
+/**
+A detailed statistics about a story.
+*/
+export interface StoryStatistics {
+	'@type': 'storyStatistics';
+	/**
+A graph containing number of story views and shares.
+*/
+	story_interaction_graph: StatisticalGraph;
+	/**
+A graph containing number of story reactions.
+*/
+	story_reaction_graph: StatisticalGraph;
 }
 
 /**
@@ -20193,8 +20528,8 @@ The new message.
 
 /**
 A request to send a message has reached the Telegram server. This doesn't mean that the message will be sent
-successfully or even that the send message request will be processed. This update will be sent only if the option
-"use_quick_ack" is set to true. This update may be sent multiple times for the same message.
+successfully. This update is sent only if the option "use_quick_ack" is set to true. This update may be sent multiple
+times for the same message.
 Subtype of {@link Update}.
 */
 export interface UpdateMessageSendAcknowledged {
@@ -20481,13 +20816,13 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-The new tdentifier of a custom emoji to be shown on the reply header background.
+The new identifier of a custom emoji to be shown on the reply header background; 0 if none.
 */
 	background_custom_emoji_id: string;
 }
 
 /**
-Chat permissions was changed.
+Chat permissions were changed.
 Subtype of {@link Update}.
 */
 export interface UpdateChatPermissions {
@@ -20856,6 +21191,22 @@ New value of is_marked_as_unread.
 }
 
 /**
+A chat default appearance has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatViewAsTopics {
+	'@type': 'updateChatViewAsTopics';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of view_as_topics.
+*/
+	view_as_topics?: boolean;
+}
+
+/**
 A chat was blocked or unblocked.
 Subtype of {@link Update}.
 */
@@ -20905,8 +21256,7 @@ Position of the main chat list among chat folders, 0-based.
 
 /**
 The number of online group members has changed. This update with non-zero number of online group members is sent only
-for currently opened chats. There is no guarantee that it will be sent just after the number of online users has
-changed.
+for currently opened chats. There is no guarantee that it is sent just after the number of online users has changed.
 Subtype of {@link Update}.
 */
 export interface UpdateChatOnlineMemberCount {
@@ -21010,7 +21360,7 @@ Identifiers of removed group notifications, sorted by notification identifier.
 }
 
 /**
-Contains active notifications that was shown on previous application launches. This update is sent only if the message
+Contains active notifications that were shown on previous application launches. This update is sent only if the message
 database is used. In that case it comes once before any updateNotification and updateNotificationGroup update.
 Subtype of {@link Update}.
 */
@@ -21685,7 +22035,7 @@ The new list of file identifiers of saved animations.
 }
 
 /**
-The list of saved notifications sounds was updated. This update may not be sent until information about a notification
+The list of saved notification sounds was updated. This update may not be sent until information about a notification
 sound was requested for the first time.
 Subtype of {@link Update}.
 */
@@ -21740,6 +22090,23 @@ identifiers 0-6 must be taken from the app theme.
 	/**
 The list of accent color identifiers, which can be set through setAccentColor and setChatAccentColor. The colors must be
 shown in the specififed order.
+*/
+	available_accent_color_ids: number[];
+}
+
+/**
+The list of supported accent colors for user profiles has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateProfileAccentColors {
+	'@type': 'updateProfileAccentColors';
+	/**
+Information about supported colors.
+*/
+	colors: ProfileAccentColor[];
+	/**
+The list of accent color identifiers, which can be set through setProfileAccentColor. The colors must be shown in the
+specififed order.
 */
 	available_accent_color_ids: number[];
 }
@@ -21865,6 +22232,30 @@ export interface UpdateDefaultReactionType {
 The new type of the default reaction.
 */
 	reaction_type: ReactionType;
+}
+
+/**
+The parameters of speech recognition without Telegram Premium subscription has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateSpeechRecognitionTrial {
+	'@type': 'updateSpeechRecognitionTrial';
+	/**
+The maximum allowed duration of media for speech recognition without Telegram Premium subscription.
+*/
+	max_media_duration: number;
+	/**
+The total number of allowed speech recognitions per week; 0 if none.
+*/
+	weekly_count: number;
+	/**
+Number of left speech recognition attempts this week.
+*/
+	left_count: number;
+	/**
+Point in time (Unix timestamp) when the weekly number of tries will reset; 0 if unknown.
+*/
+	next_reset_date: number;
 }
 
 /**
@@ -22224,7 +22615,7 @@ Identifier of the user, changing the rights.
 */
 	actor_user_id: number;
 	/**
-Point in time (Unix timestamp) when the user rights was changed.
+Point in time (Unix timestamp) when the user rights were changed.
 */
 	date: number;
 	/**
@@ -22630,6 +23021,7 @@ export type MessageSource =
 
 export type MessageSponsorType =
 	| MessageSponsorTypeBot
+	| MessageSponsorTypeWebApp
 	| MessageSponsorTypePublicChannel
 	| MessageSponsorTypePrivateChannel
 	| MessageSponsorTypeWebsite;
@@ -22905,6 +23297,7 @@ export type MessageContent =
 	| MessagePremiumGiftCode
 	| MessagePremiumGiveawayCreated
 	| MessagePremiumGiveaway
+	| MessagePremiumGiveawayCompleted
 	| MessageContactRegistered
 	| MessageUserShared
 	| MessageChatShared
@@ -23039,6 +23432,14 @@ export type InputStoryContent =
 export type StoryList =
 	| StoryListMain
 	| StoryListArchive;
+
+export type StoryOrigin =
+	| StoryOriginPublicStory
+	| StoryOriginHiddenUser;
+
+export type StoryPublicForward =
+	| StoryPublicForwardMessage
+	| StoryPublicForwardStory;
 
 export type ChatBoostSource =
 	| ChatBoostSourceGiftCode
@@ -23206,7 +23607,8 @@ export type PremiumLimitType =
 	| PremiumLimitTypeWeeklySentStoryCount
 	| PremiumLimitTypeMonthlySentStoryCount
 	| PremiumLimitTypeStoryCaptionLength
-	| PremiumLimitTypeStorySuggestedReactionAreaCount;
+	| PremiumLimitTypeStorySuggestedReactionAreaCount
+	| PremiumLimitTypeSimilarChatCount;
 
 export type PremiumFeature =
 	| PremiumFeatureIncreasedLimits
@@ -23226,7 +23628,8 @@ export type PremiumFeature =
 	| PremiumFeatureRealTimeChatTranslation
 	| PremiumFeatureUpgradedStories
 	| PremiumFeatureChatBoost
-	| PremiumFeatureAccentColor;
+	| PremiumFeatureAccentColor
+	| PremiumFeatureBackgroundForBoth;
 
 export type PremiumStoryFeature =
 	| PremiumStoryFeaturePriorityOrder
@@ -23578,6 +23981,10 @@ export type StatisticalGraph =
 	| StatisticalGraphAsync
 	| StatisticalGraphError;
 
+export type ChatStatisticsObjectType =
+	| ChatStatisticsObjectTypeMessage
+	| ChatStatisticsObjectTypeStory;
+
 export type ChatStatistics =
 	| ChatStatisticsSupergroup
 	| ChatStatisticsChannel;
@@ -23636,6 +24043,7 @@ export type Update =
 	| UpdateChatHasProtectedContent
 	| UpdateChatIsTranslatable
 	| UpdateChatIsMarkedAsUnread
+	| UpdateChatViewAsTopics
 	| UpdateChatBlockList
 	| UpdateChatHasScheduledMessages
 	| UpdateChatFolders
@@ -23689,6 +24097,7 @@ export type Update =
 	| UpdateSelectedBackground
 	| UpdateChatThemes
 	| UpdateAccentColors
+	| UpdateProfileAccentColors
 	| UpdateLanguagePackStrings
 	| UpdateConnectionState
 	| UpdateTermsOfService
@@ -23698,6 +24107,7 @@ export type Update =
 	| UpdateWebAppMessageSent
 	| UpdateActiveEmojiReactions
 	| UpdateDefaultReactionType
+	| UpdateSpeechRecognitionTrial
 	| UpdateDiceEmojis
 	| UpdateAnimatedEmojiMessageClicked
 	| UpdateAnimationSearchParameters
@@ -24421,10 +24831,10 @@ Identifier of the message to get.
 }
 
 /**
-Returns information about a message that is replied by a given message. Also, returns the pinned message, the game
-message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
-messageGameScore, messagePaymentSuccessful, messageChatSetBackground and topic messages without replied message
-respectively.
+Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message,
+the game message, the invoice message, the message with a previously set same background, and the topic creation message
+for messages of the types messagePinMessage, messageGameScore, messagePaymentSuccessful, messageChatSetBackground and
+topic messages without non-bundled replied message respectively.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
 export interface GetRepliedMessage {
@@ -24661,6 +25071,34 @@ export interface SearchChatsNearby {
 Current user location.
 */
 	location: Location;
+}
+
+/**
+Returns a list of chats similar to the given chat.
+Request type for {@link Tdjson#getChatSimilarChats}.
+*/
+export interface GetChatSimilarChats {
+	'@type': 'getChatSimilarChats';
+	/**
+Identifier of the target chat; must be an identifier of a channel chat.
+*/
+	chat_id: number;
+}
+
+/**
+Returns approximate number of chats similar to the given chat.
+Request type for {@link Tdjson#getChatSimilarChatCount}.
+*/
+export interface GetChatSimilarChatCount {
+	'@type': 'getChatSimilarChatCount';
+	/**
+Identifier of the target chat; must be an identifier of a channel chat.
+*/
+	chat_id: number;
+	/**
+Pass true to get the number of chats without sending network requests, or -1 if the number of chats is unknown locally.
+*/
+	return_local?: boolean;
 }
 
 /**
@@ -25449,8 +25887,8 @@ Language code of the language to which the message is translated. Must be one of
 }
 
 /**
-Recognizes speech in a video note or a voice note message. The message must be successfully sent and must not be
-scheduled. May return an error with a message "MSG_VOICE_TOO_LONG" if media duration is too big to be recognized.
+Recognizes speech in a video note or a voice note message. The message must be successfully sent, must not be scheduled,
+and must be from a non-secret chat.
 Request type for {@link Tdjson#recognizeSpeech}.
 */
 export interface RecognizeSpeech {
@@ -25695,7 +26133,7 @@ Identifiers of the messages to resend. Message identifiers must be in a strictly
 New manually chosen quote from the message to be replied; pass null if none. Ignored if more than one message is
 re-sent, or if messageSendingStateFailed.need_another_reply_quote == false.
 */
-	quote: FormattedText;
+	quote: InputTextQuote;
 }
 
 /**
@@ -28005,7 +28443,7 @@ New non-administrator members permissions in the chat.
 }
 
 /**
-Changes the background in a specific chat. Supported only in private and secret chats with non-deleted users.
+Sets the background in a specific chat. Supported only in private and secret chats with non-deleted users.
 Request type for {@link Tdjson#setChatBackground}.
 */
 export interface SetChatBackground {
@@ -28015,17 +28453,40 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-The input background to use; pass null to create a new filled background or to remove the current background.
+The input background to use; pass null to create a new filled background.
 */
 	background: InputBackground;
 	/**
-Background type; pass null to remove the current background.
+Background type; pass null to use default background type for the chosen background.
 */
 	type: BackgroundType;
 	/**
 Dimming of the background in dark themes, as a percentage; 0-100.
 */
 	dark_theme_dimming: number;
+	/**
+Pass true to set background only for self; pass false to set background for both chat users. Background can be set for
+both users only by Telegram Premium users and if set background isn't of the type inputBackgroundPrevious.
+*/
+	only_for_self?: boolean;
+}
+
+/**
+Deletes background in a specific chat.
+Request type for {@link Tdjson#deleteChatBackground}.
+*/
+export interface DeleteChatBackground {
+	'@type': 'deleteChatBackground';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Pass true to restore previously set background. Can be used only in private and secret chats with non-deleted users if
+userFullInfo.set_chat_background == true. Supposed to be used from messageChatSetBackground messages with the currently
+set background that was set for both sides by the other user.
+*/
+	restore_previous?: boolean;
 }
 
 /**
@@ -28100,7 +28561,23 @@ New value of has_protected_content.
 }
 
 /**
-Changes the translatable state of a chat; for Telegram Premium users only.
+Changes the view_as_topics setting of a forum chat.
+Request type for {@link Tdjson#toggleChatViewAsTopics}.
+*/
+export interface ToggleChatViewAsTopics {
+	'@type': 'toggleChatViewAsTopics';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of view_as_topics.
+*/
+	view_as_topics?: boolean;
+}
+
+/**
+Changes the translatable state of a chat.
 Request type for {@link Tdjson#toggleChatIsTranslatable}.
 */
 export interface ToggleChatIsTranslatable {
@@ -28159,7 +28636,8 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Reactions available in the chat. All emoji reactions must be active.
+Reactions available in the chat. All explicitly specified emoji reactions must be active. Up to the chat's boost level
+custom emoji reactions can be explicitly specified.
 */
 	available_reactions: ChatAvailableReactions;
 }
@@ -28760,6 +29238,10 @@ for Telegram Premium users, and 86400 otherwise.
 */
 	active_period: number;
 	/**
+Full identifier of the original story, which content was used to create the story.
+*/
+	from_story_full_id: StoryFullId;
+	/**
 Pass true to keep the story accessible after expiration.
 */
 	is_pinned?: boolean;
@@ -29088,6 +29570,34 @@ export interface ActivateStoryStealthMode {
 }
 
 /**
+Returns forwards of a story as a message to public chats and reposts by public channels. Can be used only if the story
+is posted on behalf of the current user or story.can_get_statistics == true. For optimal performance, the number of
+returned messages and stories is chosen by TDLib.
+Request type for {@link Tdjson#getStoryPublicForwards}.
+*/
+export interface GetStoryPublicForwards {
+	'@type': 'getStoryPublicForwards';
+	/**
+The identifier of the sender of the story.
+*/
+	story_sender_chat_id: number;
+	/**
+The identifier of the story.
+*/
+	story_id: number;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of messages and stories to be returned; must be positive and can't be greater than 100. For optimal
+performance, the number of returned objects is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
 Returns the list of available chat boost slots for the current user.
 Request type for {@link Tdjson#getAvailableChatBoostSlots}.
 */
@@ -29345,7 +29855,7 @@ Directory in which the file is supposed to be saved.
 /**
 Preliminary uploads a file to the cloud before sending it in a message, which can be useful for uploading of being
 recorded voice and video notes. Updates updateFile will be used to notify about upload progress and successful
-completion of the upload. The file will not have a persistent remote identifier until it will be sent in a message.
+completion of the upload. The file will not have a persistent remote identifier until it is sent in a message.
 Request type for {@link Tdjson#preliminaryUploadFile}.
 */
 export interface PreliminaryUploadFile {
@@ -30189,7 +30699,7 @@ Group call identifier.
 }
 
 /**
-Toggles whether the current user will receive a notification when the group call will start; scheduled group calls only.
+Toggles whether the current user will receive a notification when the group call starts; scheduled group calls only.
 Request type for {@link Tdjson#toggleGroupCallEnabledStartNotification}.
 */
 export interface ToggleGroupCallEnabledStartNotification {
@@ -31052,12 +31562,16 @@ The maximum number of sticker sets to return.
 }
 
 /**
-Searches for ordinary sticker sets by looking for specified query in their title and name. Excludes installed sticker
-sets from the results.
+Searches for sticker sets by looking for specified query in their title and name. Excludes installed sticker sets from
+the results.
 Request type for {@link Tdjson#searchStickerSets}.
 */
 export interface SearchStickerSets {
 	'@type': 'searchStickerSets';
+	/**
+Type of the sticker sets to return.
+*/
+	sticker_type: StickerType;
 	/**
 Query to search for.
 */
@@ -31468,6 +31982,22 @@ Identifier of the accent color to use.
 Identifier of a custom emoji to be shown on the reply header background; 0 if none.
 */
 	background_custom_emoji_id: string;
+}
+
+/**
+Changes accent color and background custom emoji for profile of the current user; for Telegram Premium users only.
+Request type for {@link Tdjson#setProfileAccentColor}.
+*/
+export interface SetProfileAccentColor {
+	'@type': 'setProfileAccentColor';
+	/**
+Identifier of the accent color to use for profile; pass -1 if none.
+*/
+	profile_accent_color_id: number;
+	/**
+Identifier of a custom emoji to be shown in the on the user's profile photo background; 0 if none.
+*/
+	profile_background_custom_emoji_id: string;
 }
 
 /**
@@ -33043,6 +33573,26 @@ The maximum number of messages to be returned; must be positive and can't be gre
 the number of returned messages is chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
+}
+
+/**
+Returns detailed statistics about a story. Can be used only if story.can_get_statistics == true.
+Request type for {@link Tdjson#getStoryStatistics}.
+*/
+export interface GetStoryStatistics {
+	'@type': 'getStoryStatistics';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Story identifier.
+*/
+	story_id: number;
+	/**
+Pass true if a dark theme is used by the application.
+*/
+	is_dark?: boolean;
 }
 
 /**
@@ -34691,6 +35241,8 @@ export type Request =
 	| SearchChats
 	| SearchChatsOnServer
 	| SearchChatsNearby
+	| GetChatSimilarChats
+	| GetChatSimilarChatCount
 	| GetTopChats
 	| RemoveTopChat
 	| SearchRecentlyFoundChats
@@ -34864,10 +35416,12 @@ export type Request =
 	| SetChatMessageAutoDeleteTime
 	| SetChatPermissions
 	| SetChatBackground
+	| DeleteChatBackground
 	| SetChatTheme
 	| SetChatDraftMessage
 	| SetChatNotificationSettings
 	| ToggleChatHasProtectedContent
+	| ToggleChatViewAsTopics
 	| ToggleChatIsTranslatable
 	| ToggleChatIsMarkedAsUnread
 	| ToggleChatDefaultDisableNotification
@@ -34925,6 +35479,7 @@ export type Request =
 	| GetStoryViewers
 	| ReportStory
 	| ActivateStoryStealthMode
+	| GetStoryPublicForwards
 	| GetAvailableChatBoostSlots
 	| GetChatBoostStatus
 	| BoostChat
@@ -35070,6 +35625,7 @@ export type Request =
 	| SetProfilePhoto
 	| DeleteProfilePhoto
 	| SetAccentColor
+	| SetProfileAccentColor
 	| SetName
 	| SetBio
 	| SetUsername
@@ -35173,6 +35729,7 @@ export type Request =
 	| GetChatStatistics
 	| GetMessageStatistics
 	| GetMessagePublicForwards
+	| GetStoryStatistics
 	| GetStatisticalGraph
 	| GetStorageStatistics
 	| GetStorageStatisticsFast
@@ -35797,10 +36354,10 @@ Returns information about a message, if it is available without sending network 
 	}
 
 	/**
-Returns information about a message that is replied by a given message. Also, returns the pinned message, the game
-message, the invoice message, and the topic creation message for messages of the types messagePinMessage,
-messageGameScore, messagePaymentSuccessful, messageChatSetBackground and topic messages without replied message
-respectively.
+Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message,
+the game message, the invoice message, the message with a previously set same background, and the topic creation message
+for messages of the types messagePinMessage, messageGameScore, messagePaymentSuccessful, messageChatSetBackground and
+topic messages without non-bundled replied message respectively.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -35961,6 +36518,26 @@ location to not miss new chats.
 		return this._request({
 			...options,
 			'@type': 'searchChatsNearby',
+		});
+	}
+
+	/**
+Returns a list of chats similar to the given chat.
+*/
+	async getChatSimilarChats(options: Omit<GetChatSimilarChats, '@type'>): Promise<Chats> {
+		return this._request({
+			...options,
+			'@type': 'getChatSimilarChats',
+		});
+	}
+
+	/**
+Returns approximate number of chats similar to the given chat.
+*/
+	async getChatSimilarChatCount(options: Omit<GetChatSimilarChatCount, '@type'>): Promise<Count> {
+		return this._request({
+			...options,
+			'@type': 'getChatSimilarChatCount',
 		});
 	}
 
@@ -36400,8 +36977,8 @@ Premium user, then text formatting is preserved.
 	}
 
 	/**
-Recognizes speech in a video note or a voice note message. The message must be successfully sent and must not be
-scheduled. May return an error with a message "MSG_VOICE_TOO_LONG" if media duration is too big to be recognized.
+Recognizes speech in a video note or a voice note message. The message must be successfully sent, must not be scheduled,
+and must be from a non-secret chat.
 */
 	async recognizeSpeech(options: Omit<RecognizeSpeech, '@type'>): Promise<Ok> {
 		return this._request({
@@ -37788,12 +38365,22 @@ administrator right.
 	}
 
 	/**
-Changes the background in a specific chat. Supported only in private and secret chats with non-deleted users.
+Sets the background in a specific chat. Supported only in private and secret chats with non-deleted users.
 */
 	async setChatBackground(options: Omit<SetChatBackground, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setChatBackground',
+		});
+	}
+
+	/**
+Deletes background in a specific chat.
+*/
+	async deleteChatBackground(options: Omit<DeleteChatBackground, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteChatBackground',
 		});
 	}
 
@@ -37840,7 +38427,17 @@ channels. Requires owner privileges.
 	}
 
 	/**
-Changes the translatable state of a chat; for Telegram Premium users only.
+Changes the view_as_topics setting of a forum chat.
+*/
+	async toggleChatViewAsTopics(options: Omit<ToggleChatViewAsTopics, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleChatViewAsTopics',
+		});
+	}
+
+	/**
+Changes the translatable state of a chat.
 */
 	async toggleChatIsTranslatable(options: Omit<ToggleChatIsTranslatable, '@type'>): Promise<Ok> {
 		return this._request({
@@ -38432,6 +39029,18 @@ Premium users only.
 	}
 
 	/**
+Returns forwards of a story as a message to public chats and reposts by public channels. Can be used only if the story
+is posted on behalf of the current user or story.can_get_statistics == true. For optimal performance, the number of
+returned messages and stories is chosen by TDLib.
+*/
+	async getStoryPublicForwards(options: Omit<GetStoryPublicForwards, '@type'>): Promise<StoryPublicForwards> {
+		return this._request({
+			...options,
+			'@type': 'getStoryPublicForwards',
+		});
+	}
+
+	/**
 Returns the list of available chat boost slots for the current user.
 */
 	async getAvailableChatBoostSlots(): Promise<ChatBoostSlots> {
@@ -38603,7 +39212,7 @@ Returns suggested name for saving a file in a given directory.
 	/**
 Preliminary uploads a file to the cloud before sending it in a message, which can be useful for uploading of being
 recorded voice and video notes. Updates updateFile will be used to notify about upload progress and successful
-completion of the upload. The file will not have a persistent remote identifier until it will be sent in a message.
+completion of the upload. The file will not have a persistent remote identifier until it is sent in a message.
 */
 	async preliminaryUploadFile(options: Omit<PreliminaryUploadFile, '@type'>): Promise<File> {
 		return this._request({
@@ -39071,7 +39680,7 @@ Starts a scheduled group call.
 	}
 
 	/**
-Toggles whether the current user will receive a notification when the group call will start; scheduled group calls only.
+Toggles whether the current user will receive a notification when the group call starts; scheduled group calls only.
 */
 	async toggleGroupCallEnabledStartNotification(options: Omit<ToggleGroupCallEnabledStartNotification, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39598,8 +40207,8 @@ Searches for installed sticker sets by looking for specified query in their titl
 	}
 
 	/**
-Searches for ordinary sticker sets by looking for specified query in their title and name. Excludes installed sticker
-sets from the results.
+Searches for sticker sets by looking for specified query in their title and name. Excludes installed sticker sets from
+the results.
 */
 	async searchStickerSets(options: Omit<SearchStickerSets, '@type'>): Promise<StickerSets> {
 		return this._request({
@@ -39910,6 +40519,16 @@ Changes accent color and background custom emoji for the current user; for Teleg
 		return this._request({
 			...options,
 			'@type': 'setAccentColor',
+		});
+	}
+
+	/**
+Changes accent color and background custom emoji for profile of the current user; for Telegram Premium users only.
+*/
+	async setProfileAccentColor(options: Omit<SetProfileAccentColor, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setProfileAccentColor',
 		});
 	}
 
@@ -40972,6 +41591,16 @@ message.can_get_statistics == true. For optimal performance, the number of retur
 		return this._request({
 			...options,
 			'@type': 'getMessagePublicForwards',
+		});
+	}
+
+	/**
+Returns detailed statistics about a story. Can be used only if story.can_get_statistics == true.
+*/
+	async getStoryStatistics(options: Omit<GetStoryStatistics, '@type'>): Promise<StoryStatistics> {
+		return this._request({
+			...options,
+			'@type': 'getStoryStatistics',
 		});
 	}
 
