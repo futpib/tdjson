@@ -24,7 +24,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">PremiumGiftCodeInfo</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2215">tdjson.ts:2215</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2216">tdjson.ts:2216</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -47,7 +47,7 @@
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;premiumGiftCodeInfo&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2216">tdjson.ts:2216</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2217">tdjson.ts:2217</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="creation_date" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>creation_<wbr/>date</span><a href="#creation_date" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">creation_<wbr/>date</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -55,15 +55,16 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2224">tdjson.ts:2224</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2226">tdjson.ts:2226</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="creator_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>creator_<wbr/>id</span><a href="#creator_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">creator_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <a href="../types/MessageSender.html" class="tsd-signature-type tsd-kind-type-alias">MessageSender</a></div>
-<div class="tsd-comment tsd-typography"><p>Identifier of a chat or a user that created the gift code.</p>
+<div class="tsd-comment tsd-typography"><p>Identifier of a chat or a user that created the gift code; may be null if unknown. If null and the code is from
+messagePremiumGiftCode message, then creator_id from the message can be used.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2220">tdjson.ts:2220</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2222">tdjson.ts:2222</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="giveaway_message_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>giveaway_<wbr/>message_<wbr/>id</span><a href="#giveaway_message_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">giveaway_<wbr/>message_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -71,7 +72,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2232">tdjson.ts:2232</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2234">tdjson.ts:2234</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="is_from_giveaway" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>is_<wbr/>from_<wbr/>giveaway</span><a href="#is_from_giveaway" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">is_<wbr/>from_<wbr/>giveaway</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -79,15 +80,15 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2228">tdjson.ts:2228</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2230">tdjson.ts:2230</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="month_count" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>month_<wbr/>count</span><a href="#month_count" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">month_<wbr/>count</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>Number of month the Telegram Premium subscription will be active after code activation.</p>
+<div class="tsd-comment tsd-typography"><p>Number of months the Telegram Premium subscription will be active after code activation.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2236">tdjson.ts:2236</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2238">tdjson.ts:2238</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="use_date" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>use_<wbr/>date</span><a href="#use_date" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">use_<wbr/>date</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -95,7 +96,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2244">tdjson.ts:2244</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2246">tdjson.ts:2246</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="user_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>user_<wbr/>id</span><a href="#user_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">user_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -103,7 +104,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L2240">tdjson.ts:2240</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L2242">tdjson.ts:2242</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -140,7 +141,6 @@
 <li><a href="AcceptTermsOfService.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptTermsOfService</a></li>
 <li><a href="AccountTtl.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccountTtl</a></li>
 <li><a href="ActivateStoryStealthMode.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>ActivateStoryStealthMode</a></li>
-<li><a href="AddAppChangelog.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddAppChangelog</a></li>
 <li><a href="AddChatFolderByInviteLink.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatFolderByInviteLink</a></li>
 <li><a href="AddChatMember.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatMember</a></li>
 <li><a href="AddChatMembers.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatMembers</a></li>
@@ -155,6 +155,7 @@
 <li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
 <li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
 <li><a href="AddRecentSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentSticker</a></li>
+<li><a href="AddRecentlyFoundChat.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentlyFoundChat</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>

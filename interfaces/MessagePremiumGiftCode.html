@@ -25,7 +25,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <ul class="tsd-hierarchy">
 <li><span class="target">MessagePremiumGiftCode</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9907">tdjson.ts:9907</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9950">tdjson.ts:9950</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -34,8 +34,12 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="MessagePremiumGiftCode.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
+<a href="MessagePremiumGiftCode.html#amount" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>amount</span></a>
 <a href="MessagePremiumGiftCode.html#code" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>code</span></a>
 <a href="MessagePremiumGiftCode.html#creator_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>creator_<wbr/>id</span></a>
+<a href="MessagePremiumGiftCode.html#cryptocurrency" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>cryptocurrency</span></a>
+<a href="MessagePremiumGiftCode.html#cryptocurrency_amount" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>cryptocurrency_<wbr/>amount</span></a>
+<a href="MessagePremiumGiftCode.html#currency" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>currency</span></a>
 <a href="MessagePremiumGiftCode.html#is_from_giveaway" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>from_<wbr/>giveaway?</span></a>
 <a href="MessagePremiumGiftCode.html#is_unclaimed" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>unclaimed?</span></a>
 <a href="MessagePremiumGiftCode.html#month_count" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>month_<wbr/>count</span></a>
@@ -47,7 +51,15 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;messagePremiumGiftCode&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9908">tdjson.ts:9908</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9951">tdjson.ts:9951</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="amount" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>amount</span><a href="#amount" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">amount</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-comment tsd-typography"><p>The paid amount, in the smallest units of the currency; 0 if unknown.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9971">tdjson.ts:9971</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="code" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>code</span><a href="#code" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">code</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -55,15 +67,39 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9932">tdjson.ts:9932</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9991">tdjson.ts:9991</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="creator_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>creator_<wbr/>id</span><a href="#creator_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">creator_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <a href="../types/MessageSender.html" class="tsd-signature-type tsd-kind-type-alias">MessageSender</a></div>
-<div class="tsd-comment tsd-typography"><p>Identifier of a chat or a user that created the gift code.</p>
+<div class="tsd-comment tsd-typography"><p>Identifier of a chat or a user that created the gift code; may be null if unknown.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9912">tdjson.ts:9912</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9955">tdjson.ts:9955</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="cryptocurrency" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>cryptocurrency</span><a href="#cryptocurrency" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">cryptocurrency</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>Cryptocurrency used to pay for the gift; may be empty if none or unknown.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9975">tdjson.ts:9975</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="cryptocurrency_amount" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>cryptocurrency_<wbr/>amount</span><a href="#cryptocurrency_amount" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">cryptocurrency_<wbr/>amount</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>The paid amount, in the smallest units of the cryptocurrency; 0 if unknown.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9979">tdjson.ts:9979</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="currency" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>currency</span><a href="#currency" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">currency</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>Currency for the paid amount; empty if unknown.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9967">tdjson.ts:9967</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="is_from_giveaway" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>is_<wbr/>from_<wbr/>giveaway</span><a href="#is_from_giveaway" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">is_<wbr/>from_<wbr/>giveaway</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -71,7 +107,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9916">tdjson.ts:9916</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9959">tdjson.ts:9959</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="is_unclaimed" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>is_<wbr/>unclaimed</span><a href="#is_unclaimed" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">is_<wbr/>unclaimed</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -79,15 +115,15 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9920">tdjson.ts:9920</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9963">tdjson.ts:9963</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="month_count" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>month_<wbr/>count</span><a href="#month_count" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">month_<wbr/>count</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>Number of month the Telegram Premium subscription will be active after code activation.</p>
+<div class="tsd-comment tsd-typography"><p>Number of months the Telegram Premium subscription will be active after code activation.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9924">tdjson.ts:9924</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9983">tdjson.ts:9983</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="sticker" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>sticker</span><a href="#sticker" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">sticker</span><span class="tsd-signature-symbol">:</span> <a href="Sticker.html" class="tsd-signature-type tsd-kind-interface">Sticker</a></div>
@@ -95,7 +131,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/469681f/src/tdjson.ts#L9928">tdjson.ts:9928</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/775fccd/src/tdjson.ts#L9987">tdjson.ts:9987</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -116,8 +152,12 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
+<li><a href="#amount" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>amount</span></a></li>
 <li><a href="#code" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>code</span></a></li>
 <li><a href="#creator_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>creator_<wbr/>id</span></a></li>
+<li><a href="#cryptocurrency" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>cryptocurrency</span></a></li>
+<li><a href="#cryptocurrency_amount" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>cryptocurrency_<wbr/>amount</span></a></li>
+<li><a href="#currency" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>currency</span></a></li>
 <li><a href="#is_from_giveaway" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>from_<wbr/>giveaway</span></a></li>
 <li><a href="#is_unclaimed" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>unclaimed</span></a></li>
 <li><a href="#month_count" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>month_<wbr/>count</span></a></li>
@@ -131,7 +171,6 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <li><a href="AcceptTermsOfService.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptTermsOfService</a></li>
 <li><a href="AccountTtl.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccountTtl</a></li>
 <li><a href="ActivateStoryStealthMode.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>ActivateStoryStealthMode</a></li>
-<li><a href="AddAppChangelog.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddAppChangelog</a></li>
 <li><a href="AddChatFolderByInviteLink.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatFolderByInviteLink</a></li>
 <li><a href="AddChatMember.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatMember</a></li>
 <li><a href="AddChatMembers.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatMembers</a></li>
@@ -146,6 +185,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
 <li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
 <li><a href="AddRecentSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentSticker</a></li>
+<li><a href="AddRecentlyFoundChat.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentlyFoundChat</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
