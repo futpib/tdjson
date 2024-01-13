@@ -4,7 +4,8 @@
   "description": "TypeScript types for libtdjson.so",
   "author": "futpib <futpib@gmail.com>",
   "license": "GPL-3.0",
-  "homepage": "https://github.com/futpib/tdjson",
+  "homepage": "https://futpib.github.io/tdjson/",
+  "repository": "https://github.com/futpib/tdjson",
   "keywords": [
     "tdjson",
     "libtdjson",
