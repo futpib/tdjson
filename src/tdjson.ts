@@ -1811,6 +1811,202 @@ Location address; 1-64 characters, as defined by the chat owner.
 }
 
 /**
+Describes conditions for sending of away messages by a Telegram Business account.
+Subtype of {@link BusinessAwayMessageSchedule}.
+*/
+export interface BusinessAwayMessageScheduleAlways {
+	'@type': 'businessAwayMessageScheduleAlways';
+
+}
+
+/**
+Send away messages outside of the business opening hours.
+Subtype of {@link BusinessAwayMessageSchedule}.
+*/
+export interface BusinessAwayMessageScheduleOutsideOfOpeningHours {
+	'@type': 'businessAwayMessageScheduleOutsideOfOpeningHours';
+
+}
+
+/**
+Send away messages only in the specified time span.
+Subtype of {@link BusinessAwayMessageSchedule}.
+*/
+export interface BusinessAwayMessageScheduleCustom {
+	'@type': 'businessAwayMessageScheduleCustom';
+	/**
+Point in time (Unix timestamp) when the away messages will start to be sent.
+*/
+	start_date: number;
+	/**
+Point in time (Unix timestamp) when the away messages will stop to be sent.
+*/
+	end_date: number;
+}
+
+/**
+Represents a location of a business.
+*/
+export interface BusinessLocation {
+	'@type': 'businessLocation';
+	/**
+The location; may be null if not specified.
+*/
+	location: Location;
+	/**
+Location address; 1-96 characters.
+*/
+	address: string;
+}
+
+/**
+Describes private chats chosen for automatic interaction with a business.
+*/
+export interface BusinessRecipients {
+	'@type': 'businessRecipients';
+	/**
+Identifiers of selected private chats.
+*/
+	chat_ids: number[];
+	/**
+True, if all existing private chats are selected.
+*/
+	select_existing_chats?: boolean;
+	/**
+True, if all new private chats are selected.
+*/
+	select_new_chats?: boolean;
+	/**
+True, if all private chats with contacts are selected.
+*/
+	select_contacts?: boolean;
+	/**
+True, if all private chats with non-contacts are selected.
+*/
+	select_non_contacts?: boolean;
+	/**
+If true, then all private chats except the selected are chosen. Otherwise, only the selected chats are chosen.
+*/
+	exclude_selected?: boolean;
+}
+
+/**
+Describes settings for messages that are automatically sent by a Telegram Business account when it is away.
+*/
+export interface BusinessAwayMessageSettings {
+	'@type': 'businessAwayMessageSettings';
+	/**
+Unique quick reply shortcut identifier for the away messages.
+*/
+	shortcut_id: number;
+	/**
+Chosen recipients of the away messages.
+*/
+	recipients: BusinessRecipients;
+	/**
+Settings used to check whether the current user is away.
+*/
+	schedule: BusinessAwayMessageSchedule;
+	/**
+True, if the messages must not be sent if the account was online in the last 10 minutes.
+*/
+	offline_only?: boolean;
+}
+
+/**
+Describes settings for greeting messages that are automatically sent by a Telegram Business account as response to
+incoming messages in an inactive private chat.
+*/
+export interface BusinessGreetingMessageSettings {
+	'@type': 'businessGreetingMessageSettings';
+	/**
+Unique quick reply shortcut identifier for the greeting messages.
+*/
+	shortcut_id: number;
+	/**
+Chosen recipients of the greeting messages.
+*/
+	recipients: BusinessRecipients;
+	/**
+The number of days after which a chat will be considered as inactive; currently, must be on of 7, 14, 21, or 28.
+*/
+	inactivity_days: number;
+}
+
+/**
+Describes a bot connected to a business account.
+*/
+export interface BusinessConnectedBot {
+	'@type': 'businessConnectedBot';
+	/**
+User identifier of the bot.
+*/
+	bot_user_id: number;
+	/**
+Private chats that will be accessible to the bot.
+*/
+	recipients: BusinessRecipients;
+	/**
+True, if the bot can send messages to the private chats; false otherwise.
+*/
+	can_reply?: boolean;
+}
+
+/**
+Describes an interval of time when the business is open.
+*/
+export interface BusinessOpeningHoursInterval {
+	'@type': 'businessOpeningHoursInterval';
+	/**
+The first minute of the interval since start of the week; 0-7*24*60.
+*/
+	start_minute: number;
+	/**
+The first minute after the end of the interval since start of the week; 1-8*24*60.
+*/
+	end_minute: number;
+}
+
+/**
+Describes opening hours of a business.
+*/
+export interface BusinessOpeningHours {
+	'@type': 'businessOpeningHours';
+	/**
+Unique time zone identifier.
+*/
+	time_zone_id: string;
+	/**
+Intervals of the time when the business is open.
+*/
+	opening_hours: BusinessOpeningHoursInterval[];
+}
+
+/**
+Contains information about a Telegram Business account.
+*/
+export interface BusinessInfo {
+	'@type': 'businessInfo';
+	/**
+Location of the business; may be null if none.
+*/
+	location: BusinessLocation;
+	/**
+Opening hours of the business; may be null if none. The hours are guaranteed to be valid and has already been split by
+week days.
+*/
+	opening_hours: BusinessOpeningHours;
+	/**
+The greeting message; may be null if none or the Business account is not of the current user.
+*/
+	greeting_message_settings: BusinessGreetingMessageSettings;
+	/**
+The away message; may be null if none or the Business account is not of the current user.
+*/
+	away_message_settings: BusinessAwayMessageSettings;
+}
+
+/**
 Describes type of a sticker, which was used to create a chat photo.
 Subtype of {@link ChatPhotoStickerType}.
 */
@@ -2034,9 +2230,9 @@ True, if the user can pin messages.
 */
 	can_pin_messages?: boolean;
 	/**
-True, if the user can manage topics.
+True, if the user can create topics.
 */
-	can_manage_topics?: boolean;
+	can_create_topics?: boolean;
 }
 
 /**
@@ -2045,9 +2241,9 @@ Describes rights of the administrator.
 export interface ChatAdministratorRights {
 	'@type': 'chatAdministratorRights';
 	/**
-True, if the administrator can get chat event log, get chat boosts in channels, get channel members, report supergroup
-spam messages, see anonymous administrators in supergroups and ignore slow mode. Implied by any other privilege;
-applicable to supergroups and channels only.
+True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members,
+report supergroup spam messages and ignore slow mode. Implied by any other privilege; applicable to supergroups and
+channels only.
 */
 	can_manage_chat?: boolean;
 	/**
@@ -2080,7 +2276,8 @@ True, if the administrator can pin messages; applicable to basic groups and supe
 */
 	can_pin_messages?: boolean;
 	/**
-True, if the administrator can manage topics; applicable to forum supergroups only.
+True, if the administrator can create, rename, close, reopen, hide, and unhide forum topics; applicable to forum
+supergroups only.
 */
 	can_manage_topics?: boolean;
 	/**
@@ -2093,17 +2290,17 @@ True, if the administrator can manage video chats.
 */
 	can_manage_video_chats?: boolean;
 	/**
-True, if the administrator can create new channel stories, or edit and delete posted stories; applicable to channels
-only.
+True, if the administrator can create new chat stories, or edit and delete posted stories; applicable to supergroups and
+channels only.
 */
 	can_post_stories?: boolean;
 	/**
 True, if the administrator can edit stories posted by other users, pin stories and access story archive; applicable to
-channels only.
+supergroups and channels only.
 */
 	can_edit_stories?: boolean;
 	/**
-True, if the administrator can delete stories posted by other users; applicable to channels only.
+True, if the administrator can delete stories posted by other users; applicable to supergroups and channels only.
 */
 	can_delete_stories?: boolean;
 	/**
@@ -2377,9 +2574,9 @@ The list of 1-3 colors in RGB format, describing the accent color, as expected t
 */
 	dark_theme_colors: number[];
 	/**
-The minimum chat boost level required to use the color.
+The minimum chat boost level required to use the color in a channel chat.
 */
-	min_chat_boost_level: number;
+	min_channel_chat_boost_level: number;
 }
 
 /**
@@ -2420,9 +2617,13 @@ Accent colors expected to be used in dark themes.
 */
 	dark_theme_colors: ProfileAccentColors;
 	/**
-The minimum chat boost level required to use the color.
+The minimum chat boost level required to use the color in a supergroup chat.
 */
-	min_chat_boost_level: number;
+	min_supergroup_chat_boost_level: number;
+	/**
+The minimum chat boost level required to use the color in a channel chat.
+*/
+	min_channel_chat_boost_level: number;
 }
 
 /**
@@ -2573,6 +2774,11 @@ True, if the user has unread non-expired stories available to the current user.
 */
 	has_unread_active_stories?: boolean;
 	/**
+True, if the user may restrict new chats with non-contacts. Use canSendMessageToUser to check whether the current user
+can message the user or try to create a chat with them.
+*/
+	restricts_new_chats?: boolean;
+	/**
 If false, the user is inaccessible, and the only information known about the user is inside this class. Identifier of
 the user can't be passed to any method.
 */
@@ -2719,6 +2925,10 @@ The list of available options for gifting Telegram Premium to the user.
 Number of group chats where both the other user and the current user are a member; 0 for the current user.
 */
 	group_in_common_count: number;
+	/**
+Information about business settings for Telegram Business accounts; may be null if none.
+*/
+	business_info: BusinessInfo;
 	/**
 For bots, information about the bot; may be null if the user isn't a bot.
 */
@@ -3506,11 +3716,11 @@ True, if many users reported this supergroup or channel as a fake account.
 */
 	is_fake?: boolean;
 	/**
-True, if the channel has non-expired stories available to the current user.
+True, if the supergroup or channel has non-expired stories available to the current user.
 */
 	has_active_stories?: boolean;
 	/**
-True, if the channel has unread non-expired stories available to the current user.
+True, if the supergroup or channel has unread non-expired stories available to the current user.
 */
 	has_unread_active_stories?: boolean;
 }
@@ -3599,13 +3809,27 @@ administrators.
 */
 	has_aggressive_anti_spam_enabled?: boolean;
 	/**
-True, if the channel has pinned stories.
+True, if the supergroup or channel has pinned stories.
 */
 	has_pinned_stories?: boolean;
 	/**
-Identifier of the supergroup sticker set; 0 if none.
+Number of times the current user boosted the supergroup or channel.
+*/
+	my_boost_count: number;
+	/**
+Number of times the supergroup must be boosted by a user to ignore slow mode and chat permission restrictions; 0 if
+unspecified.
+*/
+	unrestrict_boost_count: number;
+	/**
+Identifier of the supergroup sticker set that must be shown before user sticker sets; 0 if none.
 */
 	sticker_set_id: string;
+	/**
+Identifier of the custom emoji sticker set that can be used in the supergroup without Telegram Premium subscription; 0
+if none.
+*/
+	custom_emoji_sticker_set_id: string;
 	/**
 Location to which the supergroup is connected; may be null if none.
 */
@@ -3758,6 +3982,55 @@ List of available message senders.
 }
 
 /**
+Describes read date of a recent outgoing message in a private chat.
+Subtype of {@link MessageReadDate}.
+*/
+export interface MessageReadDateRead {
+	'@type': 'messageReadDateRead';
+	/**
+Point in time (Unix timestamp) when the message was read by the other user.
+*/
+	read_date: number;
+}
+
+/**
+The message is unread yet.
+Subtype of {@link MessageReadDate}.
+*/
+export interface MessageReadDateUnread {
+	'@type': 'messageReadDateUnread';
+
+}
+
+/**
+The message is too old to get read date.
+Subtype of {@link MessageReadDate}.
+*/
+export interface MessageReadDateTooOld {
+	'@type': 'messageReadDateTooOld';
+
+}
+
+/**
+The read date is unknown due to privacy settings of the other user.
+Subtype of {@link MessageReadDate}.
+*/
+export interface MessageReadDateUserPrivacyRestricted {
+	'@type': 'messageReadDateUserPrivacyRestricted';
+
+}
+
+/**
+The read date is unknown due to privacy settings of the current user, but will be known if the user subscribes to
+Telegram Premium.
+Subtype of {@link MessageReadDate}.
+*/
+export interface MessageReadDateMyPrivacyRestricted {
+	'@type': 'messageReadDateMyPrivacyRestricted';
+
+}
+
+/**
 Represents a viewer of a message.
 */
 export interface MessageViewer {
@@ -3844,6 +4117,37 @@ Original post author signature.
 }
 
 /**
+Contains information about the last message from which a new message was forwarded last time.
+*/
+export interface ForwardSource {
+	'@type': 'forwardSource';
+	/**
+Identifier of the chat to which the message that was forwarded belonged; may be 0 if unknown.
+*/
+	chat_id: number;
+	/**
+Identifier of the message; may be 0 if unknown.
+*/
+	message_id: number;
+	/**
+Identifier of the sender of the message; may be null if unknown or the new message was forwarded not to Saved Messages.
+*/
+	sender_id: MessageSender;
+	/**
+Name of the sender of the message if the sender is hidden by their privacy settings.
+*/
+	sender_name: string;
+	/**
+Point in time (Unix timestamp) when the message is sent; 0 if unknown.
+*/
+	date: number;
+	/**
+True, if the message that was forwarded is outgoing; always false if sender is unknown.
+*/
+	is_outgoing?: boolean;
+}
+
+/**
 Describes type of message reaction.
 Subtype of {@link ReactionType}.
 */
@@ -3881,20 +4185,15 @@ Point in time (Unix timestamp) when the message was originally sent.
 */
 	date: number;
 	/**
+For messages forwarded to the chat with the current user (Saved Messages), to the Replies bot chat, or to the channel's
+discussion group, information about the source message from which the message was forwarded last time; may be null for
+other forwards or if unknown.
+*/
+	source: ForwardSource;
+	/**
 The type of a public service announcement for the forwarded message.
 */
 	public_service_announcement_type: string;
-	/**
-For messages forwarded to the chat with the current user (Saved Messages), to the Replies bot chat, or to the channel's
-discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown.
-*/
-	from_chat_id: number;
-	/**
-For messages forwarded to the chat with the current user (Saved Messages), to the Replies bot chat, or to the channel's
-discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if
-unknown.
-*/
-	from_message_id: number;
 }
 
 /**
@@ -3970,6 +4269,21 @@ chats.
 }
 
 /**
+Contains a list of reactions added to a message.
+*/
+export interface MessageReactions {
+	'@type': 'messageReactions';
+	/**
+List of added reactions.
+*/
+	reactions: MessageReaction[];
+	/**
+True, if the reactions are tags and Telegram Premium users can filter messages by them.
+*/
+	are_tags?: boolean;
+}
+
+/**
 Contains information about interactions with a message.
 */
 export interface MessageInteractionInfo {
@@ -3988,9 +4302,9 @@ discussion supergroup and discussion supergroups for messages, which are not rep
 */
 	reply_info: MessageReplyInfo;
 	/**
-The list of reactions added to the message.
+The list of reactions or tags added to the message; may be null.
 */
-	reactions: MessageReaction[];
+	reactions: MessageReactions;
 }
 
 /**
@@ -4176,7 +4490,8 @@ Subtype of {@link InputMessageReplyTo}.
 export interface InputMessageReplyToStory {
 	'@type': 'inputMessageReplyToStory';
 	/**
-The identifier of the sender of the story. Currently, stories can be replied only in the sender's chat.
+The identifier of the sender of the story. Currently, stories can be replied only in the sender's chat and channel
+stories can't be replied.
 */
 	story_sender_chat_id: number;
 	/**
@@ -4256,6 +4571,10 @@ True, if information about the message thread is available through getMessageThr
 */
 	can_get_message_thread?: boolean;
 	/**
+True, if read date of the message can be received through getMessageReadDate.
+*/
+	can_get_read_date?: boolean;
+	/**
 True, if chat members already viewed the message can be received through getMessageViewers.
 */
 	can_get_viewers?: boolean;
@@ -4320,6 +4639,10 @@ belongs.
 */
 	message_thread_id: number;
 	/**
+Identifier of the Saved Messages topic for the message; 0 for messages not from Saved Messages.
+*/
+	saved_messages_topic_id: number;
+	/**
 The message's self-destruct type; may be null if none.
 */
 	self_destruct_type: MessageSelfDestructType;
@@ -4336,6 +4659,11 @@ Time left before the message will be automatically deleted by message_auto_delet
 If non-zero, the user identifier of the bot through which this message was sent.
 */
 	via_bot_user_id: number;
+	/**
+Number of times the sender of the message boosted the supergroup at the time the message was sent; 0 if none or unknown.
+For messages sent by the current user, supergroupFullInfo.my_boost_count must be used instead.
+*/
+	sender_boost_count: number;
 	/**
 For channel posts and anonymous group messages, optional author signature.
 */
@@ -4937,7 +5265,7 @@ Point in time (Unix timestamp) when the draft was created.
 */
 	date: number;
 	/**
-Content of the message draft; must be of the type inputMessageText.
+Content of the message draft; must be of the type inputMessageText, inputMessageVideoNote, or inputMessageVoiceNote.
 */
 	input_message_text: InputMessageContent;
 }
@@ -5026,6 +5354,10 @@ the folder.
 */
 	icon: ChatFolderIcon;
 	/**
+The identifier of the chosen color for the chat folder icon; from -1 to 6. If -1, then color is didabled.
+*/
+	color_id: number;
+	/**
 True, if at least one link has been created for the folder.
 */
 	is_shareable?: boolean;
@@ -5098,6 +5430,10 @@ The title of the folder; 1-12 characters without line feeds.
 The chosen or default icon for the chat folder.
 */
 	icon: ChatFolderIcon;
+	/**
+The identifier of the chosen color for the chat folder icon; from -1 to 6. If -1, then color is didabled.
+*/
+	color_id: number;
 	/**
 True, if at least one link has been created for the folder.
 */
@@ -5317,6 +5653,36 @@ The list of reactions.
 }
 
 /**
+Represents a tag used in Saved Messages or a Saved Messages topic.
+*/
+export interface SavedMessagesTag {
+	'@type': 'savedMessagesTag';
+	/**
+The tag.
+*/
+	tag: ReactionType;
+	/**
+Label of the tag; 0-12 characters. Always empty if the tag is returned for a Saved Messages topic.
+*/
+	label: string;
+	/**
+Number of times the tag was used; may be 0 if the tag has non-empty label.
+*/
+	count: number;
+}
+
+/**
+Contains a list of tags used in Saved Messages.
+*/
+export interface SavedMessagesTags {
+	'@type': 'savedMessagesTags';
+	/**
+List of tags.
+*/
+	tags: SavedMessagesTag[];
+}
+
+/**
 Describes a video chat.
 */
 export interface VideoChat {
@@ -5387,6 +5753,11 @@ Positions of the chat in chat lists.
 */
 	positions: ChatPosition[];
 	/**
+Chat lists to which the chat belongs. A chat can have a non-zero position in a chat list even it doesn't belong to the
+chat list and have no position in a chat list even it belongs to the chat list.
+*/
+	chat_lists: ChatList[];
+	/**
 Identifier of a user or chat that is selected to send messages in the chat; may be null if the user can't change message
 sender.
 */
@@ -5408,7 +5779,8 @@ True, if the chat is marked as unread.
 */
 	is_marked_as_unread?: boolean;
 	/**
-True, if the chat is a forum supergroup that must be shown in the "View as topics" mode.
+True, if the chat is a forum supergroup that must be shown in the "View as topics" mode, or Saved Messages chat that
+must be shown in the "View as chats".
 */
 	view_as_topics?: boolean;
 	/**
@@ -6124,6 +6496,68 @@ decreasing message_id).
 	messages: Message[];
 	/**
 A draft of a message in the message thread; may be null if none.
+*/
+	draft_message: DraftMessage;
+}
+
+/**
+Describes type of a Saved Messages topic.
+Subtype of {@link SavedMessagesTopicType}.
+*/
+export interface SavedMessagesTopicTypeMyNotes {
+	'@type': 'savedMessagesTopicTypeMyNotes';
+
+}
+
+/**
+Topic containing messages forwarded from a user with hidden privacy.
+Subtype of {@link SavedMessagesTopicType}.
+*/
+export interface SavedMessagesTopicTypeAuthorHidden {
+	'@type': 'savedMessagesTopicTypeAuthorHidden';
+
+}
+
+/**
+Topic containing messages forwarded from a specific chat.
+Subtype of {@link SavedMessagesTopicType}.
+*/
+export interface SavedMessagesTopicTypeSavedFromChat {
+	'@type': 'savedMessagesTopicTypeSavedFromChat';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+}
+
+/**
+Contains information about a Saved Messages topic.
+*/
+export interface SavedMessagesTopic {
+	'@type': 'savedMessagesTopic';
+	/**
+Unique topic identifier.
+*/
+	id: number;
+	/**
+Type of the topic.
+*/
+	type: SavedMessagesTopicType;
+	/**
+True, if the topic is pinned.
+*/
+	is_pinned?: boolean;
+	/**
+A parameter used to determine order of the topic in the topic list. Topics must be sorted by the order in descending
+order.
+*/
+	order: string;
+	/**
+Last message in the topic; may be null if none or unknown.
+*/
+	last_message: Message;
+	/**
+A draft of a message in the topic; may be null if none.
 */
 	draft_message: DraftMessage;
 }
@@ -8030,13 +8464,14 @@ Describes parameters of a Telegram Premium giveaway.
 export interface PremiumGiveawayParameters {
 	'@type': 'premiumGiveawayParameters';
 	/**
-Identifier of the channel chat, which will be automatically boosted by the winners of the giveaway for duration of the
-Premium subscription.
+Identifier of the supergroup or channel chat, which will be automatically boosted by the winners of the giveaway for
+duration of the Premium subscription. If the chat is a channel, then can_post_messages right is required in the channel,
+otherwise, the user must be an administrator in the supergroup.
 */
 	boosted_chat_id: number;
 	/**
-Identifiers of other channel chats that must be subscribed by the users to be eligible for the giveaway. There can be up
-to getOption("giveaway_additional_chat_count_max") additional chats.
+Identifiers of other supergroup or channel chats that must be subscribed by the users to be eligible for the giveaway.
+There can be up to getOption("giveaway_additional_chat_count_max") additional chats.
 */
 	additional_chat_ids: number[];
 	/**
@@ -9157,15 +9592,6 @@ True, if the photo must be blurred and must be shown only while tapped.
 }
 
 /**
-A self-destructed photo message.
-Subtype of {@link MessageContent}.
-*/
-export interface MessageExpiredPhoto {
-	'@type': 'messageExpiredPhoto';
-
-}
-
-/**
 A sticker message.
 Subtype of {@link MessageContent}.
 */
@@ -9206,15 +9632,6 @@ True, if the video thumbnail must be blurred and the video must be shown only wh
 }
 
 /**
-A self-destructed video message.
-Subtype of {@link MessageContent}.
-*/
-export interface MessageExpiredVideo {
-	'@type': 'messageExpiredVideo';
-
-}
-
-/**
 A video note message.
 Subtype of {@link MessageContent}.
 */
@@ -9252,6 +9669,42 @@ Voice note caption.
 True, if at least one of the recipients has listened to the voice note.
 */
 	is_listened?: boolean;
+}
+
+/**
+A self-destructed photo message.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageExpiredPhoto {
+	'@type': 'messageExpiredPhoto';
+
+}
+
+/**
+A self-destructed video message.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageExpiredVideo {
+	'@type': 'messageExpiredVideo';
+
+}
+
+/**
+A self-destructed video note message.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageExpiredVideoNote {
+	'@type': 'messageExpiredVideoNote';
+
+}
+
+/**
+A self-destructed voice note message.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageExpiredVoiceNote {
+	'@type': 'messageExpiredVoiceNote';
+
 }
 
 /**
@@ -9720,6 +10173,18 @@ New value auto-delete or self-destruct time, in seconds; 0 if disabled.
 If not 0, a user identifier, which default setting was automatically applied.
 */
 	from_user_id: number;
+}
+
+/**
+The chat was boosted by the sender of the message.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatBoost {
+	'@type': 'messageChatBoost';
+	/**
+Number of times the chat was boosted.
+*/
+	boost_count: number;
 }
 
 /**
@@ -10575,7 +11040,7 @@ specified manually.
 */
 	text: FormattedText;
 	/**
-Options to be used for generation of a link preview; pass null to use default link preview options.
+Options to be used for generation of a link preview; may be null if none; pass null to use default link preview options.
 */
 	link_preview_options: LinkPreviewOptions;
 	/**
@@ -10810,7 +11275,7 @@ Video note to be sent.
 */
 	video_note: InputFile;
 	/**
-Video thumbnail; pass null to skip thumbnail uploading.
+Video thumbnail; may be null if empty; pass null to skip thumbnail uploading.
 */
 	thumbnail: InputThumbnail;
 	/**
@@ -10821,6 +11286,10 @@ Duration of the video, in seconds.
 Video width and height; must be positive and not greater than 640.
 */
 	length: number;
+	/**
+Video note self-destruct type; may be null if none; pass null if none; private chats only.
+*/
+	self_destruct_type: MessageSelfDestructType;
 }
 
 /**
@@ -10842,9 +11311,14 @@ Waveform representation of the voice note in 5-bit format.
 */
 	waveform: string;
 	/**
-Voice note caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
+Voice note caption; may be null if empty; pass null to use an empty caption; 0-getOption("message_caption_length_max")
+characters.
 */
 	caption: FormattedText;
+	/**
+Voice note self-destruct type; may be null if none; pass null if none; private chats only.
+*/
+	self_destruct_type: MessageSelfDestructType;
 }
 
 /**
@@ -11412,7 +11886,11 @@ Subtype of {@link UserStatus}.
 */
 export interface UserStatusRecently {
 	'@type': 'userStatusRecently';
-
+	/**
+Exact user's status is hidden because the current user enabled userPrivacySettingShowStatus privacy setting for the user
+and has no Telegram Premium.
+*/
+	by_my_privacy_settings?: boolean;
 }
 
 /**
@@ -11421,7 +11899,11 @@ Subtype of {@link UserStatus}.
 */
 export interface UserStatusLastWeek {
 	'@type': 'userStatusLastWeek';
-
+	/**
+Exact user's status is hidden because the current user enabled userPrivacySettingShowStatus privacy setting for the user
+and has no Telegram Premium.
+*/
+	by_my_privacy_settings?: boolean;
 }
 
 /**
@@ -11430,7 +11912,37 @@ Subtype of {@link UserStatus}.
 */
 export interface UserStatusLastMonth {
 	'@type': 'userStatusLastMonth';
+	/**
+Exact user's status is hidden because the current user enabled userPrivacySettingShowStatus privacy setting for the user
+and has no Telegram Premium.
+*/
+	by_my_privacy_settings?: boolean;
+}
 
+/**
+Represents an emoji with its keyword.
+*/
+export interface EmojiKeyword {
+	'@type': 'emojiKeyword';
+	/**
+The emoji.
+*/
+	emoji: string;
+	/**
+The keyword.
+*/
+	keyword: string;
+}
+
+/**
+Represents a list of emoji with their keywords.
+*/
+export interface EmojiKeywords {
+	'@type': 'emojiKeywords';
+	/**
+List of emoji with their keywords.
+*/
+	emoji_keywords: EmojiKeyword[];
 }
 
 /**
@@ -12124,6 +12636,10 @@ Identifier of the chat that posted the story.
 */
 	sender_chat_id: number;
 	/**
+Identifier of the sender of the story; may be null if the story is posted on behalf of the sender_chat_id.
+*/
+	sender_id: MessageSender;
+	/**
 Point in time (Unix timestamp) when the story was published.
 */
 	date: number;
@@ -12376,6 +12892,69 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
+Describes a message that can be used for quick reply.
+*/
+export interface QuickReplyMessage {
+	'@type': 'quickReplyMessage';
+	/**
+Unique message identifier among all quick replies.
+*/
+	id: number;
+	/**
+The sending state of the message; may be null if the message isn't being sent and didn't fail to be sent.
+*/
+	sending_state: MessageSendingState;
+	/**
+True, if the message can be edited.
+*/
+	can_be_edited?: boolean;
+	/**
+Information about the identifier of the quick reply message to which the message replies.
+*/
+	reply_to_message_id: number;
+	/**
+If non-zero, the user identifier of the bot through which this message was sent.
+*/
+	via_bot_user_id: number;
+	/**
+Unique identifier of an album this message belongs to. Only audios, documents, photos and videos can be grouped together
+in albums.
+*/
+	media_album_id: string;
+	/**
+Content of the message.
+*/
+	content: MessageContent;
+	/**
+Inline keyboard reply markup for the message; may be null if none.
+*/
+	reply_markup: ReplyMarkup;
+}
+
+/**
+Describes a shortcut that can be used for a quick reply.
+*/
+export interface QuickReplyShortcut {
+	'@type': 'quickReplyShortcut';
+	/**
+Unique shortcut identifier.
+*/
+	id: number;
+	/**
+The name of the shortcut that can be used to use the shortcut.
+*/
+	name: string;
+	/**
+The first shortcut message.
+*/
+	first_message: QuickReplyMessage;
+	/**
+The total number of messages in the shortcut.
+*/
+	message_count: number;
+}
+
+/**
 Describes a public forward or repost of a story.
 Subtype of {@link PublicForward}.
 */
@@ -12467,6 +13046,14 @@ Number of chat theme backgrounds that can be set as chat background.
 True, if custom background can be set in the chat for all users.
 */
 	can_set_custom_background?: boolean;
+	/**
+True, if custom emoji sticker set can be set for the chat.
+*/
+	can_set_custom_emoji_sticker_set?: boolean;
+	/**
+True, if speech recognition can be used for video note and voice note messages by all users.
+*/
+	can_recognize_speech?: boolean;
 }
 
 /**
@@ -12478,6 +13065,36 @@ export interface ChatBoostFeatures {
 The list of features.
 */
 	features: ChatBoostLevelFeatures[];
+	/**
+The minimum boost level required to set custom emoji for profile background.
+*/
+	min_profile_background_custom_emoji_boost_level: number;
+	/**
+The minimum boost level required to set custom emoji for reply header and link preview background; for channel chats
+only.
+*/
+	min_background_custom_emoji_boost_level: number;
+	/**
+The minimum boost level required to set emoji status.
+*/
+	min_emoji_status_boost_level: number;
+	/**
+The minimum boost level required to set a chat theme background as chat background.
+*/
+	min_chat_theme_background_boost_level: number;
+	/**
+The minimum boost level required to set custom chat background.
+*/
+	min_custom_background_boost_level: number;
+	/**
+The minimum boost level required to set custom emoji sticker set for the chat; for supergroup chats only.
+*/
+	min_custom_emoji_sticker_set_boost_level: number;
+	/**
+The minimum boost level allowing to recognize speech in video note and voice note messages for non-Premium users; for
+supergroup chats only.
+*/
+	min_speech_recognition_boost_level: number;
 }
 
 /**
@@ -13495,10 +14112,18 @@ List of popular reactions.
 True, if any custom emoji reaction can be added by Telegram Premium subscribers.
 */
 	allow_custom_emoji?: boolean;
+	/**
+True, if the reactions will be tags and the message can be found by them.
+*/
+	are_tags?: boolean;
+	/**
+The reason why the current user can't add reactions to the message, despite some other users can; may be null if none.
+*/
+	unavailability_reason: ReactionUnavailabilityReason;
 }
 
 /**
-Contains information about a emoji reaction.
+Contains information about an emoji reaction.
 */
 export interface EmojiReaction {
 	'@type': 'emojiReaction';
@@ -13542,6 +14167,24 @@ Around animation for the reaction; may be null.
 Center animation for the reaction; may be null.
 */
 	center_animation: Sticker;
+}
+
+/**
+Describes why the current user can't add reactions to the message, despite some other users can.
+Subtype of {@link ReactionUnavailabilityReason}.
+*/
+export interface ReactionUnavailabilityReasonAnonymousAdministrator {
+	'@type': 'reactionUnavailabilityReasonAnonymousAdministrator';
+
+}
+
+/**
+The user isn't a member of the supergroup and can't send messages and reactions there without joining.
+Subtype of {@link ReactionUnavailabilityReason}.
+*/
+export interface ReactionUnavailabilityReasonGuest {
+	'@type': 'reactionUnavailabilityReasonGuest';
+
 }
 
 /**
@@ -15107,6 +15750,22 @@ New identifier of the chat sticker set; 0 if none.
 }
 
 /**
+The supergroup sticker set with allowed custom emoji was changed.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventCustomEmojiStickerSetChanged {
+	'@type': 'chatEventCustomEmojiStickerSetChanged';
+	/**
+Previous identifier of the chat sticker set; 0 if none.
+*/
+	old_sticker_set_id: string;
+	/**
+New identifier of the chat sticker set; 0 if none.
+*/
+	new_sticker_set_id: string;
+}
+
+/**
 The chat title was changed.
 Subtype of {@link ChatEventAction}.
 */
@@ -15780,6 +16439,15 @@ export interface PremiumLimitTypePinnedArchivedChatCount {
 }
 
 /**
+The maximum number of pinned Saved Messages topics.
+Subtype of {@link PremiumLimitType}.
+*/
+export interface PremiumLimitTypePinnedSavedMessagesTopicCount {
+	'@type': 'premiumLimitTypePinnedSavedMessagesTopicCount';
+
+}
+
+/**
 The maximum length of sent media caption.
 Subtype of {@link PremiumLimitType}.
 */
@@ -16042,6 +16710,36 @@ export interface PremiumFeatureBackgroundForBoth {
 }
 
 /**
+The ability to use tags in Saved Messages.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureSavedMessagesTags {
+	'@type': 'premiumFeatureSavedMessagesTags';
+
+}
+
+/**
+The ability to disallow incoming voice and video note messages in private chats using setUserPrivacySettingRules with
+userPrivacySettingAllowPrivateVoiceAndVideoNoteMessages and to restrict incoming messages from non-contacts using
+setNewChatPrivacySettings.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureMessagePrivacy {
+	'@type': 'premiumFeatureMessagePrivacy';
+
+}
+
+/**
+The ability to view last seen and read times of other users even they can't view last seen or read time for the current
+user.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureLastSeenTimes {
+	'@type': 'premiumFeatureLastSeenTimes';
+
+}
+
+/**
 Describes a story feature available to Premium users.
 Subtype of {@link PremiumStoryFeature}.
 */
@@ -16092,6 +16790,15 @@ Subtype of {@link PremiumStoryFeature}.
 */
 export interface PremiumStoryFeatureLinksAndFormatting {
 	'@type': 'premiumStoryFeatureLinksAndFormatting';
+
+}
+
+/**
+The ability to choose better quality for viewed stories.
+Subtype of {@link PremiumStoryFeature}.
+*/
+export interface PremiumStoryFeatureVideoQuality {
+	'@type': 'premiumStoryFeatureVideoQuality';
 
 }
 
@@ -16269,8 +16976,8 @@ Subtype of {@link StorePaymentPurpose}.
 export interface StorePaymentPurposePremiumGiftCodes {
 	'@type': 'storePaymentPurposePremiumGiftCodes';
 	/**
-Identifier of the channel chat, which will be automatically boosted by the users for duration of the Premium
-subscription and which is administered by the user; 0 if none.
+Identifier of the supergroup or channel chat, which will be automatically boosted by the users for duration of the
+Premium subscription and which is administered by the user; 0 if none.
 */
 	boosted_chat_id: number;
 	/**
@@ -16288,8 +16995,7 @@ Identifiers of the users which can activate the gift codes.
 }
 
 /**
-The user creating a Telegram Premium giveaway for subscribers of channel chats; requires can_post_messages rights in the
-channels.
+The user creating a Telegram Premium giveaway.
 Subtype of {@link StorePaymentPurpose}.
 */
 export interface StorePaymentPurposePremiumGiveaway {
@@ -16315,8 +17021,8 @@ Subtype of {@link TelegramPaymentPurpose}.
 export interface TelegramPaymentPurposePremiumGiftCodes {
 	'@type': 'telegramPaymentPurposePremiumGiftCodes';
 	/**
-Identifier of the channel chat, which will be automatically boosted by the users for duration of the Premium
-subscription and which is administered by the user; 0 if none.
+Identifier of the supergroup or channel chat, which will be automatically boosted by the users for duration of the
+Premium subscription and which is administered by the user; 0 if none.
 */
 	boosted_chat_id: number;
 	/**
@@ -16338,8 +17044,7 @@ Number of months the Telegram Premium subscription will be active for the users.
 }
 
 /**
-The user creating a Telegram Premium giveaway for subscribers of channel chats; requires can_post_messages rights in the
-channels.
+The user creating a Telegram Premium giveaway.
 Subtype of {@link TelegramPaymentPurpose}.
 */
 export interface TelegramPaymentPurposePremiumGiveaway {
@@ -16748,6 +17453,36 @@ Theme settings for a dark chat theme.
 }
 
 /**
+Describes a time zone.
+*/
+export interface TimeZone {
+	'@type': 'timeZone';
+	/**
+Unique time zone identifier.
+*/
+	id: string;
+	/**
+Time zone name.
+*/
+	name: string;
+	/**
+Current UTC time offset for the time zone.
+*/
+	utc_time_offset: number;
+}
+
+/**
+Contains a list of time zones.
+*/
+export interface TimeZones {
+	'@type': 'timeZones';
+	/**
+A list of time zones.
+*/
+	time_zones: TimeZone[];
+}
+
+/**
 Contains a list of hashtags.
 */
 export interface Hashtags {
@@ -16777,8 +17512,8 @@ export interface CanSendStoryResultPremiumNeeded {
 }
 
 /**
-The channel chat must be boosted first by Telegram Premium subscribers to post more stories. Call getChatBoostStatus to
-get current boost status of the chat.
+The chat must be boosted first by Telegram Premium subscribers to post more stories. Call getChatBoostStatus to get
+current boost status of the chat.
 Subtype of {@link CanSendStoryResult}.
 */
 export interface CanSendStoryResultBoostNeeded {
@@ -18078,11 +18813,64 @@ export interface UserPrivacySettingAllowFindingByPhoneNumber {
 }
 
 /**
-A privacy setting for managing whether the user can receive voice and video messages in private chats.
+A privacy setting for managing whether the user can receive voice and video messages in private chats; for Telegram
+Premium users only.
 Subtype of {@link UserPrivacySetting}.
 */
 export interface UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages {
 	'@type': 'userPrivacySettingAllowPrivateVoiceAndVideoNoteMessages';
+
+}
+
+/**
+Contains privacy settings for message read date in private chats. Read dates are always shown to the users that can see
+online status of the current user regardless of this setting.
+*/
+export interface ReadDatePrivacySettings {
+	'@type': 'readDatePrivacySettings';
+	/**
+True, if message read date is shown to other users in private chats. If false and the current user isn't a Telegram
+Premium user, then they will not be able to see other's message read date.
+*/
+	show_read_date?: boolean;
+}
+
+/**
+Contains privacy settings for new chats with non-contacts.
+*/
+export interface NewChatPrivacySettings {
+	'@type': 'newChatPrivacySettings';
+	/**
+True, if non-contacts users are able to write first to the current user. Telegram Premium subscribers are able to write
+first regardless of this setting.
+*/
+	allow_new_chats_from_unknown_users?: boolean;
+}
+
+/**
+Describes result of canSendMessageToUser.
+Subtype of {@link CanSendMessageToUserResult}.
+*/
+export interface CanSendMessageToUserResultOk {
+	'@type': 'canSendMessageToUserResultOk';
+
+}
+
+/**
+The user can't be messaged, because they are deleted or unknown.
+Subtype of {@link CanSendMessageToUserResult}.
+*/
+export interface CanSendMessageToUserResultUserIsDeleted {
+	'@type': 'canSendMessageToUserResultUserIsDeleted';
+
+}
+
+/**
+The user can't be messaged, because they restrict new chats with non-contacts.
+Subtype of {@link CanSendMessageToUserResult}.
+*/
+export interface CanSendMessageToUserResultUserRestrictsNewChats {
+	'@type': 'canSendMessageToUserResultUserRestrictsNewChats';
 
 }
 
@@ -18619,7 +19407,8 @@ The authentication code.
 }
 
 /**
-The link is a link to a background. Call searchBackground with the given background name to process the link.
+The link is a link to a background. Call searchBackground with the given background name to process the link If
+background is found and the user wants to apply it, then call setDefaultBackground.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeBackground {
@@ -18727,7 +19516,7 @@ URL to be passed to getChatBoostLinkInfo.
 
 /**
 The link is an invite link to a chat folder. Call checkChatFolderInviteLink with the given invite link to process the
-link.
+link. If the link is valid and the user wants to join the chat folder, then call addChatFolderByInviteLink.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeChatFolderInvite {
@@ -18748,7 +19537,8 @@ export interface InternalLinkTypeChatFolderSettings {
 }
 
 /**
-The link is a chat invite link. Call checkChatInviteLink with the given invite link to process the link.
+The link is a chat invite link. Call checkChatInviteLink with the given invite link to process the link. If the link is
+valid and the user wants to join the chat, then call joinChatByInviteLink.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeChatInvite {
@@ -18795,7 +19585,8 @@ Short name of the game.
 }
 
 /**
-The link must be opened in an Instant View. Call getWebPageInstantView with the given URL to process the link.
+The link must be opened in an Instant View. Call getWebPageInstantView with the given URL to process the link. If
+Instant View is found, then show it, otherwise, open the fallback URL in an external browser.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeInstantView {
@@ -18824,7 +19615,8 @@ Name of the invoice.
 
 /**
 The link is a link to a language pack. Call getLanguagePackInfo with the given language pack identifier to process the
-link.
+link. If the language pack is found and the user wants to apply it, then call setOption for the option
+"language_pack_id".
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeLanguagePack {
@@ -18846,7 +19638,7 @@ export interface InternalLinkTypeLanguageSettings {
 
 /**
 The link is a link to a Telegram message or a forum topic. Call getMessageLinkInfo with the given URL to process the
-link.
+link, and then open received forum topic or chat and show the message there.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeMessage {
@@ -18909,7 +19701,8 @@ must be opened otherwise.
 
 /**
 The link can be used to confirm ownership of a phone number to prevent account deletion. Call
-sendPhoneNumberConfirmationCode with the given hash and phone number to process the link.
+sendPhoneNumberConfirmationCode with the given hash and phone number to process the link. If succeeded, call
+checkPhoneNumberConfirmationCode to check entered by the user code, or resendPhoneNumberConfirmationCode to resend it.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePhoneNumberConfirmation {
@@ -18938,7 +19731,8 @@ Referrer specified in the link.
 }
 
 /**
-The link is a link to the screen for gifting Telegram Premium subscriptions to friends.
+The link is a link to the screen for gifting Telegram Premium subscriptions to friends via inputInvoiceTelegram payments
+or in-store purchases.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePremiumGift {
@@ -18992,7 +19786,8 @@ Type of the proxy.
 }
 
 /**
-The link is a link to a chat by its username. Call searchPublicChat with the given chat username to process the link.
+The link is a link to a chat by its username. Call searchPublicChat with the given chat username to process the link If
+the chat is found, open its profile information screen or the chat itself.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePublicChat {
@@ -19038,7 +19833,7 @@ check that the user is a bot and can be added to attachment menu. Then, use getA
 about the bot. If the bot isn't added to side menu, then show a disclaimer about Mini Apps being a third-party apps, ask
 the user to accept their Terms of service and confirm adding the bot to side and attachment menu. If the user accept the
 terms and confirms adding, then use toggleBotIsAddedToAttachmentMenu to add the bot. If the bot is added to side menu,
-then use getWebAppUrl with the given URL.
+then use getWebAppUrl with the given URL and open the returned URL as a Web App.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeSideMenuBot {
@@ -19055,7 +19850,7 @@ URL to be passed to getWebAppUrl.
 
 /**
 The link is a link to a sticker set. Call searchStickerSet with the given sticker set name to process the link and show
-the sticker set.
+the sticker set. If the sticker set is found and the user wants to add it, then call changeStickerSet.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeStickerSet {
@@ -19072,7 +19867,7 @@ True, if the sticker set is expected to contain custom emoji.
 
 /**
 The link is a link to a story. Call searchPublicChat with the given sender username, then call getStory with the
-received chat identifier and the given story identifier.
+received chat identifier and the given story identifier, then show the story if received.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeStory {
@@ -19131,7 +19926,7 @@ export interface InternalLinkTypeUnsupportedProxy {
 
 /**
 The link is a link to a user by its phone number. Call searchUserByPhoneNumber with the given phone number to process
-the link.
+the link. If the user is found, then call createPrivateChat and open the chat.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeUserPhoneNumber {
@@ -19143,7 +19938,8 @@ Phone number of the user.
 }
 
 /**
-The link is a link to a user by a temporary token. Call searchUserByToken with the given token to process the link.
+The link is a link to a user by a temporary token. Call searchUserByToken with the given token to process the link. If
+the user is found, then call createPrivateChat and open the chat.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeUserToken {
@@ -21214,6 +22010,38 @@ New chat position. If new order is 0, then the chat needs to be removed from the
 }
 
 /**
+A chat was added to a chat list.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatAddedToList {
+	'@type': 'updateChatAddedToList';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The chat list to which the chat was added.
+*/
+	chat_list: ChatList;
+}
+
+/**
+A chat was removed from a chat list.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatRemovedFromList {
+	'@type': 'updateChatRemovedFromList';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The chat list from which the chat was removed.
+*/
+	chat_list: ChatList;
+}
+
+/**
 Incoming messages were read or the number of unread messages has been changed.
 Subtype of {@link Update}.
 */
@@ -21293,7 +22121,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-The new draft message; may be null.
+The new draft message; may be null if none.
 */
 	draft_message: DraftMessage;
 	/**
@@ -21606,6 +22434,10 @@ The new list of chat folders.
 Position of the main chat list among chat folders, 0-based.
 */
 	main_chat_list_position: number;
+	/**
+True, if folder tags are enabled.
+*/
+	are_tags_enabled?: boolean;
 }
 
 /**
@@ -21623,6 +22455,84 @@ Identifier of the chat.
 New number of online members in the chat, or 0 if unknown.
 */
 	online_member_count: number;
+}
+
+/**
+Basic information about a Saved Messages topic has changed. This update is guaranteed to come before the topic
+identifier is returned to the application.
+Subtype of {@link Update}.
+*/
+export interface UpdateSavedMessagesTopic {
+	'@type': 'updateSavedMessagesTopic';
+	/**
+New data about the topic.
+*/
+	topic: SavedMessagesTopic;
+}
+
+/**
+Number of Saved Messages topics has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateSavedMessagesTopicCount {
+	'@type': 'updateSavedMessagesTopicCount';
+	/**
+Approximate total number of Saved Messages topics.
+*/
+	topic_count: number;
+}
+
+/**
+Basic information about a quick reply shortcut has changed. This update is guaranteed to come before the quick shortcut
+name is returned to the application.
+Subtype of {@link Update}.
+*/
+export interface UpdateQuickReplyShortcut {
+	'@type': 'updateQuickReplyShortcut';
+	/**
+New data about the shortcut.
+*/
+	shortcut: QuickReplyShortcut;
+}
+
+/**
+A quick reply shortcut and all its messages were deleted.
+Subtype of {@link Update}.
+*/
+export interface UpdateQuickReplyShortcutDeleted {
+	'@type': 'updateQuickReplyShortcutDeleted';
+	/**
+The identifier of the deleted shortcut.
+*/
+	shortcut_id: number;
+}
+
+/**
+The list of quick reply shortcuts has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateQuickReplyShortcuts {
+	'@type': 'updateQuickReplyShortcuts';
+	/**
+The new list of identifiers of quick reply shortcuts.
+*/
+	shortcut_ids: number[];
+}
+
+/**
+The list of quick reply shortcut messages has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateQuickReplyShortcutMessages {
+	'@type': 'updateQuickReplyShortcutMessages';
+	/**
+The identifier of the shortcut.
+*/
+	shortcut_id: number;
+	/**
+The new list of quick reply messages for the shortcut in order from the first to the last sent.
+*/
+	messages: QuickReplyMessage[];
 }
 
 /**
@@ -21778,7 +22688,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-If not 0, a message thread identifier in which the action was performed.
+If not 0, the message thread identifier in which the action was performed.
 */
 	message_thread_id: number;
 	/**
@@ -22589,6 +23499,22 @@ The new type of the default reaction.
 }
 
 /**
+Tags used in Saved Messages or a Saved Messages topic have changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateSavedMessagesTags {
+	'@type': 'updateSavedMessagesTags';
+	/**
+Identifier of Saved Messages topic which tags were changed; 0 if tags for the whole chat has changed.
+*/
+	saved_messages_topic_id: number;
+	/**
+The new tags.
+*/
+	tags: SavedMessagesTags;
+}
+
+/**
 The parameters of speech recognition without Telegram Premium subscription has changed.
 Subtype of {@link Update}.
 */
@@ -23333,6 +24259,11 @@ export type UserType =
 	| UserTypeBot
 	| UserTypeUnknown;
 
+export type BusinessAwayMessageSchedule =
+	| BusinessAwayMessageScheduleAlways
+	| BusinessAwayMessageScheduleOutsideOfOpeningHours
+	| BusinessAwayMessageScheduleCustom;
+
 export type ChatPhotoStickerType =
 	| ChatPhotoStickerTypeRegularOrMask
 	| ChatPhotoStickerTypeCustomEmoji;
@@ -23394,6 +24325,13 @@ export type SecretChatState =
 export type MessageSender =
 	| MessageSenderUser
 	| MessageSenderChat;
+
+export type MessageReadDate =
+	| MessageReadDateRead
+	| MessageReadDateUnread
+	| MessageReadDateTooOld
+	| MessageReadDateUserPrivacyRestricted
+	| MessageReadDateMyPrivacyRestricted;
 
 export type MessageOrigin =
 	| MessageOriginUser
@@ -23502,6 +24440,11 @@ export type ReplyMarkup =
 export type LoginUrlInfo =
 	| LoginUrlInfoOpen
 	| LoginUrlInfoRequestConfirmation;
+
+export type SavedMessagesTopicType =
+	| SavedMessagesTopicTypeMyNotes
+	| SavedMessagesTopicTypeAuthorHidden
+	| SavedMessagesTopicTypeSavedFromChat;
 
 export type RichText =
 	| RichTextPlain
@@ -23658,12 +24601,14 @@ export type MessageContent =
 	| MessageAudio
 	| MessageDocument
 	| MessagePhoto
-	| MessageExpiredPhoto
 	| MessageSticker
 	| MessageVideo
-	| MessageExpiredVideo
 	| MessageVideoNote
 	| MessageVoiceNote
+	| MessageExpiredPhoto
+	| MessageExpiredVideo
+	| MessageExpiredVideoNote
+	| MessageExpiredVoiceNote
 	| MessageLocation
 	| MessageVenue
 	| MessageContact
@@ -23694,6 +24639,7 @@ export type MessageContent =
 	| MessageChatSetBackground
 	| MessageChatSetTheme
 	| MessageChatSetMessageAutoDeleteTime
+	| MessageChatBoost
 	| MessageForumTopicCreated
 	| MessageForumTopicEdited
 	| MessageForumTopicIsClosedToggled
@@ -23903,6 +24849,10 @@ export type FirebaseAuthenticationSettings =
 	| FirebaseAuthenticationSettingsAndroid
 	| FirebaseAuthenticationSettingsIos;
 
+export type ReactionUnavailabilityReason =
+	| ReactionUnavailabilityReasonAnonymousAdministrator
+	| ReactionUnavailabilityReasonGuest;
+
 export type DiceStickers =
 	| DiceStickersRegular
 	| DiceStickersSlotMachine;
@@ -23979,6 +24929,7 @@ export type ChatEventAction =
 	| ChatEventPhotoChanged
 	| ChatEventSlowModeDelayChanged
 	| ChatEventStickerSetChanged
+	| ChatEventCustomEmojiStickerSetChanged
 	| ChatEventTitleChanged
 	| ChatEventUsernameChanged
 	| ChatEventActiveUsernamesChanged
@@ -24019,6 +24970,7 @@ export type PremiumLimitType =
 	| PremiumLimitTypeChatFolderCount
 	| PremiumLimitTypeChatFolderChosenChatCount
 	| PremiumLimitTypePinnedArchivedChatCount
+	| PremiumLimitTypePinnedSavedMessagesTopicCount
 	| PremiumLimitTypeCaptionLength
 	| PremiumLimitTypeBioLength
 	| PremiumLimitTypeChatFolderInviteLinkCount
@@ -24049,7 +25001,10 @@ export type PremiumFeature =
 	| PremiumFeatureUpgradedStories
 	| PremiumFeatureChatBoost
 	| PremiumFeatureAccentColor
-	| PremiumFeatureBackgroundForBoth;
+	| PremiumFeatureBackgroundForBoth
+	| PremiumFeatureSavedMessagesTags
+	| PremiumFeatureMessagePrivacy
+	| PremiumFeatureLastSeenTimes;
 
 export type PremiumStoryFeature =
 	| PremiumStoryFeaturePriorityOrder
@@ -24057,7 +25012,8 @@ export type PremiumStoryFeature =
 	| PremiumStoryFeaturePermanentViewsHistory
 	| PremiumStoryFeatureCustomExpirationDuration
 	| PremiumStoryFeatureSaveStories
-	| PremiumStoryFeatureLinksAndFormatting;
+	| PremiumStoryFeatureLinksAndFormatting
+	| PremiumStoryFeatureVideoQuality;
 
 export type PremiumSource =
 	| PremiumSourceLimitExceeded
@@ -24232,6 +25188,11 @@ export type UserPrivacySetting =
 	| UserPrivacySettingAllowPeerToPeerCalls
 	| UserPrivacySettingAllowFindingByPhoneNumber
 	| UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages;
+
+export type CanSendMessageToUserResult =
+	| CanSendMessageToUserResultOk
+	| CanSendMessageToUserResultUserIsDeleted
+	| CanSendMessageToUserResultUserRestrictsNewChats;
 
 export type SessionType =
 	| SessionTypeAndroid
@@ -24446,6 +25407,8 @@ export type Update =
 	| UpdateChatPermissions
 	| UpdateChatLastMessage
 	| UpdateChatPosition
+	| UpdateChatAddedToList
+	| UpdateChatRemovedFromList
 	| UpdateChatReadInbox
 	| UpdateChatReadOutbox
 	| UpdateChatActionBar
@@ -24471,6 +25434,12 @@ export type Update =
 	| UpdateChatHasScheduledMessages
 	| UpdateChatFolders
 	| UpdateChatOnlineMemberCount
+	| UpdateSavedMessagesTopic
+	| UpdateSavedMessagesTopicCount
+	| UpdateQuickReplyShortcut
+	| UpdateQuickReplyShortcutDeleted
+	| UpdateQuickReplyShortcuts
+	| UpdateQuickReplyShortcutMessages
 	| UpdateForumTopicInfo
 	| UpdateScopeNotificationSettings
 	| UpdateNotification
@@ -24530,6 +25499,7 @@ export type Update =
 	| UpdateWebAppMessageSent
 	| UpdateActiveEmojiReactions
 	| UpdateDefaultReactionType
+	| UpdateSavedMessagesTags
 	| UpdateSpeechRecognitionTrial
 	| UpdateDiceEmojis
 	| UpdateAnimatedEmojiMessageClicked
@@ -24633,15 +25603,6 @@ TDLib.
 Application version; must be non-empty.
 */
 	application_version: string;
-	/**
-Pass true to automatically delete old files in background.
-*/
-	enable_storage_optimizer?: boolean;
-	/**
-Pass true to ignore original file names for downloaded files. Otherwise, downloaded files are saved under names as close
-as possible to the original name.
-*/
-	ignore_file_names?: boolean;
 }
 
 /**
@@ -24741,6 +25702,11 @@ The first name of the user; 1-64 characters.
 The last name of the user; 0-64 characters.
 */
 	last_name: string;
+	/**
+Pass true to disable notification about the current user joining Telegram for other users that added them to contact
+list.
+*/
+	disable_notification?: boolean;
 }
 
 /**
@@ -25029,6 +25995,15 @@ Request type for {@link Tdjson#resendRecoveryEmailAddressCode}.
 */
 export interface ResendRecoveryEmailAddressCode {
 	'@type': 'resendRecoveryEmailAddressCode';
+
+}
+
+/**
+Cancels verification of the 2-step verification recovery email address.
+Request type for {@link Tdjson#cancelRecoveryEmailAddressVerification}.
+*/
+export interface CancelRecoveryEmailAddressVerification {
+	'@type': 'cancelRecoveryEmailAddressVerification';
 
 }
 
@@ -25329,6 +26304,23 @@ Request type for {@link Tdjson#getMessageThread}.
 */
 export interface GetMessageThread {
 	'@type': 'getMessageThread';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Returns read date of a recent outgoing message in a private chat. The method can be called if message.can_get_read_date
+== true and the message is read.
+Request type for {@link Tdjson#getMessageReadDate}.
+*/
+export interface GetMessageReadDate {
+	'@type': 'getMessageReadDate';
 	/**
 Chat identifier.
 */
@@ -25704,6 +26696,126 @@ export interface GetInactiveSupergroupChats {
 }
 
 /**
+Loads more Saved Messages topics. The loaded topics will be sent through updateSavedMessagesTopic. Topics are sorted by
+their topic.order in descending order. Returns a 404 error if all topics have been loaded.
+Request type for {@link Tdjson#loadSavedMessagesTopics}.
+*/
+export interface LoadSavedMessagesTopics {
+	'@type': 'loadSavedMessagesTopics';
+	/**
+The maximum number of topics to be loaded. For optimal performance, the number of loaded topics is chosen by TDLib and
+can be smaller than the specified limit, even if the end of the list is not reached.
+*/
+	limit: number;
+}
+
+/**
+Returns messages in a Saved Messages topic. The messages are returned in a reverse chronological order (i.e., in order
+of decreasing message_id).
+Request type for {@link Tdjson#getSavedMessagesTopicHistory}.
+*/
+export interface GetSavedMessagesTopicHistory {
+	'@type': 'getSavedMessagesTopicHistory';
+	/**
+Identifier of Saved Messages topic which messages will be fetched.
+*/
+	saved_messages_topic_id: number;
+	/**
+Identifier of the message starting from which messages must be fetched; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+	/**
+Specify 0 to get results from exactly the message from_message_id or a negative offset up to 99 to get additionally some
+newer messages.
+*/
+	offset: number;
+	/**
+The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
+negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
+is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Returns the last message sent in a Saved Messages topic no later than the specified date.
+Request type for {@link Tdjson#getSavedMessagesTopicMessageByDate}.
+*/
+export interface GetSavedMessagesTopicMessageByDate {
+	'@type': 'getSavedMessagesTopicMessageByDate';
+	/**
+Identifier of Saved Messages topic which message will be returned.
+*/
+	saved_messages_topic_id: number;
+	/**
+Point in time (Unix timestamp) relative to which to search for messages.
+*/
+	date: number;
+}
+
+/**
+Deletes all messages in a Saved Messages topic.
+Request type for {@link Tdjson#deleteSavedMessagesTopicHistory}.
+*/
+export interface DeleteSavedMessagesTopicHistory {
+	'@type': 'deleteSavedMessagesTopicHistory';
+	/**
+Identifier of Saved Messages topic which messages will be deleted.
+*/
+	saved_messages_topic_id: number;
+}
+
+/**
+Deletes all messages between the specified dates in a Saved Messages topic. Messages sent in the last 30 seconds will
+not be deleted.
+Request type for {@link Tdjson#deleteSavedMessagesTopicMessagesByDate}.
+*/
+export interface DeleteSavedMessagesTopicMessagesByDate {
+	'@type': 'deleteSavedMessagesTopicMessagesByDate';
+	/**
+Identifier of Saved Messages topic which messages will be deleted.
+*/
+	saved_messages_topic_id: number;
+	/**
+The minimum date of the messages to delete.
+*/
+	min_date: number;
+	/**
+The maximum date of the messages to delete.
+*/
+	max_date: number;
+}
+
+/**
+Changes the pinned state of a Saved Messages topic. There can be up to
+getOption("pinned_saved_messages_topic_count_max") pinned topics. The limit can be increased with Telegram Premium.
+Request type for {@link Tdjson#toggleSavedMessagesTopicIsPinned}.
+*/
+export interface ToggleSavedMessagesTopicIsPinned {
+	'@type': 'toggleSavedMessagesTopicIsPinned';
+	/**
+Identifier of Saved Messages topic to pin or unpin.
+*/
+	saved_messages_topic_id: number;
+	/**
+Pass true to pin the topic; pass false to unpin it.
+*/
+	is_pinned?: boolean;
+}
+
+/**
+Changes the order of pinned Saved Messages topics.
+Request type for {@link Tdjson#setPinnedSavedMessagesTopics}.
+*/
+export interface SetPinnedSavedMessagesTopics {
+	'@type': 'setPinnedSavedMessagesTopics';
+	/**
+Identifiers of the new pinned Saved Messages topics.
+*/
+	saved_messages_topic_ids: number[];
+}
+
+/**
 Returns a list of common group chats with a given user. Chats are sorted by their type and creation date.
 Request type for {@link Tdjson#getGroupsInCommon}.
 */
@@ -25740,8 +26852,8 @@ Identifier of the message starting from which history must be fetched; use 0 to 
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the from_message_id or a negative offset up to 99 to get additionally some newer
-messages.
+Specify 0 to get results from exactly the message from_message_id or a negative offset up to 99 to get additionally some
+newer messages.
 */
 	offset: number;
 	/**
@@ -25778,8 +26890,8 @@ Identifier of the message starting from which history must be fetched; use 0 to 
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the from_message_id or a negative offset up to 99 to get additionally some newer
-messages.
+Specify 0 to get results from exactly the message from_message_id or a negative offset up to 99 to get additionally some
+newer messages.
 */
 	offset: number;
 	/**
@@ -25853,8 +26965,8 @@ Identifier of the message starting from which history must be fetched; use 0 to 
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the from_message_id or a negative offset to get the specified message and some
-newer messages.
+Specify 0 to get results from exactly the message from_message_id or a negative offset to get the specified message and
+some newer messages.
 */
 	offset: number;
 	/**
@@ -25871,6 +26983,11 @@ Additional filter for messages to search; pass null to search for all messages.
 If not 0, only messages in the specified thread will be returned; supergroups only.
 */
 	message_thread_id: number;
+	/**
+If not 0, only messages in the specified Saved Messages topic will be returned; pass 0 to return all messages, or for
+chats other than Saved Messages.
+*/
+	saved_messages_topic_id: number;
 }
 
 /**
@@ -25945,6 +27062,43 @@ chosen by TDLib and can be smaller than the specified limit.
 Additional filter for messages to search; pass null to search for all messages.
 */
 	filter: SearchMessagesFilter;
+}
+
+/**
+Searches for messages tagged by the given reaction and with the given words in the Saved Messages chat; for Telegram
+Premium users only. Returns the results in reverse chronological order, i.e. in order of decreasing message_id For
+optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit.
+Request type for {@link Tdjson#searchSavedMessages}.
+*/
+export interface SearchSavedMessages {
+	'@type': 'searchSavedMessages';
+	/**
+If not 0, only messages in the specified Saved Messages topic will be considered; pass 0 to consider all messages.
+*/
+	saved_messages_topic_id: number;
+	/**
+Tag to search for; pass null to return all suitable messages.
+*/
+	tag: ReactionType;
+	/**
+Query to search for.
+*/
+	query: string;
+	/**
+Identifier of the message starting from which messages must be fetched; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+	/**
+Specify 0 to get results from exactly the message from_message_id or a negative offset to get the specified message and
+some newer messages.
+*/
+	offset: number;
+	/**
+The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
+negative, the limit must be greater than -offset. For optimal performance, the number of returned messages is chosen by
+TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
 }
 
 /**
@@ -26068,6 +27222,11 @@ The expected number of message positions to be returned; 50-2000. A smaller numb
 there are not enough appropriate messages.
 */
 	limit: number;
+	/**
+If not 0, only messages in the specified Saved Messages topic will be considered; pass 0 to consider all messages, or
+for chats other than Saved Messages.
+*/
+	saved_messages_topic_id: number;
 }
 
 /**
@@ -26091,6 +27250,11 @@ searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are un
 The message identifier from which to return information about messages; use 0 to get results from the last message.
 */
 	from_message_id: number;
+	/**
+If not0, only messages in the specified Saved Messages topic will be considered; pass 0 to consider all messages, or for
+chats other than Saved Messages.
+*/
+	saved_messages_topic_id: number;
 }
 
 /**
@@ -26107,6 +27271,11 @@ Identifier of the chat in which to count messages.
 Filter for message content; searchMessagesFilterEmpty is unsupported in this function.
 */
 	filter: SearchMessagesFilter;
+	/**
+If not 0, only messages in the specified Saved Messages topic will be counted; pass 0 to count all messages, or for
+chats other than Saved Messages.
+*/
+	saved_messages_topic_id: number;
 	/**
 Pass true to get the number of messages without sending network requests, or -1 if the number of messages is unknown
 locally.
@@ -26138,6 +27307,11 @@ searchMessagesFilterUnreadReaction, and searchMessagesFilterFailedToSend are uns
 If not 0, only messages in the specified thread will be considered; supergroups only.
 */
 	message_thread_id: number;
+	/**
+If not 0, only messages in the specified Saved Messages topic will be considered; pass 0 to consider all relevant
+messages, or for chats other than Saved Messages.
+*/
+	saved_messages_topic_id: number;
 }
 
 /**
@@ -26405,7 +27579,7 @@ Target chat.
 */
 	chat_id: number;
 	/**
-If not 0, a message thread identifier in which the message will be sent.
+If not 0, the message thread identifier in which the message will be sent.
 */
 	message_thread_id: number;
 	/**
@@ -26439,7 +27613,7 @@ Target chat.
 */
 	chat_id: number;
 	/**
-If not 0, a message thread identifier in which the messages will be sent.
+If not 0, the message thread identifier in which the messages will be sent.
 */
 	message_thread_id: number;
 	/**
@@ -26457,9 +27631,9 @@ Contents of messages to be sent. At most 10 messages can be added to an album.
 }
 
 /**
-Invites a bot to a chat (if it is not yet a member) and sends it the /start command. Bots can't be invited to a private
-chat other than the chat with the bot. Bots can't be invited to channels (although they can be added as admins) and
-secret chats. Returns the sent message.
+Invites a bot to a chat (if it is not yet a member) and sends it the /start command; requires can_invite_users member
+right. Bots can't be invited to a private chat other than the chat with the bot. Bots can't be invited to channels
+(although they can be added as admins) and secret chats. Returns the sent message.
 Request type for {@link Tdjson#sendBotStartMessage}.
 */
 export interface SendBotStartMessage {
@@ -26489,7 +27663,7 @@ Target chat.
 */
 	chat_id: number;
 	/**
-If not 0, a message thread identifier in which the message will be sent.
+If not 0, the message thread identifier in which the message will be sent.
 */
 	message_thread_id: number;
 	/**
@@ -26528,7 +27702,7 @@ Identifier of the chat to which to forward messages.
 */
 	chat_id: number;
 	/**
-If not 0, a message thread identifier in which the message will be sent; for forum threads only.
+If not 0, the message thread identifier in which the message will be sent; for forum threads only.
 */
 	message_thread_id: number;
 	/**
@@ -26553,6 +27727,27 @@ forwarded to a secret chat or are local.
 Pass true to remove media captions of message copies. Ignored if send_copy is false.
 */
 	remove_caption?: boolean;
+}
+
+/**
+Sends messages from a quick reply shortcut. Requires Telegram Business subscription.
+Request type for {@link Tdjson#sendQuickReplyShortcutMessages}.
+*/
+export interface SendQuickReplyShortcutMessages {
+	'@type': 'sendQuickReplyShortcutMessages';
+	/**
+Identifier of the chat to which to send messages. The chat must be a private chat with a regular user.
+*/
+	chat_id: number;
+	/**
+Unique identifier of the quick reply shortcut.
+*/
+	shortcut_id: number;
+	/**
+Non-persistent identifier, which will be returned back in messageSendingStatePending object and can be used to match
+sent messages and corresponding updateNewMessage updates.
+*/
+	sending_id: number;
 }
 
 /**
@@ -26930,6 +28125,97 @@ The new message scheduling state; pass null to send the message immediately.
 }
 
 /**
+Checks validness of a name for a quick reply shortcut. Can be called synchronously.
+Request type for {@link Tdjson#checkQuickReplyShortcutName}.
+*/
+export interface CheckQuickReplyShortcutName {
+	'@type': 'checkQuickReplyShortcutName';
+	/**
+The name of the shortcut; 1-32 characters.
+*/
+	name: string;
+}
+
+/**
+Loads quick reply shortcuts created by the current user. The loaded topics will be sent through
+updateQuickReplyShortcuts.
+Request type for {@link Tdjson#loadQuickReplyShortcuts}.
+*/
+export interface LoadQuickReplyShortcuts {
+	'@type': 'loadQuickReplyShortcuts';
+
+}
+
+/**
+Changes name of a quick reply shortcut.
+Request type for {@link Tdjson#setQuickReplyShortcutName}.
+*/
+export interface SetQuickReplyShortcutName {
+	'@type': 'setQuickReplyShortcutName';
+	/**
+Unique identifier of the quick reply shortcut.
+*/
+	shortcut_id: number;
+	/**
+New name for the shortcut. Use checkQuickReplyShortcutName to check its validness.
+*/
+	name: string;
+}
+
+/**
+Deletes a quick reply shortcut.
+Request type for {@link Tdjson#deleteQuickReplyShortcut}.
+*/
+export interface DeleteQuickReplyShortcut {
+	'@type': 'deleteQuickReplyShortcut';
+	/**
+Unique identifier of the quick reply shortcut.
+*/
+	shortcut_id: number;
+}
+
+/**
+Changes the order of quick reply shortcuts.
+Request type for {@link Tdjson#reorderQuickReplyShortcuts}.
+*/
+export interface ReorderQuickReplyShortcuts {
+	'@type': 'reorderQuickReplyShortcuts';
+	/**
+The new order of quick reply shortcuts.
+*/
+	shortcut_ids: number[];
+}
+
+/**
+Loads quick reply messages that can be sent by a given quick reply shortcut. The loaded messages will be sent through
+updateQuickReplyShortcutMessages.
+Request type for {@link Tdjson#loadQuickReplyShortcutMessages}.
+*/
+export interface LoadQuickReplyShortcutMessages {
+	'@type': 'loadQuickReplyShortcutMessages';
+	/**
+Unique identifier of the quick reply shortcut.
+*/
+	shortcut_id: number;
+}
+
+/**
+Deletes specified quick reply messages.
+Request type for {@link Tdjson#deleteQuickReplyShortcutMessages}.
+*/
+export interface DeleteQuickReplyShortcutMessages {
+	'@type': 'deleteQuickReplyShortcutMessages';
+	/**
+Unique identifier of the quick reply shortcut to which the messages belong.
+*/
+	shortcut_id: number;
+	/**
+Unique identifiers of the messages.
+*/
+	message_ids: number[];
+}
+
+/**
 Returns list of custom emojis, which can be used as forum topic icon by all users.
 Request type for {@link Tdjson#getForumTopicDefaultIcons}.
 */
@@ -26939,7 +28225,8 @@ export interface GetForumTopicDefaultIcons {
 }
 
 /**
-Creates a topic in a forum supergroup chat; requires can_manage_topics rights in the supergroup.
+Creates a topic in a forum supergroup chat; requires can_manage_topics administrator or can_create_topics member right
+in the supergroup.
 Request type for {@link Tdjson#createForumTopic}.
 */
 export interface CreateForumTopic {
@@ -26961,8 +28248,8 @@ getForumTopicDefaultIcons.
 }
 
 /**
-Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics administrator right in the
-supergroup unless the user is creator of the topic.
+Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics right in the supergroup unless
+the user is creator of the topic.
 Request type for {@link Tdjson#editForumTopic}.
 */
 export interface EditForumTopic {
@@ -27080,8 +28367,8 @@ muted forever.
 }
 
 /**
-Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics administrator right in the
-supergroup unless the user is creator of the topic.
+Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics right in the supergroup unless
+the user is creator of the topic.
 Request type for {@link Tdjson#toggleForumTopicIsClosed}.
 */
 export interface ToggleForumTopicIsClosed {
@@ -27101,8 +28388,8 @@ Pass true to close the topic; pass false to reopen it.
 }
 
 /**
-Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics administrator right in
-the supergroup.
+Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics right in the
+supergroup.
 Request type for {@link Tdjson#toggleGeneralForumTopicIsHidden}.
 */
 export interface ToggleGeneralForumTopicIsHidden {
@@ -27118,8 +28405,8 @@ Pass true to hide and close the General topic; pass false to unhide it.
 }
 
 /**
-Changes the pinned state of a forum topic; requires can_manage_topics administrator right in the supergroup. There can
-be up to getOption("pinned_forum_topic_count_max") pinned forum topics.
+Changes the pinned state of a forum topic; requires can_manage_topics right in the supergroup. There can be up to
+getOption("pinned_forum_topic_count_max") pinned forum topics.
 Request type for {@link Tdjson#toggleForumTopicIsPinned}.
 */
 export interface ToggleForumTopicIsPinned {
@@ -27139,7 +28426,7 @@ Pass true to pin the topic; pass false to unpin it.
 }
 
 /**
-Changes the order of pinned forum topics.
+Changes the order of pinned forum topics; requires can_manage_topics right in the supergroup.
 Request type for {@link Tdjson#setPinnedForumTopics}.
 */
 export interface SetPinnedForumTopics {
@@ -27172,7 +28459,7 @@ Message thread identifier of the forum topic.
 }
 
 /**
-Returns information about a emoji reaction. Returns a 404 error if the reaction is not found.
+Returns information about an emoji reaction. Returns a 404 error if the reaction is not found.
 Request type for {@link Tdjson#getEmojiReaction}.
 */
 export interface GetEmojiReaction {
@@ -27223,8 +28510,8 @@ export interface ClearRecentReactions {
 }
 
 /**
-Adds a reaction to a message. Use getMessageAvailableReactions to receive the list of available reactions for the
-message.
+Adds a reaction or a tag to a message. Use getMessageAvailableReactions to receive the list of available reactions for
+the message.
 Request type for {@link Tdjson#addMessageReaction}.
 */
 export interface AddMessageReaction {
@@ -27246,7 +28533,7 @@ Pass true if the reaction is added with a big animation.
 */
 	is_big?: boolean;
 	/**
-Pass true if the reaction needs to be added to recent reactions.
+Pass true if the reaction needs to be added to recent reactions; tags are never added to the list of recent reactions.
 */
 	update_recent_reactions?: boolean;
 }
@@ -27337,6 +28624,34 @@ New type of the default reaction.
 }
 
 /**
+Returns tags used in Saved Messages or a Saved Messages topic.
+Request type for {@link Tdjson#getSavedMessagesTags}.
+*/
+export interface GetSavedMessagesTags {
+	'@type': 'getSavedMessagesTags';
+	/**
+Identifier of Saved Messages topic which tags will be returned; pass 0 to get all Saved Messages tags.
+*/
+	saved_messages_topic_id: number;
+}
+
+/**
+Changes label of a Saved Messages tag; for Telegram Premium users only.
+Request type for {@link Tdjson#setSavedMessagesTagLabel}.
+*/
+export interface SetSavedMessagesTagLabel {
+	'@type': 'setSavedMessagesTagLabel';
+	/**
+The tag which label will be changed.
+*/
+	tag: ReactionType;
+	/**
+New label for the tag; 0-12 characters.
+*/
+	label: string;
+}
+
+/**
 Searches for a given quote in a text. Returns found quote start position in UTF-16 code units. Returns a 404 error if
 the quote is not found. Can be called synchronously.
 Request type for {@link Tdjson#searchQuote}.
@@ -27411,6 +28726,18 @@ export interface GetMarkdownText {
 The text.
 */
 	text: FormattedText;
+}
+
+/**
+Returns an emoji for the given country. Returns an empty string on failure. Can be called synchronously.
+Request type for {@link Tdjson#getCountryFlagEmoji}.
+*/
+export interface GetCountryFlagEmoji {
+	'@type': 'getCountryFlagEmoji';
+	/**
+A two-letter ISO 3166-1 alpha-2 country code as received from getCountries.
+*/
+	country_code: string;
 }
 
 /**
@@ -27894,7 +29221,7 @@ Short name of the application; 0-64 English letters, digits, and underscores.
 */
 	application_name: string;
 	/**
-If not 0, a message thread identifier in which the message will be sent.
+If not 0, the message thread identifier in which the message will be sent.
 */
 	message_thread_id: number;
 	/**
@@ -28144,7 +29471,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-If not 0, a message thread identifier in which the action was performed.
+If not 0, the message thread identifier in which the action was performed.
 */
 	message_thread_id: number;
 	/**
@@ -28492,7 +29819,7 @@ Identifier of the target user.
 
 /**
 Creates a new supergroup from an existing basic group and sends a corresponding messageChatUpgradeTo and
-messageChatUpgradeFrom; requires creator privileges. Deactivates the original basic group.
+messageChatUpgradeFrom; requires owner privileges. Deactivates the original basic group.
 Request type for {@link Tdjson#upgradeBasicGroupChatToSupergroupChat}.
 */
 export interface UpgradeBasicGroupChatToSupergroupChat {
@@ -28629,6 +29956,18 @@ Identifiers of chat folders in the new correct order.
 Position of the main chat list among chat folders, 0-based. Can be non-zero only for Premium users.
 */
 	main_chat_list_position: number;
+}
+
+/**
+Toggles whether chat folder tags are enabled.
+Request type for {@link Tdjson#toggleChatFolderTags}.
+*/
+export interface ToggleChatFolderTags {
+	'@type': 'toggleChatFolderTags';
+	/**
+Pass true to enable folder tags; pass false to disable them.
+*/
+	are_tags_enabled?: boolean;
 }
 
 /**
@@ -28819,8 +30158,8 @@ New settings.
 }
 
 /**
-Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info
-administrator right.
+Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info member
+right.
 Request type for {@link Tdjson#setChatTitle}.
 */
 export interface SetChatTitle {
@@ -28836,8 +30175,8 @@ New title of the chat; 1-128 characters.
 }
 
 /**
-Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info
-administrator right.
+Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info member
+right.
 Request type for {@link Tdjson#setChatPhoto}.
 */
 export interface SetChatPhoto {
@@ -28853,7 +30192,7 @@ New chat photo; pass null to delete the chat photo.
 }
 
 /**
-Changes accent color and background custom emoji of a chat. Requires can_change_info administrator right.
+Changes accent color and background custom emoji of a channel chat. Requires can_change_info administrator right.
 Request type for {@link Tdjson#setChatAccentColor}.
 */
 export interface SetChatAccentColor {
@@ -28863,8 +30202,8 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Identifier of the accent color to use. The chat must have at least accentColor.min_chat_boost_level boost level to pass
-the corresponding color.
+Identifier of the accent color to use. The chat must have at least accentColor.min_channel_chat_boost_level boost level
+to pass the corresponding color.
 */
 	accent_color_id: number;
 	/**
@@ -28875,7 +30214,8 @@ chatBoostLevelFeatures.can_set_background_custom_emoji to check whether a custom
 }
 
 /**
-Changes accent color and background custom emoji for profile of a chat. Requires can_change_info administrator right.
+Changes accent color and background custom emoji for profile of a supergroup or channel chat. Requires can_change_info
+administrator right.
 Request type for {@link Tdjson#setChatProfileAccentColor}.
 */
 export interface SetChatProfileAccentColor {
@@ -28886,7 +30226,8 @@ Chat identifier.
 	chat_id: number;
 	/**
 Identifier of the accent color to use for profile; pass -1 if none. The chat must have at least
-profileAccentColor.min_chat_boost_level boost level to pass the corresponding color.
+profileAccentColor.min_supergroup_chat_boost_level for supergroups or profileAccentColor.min_channel_chat_boost_level
+for channels boost level to pass the corresponding color.
 */
 	profile_accent_color_id: number;
 	/**
@@ -29028,11 +30369,12 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-If not 0, a message thread identifier in which the draft was changed.
+If not 0, the message thread identifier in which the draft was changed.
 */
 	message_thread_id: number;
 	/**
-New draft message; pass null to remove the draft.
+New draft message; pass null to remove the draft. All files in draft message content must be of the type inputFileLocal.
+Media thumbnails and captions are ignored.
 */
 	draft_message: DraftMessage;
 }
@@ -29073,7 +30415,7 @@ New value of has_protected_content.
 }
 
 /**
-Changes the view_as_topics setting of a forum chat.
+Changes the view_as_topics setting of a forum chat or Saved Messages.
 Request type for {@link Tdjson#toggleChatViewAsTopics}.
 */
 export interface ToggleChatViewAsTopics {
@@ -29138,7 +30480,7 @@ New value of default_disable_notification.
 
 /**
 Changes reactions, available in a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
-administrator right.
+member right.
 Request type for {@link Tdjson#setChatAvailableReactions}.
 */
 export interface SetChatAvailableReactions {
@@ -29148,8 +30490,8 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Reactions available in the chat. All explicitly specified emoji reactions must be active. Up to the chat's boost level
-custom emoji reactions can be explicitly specified.
+Reactions available in the chat. All explicitly specified emoji reactions must be active. In channel chats up to the
+chat's boost level custom emoji reactions can be explicitly specified.
 */
 	available_reactions: ChatAvailableReactions;
 }
@@ -29171,8 +30513,8 @@ New value of client_data.
 }
 
 /**
-Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
-administrator right.
+Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info member
+right.
 Request type for {@link Tdjson#setChatDescription}.
 */
 export interface SetChatDescription {
@@ -29182,8 +30524,8 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
-administrator right.
+Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info member
+right.
 */
 	description: string;
 }
@@ -29197,7 +30539,7 @@ export interface SetChatDiscussionGroup {
 	'@type': 'setChatDiscussionGroup';
 	/**
 Identifier of the channel chat. Pass 0 to remove a link from the supergroup passed in the second argument to a linked
-channel chat (requires can_pin_messages rights in the supergroup).
+channel chat (requires can_pin_messages member right in the supergroup).
 */
 	chat_id: number;
 	/**
@@ -29227,7 +30569,7 @@ New location for the chat; must be valid and not null.
 }
 
 /**
-Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members rights.
+Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members right.
 Request type for {@link Tdjson#setChatSlowModeDelay}.
 */
 export interface SetChatSlowModeDelay {
@@ -29243,7 +30585,8 @@ New slow mode delay for the chat, in seconds; must be one of 0, 10, 30, 60, 300,
 }
 
 /**
-Pins a message in a chat; requires can_pin_messages rights or can_edit_messages rights in the channel.
+Pins a message in a chat; requires can_pin_messages member right if the chat is a basic group or supergroup, or
+can_edit_messages administrator right if the chat is a channel.
 Request type for {@link Tdjson#pinChatMessage}.
 */
 export interface PinChatMessage {
@@ -29268,8 +30611,8 @@ Pass true to pin the message only for self; private chats only.
 }
 
 /**
-Removes a pinned message from a chat; requires can_pin_messages rights in the group or can_edit_messages rights in the
-channel.
+Removes a pinned message from a chat; requires can_pin_messages member right if the chat is a basic group or supergroup,
+or can_edit_messages administrator right if the chat is a channel.
 Request type for {@link Tdjson#unpinChatMessage}.
 */
 export interface UnpinChatMessage {
@@ -29285,8 +30628,8 @@ Identifier of the removed pinned message.
 }
 
 /**
-Removes all pinned messages from a chat; requires can_pin_messages rights in the group or can_edit_messages rights in
-the channel.
+Removes all pinned messages from a chat; requires can_pin_messages member right if the chat is a basic group or
+supergroup, or can_edit_messages administrator right if the chat is a channel.
 Request type for {@link Tdjson#unpinAllChatMessages}.
 */
 export interface UnpinAllChatMessages {
@@ -29298,7 +30641,7 @@ Identifier of the chat.
 }
 
 /**
-Removes all pinned messages from a forum topic; requires can_pin_messages rights in the supergroup.
+Removes all pinned messages from a forum topic; requires can_pin_messages member right in the supergroup.
 Request type for {@link Tdjson#unpinAllMessageThreadMessages}.
 */
 export interface UnpinAllMessageThreadMessages {
@@ -29339,7 +30682,7 @@ Chat identifier.
 }
 
 /**
-Adds a new member to a chat. Members can't be added to private or secret chats.
+Adds a new member to a chat; requires can_invite_users member right. Members can't be added to private or secret chats.
 Request type for {@link Tdjson#addChatMember}.
 */
 export interface AddChatMember {
@@ -29360,8 +30703,9 @@ channels, or if the added user is a bot.
 }
 
 /**
-Adds multiple new members to a chat. Currently, this method is only available for supergroups and channels. This method
-can't be used to join a chat. Members can't be added to a channel if it has more than 200 members.
+Adds multiple new members to a chat; requires can_invite_users member right. Currently, this method is only available
+for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has
+more than 200 members.
 Request type for {@link Tdjson#addChatMembers}.
 */
 export interface AddChatMembers {
@@ -29378,9 +30722,10 @@ channels.
 }
 
 /**
-Changes the status of a chat member, needs appropriate privileges. This function is currently not suitable for
-transferring chat ownership; use transferChatOwnership instead. Use addChatMember or banChatMember if some additional
-parameters needs to be passed.
+Changes the status of a chat member; requires can_invite_users member right to add a chat member, can_promote_members
+administrator right to change administrator rights of the member, and can_restrict_members administrator right to change
+restrictions of a user. This function is currently not suitable for transferring chat ownership; use
+transferChatOwnership instead. Use addChatMember or banChatMember if some additional parameters needs to be passed.
 Request type for {@link Tdjson#setChatMemberStatus}.
 */
 export interface SetChatMemberStatus {
@@ -29400,8 +30745,9 @@ The new status of the member in the chat.
 }
 
 /**
-Bans a member in a chat. Members can't be banned in private or secret chats. In supergroups and channels, the user will
-not be able to return to the group on their own using invite links, etc., unless unbanned first.
+Bans a member in a chat; requires can_restrict_members administrator right. Members can't be banned in private or secret
+chats. In supergroups and channels, the user will not be able to return to the group on their own using invite links,
+etc., unless unbanned first.
 Request type for {@link Tdjson#banChatMember}.
 */
 export interface BanChatMember {
@@ -29437,9 +30783,8 @@ export interface CanTransferOwnership {
 }
 
 /**
-Changes the owner of a chat. The current user must be a current owner of the chat. Use the method canTransferOwnership
-to check whether the ownership can be transferred from the current session. Available only for supergroups and channel
-chats.
+Changes the owner of a chat; requires owner privileges in the chat. Use the method canTransferOwnership to check whether
+the ownership can be transferred from the current session. Available only for supergroups and channel chats.
 Request type for {@link Tdjson#transferChatOwnership}.
 */
 export interface TransferChatOwnership {
@@ -29477,7 +30822,7 @@ Member identifier.
 
 /**
 Searches for a specified query in the first name, last name and usernames of the members of a specified chat. Requires
-administrator rights in channels.
+administrator rights if the chat is a channel.
 Request type for {@link Tdjson#searchChatMembers}.
 */
 export interface SearchChatMembers {
@@ -29696,8 +31041,8 @@ Pass true to get only locally available information without sending network requ
 }
 
 /**
-Returns channel chats in which the current user has the right to post stories. The chats must be rechecked with
-canSendStory before actually trying to post a story there.
+Returns supergroup and channel chats in which the current user has the right to post stories. The chats must be
+rechecked with canSendStory before actually trying to post a story there.
 Request type for {@link Tdjson#getChatsToSendStories}.
 */
 export interface GetChatsToSendStories {
@@ -29706,8 +31051,8 @@ export interface GetChatsToSendStories {
 }
 
 /**
-Checks whether the current user can send a story on behalf of a chat; requires can_post_stories rights for channel
-chats.
+Checks whether the current user can send a story on behalf of a chat; requires can_post_stories right for supergroup and
+channel chats.
 Request type for {@link Tdjson#canSendStory}.
 */
 export interface CanSendStory {
@@ -29719,7 +31064,8 @@ Chat identifier.
 }
 
 /**
-Sends a new story to a chat; requires can_post_stories rights for channel chats. Returns a temporary story.
+Sends a new story to a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary
+story.
 Request type for {@link Tdjson#sendStory}.
 */
 export interface SendStory {
@@ -29741,7 +31087,7 @@ Story caption; pass null to use an empty caption; 0-getOption("story_caption_len
 */
 	caption: FormattedText;
 	/**
-The privacy settings for the story.
+The privacy settings for the story; ignored for stories sent to supergroup and channel chats.
 */
 	privacy_settings: StoryPrivacySettings;
 	/**
@@ -29793,15 +31139,12 @@ New story caption; pass null to keep the current caption.
 }
 
 /**
-Changes privacy settings of a story. Can be called only if story.can_be_edited == true.
+Changes privacy settings of a story. The method can be called only for stories posted on behalf of the current user and
+if story.can_be_edited == true.
 Request type for {@link Tdjson#setStoryPrivacySettings}.
 */
 export interface SetStoryPrivacySettings {
 	'@type': 'setStoryPrivacySettings';
-	/**
-Identifier of the chat that posted the story.
-*/
-	story_sender_chat_id: number;
 	/**
 Identifier of the story.
 */
@@ -29922,9 +31265,9 @@ and can be smaller than the specified limit.
 }
 
 /**
-Returns the list of all stories posted by the given chat; requires can_edit_stories rights for channel chats. The
-stories are returned in a reverse chronological order (i.e., in order of decreasing story_id). For optimal performance,
-the number of returned stories is chosen by TDLib.
+Returns the list of all stories posted by the given chat; requires can_edit_stories right in the chat. The stories are
+returned in a reverse chronological order (i.e., in order of decreasing story_id). For optimal performance, the number
+of returned stories is chosen by TDLib.
 Request type for {@link Tdjson#getChatArchivedStories}.
 */
 export interface GetChatArchivedStories {
@@ -29989,7 +31332,7 @@ Number of reaction per row, 5-25.
 }
 
 /**
-Changes chosen reaction on a story.
+Changes chosen reaction on a story that has already been sent.
 Request type for {@link Tdjson#setStoryReaction}.
 */
 export interface SetStoryReaction {
@@ -30158,6 +31501,10 @@ Request type for {@link Tdjson#getChatBoostLevelFeatures}.
 export interface GetChatBoostLevelFeatures {
 	'@type': 'getChatBoostLevelFeatures';
 	/**
+Pass true to get the list of features for channels; pass false to get the list of features for supergroups.
+*/
+	is_channel?: boolean;
+	/**
 Chat boost level.
 */
 	level: number;
@@ -30169,7 +31516,10 @@ Request type for {@link Tdjson#getChatBoostFeatures}.
 */
 export interface GetChatBoostFeatures {
 	'@type': 'getChatBoostFeatures';
-
+	/**
+Pass true to get the list of features for channels; pass false to get the list of features for supergroups.
+*/
+	is_channel?: boolean;
 }
 
 /**
@@ -30182,13 +31532,13 @@ export interface GetAvailableChatBoostSlots {
 }
 
 /**
-Returns the current boost status for a channel chat.
+Returns the current boost status for a supergroup or a channel chat.
 Request type for {@link Tdjson#getChatBoostStatus}.
 */
 export interface GetChatBoostStatus {
 	'@type': 'getChatBoostStatus';
 	/**
-Identifier of the channel chat.
+Identifier of the chat.
 */
 	chat_id: number;
 }
@@ -30210,7 +31560,7 @@ Identifiers of boost slots of the current user from which to apply boosts to the
 }
 
 /**
-Returns an HTTPS link to boost the specified channel chat.
+Returns an HTTPS link to boost the specified supergroup or channel chat.
 Request type for {@link Tdjson#getChatBoostLink}.
 */
 export interface GetChatBoostLink {
@@ -30235,7 +31585,7 @@ The link to boost a chat.
 }
 
 /**
-Returns list of boosts applied to a chat; requires administrator rights in the channel chat.
+Returns list of boosts applied to a chat; requires administrator rights in the chat.
 Request type for {@link Tdjson#getChatBoosts}.
 */
 export interface GetChatBoosts {
@@ -30261,8 +31611,7 @@ smaller than the specified limit.
 }
 
 /**
-Returns list of boosts applied to a chat by a given user; requires administrator rights in the channel chat; for bots
-only.
+Returns list of boosts applied to a chat by a given user; requires administrator rights in the chat; for bots only.
 Request type for {@link Tdjson#getUserChatBoosts}.
 */
 export interface GetUserChatBoosts {
@@ -30724,7 +32073,7 @@ export interface GetMessageImportConfirmationText {
 	'@type': 'getMessageImportConfirmationText';
 	/**
 Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual
-contact or an identifier of a supergroup chat with can_change_info administrator right.
+contact or an identifier of a supergroup chat with can_change_info member right.
 */
 	chat_id: number;
 }
@@ -30737,7 +32086,7 @@ export interface ImportMessages {
 	'@type': 'importMessages';
 	/**
 Identifier of a chat to which the messages will be imported. It must be an identifier of a private chat with a mutual
-contact or an identifier of a supergroup chat with can_change_info administrator right.
+contact or an identifier of a supergroup chat with can_change_info member right.
 */
 	chat_id: number;
 	/**
@@ -31230,7 +32579,7 @@ Default group call participant identifier to join the video chats.
 
 /**
 Creates a video chat (a group call bound to a chat). Available only for basic groups, supergroups and channels; requires
-can_manage_video_chats rights.
+can_manage_video_chats administrator right.
 Request type for {@link Tdjson#createVideoChat}.
 */
 export interface CreateVideoChat {
@@ -31249,13 +32598,13 @@ chat immediately. The date must be at least 10 seconds and at most 8 days in the
 */
 	start_date: number;
 	/**
-Pass true to create an RTMP stream instead of an ordinary video chat; requires creator privileges.
+Pass true to create an RTMP stream instead of an ordinary video chat; requires owner privileges.
 */
 	is_rtmp_stream?: boolean;
 }
 
 /**
-Returns RTMP URL for streaming to the chat; requires creator privileges.
+Returns RTMP URL for streaming to the chat; requires owner privileges.
 Request type for {@link Tdjson#getVideoChatRtmpUrl}.
 */
 export interface GetVideoChatRtmpUrl {
@@ -31267,7 +32616,7 @@ Chat identifier.
 }
 
 /**
-Replaces the current RTMP URL for streaming to the chat; requires creator privileges.
+Replaces the current RTMP URL for streaming to the chat; requires owner privileges.
 Request type for {@link Tdjson#replaceVideoChatRtmpUrl}.
 */
 export interface ReplaceVideoChatRtmpUrl {
@@ -32245,8 +33594,8 @@ recently sent stickers.
 
 /**
 Manually adds a new sticker to the list of recently used stickers. The new sticker is added to the top of the list. If
-the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be
-added to this list. Emoji stickers can't be added to recent stickers.
+the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set or in
+WEBP format can be added to this list. Emoji stickers can't be added to recent stickers.
 Request type for {@link Tdjson#addRecentSticker}.
 */
 export interface AddRecentSticker {
@@ -32303,8 +33652,8 @@ export interface GetFavoriteStickers {
 
 /**
 Adds a new sticker to the list of favorite stickers. The new sticker is added to the top of the list. If the sticker was
-already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be added to this
-list. Emoji stickers can't be added to favorite stickers.
+already in the list, it is removed from the list first. Only stickers belonging to a sticker set or in WEBP format can
+be added to this list. Emoji stickers can't be added to favorite stickers.
 Request type for {@link Tdjson#addFavoriteSticker}.
 */
 export interface AddFavoriteSticker {
@@ -32341,7 +33690,7 @@ Sticker file identifier.
 }
 
 /**
-Searches for emojis by keywords. Supported only if the file database is enabled.
+Searches for emojis by keywords. Supported only if the file database is enabled. Order of results is unspecified.
 Request type for {@link Tdjson#searchEmojis}.
 */
 export interface SearchEmojis {
@@ -32351,9 +33700,21 @@ Text to search for.
 */
 	text: string;
 	/**
-Pass true if only emojis, which exactly match the text, needs to be returned.
+List of possible IETF language tags of the user's input language; may be empty if unknown.
 */
-	exact_match?: boolean;
+	input_language_codes: string[];
+}
+
+/**
+Return emojis matching the keyword. Supported only if the file database is enabled. Order of results is unspecified.
+Request type for {@link Tdjson#getKeywordEmojis}.
+*/
+export interface GetKeywordEmojis {
+	'@type': 'getKeywordEmojis';
+	/**
+Text to search for.
+*/
+	text: string;
 	/**
 List of possible IETF language tags of the user's input language; may be empty if unknown.
 */
@@ -32688,7 +34049,7 @@ New emoji status; pass null to switch to the default badge.
 
 /**
 Changes the location of the current user. Needs to be called if getOption("is_location_visible") is true and location
-changes for more than 1 kilometer.
+changes for more than 1 kilometer. Must not be called if the user has a business location.
 Request type for {@link Tdjson#setLocation}.
 */
 export interface SetLocation {
@@ -32697,6 +34058,54 @@ export interface SetLocation {
 The new location of the user.
 */
 	location: Location;
+}
+
+/**
+Changes the business location of the current user. Requires Telegram Business subscription.
+Request type for {@link Tdjson#setBusinessLocation}.
+*/
+export interface SetBusinessLocation {
+	'@type': 'setBusinessLocation';
+	/**
+The new location of the business; pass null to remove the location.
+*/
+	location: BusinessLocation;
+}
+
+/**
+Changes the business opening hours of the current user. Requires Telegram Business subscription.
+Request type for {@link Tdjson#setBusinessOpeningHours}.
+*/
+export interface SetBusinessOpeningHours {
+	'@type': 'setBusinessOpeningHours';
+	/**
+The new opening hours of the business; pass null to remove the opening hours.
+*/
+	opening_hours: BusinessOpeningHours;
+}
+
+/**
+Changes the business greeting message settings of the current user. Requires Telegram Business subscription.
+Request type for {@link Tdjson#setBusinessGreetingMessageSettings}.
+*/
+export interface SetBusinessGreetingMessageSettings {
+	'@type': 'setBusinessGreetingMessageSettings';
+	/**
+The new settings for the greeting message of the business; pass null to disable the greeting message.
+*/
+	greeting_message_settings: BusinessGreetingMessageSettings;
+}
+
+/**
+Changes the business away message settings of the current user. Requires Telegram Business subscription.
+Request type for {@link Tdjson#setBusinessAwayMessageSettings}.
+*/
+export interface SetBusinessAwayMessageSettings {
+	'@type': 'setBusinessAwayMessageSettings';
+	/**
+The new settings for the away message of the business; pass null to disable the away message.
+*/
+	away_message_settings: BusinessAwayMessageSettings;
 }
 
 /**
@@ -32736,6 +34145,40 @@ export interface CheckChangePhoneNumberCode {
 Authentication code to check.
 */
 	code: string;
+}
+
+/**
+Returns the business bot that is connected to the current user account. Returns a 404 error if there is no connected
+bot.
+Request type for {@link Tdjson#getBusinessConnectedBot}.
+*/
+export interface GetBusinessConnectedBot {
+	'@type': 'getBusinessConnectedBot';
+
+}
+
+/**
+Adds or changes business bot that is connected to the current user account.
+Request type for {@link Tdjson#setBusinessConnectedBot}.
+*/
+export interface SetBusinessConnectedBot {
+	'@type': 'setBusinessConnectedBot';
+	/**
+Connection settings for the bot.
+*/
+	bot: BusinessConnectedBot;
+}
+
+/**
+Deletes the business bot that is connected to the current user account.
+Request type for {@link Tdjson#deleteBusinessConnectedBot}.
+*/
+export interface DeleteBusinessConnectedBot {
+	'@type': 'deleteBusinessConnectedBot';
+	/**
+Unique user identifier for the bot.
+*/
+	bot_user_id: number;
 }
 
 /**
@@ -33280,7 +34723,42 @@ New value of the supergroup sticker set identifier. Use 0 to remove the supergro
 }
 
 /**
-Toggles whether sender signature is added to sent messages in a channel; requires can_change_info administrator right.
+Changes the custom emoji sticker set of a supergroup; requires can_change_info administrator right. The chat must have
+at least chatBoostFeatures.min_custom_emoji_sticker_set_boost_level boost level to pass the corresponding color.
+Request type for {@link Tdjson#setSupergroupCustomEmojiStickerSet}.
+*/
+export interface SetSupergroupCustomEmojiStickerSet {
+	'@type': 'setSupergroupCustomEmojiStickerSet';
+	/**
+Identifier of the supergroup.
+*/
+	supergroup_id: number;
+	/**
+New value of the custom emoji sticker set identifier for the supergroup. Use 0 to remove the custom emoji sticker set in
+the supergroup.
+*/
+	custom_emoji_sticker_set_id: string;
+}
+
+/**
+Changes the number of times the supergroup must be boosted by a user to ignore slow mode and chat permission
+restrictions; requires can_restrict_members administrator right.
+Request type for {@link Tdjson#setSupergroupUnrestrictBoostCount}.
+*/
+export interface SetSupergroupUnrestrictBoostCount {
+	'@type': 'setSupergroupUnrestrictBoostCount';
+	/**
+Identifier of the supergroup.
+*/
+	supergroup_id: number;
+	/**
+New value of the unrestrict_boost_count supergroup setting; 0-8. Use 0 to remove the setting.
+*/
+	unrestrict_boost_count: number;
+}
+
+/**
+Toggles whether sender signature is added to sent messages in a channel; requires can_change_info member right.
 Request type for {@link Tdjson#toggleSupergroupSignMessages}.
 */
 export interface ToggleSupergroupSignMessages {
@@ -33330,8 +34808,7 @@ New value of join_by_request.
 }
 
 /**
-Toggles whether the message history of a supergroup is available to new members; requires can_change_info administrator
-right.
+Toggles whether the message history of a supergroup is available to new members; requires can_change_info member right.
 Request type for {@link Tdjson#toggleSupergroupIsAllHistoryAvailable}.
 */
 export interface ToggleSupergroupIsAllHistoryAvailable {
@@ -33511,6 +34988,15 @@ The types of events to return; pass null to get chat events of all types.
 User identifiers by which to filter events. By default, events relating to all users will be returned.
 */
 	user_ids: number[];
+}
+
+/**
+Returns the list of supported time zones.
+Request type for {@link Tdjson#getTimeZones}.
+*/
+export interface GetTimeZones {
+	'@type': 'getTimeZones';
+
 }
 
 /**
@@ -33950,6 +35436,64 @@ export interface GetUserPrivacySettingRules {
 The privacy setting.
 */
 	setting: UserPrivacySetting;
+}
+
+/**
+Changes privacy settings for message read date.
+Request type for {@link Tdjson#setReadDatePrivacySettings}.
+*/
+export interface SetReadDatePrivacySettings {
+	'@type': 'setReadDatePrivacySettings';
+	/**
+New settings.
+*/
+	settings: ReadDatePrivacySettings;
+}
+
+/**
+Returns privacy settings for message read date.
+Request type for {@link Tdjson#getReadDatePrivacySettings}.
+*/
+export interface GetReadDatePrivacySettings {
+	'@type': 'getReadDatePrivacySettings';
+
+}
+
+/**
+Changes privacy settings for new chat creation; for Telegram Premium users only.
+Request type for {@link Tdjson#setNewChatPrivacySettings}.
+*/
+export interface SetNewChatPrivacySettings {
+	'@type': 'setNewChatPrivacySettings';
+	/**
+New settings.
+*/
+	settings: NewChatPrivacySettings;
+}
+
+/**
+Returns privacy settings for new chat creation.
+Request type for {@link Tdjson#getNewChatPrivacySettings}.
+*/
+export interface GetNewChatPrivacySettings {
+	'@type': 'getNewChatPrivacySettings';
+
+}
+
+/**
+Check whether the current user can message another user or try to create a chat with them.
+Request type for {@link Tdjson#canSendMessageToUser}.
+*/
+export interface CanSendMessageToUser {
+	'@type': 'canSendMessageToUser';
+	/**
+Identifier of the other user.
+*/
+	user_id: number;
+	/**
+Pass true to get only locally available information without sending network requests.
+*/
+	only_local?: boolean;
 }
 
 /**
@@ -35066,8 +36610,8 @@ Request type for {@link Tdjson#getPremiumGiftCodePaymentOptions}.
 export interface GetPremiumGiftCodePaymentOptions {
 	'@type': 'getPremiumGiftCodePaymentOptions';
 	/**
-Identifier of the channel chat, which will be automatically boosted by receivers of the gift codes and which is
-administered by the user; 0 if none.
+Identifier of the supergroup or channel chat, which will be automatically boosted by receivers of the gift codes and
+which is administered by the user; 0 if none.
 */
 	boosted_chat_id: number;
 }
@@ -35097,8 +36641,7 @@ The code to apply.
 }
 
 /**
-Launches a prepaid Telegram Premium giveaway for subscribers of channel chats; requires can_post_messages rights in the
-channels.
+Launches a prepaid Telegram Premium giveaway.
 Request type for {@link Tdjson#launchPrepaidPremiumGiveaway}.
 */
 export interface LaunchPrepaidPremiumGiveaway {
@@ -35812,6 +37355,7 @@ export type Request =
 	| SetRecoveryEmailAddress
 	| CheckRecoveryEmailAddressCode
 	| ResendRecoveryEmailAddressCode
+	| CancelRecoveryEmailAddressVerification
 	| RequestPasswordRecovery
 	| CheckPasswordRecoveryCode
 	| RecoverPassword
@@ -35835,6 +37379,7 @@ export type Request =
 	| GetCallbackQueryMessage
 	| GetMessages
 	| GetMessageThread
+	| GetMessageReadDate
 	| GetMessageViewers
 	| GetFile
 	| GetRemoteFile
@@ -35860,6 +37405,13 @@ export type Request =
 	| CheckCreatedPublicChatsLimit
 	| GetSuitableDiscussionChats
 	| GetInactiveSupergroupChats
+	| LoadSavedMessagesTopics
+	| GetSavedMessagesTopicHistory
+	| GetSavedMessagesTopicMessageByDate
+	| DeleteSavedMessagesTopicHistory
+	| DeleteSavedMessagesTopicMessagesByDate
+	| ToggleSavedMessagesTopicIsPinned
+	| SetPinnedSavedMessagesTopics
 	| GetGroupsInCommon
 	| GetChatHistory
 	| GetMessageThreadHistory
@@ -35868,6 +37420,7 @@ export type Request =
 	| SearchChatMessages
 	| SearchMessages
 	| SearchSecretMessages
+	| SearchSavedMessages
 	| SearchCallMessages
 	| SearchOutgoingDocumentMessages
 	| DeleteAllCallMessages
@@ -35897,6 +37450,7 @@ export type Request =
 	| SendBotStartMessage
 	| SendInlineQueryResultMessage
 	| ForwardMessages
+	| SendQuickReplyShortcutMessages
 	| ResendMessages
 	| AddLocalMessage
 	| DeleteMessages
@@ -35913,6 +37467,13 @@ export type Request =
 	| EditInlineMessageCaption
 	| EditInlineMessageReplyMarkup
 	| EditMessageSchedulingState
+	| CheckQuickReplyShortcutName
+	| LoadQuickReplyShortcuts
+	| SetQuickReplyShortcutName
+	| DeleteQuickReplyShortcut
+	| ReorderQuickReplyShortcuts
+	| LoadQuickReplyShortcutMessages
+	| DeleteQuickReplyShortcutMessages
 	| GetForumTopicDefaultIcons
 	| CreateForumTopic
 	| EditForumTopic
@@ -35934,11 +37495,14 @@ export type Request =
 	| SetMessageReactions
 	| GetMessageAddedReactions
 	| SetDefaultReactionType
+	| GetSavedMessagesTags
+	| SetSavedMessagesTagLabel
 	| SearchQuote
 	| GetTextEntities
 	| ParseTextEntities
 	| ParseMarkdown
 	| GetMarkdownText
+	| GetCountryFlagEmoji
 	| GetFileMimeType
 	| GetFileExtension
 	| CleanFileName
@@ -36003,6 +37567,7 @@ export type Request =
 	| GetChatFolderChatsToLeave
 	| GetChatFolderChatCount
 	| ReorderChatFolders
+	| ToggleChatFolderTags
 	| GetRecommendedChatFolders
 	| GetChatFolderDefaultIconName
 	| GetChatsForChatFolderInviteLink
@@ -36221,6 +37786,7 @@ export type Request =
 	| RemoveFavoriteSticker
 	| GetStickerEmojis
 	| SearchEmojis
+	| GetKeywordEmojis
 	| GetEmojiCategories
 	| GetAnimatedEmoji
 	| GetEmojiSuggestionsUrl
@@ -36247,9 +37813,16 @@ export type Request =
 	| ReorderActiveUsernames
 	| SetEmojiStatus
 	| SetLocation
+	| SetBusinessLocation
+	| SetBusinessOpeningHours
+	| SetBusinessGreetingMessageSettings
+	| SetBusinessAwayMessageSettings
 	| ChangePhoneNumber
 	| ResendChangePhoneNumberCode
 	| CheckChangePhoneNumberCode
+	| GetBusinessConnectedBot
+	| SetBusinessConnectedBot
+	| DeleteBusinessConnectedBot
 	| GetUserLink
 	| SearchUserByToken
 	| SetCommands
@@ -36286,6 +37859,8 @@ export type Request =
 	| DisableAllSupergroupUsernames
 	| ReorderSupergroupActiveUsernames
 	| SetSupergroupStickerSet
+	| SetSupergroupCustomEmojiStickerSet
+	| SetSupergroupUnrestrictBoostCount
 	| ToggleSupergroupSignMessages
 	| ToggleSupergroupJoinToSendMessages
 	| ToggleSupergroupJoinByRequest
@@ -36299,6 +37874,7 @@ export type Request =
 	| GetSupergroupMembers
 	| CloseSecretChat
 	| GetChatEventLog
+	| GetTimeZones
 	| GetPaymentForm
 	| ValidateOrderInfo
 	| SendPaymentForm
@@ -36330,6 +37906,11 @@ export type Request =
 	| GetRecentlyVisitedTMeUrls
 	| SetUserPrivacySettingRules
 	| GetUserPrivacySettingRules
+	| SetReadDatePrivacySettings
+	| GetReadDatePrivacySettings
+	| SetNewChatPrivacySettings
+	| GetNewChatPrivacySettings
+	| CanSendMessageToUser
 	| GetOption
 	| SetOption
 	| SetAccountTtl
@@ -36791,6 +38372,15 @@ Resends the 2-step verification recovery email address verification code.
 	}
 
 	/**
+Cancels verification of the 2-step verification recovery email address.
+*/
+	async cancelRecoveryEmailAddressVerification(): Promise<PasswordState> {
+		return this._request({
+			'@type': 'cancelRecoveryEmailAddressVerification',
+		});
+	}
+
+	/**
 Requests to send a 2-step verification password recovery code to an email address that was previously set up.
 */
 	async requestPasswordRecovery(): Promise<EmailAddressAuthenticationCodeInfo> {
@@ -37018,6 +38608,17 @@ Returns information about a message thread. Can be used only if message.can_get_
 		return this._request({
 			...options,
 			'@type': 'getMessageThread',
+		});
+	}
+
+	/**
+Returns read date of a recent outgoing message in a private chat. The method can be called if message.can_get_read_date
+== true and the message is read.
+*/
+	async getMessageReadDate(options: Omit<GetMessageReadDate, '@type'>): Promise<MessageReadDate> {
+		return this._request({
+			...options,
+			'@type': 'getMessageReadDate',
 		});
 	}
 
@@ -37292,6 +38893,80 @@ Premium.
 	}
 
 	/**
+Loads more Saved Messages topics. The loaded topics will be sent through updateSavedMessagesTopic. Topics are sorted by
+their topic.order in descending order. Returns a 404 error if all topics have been loaded.
+*/
+	async loadSavedMessagesTopics(options: Omit<LoadSavedMessagesTopics, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'loadSavedMessagesTopics',
+		});
+	}
+
+	/**
+Returns messages in a Saved Messages topic. The messages are returned in a reverse chronological order (i.e., in order
+of decreasing message_id).
+*/
+	async getSavedMessagesTopicHistory(options: Omit<GetSavedMessagesTopicHistory, '@type'>): Promise<Messages> {
+		return this._request({
+			...options,
+			'@type': 'getSavedMessagesTopicHistory',
+		});
+	}
+
+	/**
+Returns the last message sent in a Saved Messages topic no later than the specified date.
+*/
+	async getSavedMessagesTopicMessageByDate(options: Omit<GetSavedMessagesTopicMessageByDate, '@type'>): Promise<Message> {
+		return this._request({
+			...options,
+			'@type': 'getSavedMessagesTopicMessageByDate',
+		});
+	}
+
+	/**
+Deletes all messages in a Saved Messages topic.
+*/
+	async deleteSavedMessagesTopicHistory(options: Omit<DeleteSavedMessagesTopicHistory, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteSavedMessagesTopicHistory',
+		});
+	}
+
+	/**
+Deletes all messages between the specified dates in a Saved Messages topic. Messages sent in the last 30 seconds will
+not be deleted.
+*/
+	async deleteSavedMessagesTopicMessagesByDate(options: Omit<DeleteSavedMessagesTopicMessagesByDate, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteSavedMessagesTopicMessagesByDate',
+		});
+	}
+
+	/**
+Changes the pinned state of a Saved Messages topic. There can be up to
+getOption("pinned_saved_messages_topic_count_max") pinned topics. The limit can be increased with Telegram Premium.
+*/
+	async toggleSavedMessagesTopicIsPinned(options: Omit<ToggleSavedMessagesTopicIsPinned, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleSavedMessagesTopicIsPinned',
+		});
+	}
+
+	/**
+Changes the order of pinned Saved Messages topics.
+*/
+	async setPinnedSavedMessagesTopics(options: Omit<SetPinnedSavedMessagesTopics, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setPinnedSavedMessagesTopics',
+		});
+	}
+
+	/**
 Returns a list of common group chats with a given user. Chats are sorted by their type and creation date.
 */
 	async getGroupsInCommon(options: Omit<GetGroupsInCommon, '@type'>): Promise<Chats> {
@@ -37383,6 +39058,18 @@ number of returned messages is chosen by TDLib.
 		return this._request({
 			...options,
 			'@type': 'searchSecretMessages',
+		});
+	}
+
+	/**
+Searches for messages tagged by the given reaction and with the given words in the Saved Messages chat; for Telegram
+Premium users only. Returns the results in reverse chronological order, i.e. in order of decreasing message_id For
+optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit.
+*/
+	async searchSavedMessages(options: Omit<SearchSavedMessages, '@type'>): Promise<FoundChatMessages> {
+		return this._request({
+			...options,
+			'@type': 'searchSavedMessages',
 		});
 	}
 
@@ -37666,9 +39353,9 @@ sent messages.
 	}
 
 	/**
-Invites a bot to a chat (if it is not yet a member) and sends it the /start command. Bots can't be invited to a private
-chat other than the chat with the bot. Bots can't be invited to channels (although they can be added as admins) and
-secret chats. Returns the sent message.
+Invites a bot to a chat (if it is not yet a member) and sends it the /start command; requires can_invite_users member
+right. Bots can't be invited to a private chat other than the chat with the bot. Bots can't be invited to channels
+(although they can be added as admins) and secret chats. Returns the sent message.
 */
 	async sendBotStartMessage(options: Omit<SendBotStartMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -37695,6 +39382,16 @@ message_ids. If a message can't be forwarded, null will be returned instead of t
 		return this._request({
 			...options,
 			'@type': 'forwardMessages',
+		});
+	}
+
+	/**
+Sends messages from a quick reply shortcut. Requires Telegram Business subscription.
+*/
+	async sendQuickReplyShortcutMessages(options: Omit<SendQuickReplyShortcutMessages, '@type'>): Promise<Messages> {
+		return this._request({
+			...options,
+			'@type': 'sendQuickReplyShortcutMessages',
 		});
 	}
 
@@ -37874,6 +39571,77 @@ together with the message will be also changed.
 	}
 
 	/**
+Checks validness of a name for a quick reply shortcut. Can be called synchronously.
+*/
+	async checkQuickReplyShortcutName(options: Omit<CheckQuickReplyShortcutName, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'checkQuickReplyShortcutName',
+		});
+	}
+
+	/**
+Loads quick reply shortcuts created by the current user. The loaded topics will be sent through
+updateQuickReplyShortcuts.
+*/
+	async loadQuickReplyShortcuts(): Promise<Ok> {
+		return this._request({
+			'@type': 'loadQuickReplyShortcuts',
+		});
+	}
+
+	/**
+Changes name of a quick reply shortcut.
+*/
+	async setQuickReplyShortcutName(options: Omit<SetQuickReplyShortcutName, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setQuickReplyShortcutName',
+		});
+	}
+
+	/**
+Deletes a quick reply shortcut.
+*/
+	async deleteQuickReplyShortcut(options: Omit<DeleteQuickReplyShortcut, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteQuickReplyShortcut',
+		});
+	}
+
+	/**
+Changes the order of quick reply shortcuts.
+*/
+	async reorderQuickReplyShortcuts(options: Omit<ReorderQuickReplyShortcuts, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reorderQuickReplyShortcuts',
+		});
+	}
+
+	/**
+Loads quick reply messages that can be sent by a given quick reply shortcut. The loaded messages will be sent through
+updateQuickReplyShortcutMessages.
+*/
+	async loadQuickReplyShortcutMessages(options: Omit<LoadQuickReplyShortcutMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'loadQuickReplyShortcutMessages',
+		});
+	}
+
+	/**
+Deletes specified quick reply messages.
+*/
+	async deleteQuickReplyShortcutMessages(options: Omit<DeleteQuickReplyShortcutMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteQuickReplyShortcutMessages',
+		});
+	}
+
+	/**
 Returns list of custom emojis, which can be used as forum topic icon by all users.
 */
 	async getForumTopicDefaultIcons(): Promise<Stickers> {
@@ -37883,7 +39651,8 @@ Returns list of custom emojis, which can be used as forum topic icon by all user
 	}
 
 	/**
-Creates a topic in a forum supergroup chat; requires can_manage_topics rights in the supergroup.
+Creates a topic in a forum supergroup chat; requires can_manage_topics administrator or can_create_topics member right
+in the supergroup.
 */
 	async createForumTopic(options: Omit<CreateForumTopic, '@type'>): Promise<ForumTopicInfo> {
 		return this._request({
@@ -37893,8 +39662,8 @@ Creates a topic in a forum supergroup chat; requires can_manage_topics rights in
 	}
 
 	/**
-Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics administrator right in the
-supergroup unless the user is creator of the topic.
+Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics right in the supergroup unless
+the user is creator of the topic.
 */
 	async editForumTopic(options: Omit<EditForumTopic, '@type'>): Promise<Ok> {
 		return this._request({
@@ -37945,8 +39714,8 @@ Changes the notification settings of a forum topic.
 	}
 
 	/**
-Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics administrator right in the
-supergroup unless the user is creator of the topic.
+Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics right in the supergroup unless
+the user is creator of the topic.
 */
 	async toggleForumTopicIsClosed(options: Omit<ToggleForumTopicIsClosed, '@type'>): Promise<Ok> {
 		return this._request({
@@ -37956,8 +39725,8 @@ supergroup unless the user is creator of the topic.
 	}
 
 	/**
-Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics administrator right in
-the supergroup.
+Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics right in the
+supergroup.
 */
 	async toggleGeneralForumTopicIsHidden(options: Omit<ToggleGeneralForumTopicIsHidden, '@type'>): Promise<Ok> {
 		return this._request({
@@ -37967,8 +39736,8 @@ the supergroup.
 	}
 
 	/**
-Changes the pinned state of a forum topic; requires can_manage_topics administrator right in the supergroup. There can
-be up to getOption("pinned_forum_topic_count_max") pinned forum topics.
+Changes the pinned state of a forum topic; requires can_manage_topics right in the supergroup. There can be up to
+getOption("pinned_forum_topic_count_max") pinned forum topics.
 */
 	async toggleForumTopicIsPinned(options: Omit<ToggleForumTopicIsPinned, '@type'>): Promise<Ok> {
 		return this._request({
@@ -37978,7 +39747,7 @@ be up to getOption("pinned_forum_topic_count_max") pinned forum topics.
 	}
 
 	/**
-Changes the order of pinned forum topics.
+Changes the order of pinned forum topics; requires can_manage_topics right in the supergroup.
 */
 	async setPinnedForumTopics(options: Omit<SetPinnedForumTopics, '@type'>): Promise<Ok> {
 		return this._request({
@@ -37999,7 +39768,7 @@ user is creator of the topic, the topic has no messages from other users and has
 	}
 
 	/**
-Returns information about a emoji reaction. Returns a 404 error if the reaction is not found.
+Returns information about an emoji reaction. Returns a 404 error if the reaction is not found.
 */
 	async getEmojiReaction(options: Omit<GetEmojiReaction, '@type'>): Promise<EmojiReaction> {
 		return this._request({
@@ -38038,8 +39807,8 @@ Clears the list of recently used reactions.
 	}
 
 	/**
-Adds a reaction to a message. Use getMessageAvailableReactions to receive the list of available reactions for the
-message.
+Adds a reaction or a tag to a message. Use getMessageAvailableReactions to receive the list of available reactions for
+the message.
 */
 	async addMessageReaction(options: Omit<AddMessageReaction, '@type'>): Promise<Ok> {
 		return this._request({
@@ -38085,6 +39854,26 @@ Changes type of default reaction for the current user.
 		return this._request({
 			...options,
 			'@type': 'setDefaultReactionType',
+		});
+	}
+
+	/**
+Returns tags used in Saved Messages or a Saved Messages topic.
+*/
+	async getSavedMessagesTags(options: Omit<GetSavedMessagesTags, '@type'>): Promise<SavedMessagesTags> {
+		return this._request({
+			...options,
+			'@type': 'getSavedMessagesTags',
+		});
+	}
+
+	/**
+Changes label of a Saved Messages tag; for Telegram Premium users only.
+*/
+	async setSavedMessagesTagLabel(options: Omit<SetSavedMessagesTagLabel, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setSavedMessagesTagLabel',
 		});
 	}
 
@@ -38139,6 +39928,16 @@ Markdown unambiguously are kept as is. Can be called synchronously.
 		return this._request({
 			...options,
 			'@type': 'getMarkdownText',
+		});
+	}
+
+	/**
+Returns an emoji for the given country. Returns an empty string on failure. Can be called synchronously.
+*/
+	async getCountryFlagEmoji(options: Omit<GetCountryFlagEmoji, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'getCountryFlagEmoji',
 		});
 	}
 
@@ -38711,7 +40510,7 @@ Creates a new secret chat. Returns the newly created chat.
 
 	/**
 Creates a new supergroup from an existing basic group and sends a corresponding messageChatUpgradeTo and
-messageChatUpgradeFrom; requires creator privileges. Deactivates the original basic group.
+messageChatUpgradeFrom; requires owner privileges. Deactivates the original basic group.
 */
 	async upgradeBasicGroupChatToSupergroupChat(options: Omit<UpgradeBasicGroupChatToSupergroupChat, '@type'>): Promise<Chat> {
 		return this._request({
@@ -38811,6 +40610,16 @@ Changes the order of chat folders.
 		return this._request({
 			...options,
 			'@type': 'reorderChatFolders',
+		});
+	}
+
+	/**
+Toggles whether chat folder tags are enabled.
+*/
+	async toggleChatFolderTags(options: Omit<ToggleChatFolderTags, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleChatFolderTags',
 		});
 	}
 
@@ -38945,8 +40754,8 @@ Changes settings for automatic moving of chats to and from the Archive chat list
 	}
 
 	/**
-Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info
-administrator right.
+Changes the chat title. Supported only for basic groups, supergroups and channels. Requires can_change_info member
+right.
 */
 	async setChatTitle(options: Omit<SetChatTitle, '@type'>): Promise<Ok> {
 		return this._request({
@@ -38956,8 +40765,8 @@ administrator right.
 	}
 
 	/**
-Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info
-administrator right.
+Changes the photo of a chat. Supported only for basic groups, supergroups and channels. Requires can_change_info member
+right.
 */
 	async setChatPhoto(options: Omit<SetChatPhoto, '@type'>): Promise<Ok> {
 		return this._request({
@@ -38967,7 +40776,7 @@ administrator right.
 	}
 
 	/**
-Changes accent color and background custom emoji of a chat. Requires can_change_info administrator right.
+Changes accent color and background custom emoji of a channel chat. Requires can_change_info administrator right.
 */
 	async setChatAccentColor(options: Omit<SetChatAccentColor, '@type'>): Promise<Ok> {
 		return this._request({
@@ -38977,7 +40786,8 @@ Changes accent color and background custom emoji of a chat. Requires can_change_
 	}
 
 	/**
-Changes accent color and background custom emoji for profile of a chat. Requires can_change_info administrator right.
+Changes accent color and background custom emoji for profile of a supergroup or channel chat. Requires can_change_info
+administrator right.
 */
 	async setChatProfileAccentColor(options: Omit<SetChatProfileAccentColor, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39084,7 +40894,7 @@ channels. Requires owner privileges.
 	}
 
 	/**
-Changes the view_as_topics setting of a forum chat.
+Changes the view_as_topics setting of a forum chat or Saved Messages.
 */
 	async toggleChatViewAsTopics(options: Omit<ToggleChatViewAsTopics, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39125,7 +40935,7 @@ Changes the value of the default disable_notification parameter, used when a mes
 
 	/**
 Changes reactions, available in a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
-administrator right.
+member right.
 */
 	async setChatAvailableReactions(options: Omit<SetChatAvailableReactions, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39145,8 +40955,8 @@ Changes application-specific data associated with a chat.
 	}
 
 	/**
-Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info
-administrator right.
+Changes information about a chat. Available for basic groups, supergroups, and channels. Requires can_change_info member
+right.
 */
 	async setChatDescription(options: Omit<SetChatDescription, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39178,7 +40988,7 @@ supergroupFullInfo.can_set_location to check whether the method is allowed to us
 	}
 
 	/**
-Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members rights.
+Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members right.
 */
 	async setChatSlowModeDelay(options: Omit<SetChatSlowModeDelay, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39188,7 +40998,8 @@ Changes the slow mode delay of a chat. Available only for supergroups; requires 
 	}
 
 	/**
-Pins a message in a chat; requires can_pin_messages rights or can_edit_messages rights in the channel.
+Pins a message in a chat; requires can_pin_messages member right if the chat is a basic group or supergroup, or
+can_edit_messages administrator right if the chat is a channel.
 */
 	async pinChatMessage(options: Omit<PinChatMessage, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39198,8 +41009,8 @@ Pins a message in a chat; requires can_pin_messages rights or can_edit_messages 
 	}
 
 	/**
-Removes a pinned message from a chat; requires can_pin_messages rights in the group or can_edit_messages rights in the
-channel.
+Removes a pinned message from a chat; requires can_pin_messages member right if the chat is a basic group or supergroup,
+or can_edit_messages administrator right if the chat is a channel.
 */
 	async unpinChatMessage(options: Omit<UnpinChatMessage, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39209,8 +41020,8 @@ channel.
 	}
 
 	/**
-Removes all pinned messages from a chat; requires can_pin_messages rights in the group or can_edit_messages rights in
-the channel.
+Removes all pinned messages from a chat; requires can_pin_messages member right if the chat is a basic group or
+supergroup, or can_edit_messages administrator right if the chat is a channel.
 */
 	async unpinAllChatMessages(options: Omit<UnpinAllChatMessages, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39220,7 +41031,7 @@ the channel.
 	}
 
 	/**
-Removes all pinned messages from a forum topic; requires can_pin_messages rights in the supergroup.
+Removes all pinned messages from a forum topic; requires can_pin_messages member right in the supergroup.
 */
 	async unpinAllMessageThreadMessages(options: Omit<UnpinAllMessageThreadMessages, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39251,7 +41062,7 @@ Removes the current user from chat members. Private and secret chats can't be le
 	}
 
 	/**
-Adds a new member to a chat. Members can't be added to private or secret chats.
+Adds a new member to a chat; requires can_invite_users member right. Members can't be added to private or secret chats.
 */
 	async addChatMember(options: Omit<AddChatMember, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39261,8 +41072,9 @@ Adds a new member to a chat. Members can't be added to private or secret chats.
 	}
 
 	/**
-Adds multiple new members to a chat. Currently, this method is only available for supergroups and channels. This method
-can't be used to join a chat. Members can't be added to a channel if it has more than 200 members.
+Adds multiple new members to a chat; requires can_invite_users member right. Currently, this method is only available
+for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has
+more than 200 members.
 */
 	async addChatMembers(options: Omit<AddChatMembers, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39272,9 +41084,10 @@ can't be used to join a chat. Members can't be added to a channel if it has more
 	}
 
 	/**
-Changes the status of a chat member, needs appropriate privileges. This function is currently not suitable for
-transferring chat ownership; use transferChatOwnership instead. Use addChatMember or banChatMember if some additional
-parameters needs to be passed.
+Changes the status of a chat member; requires can_invite_users member right to add a chat member, can_promote_members
+administrator right to change administrator rights of the member, and can_restrict_members administrator right to change
+restrictions of a user. This function is currently not suitable for transferring chat ownership; use
+transferChatOwnership instead. Use addChatMember or banChatMember if some additional parameters needs to be passed.
 */
 	async setChatMemberStatus(options: Omit<SetChatMemberStatus, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39284,8 +41097,9 @@ parameters needs to be passed.
 	}
 
 	/**
-Bans a member in a chat. Members can't be banned in private or secret chats. In supergroups and channels, the user will
-not be able to return to the group on their own using invite links, etc., unless unbanned first.
+Bans a member in a chat; requires can_restrict_members administrator right. Members can't be banned in private or secret
+chats. In supergroups and channels, the user will not be able to return to the group on their own using invite links,
+etc., unless unbanned first.
 */
 	async banChatMember(options: Omit<BanChatMember, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39304,9 +41118,8 @@ Checks whether the current session can be used to transfer a chat ownership to a
 	}
 
 	/**
-Changes the owner of a chat. The current user must be a current owner of the chat. Use the method canTransferOwnership
-to check whether the ownership can be transferred from the current session. Available only for supergroups and channel
-chats.
+Changes the owner of a chat; requires owner privileges in the chat. Use the method canTransferOwnership to check whether
+the ownership can be transferred from the current session. Available only for supergroups and channel chats.
 */
 	async transferChatOwnership(options: Omit<TransferChatOwnership, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39327,7 +41140,7 @@ Returns information about a single member of a chat.
 
 	/**
 Searches for a specified query in the first name, last name and usernames of the members of a specified chat. Requires
-administrator rights in channels.
+administrator rights if the chat is a channel.
 */
 	async searchChatMembers(options: Omit<SearchChatMembers, '@type'>): Promise<ChatMembers> {
 		return this._request({
@@ -39480,8 +41293,8 @@ Returns a story.
 	}
 
 	/**
-Returns channel chats in which the current user has the right to post stories. The chats must be rechecked with
-canSendStory before actually trying to post a story there.
+Returns supergroup and channel chats in which the current user has the right to post stories. The chats must be
+rechecked with canSendStory before actually trying to post a story there.
 */
 	async getChatsToSendStories(): Promise<Chats> {
 		return this._request({
@@ -39490,8 +41303,8 @@ canSendStory before actually trying to post a story there.
 	}
 
 	/**
-Checks whether the current user can send a story on behalf of a chat; requires can_post_stories rights for channel
-chats.
+Checks whether the current user can send a story on behalf of a chat; requires can_post_stories right for supergroup and
+channel chats.
 */
 	async canSendStory(options: Omit<CanSendStory, '@type'>): Promise<CanSendStoryResult> {
 		return this._request({
@@ -39501,7 +41314,8 @@ chats.
 	}
 
 	/**
-Sends a new story to a chat; requires can_post_stories rights for channel chats. Returns a temporary story.
+Sends a new story to a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary
+story.
 */
 	async sendStory(options: Omit<SendStory, '@type'>): Promise<Story> {
 		return this._request({
@@ -39521,7 +41335,8 @@ Changes content and caption of a story. Can be called only if story.can_be_edite
 	}
 
 	/**
-Changes privacy settings of a story. Can be called only if story.can_be_edited == true.
+Changes privacy settings of a story. The method can be called only for stories posted on behalf of the current user and
+if story.can_be_edited == true.
 */
 	async setStoryPrivacySettings(options: Omit<SetStoryPrivacySettings, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39603,9 +41418,9 @@ Returns the list of pinned stories posted by the given chat. The stories are ret
 	}
 
 	/**
-Returns the list of all stories posted by the given chat; requires can_edit_stories rights for channel chats. The
-stories are returned in a reverse chronological order (i.e., in order of decreasing story_id). For optimal performance,
-the number of returned stories is chosen by TDLib.
+Returns the list of all stories posted by the given chat; requires can_edit_stories right in the chat. The stories are
+returned in a reverse chronological order (i.e., in order of decreasing story_id). For optimal performance, the number
+of returned stories is chosen by TDLib.
 */
 	async getChatArchivedStories(options: Omit<GetChatArchivedStories, '@type'>): Promise<Stories> {
 		return this._request({
@@ -39645,7 +41460,7 @@ Returns reactions, which can be chosen for a story.
 	}
 
 	/**
-Changes chosen reaction on a story.
+Changes chosen reaction on a story that has already been sent.
 */
 	async setStoryReaction(options: Omit<SetStoryReaction, '@type'>): Promise<Ok> {
 		return this._request({
@@ -39721,8 +41536,9 @@ Returns list of features available on the specific chat boost level; this is an 
 	/**
 Returns list of features available on the first 10 chat boost levels; this is an offline request.
 */
-	async getChatBoostFeatures(): Promise<ChatBoostFeatures> {
+	async getChatBoostFeatures(options: Omit<GetChatBoostFeatures, '@type'>): Promise<ChatBoostFeatures> {
 		return this._request({
+			...options,
 			'@type': 'getChatBoostFeatures',
 		});
 	}
@@ -39737,7 +41553,7 @@ Returns the list of available chat boost slots for the current user.
 	}
 
 	/**
-Returns the current boost status for a channel chat.
+Returns the current boost status for a supergroup or a channel chat.
 */
 	async getChatBoostStatus(options: Omit<GetChatBoostStatus, '@type'>): Promise<ChatBoostStatus> {
 		return this._request({
@@ -39757,7 +41573,7 @@ Boosts a chat and returns the list of available chat boost slots for the current
 	}
 
 	/**
-Returns an HTTPS link to boost the specified channel chat.
+Returns an HTTPS link to boost the specified supergroup or channel chat.
 */
 	async getChatBoostLink(options: Omit<GetChatBoostLink, '@type'>): Promise<ChatBoostLink> {
 		return this._request({
@@ -39778,7 +41594,7 @@ internalLinkTypeChatBoost.
 	}
 
 	/**
-Returns list of boosts applied to a chat; requires administrator rights in the channel chat.
+Returns list of boosts applied to a chat; requires administrator rights in the chat.
 */
 	async getChatBoosts(options: Omit<GetChatBoosts, '@type'>): Promise<FoundChatBoosts> {
 		return this._request({
@@ -39788,8 +41604,7 @@ Returns list of boosts applied to a chat; requires administrator rights in the c
 	}
 
 	/**
-Returns list of boosts applied to a chat by a given user; requires administrator rights in the channel chat; for bots
-only.
+Returns list of boosts applied to a chat by a given user; requires administrator rights in the chat; for bots only.
 */
 	async getUserChatBoosts(options: Omit<GetUserChatBoosts, '@type'>): Promise<FoundChatBoosts> {
 		return this._request({
@@ -40346,7 +42161,7 @@ Changes default participant identifier, on whose behalf a video chat in the chat
 
 	/**
 Creates a video chat (a group call bound to a chat). Available only for basic groups, supergroups and channels; requires
-can_manage_video_chats rights.
+can_manage_video_chats administrator right.
 */
 	async createVideoChat(options: Omit<CreateVideoChat, '@type'>): Promise<GroupCallId> {
 		return this._request({
@@ -40356,7 +42171,7 @@ can_manage_video_chats rights.
 	}
 
 	/**
-Returns RTMP URL for streaming to the chat; requires creator privileges.
+Returns RTMP URL for streaming to the chat; requires owner privileges.
 */
 	async getVideoChatRtmpUrl(options: Omit<GetVideoChatRtmpUrl, '@type'>): Promise<RtmpUrl> {
 		return this._request({
@@ -40366,7 +42181,7 @@ Returns RTMP URL for streaming to the chat; requires creator privileges.
 	}
 
 	/**
-Replaces the current RTMP URL for streaming to the chat; requires creator privileges.
+Replaces the current RTMP URL for streaming to the chat; requires owner privileges.
 */
 	async replaceVideoChatRtmpUrl(options: Omit<ReplaceVideoChatRtmpUrl, '@type'>): Promise<RtmpUrl> {
 		return this._request({
@@ -40975,8 +42790,8 @@ Returns a list of recently used stickers.
 
 	/**
 Manually adds a new sticker to the list of recently used stickers. The new sticker is added to the top of the list. If
-the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be
-added to this list. Emoji stickers can't be added to recent stickers.
+the sticker was already in the list, it is removed from the list first. Only stickers belonging to a sticker set or in
+WEBP format can be added to this list. Emoji stickers can't be added to recent stickers.
 */
 	async addRecentSticker(options: Omit<AddRecentSticker, '@type'>): Promise<Stickers> {
 		return this._request({
@@ -41016,8 +42831,8 @@ Returns favorite stickers.
 
 	/**
 Adds a new sticker to the list of favorite stickers. The new sticker is added to the top of the list. If the sticker was
-already in the list, it is removed from the list first. Only stickers belonging to a sticker set can be added to this
-list. Emoji stickers can't be added to favorite stickers.
+already in the list, it is removed from the list first. Only stickers belonging to a sticker set or in WEBP format can
+be added to this list. Emoji stickers can't be added to favorite stickers.
 */
 	async addFavoriteSticker(options: Omit<AddFavoriteSticker, '@type'>): Promise<Ok> {
 		return this._request({
@@ -41048,12 +42863,22 @@ with a fixed emoji from the corresponding Sticker object.
 	}
 
 	/**
-Searches for emojis by keywords. Supported only if the file database is enabled.
+Searches for emojis by keywords. Supported only if the file database is enabled. Order of results is unspecified.
 */
-	async searchEmojis(options: Omit<SearchEmojis, '@type'>): Promise<Emojis> {
+	async searchEmojis(options: Omit<SearchEmojis, '@type'>): Promise<EmojiKeywords> {
 		return this._request({
 			...options,
 			'@type': 'searchEmojis',
+		});
+	}
+
+	/**
+Return emojis matching the keyword. Supported only if the file database is enabled. Order of results is unspecified.
+*/
+	async getKeywordEmojis(options: Omit<GetKeywordEmojis, '@type'>): Promise<Emojis> {
+		return this._request({
+			...options,
+			'@type': 'getKeywordEmojis',
 		});
 	}
 
@@ -41311,12 +43136,52 @@ Changes the emoji status of the current user; for Telegram Premium users only.
 
 	/**
 Changes the location of the current user. Needs to be called if getOption("is_location_visible") is true and location
-changes for more than 1 kilometer.
+changes for more than 1 kilometer. Must not be called if the user has a business location.
 */
 	async setLocation(options: Omit<SetLocation, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setLocation',
+		});
+	}
+
+	/**
+Changes the business location of the current user. Requires Telegram Business subscription.
+*/
+	async setBusinessLocation(options: Omit<SetBusinessLocation, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessLocation',
+		});
+	}
+
+	/**
+Changes the business opening hours of the current user. Requires Telegram Business subscription.
+*/
+	async setBusinessOpeningHours(options: Omit<SetBusinessOpeningHours, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessOpeningHours',
+		});
+	}
+
+	/**
+Changes the business greeting message settings of the current user. Requires Telegram Business subscription.
+*/
+	async setBusinessGreetingMessageSettings(options: Omit<SetBusinessGreetingMessageSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessGreetingMessageSettings',
+		});
+	}
+
+	/**
+Changes the business away message settings of the current user. Requires Telegram Business subscription.
+*/
+	async setBusinessAwayMessageSettings(options: Omit<SetBusinessAwayMessageSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessAwayMessageSettings',
 		});
 	}
 
@@ -41348,6 +43213,36 @@ Checks the authentication code sent to confirm a new phone number of the user.
 		return this._request({
 			...options,
 			'@type': 'checkChangePhoneNumberCode',
+		});
+	}
+
+	/**
+Returns the business bot that is connected to the current user account. Returns a 404 error if there is no connected
+bot.
+*/
+	async getBusinessConnectedBot(): Promise<BusinessConnectedBot> {
+		return this._request({
+			'@type': 'getBusinessConnectedBot',
+		});
+	}
+
+	/**
+Adds or changes business bot that is connected to the current user account.
+*/
+	async setBusinessConnectedBot(options: Omit<SetBusinessConnectedBot, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessConnectedBot',
+		});
+	}
+
+	/**
+Deletes the business bot that is connected to the current user account.
+*/
+	async deleteBusinessConnectedBot(options: Omit<DeleteBusinessConnectedBot, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteBusinessConnectedBot',
 		});
 	}
 
@@ -41717,7 +43612,29 @@ Changes the sticker set of a supergroup; requires can_change_info administrator 
 	}
 
 	/**
-Toggles whether sender signature is added to sent messages in a channel; requires can_change_info administrator right.
+Changes the custom emoji sticker set of a supergroup; requires can_change_info administrator right. The chat must have
+at least chatBoostFeatures.min_custom_emoji_sticker_set_boost_level boost level to pass the corresponding color.
+*/
+	async setSupergroupCustomEmojiStickerSet(options: Omit<SetSupergroupCustomEmojiStickerSet, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setSupergroupCustomEmojiStickerSet',
+		});
+	}
+
+	/**
+Changes the number of times the supergroup must be boosted by a user to ignore slow mode and chat permission
+restrictions; requires can_restrict_members administrator right.
+*/
+	async setSupergroupUnrestrictBoostCount(options: Omit<SetSupergroupUnrestrictBoostCount, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setSupergroupUnrestrictBoostCount',
+		});
+	}
+
+	/**
+Toggles whether sender signature is added to sent messages in a channel; requires can_change_info member right.
 */
 	async toggleSupergroupSignMessages(options: Omit<ToggleSupergroupSignMessages, '@type'>): Promise<Ok> {
 		return this._request({
@@ -41749,8 +43666,7 @@ can_restrict_members administrator right.
 	}
 
 	/**
-Toggles whether the message history of a supergroup is available to new members; requires can_change_info administrator
-right.
+Toggles whether the message history of a supergroup is available to new members; requires can_change_info member right.
 */
 	async toggleSupergroupIsAllHistoryAvailable(options: Omit<ToggleSupergroupIsAllHistoryAvailable, '@type'>): Promise<Ok> {
 		return this._request({
@@ -41853,6 +43769,15 @@ of decreasing event_id).
 		return this._request({
 			...options,
 			'@type': 'getChatEventLog',
+		});
+	}
+
+	/**
+Returns the list of supported time zones.
+*/
+	async getTimeZones(): Promise<TimeZones> {
+		return this._request({
+			'@type': 'getTimeZones',
 		});
 	}
 
@@ -42170,6 +44095,54 @@ Returns the current privacy settings.
 		return this._request({
 			...options,
 			'@type': 'getUserPrivacySettingRules',
+		});
+	}
+
+	/**
+Changes privacy settings for message read date.
+*/
+	async setReadDatePrivacySettings(options: Omit<SetReadDatePrivacySettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setReadDatePrivacySettings',
+		});
+	}
+
+	/**
+Returns privacy settings for message read date.
+*/
+	async getReadDatePrivacySettings(): Promise<ReadDatePrivacySettings> {
+		return this._request({
+			'@type': 'getReadDatePrivacySettings',
+		});
+	}
+
+	/**
+Changes privacy settings for new chat creation; for Telegram Premium users only.
+*/
+	async setNewChatPrivacySettings(options: Omit<SetNewChatPrivacySettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setNewChatPrivacySettings',
+		});
+	}
+
+	/**
+Returns privacy settings for new chat creation.
+*/
+	async getNewChatPrivacySettings(): Promise<NewChatPrivacySettings> {
+		return this._request({
+			'@type': 'getNewChatPrivacySettings',
+		});
+	}
+
+	/**
+Check whether the current user can message another user or try to create a chat with them.
+*/
+	async canSendMessageToUser(options: Omit<CanSendMessageToUser, '@type'>): Promise<CanSendMessageToUserResult> {
+		return this._request({
+			...options,
+			'@type': 'canSendMessageToUser',
 		});
 	}
 
@@ -42917,8 +44890,7 @@ Applies a Telegram Premium gift code.
 	}
 
 	/**
-Launches a prepaid Telegram Premium giveaway for subscribers of channel chats; requires can_post_messages rights in the
-channels.
+Launches a prepaid Telegram Premium giveaway.
 */
 	async launchPrepaidPremiumGiveaway(options: Omit<LaunchPrepaidPremiumGiveaway, '@type'>): Promise<Ok> {
 		return this._request({
