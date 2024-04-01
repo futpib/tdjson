@@ -24,7 +24,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">MessageForwardInfo</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L3873">tdjson.ts:3873</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L4271">tdjson.ts:4271</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -34,10 +34,9 @@
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="MessageForwardInfo.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
 <a href="MessageForwardInfo.html#date" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>date</span></a>
-<a href="MessageForwardInfo.html#from_chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>from_<wbr/>chat_<wbr/>id</span></a>
-<a href="MessageForwardInfo.html#from_message_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>from_<wbr/>message_<wbr/>id</span></a>
 <a href="MessageForwardInfo.html#origin" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>origin</span></a>
 <a href="MessageForwardInfo.html#public_service_announcement_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>public_<wbr/>service_<wbr/>announcement_<wbr/>type</span></a>
+<a href="MessageForwardInfo.html#source" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -45,7 +44,7 @@
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;messageForwardInfo&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L3874">tdjson.ts:3874</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L4272">tdjson.ts:4272</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="date" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>date</span><a href="#date" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">date</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -53,26 +52,7 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L3882">tdjson.ts:3882</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="from_chat_id" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>from_<wbr/>chat_<wbr/>id</span><a href="#from_chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">from_<wbr/>chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>For messages forwarded to the chat with the current user (Saved Messages), to the Replies bot chat, or to the channel&#39;s
-discussion group, the identifier of the chat from which the message was forwarded last time; 0 if unknown.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L3891">tdjson.ts:3891</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="from_message_id" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>from_<wbr/>message_<wbr/>id</span><a href="#from_message_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">from_<wbr/>message_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>For messages forwarded to the chat with the current user (Saved Messages), to the Replies bot chat, or to the channel&#39;s
-discussion group, the identifier of the original message from which the new message was forwarded last time; 0 if
-unknown.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L3897">tdjson.ts:3897</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L4280">tdjson.ts:4280</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="origin" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>origin</span><a href="#origin" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">origin</span><span class="tsd-signature-symbol">:</span> <a href="../types/MessageOrigin.html" class="tsd-signature-type tsd-kind-type-alias">MessageOrigin</a></div>
@@ -80,7 +60,7 @@ unknown.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L3878">tdjson.ts:3878</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L4276">tdjson.ts:4276</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="public_service_announcement_type" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>public_<wbr/>service_<wbr/>announcement_<wbr/>type</span><a href="#public_service_announcement_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">public_<wbr/>service_<wbr/>announcement_<wbr/>type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -88,7 +68,17 @@ unknown.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L3886">tdjson.ts:3886</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L4290">tdjson.ts:4290</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="source" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>source</span><a href="#source" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">source</span><span class="tsd-signature-symbol">:</span> <a href="ForwardSource.html" class="tsd-signature-type tsd-kind-interface">ForwardSource</a></div>
+<div class="tsd-comment tsd-typography"><p>For messages forwarded to the chat with the current user (Saved Messages), to the Replies bot chat, or to the channel&#39;s
+discussion group, information about the source message from which the message was forwarded last time; may be null for
+other forwards or if unknown.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L4286">tdjson.ts:4286</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -110,10 +100,9 @@ unknown.</p>
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
 <li><a href="#date" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>date</span></a></li>
-<li><a href="#from_chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>from_<wbr/>chat_<wbr/>id</span></a></li>
-<li><a href="#from_message_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>from_<wbr/>message_<wbr/>id</span></a></li>
 <li><a href="#origin" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>origin</span></a></li>
-<li><a href="#public_service_announcement_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>public_<wbr/>service_<wbr/>announcement_<wbr/>type</span></a></li></ul></div></details></div>
+<li><a href="#public_service_announcement_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>public_<wbr/>service_<wbr/>announcement_<wbr/>type</span></a></li>
+<li><a href="#source" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">

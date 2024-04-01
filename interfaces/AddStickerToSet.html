@@ -16,7 +16,7 @@
 <li><a href="AddStickerToSet.html">AddStickerToSet</a></li></ul>
 <h1>Interface AddStickerToSet</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Adds a new sticker to a set; for bots only.
+<div class="tsd-comment tsd-typography"><p>Adds a new sticker to a set.
 Request type for <a href="../classes/Tdjson.html#addStickerToSet" class="tsd-kind-method">Tdjson#addStickerToSet</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
@@ -25,7 +25,7 @@ Request type for <a href="../classes/Tdjson.html#addStickerToSet" class="tsd-kin
 <ul class="tsd-hierarchy">
 <li><span class="target">AddStickerToSet</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L34804">tdjson.ts:34804</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L37151">tdjson.ts:37151</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -44,15 +44,16 @@ Request type for <a href="../classes/Tdjson.html#addStickerToSet" class="tsd-kin
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;addStickerToSet&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L34805">tdjson.ts:34805</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L37152">tdjson.ts:37152</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="name" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>name</span><a href="#name" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">name</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-<div class="tsd-comment tsd-typography"><p>Sticker set name.</p>
+<div class="tsd-comment tsd-typography"><p>Sticker set name. The sticker set must be owned by the current user, and contain less than 200 stickers for custom emoji
+sticker sets and less than 120 otherwise.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L34813">tdjson.ts:34813</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L37161">tdjson.ts:37161</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="sticker" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>sticker</span><a href="#sticker" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">sticker</span><span class="tsd-signature-symbol">:</span> <a href="InputSticker.html" class="tsd-signature-type tsd-kind-interface">InputSticker</a></div>
@@ -60,15 +61,15 @@ Request type for <a href="../classes/Tdjson.html#addStickerToSet" class="tsd-kin
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L34817">tdjson.ts:34817</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L37165">tdjson.ts:37165</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="user_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>user_<wbr/>id</span><a href="#user_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">user_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>Sticker set owner.</p>
+<div class="tsd-comment tsd-typography"><p>Sticker set owner; ignored for regular users.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L34809">tdjson.ts:34809</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L37156">tdjson.ts:37156</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

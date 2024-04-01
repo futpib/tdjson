@@ -16,7 +16,8 @@
 <li><a href="SetChatProfileAccentColor.html">SetChatProfileAccentColor</a></li></ul>
 <h1>Interface SetChatProfileAccentColor</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Changes accent color and background custom emoji for profile of a chat. Requires can_change_info administrator right.
+<div class="tsd-comment tsd-typography"><p>Changes accent color and background custom emoji for profile of a supergroup or channel chat. Requires can_change_info
+administrator right.
 Request type for <a href="../classes/Tdjson.html#setChatProfileAccentColor" class="tsd-kind-method">Tdjson#setChatProfileAccentColor</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
@@ -25,7 +26,7 @@ Request type for <a href="../classes/Tdjson.html#setChatProfileAccentColor" clas
 <ul class="tsd-hierarchy">
 <li><span class="target">SetChatProfileAccentColor</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L28881">tdjson.ts:28881</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L30990">tdjson.ts:30990</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -44,7 +45,7 @@ Request type for <a href="../classes/Tdjson.html#setChatProfileAccentColor" clas
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;setChatProfileAccentColor&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L28882">tdjson.ts:28882</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L30991">tdjson.ts:30991</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -52,16 +53,17 @@ Request type for <a href="../classes/Tdjson.html#setChatProfileAccentColor" clas
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L28886">tdjson.ts:28886</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L30995">tdjson.ts:30995</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="profile_accent_color_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>profile_<wbr/>accent_<wbr/>color_<wbr/>id</span><a href="#profile_accent_color_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">profile_<wbr/>accent_<wbr/>color_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
 <div class="tsd-comment tsd-typography"><p>Identifier of the accent color to use for profile; pass -1 if none. The chat must have at least
-profileAccentColor.min_chat_boost_level boost level to pass the corresponding color.</p>
+profileAccentColor.min_supergroup_chat_boost_level for supergroups or profileAccentColor.min_channel_chat_boost_level
+for channels boost level to pass the corresponding color.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L28891">tdjson.ts:28891</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L31001">tdjson.ts:31001</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="profile_background_custom_emoji_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>profile_<wbr/>background_<wbr/>custom_<wbr/>emoji_<wbr/>id</span><a href="#profile_background_custom_emoji_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">profile_<wbr/>background_<wbr/>custom_<wbr/>emoji_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -70,7 +72,7 @@ chatBoostLevelFeatures.can_set_profile_background_custom_emoji to check whether 
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L28896">tdjson.ts:28896</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L31006">tdjson.ts:31006</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">

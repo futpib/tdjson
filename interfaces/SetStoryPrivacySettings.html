@@ -16,7 +16,8 @@
 <li><a href="SetStoryPrivacySettings.html">SetStoryPrivacySettings</a></li></ul>
 <h1>Interface SetStoryPrivacySettings</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Changes privacy settings of a story. Can be called only if story.can_be_edited == true.
+<div class="tsd-comment tsd-typography"><p>Changes privacy settings of a story. The method can be called only for stories posted on behalf of the current user and
+if story.can_be_edited == true.
 Request type for <a href="../classes/Tdjson.html#setStoryPrivacySettings" class="tsd-kind-method">Tdjson#setStoryPrivacySettings</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
@@ -25,7 +26,7 @@ Request type for <a href="../classes/Tdjson.html#setStoryPrivacySettings" class=
 <ul class="tsd-hierarchy">
 <li><span class="target">SetStoryPrivacySettings</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L29799">tdjson.ts:29799</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L31916">tdjson.ts:31916</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -36,7 +37,6 @@ Request type for <a href="../classes/Tdjson.html#setStoryPrivacySettings" class=
 <div class="tsd-index-list"><a href="SetStoryPrivacySettings.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
 <a href="SetStoryPrivacySettings.html#privacy_settings" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>privacy_<wbr/>settings</span></a>
 <a href="SetStoryPrivacySettings.html#story_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>story_<wbr/>id</span></a>
-<a href="SetStoryPrivacySettings.html#story_sender_chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>story_<wbr/>sender_<wbr/>chat_<wbr/>id</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -44,7 +44,7 @@ Request type for <a href="../classes/Tdjson.html#setStoryPrivacySettings" class=
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;setStoryPrivacySettings&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L29800">tdjson.ts:29800</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L31917">tdjson.ts:31917</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="privacy_settings" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>privacy_<wbr/>settings</span><a href="#privacy_settings" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">privacy_<wbr/>settings</span><span class="tsd-signature-symbol">:</span> <a href="../types/StoryPrivacySettings.html" class="tsd-signature-type tsd-kind-type-alias">StoryPrivacySettings</a></div>
@@ -52,7 +52,7 @@ Request type for <a href="../classes/Tdjson.html#setStoryPrivacySettings" class=
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L29812">tdjson.ts:29812</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L31925">tdjson.ts:31925</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="story_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>story_<wbr/>id</span><a href="#story_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">story_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -60,15 +60,7 @@ Request type for <a href="../classes/Tdjson.html#setStoryPrivacySettings" class=
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L29808">tdjson.ts:29808</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="story_sender_chat_id" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>story_<wbr/>sender_<wbr/>chat_<wbr/>id</span><a href="#story_sender_chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">story_<wbr/>sender_<wbr/>chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>Identifier of the chat that posted the story.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L29804">tdjson.ts:29804</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L31921">tdjson.ts:31921</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -90,8 +82,7 @@ Request type for <a href="../classes/Tdjson.html#setStoryPrivacySettings" class=
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
 <li><a href="#privacy_settings" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>privacy_<wbr/>settings</span></a></li>
-<li><a href="#story_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>story_<wbr/>id</span></a></li>
-<li><a href="#story_sender_chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>story_<wbr/>sender_<wbr/>chat_<wbr/>id</span></a></li></ul></div></details></div>
+<li><a href="#story_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>story_<wbr/>id</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">

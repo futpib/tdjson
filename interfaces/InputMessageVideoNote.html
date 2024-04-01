@@ -25,7 +25,7 @@ Subtype of <a href="../types/InputMessageContent.html" class="tsd-kind-type-alia
 <ul class="tsd-hierarchy">
 <li><span class="target">InputMessageVideoNote</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L10806">tdjson.ts:10806</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L11602">tdjson.ts:11602</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -36,6 +36,7 @@ Subtype of <a href="../types/InputMessageContent.html" class="tsd-kind-type-alia
 <div class="tsd-index-list"><a href="InputMessageVideoNote.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
 <a href="InputMessageVideoNote.html#duration" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>duration</span></a>
 <a href="InputMessageVideoNote.html#length" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>length</span></a>
+<a href="InputMessageVideoNote.html#self_destruct_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>self_<wbr/>destruct_<wbr/>type</span></a>
 <a href="InputMessageVideoNote.html#thumbnail" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>thumbnail</span></a>
 <a href="InputMessageVideoNote.html#video_note" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>video_<wbr/>note</span></a>
 </div></section></div></details></section></section>
@@ -45,15 +46,15 @@ Subtype of <a href="../types/InputMessageContent.html" class="tsd-kind-type-alia
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;inputMessageVideoNote&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L10807">tdjson.ts:10807</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L11603">tdjson.ts:11603</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="duration" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>duration</span><a href="#duration" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">duration</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>Duration of the video, in seconds.</p>
+<div class="tsd-comment tsd-typography"><p>Duration of the video, in seconds; 0-60.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L10819">tdjson.ts:10819</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L11615">tdjson.ts:11615</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="length" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>length</span><a href="#length" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">length</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -61,15 +62,23 @@ Subtype of <a href="../types/InputMessageContent.html" class="tsd-kind-type-alia
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L10823">tdjson.ts:10823</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="thumbnail" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>thumbnail</span><a href="#thumbnail" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">thumbnail</span><span class="tsd-signature-symbol">:</span> <a href="InputThumbnail.html" class="tsd-signature-type tsd-kind-interface">InputThumbnail</a></div>
-<div class="tsd-comment tsd-typography"><p>Video thumbnail; pass null to skip thumbnail uploading.</p>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L11619">tdjson.ts:11619</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="self_destruct_type" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>self_<wbr/>destruct_<wbr/>type</span><a href="#self_destruct_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">self_<wbr/>destruct_<wbr/>type</span><span class="tsd-signature-symbol">:</span> <a href="../types/MessageSelfDestructType.html" class="tsd-signature-type tsd-kind-type-alias">MessageSelfDestructType</a></div>
+<div class="tsd-comment tsd-typography"><p>Video note self-destruct type; may be null if none; pass null if none; private chats only.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L10815">tdjson.ts:10815</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L11623">tdjson.ts:11623</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="thumbnail" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>thumbnail</span><a href="#thumbnail" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">thumbnail</span><span class="tsd-signature-symbol">:</span> <a href="InputThumbnail.html" class="tsd-signature-type tsd-kind-interface">InputThumbnail</a></div>
+<div class="tsd-comment tsd-typography"><p>Video thumbnail; may be null if empty; pass null to skip thumbnail uploading.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L11611">tdjson.ts:11611</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="video_note" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>video_<wbr/>note</span><a href="#video_note" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">video_<wbr/>note</span><span class="tsd-signature-symbol">:</span> <a href="../types/InputFile.html" class="tsd-signature-type tsd-kind-type-alias">InputFile</a></div>
@@ -77,7 +86,7 @@ Subtype of <a href="../types/InputMessageContent.html" class="tsd-kind-type-alia
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/10d054d/src/tdjson.ts#L10811">tdjson.ts:10811</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L11607">tdjson.ts:11607</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -100,6 +109,7 @@ Subtype of <a href="../types/InputMessageContent.html" class="tsd-kind-type-alia
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
 <li><a href="#duration" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>duration</span></a></li>
 <li><a href="#length" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>length</span></a></li>
+<li><a href="#self_destruct_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>self_<wbr/>destruct_<wbr/>type</span></a></li>
 <li><a href="#thumbnail" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>thumbnail</span></a></li>
 <li><a href="#video_note" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>video_<wbr/>note</span></a></li></ul></div></details></div>
 <div class="site-menu">
