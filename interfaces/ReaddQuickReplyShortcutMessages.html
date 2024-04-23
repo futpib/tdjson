@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>BusinessIntro | tdjson</title><meta name="description" content="Documentation for tdjson"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>ReaddQuickReplyShortcutMessages | tdjson</title><meta name="description" content="Documentation for tdjson"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base="..">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -13,18 +13,23 @@
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb">
 <li><a href="../modules.html">tdjson</a></li>
-<li><a href="BusinessIntro.html">BusinessIntro</a></li></ul>
-<h1>Interface BusinessIntro</h1></div>
+<li><a href="ReaddQuickReplyShortcutMessages.html">ReaddQuickReplyShortcutMessages</a></li></ul>
+<h1>Interface ReaddQuickReplyShortcutMessages</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Describes settings for a business account intro.</p>
+<div class="tsd-comment tsd-typography"><p>Readds quick reply messages which failed to add. Can be called only for messages for which
+messageSendingStateFailed.can_retry is true and after specified in messageSendingStateFailed.retry_after time passed. If
+a message is readded, the corresponding failed to send message is deleted. Returns the sent messages in the same order
+as the message identifiers passed in message_ids. If a message can&#39;t be readded, null will be returned instead of the
+message.
+Request type for <a href="../classes/Tdjson.html#readdQuickReplyShortcutMessages" class="tsd-kind-method">Tdjson#readdQuickReplyShortcutMessages</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
-<li><span class="target">BusinessIntro</span></li></ul></section><aside class="tsd-sources">
+<li><span class="target">ReaddQuickReplyShortcutMessages</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L2000">tdjson.ts:2000</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L29443">tdjson.ts:29443</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -32,42 +37,33 @@
 <div class="tsd-accordion-details">
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
-<div class="tsd-index-list"><a href="BusinessIntro.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
-<a href="BusinessIntro.html#message" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message</span></a>
-<a href="BusinessIntro.html#sticker" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>sticker</span></a>
-<a href="BusinessIntro.html#title" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>title</span></a>
+<div class="tsd-index-list"><a href="ReaddQuickReplyShortcutMessages.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
+<a href="ReaddQuickReplyShortcutMessages.html#message_ids" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>ids</span></a>
+<a href="ReaddQuickReplyShortcutMessages.html#shortcut_name" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>shortcut_<wbr/>name</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="_type" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;businessIntro&quot;</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;readdQuickReplyShortcutMessages&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L2001">tdjson.ts:2001</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="message" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>message</span><a href="#message" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">message</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-<div class="tsd-comment tsd-typography"><p>Message text of the intro.</p>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L29444">tdjson.ts:29444</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="message_ids" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>message_<wbr/>ids</span><a href="#message_ids" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">message_<wbr/>ids</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>Identifiers of the quick reply messages to readd. Message identifiers must be in a strictly increasing order.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L2009">tdjson.ts:2009</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="sticker" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>sticker</span><a href="#sticker" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">sticker</span><span class="tsd-signature-symbol">:</span> <a href="Sticker.html" class="tsd-signature-type tsd-kind-interface">Sticker</a></div>
-<div class="tsd-comment tsd-typography"><p>Greeting sticker of the intro; may be null if none.</p>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L29452">tdjson.ts:29452</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="shortcut_name" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>shortcut_<wbr/>name</span><a href="#shortcut_name" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">shortcut_<wbr/>name</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>Name of the target shortcut.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L2013">tdjson.ts:2013</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="title" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>title</span><a href="#title" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">title</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-<div class="tsd-comment tsd-typography"><p>Title text of the intro.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L2005">tdjson.ts:2005</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L29448">tdjson.ts:29448</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -88,9 +84,8 @@
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
-<li><a href="#message" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message</span></a></li>
-<li><a href="#sticker" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>sticker</span></a></li>
-<li><a href="#title" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>title</span></a></li></ul></div></details></div>
+<li><a href="#message_ids" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>ids</span></a></li>
+<li><a href="#shortcut_name" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>shortcut_<wbr/>name</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
@@ -113,8 +108,8 @@
 <li><a href="AddMessageReaction.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddMessageReaction</a></li>
 <li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
 <li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
-<li><a href="AddRecentSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentSticker</a></li>
-<li><a href="AddRecentlyFoundChat.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentlyFoundChat</a></li>
+<li><a href="AddQuickReplyShortcutInlineQueryResultMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutInlineQueryResultMessage</a></li>
+<li><a href="AddQuickReplyShortcutMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutMessage</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>

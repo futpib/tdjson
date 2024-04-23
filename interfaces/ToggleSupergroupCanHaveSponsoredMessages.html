@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>UpdateAddChatMembersPrivacyForbidden | tdjson</title><meta name="description" content="Documentation for tdjson"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>ToggleSupergroupCanHaveSponsoredMessages | tdjson</title><meta name="description" content="Documentation for tdjson"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base="..">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -13,20 +13,21 @@
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb">
 <li><a href="../modules.html">tdjson</a></li>
-<li><a href="UpdateAddChatMembersPrivacyForbidden.html">UpdateAddChatMembersPrivacyForbidden</a></li></ul>
-<h1>Interface UpdateAddChatMembersPrivacyForbidden</h1></div>
+<li><a href="ToggleSupergroupCanHaveSponsoredMessages.html">ToggleSupergroupCanHaveSponsoredMessages</a></li></ul>
+<h1>Interface ToggleSupergroupCanHaveSponsoredMessages</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Adding users to a chat has failed because of their privacy settings. An invite link can be shared with the users if
-appropriate.
-Subtype of <a href="../types/Update.html" class="tsd-kind-type-alias">Update</a>.</p>
+<div class="tsd-comment tsd-typography"><p>Toggles whether sponsored messages are shown in the channel chat; requires owner privileges in the channel. The chat
+must have at least chatBoostFeatures.min_sponsored_message_disable_boost_level boost level to disable sponsored
+messages.
+Request type for <a href="../classes/Tdjson.html#toggleSupergroupCanHaveSponsoredMessages" class="tsd-kind-method">Tdjson#toggleSupergroupCanHaveSponsoredMessages</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
-<li><span class="target">UpdateAddChatMembersPrivacyForbidden</span></li></ul></section><aside class="tsd-sources">
+<li><span class="target">ToggleSupergroupCanHaveSponsoredMessages</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L24167">tdjson.ts:24167</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L36263">tdjson.ts:36263</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -34,33 +35,33 @@ Subtype of <a href="../types/Update.html" class="tsd-kind-type-alias">Update</a>
 <div class="tsd-accordion-details">
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
-<div class="tsd-index-list"><a href="UpdateAddChatMembersPrivacyForbidden.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
-<a href="UpdateAddChatMembersPrivacyForbidden.html#chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a>
-<a href="UpdateAddChatMembersPrivacyForbidden.html#user_ids" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>user_<wbr/>ids</span></a>
+<div class="tsd-index-list"><a href="ToggleSupergroupCanHaveSponsoredMessages.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
+<a href="ToggleSupergroupCanHaveSponsoredMessages.html#can_have_sponsored_messages" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>can_<wbr/>have_<wbr/>sponsored_<wbr/>messages?</span></a>
+<a href="ToggleSupergroupCanHaveSponsoredMessages.html#supergroup_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>supergroup_<wbr/>id</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="_type" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;updateAddChatMembersPrivacyForbidden&quot;</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;toggleSupergroupCanHaveSponsoredMessages&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L24168">tdjson.ts:24168</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>Chat identifier.</p>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L36264">tdjson.ts:36264</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="can_have_sponsored_messages" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>can_<wbr/>have_<wbr/>sponsored_<wbr/>messages</span><a href="#can_have_sponsored_messages" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">can_<wbr/>have_<wbr/>sponsored_<wbr/>messages</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>The new value of can_have_sponsored_messages.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L24172">tdjson.ts:24172</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="user_ids" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>user_<wbr/>ids</span><a href="#user_ids" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">user_<wbr/>ids</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span><span class="tsd-signature-symbol">[]</span></div>
-<div class="tsd-comment tsd-typography"><p>Identifiers of users, which weren&#39;t added because of their privacy settings.</p>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L36272">tdjson.ts:36272</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="supergroup_id" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>supergroup_<wbr/>id</span><a href="#supergroup_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">supergroup_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-comment tsd-typography"><p>The identifier of the channel.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L24176">tdjson.ts:24176</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L36268">tdjson.ts:36268</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -81,8 +82,8 @@ Subtype of <a href="../types/Update.html" class="tsd-kind-type-alias">Update</a>
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
-<li><a href="#chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a></li>
-<li><a href="#user_ids" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>user_<wbr/>ids</span></a></li></ul></div></details></div>
+<li><a href="#can_have_sponsored_messages" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>can_<wbr/>have_<wbr/>sponsored_<wbr/>messages</span></a></li>
+<li><a href="#supergroup_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>supergroup_<wbr/>id</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
@@ -105,8 +106,8 @@ Subtype of <a href="../types/Update.html" class="tsd-kind-type-alias">Update</a>
 <li><a href="AddMessageReaction.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddMessageReaction</a></li>
 <li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
 <li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
-<li><a href="AddRecentSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentSticker</a></li>
-<li><a href="AddRecentlyFoundChat.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentlyFoundChat</a></li>
+<li><a href="AddQuickReplyShortcutInlineQueryResultMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutInlineQueryResultMessage</a></li>
+<li><a href="AddQuickReplyShortcutMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutMessage</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>

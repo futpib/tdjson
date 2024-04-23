@@ -17,7 +17,8 @@
 <h1>Interface InternalLinkTypeUserPhoneNumber</h1></div>
 <section class="tsd-panel tsd-comment">
 <div class="tsd-comment tsd-typography"><p>The link is a link to a user by its phone number. Call searchUserByPhoneNumber with the given phone number to process
-the link. If the user is found, then call createPrivateChat and open the chat.
+the link. If the user is found, then call createPrivateChat and open the chat. If draft text isn&#39;t empty, then put the
+draft text in the input field.
 Subtype of <a href="../types/InternalLinkType.html" class="tsd-kind-type-alias">InternalLinkType</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
@@ -26,7 +27,7 @@ Subtype of <a href="../types/InternalLinkType.html" class="tsd-kind-type-alias">
 <ul class="tsd-hierarchy">
 <li><span class="target">InternalLinkTypeUserPhoneNumber</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L20463">tdjson.ts:20463</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L20649">tdjson.ts:20649</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -35,6 +36,7 @@ Subtype of <a href="../types/InternalLinkType.html" class="tsd-kind-type-alias">
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="InternalLinkTypeUserPhoneNumber.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
+<a href="InternalLinkTypeUserPhoneNumber.html#draft_text" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>draft_<wbr/>text</span></a>
 <a href="InternalLinkTypeUserPhoneNumber.html#phone_number" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>phone_<wbr/>number</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
@@ -43,7 +45,15 @@ Subtype of <a href="../types/InternalLinkType.html" class="tsd-kind-type-alias">
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;internalLinkTypeUserPhoneNumber&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L20464">tdjson.ts:20464</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L20650">tdjson.ts:20650</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="draft_text" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>draft_<wbr/>text</span><a href="#draft_text" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">draft_<wbr/>text</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>Draft text for message to send in the chat.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L20658">tdjson.ts:20658</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="phone_number" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>phone_<wbr/>number</span><a href="#phone_number" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">phone_<wbr/>number</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -51,7 +61,7 @@ Subtype of <a href="../types/InternalLinkType.html" class="tsd-kind-type-alias">
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/7b76f33/src/tdjson.ts#L20468">tdjson.ts:20468</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L20654">tdjson.ts:20654</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -72,6 +82,7 @@ Subtype of <a href="../types/InternalLinkType.html" class="tsd-kind-type-alias">
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
+<li><a href="#draft_text" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>draft_<wbr/>text</span></a></li>
 <li><a href="#phone_number" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>phone_<wbr/>number</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
@@ -95,8 +106,8 @@ Subtype of <a href="../types/InternalLinkType.html" class="tsd-kind-type-alias">
 <li><a href="AddMessageReaction.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddMessageReaction</a></li>
 <li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
 <li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
-<li><a href="AddRecentSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentSticker</a></li>
-<li><a href="AddRecentlyFoundChat.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddRecentlyFoundChat</a></li>
+<li><a href="AddQuickReplyShortcutInlineQueryResultMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutInlineQueryResultMessage</a></li>
+<li><a href="AddQuickReplyShortcutMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutMessage</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
