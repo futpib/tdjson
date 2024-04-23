@@ -920,7 +920,7 @@ export interface StickerFormatWebm {
 }
 
 /**
-Describes type of a sticker.
+Describes type of sticker.
 Subtype of {@link StickerType}.
 */
 export interface StickerTypeRegular {
@@ -1027,7 +1027,7 @@ True, if the option is being chosen by a pending setPollAnswer request.
 }
 
 /**
-Describes the type of a poll.
+Describes the type of poll.
 Subtype of {@link PollType}.
 */
 export interface PollTypeRegular {
@@ -1684,7 +1684,7 @@ True, if the photo is visible only for the current user.
 }
 
 /**
-Represents the type of a user. The following types are possible: regular users, deleted users and bots.
+Represents the type of user. The following types are possible: regular users, deleted users and bots.
 Subtype of {@link UserType}.
 */
 export interface UserTypeRegular {
@@ -1995,39 +1995,39 @@ True, if the bot can send messages to the private chats; false otherwise.
 }
 
 /**
-Describes settings for a business account intro.
+Describes settings for a business account start page.
 */
-export interface BusinessIntro {
-	'@type': 'businessIntro';
+export interface BusinessStartPage {
+	'@type': 'businessStartPage';
 	/**
-Title text of the intro.
+Title text of the start page.
 */
 	title: string;
 	/**
-Message text of the intro.
+Message text of the start page.
 */
 	message: string;
 	/**
-Greeting sticker of the intro; may be null if none.
+Greeting sticker of the start page; may be null if none.
 */
 	sticker: Sticker;
 }
 
 /**
-Describes settings for a business account intro to set.
+Describes settings for a business account start page to set.
 */
-export interface InputBusinessIntro {
-	'@type': 'inputBusinessIntro';
+export interface InputBusinessStartPage {
+	'@type': 'inputBusinessStartPage';
 	/**
-Title text of the intro; 0-getOption("business_intro_title_length_max") characters.
+Title text of the start page; 0-getOption("business_start_page_title_length_max") characters.
 */
 	title: string;
 	/**
-Message text of the intro; 0-getOption("business_intro_message_length_max") characters.
+Message text of the start page; 0-getOption("business_start_page_message_length_max") characters.
 */
 	message: string;
 	/**
-Greeting sticker of the intro; pass null if none. The sticker must belong to a sticker set and must not be a custom
+Greeting sticker of the start page; pass null if none. The sticker must belong to a sticker set and must not be a custom
 emoji.
 */
 	sticker: InputFile;
@@ -2086,13 +2086,77 @@ The away message; may be null if none or the Business account is not of the curr
 */
 	away_message_settings: BusinessAwayMessageSettings;
 	/**
-Information about intro of the business; may be null if none.
+Information about start page of the account; may be null if none.
 */
-	intro: BusinessIntro;
+	start_page: BusinessStartPage;
 }
 
 /**
-Describes type of a sticker, which was used to create a chat photo.
+Contains information about a business chat link.
+*/
+export interface BusinessChatLink {
+	'@type': 'businessChatLink';
+	/**
+The HTTPS link.
+*/
+	link: string;
+	/**
+Message draft text that will be added to the input field.
+*/
+	text: FormattedText;
+	/**
+Link title.
+*/
+	title: string;
+	/**
+Number of times the link was used.
+*/
+	view_count: number;
+}
+
+/**
+Contains a list of business chat links created by the user.
+*/
+export interface BusinessChatLinks {
+	'@type': 'businessChatLinks';
+	/**
+List of links.
+*/
+	links: BusinessChatLink[];
+}
+
+/**
+Describes a business chat link to create or edit.
+*/
+export interface InputBusinessChatLink {
+	'@type': 'inputBusinessChatLink';
+	/**
+Message draft text that will be added to the input field.
+*/
+	text: FormattedText;
+	/**
+Link title.
+*/
+	title: string;
+}
+
+/**
+Contains information about a business chat link.
+*/
+export interface BusinessChatLinkInfo {
+	'@type': 'businessChatLinkInfo';
+	/**
+Identifier of the private chat that created the link.
+*/
+	chat_id: number;
+	/**
+Message draft text that must be added to the input field.
+*/
+	text: FormattedText;
+}
+
+/**
+Describes type of sticker, which was used to create a chat photo.
 Subtype of {@link ChatPhotoStickerType}.
 */
 export interface ChatPhotoStickerTypeRegularOrMask {
@@ -3507,7 +3571,7 @@ List of chat members, joined a chat via an invite link.
 }
 
 /**
-Describes the type of a chat to which points an invite link.
+Describes the type of chat to which points an invite link.
 Subtype of {@link InviteLinkChatType}.
 */
 export interface InviteLinkChatTypeBasicGroup {
@@ -3888,6 +3952,10 @@ True, if the supergroup or channel statistics are available.
 */
 	can_get_statistics?: boolean;
 	/**
+True, if the supergroup or channel revenue statistics are available.
+*/
+	can_get_revenue_statistics?: boolean;
+	/**
 True, if aggressive anti-spam checks can be enabled or disabled in the supergroup.
 */
 	can_toggle_aggressive_anti_spam?: boolean;
@@ -3897,6 +3965,10 @@ messages are always available, so this option affects only private non-forum sup
 value of this field is only available to chat administrators.
 */
 	is_all_history_available?: boolean;
+	/**
+True, if the chat can have sponsored messages. The value of this field is only available to the owner of the chat.
+*/
+	can_have_sponsored_messages?: boolean;
 	/**
 True, if aggressive anti-spam checks are enabled in the supergroup. The value of this field is only available to chat
 administrators.
@@ -4285,7 +4357,7 @@ other forwards or if unknown.
 */
 	source: ForwardSource;
 	/**
-The type of a public service announcement for the forwarded message.
+The type of public service announcement for the forwarded message.
 */
 	public_service_announcement_type: string;
 }
@@ -4772,8 +4844,8 @@ For channel posts and anonymous group messages, optional author signature.
 */
 	author_signature: string;
 	/**
-Unique identifier of an album this message belongs to. Only audios, documents, photos and videos can be grouped together
-in albums.
+Unique identifier of an album this message belongs to; 0 if none. Only audios, documents, photos and videos can be
+grouped together in albums.
 */
 	media_album_id: string;
 	/**
@@ -5024,7 +5096,7 @@ export interface MessageSourceOther {
 }
 
 /**
-Describes type of a message sponsor.
+Describes type of message sponsor.
 Subtype of {@link MessageSponsorType}.
 */
 export interface MessageSponsorTypeBot {
@@ -5471,7 +5543,7 @@ Content of the message draft; must be of the type inputMessageText, inputMessage
 }
 
 /**
-Describes the type of a chat.
+Describes the type of chat.
 Subtype of {@link ChatType}.
 */
 export interface ChatTypePrivate {
@@ -5554,7 +5626,7 @@ the folder.
 */
 	icon: ChatFolderIcon;
 	/**
-The identifier of the chosen color for the chat folder icon; from -1 to 6. If -1, then color is didabled. Can't be
+The identifier of the chosen color for the chat folder icon; from -1 to 6. If -1, then color is disabled. Can't be
 changed if folder tags are disabled or the current user doesn't have Telegram Premium subscription.
 */
 	color_id: number;
@@ -5632,7 +5704,7 @@ The chosen or default icon for the chat folder.
 */
 	icon: ChatFolderIcon;
 	/**
-The identifier of the chosen color for the chat folder icon; from -1 to 6. If -1, then color is didabled.
+The identifier of the chosen color for the chat folder icon; from -1 to 6. If -1, then color is disabled.
 */
 	color_id: number;
 	/**
@@ -5884,6 +5956,29 @@ List of tags.
 }
 
 /**
+Contains information about a business bot that manages the chat.
+*/
+export interface BusinessBotManageBar {
+	'@type': 'businessBotManageBar';
+	/**
+User identifier of the bot.
+*/
+	bot_user_id: number;
+	/**
+URL to be opened to manage the bot.
+*/
+	manage_url: string;
+	/**
+True, if the bot is paused. Use toggleBusinessConnectedBotChatIsPaused to change the value of the field.
+*/
+	is_bot_paused?: boolean;
+	/**
+True, if the bot can reply.
+*/
+	can_bot_reply?: boolean;
+}
+
+/**
 Describes a video chat.
 */
 export interface VideoChat {
@@ -6055,6 +6150,10 @@ Information about actions which must be possible to do through the chat action b
 */
 	action_bar: ChatActionBar;
 	/**
+Information about bar for managing a business bot in the chat; may be null if none.
+*/
+	business_bot_manage_bar: BusinessBotManageBar;
+	/**
 Information about video chat of the chat.
 */
 	video_chat: VideoChat;
@@ -6091,6 +6190,51 @@ Approximate total number of chats found.
 List of chat identifiers.
 */
 	chat_ids: number[];
+}
+
+/**
+Contains information about a user that has failed to be added to a chat.
+*/
+export interface FailedToAddMember {
+	'@type': 'failedToAddMember';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+True, if subscription to Telegram Premium would have allowed to add the user to the chat.
+*/
+	premium_would_allow_invite?: boolean;
+	/**
+True, if subscription to Telegram Premium is required to send the user chat invite link.
+*/
+	premium_required_to_send_messages?: boolean;
+}
+
+/**
+Represents a list of users that has failed to be added to a chat.
+*/
+export interface FailedToAddMembers {
+	'@type': 'failedToAddMembers';
+	/**
+Information about users that weren't added to the chat.
+*/
+	failed_to_add_members: FailedToAddMember[];
+}
+
+/**
+Contains information about a newly created basic group chat.
+*/
+export interface CreatedBasicGroupChat {
+	'@type': 'createdBasicGroupChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Information about failed to add members.
+*/
+	failed_to_add_members: FailedToAddMembers;
 }
 
 /**
@@ -6414,7 +6558,7 @@ Type of the button.
 }
 
 /**
-Describes the type of an inline keyboard button.
+Describes the type of inline keyboard button.
 Subtype of {@link InlineKeyboardButtonType}.
 */
 export interface InlineKeyboardButtonTypeUrl {
@@ -6726,7 +6870,7 @@ A draft of a message in the message thread; may be null if none.
 }
 
 /**
-Describes type of a Saved Messages topic.
+Describes type of Saved Messages topic.
 Subtype of {@link SavedMessagesTopicType}.
 */
 export interface SavedMessagesTopicTypeMyNotes {
@@ -8847,7 +8991,7 @@ Point in time (Unix timestamp) when the file was uploaded.
 }
 
 /**
-Contains the type of a Telegram Passport element.
+Contains the type of Telegram Passport element.
 Subtype of {@link PassportElementType}.
 */
 export interface PassportElementTypePersonalDetails {
@@ -10291,7 +10435,7 @@ Call duration, in seconds.
 }
 
 /**
-A message with information about an invite to a video chat.
+A message with information about an invitation to a video chat.
 Subtype of {@link MessageContent}.
 */
 export interface MessageInviteVideoChatParticipants {
@@ -12505,7 +12649,7 @@ List of categories.
 }
 
 /**
-Describes type of an emoji category.
+Describes type of emoji category.
 Subtype of {@link EmojiCategoryType}.
 */
 export interface EmojiCategoryTypeDefault {
@@ -12559,7 +12703,7 @@ Clockwise rotation angle of the rectangle, in degrees; 0-360.
 }
 
 /**
-Describes type of a clickable rectangle area on a story media.
+Describes type of clickable rectangle area on a story media.
 Subtype of {@link StoryAreaType}.
 */
 export interface StoryAreaTypeLocation {
@@ -12639,7 +12783,7 @@ Type of the area.
 }
 
 /**
-Describes type of a clickable rectangle area on a story media to be added.
+Describes type of clickable rectangle area on a story media to be added.
 Subtype of {@link InputStoryAreaType}.
 */
 export interface InputStoryAreaTypeLocation {
@@ -13240,7 +13384,7 @@ True, if the message can be edited.
 */
 	can_be_edited?: boolean;
 	/**
-Information about the identifier of the quick reply message to which the message replies.
+The identifier of the quick reply message to which the message replies; 0 if none.
 */
 	reply_to_message_id: number;
 	/**
@@ -13248,8 +13392,8 @@ If non-zero, the user identifier of the bot through which this message was sent.
 */
 	via_bot_user_id: number;
 	/**
-Unique identifier of an album this message belongs to. Only audios, documents, photos and videos can be grouped together
-in albums.
+Unique identifier of an album this message belongs to; 0 if none. Only audios, documents, photos and videos can be
+grouped together in albums.
 */
 	media_album_id: string;
 	/**
@@ -13260,6 +13404,17 @@ Content of the message.
 Inline keyboard reply markup for the message; may be null if none.
 */
 	reply_markup: ReplyMarkup;
+}
+
+/**
+Contains a list of quick reply messages.
+*/
+export interface QuickReplyMessages {
+	'@type': 'quickReplyMessages';
+	/**
+List of quick reply messages; messages may be null.
+*/
+	messages: QuickReplyMessage[];
 }
 
 /**
@@ -13385,6 +13540,10 @@ True, if custom emoji sticker set can be set for the chat.
 True, if speech recognition can be used for video note and voice note messages by all users.
 */
 	can_recognize_speech?: boolean;
+	/**
+True, if sponsored messages can be disabled in the chat.
+*/
+	can_disable_sponsored_messages?: boolean;
 }
 
 /**
@@ -13426,6 +13585,10 @@ The minimum boost level allowing to recognize speech in video note and voice not
 supergroup chats only.
 */
 	min_speech_recognition_boost_level: number;
+	/**
+The minimum boost level allowing to disable sponsored messages in the chat; for channel chats only.
+*/
+	min_sponsored_message_disable_boost_level: number;
 }
 
 /**
@@ -13713,7 +13876,7 @@ List of supported tgcalls versions.
 }
 
 /**
-Describes the type of a call server.
+Describes the type of call server.
 Subtype of {@link CallServerType}.
 */
 export interface CallServerTypeTelegramReflector {
@@ -13856,6 +14019,10 @@ Encryption key emojis fingerprint.
 True, if peer-to-peer connection is allowed by users privacy settings.
 */
 	allow_p2p?: boolean;
+	/**
+Custom JSON-encoded call parameters to be passed to tgcalls.
+*/
+	custom_parameters: string;
 }
 
 /**
@@ -14199,7 +14366,7 @@ higher is user in the list. If order is empty, the user must be removed from the
 }
 
 /**
-Describes the exact type of a problem with a call.
+Describes the exact type of problem with a call.
 Subtype of {@link CallProblem}.
 */
 export interface CallProblemEcho {
@@ -15600,7 +15767,7 @@ Title of the voice note.
 }
 
 /**
-Represents a type of a button in results of inline query.
+Represents a type of button in results of inline query.
 Subtype of {@link InlineQueryResultsButtonType}.
 */
 export interface InlineQueryResultsButtonTypeStartBot {
@@ -16729,7 +16896,7 @@ List of available language packs for this application.
 }
 
 /**
-Describes type of a limit, increased for Premium users.
+Describes type of limit, increased for Premium users.
 Subtype of {@link PremiumLimitType}.
 */
 export interface PremiumLimitTypeSupergroupCount {
@@ -17165,11 +17332,11 @@ export interface BusinessFeatureAccountLinks {
 }
 
 /**
-The ability to customize intro.
+The ability to customize start page.
 Subtype of {@link BusinessFeature}.
 */
-export interface BusinessFeatureIntro {
-	'@type': 'businessFeatureIntro';
+export interface BusinessFeatureStartPage {
+	'@type': 'businessFeatureStartPage';
 
 }
 
@@ -17816,7 +17983,7 @@ A list of 3 or 4 colors of the freeform gradients in the RGB24 format.
 }
 
 /**
-Describes the type of a background.
+Describes the type of background.
 Subtype of {@link BackgroundType}.
 */
 export interface BackgroundTypeWallpaper {
@@ -19429,7 +19596,7 @@ Message auto-delete time, in seconds. If 0, then messages aren't deleted automat
 }
 
 /**
-Represents the type of a session.
+Represents the type of session.
 Subtype of {@link SessionType}.
 */
 export interface SessionTypeAndroid {
@@ -20023,6 +20190,19 @@ Expected administrator rights for the bot; may be null.
 }
 
 /**
+The link is a link to a business chat. Use getBusinessChatLinkInfo with the provided link name to get information about
+the link, then open received private chat and replace chat draft with the provided text.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeBusinessChat {
+	'@type': 'internalLinkTypeBusinessChat';
+	/**
+Name of the link.
+*/
+	link_name: string;
+}
+
+/**
 The link is a link to the change phone number section of the app.
 Subtype of {@link InternalLinkType}.
 */
@@ -20231,9 +20411,9 @@ must be opened otherwise.
 }
 
 /**
-The link can be used to confirm ownership of a phone number to prevent account deletion. Call
-sendPhoneNumberConfirmationCode with the given hash and phone number to process the link. If succeeded, call
-checkPhoneNumberConfirmationCode to check entered by the user code, or resendPhoneNumberConfirmationCode to resend it.
+The link can be used to confirm ownership of a phone number to prevent account deletion. Call sendPhoneNumberCode with
+the given phone number and with phoneNumberCodeTypeConfirmOwnership with the given hash to process the link. If
+succeeded, call checkPhoneNumberCode to check entered by the user code, or resendPhoneNumberCode to resend it.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePhoneNumberConfirmation {
@@ -20318,7 +20498,8 @@ Type of the proxy.
 
 /**
 The link is a link to a chat by its username. Call searchPublicChat with the given chat username to process the link If
-the chat is found, open its profile information screen or the chat itself.
+the chat is found, open its profile information screen or the chat itself. If draft text isn't empty and the chat is a
+private chat, then put the draft text in the input field.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePublicChat {
@@ -20327,6 +20508,10 @@ export interface InternalLinkTypePublicChat {
 Username of the chat.
 */
 	chat_username: string;
+	/**
+Draft text for message to send in the chat.
+*/
+	draft_text: string;
 }
 
 /**
@@ -20457,7 +20642,8 @@ export interface InternalLinkTypeUnsupportedProxy {
 
 /**
 The link is a link to a user by its phone number. Call searchUserByPhoneNumber with the given phone number to process
-the link. If the user is found, then call createPrivateChat and open the chat.
+the link. If the user is found, then call createPrivateChat and open the chat. If draft text isn't empty, then put the
+draft text in the input field.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeUserPhoneNumber {
@@ -20466,6 +20652,10 @@ export interface InternalLinkTypeUserPhoneNumber {
 Phone number of the user.
 */
 	phone_number: string;
+	/**
+Draft text for message to send in the chat.
+*/
+	draft_text: string;
 }
 
 /**
@@ -20606,7 +20796,7 @@ Identifier of the chat to which the link points; 0 if the chat isn't found.
 }
 
 /**
-Describes a type of a block list.
+Describes a type of block list.
 Subtype of {@link BlockList}.
 */
 export interface BlockListMain {
@@ -20635,7 +20825,7 @@ File bytes.
 }
 
 /**
-Represents the type of a file.
+Represents the type of file.
 Subtype of {@link FileType}.
 */
 export interface FileTypeNone {
@@ -20905,7 +21095,7 @@ Database statistics in an unspecified human-readable format.
 }
 
 /**
-Represents the type of a network.
+Represents the type of network.
 Subtype of {@link NetworkType}.
 */
 export interface NetworkTypeNone {
@@ -21305,7 +21495,7 @@ The positions of the matched objects.
 }
 
 /**
-Describes the type of a URL linking to an internal Telegram entity.
+Describes the type of URL linking to an internal Telegram entity.
 Subtype of {@link TMeUrlType}.
 */
 export interface TMeUrlTypeUser {
@@ -21566,7 +21756,7 @@ export interface TextParseModeHtml {
 }
 
 /**
-Describes the type of a proxy server.
+Describes the type of proxy server.
 Subtype of {@link ProxyType}.
 */
 export interface ProxyTypeSocks5 {
@@ -21760,7 +21950,7 @@ The error message.
 }
 
 /**
-Describes type of an object, for which statistics are provided.
+Describes type of object, for which statistics are provided.
 Subtype of {@link ChatStatisticsObjectType}.
 */
 export interface ChatStatisticsObjectTypeMessage {
@@ -22032,6 +22222,41 @@ Detailed statistics about number of views and shares of recently sent messages a
 }
 
 /**
+A detailed statistics about revenue earned from sponsored messages in a chat.
+*/
+export interface ChatRevenueStatistics {
+	'@type': 'chatRevenueStatistics';
+	/**
+A graph containing amount of revenue in a given hour.
+*/
+	revenue_by_hour_graph: StatisticalGraph;
+	/**
+A graph containing amount of revenue.
+*/
+	revenue_graph: StatisticalGraph;
+	/**
+Cryptocurrency in which revenue is calculated.
+*/
+	cryptocurrency: string;
+	/**
+Total amount of the cryptocurrency earned, in the smallest units of the cryptocurrency.
+*/
+	cryptocurrency_total_amount: string;
+	/**
+Amount of the cryptocurrency that isn't withdrawn yet, in the smallest units of the cryptocurrency.
+*/
+	cryptocurrency_balance_amount: string;
+	/**
+Amount of the cryptocurrency available for withdrawal, in the smallest units of the cryptocurrency.
+*/
+	cryptocurrency_available_amount: string;
+	/**
+Current conversion rate of the cryptocurrency to USD.
+*/
+	usd_rate: number;
+}
+
+/**
 A detailed statistics about a message.
 */
 export interface MessageStatistics {
@@ -22059,6 +22284,126 @@ A graph containing number of story views and shares.
 A graph containing number of story reactions.
 */
 	story_reaction_graph: StatisticalGraph;
+}
+
+/**
+Describes state of a chat revenue withdrawal.
+Subtype of {@link ChatRevenueWithdrawalState}.
+*/
+export interface ChatRevenueWithdrawalStatePending {
+	'@type': 'chatRevenueWithdrawalStatePending';
+
+}
+
+/**
+Withdrawal was completed.
+Subtype of {@link ChatRevenueWithdrawalState}.
+*/
+export interface ChatRevenueWithdrawalStateCompleted {
+	'@type': 'chatRevenueWithdrawalStateCompleted';
+	/**
+Point in time (Unix timestamp) when the withdrawal was completed.
+*/
+	date: number;
+	/**
+The URL where the withdrawal transaction can be viewed.
+*/
+	url: string;
+}
+
+/**
+Withdrawal has_failed.
+Subtype of {@link ChatRevenueWithdrawalState}.
+*/
+export interface ChatRevenueWithdrawalStateFailed {
+	'@type': 'chatRevenueWithdrawalStateFailed';
+
+}
+
+/**
+Describes type of transaction for revenue earned from sponsored messages in a chat.
+Subtype of {@link ChatRevenueTransactionType}.
+*/
+export interface ChatRevenueTransactionTypeEarnings {
+	'@type': 'chatRevenueTransactionTypeEarnings';
+	/**
+Point in time (Unix timestamp) when the earnings started.
+*/
+	start_date: number;
+	/**
+Point in time (Unix timestamp) when the earnings ended.
+*/
+	end_date: number;
+}
+
+/**
+Describes a withdrawal of earnings.
+Subtype of {@link ChatRevenueTransactionType}.
+*/
+export interface ChatRevenueTransactionTypeWithdrawal {
+	'@type': 'chatRevenueTransactionTypeWithdrawal';
+	/**
+Point in time (Unix timestamp) when the earnings withdrawal started.
+*/
+	withdrawal_date: number;
+	/**
+Name of the payment provider.
+*/
+	provider: string;
+	/**
+State of the withdrawal.
+*/
+	state: ChatRevenueWithdrawalState;
+}
+
+/**
+Describes a refund for failed withdrawal of earnings.
+Subtype of {@link ChatRevenueTransactionType}.
+*/
+export interface ChatRevenueTransactionTypeRefund {
+	'@type': 'chatRevenueTransactionTypeRefund';
+	/**
+Point in time (Unix timestamp) when the transaction was refunded.
+*/
+	refund_date: number;
+	/**
+Name of the payment provider.
+*/
+	provider: string;
+}
+
+/**
+Contains a chat revenue transactions.
+*/
+export interface ChatRevenueTransaction {
+	'@type': 'chatRevenueTransaction';
+	/**
+Cryptocurrency in which revenue is calculated.
+*/
+	cryptocurrency: string;
+	/**
+The withdrawn amount, in the smallest units of the cryptocurrency.
+*/
+	cryptocurrency_amount: string;
+	/**
+Type of the transaction.
+*/
+	type: ChatRevenueTransactionType;
+}
+
+/**
+Contains a list of chat revenue transactions.
+*/
+export interface ChatRevenueTransactions {
+	'@type': 'chatRevenueTransactions';
+	/**
+Total number of transactions.
+*/
+	total_count: number;
+	/**
+List of transactions.
+*/
+	transactions: ChatRevenueTransaction[];
 }
 
 /**
@@ -22182,6 +22527,37 @@ Chat identifier.
 User identifier.
 */
 	user_id: number;
+}
+
+/**
+Describes type of the request for which a code is sent to a phone number.
+Subtype of {@link PhoneNumberCodeType}.
+*/
+export interface PhoneNumberCodeTypeChange {
+	'@type': 'phoneNumberCodeTypeChange';
+
+}
+
+/**
+Verifies ownership of a phone number to be added to the user's Telegram Passport.
+Subtype of {@link PhoneNumberCodeType}.
+*/
+export interface PhoneNumberCodeTypeVerify {
+	'@type': 'phoneNumberCodeTypeVerify';
+
+}
+
+/**
+Confirms ownership of a phone number to prevent account deletion while handling links of the type
+internalLinkTypePhoneNumberConfirmation.
+Subtype of {@link PhoneNumberCodeType}.
+*/
+export interface PhoneNumberCodeTypeConfirmOwnership {
+	'@type': 'phoneNumberCodeTypeConfirmOwnership';
+	/**
+Hash value from the link.
+*/
+	hash: string;
 }
 
 /**
@@ -22635,6 +23011,22 @@ Chat identifier.
 The new value of the action bar; may be null.
 */
 	action_bar: ChatActionBar;
+}
+
+/**
+The bar for managing business bot was changed in a chat.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatBusinessBotManageBar {
+	'@type': 'updateChatBusinessBotManageBar';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The new value of the business bot manage bar; may be null.
+*/
+	business_bot_manage_bar: BusinessBotManageBar;
 }
 
 /**
@@ -24148,6 +24540,21 @@ Removed suggested actions.
 }
 
 /**
+Download or upload file speed for the user was limited, but it can be restored by subscription to Telegram Premium. The
+notification can be postponed until a being downloaded or uploaded file is visible to the user Use
+getOption("premium_download_speedup") or getOption("premium_upload_speedup") to get expected speedup after subscription
+to Telegram Premium.
+Subtype of {@link Update}.
+*/
+export interface UpdateSpeedLimitNotification {
+	'@type': 'updateSpeedLimitNotification';
+	/**
+True, if upload speed was limited; false, if download speed was limited.
+*/
+	is_upload?: boolean;
+}
+
+/**
 The list of contacts that had birthdays recently or will have birthday soon has changed.
 Subtype of {@link Update}.
 */
@@ -24157,23 +24564,6 @@ export interface UpdateContactCloseBirthdays {
 List of contact users with close birthday.
 */
 	close_birthday_users: CloseBirthdayUser[];
-}
-
-/**
-Adding users to a chat has failed because of their privacy settings. An invite link can be shared with the users if
-appropriate.
-Subtype of {@link Update}.
-*/
-export interface UpdateAddChatMembersPrivacyForbidden {
-	'@type': 'updateAddChatMembersPrivacyForbidden';
-	/**
-Chat identifier.
-*/
-	chat_id: number;
-	/**
-Identifiers of users, which weren't added because of their privacy settings.
-*/
-	user_ids: number[];
 }
 
 /**
@@ -25645,7 +26035,7 @@ export type BusinessFeature =
 	| BusinessFeatureGreetingMessage
 	| BusinessFeatureAwayMessage
 	| BusinessFeatureAccountLinks
-	| BusinessFeatureIntro
+	| BusinessFeatureStartPage
 	| BusinessFeatureBots
 	| BusinessFeatureEmojiStatus
 	| BusinessFeatureChatFolderTags
@@ -25886,6 +26276,7 @@ export type InternalLinkType =
 	| InternalLinkTypeBotAddToChannel
 	| InternalLinkTypeBotStart
 	| InternalLinkTypeBotStartInGroup
+	| InternalLinkTypeBusinessChat
 	| InternalLinkTypeChangePhoneNumber
 	| InternalLinkTypeChatBoost
 	| InternalLinkTypeChatFolderInvite
@@ -26022,6 +26413,16 @@ export type ChatStatistics =
 	| ChatStatisticsSupergroup
 	| ChatStatisticsChannel;
 
+export type ChatRevenueWithdrawalState =
+	| ChatRevenueWithdrawalStatePending
+	| ChatRevenueWithdrawalStateCompleted
+	| ChatRevenueWithdrawalStateFailed;
+
+export type ChatRevenueTransactionType =
+	| ChatRevenueTransactionTypeEarnings
+	| ChatRevenueTransactionTypeWithdrawal
+	| ChatRevenueTransactionTypeRefund;
+
 export type VectorPathCommand =
 	| VectorPathCommandLine
 	| VectorPathCommandCubicBezierCurve;
@@ -26034,6 +26435,11 @@ export type BotCommandScope =
 	| BotCommandScopeChat
 	| BotCommandScopeChatAdministrators
 	| BotCommandScopeChatMember;
+
+export type PhoneNumberCodeType =
+	| PhoneNumberCodeTypeChange
+	| PhoneNumberCodeTypeVerify
+	| PhoneNumberCodeTypeConfirmOwnership;
 
 export type Update =
 	| UpdateAuthorizationState
@@ -26061,6 +26467,7 @@ export type Update =
 	| UpdateChatReadInbox
 	| UpdateChatReadOutbox
 	| UpdateChatActionBar
+	| UpdateChatBusinessBotManageBar
 	| UpdateChatAvailableReactions
 	| UpdateChatDraftMessage
 	| UpdateChatEmojiStatus
@@ -26154,8 +26561,8 @@ export type Update =
 	| UpdateAnimatedEmojiMessageClicked
 	| UpdateAnimationSearchParameters
 	| UpdateSuggestedActions
+	| UpdateSpeedLimitNotification
 	| UpdateContactCloseBirthdays
-	| UpdateAddChatMembersPrivacyForbidden
 	| UpdateAutosaveSettings
 	| UpdateBusinessConnection
 	| UpdateNewBusinessMessage
@@ -27174,8 +27581,8 @@ Pass true to get the number of chats without sending network requests, or -1 if 
 }
 
 /**
-Informs TDLib that a chat was opened from the list of similar chats. The method is independent from openChat and
-closeChat methods.
+Informs TDLib that a chat was opened from the list of similar chats. The method is independent of openChat and closeChat
+methods.
 Request type for {@link Tdjson#openChatSimilarChat}.
 */
 export interface OpenChatSimilarChat {
@@ -28969,6 +29376,106 @@ Unique identifiers of the messages.
 }
 
 /**
+Adds a message to a quick reply shortcut. If shortcut doesn't exist and there are less than
+getOption("quick_reply_shortcut_count_max") shortcuts, then a new shortcut is created. The shortcut must not contain
+more than getOption("quick_reply_shortcut_message_count_max") messages after adding the new message. Returns the added
+message.
+Request type for {@link Tdjson#addQuickReplyShortcutMessage}.
+*/
+export interface AddQuickReplyShortcutMessage {
+	'@type': 'addQuickReplyShortcutMessage';
+	/**
+Name of the target shortcut.
+*/
+	shortcut_name: string;
+	/**
+Identifier of a quick reply message in the same shortcut to be replied; pass 0 if none.
+*/
+	reply_to_message_id: number;
+	/**
+The content of the message to be added; inputMessagePoll, inputMessageForwarded and inputMessageLocation with
+live_period aren't supported.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Adds a message to a quick reply shortcut via inline bot. If shortcut doesn't exist and there are less than
+getOption("quick_reply_shortcut_count_max") shortcuts, then a new shortcut is created. The shortcut must not contain
+more than getOption("quick_reply_shortcut_message_count_max") messages after adding the new message. Returns the added
+message.
+Request type for {@link Tdjson#addQuickReplyShortcutInlineQueryResultMessage}.
+*/
+export interface AddQuickReplyShortcutInlineQueryResultMessage {
+	'@type': 'addQuickReplyShortcutInlineQueryResultMessage';
+	/**
+Name of the target shortcut.
+*/
+	shortcut_name: string;
+	/**
+Identifier of a quick reply message in the same shortcut to be replied; pass 0 if none.
+*/
+	reply_to_message_id: number;
+	/**
+Identifier of the inline query.
+*/
+	query_id: string;
+	/**
+Identifier of the inline query result.
+*/
+	result_id: string;
+	/**
+Pass true to hide the bot, via which the message is sent. Can be used only for bots
+getOption("animation_search_bot_username"), getOption("photo_search_bot_username"), and
+getOption("venue_search_bot_username").
+*/
+	hide_via_bot?: boolean;
+}
+
+/**
+Readds quick reply messages which failed to add. Can be called only for messages for which
+messageSendingStateFailed.can_retry is true and after specified in messageSendingStateFailed.retry_after time passed. If
+a message is readded, the corresponding failed to send message is deleted. Returns the sent messages in the same order
+as the message identifiers passed in message_ids. If a message can't be readded, null will be returned instead of the
+message.
+Request type for {@link Tdjson#readdQuickReplyShortcutMessages}.
+*/
+export interface ReaddQuickReplyShortcutMessages {
+	'@type': 'readdQuickReplyShortcutMessages';
+	/**
+Name of the target shortcut.
+*/
+	shortcut_name: string;
+	/**
+Identifiers of the quick reply messages to readd. Message identifiers must be in a strictly increasing order.
+*/
+	message_ids: number[];
+}
+
+/**
+Asynchronously edits the text, media or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
+whether a message can be edited. Text message can be edited only to a text message. The type of message content in an
+album can't be changed with exception of replacing a photo with a video or vice versa.
+Request type for {@link Tdjson#editQuickReplyMessage}.
+*/
+export interface EditQuickReplyMessage {
+	'@type': 'editQuickReplyMessage';
+	/**
+Unique identifier of the quick reply shortcut with the message.
+*/
+	shortcut_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+New content of the message. Must be one of the following types: inputMessageText, inputMessageAnimation,
+inputMessageAudio, inputMessageDocument, inputMessagePhoto or inputMessageVideo.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
 Returns list of custom emojis, which can be used as forum topic icon by all users.
 Request type for {@link Tdjson#getForumTopicDefaultIcons}.
 */
@@ -30353,7 +30860,7 @@ Pass true to create an HTTPS link (only available for some link types); pass fal
 }
 
 /**
-Returns information about the type of an internal link. Returns a 404 error if the link is not internal. Can be called
+Returns information about the type of internal link. Returns a 404 error if the link is not internal. Can be called
 before authorization.
 Request type for {@link Tdjson#getInternalLinkType}.
 */
@@ -30515,7 +31022,8 @@ Secret chat identifier.
 }
 
 /**
-Creates a new basic group and sends a corresponding messageBasicGroupChatCreate. Returns the newly created chat.
+Creates a new basic group and sends a corresponding messageBasicGroupChatCreate. Returns information about the newly
+created chat.
 Request type for {@link Tdjson#createNewBasicGroupChat}.
 */
 export interface CreateNewBasicGroupChat {
@@ -31452,6 +31960,7 @@ Chat identifier.
 
 /**
 Adds a new member to a chat; requires can_invite_users member right. Members can't be added to private or secret chats.
+Returns information about members that weren't added.
 Request type for {@link Tdjson#addChatMember}.
 */
 export interface AddChatMember {
@@ -31474,7 +31983,7 @@ channels, or if the added user is a bot.
 /**
 Adds multiple new members to a chat; requires can_invite_users member right. Currently, this method is only available
 for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has
-more than 200 members.
+more than 200 members. Returns information about members that weren't added.
 Request type for {@link Tdjson#addChatMembers}.
 */
 export interface AddChatMembers {
@@ -32281,7 +32790,7 @@ Chat boost level.
 }
 
 /**
-Returns list of features available on the first 10 chat boost levels; this is an offline request.
+Returns list of features available for different chat boost levels; this is an offline request.
 Request type for {@link Tdjson#getChatBoostFeatures}.
 */
 export interface GetChatBoostFeatures {
@@ -32705,7 +33214,7 @@ Identifier of the file to delete.
 /**
 Adds a file from a message to the list of file downloads. Download progress and completion of the download will be
 notified through updateFile updates. If message database is used, the list of file downloads is persistent across
-application restarts. The downloading is independent from download using downloadFile, i.e. it continues if downloadFile
+application restarts. The downloading is independent of download using downloadFile, i.e. it continues if downloadFile
 is canceled or is used to download a part of the file.
 Request type for {@link Tdjson#addFileToDownloads}.
 */
@@ -34162,6 +34671,15 @@ The maximum number of stickers to be returned; 0-100.
 }
 
 /**
+Returns greeting stickers from regular sticker sets that can be used for the start page of other users.
+Request type for {@link Tdjson#getGreetingStickers}.
+*/
+export interface GetGreetingStickers {
+	'@type': 'getGreetingStickers';
+
+}
+
+/**
 Returns premium stickers from regular sticker sets.
 Request type for {@link Tdjson#getPremiumStickers}.
 */
@@ -34903,50 +35421,67 @@ The new settings for the away message of the business; pass null to disable the 
 }
 
 /**
-Changes the business intro of the current user. Requires Telegram Business subscription.
-Request type for {@link Tdjson#setBusinessIntro}.
+Changes the business start page of the current user. Requires Telegram Business subscription.
+Request type for {@link Tdjson#setBusinessStartPage}.
 */
-export interface SetBusinessIntro {
-	'@type': 'setBusinessIntro';
+export interface SetBusinessStartPage {
+	'@type': 'setBusinessStartPage';
 	/**
-The new intro of the business; pass null to remove the intro.
+The new start page of the business; pass null to remove custom start page.
 */
-	intro: InputBusinessIntro;
+	start_page: InputBusinessStartPage;
 }
 
 /**
-Changes the phone number of the user and sends an authentication code to the user's new phone number; for official
-Android and iOS applications only. On success, returns information about the sent code.
-Request type for {@link Tdjson#changePhoneNumber}.
+Sends a code to the specified phone number. Aborts previous phone number verification if there was one. On success,
+returns information about the sent code.
+Request type for {@link Tdjson#sendPhoneNumberCode}.
 */
-export interface ChangePhoneNumber {
-	'@type': 'changePhoneNumber';
+export interface SendPhoneNumberCode {
+	'@type': 'sendPhoneNumberCode';
 	/**
-The new phone number of the user in international format.
+The phone number, in international format.
 */
 	phone_number: string;
 	/**
 Settings for the authentication of the user's phone number; pass null to use default settings.
 */
 	settings: PhoneNumberAuthenticationSettings;
+	/**
+Type of the request for which the code is sent.
+*/
+	type: PhoneNumberCodeType;
 }
 
 /**
-Resends the authentication code sent to confirm a new phone number for the current user. Works only if the previously
-received authenticationCodeInfo next_code_type was not null and the server-specified timeout has passed.
-Request type for {@link Tdjson#resendChangePhoneNumberCode}.
+Sends Firebase Authentication SMS to the specified phone number. Works only when received a code of the type
+authenticationCodeTypeFirebaseAndroid or authenticationCodeTypeFirebaseIos.
+Request type for {@link Tdjson#sendPhoneNumberFirebaseSms}.
 */
-export interface ResendChangePhoneNumberCode {
-	'@type': 'resendChangePhoneNumberCode';
+export interface SendPhoneNumberFirebaseSms {
+	'@type': 'sendPhoneNumberFirebaseSms';
+	/**
+SafetyNet Attestation API token for the Android application, or secret from push notification for the iOS application.
+*/
+	token: string;
+}
+
+/**
+Resends the authentication code sent to a phone number. Works only if the previously received authenticationCodeInfo
+next_code_type was not null and the server-specified timeout has passed.
+Request type for {@link Tdjson#resendPhoneNumberCode}.
+*/
+export interface ResendPhoneNumberCode {
+	'@type': 'resendPhoneNumberCode';
 
 }
 
 /**
-Checks the authentication code sent to confirm a new phone number of the user.
-Request type for {@link Tdjson#checkChangePhoneNumberCode}.
+Check the authentication code and completes the request for which the code was sent if appropriate.
+Request type for {@link Tdjson#checkPhoneNumberCode}.
 */
-export interface CheckChangePhoneNumberCode {
-	'@type': 'checkChangePhoneNumberCode';
+export interface CheckPhoneNumberCode {
+	'@type': 'checkPhoneNumberCode';
 	/**
 Authentication code to check.
 */
@@ -34985,6 +35520,96 @@ export interface DeleteBusinessConnectedBot {
 Unique user identifier for the bot.
 */
 	bot_user_id: number;
+}
+
+/**
+Pauses or resumes the connected business bot in a specific chat.
+Request type for {@link Tdjson#toggleBusinessConnectedBotChatIsPaused}.
+*/
+export interface ToggleBusinessConnectedBotChatIsPaused {
+	'@type': 'toggleBusinessConnectedBotChatIsPaused';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Pass true to pause the connected bot in the chat; pass false to resume the bot.
+*/
+	is_paused?: boolean;
+}
+
+/**
+Removes the connected business bot from a specific chat by adding the chat to businessRecipients.excluded_chat_ids.
+Request type for {@link Tdjson#removeBusinessConnectedBotFromChat}.
+*/
+export interface RemoveBusinessConnectedBotFromChat {
+	'@type': 'removeBusinessConnectedBotFromChat';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Returns business chat links created for the current account.
+Request type for {@link Tdjson#getBusinessChatLinks}.
+*/
+export interface GetBusinessChatLinks {
+	'@type': 'getBusinessChatLinks';
+
+}
+
+/**
+Creates a business chat link for the current account. Requires Telegram Business subscription. There can be up to
+getOption("business_chat_link_count_max") links created. Returns the created link.
+Request type for {@link Tdjson#createBusinessChatLink}.
+*/
+export interface CreateBusinessChatLink {
+	'@type': 'createBusinessChatLink';
+	/**
+Information about the link to create.
+*/
+	link_info: InputBusinessChatLink;
+}
+
+/**
+Edits a business chat link of the current account. Requires Telegram Business subscription. Returns the edited link.
+Request type for {@link Tdjson#editBusinessChatLink}.
+*/
+export interface EditBusinessChatLink {
+	'@type': 'editBusinessChatLink';
+	/**
+The link to edit.
+*/
+	link: string;
+	/**
+New description of the link.
+*/
+	link_info: InputBusinessChatLink;
+}
+
+/**
+Deletes a business chat link of the current account.
+Request type for {@link Tdjson#deleteBusinessChatLink}.
+*/
+export interface DeleteBusinessChatLink {
+	'@type': 'deleteBusinessChatLink';
+	/**
+The link to delete.
+*/
+	link: string;
+}
+
+/**
+Returns information about a business chat link.
+Request type for {@link Tdjson#getBusinessChatLinkInfo}.
+*/
+export interface GetBusinessChatLinkInfo {
+	'@type': 'getBusinessChatLinkInfo';
+	/**
+Name of the link.
+*/
+	link_name: string;
 }
 
 /**
@@ -35630,6 +36255,24 @@ The new value of is_all_history_available.
 }
 
 /**
+Toggles whether sponsored messages are shown in the channel chat; requires owner privileges in the channel. The chat
+must have at least chatBoostFeatures.min_sponsored_message_disable_boost_level boost level to disable sponsored
+messages.
+Request type for {@link Tdjson#toggleSupergroupCanHaveSponsoredMessages}.
+*/
+export interface ToggleSupergroupCanHaveSponsoredMessages {
+	'@type': 'toggleSupergroupCanHaveSponsoredMessages';
+	/**
+The identifier of the channel.
+*/
+	supergroup_id: number;
+	/**
+The new value of can_have_sponsored_messages.
+*/
+	can_have_sponsored_messages?: boolean;
+}
+
+/**
 Toggles whether non-administrators can receive only administrators and bots using getSupergroupMembers or
 searchChatMembers. Can be called only if supergroupFullInfo.can_hide_members == true.
 Request type for {@link Tdjson#toggleSupergroupHasHiddenMembers}.
@@ -35745,7 +36388,7 @@ Number of users to skip.
 */
 	offset: number;
 	/**
-The maximum number of users be returned; up to 200.
+The maximum number of users to be returned; up to 200.
 */
 	limit: number;
 }
@@ -36478,6 +37121,61 @@ Identifier of the sender, which added the reaction.
 }
 
 /**
+Returns detailed revenue statistics about a chat. Currently, this method can be used only for channels if
+supergroupFullInfo.can_get_revenue_statistics == true.
+Request type for {@link Tdjson#getChatRevenueStatistics}.
+*/
+export interface GetChatRevenueStatistics {
+	'@type': 'getChatRevenueStatistics';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Pass true if a dark theme is used by the application.
+*/
+	is_dark?: boolean;
+}
+
+/**
+Returns URL for chat revenue withdrawal; requires owner privileges in the chat. Currently, this method can be used only
+for channels if supergroupFullInfo.can_get_revenue_statistics == true and getOption("can_withdraw_chat_revenue").
+Request type for {@link Tdjson#getChatRevenueWithdrawalUrl}.
+*/
+export interface GetChatRevenueWithdrawalUrl {
+	'@type': 'getChatRevenueWithdrawalUrl';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
+}
+
+/**
+Returns list of revenue transactions for a chat. Currently, this method can be used only for channels if
+supergroupFullInfo.can_get_revenue_statistics == true.
+Request type for {@link Tdjson#getChatRevenueTransactions}.
+*/
+export interface GetChatRevenueTransactions {
+	'@type': 'getChatRevenueTransactions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Number of transactions to skip.
+*/
+	offset: number;
+	/**
+The maximum number of transactions to be returned; up to 200.
+*/
+	limit: number;
+}
+
+/**
 Returns detailed statistics about a chat. Currently, this method can be used only for supergroups and channels. Can be
 used only if supergroupFullInfo.can_get_statistics == true.
 Request type for {@link Tdjson#getChatStatistics}.
@@ -36874,43 +37572,6 @@ A two-letter ISO 3166-1 alpha-2 country code.
 }
 
 /**
-Sends a code to verify a phone number to be added to a user's Telegram Passport.
-Request type for {@link Tdjson#sendPhoneNumberVerificationCode}.
-*/
-export interface SendPhoneNumberVerificationCode {
-	'@type': 'sendPhoneNumberVerificationCode';
-	/**
-The phone number of the user, in international format.
-*/
-	phone_number: string;
-	/**
-Settings for the authentication of the user's phone number; pass null to use default settings.
-*/
-	settings: PhoneNumberAuthenticationSettings;
-}
-
-/**
-Resends the code to verify a phone number to be added to a user's Telegram Passport.
-Request type for {@link Tdjson#resendPhoneNumberVerificationCode}.
-*/
-export interface ResendPhoneNumberVerificationCode {
-	'@type': 'resendPhoneNumberVerificationCode';
-
-}
-
-/**
-Checks the phone number verification code for Telegram Passport.
-Request type for {@link Tdjson#checkPhoneNumberVerificationCode}.
-*/
-export interface CheckPhoneNumberVerificationCode {
-	'@type': 'checkPhoneNumberVerificationCode';
-	/**
-Verification code to check.
-*/
-	code: string;
-}
-
-/**
 Sends a code to verify an email address to be added to a user's Telegram Passport.
 Request type for {@link Tdjson#sendEmailAddressVerificationCode}.
 */
@@ -36999,47 +37660,6 @@ Authorization form identifier.
 Types of Telegram Passport elements chosen by user to complete the authorization form.
 */
 	types: PassportElementType[];
-}
-
-/**
-Sends phone number confirmation code to handle links of the type internalLinkTypePhoneNumberConfirmation.
-Request type for {@link Tdjson#sendPhoneNumberConfirmationCode}.
-*/
-export interface SendPhoneNumberConfirmationCode {
-	'@type': 'sendPhoneNumberConfirmationCode';
-	/**
-Hash value from the link.
-*/
-	hash: string;
-	/**
-Phone number value from the link.
-*/
-	phone_number: string;
-	/**
-Settings for the authentication of the user's phone number; pass null to use default settings.
-*/
-	settings: PhoneNumberAuthenticationSettings;
-}
-
-/**
-Resends phone number confirmation code.
-Request type for {@link Tdjson#resendPhoneNumberConfirmationCode}.
-*/
-export interface ResendPhoneNumberConfirmationCode {
-	'@type': 'resendPhoneNumberConfirmationCode';
-
-}
-
-/**
-Checks phone number confirmation code.
-Request type for {@link Tdjson#checkPhoneNumberConfirmationCode}.
-*/
-export interface CheckPhoneNumberConfirmationCode {
-	'@type': 'checkPhoneNumberConfirmationCode';
-	/**
-Confirmation code to check.
-*/
-	code: string;
 }
 
 /**
@@ -38350,6 +38970,10 @@ export type Request =
 	| ReorderQuickReplyShortcuts
 	| LoadQuickReplyShortcutMessages
 	| DeleteQuickReplyShortcutMessages
+	| AddQuickReplyShortcutMessage
+	| AddQuickReplyShortcutInlineQueryResultMessage
+	| ReaddQuickReplyShortcutMessages
+	| EditQuickReplyMessage
 	| GetForumTopicDefaultIcons
 	| CreateForumTopic
 	| EditForumTopic
@@ -38642,6 +39266,7 @@ export type Request =
 	| GetStickers
 	| GetAllStickerEmojis
 	| SearchStickers
+	| GetGreetingStickers
 	| GetPremiumStickers
 	| GetInstalledStickerSets
 	| GetArchivedStickerSets
@@ -38696,13 +39321,21 @@ export type Request =
 	| SetBusinessOpeningHours
 	| SetBusinessGreetingMessageSettings
 	| SetBusinessAwayMessageSettings
-	| SetBusinessIntro
-	| ChangePhoneNumber
-	| ResendChangePhoneNumberCode
-	| CheckChangePhoneNumberCode
+	| SetBusinessStartPage
+	| SendPhoneNumberCode
+	| SendPhoneNumberFirebaseSms
+	| ResendPhoneNumberCode
+	| CheckPhoneNumberCode
 	| GetBusinessConnectedBot
 	| SetBusinessConnectedBot
 	| DeleteBusinessConnectedBot
+	| ToggleBusinessConnectedBotChatIsPaused
+	| RemoveBusinessConnectedBotFromChat
+	| GetBusinessChatLinks
+	| CreateBusinessChatLink
+	| EditBusinessChatLink
+	| DeleteBusinessChatLink
+	| GetBusinessChatLinkInfo
 	| GetUserLink
 	| SearchUserByToken
 	| SetCommands
@@ -38745,6 +39378,7 @@ export type Request =
 	| ToggleSupergroupJoinToSendMessages
 	| ToggleSupergroupJoinByRequest
 	| ToggleSupergroupIsAllHistoryAvailable
+	| ToggleSupergroupCanHaveSponsoredMessages
 	| ToggleSupergroupHasHiddenMembers
 	| ToggleSupergroupHasAggressiveAntiSpamEnabled
 	| ToggleSupergroupIsForum
@@ -38802,6 +39436,9 @@ export type Request =
 	| ReportChat
 	| ReportChatPhoto
 	| ReportMessageReactions
+	| GetChatRevenueStatistics
+	| GetChatRevenueWithdrawalUrl
+	| GetChatRevenueTransactions
 	| GetChatStatistics
 	| GetMessageStatistics
 	| GetMessagePublicForwards
@@ -38827,18 +39464,12 @@ export type Request =
 	| DeletePassportElement
 	| SetPassportElementErrors
 	| GetPreferredCountryLanguage
-	| SendPhoneNumberVerificationCode
-	| ResendPhoneNumberVerificationCode
-	| CheckPhoneNumberVerificationCode
 	| SendEmailAddressVerificationCode
 	| ResendEmailAddressVerificationCode
 	| CheckEmailAddressVerificationCode
 	| GetPassportAuthorizationForm
 	| GetPassportAuthorizationFormAvailableElements
 	| SendPassportAuthorizationForm
-	| SendPhoneNumberConfirmationCode
-	| ResendPhoneNumberConfirmationCode
-	| CheckPhoneNumberConfirmationCode
 	| SetBotUpdatesStatus
 	| UploadStickerFile
 	| GetSuggestedStickerSetName
@@ -39642,8 +40273,8 @@ Returns approximate number of chats similar to the given chat.
 	}
 
 	/**
-Informs TDLib that a chat was opened from the list of similar chats. The method is independent from openChat and
-closeChat methods.
+Informs TDLib that a chat was opened from the list of similar chats. The method is independent of openChat and closeChat
+methods.
 */
 	async openChatSimilarChat(options: Omit<OpenChatSimilarChat, '@type'>): Promise<Ok> {
 		return this._request({
@@ -40567,6 +41198,58 @@ Deletes specified quick reply messages.
 	}
 
 	/**
+Adds a message to a quick reply shortcut. If shortcut doesn't exist and there are less than
+getOption("quick_reply_shortcut_count_max") shortcuts, then a new shortcut is created. The shortcut must not contain
+more than getOption("quick_reply_shortcut_message_count_max") messages after adding the new message. Returns the added
+message.
+*/
+	async addQuickReplyShortcutMessage(options: Omit<AddQuickReplyShortcutMessage, '@type'>): Promise<QuickReplyMessage> {
+		return this._request({
+			...options,
+			'@type': 'addQuickReplyShortcutMessage',
+		});
+	}
+
+	/**
+Adds a message to a quick reply shortcut via inline bot. If shortcut doesn't exist and there are less than
+getOption("quick_reply_shortcut_count_max") shortcuts, then a new shortcut is created. The shortcut must not contain
+more than getOption("quick_reply_shortcut_message_count_max") messages after adding the new message. Returns the added
+message.
+*/
+	async addQuickReplyShortcutInlineQueryResultMessage(options: Omit<AddQuickReplyShortcutInlineQueryResultMessage, '@type'>): Promise<QuickReplyMessage> {
+		return this._request({
+			...options,
+			'@type': 'addQuickReplyShortcutInlineQueryResultMessage',
+		});
+	}
+
+	/**
+Readds quick reply messages which failed to add. Can be called only for messages for which
+messageSendingStateFailed.can_retry is true and after specified in messageSendingStateFailed.retry_after time passed. If
+a message is readded, the corresponding failed to send message is deleted. Returns the sent messages in the same order
+as the message identifiers passed in message_ids. If a message can't be readded, null will be returned instead of the
+message.
+*/
+	async readdQuickReplyShortcutMessages(options: Omit<ReaddQuickReplyShortcutMessages, '@type'>): Promise<QuickReplyMessages> {
+		return this._request({
+			...options,
+			'@type': 'readdQuickReplyShortcutMessages',
+		});
+	}
+
+	/**
+Asynchronously edits the text, media or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
+whether a message can be edited. Text message can be edited only to a text message. The type of message content in an
+album can't be changed with exception of replacing a photo with a video or vice versa.
+*/
+	async editQuickReplyMessage(options: Omit<EditQuickReplyMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editQuickReplyMessage',
+		});
+	}
+
+	/**
 Returns list of custom emojis, which can be used as forum topic icon by all users.
 */
 	async getForumTopicDefaultIcons(): Promise<Stickers> {
@@ -41300,7 +41983,7 @@ Returns an HTTPS or a tg: link with the given type. Can be called before authori
 	}
 
 	/**
-Returns information about the type of an internal link. Returns a 404 error if the link is not internal. Can be called
+Returns information about the type of internal link. Returns a 404 error if the link is not internal. Can be called
 before authorization.
 */
 	async getInternalLinkType(options: Omit<GetInternalLinkType, '@type'>): Promise<InternalLinkType> {
@@ -41413,9 +42096,10 @@ Returns an existing chat corresponding to a known secret chat.
 	}
 
 	/**
-Creates a new basic group and sends a corresponding messageBasicGroupChatCreate. Returns the newly created chat.
+Creates a new basic group and sends a corresponding messageBasicGroupChatCreate. Returns information about the newly
+created chat.
 */
-	async createNewBasicGroupChat(options: Omit<CreateNewBasicGroupChat, '@type'>): Promise<Chat> {
+	async createNewBasicGroupChat(options: Omit<CreateNewBasicGroupChat, '@type'>): Promise<CreatedBasicGroupChat> {
 		return this._request({
 			...options,
 			'@type': 'createNewBasicGroupChat',
@@ -41998,8 +42682,9 @@ Removes the current user from chat members. Private and secret chats can't be le
 
 	/**
 Adds a new member to a chat; requires can_invite_users member right. Members can't be added to private or secret chats.
+Returns information about members that weren't added.
 */
-	async addChatMember(options: Omit<AddChatMember, '@type'>): Promise<Ok> {
+	async addChatMember(options: Omit<AddChatMember, '@type'>): Promise<FailedToAddMembers> {
 		return this._request({
 			...options,
 			'@type': 'addChatMember',
@@ -42009,9 +42694,9 @@ Adds a new member to a chat; requires can_invite_users member right. Members can
 	/**
 Adds multiple new members to a chat; requires can_invite_users member right. Currently, this method is only available
 for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has
-more than 200 members.
+more than 200 members. Returns information about members that weren't added.
 */
-	async addChatMembers(options: Omit<AddChatMembers, '@type'>): Promise<Ok> {
+	async addChatMembers(options: Omit<AddChatMembers, '@type'>): Promise<FailedToAddMembers> {
 		return this._request({
 			...options,
 			'@type': 'addChatMembers',
@@ -42469,7 +43154,7 @@ Returns list of features available on the specific chat boost level; this is an 
 	}
 
 	/**
-Returns list of features available on the first 10 chat boost levels; this is an offline request.
+Returns list of features available for different chat boost levels; this is an offline request.
 */
 	async getChatBoostFeatures(options: Omit<GetChatBoostFeatures, '@type'>): Promise<ChatBoostFeatures> {
 		return this._request({
@@ -42753,7 +43438,7 @@ Deletes a file from the TDLib file cache.
 	/**
 Adds a file from a message to the list of file downloads. Download progress and completion of the download will be
 notified through updateFile updates. If message database is used, the list of file downloads is persistent across
-application restarts. The downloading is independent from download using downloadFile, i.e. it continues if downloadFile
+application restarts. The downloading is independent of download using downloadFile, i.e. it continues if downloadFile
 is canceled or is used to download a part of the file.
 */
 	async addFileToDownloads(options: Omit<AddFileToDownloads, '@type'>): Promise<File> {
@@ -43591,6 +44276,15 @@ Searches for stickers from public sticker sets that correspond to any of the giv
 	}
 
 	/**
+Returns greeting stickers from regular sticker sets that can be used for the start page of other users.
+*/
+	async getGreetingStickers(): Promise<Stickers> {
+		return this._request({
+			'@type': 'getGreetingStickers',
+		});
+	}
+
+	/**
 Returns premium stickers from regular sticker sets.
 */
 	async getPremiumStickers(options: Omit<GetPremiumStickers, '@type'>): Promise<Stickers> {
@@ -44141,43 +44835,54 @@ Changes the business away message settings of the current user. Requires Telegra
 	}
 
 	/**
-Changes the business intro of the current user. Requires Telegram Business subscription.
+Changes the business start page of the current user. Requires Telegram Business subscription.
 */
-	async setBusinessIntro(options: Omit<SetBusinessIntro, '@type'>): Promise<Ok> {
+	async setBusinessStartPage(options: Omit<SetBusinessStartPage, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'setBusinessIntro',
+			'@type': 'setBusinessStartPage',
 		});
 	}
 
 	/**
-Changes the phone number of the user and sends an authentication code to the user's new phone number; for official
-Android and iOS applications only. On success, returns information about the sent code.
+Sends a code to the specified phone number. Aborts previous phone number verification if there was one. On success,
+returns information about the sent code.
 */
-	async changePhoneNumber(options: Omit<ChangePhoneNumber, '@type'>): Promise<AuthenticationCodeInfo> {
+	async sendPhoneNumberCode(options: Omit<SendPhoneNumberCode, '@type'>): Promise<AuthenticationCodeInfo> {
 		return this._request({
 			...options,
-			'@type': 'changePhoneNumber',
+			'@type': 'sendPhoneNumberCode',
 		});
 	}
 
 	/**
-Resends the authentication code sent to confirm a new phone number for the current user. Works only if the previously
-received authenticationCodeInfo next_code_type was not null and the server-specified timeout has passed.
+Sends Firebase Authentication SMS to the specified phone number. Works only when received a code of the type
+authenticationCodeTypeFirebaseAndroid or authenticationCodeTypeFirebaseIos.
 */
-	async resendChangePhoneNumberCode(): Promise<AuthenticationCodeInfo> {
+	async sendPhoneNumberFirebaseSms(options: Omit<SendPhoneNumberFirebaseSms, '@type'>): Promise<Ok> {
 		return this._request({
-			'@type': 'resendChangePhoneNumberCode',
+			...options,
+			'@type': 'sendPhoneNumberFirebaseSms',
 		});
 	}
 
 	/**
-Checks the authentication code sent to confirm a new phone number of the user.
+Resends the authentication code sent to a phone number. Works only if the previously received authenticationCodeInfo
+next_code_type was not null and the server-specified timeout has passed.
 */
-	async checkChangePhoneNumberCode(options: Omit<CheckChangePhoneNumberCode, '@type'>): Promise<Ok> {
+	async resendPhoneNumberCode(): Promise<AuthenticationCodeInfo> {
+		return this._request({
+			'@type': 'resendPhoneNumberCode',
+		});
+	}
+
+	/**
+Check the authentication code and completes the request for which the code was sent if appropriate.
+*/
+	async checkPhoneNumberCode(options: Omit<CheckPhoneNumberCode, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'checkChangePhoneNumberCode',
+			'@type': 'checkPhoneNumberCode',
 		});
 	}
 
@@ -44208,6 +44913,76 @@ Deletes the business bot that is connected to the current user account.
 		return this._request({
 			...options,
 			'@type': 'deleteBusinessConnectedBot',
+		});
+	}
+
+	/**
+Pauses or resumes the connected business bot in a specific chat.
+*/
+	async toggleBusinessConnectedBotChatIsPaused(options: Omit<ToggleBusinessConnectedBotChatIsPaused, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleBusinessConnectedBotChatIsPaused',
+		});
+	}
+
+	/**
+Removes the connected business bot from a specific chat by adding the chat to businessRecipients.excluded_chat_ids.
+*/
+	async removeBusinessConnectedBotFromChat(options: Omit<RemoveBusinessConnectedBotFromChat, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeBusinessConnectedBotFromChat',
+		});
+	}
+
+	/**
+Returns business chat links created for the current account.
+*/
+	async getBusinessChatLinks(): Promise<BusinessChatLinks> {
+		return this._request({
+			'@type': 'getBusinessChatLinks',
+		});
+	}
+
+	/**
+Creates a business chat link for the current account. Requires Telegram Business subscription. There can be up to
+getOption("business_chat_link_count_max") links created. Returns the created link.
+*/
+	async createBusinessChatLink(options: Omit<CreateBusinessChatLink, '@type'>): Promise<BusinessChatLink> {
+		return this._request({
+			...options,
+			'@type': 'createBusinessChatLink',
+		});
+	}
+
+	/**
+Edits a business chat link of the current account. Requires Telegram Business subscription. Returns the edited link.
+*/
+	async editBusinessChatLink(options: Omit<EditBusinessChatLink, '@type'>): Promise<BusinessChatLink> {
+		return this._request({
+			...options,
+			'@type': 'editBusinessChatLink',
+		});
+	}
+
+	/**
+Deletes a business chat link of the current account.
+*/
+	async deleteBusinessChatLink(options: Omit<DeleteBusinessChatLink, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteBusinessChatLink',
+		});
+	}
+
+	/**
+Returns information about a business chat link.
+*/
+	async getBusinessChatLinkInfo(options: Omit<GetBusinessChatLinkInfo, '@type'>): Promise<BusinessChatLinkInfo> {
+		return this._request({
+			...options,
+			'@type': 'getBusinessChatLinkInfo',
 		});
 	}
 
@@ -44637,6 +45412,18 @@ Toggles whether the message history of a supergroup is available to new members;
 		return this._request({
 			...options,
 			'@type': 'toggleSupergroupIsAllHistoryAvailable',
+		});
+	}
+
+	/**
+Toggles whether sponsored messages are shown in the channel chat; requires owner privileges in the channel. The chat
+must have at least chatBoostFeatures.min_sponsored_message_disable_boost_level boost level to disable sponsored
+messages.
+*/
+	async toggleSupergroupCanHaveSponsoredMessages(options: Omit<ToggleSupergroupCanHaveSponsoredMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleSupergroupCanHaveSponsoredMessages',
 		});
 	}
 
@@ -45227,6 +46014,39 @@ message.can_report_reactions.
 	}
 
 	/**
+Returns detailed revenue statistics about a chat. Currently, this method can be used only for channels if
+supergroupFullInfo.can_get_revenue_statistics == true.
+*/
+	async getChatRevenueStatistics(options: Omit<GetChatRevenueStatistics, '@type'>): Promise<ChatRevenueStatistics> {
+		return this._request({
+			...options,
+			'@type': 'getChatRevenueStatistics',
+		});
+	}
+
+	/**
+Returns URL for chat revenue withdrawal; requires owner privileges in the chat. Currently, this method can be used only
+for channels if supergroupFullInfo.can_get_revenue_statistics == true and getOption("can_withdraw_chat_revenue").
+*/
+	async getChatRevenueWithdrawalUrl(options: Omit<GetChatRevenueWithdrawalUrl, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getChatRevenueWithdrawalUrl',
+		});
+	}
+
+	/**
+Returns list of revenue transactions for a chat. Currently, this method can be used only for channels if
+supergroupFullInfo.can_get_revenue_statistics == true.
+*/
+	async getChatRevenueTransactions(options: Omit<GetChatRevenueTransactions, '@type'>): Promise<ChatRevenueTransactions> {
+		return this._request({
+			...options,
+			'@type': 'getChatRevenueTransactions',
+		});
+	}
+
+	/**
 Returns detailed statistics about a chat. Currently, this method can be used only for supergroups and channels. Can be
 used only if supergroupFullInfo.can_get_statistics == true.
 */
@@ -45483,35 +46303,6 @@ Telegram Passport personal details. Returns a 404 error if unknown.
 	}
 
 	/**
-Sends a code to verify a phone number to be added to a user's Telegram Passport.
-*/
-	async sendPhoneNumberVerificationCode(options: Omit<SendPhoneNumberVerificationCode, '@type'>): Promise<AuthenticationCodeInfo> {
-		return this._request({
-			...options,
-			'@type': 'sendPhoneNumberVerificationCode',
-		});
-	}
-
-	/**
-Resends the code to verify a phone number to be added to a user's Telegram Passport.
-*/
-	async resendPhoneNumberVerificationCode(): Promise<AuthenticationCodeInfo> {
-		return this._request({
-			'@type': 'resendPhoneNumberVerificationCode',
-		});
-	}
-
-	/**
-Checks the phone number verification code for Telegram Passport.
-*/
-	async checkPhoneNumberVerificationCode(options: Omit<CheckPhoneNumberVerificationCode, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'checkPhoneNumberVerificationCode',
-		});
-	}
-
-	/**
 Sends a code to verify an email address to be added to a user's Telegram Passport.
 */
 	async sendEmailAddressVerificationCode(options: Omit<SendEmailAddressVerificationCode, '@type'>): Promise<EmailAddressAuthenticationCodeInfo> {
@@ -45569,35 +46360,6 @@ after getPassportAuthorizationFormAvailableElements if some previously available
 		return this._request({
 			...options,
 			'@type': 'sendPassportAuthorizationForm',
-		});
-	}
-
-	/**
-Sends phone number confirmation code to handle links of the type internalLinkTypePhoneNumberConfirmation.
-*/
-	async sendPhoneNumberConfirmationCode(options: Omit<SendPhoneNumberConfirmationCode, '@type'>): Promise<AuthenticationCodeInfo> {
-		return this._request({
-			...options,
-			'@type': 'sendPhoneNumberConfirmationCode',
-		});
-	}
-
-	/**
-Resends phone number confirmation code.
-*/
-	async resendPhoneNumberConfirmationCode(): Promise<AuthenticationCodeInfo> {
-		return this._request({
-			'@type': 'resendPhoneNumberConfirmationCode',
-		});
-	}
-
-	/**
-Checks phone number confirmation code.
-*/
-	async checkPhoneNumberConfirmationCode(options: Omit<CheckPhoneNumberConfirmationCode, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'checkPhoneNumberConfirmationCode',
 		});
 	}
 
