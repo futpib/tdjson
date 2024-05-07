@@ -16,7 +16,7 @@
 <li><a href="EmojiCategory.html">EmojiCategory</a></li></ul>
 <h1>Interface EmojiCategory</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Contains a list of similar emoji to search for in getStickers and searchStickers.</p>
+<div class="tsd-comment tsd-typography"><p>Describes an emoji category.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
@@ -24,7 +24,7 @@
 <ul class="tsd-hierarchy">
 <li><span class="target">EmojiCategory</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L12624">tdjson.ts:12624</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L12690">tdjson.ts:12690</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -33,9 +33,10 @@
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="EmojiCategory.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
-<a href="EmojiCategory.html#emojis" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>emojis</span></a>
 <a href="EmojiCategory.html#icon" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>icon</span></a>
+<a href="EmojiCategory.html#is_greeting" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>greeting?</span></a>
 <a href="EmojiCategory.html#name" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>name</span></a>
+<a href="EmojiCategory.html#source" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -43,15 +44,7 @@
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;emojiCategory&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L12625">tdjson.ts:12625</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="emojis" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>emojis</span><a href="#emojis" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">emojis</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span><span class="tsd-signature-symbol">[]</span></div>
-<div class="tsd-comment tsd-typography"><p>List of emojis in the category.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L12637">tdjson.ts:12637</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L12691">tdjson.ts:12691</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="icon" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>icon</span><a href="#icon" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">icon</span><span class="tsd-signature-symbol">:</span> <a href="Sticker.html" class="tsd-signature-type tsd-kind-interface">Sticker</a></div>
@@ -59,7 +52,15 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L12633">tdjson.ts:12633</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L12699">tdjson.ts:12699</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="is_greeting" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>is_<wbr/>greeting</span><a href="#is_greeting" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">is_<wbr/>greeting</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>True, if the category must be shown first when choosing a sticker for the start page.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L12707">tdjson.ts:12707</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="name" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>name</span><a href="#name" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">name</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
@@ -67,7 +68,15 @@
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L12629">tdjson.ts:12629</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L12695">tdjson.ts:12695</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="source" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>source</span><a href="#source" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">source</span><span class="tsd-signature-symbol">:</span> <a href="../types/EmojiCategorySource.html" class="tsd-signature-type tsd-kind-type-alias">EmojiCategorySource</a></div>
+<div class="tsd-comment tsd-typography"><p>Source of stickers for the emoji category.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L12703">tdjson.ts:12703</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -88,9 +97,10 @@
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
-<li><a href="#emojis" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>emojis</span></a></li>
 <li><a href="#icon" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>icon</span></a></li>
-<li><a href="#name" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>name</span></a></li></ul></div></details></div>
+<li><a href="#is_greeting" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>greeting</span></a></li>
+<li><a href="#name" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>name</span></a></li>
+<li><a href="#source" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>source</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">

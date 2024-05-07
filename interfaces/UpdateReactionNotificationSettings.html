@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>GetChatPinnedStories | tdjson</title><meta name="description" content="Documentation for tdjson"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>UpdateReactionNotificationSettings | tdjson</title><meta name="description" content="Documentation for tdjson"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base="..">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -13,20 +13,19 @@
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb">
 <li><a href="../modules.html">tdjson</a></li>
-<li><a href="GetChatPinnedStories.html">GetChatPinnedStories</a></li></ul>
-<h1>Interface GetChatPinnedStories</h1></div>
+<li><a href="UpdateReactionNotificationSettings.html">UpdateReactionNotificationSettings</a></li></ul>
+<h1>Interface UpdateReactionNotificationSettings</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Returns the list of pinned stories posted by the given chat. The stories are returned in a reverse chronological order
-(i.e., in order of decreasing story_id). For optimal performance, the number of returned stories is chosen by TDLib.
-Request type for <a href="../classes/Tdjson.html#getChatPinnedStories" class="tsd-kind-method">Tdjson#getChatPinnedStories</a>.</p>
+<div class="tsd-comment tsd-typography"><p>Notification settings for reactions were updated.
+Subtype of <a href="../types/Update.html" class="tsd-kind-type-alias">Update</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
 <section class="tsd-panel tsd-hierarchy">
 <h4>Hierarchy</h4>
 <ul class="tsd-hierarchy">
-<li><span class="target">GetChatPinnedStories</span></li></ul></section><aside class="tsd-sources">
+<li><span class="target">UpdateReactionNotificationSettings</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L32529">tdjson.ts:32529</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L23621">tdjson.ts:23621</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -34,43 +33,24 @@ Request type for <a href="../classes/Tdjson.html#getChatPinnedStories" class="ts
 <div class="tsd-accordion-details">
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
-<div class="tsd-index-list"><a href="GetChatPinnedStories.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
-<a href="GetChatPinnedStories.html#chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a>
-<a href="GetChatPinnedStories.html#from_story_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>from_<wbr/>story_<wbr/>id</span></a>
-<a href="GetChatPinnedStories.html#limit" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>limit</span></a>
+<div class="tsd-index-list"><a href="UpdateReactionNotificationSettings.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
+<a href="UpdateReactionNotificationSettings.html#notification_settings" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>notification_<wbr/>settings</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
 <section class="tsd-panel tsd-member"><a id="_type" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;getChatPinnedStories&quot;</span></div><aside class="tsd-sources">
+<div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;updateReactionNotificationSettings&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L32530">tdjson.ts:32530</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>Chat identifier.</p>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L23622">tdjson.ts:23622</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="notification_settings" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>notification_<wbr/>settings</span><a href="#notification_settings" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">notification_<wbr/>settings</span><span class="tsd-signature-symbol">:</span> <a href="ReactionNotificationSettings.html" class="tsd-signature-type tsd-kind-interface">ReactionNotificationSettings</a></div>
+<div class="tsd-comment tsd-typography"><p>The new notification settings.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L32534">tdjson.ts:32534</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="from_story_id" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>from_<wbr/>story_<wbr/>id</span><a href="#from_story_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">from_<wbr/>story_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>Identifier of the story starting from which stories must be returned; use 0 to get results from the last story.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L32538">tdjson.ts:32538</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="limit" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>limit</span><a href="#limit" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">limit</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>The maximum number of stories to be returned For optimal performance, the number of returned stories is chosen by TDLib
-and can be smaller than the specified limit.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/9e8c1bb/src/tdjson.ts#L32543">tdjson.ts:32543</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/3dac492/src/tdjson.ts#L23626">tdjson.ts:23626</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -91,9 +71,7 @@ and can be smaller than the specified limit.</p>
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
-<li><a href="#chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a></li>
-<li><a href="#from_story_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>from_<wbr/>story_<wbr/>id</span></a></li>
-<li><a href="#limit" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>limit</span></a></li></ul></div></details></div>
+<li><a href="#notification_settings" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>notification_<wbr/>settings</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
