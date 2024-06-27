@@ -25,7 +25,7 @@ Subtype of <a href="../types/InputMessageReplyTo.html" class="tsd-kind-type-alia
 <ul class="tsd-hierarchy">
 <li><span class="target">InputMessageReplyToMessage</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L4682">tdjson.ts:4682</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L4938">tdjson.ts:4938</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -34,7 +34,6 @@ Subtype of <a href="../types/InputMessageReplyTo.html" class="tsd-kind-type-alia
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="InputMessageReplyToMessage.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
-<a href="InputMessageReplyToMessage.html#chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a>
 <a href="InputMessageReplyToMessage.html#message_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>id</span></a>
 <a href="InputMessageReplyToMessage.html#quote" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>quote</span></a>
 </div></section></div></details></section></section>
@@ -44,25 +43,15 @@ Subtype of <a href="../types/InputMessageReplyTo.html" class="tsd-kind-type-alia
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;inputMessageReplyToMessage&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L4683">tdjson.ts:4683</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>The identifier of the chat to which the message to be replied belongs; pass 0 if the message to be replied is in the
-same chat. Must always be 0 for replies in secret chats. A message can be replied in another chat or topic only if
-message.can_be_replied_in_another_chat.</p>
-</div>
-<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
-<ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L4689">tdjson.ts:4689</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L4939">tdjson.ts:4939</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="message_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>message_<wbr/>id</span><a href="#message_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">message_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
-<div class="tsd-comment tsd-typography"><p>The identifier of the message to be replied in the same or the specified chat.</p>
+<div class="tsd-comment tsd-typography"><p>The identifier of the message to be replied in the same chat and forum topic.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L4693">tdjson.ts:4693</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L4943">tdjson.ts:4943</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="quote" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>quote</span><a href="#quote" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">quote</span><span class="tsd-signature-symbol">:</span> <a href="InputTextQuote.html" class="tsd-signature-type tsd-kind-interface">InputTextQuote</a></div>
@@ -70,7 +59,7 @@ message.can_be_replied_in_another_chat.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L4697">tdjson.ts:4697</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L4947">tdjson.ts:4947</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -91,7 +80,6 @@ message.can_be_replied_in_another_chat.</p>
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
-<li><a href="#chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a></li>
 <li><a href="#message_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>id</span></a></li>
 <li><a href="#quote" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>quote</span></a></li></ul></div></details></div>
 <div class="site-menu">

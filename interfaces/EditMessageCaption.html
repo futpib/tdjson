@@ -16,7 +16,8 @@
 <li><a href="EditMessageCaption.html">EditMessageCaption</a></li></ul>
 <h1>Interface EditMessageCaption</h1></div>
 <section class="tsd-panel tsd-comment">
-<div class="tsd-comment tsd-typography"><p>Edits the message content caption. Returns the edited message after the edit is completed on the server side.
+<div class="tsd-comment tsd-typography"><p>Edits the message content caption. Returns the edited message after the edit is completed on the server side. Can be
+used only if message.can_be_edited == true.
 Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-kind-method">Tdjson#editMessageCaption</a>.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div></section>
@@ -25,7 +26,7 @@ Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-
 <ul class="tsd-hierarchy">
 <li><span class="target">EditMessageCaption</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L29226">tdjson.ts:29226</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L30093">tdjson.ts:30093</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -38,6 +39,7 @@ Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-
 <a href="EditMessageCaption.html#chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a>
 <a href="EditMessageCaption.html#message_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>id</span></a>
 <a href="EditMessageCaption.html#reply_markup" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>reply_<wbr/>markup</span></a>
+<a href="EditMessageCaption.html#show_caption_above_media" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>show_<wbr/>caption_<wbr/>above_<wbr/>media?</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -45,7 +47,7 @@ Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;editMessageCaption&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L29227">tdjson.ts:29227</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L30094">tdjson.ts:30094</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="caption" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>caption</span><a href="#caption" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">caption</span><span class="tsd-signature-symbol">:</span> <a href="FormattedText.html" class="tsd-signature-type tsd-kind-interface">FormattedText</a></div>
@@ -53,7 +55,7 @@ Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L29243">tdjson.ts:29243</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L30110">tdjson.ts:30110</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -61,7 +63,7 @@ Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L29231">tdjson.ts:29231</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L30098">tdjson.ts:30098</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="message_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>message_<wbr/>id</span><a href="#message_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">message_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -69,7 +71,7 @@ Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L29235">tdjson.ts:29235</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L30102">tdjson.ts:30102</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="reply_markup" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>reply_<wbr/>markup</span><a href="#reply_markup" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">reply_<wbr/>markup</span><span class="tsd-signature-symbol">:</span> <a href="../types/ReplyMarkup.html" class="tsd-signature-type tsd-kind-type-alias">ReplyMarkup</a></div>
@@ -77,7 +79,16 @@ Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L29239">tdjson.ts:29239</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L30106">tdjson.ts:30106</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="show_caption_above_media" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>show_<wbr/>caption_<wbr/>above_<wbr/>media</span><a href="#show_caption_above_media" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">show_<wbr/>caption_<wbr/>above_<wbr/>media</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>Pass true to show the caption above the media; otherwise, caption will be shown below the media. Can be true only for
+animation, photo, and video messages.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L30115">tdjson.ts:30115</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -101,7 +112,8 @@ Request type for <a href="../classes/Tdjson.html#editMessageCaption" class="tsd-
 <li><a href="#caption" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>caption</span></a></li>
 <li><a href="#chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a></li>
 <li><a href="#message_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>message_<wbr/>id</span></a></li>
-<li><a href="#reply_markup" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>reply_<wbr/>markup</span></a></li></ul></div></details></div>
+<li><a href="#reply_markup" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>reply_<wbr/>markup</span></a></li>
+<li><a href="#show_caption_above_media" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>show_<wbr/>caption_<wbr/>above_<wbr/>media</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">

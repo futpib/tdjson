@@ -25,7 +25,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <ul class="tsd-hierarchy">
 <li><span class="target">MessageVideo</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L10129">tdjson.ts:10129</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L10494">tdjson.ts:10494</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -37,6 +37,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <a href="MessageVideo.html#caption" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>caption</span></a>
 <a href="MessageVideo.html#has_spoiler" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>has_<wbr/>spoiler?</span></a>
 <a href="MessageVideo.html#is_secret" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>secret?</span></a>
+<a href="MessageVideo.html#show_caption_above_media" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>show_<wbr/>caption_<wbr/>above_<wbr/>media?</span></a>
 <a href="MessageVideo.html#video" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>video</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
@@ -45,7 +46,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;messageVideo&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L10130">tdjson.ts:10130</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L10495">tdjson.ts:10495</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="caption" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>caption</span><a href="#caption" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">caption</span><span class="tsd-signature-symbol">:</span> <a href="FormattedText.html" class="tsd-signature-type tsd-kind-interface">FormattedText</a></div>
@@ -53,7 +54,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L10138">tdjson.ts:10138</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L10503">tdjson.ts:10503</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="has_spoiler" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>has_<wbr/>spoiler</span><a href="#has_spoiler" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">has_<wbr/>spoiler</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -61,7 +62,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L10142">tdjson.ts:10142</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L10511">tdjson.ts:10511</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="is_secret" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>is_<wbr/>secret</span><a href="#is_secret" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">is_<wbr/>secret</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
@@ -69,7 +70,15 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L10146">tdjson.ts:10146</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L10515">tdjson.ts:10515</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="show_caption_above_media" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>show_<wbr/>caption_<wbr/>above_<wbr/>media</span><a href="#show_caption_above_media" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">show_<wbr/>caption_<wbr/>above_<wbr/>media</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>True, if caption must be shown above the video; otherwise, caption must be shown below the video.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L10507">tdjson.ts:10507</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="video" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>video</span><a href="#video" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">video</span><span class="tsd-signature-symbol">:</span> <a href="Video.html" class="tsd-signature-type tsd-kind-interface">Video</a></div>
@@ -77,7 +86,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/b689ba7/src/tdjson.ts#L10134">tdjson.ts:10134</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L10499">tdjson.ts:10499</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -101,6 +110,7 @@ Subtype of <a href="../types/MessageContent.html" class="tsd-kind-type-alias">Me
 <li><a href="#caption" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>caption</span></a></li>
 <li><a href="#has_spoiler" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>has_<wbr/>spoiler</span></a></li>
 <li><a href="#is_secret" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>is_<wbr/>secret</span></a></li>
+<li><a href="#show_caption_above_media" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>show_<wbr/>caption_<wbr/>above_<wbr/>media</span></a></li>
 <li><a href="#video" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>video</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
