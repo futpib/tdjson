@@ -141,7 +141,11 @@ Subtype of {@link AuthenticationCodeType}.
 export interface AuthenticationCodeTypeFirebaseAndroid {
 	'@type': 'authenticationCodeTypeFirebaseAndroid';
 	/**
-Nonce to pass to the SafetyNet Attestation API.
+True, if Play Integrity API must be used for device verification. Otherwise, SafetyNet Attestation API must be used.
+*/
+	use_play_integrity?: boolean;
+	/**
+Nonce to pass to the Play Integrity API or the SafetyNet Attestation API.
 */
 	nonce: string;
 	/**
@@ -2504,6 +2508,25 @@ only.
 }
 
 /**
+Contains information about a product that can be paid with invoice.
+*/
+export interface ProductInfo {
+	'@type': 'productInfo';
+	/**
+Product title.
+*/
+	title: string;
+	/**
+Contains information about a product that can be paid with invoice.
+*/
+	description: FormattedText;
+	/**
+Product photo; may be null.
+*/
+	photo: Photo;
+}
+
+/**
 Describes an option for buying Telegram Premium to a user.
 */
 export interface PremiumPaymentOption {
@@ -2634,6 +2657,184 @@ Identifier of a user for which the code was created; 0 if none.
 Point in time (Unix timestamp) when the code was activated; 0 if none.
 */
 	use_date: number;
+}
+
+/**
+Describes an option for buying Telegram stars.
+*/
+export interface StarPaymentOption {
+	'@type': 'starPaymentOption';
+	/**
+ISO 4217 currency code for the payment.
+*/
+	currency: string;
+	/**
+The amount to pay, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of Telegram stars that will be purchased.
+*/
+	star_count: number;
+	/**
+Identifier of the store product associated with the option; may be empty if none.
+*/
+	store_product_id: string;
+	/**
+True, if the option must be shown only in the full list of payment options.
+*/
+	is_additional?: boolean;
+}
+
+/**
+Contains a list of options for buying Telegram stars.
+*/
+export interface StarPaymentOptions {
+	'@type': 'starPaymentOptions';
+	/**
+The list of options.
+*/
+	options: StarPaymentOption[];
+}
+
+/**
+Describes direction of a transaction with Telegram stars.
+Subtype of {@link StarTransactionDirection}.
+*/
+export interface StarTransactionDirectionIncoming {
+	'@type': 'starTransactionDirectionIncoming';
+
+}
+
+/**
+The transaction is outgoing and decreases the number of owned Telegram stars.
+Subtype of {@link StarTransactionDirection}.
+*/
+export interface StarTransactionDirectionOutgoing {
+	'@type': 'starTransactionDirectionOutgoing';
+
+}
+
+/**
+Describes source or recipient of a transaction with Telegram stars.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerTelegram {
+	'@type': 'starTransactionPartnerTelegram';
+
+}
+
+/**
+The transaction is a transaction with App Store.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerAppStore {
+	'@type': 'starTransactionPartnerAppStore';
+
+}
+
+/**
+The transaction is a transaction with Google Play.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerGooglePlay {
+	'@type': 'starTransactionPartnerGooglePlay';
+
+}
+
+/**
+The transaction is a transaction with Fragment.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerFragment {
+	'@type': 'starTransactionPartnerFragment';
+	/**
+State of the withdrawal; may be null for refunds from Fragment.
+*/
+	withdrawal_state: RevenueWithdrawalState;
+}
+
+/**
+The transaction is a transaction with another user.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerUser {
+	'@type': 'starTransactionPartnerUser';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+	/**
+Information about the bought product; may be null if none.
+*/
+	product_info: ProductInfo;
+}
+
+/**
+The transaction is a transaction with a channel chat.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerChannel {
+	'@type': 'starTransactionPartnerChannel';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+}
+
+/**
+The transaction is a transaction with unknown partner.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerUnsupported {
+	'@type': 'starTransactionPartnerUnsupported';
+
+}
+
+/**
+Represents a transaction changing the amount of owned Telegram stars.
+*/
+export interface StarTransaction {
+	'@type': 'starTransaction';
+	/**
+Unique identifier of the transaction.
+*/
+	id: string;
+	/**
+The amount of added owned Telegram stars; negative for outgoing transactions.
+*/
+	star_count: number;
+	/**
+True, if the transaction is a refund of a previous transaction.
+*/
+	is_refund?: boolean;
+	/**
+Point in time (Unix timestamp) when the transaction was completed.
+*/
+	date: number;
+	/**
+Source of the incoming transaction, or its recipient for outgoing transactions.
+*/
+	partner: StarTransactionPartner;
+}
+
+/**
+Represents a list of Telegram star transactions.
+*/
+export interface StarTransactions {
+	'@type': 'starTransactions';
+	/**
+The amount of owned Telegram stars.
+*/
+	star_count: number;
+	/**
+List of transactions with Telegram stars.
+*/
+	transactions: StarTransaction[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
 }
 
 /**
@@ -3193,7 +3394,7 @@ Subtype of {@link ChatMemberStatus}.
 export interface ChatMemberStatusCreator {
 	'@type': 'chatMemberStatusCreator';
 	/**
-A custom title of the owner; 0-16 characters without emojis; applicable to supergroups only.
+A custom title of the owner; 0-16 characters without emoji; applicable to supergroups only.
 */
 	custom_title: string;
 	/**
@@ -3215,7 +3416,7 @@ Subtype of {@link ChatMemberStatus}.
 export interface ChatMemberStatusAdministrator {
 	'@type': 'chatMemberStatusAdministrator';
 	/**
-A custom title of the administrator; 0-16 characters without emojis; applicable to supergroups only.
+A custom title of the administrator; 0-16 characters without emoji; applicable to supergroups only.
 */
 	custom_title: string;
 	/**
@@ -3854,10 +4055,10 @@ Status of the current user in the supergroup or channel; custom title will alway
 	/**
 Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the
 supergroup or channel was received through getChatSimilarChats, getChatsToSendStories, getCreatedPublicChats,
-getGroupsInCommon, getInactiveSupergroupChats, getSuitableDiscussionChats, getUserPrivacySettingRules,
-getVideoChatAvailableParticipants, searchChatsNearby, searchPublicChats, or in
-chatFolderInviteLinkInfo.missing_chat_ids, or for public chats in which where sent messages and posted stories from
-publicForwards, or for public chats in which where sent messages from getMessagePublicForwards response.
+getGroupsInCommon, getInactiveSupergroupChats, getRecommendedChats, getSuitableDiscussionChats,
+getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchChatsNearby, searchPublicChats, or in
+chatFolderInviteLinkInfo.missing_chat_ids, or in userFullInfo.personal_chat_id, or for chats with messages or stories
+from publicForwards.
 */
 	member_count: number;
 	/**
@@ -4541,6 +4742,61 @@ True, if the reaction was added with a big animation.
 }
 
 /**
+Describes type of emoji effect.
+Subtype of {@link MessageEffectType}.
+*/
+export interface MessageEffectTypeEmojiReaction {
+	'@type': 'messageEffectTypeEmojiReaction';
+	/**
+Select animation for the effect in TGS format.
+*/
+	select_animation: Sticker;
+	/**
+Effect animation for the effect in TGS format.
+*/
+	effect_animation: Sticker;
+}
+
+/**
+An effect from a premium sticker.
+Subtype of {@link MessageEffectType}.
+*/
+export interface MessageEffectTypePremiumSticker {
+	'@type': 'messageEffectTypePremiumSticker';
+	/**
+The premium sticker. The effect can be found at sticker.full_type.premium_animation.
+*/
+	sticker: Sticker;
+}
+
+/**
+Contains information about an effect added to a message.
+*/
+export interface MessageEffect {
+	'@type': 'messageEffect';
+	/**
+Unique identifier of the effect.
+*/
+	id: string;
+	/**
+Static icon for the effect in WEBP format; may be null if none.
+*/
+	static_icon: Sticker;
+	/**
+Emoji corresponding to the effect that can be used if static icon isn't available.
+*/
+	emoji: string;
+	/**
+True, if Telegram Premium subscription is required to use the effect.
+*/
+	is_premium?: boolean;
+	/**
+Type of the effect.
+*/
+	type: MessageEffectType;
+}
+
+/**
 Contains information about the sending state of the message.
 Subtype of {@link MessageSendingState}.
 */
@@ -4682,17 +4938,32 @@ Subtype of {@link InputMessageReplyTo}.
 export interface InputMessageReplyToMessage {
 	'@type': 'inputMessageReplyToMessage';
 	/**
-The identifier of the chat to which the message to be replied belongs; pass 0 if the message to be replied is in the
-same chat. Must always be 0 for replies in secret chats. A message can be replied in another chat or topic only if
-message.can_be_replied_in_another_chat.
-*/
-	chat_id: number;
-	/**
-The identifier of the message to be replied in the same or the specified chat.
+The identifier of the message to be replied in the same chat and forum topic.
 */
 	message_id: number;
 	/**
 Quote from the message to be replied; pass null if none. Must always be null for replies in secret chats.
+*/
+	quote: InputTextQuote;
+}
+
+/**
+Describes a message to be replied that is from a different chat or a forum topic; not supported in secret chats.
+Subtype of {@link InputMessageReplyTo}.
+*/
+export interface InputMessageReplyToExternalMessage {
+	'@type': 'inputMessageReplyToExternalMessage';
+	/**
+The identifier of the chat to which the message to be replied belongs.
+*/
+	chat_id: number;
+	/**
+The identifier of the message to be replied in the specified chat. A message can be replied in another chat or topic
+only if message.can_be_replied_in_another_chat.
+*/
+	message_id: number;
+	/**
+Quote from the message to be replied; pass null if none.
 */
 	quote: InputTextQuote;
 }
@@ -4712,6 +4983,21 @@ stories can't be replied.
 The identifier of the story.
 */
 	story_id: number;
+}
+
+/**
+Describes a fact-check added to the message by an independent checker.
+*/
+export interface FactCheck {
+	'@type': 'factCheck';
+	/**
+Text of the fact-check.
+*/
+	text: FormattedText;
+	/**
+A two-letter ISO 3166-1 alpha-2 country code of the country for which the fact-check is shown.
+*/
+	country_code: string;
 }
 
 /**
@@ -4849,6 +5135,10 @@ Information about unread reactions added to the message.
 */
 	unread_reactions: UnreadReaction[];
 	/**
+Information about fact-check added to the message; may be null if none.
+*/
+	fact_check: FactCheck;
+	/**
 Information about the message or the story this message is replying to; may be null if none.
 */
 	reply_to: MessageReplyTo;
@@ -4896,6 +5186,10 @@ Unique identifier of an album this message belongs to; 0 if none. Only audios, d
 grouped together in albums.
 */
 	media_album_id: string;
+	/**
+Unique identifier of the effect added to the message; 0 if none.
+*/
+	effect_id: string;
 	/**
 If non-empty, contains a human-readable description of the reason why access to this message must be restricted.
 */
@@ -5569,6 +5863,10 @@ Point in time (Unix timestamp) when the draft was created.
 Content of the message draft; must be of the type inputMessageText, inputMessageVideoNote, or inputMessageVoiceNote.
 */
 	input_message_text: InputMessageContent;
+	/**
+Identifier of the effect to apply to the message when it is sent; 0 if none.
+*/
+	effect_id: string;
 }
 
 /**
@@ -6304,7 +6602,7 @@ List of location-based supergroups nearby.
 }
 
 /**
-Describes a type of public chats.
+Describes type of public chat.
 Subtype of {@link PublicChatType}.
 */
 export interface PublicChatTypeHasUsername {
@@ -8406,6 +8704,29 @@ Address postal code.
 }
 
 /**
+Describes an address of a location.
+*/
+export interface LocationAddress {
+	'@type': 'locationAddress';
+	/**
+A two-letter ISO 3166-1 alpha-2 country code.
+*/
+	country_code: string;
+	/**
+State, if applicable; empty if unknown.
+*/
+	state: string;
+	/**
+City; empty if unknown.
+*/
+	city: string;
+	/**
+The address; empty if unknown.
+*/
+	street: string;
+}
+
+/**
 Contains parameters of the application theme.
 */
 export interface ThemeParameters {
@@ -8721,22 +9042,15 @@ Payment form URL to be opened in a web view.
 }
 
 /**
-Contains information about an invoice payment form.
+Describes type of payment form.
+Subtype of {@link PaymentFormType}.
 */
-export interface PaymentForm {
-	'@type': 'paymentForm';
-	/**
-The payment form identifier.
-*/
-	id: string;
+export interface PaymentFormTypeRegular {
+	'@type': 'paymentFormTypeRegular';
 	/**
 Full information about the invoice.
 */
 	invoice: Invoice;
-	/**
-User identifier of the seller bot.
-*/
-	seller_bot_user_id: number;
 	/**
 User identifier of the payment provider bot.
 */
@@ -8765,18 +9079,41 @@ True, if the user can choose to save credentials.
 True, if the user will be able to save credentials, if sets up a 2-step verification password.
 */
 	need_password?: boolean;
-	/**
-Product title.
+}
+
+/**
+The payment form is for a payment in Telegram stars.
+Subtype of {@link PaymentFormType}.
 */
-	product_title: string;
+export interface PaymentFormTypeStars {
+	'@type': 'paymentFormTypeStars';
 	/**
-Product description.
+Number of Telegram stars that will be paid.
 */
-	product_description: FormattedText;
+	star_count: number;
+}
+
+/**
+Contains information about an invoice payment form.
+*/
+export interface PaymentForm {
+	'@type': 'paymentForm';
 	/**
-Product photo; may be null.
+The payment form identifier.
 */
-	product_photo: Photo;
+	id: string;
+	/**
+Type of the payment form.
+*/
+	type: PaymentFormType;
+	/**
+User identifier of the seller bot.
+*/
+	seller_bot_user_id: number;
+	/**
+Information about the product.
+*/
+	product_info: ProductInfo;
 }
 
 /**
@@ -8811,30 +9148,11 @@ URL for additional payment credentials verification.
 }
 
 /**
-Contains information about a successful payment.
+Describes type of successful payment.
+Subtype of {@link PaymentReceiptType}.
 */
-export interface PaymentReceipt {
-	'@type': 'paymentReceipt';
-	/**
-Product title.
-*/
-	title: string;
-	/**
-Contains information about a successful payment.
-*/
-	description: FormattedText;
-	/**
-Product photo; may be null.
-*/
-	photo: Photo;
-	/**
-Point in time (Unix timestamp) when the payment was made.
-*/
-	date: number;
-	/**
-User identifier of the seller bot.
-*/
-	seller_bot_user_id: number;
+export interface PaymentReceiptTypeRegular {
+	'@type': 'paymentReceiptTypeRegular';
 	/**
 User identifier of the payment provider bot.
 */
@@ -8859,6 +9177,45 @@ Title of the saved credentials chosen by the buyer.
 The amount of tip chosen by the buyer in the smallest units of the currency.
 */
 	tip_amount: number;
+}
+
+/**
+The payment was done using Telegram stars.
+Subtype of {@link PaymentReceiptType}.
+*/
+export interface PaymentReceiptTypeStars {
+	'@type': 'paymentReceiptTypeStars';
+	/**
+Number of Telegram stars that were paid.
+*/
+	star_count: number;
+	/**
+Unique identifier of the transaction that can be used to dispute it.
+*/
+	transaction_id: string;
+}
+
+/**
+Contains information about a successful payment.
+*/
+export interface PaymentReceipt {
+	'@type': 'paymentReceipt';
+	/**
+Information about the product.
+*/
+	product_info: ProductInfo;
+	/**
+Point in time (Unix timestamp) when the payment was made.
+*/
+	date: number;
+	/**
+User identifier of the seller bot.
+*/
+	seller_bot_user_id: number;
+	/**
+Type of the payment receipt.
+*/
+	type: PaymentReceiptType;
 }
 
 /**
@@ -10041,6 +10398,10 @@ Animation caption.
 */
 	caption: FormattedText;
 	/**
+True, if caption must be shown above the animation; otherwise, caption must be shown below the animation.
+*/
+	show_caption_above_media?: boolean;
+	/**
 True, if the animation preview must be covered by a spoiler animation.
 */
 	has_spoiler?: boolean;
@@ -10097,6 +10458,10 @@ Photo caption.
 */
 	caption: FormattedText;
 	/**
+True, if caption must be shown above the photo; otherwise, caption must be shown below the photo.
+*/
+	show_caption_above_media?: boolean;
+	/**
 True, if the photo preview must be covered by a spoiler animation.
 */
 	has_spoiler?: boolean;
@@ -10136,6 +10501,10 @@ The video description.
 Video caption.
 */
 	caption: FormattedText;
+	/**
+True, if caption must be shown above the video; otherwise, caption must be shown below the video.
+*/
+	show_caption_above_media?: boolean;
 	/**
 True, if the video preview must be covered by a spoiler animation.
 */
@@ -10375,17 +10744,9 @@ Subtype of {@link MessageContent}.
 export interface MessageInvoice {
 	'@type': 'messageInvoice';
 	/**
-Product title.
+Information about the product.
 */
-	title: string;
-	/**
-A message with an invoice from a bot. Use getInternalLink with internalLinkTypeBotStart to share the invoice.
-*/
-	description: FormattedText;
-	/**
-Product photo; may be null.
-*/
-	photo: Photo;
+	product_info: ProductInfo;
 	/**
 Currency for the product price.
 */
@@ -11366,11 +11727,21 @@ Programming language of the code; as defined by the sender.
 }
 
 /**
-Text that must be formatted as if inside a blockquote HTML tag.
+Text that must be formatted as if inside a blockquote HTML tag; not supported in secret chats.
 Subtype of {@link TextEntityType}.
 */
 export interface TextEntityTypeBlockQuote {
 	'@type': 'textEntityTypeBlockQuote';
+
+}
+
+/**
+Text that must be formatted as if inside a blockquote HTML tag and collapsed by default to 3 lines with the ability to
+show full text; not supported in secret chats.
+Subtype of {@link TextEntityType}.
+*/
+export interface TextEntityTypeExpandableBlockQuote {
+	'@type': 'textEntityTypeExpandableBlockQuote';
 
 }
 
@@ -11513,6 +11884,11 @@ and self-destructing messages can't be scheduled.
 */
 	scheduling_state: MessageSchedulingState;
 	/**
+Identifier of the effect to apply to the message; pass 0 if none; applicable only to sendMessage and sendMessageAlbum in
+private chats.
+*/
+	effect_id: string;
+	/**
 Non-persistent identifier, which will be returned back in messageSendingStatePending object and can be used to match
 sent messages and corresponding updateNewMessage updates.
 */
@@ -11542,6 +11918,11 @@ True, if media caption of the message copy needs to be replaced. Ignored if send
 New message caption; pass null to copy message without caption. Ignored if replace_caption is false.
 */
 	new_caption: FormattedText;
+	/**
+True, if new caption must be shown above the animation; otherwise, new caption must be shown below the animation; not
+supported in secret chats. Ignored if replace_caption is false.
+*/
+	new_show_caption_above_media?: boolean;
 }
 
 /**
@@ -11552,8 +11933,8 @@ export interface InputMessageText {
 	'@type': 'inputMessageText';
 	/**
 Formatted text to be sent; 0-getOption("message_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, CustomEmoji, BlockQuote, Code, Pre, PreCode, TextUrl and MentionName entities are allowed to be
-specified manually.
+Strikethrough, Spoiler, CustomEmoji, BlockQuote, ExpandableBlockQuote, Code, Pre, PreCode, TextUrl and MentionName
+entities are allowed to be specified manually.
 */
 	text: FormattedText;
 	/**
@@ -11600,6 +11981,11 @@ Height of the animation; may be replaced by the server.
 Animation caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
+	/**
+True, if caption must be shown above the animation; otherwise, caption must be shown below the animation; not supported
+in secret chats.
+*/
+	show_caption_above_media?: boolean;
 	/**
 True, if the animation preview must be covered by a spoiler animation; not supported in secret chats.
 */
@@ -11696,6 +12082,11 @@ Photo caption; pass null to use an empty caption; 0-getOption("message_caption_l
 */
 	caption: FormattedText;
 	/**
+True, if caption must be shown above the photo; otherwise, caption must be shown below the photo; not supported in
+secret chats.
+*/
+	show_caption_above_media?: boolean;
+	/**
 Photo self-destruct type; pass null if none; private chats only.
 */
 	self_destruct_type: MessageSelfDestructType;
@@ -11771,6 +12162,11 @@ True, if the video is supposed to be streamed.
 Video caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
+	/**
+True, if caption must be shown above the video; otherwise, caption must be shown below the video; not supported in
+secret chats.
+*/
+	show_caption_above_media?: boolean;
 	/**
 Video self-destruct type; pass null if none; private chats only.
 */
@@ -11960,7 +12356,7 @@ The invoice payload.
 */
 	payload: string;
 	/**
-Payment provider token.
+Payment provider token; may be empty for payments in Telegram Stars.
 */
 	provider_token: string;
 	/**
@@ -12455,12 +12851,12 @@ The keyword.
 }
 
 /**
-Represents a list of emoji with their keywords.
+Represents a list of emojis with their keywords.
 */
 export interface EmojiKeywords {
 	'@type': 'emojiKeywords';
 	/**
-List of emoji with their keywords.
+List of emojis with their keywords.
 */
 	emoji_keywords: EmojiKeyword[];
 }
@@ -12477,7 +12873,7 @@ List of stickers.
 }
 
 /**
-Represents a list of emoji.
+Represents a list of emojis.
 */
 export interface Emojis {
 	'@type': 'emojis';
@@ -12552,7 +12948,7 @@ List of stickers in this set.
 */
 	stickers: Sticker[];
 	/**
-A list of emoji corresponding to the stickers in the same order. The list is only for informational purposes, because a
+A list of emojis corresponding to the stickers in the same order. The list is only for informational purposes, because a
 sticker is always sent with a fixed emoji from the corresponding Sticker object.
 */
 	emojis: Emojis[];
@@ -12670,13 +13066,13 @@ Subtype of {@link EmojiCategorySource}.
 export interface EmojiCategorySourceSearch {
 	'@type': 'emojiCategorySourceSearch';
 	/**
-List of emojis for search for.
+List of emojis to search for.
 */
 	emojis: string[];
 }
 
 /**
-The category contains Premium stickers that must be found by getPremiumStickers.
+The category contains premium stickers that must be found by getPremiumStickers.
 Subtype of {@link EmojiCategorySource}.
 */
 export interface EmojiCategorySourcePremium {
@@ -12728,7 +13124,7 @@ export interface EmojiCategoryTypeDefault {
 }
 
 /**
-The category must be used by default for regular sticker selection. It may contain greeting emoji category and Premium
+The category must be used by default for regular sticker selection. It may contain greeting emoji category and premium
 stickers.
 Subtype of {@link EmojiCategoryType}.
 */
@@ -12780,6 +13176,10 @@ The height of the rectangle, as a percentage of the media height.
 Clockwise rotation angle of the rectangle, in degrees; 0-360.
 */
 	rotation_angle: number;
+	/**
+The radius of the rectangle corner rounding, as a percentage of the media width.
+*/
+	corner_radius_percentage: number;
 }
 
 /**
@@ -12792,6 +13192,10 @@ export interface StoryAreaTypeLocation {
 The location.
 */
 	location: Location;
+	/**
+Address of the location; may be null if unknown.
+*/
+	address: LocationAddress;
 }
 
 /**
@@ -12848,6 +13252,18 @@ Identifier of the message.
 }
 
 /**
+An area pointing to a HTTP or tg:// link.
+Subtype of {@link StoryAreaType}.
+*/
+export interface StoryAreaTypeLink {
+	'@type': 'storyAreaTypeLink';
+	/**
+HTTP or tg:// URL to be opened when the area is clicked.
+*/
+	url: string;
+}
+
+/**
 Describes a clickable rectangle area on a story media.
 */
 export interface StoryArea {
@@ -12872,6 +13288,10 @@ export interface InputStoryAreaTypeLocation {
 The location.
 */
 	location: Location;
+	/**
+Address of the location; pass null if unknown.
+*/
+	address: LocationAddress;
 }
 
 /**
@@ -12943,6 +13363,18 @@ Identifier of the message. Only successfully sent non-scheduled messages can be 
 }
 
 /**
+An area pointing to a HTTP or tg:// link.
+Subtype of {@link InputStoryAreaType}.
+*/
+export interface InputStoryAreaTypeLink {
+	'@type': 'inputStoryAreaTypeLink';
+	/**
+HTTP or tg:// URL to be opened when the area is clicked.
+*/
+	url: string;
+}
+
+/**
 Describes a clickable rectangle area on a story media to be added.
 */
 export interface InputStoryArea {
@@ -12965,8 +13397,9 @@ export interface InputStoryAreas {
 	/**
 List of input story areas. Currently, a story can have up to 10 inputStoryAreaTypeLocation,
 inputStoryAreaTypeFoundVenue, and inputStoryAreaTypePreviousVenue areas, up to
-getOption("story_suggested_reaction_area_count_max") inputStoryAreaTypeSuggestedReaction areas, and up to 1
-inputStoryAreaTypeMessage area.
+getOption("story_suggested_reaction_area_count_max") inputStoryAreaTypeSuggestedReaction areas, up to 1
+inputStoryAreaTypeMessage area, and up to getOption("story_link_area_count_max") inputStoryAreaTypeLink areas if the
+current user is a Telegram Premium user.
 */
 	areas: InputStoryArea[];
 }
@@ -13299,6 +13732,25 @@ The list of stories.
 Identifiers of the pinned stories; returned only in getChatPostedToChatPageStories with from_story_id == 0.
 */
 	pinned_story_ids: number[];
+}
+
+/**
+Contains a list of stories found by a search.
+*/
+export interface FoundStories {
+	'@type': 'foundStories';
+	/**
+Approximate total number of stories found.
+*/
+	total_count: number;
+	/**
+List of stories.
+*/
+	stories: Story[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
 }
 
 /**
@@ -13888,6 +14340,28 @@ List of boost slots.
 }
 
 /**
+Describes the reason why a code needs to be re-sent.
+Subtype of {@link ResendCodeReason}.
+*/
+export interface ResendCodeReasonUserRequest {
+	'@type': 'resendCodeReasonUserRequest';
+
+}
+
+/**
+The code is re-sent, because device verification has failed.
+Subtype of {@link ResendCodeReason}.
+*/
+export interface ResendCodeReasonVerificationFailed {
+	'@type': 'resendCodeReasonVerificationFailed';
+	/**
+Cause of the verification failure, for example, PLAY_SERVICES_NOT_AVAILABLE, APNS_RECEIVE_TIMEOUT, APNS_INIT_FAILED,
+etc.
+*/
+	error_message: string;
+}
+
+/**
 Describes the reason why a call was discarded.
 Subtype of {@link CallDiscardReason}.
 */
@@ -14096,7 +14570,7 @@ Call encryption key.
 */
 	encryption_key: string;
 	/**
-Encryption key emojis fingerprint.
+Encryption key fingerprint represented as 4 emoji.
 */
 	emojis: string[];
 	/**
@@ -15855,7 +16329,7 @@ Title of the voice note.
 }
 
 /**
-Represents a type of button in results of inline query.
+Represents type of button in results of inline query.
 Subtype of {@link InlineQueryResultsButtonType}.
 */
 export interface InlineQueryResultsButtonTypeStartBot {
@@ -17510,7 +17984,7 @@ export interface PremiumStoryFeatureSaveStories {
 }
 
 /**
-The ability to use links and formatting in story caption.
+The ability to use links and formatting in story caption, and use inputStoryAreaTypeLink areas.
 Subtype of {@link PremiumStoryFeature}.
 */
 export interface PremiumStoryFeatureLinksAndFormatting {
@@ -17782,6 +18256,26 @@ Paid amount, in the smallest units of the currency.
 }
 
 /**
+The user buying Telegram stars.
+Subtype of {@link StorePaymentPurpose}.
+*/
+export interface StorePaymentPurposeStars {
+	'@type': 'storePaymentPurposeStars';
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of bought stars.
+*/
+	star_count: number;
+}
+
+/**
 Describes a purpose of a payment toward Telegram.
 Subtype of {@link TelegramPaymentPurpose}.
 */
@@ -17836,6 +18330,26 @@ Number of users which will be able to activate the gift codes.
 Number of months the Telegram Premium subscription will be active for the users.
 */
 	month_count: number;
+}
+
+/**
+The user buying Telegram stars.
+Subtype of {@link TelegramPaymentPurpose}.
+*/
+export interface TelegramPaymentPurposeStars {
+	'@type': 'telegramPaymentPurposeStars';
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of bought stars.
+*/
+	star_count: number;
 }
 
 /**
@@ -20587,7 +21101,7 @@ Type of the proxy.
 /**
 The link is a link to a chat by its username. Call searchPublicChat with the given chat username to process the link If
 the chat is found, open its profile information screen or the chat itself. If draft text isn't empty and the chat is a
-private chat, then put the draft text in the input field.
+private chat with a regular user, then put the draft text in the input field.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePublicChat {
@@ -20884,7 +21398,7 @@ Identifier of the chat to which the link points; 0 if the chat isn't found.
 }
 
 /**
-Describes a type of block list.
+Describes type of block list.
 Subtype of {@link BlockList}.
 */
 export interface BlockListMain {
@@ -22398,20 +22912,20 @@ A graph containing number of story reactions.
 }
 
 /**
-Describes state of a chat revenue withdrawal.
-Subtype of {@link ChatRevenueWithdrawalState}.
+Describes state of a revenue withdrawal.
+Subtype of {@link RevenueWithdrawalState}.
 */
-export interface ChatRevenueWithdrawalStatePending {
-	'@type': 'chatRevenueWithdrawalStatePending';
+export interface RevenueWithdrawalStatePending {
+	'@type': 'revenueWithdrawalStatePending';
 
 }
 
 /**
-Withdrawal was completed.
-Subtype of {@link ChatRevenueWithdrawalState}.
+Withdrawal succeeded.
+Subtype of {@link RevenueWithdrawalState}.
 */
-export interface ChatRevenueWithdrawalStateCompleted {
-	'@type': 'chatRevenueWithdrawalStateCompleted';
+export interface RevenueWithdrawalStateSucceeded {
+	'@type': 'revenueWithdrawalStateSucceeded';
 	/**
 Point in time (Unix timestamp) when the withdrawal was completed.
 */
@@ -22423,11 +22937,11 @@ The URL where the withdrawal transaction can be viewed.
 }
 
 /**
-Withdrawal has_failed.
-Subtype of {@link ChatRevenueWithdrawalState}.
+Withdrawal failed.
+Subtype of {@link RevenueWithdrawalState}.
 */
-export interface ChatRevenueWithdrawalStateFailed {
-	'@type': 'chatRevenueWithdrawalStateFailed';
+export interface RevenueWithdrawalStateFailed {
+	'@type': 'revenueWithdrawalStateFailed';
 
 }
 
@@ -22464,7 +22978,7 @@ Name of the payment provider.
 	/**
 State of the withdrawal.
 */
-	state: ChatRevenueWithdrawalState;
+	state: RevenueWithdrawalState;
 }
 
 /**
@@ -22515,6 +23029,52 @@ Total number of transactions.
 List of transactions.
 */
 	transactions: ChatRevenueTransaction[];
+}
+
+/**
+Contains information about Telegram stars earned by a bot or a chat.
+*/
+export interface StarRevenueStatus {
+	'@type': 'starRevenueStatus';
+	/**
+Total number of the stars earned.
+*/
+	total_count: number;
+	/**
+The number of Telegram stars that aren't withdrawn yet.
+*/
+	current_count: number;
+	/**
+The number of Telegram stars that are available for withdrawal.
+*/
+	available_count: number;
+	/**
+True, if Telegram stars can be withdrawn now or later.
+*/
+	withdrawal_enabled?: boolean;
+	/**
+Time left before the next withdrawal can be started, in seconds; 0 if withdrawal can be started now.
+*/
+	next_withdrawal_in: number;
+}
+
+/**
+A detailed statistics about Telegram stars earned by a bot or a chat.
+*/
+export interface StarRevenueStatistics {
+	'@type': 'starRevenueStatistics';
+	/**
+A graph containing amount of revenue in a given day.
+*/
+	revenue_by_day_graph: StatisticalGraph;
+	/**
+Telegram star revenue status.
+*/
+	status: StarRevenueStatus;
+	/**
+Current conversion rate of a Telegram star to USD.
+*/
+	usd_rate: number;
 }
 
 /**
@@ -22894,6 +23454,26 @@ The new list of unread reactions.
 The new number of messages with unread reactions left in the chat.
 */
 	unread_reaction_count: number;
+}
+
+/**
+A fact-check added to a message was changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateMessageFactCheck {
+	'@type': 'updateMessageFactCheck';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+The new fact-check.
+*/
+	fact_check: FactCheck;
 }
 
 /**
@@ -24022,6 +24602,24 @@ New number of being downloaded and recently downloaded files found.
 }
 
 /**
+A request can't be completed unless application verification is performed; for official mobile applications only. The
+method setApplicationVerificationToken must be called once the verification is completed or failed.
+Subtype of {@link Update}.
+*/
+export interface UpdateAppVerificationRequired {
+	'@type': 'updateApplicationVerificationRequired';
+	/**
+Unique identifier for the verification process.
+*/
+	verification_id: number;
+	/**
+Unique nonce for the classic Play Integrity verification (https://developer.android.com/google/play/integrity/classic)
+for Android, or a unique string to compare with verify_nonce field from a push notification for iOS.
+*/
+	nonce: string;
+}
+
+/**
 New call was created or information about a call was updated.
 Subtype of {@link Update}.
 */
@@ -24546,6 +25144,22 @@ The new list of active emoji reactions.
 }
 
 /**
+The list of available message effects has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateAvailableMessageEffects {
+	'@type': 'updateAvailableMessageEffects';
+	/**
+The new list of available message effects from emoji reactions.
+*/
+	reaction_effect_ids: string[];
+	/**
+The new list of available message effects from Premium stickers.
+*/
+	sticker_effect_ids: string[];
+}
+
+/**
 The type of default reaction has changed.
 Subtype of {@link Update}.
 */
@@ -24574,13 +25188,49 @@ The new tags.
 }
 
 /**
+The number of Telegram stars owned by the current user has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateOwnedStarCount {
+	'@type': 'updateOwnedStarCount';
+	/**
+The new number of Telegram stars owned.
+*/
+	star_count: number;
+}
+
+/**
 The revenue earned from sponsored messages in a chat has changed. If chat revenue screen is opened, then
 getChatRevenueTransactions may be called to fetch new transactions.
 Subtype of {@link Update}.
 */
 export interface UpdateChatRevenueAmount {
 	'@type': 'updateChatRevenueAmount';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+New amount of earned revenue.
+*/
+	revenue_amount: ChatRevenueAmount;
+}
 
+/**
+The Telegram star revenue earned by a bot or a chat has changed. If star transactions screen of the chat is opened, then
+getStarTransactions may be called to fetch new transactions.
+Subtype of {@link Update}.
+*/
+export interface UpdateStarRevenueStatus {
+	'@type': 'updateStarRevenueStatus';
+	/**
+Identifier of the owner of the Telegram stars.
+*/
+	owner_id: MessageSender;
+	/**
+New Telegram star revenue status.
+*/
+	status: StarRevenueStatus;
 }
 
 /**
@@ -24889,6 +25539,38 @@ Identifier of the user who sent the query.
 Identifier of the inline message from which the query originated.
 */
 	inline_message_id: string;
+	/**
+An identifier uniquely corresponding to the chat a message was sent to.
+*/
+	chat_instance: string;
+	/**
+Query payload.
+*/
+	payload: CallbackQueryPayload;
+}
+
+/**
+A new incoming callback query from a business message; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdateNewBusinessCallbackQuery {
+	'@type': 'updateNewBusinessCallbackQuery';
+	/**
+Unique query identifier.
+*/
+	id: string;
+	/**
+Identifier of the user who sent the query.
+*/
+	sender_user_id: number;
+	/**
+Unique identifier of the business connection.
+*/
+	connection_id: string;
+	/**
+The message from the business account from which the query originated.
+*/
+	message: BusinessMessage;
 	/**
 An identifier uniquely corresponding to the chat a message was sent to.
 */
@@ -25423,6 +26105,19 @@ export type InputChatPhoto =
 	| InputChatPhotoAnimation
 	| InputChatPhotoSticker;
 
+export type StarTransactionDirection =
+	| StarTransactionDirectionIncoming
+	| StarTransactionDirectionOutgoing;
+
+export type StarTransactionPartner =
+	| StarTransactionPartnerTelegram
+	| StarTransactionPartnerAppStore
+	| StarTransactionPartnerGooglePlay
+	| StarTransactionPartnerFragment
+	| StarTransactionPartnerUser
+	| StarTransactionPartnerChannel
+	| StarTransactionPartnerUnsupported;
+
 export type PremiumGiveawayParticipantStatus =
 	| PremiumGiveawayParticipantStatusEligible
 	| PremiumGiveawayParticipantStatusParticipating
@@ -25492,6 +26187,10 @@ export type ReactionType =
 	| ReactionTypeEmoji
 	| ReactionTypeCustomEmoji;
 
+export type MessageEffectType =
+	| MessageEffectTypeEmojiReaction
+	| MessageEffectTypePremiumSticker;
+
 export type MessageSendingState =
 	| MessageSendingStatePending
 	| MessageSendingStateFailed;
@@ -25502,6 +26201,7 @@ export type MessageReplyTo =
 
 export type InputMessageReplyTo =
 	| InputMessageReplyToMessage
+	| InputMessageReplyToExternalMessage
 	| InputMessageReplyToStory;
 
 export type MessageSource =
@@ -25675,6 +26375,14 @@ export type PaymentProvider =
 	| PaymentProviderStripe
 	| PaymentProviderOther;
 
+export type PaymentFormType =
+	| PaymentFormTypeRegular
+	| PaymentFormTypeStars;
+
+export type PaymentReceiptType =
+	| PaymentReceiptTypeRegular
+	| PaymentReceiptTypeStars;
+
 export type InputInvoice =
 	| InputInvoiceMessage
 	| InputInvoiceName
@@ -25842,6 +26550,7 @@ export type TextEntityType =
 	| TextEntityTypePre
 	| TextEntityTypePreCode
 	| TextEntityTypeBlockQuote
+	| TextEntityTypeExpandableBlockQuote
 	| TextEntityTypeTextUrl
 	| TextEntityTypeMentionName
 	| TextEntityTypeCustomEmoji
@@ -25933,14 +26642,16 @@ export type StoryAreaType =
 	| StoryAreaTypeLocation
 	| StoryAreaTypeVenue
 	| StoryAreaTypeSuggestedReaction
-	| StoryAreaTypeMessage;
+	| StoryAreaTypeMessage
+	| StoryAreaTypeLink;
 
 export type InputStoryAreaType =
 	| InputStoryAreaTypeLocation
 	| InputStoryAreaTypeFoundVenue
 	| InputStoryAreaTypePreviousVenue
 	| InputStoryAreaTypeSuggestedReaction
-	| InputStoryAreaTypeMessage;
+	| InputStoryAreaTypeMessage
+	| InputStoryAreaTypeLink;
 
 export type StoryContent =
 	| StoryContentPhoto
@@ -25972,6 +26683,10 @@ export type ChatBoostSource =
 	| ChatBoostSourceGiftCode
 	| ChatBoostSourceGiveaway
 	| ChatBoostSourcePremium;
+
+export type ResendCodeReason =
+	| ResendCodeReasonUserRequest
+	| ResendCodeReasonVerificationFailed;
 
 export type CallDiscardReason =
 	| CallDiscardReasonEmpty
@@ -26204,11 +26919,13 @@ export type StorePaymentPurpose =
 	| StorePaymentPurposePremiumSubscription
 	| StorePaymentPurposeGiftedPremium
 	| StorePaymentPurposePremiumGiftCodes
-	| StorePaymentPurposePremiumGiveaway;
+	| StorePaymentPurposePremiumGiveaway
+	| StorePaymentPurposeStars;
 
 export type TelegramPaymentPurpose =
 	| TelegramPaymentPurposePremiumGiftCodes
-	| TelegramPaymentPurposePremiumGiveaway;
+	| TelegramPaymentPurposePremiumGiveaway
+	| TelegramPaymentPurposeStars;
 
 export type DeviceToken =
 	| DeviceTokenFirebaseCloudMessaging
@@ -26556,10 +27273,10 @@ export type ChatStatistics =
 	| ChatStatisticsSupergroup
 	| ChatStatisticsChannel;
 
-export type ChatRevenueWithdrawalState =
-	| ChatRevenueWithdrawalStatePending
-	| ChatRevenueWithdrawalStateCompleted
-	| ChatRevenueWithdrawalStateFailed;
+export type RevenueWithdrawalState =
+	| RevenueWithdrawalStatePending
+	| RevenueWithdrawalStateSucceeded
+	| RevenueWithdrawalStateFailed;
 
 export type ChatRevenueTransactionType =
 	| ChatRevenueTransactionTypeEarnings
@@ -26597,6 +27314,7 @@ export type Update =
 	| UpdateMessageContentOpened
 	| UpdateMessageMentionRead
 	| UpdateMessageUnreadReactions
+	| UpdateMessageFactCheck
 	| UpdateMessageLiveLocationViewed
 	| UpdateNewChat
 	| UpdateChatTitle
@@ -26664,6 +27382,7 @@ export type Update =
 	| UpdateFileAddedToDownloads
 	| UpdateFileDownload
 	| UpdateFileRemovedFromDownloads
+	| UpdateAppVerificationRequired
 	| UpdateCall
 	| UpdateGroupCall
 	| UpdateGroupCallParticipant
@@ -26698,9 +27417,12 @@ export type Update =
 	| UpdateAttachmentMenuBots
 	| UpdateWebAppMessageSent
 	| UpdateActiveEmojiReactions
+	| UpdateAvailableMessageEffects
 	| UpdateDefaultReactionType
 	| UpdateSavedMessagesTags
+	| UpdateOwnedStarCount
 	| UpdateChatRevenueAmount
+	| UpdateStarRevenueStatus
 	| UpdateSpeechRecognitionTrial
 	| UpdateDiceEmojis
 	| UpdateAnimatedEmojiMessageClicked
@@ -26717,6 +27439,7 @@ export type Update =
 	| UpdateNewChosenInlineResult
 	| UpdateNewCallbackQuery
 	| UpdateNewInlineCallbackQuery
+	| UpdateNewBusinessCallbackQuery
 	| UpdateNewShippingQuery
 	| UpdateNewPreCheckoutQuery
 	| UpdateNewCustomEvent
@@ -26851,7 +27574,10 @@ Request type for {@link Tdjson#resendAuthenticationCode}.
 */
 export interface ResendAuthenticationCode {
 	'@type': 'resendAuthenticationCode';
-
+	/**
+Reason of code resending; pass null if unknown.
+*/
+	reason: ResendCodeReason;
 }
 
 /**
@@ -26992,14 +27718,15 @@ Request type for {@link Tdjson#sendAuthenticationFirebaseSms}.
 export interface SendAuthenticationFirebaseSms {
 	'@type': 'sendAuthenticationFirebaseSms';
 	/**
-SafetyNet Attestation API token for the Android application, or secret from push notification for the iOS application.
+Play Integrity API or SafetyNet Attestation API token for the Android application, or secret from push notification for
+the iOS application.
 */
 	token: string;
 }
 
 /**
-Reports that authentication code wasn't delivered via SMS; for official mobile apps only. Works only when the current
-authorization state is authorizationStateWaitCode.
+Reports that authentication code wasn't delivered via SMS; for official mobile applications only. Works only when the
+current authorization state is authorizationStateWaitCode.
 Request type for {@link Tdjson#reportAuthenticationCodeMissing}.
 */
 export interface ReportAuthenticationCodeMissing {
@@ -28383,6 +29110,143 @@ The maximum number of messages to be returned; up to 100.
 }
 
 /**
+Searches for public channel posts containing the given hashtag or cashtag. For optimal performance, the number of
+returned messages is chosen by TDLib and can be smaller than the specified limit.
+Request type for {@link Tdjson#searchPublicMessagesByTag}.
+*/
+export interface SearchPublicMessagesByTag {
+	'@type': 'searchPublicMessagesByTag';
+	/**
+Hashtag or cashtag to search for.
+*/
+	tag: string;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Searches for public stories containing the given hashtag or cashtag. For optimal performance, the number of returned
+stories is chosen by TDLib and can be smaller than the specified limit.
+Request type for {@link Tdjson#searchPublicStoriesByTag}.
+*/
+export interface SearchPublicStoriesByTag {
+	'@type': 'searchPublicStoriesByTag';
+	/**
+Hashtag or cashtag to search for.
+*/
+	tag: string;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of stories to be returned; up to 100. For optimal performance, the number of returned stories is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Searches for public stories by the given address location. For optimal performance, the number of returned stories is
+chosen by TDLib and can be smaller than the specified limit.
+Request type for {@link Tdjson#searchPublicStoriesByLocation}.
+*/
+export interface SearchPublicStoriesByLocation {
+	'@type': 'searchPublicStoriesByLocation';
+	/**
+Address of the location.
+*/
+	address: LocationAddress;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of stories to be returned; up to 100. For optimal performance, the number of returned stories is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Searches for public stories from the given venue. For optimal performance, the number of returned stories is chosen by
+TDLib and can be smaller than the specified limit.
+Request type for {@link Tdjson#searchPublicStoriesByVenue}.
+*/
+export interface SearchPublicStoriesByVenue {
+	'@type': 'searchPublicStoriesByVenue';
+	/**
+Provider of the venue.
+*/
+	venue_provider: string;
+	/**
+Identifier of the venue in the provider database.
+*/
+	venue_id: string;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of stories to be returned; up to 100. For optimal performance, the number of returned stories is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Returns recently searched for hashtags or cashtags by their prefix.
+Request type for {@link Tdjson#getSearchedForTags}.
+*/
+export interface GetSearchedForTags {
+	'@type': 'getSearchedForTags';
+	/**
+Prefix of hashtags or cashtags to return.
+*/
+	tag_prefix: string;
+	/**
+The maximum number of items to be returned.
+*/
+	limit: number;
+}
+
+/**
+Removes a hashtag or a cashtag from the list of recently searched for hashtags or cashtags.
+Request type for {@link Tdjson#removeSearchedForTag}.
+*/
+export interface RemoveSearchedForTag {
+	'@type': 'removeSearchedForTag';
+	/**
+Hashtag or cashtag to delete.
+*/
+	tag: string;
+}
+
+/**
+Clears the list of recently searched for hashtags or cashtags.
+Request type for {@link Tdjson#clearSearchedForTags}.
+*/
+export interface ClearSearchedForTags {
+	'@type': 'clearSearchedForTags';
+	/**
+Pass true to clear the list of recently searched for cashtags; otherwise, the list of recently searched for hashtags
+will be cleared.
+*/
+	clear_cashtags?: boolean;
+}
+
+/**
 Deletes all call messages.
 Request type for {@link Tdjson#deleteAllCallMessages}.
 */
@@ -28886,7 +29750,8 @@ Options to be used to send the messages; pass null to use default options.
 */
 	options: MessageSendOptions;
 	/**
-Contents of messages to be sent. At most 10 messages can be added to an album.
+Contents of messages to be sent. At most 10 messages can be added to an album. All messages must have the same value of
+show_caption_above_media.
 */
 	input_message_contents: InputMessageContent[];
 }
@@ -29128,7 +29993,7 @@ Pass true to delete chat messages for all users; private chats only.
 
 /**
 Edits the text of a message (or a text of a game message). Returns the edited message after the edit is completed on the
-server side.
+server side. Can be used only if message.can_be_edited == true.
 Request type for {@link Tdjson#editMessageText}.
 */
 export interface EditMessageText {
@@ -29153,7 +30018,8 @@ New text content of the message. Must be of type inputMessageText.
 
 /**
 Edits the message content of a live location. Messages can be edited for a limited period of time specified in the live
-location. Returns the edited message after the edit is completed on the server side.
+location. Returns the edited message after the edit is completed on the server side. Can be used only if
+message.can_be_edited == true.
 Request type for {@link Tdjson#editMessageLiveLocation}.
 */
 export interface EditMessageLiveLocation {
@@ -29195,7 +30061,7 @@ Edits the content of a message with an animation, an audio, a document, a photo 
 If only the caption needs to be edited, use editMessageCaption instead. The media can't be edited if the message was set
 to self-destruct or to a self-destructing media. The type of message content in an album can't be changed with exception
 of replacing a photo with a video or vice versa. Returns the edited message after the edit is completed on the server
-side.
+side. Can be used only if message.can_be_edited == true.
 Request type for {@link Tdjson#editMessageMedia}.
 */
 export interface EditMessageMedia {
@@ -29220,7 +30086,8 @@ inputMessageDocument, inputMessagePhoto or inputMessageVideo.
 }
 
 /**
-Edits the message content caption. Returns the edited message after the edit is completed on the server side.
+Edits the message content caption. Returns the edited message after the edit is completed on the server side. Can be
+used only if message.can_be_edited == true.
 Request type for {@link Tdjson#editMessageCaption}.
 */
 export interface EditMessageCaption {
@@ -29241,11 +30108,16 @@ The new message reply markup; pass null if none; for bots only.
 New message content caption; 0-getOption("message_caption_length_max") characters; pass null to remove caption.
 */
 	caption: FormattedText;
+	/**
+Pass true to show the caption above the media; otherwise, caption will be shown below the media. Can be true only for
+animation, photo, and video messages.
+*/
+	show_caption_above_media?: boolean;
 }
 
 /**
 Edits the message reply markup; for bots only. Returns the edited message after the edit is completed on the server
-side.
+side. Can be used only if message.can_be_edited == true.
 Request type for {@link Tdjson#editMessageReplyMarkup}.
 */
 export interface EditMessageReplyMarkup {
@@ -29358,6 +30230,11 @@ The new message reply markup; pass null if none.
 New message content caption; pass null to remove caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
+	/**
+Pass true to show the caption above the media; otherwise, caption will be shown below the media. Can be true only for
+animation, photo, and video messages.
+*/
+	show_caption_above_media?: boolean;
 }
 
 /**
@@ -29398,6 +30275,28 @@ The new message scheduling state; pass null to send the message immediately.
 }
 
 /**
+Changes the fact-check of a message. Can be only used if getOption("can_edit_fact_check") == true.
+Request type for {@link Tdjson#setMessageFactCheck}.
+*/
+export interface SetMessageFactCheck {
+	'@type': 'setMessageFactCheck';
+	/**
+The channel chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message. The message must be one of the following types: messageAnimation, messageAudio,
+messageDocument, messagePhoto, messageText, messageVideo.
+*/
+	message_id: number;
+	/**
+New text of the fact-check; 0-getOption("fact_check_length_max") characters; pass null to remove it. Only Bold, Italic,
+and TextUrl entities with https://t.me/ links are supported.
+*/
+	text: FormattedText;
+}
+
+/**
 Sends a message on behalf of a business account; for bots only. Returns the message after it was sent.
 Request type for {@link Tdjson#sendBusinessMessage}.
 */
@@ -29423,6 +30322,10 @@ Pass true to disable notification for the message.
 Pass true if the content of the message must be protected from forwarding and saving.
 */
 	protect_content?: boolean;
+	/**
+Identifier of the effect to apply to the message.
+*/
+	effect_id: string;
 	/**
 Markup for replying to the message; pass null if none.
 */
@@ -29462,9 +30365,195 @@ Pass true if the content of the message must be protected from forwarding and sa
 */
 	protect_content?: boolean;
 	/**
-Contents of messages to be sent. At most 10 messages can be added to an album.
+Identifier of the effect to apply to the message.
+*/
+	effect_id: string;
+	/**
+Contents of messages to be sent. At most 10 messages can be added to an album. All messages must have the same value of
+show_caption_above_media.
 */
 	input_message_contents: InputMessageContent[];
+}
+
+/**
+Edits the text of a text or game message sent on behalf of a business account; for bots only.
+Request type for {@link Tdjson#editBusinessMessageText}.
+*/
+export interface EditBusinessMessageText {
+	'@type': 'editBusinessMessageText';
+	/**
+Unique identifier of business connection on behalf of which the message was sent.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New text content of the message. Must be of type inputMessageText.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Edits the content of a live location in a message sent on behalf of a business account; for bots only.
+Request type for {@link Tdjson#editBusinessMessageLiveLocation}.
+*/
+export interface EditBusinessMessageLiveLocation {
+	'@type': 'editBusinessMessageLiveLocation';
+	/**
+Unique identifier of business connection on behalf of which the message was sent.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New location content of the message; pass null to stop sharing the live location.
+*/
+	location: Location;
+	/**
+New time relative to the message send date, for which the location can be updated, in seconds. If 0x7FFFFFFF specified,
+then the location can be updated forever. Otherwise, must not exceed the current live_period by more than a day, and the
+live location expiration date must remain in the next 90 days. Pass 0 to keep the current live_period.
+*/
+	live_period: number;
+	/**
+The new direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
+*/
+	heading: number;
+	/**
+The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
+*/
+	proximity_alert_radius: number;
+}
+
+/**
+Edits the content of a message with an animation, an audio, a document, a photo or a video in a message sent on behalf
+of a business account; for bots only.
+Request type for {@link Tdjson#editBusinessMessageMedia}.
+*/
+export interface EditBusinessMessageMedia {
+	'@type': 'editBusinessMessageMedia';
+	/**
+Unique identifier of business connection on behalf of which the message was sent.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
+inputMessageDocument, inputMessagePhoto or inputMessageVideo.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Edits the caption of a message sent on behalf of a business account; for bots only.
+Request type for {@link Tdjson#editBusinessMessageCaption}.
+*/
+export interface EditBusinessMessageCaption {
+	'@type': 'editBusinessMessageCaption';
+	/**
+Unique identifier of business connection on behalf of which the message was sent.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New message content caption; pass null to remove caption; 0-getOption("message_caption_length_max") characters.
+*/
+	caption: FormattedText;
+	/**
+Pass true to show the caption above the media; otherwise, caption will be shown below the media. Can be true only for
+animation, photo, and video messages.
+*/
+	show_caption_above_media?: boolean;
+}
+
+/**
+Edits the reply markup of a message sent on behalf of a business account; for bots only.
+Request type for {@link Tdjson#editBusinessMessageReplyMarkup}.
+*/
+export interface EditBusinessMessageReplyMarkup {
+	'@type': 'editBusinessMessageReplyMarkup';
+	/**
+Unique identifier of business connection on behalf of which the message was sent.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+}
+
+/**
+Stops a poll sent on behalf of a business account; for bots only.
+Request type for {@link Tdjson#stopBusinessPoll}.
+*/
+export interface StopBusinessPoll {
+	'@type': 'stopBusinessPoll';
+	/**
+Unique identifier of business connection on behalf of which the message with the poll was sent.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the poll.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
 }
 
 /**
@@ -29632,7 +30721,8 @@ Identifier of a quick reply message in the same shortcut to be replied; pass 0 i
 */
 	reply_to_message_id: number;
 	/**
-Contents of messages to be sent. At most 10 messages can be added to an album.
+Contents of messages to be sent. At most 10 messages can be added to an album. All messages must have the same value of
+show_caption_above_media.
 */
 	input_message_contents: InputMessageContent[];
 }
@@ -29681,7 +30771,7 @@ inputMessageAudio, inputMessageDocument, inputMessagePhoto or inputMessageVideo.
 }
 
 /**
-Returns the list of custom emojis, which can be used as forum topic icon by all users.
+Returns the list of custom emoji, which can be used as forum topic icon by all users.
 Request type for {@link Tdjson#getForumTopicDefaultIcons}.
 */
 export interface GetForumTopicDefaultIcons {
@@ -30117,6 +31207,18 @@ New label for the tag; 0-12 characters.
 }
 
 /**
+Returns information about a message effect. Returns a 404 error if the effect is not found.
+Request type for {@link Tdjson#getMessageEffect}.
+*/
+export interface GetMessageEffect {
+	'@type': 'getMessageEffect';
+	/**
+Unique identifier of the effect.
+*/
+	effect_id: string;
+}
+
+/**
 Searches for a given quote in a text. Returns found quote start position in UTF-16 code units. Returns a 404 error if
 the quote is not found. Can be called synchronously.
 Request type for {@link Tdjson#searchQuote}.
@@ -30151,8 +31253,8 @@ The text in which to look for entities.
 }
 
 /**
-Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, BlockQuote, Code, Pre, PreCode, TextUrl and
-MentionName entities from a marked-up text. Can be called synchronously.
+Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, BlockQuote, ExpandableBlockQuote, Code, Pre,
+PreCode, TextUrl and MentionName entities from a marked-up text. Can be called synchronously.
 Request type for {@link Tdjson#parseTextEntities}.
 */
 export interface ParseTextEntities {
@@ -33579,6 +34681,23 @@ The maximum number of files to be returned.
 }
 
 /**
+Application verification has been completed. Can be called before authorization.
+Request type for {@link Tdjson#setApplicationVerificationToken}.
+*/
+export interface SetAppVerificationToken {
+	'@type': 'setApplicationVerificationToken';
+	/**
+Unique identifier for the verification process as received from updateApplicationVerificationRequired.
+*/
+	verification_id: number;
+	/**
+Play Integrity API token for the Android application, or secret from push notification for the iOS application; pass an
+empty string to abort verification and receive error VERIFICATION_FAILED for the request.
+*/
+	token: string;
+}
+
+/**
 Returns information about a file with messages exported from another application.
 Request type for {@link Tdjson#getMessageFileType}.
 */
@@ -34811,6 +35930,10 @@ export interface SearchUserByPhoneNumber {
 Phone number to search for.
 */
 	phone_number: string;
+	/**
+Pass true to get only locally available information without sending network requests.
+*/
+	only_local?: boolean;
 }
 
 /**
@@ -34859,7 +35982,7 @@ Type of the stickers to return.
 */
 	sticker_type: StickerType;
 	/**
-Search query; a space-separated list of emoji or a keyword prefix. If empty, returns all known installed stickers.
+Search query; a space-separated list of emojis or a keyword prefix. If empty, returns all known installed stickers.
 */
 	query: string;
 	/**
@@ -34907,7 +36030,7 @@ Type of the stickers to return.
 */
 	sticker_type: StickerType;
 	/**
-Space-separated list of emoji to search for; must be non-empty.
+Space-separated list of emojis to search for; must be non-empty.
 */
 	emojis: string;
 	/**
@@ -35256,7 +36379,7 @@ List of possible IETF language tags of the user's input language; may be empty i
 }
 
 /**
-Returns available emojis categories.
+Returns available emoji categories.
 Request type for {@link Tdjson#getEmojiCategories}.
 */
 export interface GetEmojiCategories {
@@ -35720,13 +36843,15 @@ Request type for {@link Tdjson#sendPhoneNumberFirebaseSms}.
 export interface SendPhoneNumberFirebaseSms {
 	'@type': 'sendPhoneNumberFirebaseSms';
 	/**
-SafetyNet Attestation API token for the Android application, or secret from push notification for the iOS application.
+Play Integrity API or SafetyNet Attestation API token for the Android application, or secret from push notification for
+the iOS application.
 */
 	token: string;
 }
 
 /**
-Reports that authentication code wasn't delivered via SMS to the specified phone number; for official mobile apps only.
+Reports that authentication code wasn't delivered via SMS to the specified phone number; for official mobile
+applications only.
 Request type for {@link Tdjson#reportPhoneNumberCodeMissing}.
 */
 export interface ReportPhoneNumberCodeMissing {
@@ -35744,7 +36869,10 @@ Request type for {@link Tdjson#resendPhoneNumberCode}.
 */
 export interface ResendPhoneNumberCode {
 	'@type': 'resendPhoneNumberCode';
-
+	/**
+Reason of code resending; pass null if unknown.
+*/
+	reason: ResendCodeReason;
 }
 
 /**
@@ -36483,7 +37611,7 @@ Request type for {@link Tdjson#toggleSupergroupJoinToSendMessages}.
 export interface ToggleSupergroupJoinToSendMessages {
 	'@type': 'toggleSupergroupJoinToSendMessages';
 	/**
-Identifier of the supergroup.
+Identifier of the supergroup that isn't a broadcast group.
 */
 	supergroup_id: number;
 	/**
@@ -36500,7 +37628,7 @@ Request type for {@link Tdjson#toggleSupergroupJoinByRequest}.
 export interface ToggleSupergroupJoinByRequest {
 	'@type': 'toggleSupergroupJoinByRequest';
 	/**
-Identifier of the channel.
+Identifier of the supergroup that isn't a broadcast group.
 */
 	supergroup_id: number;
 	/**
@@ -36779,7 +37907,7 @@ Identifier of a chosen shipping option, if applicable.
 */
 	shipping_option_id: string;
 	/**
-The credentials chosen by user for payment.
+The credentials chosen by user for payment; pass null for a payment in Telegram stars.
 */
 	credentials: InputCredentials;
 	/**
@@ -36841,6 +37969,22 @@ export interface CreateInvoiceLink {
 Information about the invoice of the type inputMessageInvoice.
 */
 	invoice: InputMessageContent;
+}
+
+/**
+Refunds a previously done payment in Telegram Stars.
+Request type for {@link Tdjson#refundStarPayment}.
+*/
+export interface RefundStarPayment {
+	'@type': 'refundStarPayment';
+	/**
+Identifier of the user that did the payment.
+*/
+	user_id: number;
+	/**
+Telegram payment identifier.
+*/
+	telegram_payment_charge_id: string;
 }
 
 /**
@@ -37444,6 +38588,44 @@ Number of transactions to skip.
 The maximum number of transactions to be returned; up to 200.
 */
 	limit: number;
+}
+
+/**
+Returns detailed Telegram star revenue statistics.
+Request type for {@link Tdjson#getStarRevenueStatistics}.
+*/
+export interface GetStarRevenueStatistics {
+	'@type': 'getStarRevenueStatistics';
+	/**
+Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of a channel chat with
+supergroupFullInfo.can_get_revenue_statistics == true.
+*/
+	owner_id: MessageSender;
+	/**
+Pass true if a dark theme is used by the application.
+*/
+	is_dark?: boolean;
+}
+
+/**
+Returns URL for Telegram star withdrawal.
+Request type for {@link Tdjson#getStarWithdrawalUrl}.
+*/
+export interface GetStarWithdrawalUrl {
+	'@type': 'getStarWithdrawalUrl';
+	/**
+Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of a channel chat with
+supergroupFullInfo.can_get_revenue_statistics == true.
+*/
+	owner_id: MessageSender;
+	/**
+The number of Telegram stars to withdraw. Must be at least getOption("star_withdrawal_count_min").
+*/
+	star_count: number;
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
 }
 
 /**
@@ -38179,7 +39361,7 @@ Sticker to remove from the set.
 }
 
 /**
-Changes the list of emoji corresponding to a sticker. The sticker must belong to a regular or custom emoji sticker set
+Changes the list of emojis corresponding to a sticker. The sticker must belong to a regular or custom emoji sticker set
 that is owned by the current user.
 Request type for {@link Tdjson#setStickerEmojis}.
 */
@@ -38412,11 +39594,46 @@ Identifier of the giveaway or a giveaway winners message in the chat.
 }
 
 /**
-Checks whether Telegram Premium purchase is possible. Must be called before in-store Premium purchase.
-Request type for {@link Tdjson#canPurchasePremium}.
+Returns available options for Telegram stars purchase.
+Request type for {@link Tdjson#getStarPaymentOptions}.
 */
-export interface CanPurchasePremium {
-	'@type': 'canPurchasePremium';
+export interface GetStarPaymentOptions {
+	'@type': 'getStarPaymentOptions';
+
+}
+
+/**
+Returns the list of Telegram star transactions for the specified owner.
+Request type for {@link Tdjson#getStarTransactions}.
+*/
+export interface GetStarTransactions {
+	'@type': 'getStarTransactions';
+	/**
+Identifier of the owner of the Telegram stars; can be the identifier of the current user, identifier of an owned bot, or
+identifier of a channel chat with supergroupFullInfo.can_get_revenue_statistics == true.
+*/
+	owner_id: MessageSender;
+	/**
+Direction of the transactions to receive; pass null to get all transactions.
+*/
+	direction: StarTransactionDirection;
+	/**
+Offset of the first transaction to return as received from the previous request; use empty string to get the first chunk
+of results.
+*/
+	offset: string;
+	/**
+The maximum number of transactions to return.
+*/
+	limit: number;
+}
+
+/**
+Checks whether an in-store purchase is possible. Must be called before any in-store purchase.
+Request type for {@link Tdjson#canPurchaseFromStore}.
+*/
+export interface CanPurchaseFromStore {
+	'@type': 'canPurchaseFromStore';
 	/**
 Transaction purpose.
 */
@@ -39189,6 +40406,13 @@ export type Request =
 	| SearchSavedMessages
 	| SearchCallMessages
 	| SearchOutgoingDocumentMessages
+	| SearchPublicMessagesByTag
+	| SearchPublicStoriesByTag
+	| SearchPublicStoriesByLocation
+	| SearchPublicStoriesByVenue
+	| GetSearchedForTags
+	| RemoveSearchedForTag
+	| ClearSearchedForTags
 	| DeleteAllCallMessages
 	| SearchChatRecentLocationMessages
 	| GetActiveLiveLocationMessages
@@ -39234,8 +40458,15 @@ export type Request =
 	| EditInlineMessageCaption
 	| EditInlineMessageReplyMarkup
 	| EditMessageSchedulingState
+	| SetMessageFactCheck
 	| SendBusinessMessage
 	| SendBusinessMessageAlbum
+	| EditBusinessMessageText
+	| EditBusinessMessageLiveLocation
+	| EditBusinessMessageMedia
+	| EditBusinessMessageCaption
+	| EditBusinessMessageReplyMarkup
+	| StopBusinessPoll
 	| CheckQuickReplyShortcutName
 	| LoadQuickReplyShortcuts
 	| SetQuickReplyShortcutName
@@ -39271,6 +40502,7 @@ export type Request =
 	| SetDefaultReactionType
 	| GetSavedMessagesTags
 	| SetSavedMessagesTagLabel
+	| GetMessageEffect
 	| SearchQuote
 	| GetTextEntities
 	| ParseTextEntities
@@ -39467,6 +40699,7 @@ export type Request =
 	| RemoveFileFromDownloads
 	| RemoveAllFilesFromDownloads
 	| SearchFileDownloads
+	| SetAppVerificationToken
 	| GetMessageFileType
 	| GetMessageImportConfirmationText
 	| ImportMessages
@@ -39676,6 +40909,7 @@ export type Request =
 	| DeleteSavedOrderInfo
 	| DeleteSavedCredentials
 	| CreateInvoiceLink
+	| RefundStarPayment
 	| GetSupportUser
 	| GetBackgroundUrl
 	| SearchBackground
@@ -39718,6 +40952,8 @@ export type Request =
 	| GetChatRevenueStatistics
 	| GetChatRevenueWithdrawalUrl
 	| GetChatRevenueTransactions
+	| GetStarRevenueStatistics
+	| GetStarWithdrawalUrl
 	| GetChatStatistics
 	| GetMessageStatistics
 	| GetMessagePublicForwards
@@ -39778,7 +41014,9 @@ export type Request =
 	| ApplyPremiumGiftCode
 	| LaunchPrepaidPremiumGiveaway
 	| GetPremiumGiveawayInfo
-	| CanPurchasePremium
+	| GetStarPaymentOptions
+	| GetStarTransactions
+	| CanPurchaseFromStore
 	| AssignAppStoreTransaction
 	| AssignGooglePlayTransaction
 	| GetBusinessFeatures
@@ -39880,8 +41118,9 @@ Resends an authentication code to the user. Works only when the current authoriz
 authorizationStateWaitCode, the next_code_type of the result is not null and the server-specified timeout has passed, or
 when the current authorization state is authorizationStateWaitEmailCode.
 */
-	async resendAuthenticationCode(): Promise<Ok> {
+	async resendAuthenticationCode(options: Omit<ResendAuthenticationCode, '@type'>): Promise<Ok> {
 		return this._request({
+			...options,
 			'@type': 'resendAuthenticationCode',
 		});
 	}
@@ -39997,8 +41236,8 @@ authenticationCodeTypeFirebaseIos.
 	}
 
 	/**
-Reports that authentication code wasn't delivered via SMS; for official mobile apps only. Works only when the current
-authorization state is authorizationStateWaitCode.
+Reports that authentication code wasn't delivered via SMS; for official mobile applications only. Works only when the
+current authorization state is authorizationStateWaitCode.
 */
 	async reportAuthenticationCodeMissing(options: Omit<ReportAuthenticationCodeMissing, '@type'>): Promise<Ok> {
 		return this._request({
@@ -40919,6 +42158,80 @@ results in reverse chronological order.
 	}
 
 	/**
+Searches for public channel posts containing the given hashtag or cashtag. For optimal performance, the number of
+returned messages is chosen by TDLib and can be smaller than the specified limit.
+*/
+	async searchPublicMessagesByTag(options: Omit<SearchPublicMessagesByTag, '@type'>): Promise<FoundMessages> {
+		return this._request({
+			...options,
+			'@type': 'searchPublicMessagesByTag',
+		});
+	}
+
+	/**
+Searches for public stories containing the given hashtag or cashtag. For optimal performance, the number of returned
+stories is chosen by TDLib and can be smaller than the specified limit.
+*/
+	async searchPublicStoriesByTag(options: Omit<SearchPublicStoriesByTag, '@type'>): Promise<FoundStories> {
+		return this._request({
+			...options,
+			'@type': 'searchPublicStoriesByTag',
+		});
+	}
+
+	/**
+Searches for public stories by the given address location. For optimal performance, the number of returned stories is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	async searchPublicStoriesByLocation(options: Omit<SearchPublicStoriesByLocation, '@type'>): Promise<FoundStories> {
+		return this._request({
+			...options,
+			'@type': 'searchPublicStoriesByLocation',
+		});
+	}
+
+	/**
+Searches for public stories from the given venue. For optimal performance, the number of returned stories is chosen by
+TDLib and can be smaller than the specified limit.
+*/
+	async searchPublicStoriesByVenue(options: Omit<SearchPublicStoriesByVenue, '@type'>): Promise<FoundStories> {
+		return this._request({
+			...options,
+			'@type': 'searchPublicStoriesByVenue',
+		});
+	}
+
+	/**
+Returns recently searched for hashtags or cashtags by their prefix.
+*/
+	async getSearchedForTags(options: Omit<GetSearchedForTags, '@type'>): Promise<Hashtags> {
+		return this._request({
+			...options,
+			'@type': 'getSearchedForTags',
+		});
+	}
+
+	/**
+Removes a hashtag or a cashtag from the list of recently searched for hashtags or cashtags.
+*/
+	async removeSearchedForTag(options: Omit<RemoveSearchedForTag, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeSearchedForTag',
+		});
+	}
+
+	/**
+Clears the list of recently searched for hashtags or cashtags.
+*/
+	async clearSearchedForTags(options: Omit<ClearSearchedForTags, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'clearSearchedForTags',
+		});
+	}
+
+	/**
 Deletes all call messages.
 */
 	async deleteAllCallMessages(options: Omit<DeleteAllCallMessages, '@type'>): Promise<Ok> {
@@ -41286,7 +42599,7 @@ sent in the last 30 seconds will not be deleted.
 
 	/**
 Edits the text of a message (or a text of a game message). Returns the edited message after the edit is completed on the
-server side.
+server side. Can be used only if message.can_be_edited == true.
 */
 	async editMessageText(options: Omit<EditMessageText, '@type'>): Promise<Message> {
 		return this._request({
@@ -41297,7 +42610,8 @@ server side.
 
 	/**
 Edits the message content of a live location. Messages can be edited for a limited period of time specified in the live
-location. Returns the edited message after the edit is completed on the server side.
+location. Returns the edited message after the edit is completed on the server side. Can be used only if
+message.can_be_edited == true.
 */
 	async editMessageLiveLocation(options: Omit<EditMessageLiveLocation, '@type'>): Promise<Message> {
 		return this._request({
@@ -41311,7 +42625,7 @@ Edits the content of a message with an animation, an audio, a document, a photo 
 If only the caption needs to be edited, use editMessageCaption instead. The media can't be edited if the message was set
 to self-destruct or to a self-destructing media. The type of message content in an album can't be changed with exception
 of replacing a photo with a video or vice versa. Returns the edited message after the edit is completed on the server
-side.
+side. Can be used only if message.can_be_edited == true.
 */
 	async editMessageMedia(options: Omit<EditMessageMedia, '@type'>): Promise<Message> {
 		return this._request({
@@ -41321,7 +42635,8 @@ side.
 	}
 
 	/**
-Edits the message content caption. Returns the edited message after the edit is completed on the server side.
+Edits the message content caption. Returns the edited message after the edit is completed on the server side. Can be
+used only if message.can_be_edited == true.
 */
 	async editMessageCaption(options: Omit<EditMessageCaption, '@type'>): Promise<Message> {
 		return this._request({
@@ -41332,7 +42647,7 @@ Edits the message content caption. Returns the edited message after the edit is 
 
 	/**
 Edits the message reply markup; for bots only. Returns the edited message after the edit is completed on the server
-side.
+side. Can be used only if message.can_be_edited == true.
 */
 	async editMessageReplyMarkup(options: Omit<EditMessageReplyMarkup, '@type'>): Promise<Message> {
 		return this._request({
@@ -41404,6 +42719,16 @@ together with the message will be also changed.
 	}
 
 	/**
+Changes the fact-check of a message. Can be only used if getOption("can_edit_fact_check") == true.
+*/
+	async setMessageFactCheck(options: Omit<SetMessageFactCheck, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setMessageFactCheck',
+		});
+	}
+
+	/**
 Sends a message on behalf of a business account; for bots only. Returns the message after it was sent.
 */
 	async sendBusinessMessage(options: Omit<SendBusinessMessage, '@type'>): Promise<BusinessMessage> {
@@ -41422,6 +42747,67 @@ an album with messages of the same type. Returns sent messages.
 		return this._request({
 			...options,
 			'@type': 'sendBusinessMessageAlbum',
+		});
+	}
+
+	/**
+Edits the text of a text or game message sent on behalf of a business account; for bots only.
+*/
+	async editBusinessMessageText(options: Omit<EditBusinessMessageText, '@type'>): Promise<BusinessMessage> {
+		return this._request({
+			...options,
+			'@type': 'editBusinessMessageText',
+		});
+	}
+
+	/**
+Edits the content of a live location in a message sent on behalf of a business account; for bots only.
+*/
+	async editBusinessMessageLiveLocation(options: Omit<EditBusinessMessageLiveLocation, '@type'>): Promise<BusinessMessage> {
+		return this._request({
+			...options,
+			'@type': 'editBusinessMessageLiveLocation',
+		});
+	}
+
+	/**
+Edits the content of a message with an animation, an audio, a document, a photo or a video in a message sent on behalf
+of a business account; for bots only.
+*/
+	async editBusinessMessageMedia(options: Omit<EditBusinessMessageMedia, '@type'>): Promise<BusinessMessage> {
+		return this._request({
+			...options,
+			'@type': 'editBusinessMessageMedia',
+		});
+	}
+
+	/**
+Edits the caption of a message sent on behalf of a business account; for bots only.
+*/
+	async editBusinessMessageCaption(options: Omit<EditBusinessMessageCaption, '@type'>): Promise<BusinessMessage> {
+		return this._request({
+			...options,
+			'@type': 'editBusinessMessageCaption',
+		});
+	}
+
+	/**
+Edits the reply markup of a message sent on behalf of a business account; for bots only.
+*/
+	async editBusinessMessageReplyMarkup(options: Omit<EditBusinessMessageReplyMarkup, '@type'>): Promise<BusinessMessage> {
+		return this._request({
+			...options,
+			'@type': 'editBusinessMessageReplyMarkup',
+		});
+	}
+
+	/**
+Stops a poll sent on behalf of a business account; for bots only.
+*/
+	async stopBusinessPoll(options: Omit<StopBusinessPoll, '@type'>): Promise<BusinessMessage> {
+		return this._request({
+			...options,
+			'@type': 'stopBusinessPoll',
 		});
 	}
 
@@ -41561,7 +42947,7 @@ album can't be changed with exception of replacing a photo with a video or vice 
 	}
 
 	/**
-Returns the list of custom emojis, which can be used as forum topic icon by all users.
+Returns the list of custom emoji, which can be used as forum topic icon by all users.
 */
 	async getForumTopicDefaultIcons(): Promise<Stickers> {
 		return this._request({
@@ -41797,6 +43183,16 @@ Changes label of a Saved Messages tag; for Telegram Premium users only.
 	}
 
 	/**
+Returns information about a message effect. Returns a 404 error if the effect is not found.
+*/
+	async getMessageEffect(options: Omit<GetMessageEffect, '@type'>): Promise<MessageEffect> {
+		return this._request({
+			...options,
+			'@type': 'getMessageEffect',
+		});
+	}
+
+	/**
 Searches for a given quote in a text. Returns found quote start position in UTF-16 code units. Returns a 404 error if
 the quote is not found. Can be called synchronously.
 */
@@ -41819,8 +43215,8 @@ the text. Can be called synchronously.
 	}
 
 	/**
-Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, BlockQuote, Code, Pre, PreCode, TextUrl and
-MentionName entities from a marked-up text. Can be called synchronously.
+Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, BlockQuote, ExpandableBlockQuote, Code, Pre,
+PreCode, TextUrl and MentionName entities from a marked-up text. Can be called synchronously.
 */
 	async parseTextEntities(options: Omit<ParseTextEntities, '@type'>): Promise<FormattedText> {
 		return this._request({
@@ -43841,6 +45237,16 @@ Searches for files in the file download list or recently downloaded files from t
 	}
 
 	/**
+Application verification has been completed. Can be called before authorization.
+*/
+	async setApplicationVerificationToken(options: Omit<SetAppVerificationToken, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setApplicationVerificationToken',
+		});
+	}
+
+	/**
 Returns information about a file with messages exported from another application.
 */
 	async getMessageFileType(options: Omit<GetMessageFileType, '@type'>): Promise<MessageFileType> {
@@ -44854,7 +46260,7 @@ Return emojis matching the keyword. Supported only if the file database is enabl
 	}
 
 	/**
-Returns available emojis categories.
+Returns available emoji categories.
 */
 	async getEmojiCategories(options: Omit<GetEmojiCategories, '@type'>): Promise<EmojiCategories> {
 		return this._request({
@@ -45220,7 +46626,8 @@ authenticationCodeTypeFirebaseAndroid or authenticationCodeTypeFirebaseIos.
 	}
 
 	/**
-Reports that authentication code wasn't delivered via SMS to the specified phone number; for official mobile apps only.
+Reports that authentication code wasn't delivered via SMS to the specified phone number; for official mobile
+applications only.
 */
 	async reportPhoneNumberCodeMissing(options: Omit<ReportPhoneNumberCodeMissing, '@type'>): Promise<Ok> {
 		return this._request({
@@ -45233,8 +46640,9 @@ Reports that authentication code wasn't delivered via SMS to the specified phone
 Resends the authentication code sent to a phone number. Works only if the previously received authenticationCodeInfo
 next_code_type was not null and the server-specified timeout has passed.
 */
-	async resendPhoneNumberCode(): Promise<AuthenticationCodeInfo> {
+	async resendPhoneNumberCode(options: Omit<ResendPhoneNumberCode, '@type'>): Promise<AuthenticationCodeInfo> {
 		return this._request({
+			...options,
 			'@type': 'resendPhoneNumberCode',
 		});
 	}
@@ -45975,6 +47383,16 @@ Creates a link for the given invoice; for bots only.
 	}
 
 	/**
+Refunds a previously done payment in Telegram Stars.
+*/
+	async refundStarPayment(options: Omit<RefundStarPayment, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'refundStarPayment',
+		});
+	}
+
+	/**
 Returns a user that can be contacted to get support.
 */
 	async getSupportUser(): Promise<User> {
@@ -46406,6 +47824,26 @@ supergroupFullInfo.can_get_revenue_statistics == true.
 		return this._request({
 			...options,
 			'@type': 'getChatRevenueTransactions',
+		});
+	}
+
+	/**
+Returns detailed Telegram star revenue statistics.
+*/
+	async getStarRevenueStatistics(options: Omit<GetStarRevenueStatistics, '@type'>): Promise<StarRevenueStatistics> {
+		return this._request({
+			...options,
+			'@type': 'getStarRevenueStatistics',
+		});
+	}
+
+	/**
+Returns URL for Telegram star withdrawal.
+*/
+	async getStarWithdrawalUrl(options: Omit<GetStarWithdrawalUrl, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getStarWithdrawalUrl',
 		});
 	}
 
@@ -46859,7 +48297,7 @@ Removes a sticker from the set to which it belongs. The sticker set must be owne
 	}
 
 	/**
-Changes the list of emoji corresponding to a sticker. The sticker must belong to a regular or custom emoji sticker set
+Changes the list of emojis corresponding to a sticker. The sticker must belong to a regular or custom emoji sticker set
 that is owned by the current user.
 */
 	async setStickerEmojis(options: Omit<SetStickerEmojis, '@type'>): Promise<Ok> {
@@ -47020,12 +48458,31 @@ Returns information about a Telegram Premium giveaway.
 	}
 
 	/**
-Checks whether Telegram Premium purchase is possible. Must be called before in-store Premium purchase.
+Returns available options for Telegram stars purchase.
 */
-	async canPurchasePremium(options: Omit<CanPurchasePremium, '@type'>): Promise<Ok> {
+	async getStarPaymentOptions(): Promise<StarPaymentOptions> {
+		return this._request({
+			'@type': 'getStarPaymentOptions',
+		});
+	}
+
+	/**
+Returns the list of Telegram star transactions for the specified owner.
+*/
+	async getStarTransactions(options: Omit<GetStarTransactions, '@type'>): Promise<StarTransactions> {
 		return this._request({
 			...options,
-			'@type': 'canPurchasePremium',
+			'@type': 'getStarTransactions',
+		});
+	}
+
+	/**
+Checks whether an in-store purchase is possible. Must be called before any in-store purchase.
+*/
+	async canPurchaseFromStore(options: Omit<CanPurchaseFromStore, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'canPurchaseFromStore',
 		});
 	}
 
