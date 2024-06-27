@@ -397,15 +397,17 @@ async function main() {
 	const [ constructorsText, functionsText ] = text.split('---functions---');
 
 	const [ constructors, functions ] = [ constructorsText, functionsText ].map(text => {
-		const lines = text.split(';\n');
-
-		const parseResult = lines.flatMap(line => {
+		const lines = text.split(/;\n(?!\/\/-)/).flatMap(line => {
 			line = line.trim();
 
 			if (!line) {
 				return [];
 			}
 
+			return [ line ];
+		});
+
+		const parseResult = lines.flatMap(line => {
 			const lineParseResult = tdApiParser.run(line);
 
 			const { isError, index } = lineParseResult;
