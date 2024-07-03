@@ -141,13 +141,9 @@ Subtype of {@link AuthenticationCodeType}.
 export interface AuthenticationCodeTypeFirebaseAndroid {
 	'@type': 'authenticationCodeTypeFirebaseAndroid';
 	/**
-True, if Play Integrity API must be used for device verification. Otherwise, SafetyNet Attestation API must be used.
+Parameters to be used for device verification.
 */
-	use_play_integrity?: boolean;
-	/**
-Nonce to pass to the Play Integrity API or the SafetyNet Attestation API.
-*/
-	nonce: string;
+	device_verification_parameters: FirebaseDeviceVerificationParameters;
 	/**
 Length of the code.
 */
@@ -503,6 +499,35 @@ Subtype of {@link AuthorizationState}.
 export interface AuthorizationStateClosed {
 	'@type': 'authorizationStateClosed';
 
+}
+
+/**
+Describes parameters to be used for device verification.
+Subtype of {@link FirebaseDeviceVerificationParameters}.
+*/
+export interface FirebaseDeviceVerificationParametersSafetyNet {
+	'@type': 'firebaseDeviceVerificationParametersSafetyNet';
+	/**
+Nonce to pass to the SafetyNet Attestation API.
+*/
+	nonce: string;
+}
+
+/**
+Device verification must be performed with the classic Play Integrity verification
+(https://developer.android.com/google/play/integrity/classic).
+Subtype of {@link FirebaseDeviceVerificationParameters}.
+*/
+export interface FirebaseDeviceVerificationParametersPlayIntegrity {
+	'@type': 'firebaseDeviceVerificationParametersPlayIntegrity';
+	/**
+Base64url-encoded nonce to pass to the Play Integrity API.
+*/
+	nonce: string;
+	/**
+Cloud project number to pass to the Play Integrity API.
+*/
+	cloud_project_number: string;
 }
 
 /**
@@ -1824,7 +1849,8 @@ Text of the button.
 */
 	text: string;
 	/**
-URL to be passed to openWebApp.
+URL of a Web App to open when the button is pressed. If the link is of the type internalLinkTypeWebApp, then it must be
+processed accordingly. Otherwise, the link must be passed to openWebApp.
 */
 	url: string;
 }
@@ -2582,7 +2608,8 @@ Identifier of the last in-store transaction for the currently used option.
 }
 
 /**
-Describes an option for creating Telegram Premium gift codes.
+Describes an option for creating Telegram Premium gift codes. Use telegramPaymentPurposePremiumGiftCodes for
+out-of-store payments.
 */
 export interface PremiumGiftCodePaymentOption {
 	'@type': 'premiumGiftCodePaymentOption';
@@ -2660,7 +2687,7 @@ Point in time (Unix timestamp) when the code was activated; 0 if none.
 }
 
 /**
-Describes an option for buying Telegram stars.
+Describes an option for buying Telegram stars. Use telegramPaymentPurposeStars for out-of-store payments.
 */
 export interface StarPaymentOption {
 	'@type': 'starPaymentOption';
@@ -2755,19 +2782,32 @@ State of the withdrawal; may be null for refunds from Fragment.
 }
 
 /**
-The transaction is a transaction with another user.
+The transaction is a transaction with Telegram Ad platform.
 Subtype of {@link StarTransactionPartner}.
 */
-export interface StarTransactionPartnerUser {
-	'@type': 'starTransactionPartnerUser';
-	/**
-Identifier of the user.
+export interface StarTransactionPartnerTelegramAds {
+	'@type': 'starTransactionPartnerTelegramAds';
+
+}
+
+/**
+The transaction is a transaction with a bot.
+Subtype of {@link StarTransactionPartner}.
 */
-	user_id: number;
+export interface StarTransactionPartnerBot {
+	'@type': 'starTransactionPartnerBot';
 	/**
-Information about the bought product; may be null if none.
+Identifier of the bot.
+*/
+	bot_user_id: number;
+	/**
+Information about the bought product; may be null if not applicable.
 */
 	product_info: ProductInfo;
+	/**
+Invoice payload; for bots only.
+*/
+	invoice_payload: string;
 }
 
 /**
@@ -2780,6 +2820,14 @@ export interface StarTransactionPartnerChannel {
 Identifier of the chat.
 */
 	chat_id: number;
+	/**
+Identifier of the corresponding message with paid media; can be an identifier of a deleted message.
+*/
+	paid_media_message_id: number;
+	/**
+Information about the bought media.
+*/
+	media: PaidMedia[];
 }
 
 /**
@@ -4224,6 +4272,10 @@ administrators.
 */
 	has_aggressive_anti_spam_enabled?: boolean;
 	/**
+True, if paid media can be sent and forwarded to the channel chat; for channels only.
+*/
+	has_paid_media_allowed?: boolean;
+	/**
 True, if the supergroup or channel has pinned stories.
 */
 	has_pinned_stories?: boolean;
@@ -4908,7 +4960,7 @@ from the same chat.
 	/**
 Media content of the message if the message was from another chat or topic; may be null for messages from the same chat
 and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageContact,
-messageDice, messageDocument, messageGame, messageInvoice, messageLocation, messagePhoto, messagePoll,
+messageDice, messageDocument, messageGame, messageInvoice, messageLocation, messagePaidMedia, messagePhoto, messagePoll,
 messagePremiumGiveaway, messagePremiumGiveawayWinners, messageSticker, messageStory, messageText (for link preview),
 messageVenue, messageVideo, messageVideoNote, or messageVoiceNote.
 */
@@ -6898,7 +6950,8 @@ Subtype of {@link InlineKeyboardButtonType}.
 export interface InlineKeyboardButtonTypeUrl {
 	'@type': 'inlineKeyboardButtonTypeUrl';
 	/**
-HTTP or tg:// URL to open.
+HTTP or tg:// URL to open. If the link is of the type internalLinkTypeWebApp, then the button must be marked as a Web
+App button.
 */
 	url: string;
 }
@@ -8748,6 +8801,10 @@ A color of the section background in the RGB24 format.
 */
 	section_background_color: number;
 	/**
+A color of the section separator in the RGB24 format.
+*/
+	section_separator_color: number;
+	/**
 A color of text in the RGB24 format.
 */
 	text_color: number;
@@ -9259,11 +9316,11 @@ Transaction purpose.
 }
 
 /**
-Describes a media, which is attached to an invoice.
-Subtype of {@link MessageExtendedMedia}.
+Describes a paid media.
+Subtype of {@link PaidMedia}.
 */
-export interface MessageExtendedMediaPreview {
-	'@type': 'messageExtendedMediaPreview';
+export interface PaidMediaPreview {
+	'@type': 'paidMediaPreview';
 	/**
 Media width; 0 if unknown.
 */
@@ -9280,54 +9337,39 @@ Media duration, in seconds; 0 if unknown.
 Media minithumbnail; may be null.
 */
 	minithumbnail: Minithumbnail;
-	/**
-Media caption.
-*/
-	caption: FormattedText;
 }
 
 /**
 The media is a photo.
-Subtype of {@link MessageExtendedMedia}.
+Subtype of {@link PaidMedia}.
 */
-export interface MessageExtendedMediaPhoto {
-	'@type': 'messageExtendedMediaPhoto';
+export interface PaidMediaPhoto {
+	'@type': 'paidMediaPhoto';
 	/**
 The photo.
 */
 	photo: Photo;
-	/**
-Photo caption.
-*/
-	caption: FormattedText;
 }
 
 /**
 The media is a video.
-Subtype of {@link MessageExtendedMedia}.
+Subtype of {@link PaidMedia}.
 */
-export interface MessageExtendedMediaVideo {
-	'@type': 'messageExtendedMediaVideo';
+export interface PaidMediaVideo {
+	'@type': 'paidMediaVideo';
 	/**
 The video.
 */
 	video: Video;
-	/**
-Photo caption.
-*/
-	caption: FormattedText;
 }
 
 /**
 The media is unsupported.
-Subtype of {@link MessageExtendedMedia}.
+Subtype of {@link PaidMedia}.
 */
-export interface MessageExtendedMediaUnsupported {
-	'@type': 'messageExtendedMediaUnsupported';
-	/**
-Media caption.
-*/
-	caption: FormattedText;
+export interface PaidMediaUnsupported {
+	'@type': 'paidMediaUnsupported';
+
 }
 
 /**
@@ -10398,7 +10440,7 @@ Animation caption.
 */
 	caption: FormattedText;
 	/**
-True, if caption must be shown above the animation; otherwise, caption must be shown below the animation.
+True, if the caption must be shown above the animation; otherwise, the caption must be shown below the animation.
 */
 	show_caption_above_media?: boolean;
 	/**
@@ -10444,6 +10486,30 @@ Document caption.
 }
 
 /**
+A message with paid media.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePaidMedia {
+	'@type': 'messagePaidMedia';
+	/**
+Number of stars needed to buy access to the media in the message.
+*/
+	star_count: number;
+	/**
+Information about the media.
+*/
+	media: PaidMedia[];
+	/**
+Media caption.
+*/
+	caption: FormattedText;
+	/**
+True, if the caption must be shown above the media; otherwise, the caption must be shown below the media.
+*/
+	show_caption_above_media?: boolean;
+}
+
+/**
 A photo message.
 Subtype of {@link MessageContent}.
 */
@@ -10458,7 +10524,7 @@ Photo caption.
 */
 	caption: FormattedText;
 	/**
-True, if caption must be shown above the photo; otherwise, caption must be shown below the photo.
+True, if the caption must be shown above the photo; otherwise, the caption must be shown below the photo.
 */
 	show_caption_above_media?: boolean;
 	/**
@@ -10502,7 +10568,7 @@ Video caption.
 */
 	caption: FormattedText;
 	/**
-True, if caption must be shown above the video; otherwise, caption must be shown below the video.
+True, if the caption must be shown above the video; otherwise, the caption must be shown below the video.
 */
 	show_caption_above_media?: boolean;
 	/**
@@ -10772,9 +10838,13 @@ The identifier of the message with the receipt, after the product has been purch
 */
 	receipt_message_id: number;
 	/**
-Extended media attached to the invoice; may be null.
+Extended media attached to the invoice; may be null if none.
 */
-	extended_media: MessageExtendedMedia;
+	paid_media: PaidMedia;
+	/**
+Extended media caption; may be null if none.
+*/
+	paid_media_caption: FormattedText;
 }
 
 /**
@@ -11335,7 +11405,8 @@ The gift code.
 }
 
 /**
-A Telegram Premium giveaway was created for the chat.
+A Telegram Premium giveaway was created for the chat. Use telegramPaymentPurposePremiumGiveaway or
+storePaymentPurposePremiumGiveaway to create a giveaway.
 Subtype of {@link MessageContent}.
 */
 export interface MessagePremiumGiveawayCreated {
@@ -11814,6 +11885,62 @@ Thumbnail height, usually shouldn't exceed 320. Use 0 if unknown.
 }
 
 /**
+Describes type of paid media to sent.
+Subtype of {@link InputPaidMediaType}.
+*/
+export interface InputPaidMediaTypePhoto {
+	'@type': 'inputPaidMediaTypePhoto';
+
+}
+
+/**
+The media is a video.
+Subtype of {@link InputPaidMediaType}.
+*/
+export interface InputPaidMediaTypeVideo {
+	'@type': 'inputPaidMediaTypeVideo';
+	/**
+Duration of the video, in seconds.
+*/
+	duration: number;
+	/**
+True, if the video is supposed to be streamed.
+*/
+	supports_streaming?: boolean;
+}
+
+/**
+Describes a paid media to be sent.
+*/
+export interface InputPaidMedia {
+	'@type': 'inputPaidMedia';
+	/**
+Type of the media.
+*/
+	type: InputPaidMediaType;
+	/**
+Photo or video to be sent.
+*/
+	media: InputFile;
+	/**
+Media thumbnail; pass null to skip thumbnail uploading.
+*/
+	thumbnail: InputThumbnail;
+	/**
+File identifiers of the stickers added to the media, if applicable.
+*/
+	added_sticker_file_ids: number[];
+	/**
+Media width.
+*/
+	width: number;
+	/**
+Media height.
+*/
+	height: number;
+}
+
+/**
 Contains information about the time when a scheduled message will be sent.
 Subtype of {@link MessageSchedulingState}.
 */
@@ -11901,7 +12028,7 @@ Pass true to get a fake message instead of actually sending them.
 
 /**
 Options to be used when a message content is copied without reference to the original sender. Service messages, messages
-with messageInvoice, messagePremiumGiveaway, or messagePremiumGiveawayWinners content can't be copied.
+with messageInvoice, messagePaidMedia, messagePremiumGiveaway, or messagePremiumGiveawayWinners content can't be copied.
 */
 export interface MessageCopyOptions {
 	'@type': 'messageCopyOptions';
@@ -11982,8 +12109,8 @@ Animation caption; pass null to use an empty caption; 0-getOption("message_capti
 */
 	caption: FormattedText;
 	/**
-True, if caption must be shown above the animation; otherwise, caption must be shown below the animation; not supported
-in secret chats.
+True, if the caption must be shown above the animation; otherwise, the caption must be shown below the animation; not
+supported in secret chats.
 */
 	show_caption_above_media?: boolean;
 	/**
@@ -12050,6 +12177,31 @@ Document caption; pass null to use an empty caption; 0-getOption("message_captio
 }
 
 /**
+A message with paid media; can be used only in channel chats with supergroupFullInfo.has_paid_media_allowed.
+Subtype of {@link InputMessageContent}.
+*/
+export interface InputMessagePaidMedia {
+	'@type': 'inputMessagePaidMedia';
+	/**
+The number of stars that must be paid to see the media; 1-getOption("paid_media_message_star_count_max").
+*/
+	star_count: number;
+	/**
+The content of the paid media.
+*/
+	paid_media: InputPaidMedia[];
+	/**
+Message caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
+*/
+	caption: FormattedText;
+	/**
+True, if the caption must be shown above the video; otherwise, the caption must be shown below the video; not supported
+in secret chats.
+*/
+	show_caption_above_media?: boolean;
+}
+
+/**
 A photo message.
 Subtype of {@link InputMessageContent}.
 */
@@ -12082,8 +12234,8 @@ Photo caption; pass null to use an empty caption; 0-getOption("message_caption_l
 */
 	caption: FormattedText;
 	/**
-True, if caption must be shown above the photo; otherwise, caption must be shown below the photo; not supported in
-secret chats.
+True, if the caption must be shown above the photo; otherwise, the caption must be shown below the photo; not supported
+in secret chats.
 */
 	show_caption_above_media?: boolean;
 	/**
@@ -12163,8 +12315,8 @@ Video caption; pass null to use an empty caption; 0-getOption("message_caption_l
 */
 	caption: FormattedText;
 	/**
-True, if caption must be shown above the video; otherwise, caption must be shown below the video; not supported in
-secret chats.
+True, if the caption must be shown above the video; otherwise, the caption must be shown below the video; not supported
+in secret chats.
 */
 	show_caption_above_media?: boolean;
 	/**
@@ -12369,10 +12521,13 @@ directly from forwards of the invoice message.
 */
 	start_parameter: string;
 	/**
-The content of extended media attached to the invoice. The content of the message to be sent. Must be one of the
-following types: inputMessagePhoto, inputMessageVideo.
+The content of paid media attached to the invoice; pass null if none.
 */
-	extended_media_content: InputMessageContent;
+	paid_media: InputPaidMedia;
+	/**
+Paid media caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
+*/
+	paid_media_caption: FormattedText;
 }
 
 /**
@@ -14355,8 +14510,7 @@ Subtype of {@link ResendCodeReason}.
 export interface ResendCodeReasonVerificationFailed {
 	'@type': 'resendCodeReasonVerificationFailed';
 	/**
-Cause of the verification failure, for example, PLAY_SERVICES_NOT_AVAILABLE, APNS_RECEIVE_TIMEOUT, APNS_INIT_FAILED,
-etc.
+Cause of the verification failure, for example, PLAY_SERVICES_NOT_AVAILABLE, APNS_RECEIVE_TIMEOUT, or APNS_INIT_FAILED.
 */
 	error_message: string;
 }
@@ -17840,6 +17994,15 @@ export interface PremiumFeatureBusiness {
 }
 
 /**
+The ability to use all available message effects.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureMessageEffects {
+	'@type': 'premiumFeatureMessageEffects';
+
+}
+
+/**
 Describes a feature available to Business user accounts.
 Subtype of {@link BusinessFeature}.
 */
@@ -19179,6 +19342,22 @@ export interface PushMessageContentLocation {
 True, if the location is live.
 */
 	is_live?: boolean;
+	/**
+True, if the message is a pinned message with the specified content.
+*/
+	is_pinned?: boolean;
+}
+
+/**
+A message with paid media.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentPaidMedia {
+	'@type': 'pushMessageContentPaidMedia';
+	/**
+Number of stars needed to buy access to the media in the message; 0 for pinned message.
+*/
+	star_count: number;
 	/**
 True, if the message is a pinned message with the specified content.
 */
@@ -21164,6 +21343,10 @@ Username of the bot.
 URL to be passed to getWebAppUrl.
 */
 	url: string;
+	/**
+True, if the Web App must be opened in a compact mode instead of a full-size mode.
+*/
+	is_compact?: boolean;
 }
 
 /**
@@ -21317,6 +21500,10 @@ Short name of the Web App.
 Start parameter to be passed to getWebAppLinkUrl.
 */
 	start_parameter: string;
+	/**
+True, if the Web App must be opened in a compact mode instead of a full-size mode.
+*/
+	is_compact?: boolean;
 }
 
 /**
@@ -24613,10 +24800,15 @@ Unique identifier for the verification process.
 */
 	verification_id: number;
 	/**
-Unique nonce for the classic Play Integrity verification (https://developer.android.com/google/play/integrity/classic)
-for Android, or a unique string to compare with verify_nonce field from a push notification for iOS.
+Unique base64url-encoded nonce for the classic Play Integrity verification
+(https://developer.android.com/google/play/integrity/classic) for Android, or a unique string to compare with
+verify_nonce field from a push notification for iOS.
 */
 	nonce: string;
+	/**
+Cloud project number to pass to the Play Integrity API on Android.
+*/
+	cloud_project_number: string;
 }
 
 /**
@@ -26044,6 +26236,10 @@ export type AuthorizationState =
 	| AuthorizationStateClosing
 	| AuthorizationStateClosed;
 
+export type FirebaseDeviceVerificationParameters =
+	| FirebaseDeviceVerificationParametersSafetyNet
+	| FirebaseDeviceVerificationParametersPlayIntegrity;
+
 export type InputFile =
 	| InputFileId
 	| InputFileRemote
@@ -26114,7 +26310,8 @@ export type StarTransactionPartner =
 	| StarTransactionPartnerAppStore
 	| StarTransactionPartnerGooglePlay
 	| StarTransactionPartnerFragment
-	| StarTransactionPartnerUser
+	| StarTransactionPartnerTelegramAds
+	| StarTransactionPartnerBot
 	| StarTransactionPartnerChannel
 	| StarTransactionPartnerUnsupported;
 
@@ -26388,11 +26585,11 @@ export type InputInvoice =
 	| InputInvoiceName
 	| InputInvoiceTelegram;
 
-export type MessageExtendedMedia =
-	| MessageExtendedMediaPreview
-	| MessageExtendedMediaPhoto
-	| MessageExtendedMediaVideo
-	| MessageExtendedMediaUnsupported;
+export type PaidMedia =
+	| PaidMediaPreview
+	| PaidMediaPhoto
+	| PaidMediaVideo
+	| PaidMediaUnsupported;
 
 export type PassportElementType =
 	| PassportElementTypePersonalDetails
@@ -26466,6 +26663,7 @@ export type MessageContent =
 	| MessageAnimation
 	| MessageAudio
 	| MessageDocument
+	| MessagePaidMedia
 	| MessagePhoto
 	| MessageSticker
 	| MessageVideo
@@ -26556,6 +26754,10 @@ export type TextEntityType =
 	| TextEntityTypeCustomEmoji
 	| TextEntityTypeMediaTimestamp;
 
+export type InputPaidMediaType =
+	| InputPaidMediaTypePhoto
+	| InputPaidMediaTypeVideo;
+
 export type MessageSchedulingState =
 	| MessageSchedulingStateSendAtDate
 	| MessageSchedulingStateSendWhenOnline;
@@ -26569,6 +26771,7 @@ export type InputMessageContent =
 	| InputMessageAnimation
 	| InputMessageAudio
 	| InputMessageDocument
+	| InputMessagePaidMedia
 	| InputMessagePhoto
 	| InputMessageSticker
 	| InputMessageVideo
@@ -26883,7 +27086,8 @@ export type PremiumFeature =
 	| PremiumFeatureSavedMessagesTags
 	| PremiumFeatureMessagePrivacy
 	| PremiumFeatureLastSeenTimes
-	| PremiumFeatureBusiness;
+	| PremiumFeatureBusiness
+	| PremiumFeatureMessageEffects;
 
 export type BusinessFeature =
 	| BusinessFeatureLocation
@@ -27005,6 +27209,7 @@ export type PushMessageContent =
 	| PushMessageContentGameScore
 	| PushMessageContentInvoice
 	| PushMessageContentLocation
+	| PushMessageContentPaidMedia
 	| PushMessageContentPhoto
 	| PushMessageContentPoll
 	| PushMessageContentPremiumGiftCode
@@ -30109,8 +30314,8 @@ New message content caption; 0-getOption("message_caption_length_max") character
 */
 	caption: FormattedText;
 	/**
-Pass true to show the caption above the media; otherwise, caption will be shown below the media. Can be true only for
-animation, photo, and video messages.
+Pass true to show the caption above the media; otherwise, the caption will be shown below the media. Can be true only
+for animation, photo, and video messages.
 */
 	show_caption_above_media?: boolean;
 }
@@ -30231,8 +30436,8 @@ New message content caption; pass null to remove caption; 0-getOption("message_c
 */
 	caption: FormattedText;
 	/**
-Pass true to show the caption above the media; otherwise, caption will be shown below the media. Can be true only for
-animation, photo, and video messages.
+Pass true to show the caption above the media; otherwise, the caption will be shown below the media. Can be true only
+for animation, photo, and video messages.
 */
 	show_caption_above_media?: boolean;
 }
@@ -30502,8 +30707,8 @@ New message content caption; pass null to remove caption; 0-getOption("message_c
 */
 	caption: FormattedText;
 	/**
-Pass true to show the caption above the media; otherwise, caption will be shown below the media. Can be true only for
-animation, photo, and video messages.
+Pass true to show the caption above the media; otherwise, the caption will be shown below the media. Can be true only
+for animation, photo, and video messages.
 */
 	show_caption_above_media?: boolean;
 }
@@ -37849,7 +38054,7 @@ export interface GetTimeZones {
 
 /**
 Returns an invoice payment form. This method must be called when the user presses inline button of the type
-inlineKeyboardButtonTypeBuy.
+inlineKeyboardButtonTypeBuy, or wants to buy access to media in a messagePaidMedia message.
 Request type for {@link Tdjson#getPaymentForm}.
 */
 export interface GetPaymentForm {
@@ -38553,8 +38758,8 @@ Pass true if a dark theme is used by the application.
 }
 
 /**
-Returns URL for chat revenue withdrawal; requires owner privileges in the chat. Currently, this method can be used only
-for channels if supergroupFullInfo.can_get_revenue_statistics == true and getOption("can_withdraw_chat_revenue").
+Returns a URL for chat revenue withdrawal; requires owner privileges in the chat. Currently, this method can be used
+only for channels if supergroupFullInfo.can_get_revenue_statistics == true and getOption("can_withdraw_chat_revenue").
 Request type for {@link Tdjson#getChatRevenueWithdrawalUrl}.
 */
 export interface GetChatRevenueWithdrawalUrl {
@@ -38597,8 +38802,8 @@ Request type for {@link Tdjson#getStarRevenueStatistics}.
 export interface GetStarRevenueStatistics {
 	'@type': 'getStarRevenueStatistics';
 	/**
-Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of a channel chat with
-supergroupFullInfo.can_get_revenue_statistics == true.
+Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of an owned channel
+chat.
 */
 	owner_id: MessageSender;
 	/**
@@ -38608,14 +38813,14 @@ Pass true if a dark theme is used by the application.
 }
 
 /**
-Returns URL for Telegram star withdrawal.
+Returns a URL for Telegram star withdrawal.
 Request type for {@link Tdjson#getStarWithdrawalUrl}.
 */
 export interface GetStarWithdrawalUrl {
 	'@type': 'getStarWithdrawalUrl';
 	/**
-Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of a channel chat with
-supergroupFullInfo.can_get_revenue_statistics == true.
+Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of an owned channel
+chat.
 */
 	owner_id: MessageSender;
 	/**
@@ -38626,6 +38831,20 @@ The number of Telegram stars to withdraw. Must be at least getOption("star_withd
 The 2-step verification password of the current user.
 */
 	password: string;
+}
+
+/**
+Returns a URL for a Telegram Ad platform account that can be used to set up advertisements for the chat paid in the
+owned Telegram stars.
+Request type for {@link Tdjson#getStarAdAccountUrl}.
+*/
+export interface GetStarAdAccountUrl {
+	'@type': 'getStarAdAccountUrl';
+	/**
+Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of an owned channel
+chat.
+*/
+	owner_id: MessageSender;
 }
 
 /**
@@ -40954,6 +41173,7 @@ export type Request =
 	| GetChatRevenueTransactions
 	| GetStarRevenueStatistics
 	| GetStarWithdrawalUrl
+	| GetStarAdAccountUrl
 	| GetChatStatistics
 	| GetMessageStatistics
 	| GetMessagePublicForwards
@@ -47306,7 +47526,7 @@ Returns the list of supported time zones.
 
 	/**
 Returns an invoice payment form. This method must be called when the user presses inline button of the type
-inlineKeyboardButtonTypeBuy.
+inlineKeyboardButtonTypeBuy, or wants to buy access to media in a messagePaidMedia message.
 */
 	async getPaymentForm(options: Omit<GetPaymentForm, '@type'>): Promise<PaymentForm> {
 		return this._request({
@@ -47806,8 +48026,8 @@ supergroupFullInfo.can_get_revenue_statistics == true.
 	}
 
 	/**
-Returns URL for chat revenue withdrawal; requires owner privileges in the chat. Currently, this method can be used only
-for channels if supergroupFullInfo.can_get_revenue_statistics == true and getOption("can_withdraw_chat_revenue").
+Returns a URL for chat revenue withdrawal; requires owner privileges in the chat. Currently, this method can be used
+only for channels if supergroupFullInfo.can_get_revenue_statistics == true and getOption("can_withdraw_chat_revenue").
 */
 	async getChatRevenueWithdrawalUrl(options: Omit<GetChatRevenueWithdrawalUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
@@ -47838,12 +48058,23 @@ Returns detailed Telegram star revenue statistics.
 	}
 
 	/**
-Returns URL for Telegram star withdrawal.
+Returns a URL for Telegram star withdrawal.
 */
 	async getStarWithdrawalUrl(options: Omit<GetStarWithdrawalUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getStarWithdrawalUrl',
+		});
+	}
+
+	/**
+Returns a URL for a Telegram Ad platform account that can be used to set up advertisements for the chat paid in the
+owned Telegram stars.
+*/
+	async getStarAdAccountUrl(options: Omit<GetStarAdAccountUrl, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getStarAdAccountUrl',
 		});
 	}
 
