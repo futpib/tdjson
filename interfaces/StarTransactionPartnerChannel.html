@@ -25,7 +25,7 @@ Subtype of <a href="../types/StarTransactionPartner.html" class="tsd-kind-type-a
 <ul class="tsd-hierarchy">
 <li><span class="target">StarTransactionPartnerChannel</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L2777">tdjson.ts:2777</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L2817">tdjson.ts:2817</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -35,6 +35,8 @@ Subtype of <a href="../types/StarTransactionPartner.html" class="tsd-kind-type-a
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="StarTransactionPartnerChannel.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
 <a href="StarTransactionPartnerChannel.html#chat_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a>
+<a href="StarTransactionPartnerChannel.html#media" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>media</span></a>
+<a href="StarTransactionPartnerChannel.html#paid_media_message_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>paid_<wbr/>media_<wbr/>message_<wbr/>id</span></a>
 </div></section></div></details></section></section>
 <section class="tsd-panel-group tsd-member-group">
 <h2>Properties</h2>
@@ -42,7 +44,7 @@ Subtype of <a href="../types/StarTransactionPartner.html" class="tsd-kind-type-a
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;starTransactionPartnerChannel&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L2778">tdjson.ts:2778</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L2818">tdjson.ts:2818</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="chat_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>chat_<wbr/>id</span><a href="#chat_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">chat_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -50,7 +52,23 @@ Subtype of <a href="../types/StarTransactionPartner.html" class="tsd-kind-type-a
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L2782">tdjson.ts:2782</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L2822">tdjson.ts:2822</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="media" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>media</span><a href="#media" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">media</span><span class="tsd-signature-symbol">:</span> <a href="../types/PaidMedia.html" class="tsd-signature-type tsd-kind-type-alias">PaidMedia</a><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>Information about the bought media.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L2830">tdjson.ts:2830</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="paid_media_message_id" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>paid_<wbr/>media_<wbr/>message_<wbr/>id</span><a href="#paid_media_message_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">paid_<wbr/>media_<wbr/>message_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-comment tsd-typography"><p>Identifier of the corresponding message with paid media; can be an identifier of a deleted message.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L2826">tdjson.ts:2826</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -71,7 +89,9 @@ Subtype of <a href="../types/StarTransactionPartner.html" class="tsd-kind-type-a
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
-<li><a href="#chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a></li></ul></div></details></div>
+<li><a href="#chat_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>chat_<wbr/>id</span></a></li>
+<li><a href="#media" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>media</span></a></li>
+<li><a href="#paid_media_message_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>paid_<wbr/>media_<wbr/>message_<wbr/>id</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">

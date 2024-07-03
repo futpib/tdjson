@@ -26,7 +26,7 @@ Subtype of <a href="../types/Update.html" class="tsd-kind-type-alias">Update</a>
 <ul class="tsd-hierarchy">
 <li><span class="target">UpdateAppVerificationRequired</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L24609">tdjson.ts:24609</a></li></ul></aside>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L24796">tdjson.ts:24796</a></li></ul></aside>
 <section class="tsd-panel-group tsd-index-group">
 <section class="tsd-panel tsd-index-panel">
 <details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
@@ -35,6 +35,7 @@ Subtype of <a href="../types/Update.html" class="tsd-kind-type-alias">Update</a>
 <section class="tsd-index-section">
 <h3 class="tsd-index-heading">Properties</h3>
 <div class="tsd-index-list"><a href="UpdateAppVerificationRequired.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
+<a href="UpdateAppVerificationRequired.html#cloud_project_number" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>cloud_<wbr/>project_<wbr/>number</span></a>
 <a href="UpdateAppVerificationRequired.html#nonce" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>nonce</span></a>
 <a href="UpdateAppVerificationRequired.html#verification_id" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>verification_<wbr/>id</span></a>
 </div></section></div></details></section></section>
@@ -44,16 +45,25 @@ Subtype of <a href="../types/Update.html" class="tsd-kind-type-alias">Update</a>
 <h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;updateApplicationVerificationRequired&quot;</span></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L24610">tdjson.ts:24610</a></li></ul></aside></section>
-<section class="tsd-panel tsd-member"><a id="nonce" class="tsd-anchor"></a>
-<h3 class="tsd-anchor-link"><span>nonce</span><a href="#nonce" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
-<div class="tsd-signature"><span class="tsd-kind-property">nonce</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
-<div class="tsd-comment tsd-typography"><p>Unique nonce for the classic Play Integrity verification (<a href="https://developer.android.com/google/play/integrity/classic">https://developer.android.com/google/play/integrity/classic</a>)
-for Android, or a unique string to compare with verify_nonce field from a push notification for iOS.</p>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L24797">tdjson.ts:24797</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="cloud_project_number" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>cloud_<wbr/>project_<wbr/>number</span><a href="#cloud_project_number" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">cloud_<wbr/>project_<wbr/>number</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>Cloud project number to pass to the Play Integrity API on Android.</p>
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L24619">tdjson.ts:24619</a></li></ul></aside></section>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L24811">tdjson.ts:24811</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="nonce" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>nonce</span><a href="#nonce" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">nonce</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">string</span></div>
+<div class="tsd-comment tsd-typography"><p>Unique base64url-encoded nonce for the classic Play Integrity verification
+(<a href="https://developer.android.com/google/play/integrity/classic">https://developer.android.com/google/play/integrity/classic</a>) for Android, or a unique string to compare with
+verify_nonce field from a push notification for iOS.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L24807">tdjson.ts:24807</a></li></ul></aside></section>
 <section class="tsd-panel tsd-member"><a id="verification_id" class="tsd-anchor"></a>
 <h3 class="tsd-anchor-link"><span>verification_<wbr/>id</span><a href="#verification_id" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
 <div class="tsd-signature"><span class="tsd-kind-property">verification_<wbr/>id</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
@@ -61,7 +71,7 @@ for Android, or a unique string to compare with verify_nonce field from a push n
 </div>
 <div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L24614">tdjson.ts:24614</a></li></ul></aside></section></section></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L24801">tdjson.ts:24801</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -82,6 +92,7 @@ for Android, or a unique string to compare with verify_nonce field from a push n
 <div class="tsd-accordion-details">
 <ul>
 <li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
+<li><a href="#cloud_project_number" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>cloud_<wbr/>project_<wbr/>number</span></a></li>
 <li><a href="#nonce" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>nonce</span></a></li>
 <li><a href="#verification_id" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>verification_<wbr/>id</span></a></li></ul></div></details></div>
 <div class="site-menu">

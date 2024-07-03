@@ -1,4 +1,4 @@
-<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>MessageExtendedMedia | tdjson</title><meta name="description" content="Documentation for tdjson"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
+<!DOCTYPE html><html class="default" lang="en"><head><meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>InputMessagePaidMedia | tdjson</title><meta name="description" content="Documentation for tdjson"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="../assets/style.css"/><link rel="stylesheet" href="../assets/highlight.css"/><script defer src="../assets/main.js"></script><script async src="../assets/search.js" id="tsd-search-script"></script><script async src="../assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os"</script><header class="tsd-page-toolbar">
 <div class="tsd-toolbar-contents container">
 <div class="table-cell" id="tsd-search" data-base="..">
 <div class="field"><label for="tsd-search-field" class="tsd-widget tsd-toolbar-icon search no-caption"><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-search"></use></svg></label><input type="text" id="tsd-search-field" aria-label="Search"/></div>
@@ -13,11 +13,72 @@
 <div class="tsd-page-title">
 <ul class="tsd-breadcrumb">
 <li><a href="../modules.html">tdjson</a></li>
-<li><a href="MessageExtendedMedia.html">MessageExtendedMedia</a></li></ul>
-<h1>Type alias MessageExtendedMedia</h1></div>
-<div class="tsd-signature"><span class="tsd-kind-type-alias">Message<wbr/>Extended<wbr/>Media</span><span class="tsd-signature-symbol">:</span> <a href="../interfaces/MessageExtendedMediaPreview.html" class="tsd-signature-type tsd-kind-interface">MessageExtendedMediaPreview</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/MessageExtendedMediaPhoto.html" class="tsd-signature-type tsd-kind-interface">MessageExtendedMediaPhoto</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/MessageExtendedMediaVideo.html" class="tsd-signature-type tsd-kind-interface">MessageExtendedMediaVideo</a><span class="tsd-signature-symbol"> | </span><a href="../interfaces/MessageExtendedMediaUnsupported.html" class="tsd-signature-type tsd-kind-interface">MessageExtendedMediaUnsupported</a></div><aside class="tsd-sources">
+<li><a href="InputMessagePaidMedia.html">InputMessagePaidMedia</a></li></ul>
+<h1>Interface InputMessagePaidMedia</h1></div>
+<section class="tsd-panel tsd-comment">
+<div class="tsd-comment tsd-typography"><p>A message with paid media; can be used only in channel chats with supergroupFullInfo.has_paid_media_allowed.
+Subtype of <a href="../types/InputMessageContent.html" class="tsd-kind-type-alias">InputMessageContent</a>.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div></section>
+<section class="tsd-panel tsd-hierarchy">
+<h4>Hierarchy</h4>
+<ul class="tsd-hierarchy">
+<li><span class="target">InputMessagePaidMedia</span></li></ul></section><aside class="tsd-sources">
 <ul>
-<li>Defined in <a href="https://github.com/futpib/tdjson/blob/dd5f674/src/tdjson.ts#L26391">tdjson.ts:26391</a></li></ul></aside></div>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L12183">tdjson.ts:12183</a></li></ul></aside>
+<section class="tsd-panel-group tsd-index-group">
+<section class="tsd-panel tsd-index-panel">
+<details class="tsd-index-content tsd-index-accordion" open><summary class="tsd-accordion-summary tsd-index-summary">
+<h5 class="tsd-index-heading uppercase" role="button" aria-expanded="false" tabIndex=0><svg width="16" height="16" viewBox="0 0 16 16" fill="none"><use href="#icon-chevronSmall"></use></svg> Index</h5></summary>
+<div class="tsd-accordion-details">
+<section class="tsd-index-section">
+<h3 class="tsd-index-heading">Properties</h3>
+<div class="tsd-index-list"><a href="InputMessagePaidMedia.html#_type" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a>
+<a href="InputMessagePaidMedia.html#caption" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>caption</span></a>
+<a href="InputMessagePaidMedia.html#paid_media" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>paid_<wbr/>media</span></a>
+<a href="InputMessagePaidMedia.html#show_caption_above_media" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>show_<wbr/>caption_<wbr/>above_<wbr/>media?</span></a>
+<a href="InputMessagePaidMedia.html#star_count" class="tsd-index-link"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>star_<wbr/>count</span></a>
+</div></section></div></details></section></section>
+<section class="tsd-panel-group tsd-member-group">
+<h2>Properties</h2>
+<section class="tsd-panel tsd-member"><a id="_type" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>@type</span><a href="#_type" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">@type</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">&quot;inputMessagePaidMedia&quot;</span></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L12184">tdjson.ts:12184</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="caption" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>caption</span><a href="#caption" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">caption</span><span class="tsd-signature-symbol">:</span> <a href="FormattedText.html" class="tsd-signature-type tsd-kind-interface">FormattedText</a></div>
+<div class="tsd-comment tsd-typography"><p>Message caption; pass null to use an empty caption; 0-getOption(&quot;message_caption_length_max&quot;) characters.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L12196">tdjson.ts:12196</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="paid_media" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>paid_<wbr/>media</span><a href="#paid_media" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">paid_<wbr/>media</span><span class="tsd-signature-symbol">:</span> <a href="InputPaidMedia.html" class="tsd-signature-type tsd-kind-interface">InputPaidMedia</a><span class="tsd-signature-symbol">[]</span></div>
+<div class="tsd-comment tsd-typography"><p>The content of the paid media.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L12192">tdjson.ts:12192</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="show_caption_above_media" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><code class="tsd-tag ts-flagOptional">Optional</code> <span>show_<wbr/>caption_<wbr/>above_<wbr/>media</span><a href="#show_caption_above_media" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">show_<wbr/>caption_<wbr/>above_<wbr/>media</span><span class="tsd-signature-symbol">?:</span> <span class="tsd-signature-type">boolean</span></div>
+<div class="tsd-comment tsd-typography"><p>True, if the caption must be shown above the video; otherwise, the caption must be shown below the video; not supported
+in secret chats.</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L12201">tdjson.ts:12201</a></li></ul></aside></section>
+<section class="tsd-panel tsd-member"><a id="star_count" class="tsd-anchor"></a>
+<h3 class="tsd-anchor-link"><span>star_<wbr/>count</span><a href="#star_count" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24"><use href="#icon-anchor"></use></svg></a></h3>
+<div class="tsd-signature"><span class="tsd-kind-property">star_<wbr/>count</span><span class="tsd-signature-symbol">:</span> <span class="tsd-signature-type">number</span></div>
+<div class="tsd-comment tsd-typography"><p>The number of stars that must be paid to see the media; 1-getOption(&quot;paid_media_message_star_count_max&quot;).</p>
+</div>
+<div class="tsd-comment tsd-typography"></div><aside class="tsd-sources">
+<ul>
+<li>Defined in <a href="https://github.com/futpib/tdjson/blob/fe251ad/src/tdjson.ts#L12188">tdjson.ts:12188</a></li></ul></aside></section></section></div>
 <div class="col-sidebar">
 <div class="page-menu">
 <div class="tsd-navigation settings">
@@ -32,31 +93,40 @@
 <li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li>
 <li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></form></div>
 <div class="tsd-theme-toggle">
-<h4 class="uppercase">Theme</h4><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div></div>
+<h4 class="uppercase">Theme</h4><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div>
+<details open class="tsd-index-accordion tsd-page-navigation"><summary class="tsd-accordion-summary">
+<h3><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><use href="#icon-chevronDown"></use></svg>On This Page</h3></summary>
+<div class="tsd-accordion-details">
+<ul>
+<li><a href="#_type" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>@type</span></a></li>
+<li><a href="#caption" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>caption</span></a></li>
+<li><a href="#paid_media" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>paid_<wbr/>media</span></a></li>
+<li><a href="#show_caption_above_media" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>show_<wbr/>caption_<wbr/>above_<wbr/>media</span></a></li>
+<li><a href="#star_count" class=""><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1024"></use></svg><span>star_<wbr/>count</span></a></li></ul></div></details></div>
 <div class="site-menu">
 <nav class="tsd-navigation"><a href="../modules.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-1"></use></svg><span>tdjson</span></a>
 <ul class="tsd-small-nested-navigation" id="tsd-nav-container" data-base="..">
 <li><a href="../classes/Tdjson.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-128"></use></svg>Tdjson</a></li>
-<li><a href="../interfaces/AccentColor.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccentColor</a></li>
-<li><a href="../interfaces/AcceptCall.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptCall</a></li>
-<li><a href="../interfaces/AcceptTermsOfService.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptTermsOfService</a></li>
-<li><a href="../interfaces/AccountTtl.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccountTtl</a></li>
-<li><a href="../interfaces/ActivateStoryStealthMode.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>ActivateStoryStealthMode</a></li>
-<li><a href="../interfaces/AddChatFolderByInviteLink.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatFolderByInviteLink</a></li>
-<li><a href="../interfaces/AddChatMember.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatMember</a></li>
-<li><a href="../interfaces/AddChatMembers.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatMembers</a></li>
-<li><a href="../interfaces/AddChatToList.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatToList</a></li>
-<li><a href="../interfaces/AddContact.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddContact</a></li>
-<li><a href="../interfaces/AddCustomServerLanguagePack.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddCustomServerLanguagePack</a></li>
-<li><a href="../interfaces/AddFavoriteSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddFavoriteSticker</a></li>
-<li><a href="../interfaces/AddFileToDownloads.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddFileToDownloads</a></li>
-<li><a href="../interfaces/AddLocalMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddLocalMessage</a></li>
-<li><a href="../interfaces/AddLogMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddLogMessage</a></li>
-<li><a href="../interfaces/AddMessageReaction.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddMessageReaction</a></li>
-<li><a href="../interfaces/AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
-<li><a href="../interfaces/AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
-<li><a href="../interfaces/AddQuickReplyShortcutInlineQueryResultMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutInlineQueryResultMessage</a></li>
-<li><a href="../interfaces/AddQuickReplyShortcutMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutMessage</a></li>
+<li><a href="AccentColor.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccentColor</a></li>
+<li><a href="AcceptCall.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptCall</a></li>
+<li><a href="AcceptTermsOfService.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AcceptTermsOfService</a></li>
+<li><a href="AccountTtl.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AccountTtl</a></li>
+<li><a href="ActivateStoryStealthMode.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>ActivateStoryStealthMode</a></li>
+<li><a href="AddChatFolderByInviteLink.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatFolderByInviteLink</a></li>
+<li><a href="AddChatMember.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatMember</a></li>
+<li><a href="AddChatMembers.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatMembers</a></li>
+<li><a href="AddChatToList.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddChatToList</a></li>
+<li><a href="AddContact.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddContact</a></li>
+<li><a href="AddCustomServerLanguagePack.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddCustomServerLanguagePack</a></li>
+<li><a href="AddFavoriteSticker.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddFavoriteSticker</a></li>
+<li><a href="AddFileToDownloads.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddFileToDownloads</a></li>
+<li><a href="AddLocalMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddLocalMessage</a></li>
+<li><a href="AddLogMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddLogMessage</a></li>
+<li><a href="AddMessageReaction.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddMessageReaction</a></li>
+<li><a href="AddNetworkStatistics.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddNetworkStatistics</a></li>
+<li><a href="AddProxy.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddProxy</a></li>
+<li><a href="AddQuickReplyShortcutInlineQueryResultMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutInlineQueryResultMessage</a></li>
+<li><a href="AddQuickReplyShortcutMessage.html"><svg class="tsd-kind-icon" viewBox="0 0 24 24"><use href="#icon-256"></use></svg>AddQuickReplyShortcutMessage</a></li>
 <li>Loading...</li></ul></nav></div></div></div>
 <div class="tsd-generator">
 <p>Generated using <a href="https://typedoc.org/" rel="noopener" target="_blank">TypeDoc</a></p></div>
