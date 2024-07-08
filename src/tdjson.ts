@@ -2437,9 +2437,9 @@ True, if the user can send animations, games, stickers, and dice and use inline 
 */
 	can_send_other_messages?: boolean;
 	/**
-True, if the user may add a web page preview to their messages.
+True, if the user may add a link preview to their messages.
 */
-	can_add_web_page_previews?: boolean;
+	can_add_link_previews?: boolean;
 	/**
 True, if the user can change the chat title, photo, and other settings.
 */
@@ -4253,6 +4253,10 @@ True, if the supergroup or channel revenue statistics are available.
 */
 	can_get_revenue_statistics?: boolean;
 	/**
+True, if the supergroup or channel Telegram Star revenue statistics are available.
+*/
+	can_get_star_revenue_statistics?: boolean;
+	/**
 True, if aggressive anti-spam checks can be enabled or disabled in the supergroup.
 */
 	can_toggle_aggressive_anti_spam?: boolean;
@@ -5136,8 +5140,8 @@ True, if chat members already viewed the message can be received through getMess
 */
 	can_get_viewers?: boolean;
 	/**
-True, if media timestamp links can be generated for media timestamp entities in the message text, caption or web page
-description through getMessageLink.
+True, if media timestamp links can be generated for media timestamp entities in the message text, caption or link
+preview description through getMessageLink.
 */
 	can_get_media_timestamp_links?: boolean;
 	/**
@@ -7529,7 +7533,34 @@ Photo of the chat; for bots only; may be null.
 }
 
 /**
-Describes a text object inside an instant-view web page.
+Describes theme settings.
+*/
+export interface ThemeSettings {
+	'@type': 'themeSettings';
+	/**
+Theme accent color in ARGB format.
+*/
+	accent_color: number;
+	/**
+The background to be used in chats; may be null.
+*/
+	background: Background;
+	/**
+The fill to be used as a background for outgoing messages.
+*/
+	outgoing_message_fill: BackgroundFill;
+	/**
+If true, the freeform gradient fill needs to be animated on every sent message.
+*/
+	animate_outgoing_message_fill?: boolean;
+	/**
+Accent color of outgoing messages in ARGB format.
+*/
+	outgoing_message_accent_color: number;
+}
+
+/**
+Describes a formatted text object.
 Subtype of {@link RichText}.
 */
 export interface RichTextPlain {
@@ -7709,7 +7740,7 @@ Height of a bounding box in which the image must be shown; 0 if unknown.
 }
 
 /**
-A reference to a richTexts object on the same web page.
+A reference to a richTexts object on the same page.
 Subtype of {@link RichText}.
 */
 export interface RichTextReference {
@@ -7741,7 +7772,7 @@ Anchor name.
 }
 
 /**
-A link to an anchor on the same web page.
+A link to an anchor on the same page.
 Subtype of {@link RichText}.
 */
 export interface RichTextAnchorLink {
@@ -7773,7 +7804,7 @@ Texts.
 }
 
 /**
-Contains a caption of an instant view web page block, consisting of a text and a trailing credit.
+Contains a caption of another block.
 */
 export interface PageBlockCaption {
 	'@type': 'pageBlockCaption';
@@ -7919,7 +7950,7 @@ Point in time (Unix timestamp) when the article was published; 0 if unknown.
 }
 
 /**
-Describes a block of an instant view web page.
+Describes a block of an instant view for a web page.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockTitle {
@@ -8214,7 +8245,7 @@ Subtype of {@link PageBlock}.
 export interface PageBlockEmbedded {
 	'@type': 'pageBlockEmbedded';
 	/**
-Web page URL, if available.
+URL of the embedded page, if available.
 */
 	url: string;
 	/**
@@ -8254,7 +8285,7 @@ Subtype of {@link PageBlock}.
 export interface PageBlockEmbeddedPost {
 	'@type': 'pageBlockEmbeddedPost';
 	/**
-Web page URL.
+URL of the embedded post.
 */
 	url: string;
 	/**
@@ -8429,7 +8460,7 @@ Describes an instant view page for a web page.
 export interface WebPageInstantView {
 	'@type': 'webPageInstantView';
 	/**
-Content of the web page.
+Content of the instant view page.
 */
 	page_blocks: PageBlock[];
 	/**
@@ -8445,8 +8476,7 @@ True, if the instant view must be shown from right to left.
 */
 	is_rtl?: boolean;
 	/**
-True, if the instant view contains the full page. A network request might be needed to get the full web page instant
-view.
+True, if the instant view contains the full page. A network request might be needed to get the full instant view.
 */
 	is_full?: boolean;
 	/**
@@ -8456,10 +8486,467 @@ An internal link to be opened to leave feedback about the instant view.
 }
 
 /**
+Describes a media from a link preview album.
+Subtype of {@link LinkPreviewAlbumMedia}.
+*/
+export interface LinkPreviewAlbumMediaPhoto {
+	'@type': 'linkPreviewAlbumMediaPhoto';
+	/**
+Photo description.
+*/
+	photo: Photo;
+}
+
+/**
+The media is a video.
+Subtype of {@link LinkPreviewAlbumMedia}.
+*/
+export interface LinkPreviewAlbumMediaVideo {
+	'@type': 'linkPreviewAlbumMediaVideo';
+	/**
+Video description.
+*/
+	video: Video;
+}
+
+/**
+Describes type of link preview.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeAlbum {
+	'@type': 'linkPreviewTypeAlbum';
+	/**
+The list of album media.
+*/
+	media: LinkPreviewAlbumMedia[];
+	/**
+Album caption.
+*/
+	caption: string;
+}
+
+/**
+The link is a link to an animation.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeAnimation {
+	'@type': 'linkPreviewTypeAnimation';
+	/**
+The animation.
+*/
+	animation: Animation;
+	/**
+Author of the animation.
+*/
+	author: string;
+}
+
+/**
+The link is a link to an app at App Store or Google Play.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeApp {
+	'@type': 'linkPreviewTypeApp';
+	/**
+Photo for the app.
+*/
+	photo: Photo;
+	/**
+Author of the app.
+*/
+	author: string;
+}
+
+/**
+The link is a link to a web site.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeArticle {
+	'@type': 'linkPreviewTypeArticle';
+	/**
+Article's main photo; may be null.
+*/
+	photo: Photo;
+	/**
+Author of the article.
+*/
+	author: string;
+}
+
+/**
+The link is a link to an audio.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeAudio {
+	'@type': 'linkPreviewTypeAudio';
+	/**
+URL of the audio; may be empty if none.
+*/
+	url: string;
+	/**
+MIME type of the audio file.
+*/
+	mime_type: string;
+	/**
+The audio description; may be null if unknown.
+*/
+	audio: Audio;
+	/**
+Duration of the audio, in seconds; 0 if unknown.
+*/
+	duration: number;
+	/**
+Author of the audio.
+*/
+	author: string;
+}
+
+/**
+The link is a link to a background. Link preview title and description are available only for filled backgrounds.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeBackground {
+	'@type': 'linkPreviewTypeBackground';
+	/**
+Document with the background; may be null for filled backgrounds.
+*/
+	document: Document;
+}
+
+/**
+The link is a link to boost a channel chat.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeChannelBoost {
+	'@type': 'linkPreviewTypeChannelBoost';
+	/**
+Photo of the chat; may be null.
+*/
+	photo: ChatPhoto;
+}
+
+/**
+The link is a link to a chat.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeChat {
+	'@type': 'linkPreviewTypeChat';
+	/**
+Type of the chat.
+*/
+	type: InviteLinkChatType;
+	/**
+Photo of the chat; may be null.
+*/
+	photo: ChatPhoto;
+	/**
+True, if the link only creates join request.
+*/
+	creates_join_request?: boolean;
+}
+
+/**
+The link is a link to a general file.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeDocument {
+	'@type': 'linkPreviewTypeDocument';
+	/**
+The document description.
+*/
+	document: Document;
+	/**
+Author of the document.
+*/
+	author: string;
+}
+
+/**
+The link is a link to an audio player.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeEmbeddedAudioPlayer {
+	'@type': 'linkPreviewTypeEmbeddedAudioPlayer';
+	/**
+URL of the external audio player.
+*/
+	url: string;
+	/**
+Duration of the audio, in seconds.
+*/
+	duration: number;
+	/**
+Author of the audio.
+*/
+	author: string;
+}
+
+/**
+The link is a link to a video player.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeEmbeddedVideoPlayer {
+	'@type': 'linkPreviewTypeEmbeddedVideoPlayer';
+	/**
+URL of the external video player.
+*/
+	url: string;
+	/**
+Duration of the video, in seconds.
+*/
+	duration: number;
+	/**
+Author of the video.
+*/
+	author: string;
+	/**
+Expected width of the preview.
+*/
+	width: number;
+	/**
+Expected height of the preview.
+*/
+	height: number;
+}
+
+/**
+The link is a link to an invoice.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeInvoice {
+	'@type': 'linkPreviewTypeInvoice';
+
+}
+
+/**
+The link is a link to a text or a poll Telegram message.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeMessage {
+	'@type': 'linkPreviewTypeMessage';
+
+}
+
+/**
+The link is a link to a photo.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypePhoto {
+	'@type': 'linkPreviewTypePhoto';
+	/**
+The photo.
+*/
+	photo: Photo;
+	/**
+Author of the photo.
+*/
+	author: string;
+}
+
+/**
+The link is a link to a Telegram Premium gift code.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypePremiumGiftCode {
+	'@type': 'linkPreviewTypePremiumGiftCode';
+
+}
+
+/**
+The link is a link to a shareable chat folder.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeShareableChatFolder {
+	'@type': 'linkPreviewTypeShareableChatFolder';
+
+}
+
+/**
+The link is a link to a sticker message.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeSticker {
+	'@type': 'linkPreviewTypeSticker';
+	/**
+The sticker.
+*/
+	sticker: Sticker;
+}
+
+/**
+The link is a link to a sticker set.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeStickerSet {
+	'@type': 'linkPreviewTypeStickerSet';
+	/**
+Up to 4 stickers from the sticker set.
+*/
+	stickers: Sticker[];
+}
+
+/**
+The link is a link to a story. Link preview description is unavailable.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeStory {
+	'@type': 'linkPreviewTypeStory';
+	/**
+The identifier of the chat that posted the story.
+*/
+	story_sender_chat_id: number;
+	/**
+Story identifier.
+*/
+	story_id: number;
+}
+
+/**
+The link is a link to boost a supergroup chat.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeSupergroupBoost {
+	'@type': 'linkPreviewTypeSupergroupBoost';
+	/**
+Photo of the chat; may be null.
+*/
+	photo: ChatPhoto;
+}
+
+/**
+The link is a link to a cloud theme. TDLib has no theme support yet.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeTheme {
+	'@type': 'linkPreviewTypeTheme';
+	/**
+The list of files with theme description.
+*/
+	documents: Document[];
+	/**
+Settings for the cloud theme.
+*/
+	settings: ThemeSettings;
+}
+
+/**
+The link preview type is unsupported yet.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeUnsupported {
+	'@type': 'linkPreviewTypeUnsupported';
+
+}
+
+/**
+The link is a link to a user.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeUser {
+	'@type': 'linkPreviewTypeUser';
+	/**
+Photo of the user; may be null if none.
+*/
+	photo: ChatPhoto;
+	/**
+True, if the user is a bot.
+*/
+	is_bot?: boolean;
+}
+
+/**
+The link is a link to a video.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeVideo {
+	'@type': 'linkPreviewTypeVideo';
+	/**
+URL of the video; may be empty if none.
+*/
+	url: string;
+	/**
+MIME type of the video file.
+*/
+	mime_type: string;
+	/**
+The video description; may be null if unknown.
+*/
+	video: Video;
+	/**
+Expected width of the preview.
+*/
+	width: number;
+	/**
+Expected height of the preview.
+*/
+	height: number;
+	/**
+Duration of the video, in seconds; 0 if unknown.
+*/
+	duration: number;
+	/**
+Author of the video.
+*/
+	author: string;
+}
+
+/**
+The link is a link to a video chat.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeVideoChat {
+	'@type': 'linkPreviewTypeVideoChat';
+	/**
+Photo of the chat with the video chat; may be null if none.
+*/
+	photo: ChatPhoto;
+	/**
+True, if the video chat is expected to be a live stream in a channel or a broadcast group.
+*/
+	is_live_stream?: boolean;
+}
+
+/**
+The link is a link to a video note message.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeVideoNote {
+	'@type': 'linkPreviewTypeVideoNote';
+	/**
+The video note.
+*/
+	video_note: VideoNote;
+}
+
+/**
+The link is a link to a voice note message.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeVoiceNote {
+	'@type': 'linkPreviewTypeVoiceNote';
+	/**
+The voice note.
+*/
+	voice_note: VoiceNote;
+}
+
+/**
+The link is a link to a Web App.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeWebApp {
+	'@type': 'linkPreviewTypeWebApp';
+	/**
+Web App photo.
+*/
+	photo: Photo;
+}
+
+/**
 Describes a link preview.
 */
-export interface WebPage {
-	'@type': 'webPage';
+export interface LinkPreview {
+	'@type': 'linkPreview';
 	/**
 Original URL of the link.
 */
@@ -8468,10 +8955,6 @@ Original URL of the link.
 URL to display.
 */
 	display_url: string;
-	/**
-Type of the web page. Can be: article, photo, audio, video, document, profile, app, or something else.
-*/
-	type: string;
 	/**
 Short name of the site (e.g., Google Docs, App Store).
 */
@@ -8485,33 +8968,9 @@ Describes a link preview.
 */
 	description: FormattedText;
 	/**
-Image representing the content; may be null.
+Type of the link preview.
 */
-	photo: Photo;
-	/**
-URL to show in the embedded preview.
-*/
-	embed_url: string;
-	/**
-MIME type of the embedded preview, (e.g., text/html or video/mp4).
-*/
-	embed_type: string;
-	/**
-Width of the embedded preview.
-*/
-	embed_width: number;
-	/**
-Height of the embedded preview.
-*/
-	embed_height: number;
-	/**
-Duration of the content, in seconds.
-*/
-	duration: number;
-	/**
-Author of the content.
-*/
-	author: string;
+	type: LinkPreviewType;
 	/**
 True, if size of media in the preview can be changed.
 */
@@ -8532,47 +8991,7 @@ text.
 */
 	show_above_text?: boolean;
 	/**
-Preview of the content as an animation, if available; may be null.
-*/
-	animation: Animation;
-	/**
-Preview of the content as an audio file, if available; may be null.
-*/
-	audio: Audio;
-	/**
-Preview of the content as a document, if available; may be null.
-*/
-	document: Document;
-	/**
-Preview of the content as a sticker for small WEBP files, if available; may be null.
-*/
-	sticker: Sticker;
-	/**
-Preview of the content as a video, if available; may be null.
-*/
-	video: Video;
-	/**
-Preview of the content as a video note, if available; may be null.
-*/
-	video_note: VideoNote;
-	/**
-Preview of the content as a voice note, if available; may be null.
-*/
-	voice_note: VoiceNote;
-	/**
-The identifier of the sender of the previewed story; 0 if none.
-*/
-	story_sender_chat_id: number;
-	/**
-The identifier of the previewed story; 0 if none.
-*/
-	story_id: number;
-	/**
-Up to 4 stickers from the sticker set available via the link.
-*/
-	stickers: Sticker[];
-	/**
-Version of web page instant view (currently, can be 1 or 2); 0 if none.
+Version of instant view (currently, can be 1 or 2) for the web page; 0 if none.
 */
 	instant_view_version: number;
 }
@@ -10418,7 +10837,7 @@ Text of the message.
 	/**
 A link preview attached to the message; may be null.
 */
-	web_page: WebPage;
+	link_preview: LinkPreview;
 	/**
 Options which were used for generation of the link preview; may be null if default options were used.
 */
@@ -11321,6 +11740,38 @@ Provider payment identifier.
 }
 
 /**
+A payment has been refunded.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePaymentRefunded {
+	'@type': 'messagePaymentRefunded';
+	/**
+Identifier of the previous owner of the Telegram stars that refunds them.
+*/
+	owner_id: MessageSender;
+	/**
+Currency for the price of the product.
+*/
+	currency: string;
+	/**
+Total price for the product, in the smallest units of the currency.
+*/
+	total_amount: number;
+	/**
+Invoice payload; only for bots.
+*/
+	invoice_payload: string;
+	/**
+Telegram payment identifier.
+*/
+	telegram_payment_charge_id: string;
+	/**
+Provider payment identifier.
+*/
+	provider_payment_charge_id: string;
+}
+
+/**
 Telegram Premium was gifted to the user.
 Subtype of {@link MessageContent}.
 */
@@ -11860,7 +12311,7 @@ export interface TextEntityTypeMediaTimestamp {
 	'@type': 'textEntityTypeMediaTimestamp';
 	/**
 Timestamp from which a video/audio/video note/voice note/story playing must start, in seconds. The media can be in the
-content or the web page preview of the current message, or in the same places in the replied message.
+content or the link preview of the current message, or in the same places in the replied message.
 */
 	media_timestamp: number;
 }
@@ -18851,33 +19302,6 @@ Identifier of the message with the background.
 }
 
 /**
-Describes theme settings.
-*/
-export interface ThemeSettings {
-	'@type': 'themeSettings';
-	/**
-Theme accent color in ARGB format.
-*/
-	accent_color: number;
-	/**
-The background to be used in chats; may be null.
-*/
-	background: Background;
-	/**
-The fill to be used as a background for outgoing messages.
-*/
-	outgoing_message_fill: BackgroundFill;
-	/**
-If true, the freeform gradient fill needs to be animated on every sent message.
-*/
-	animate_outgoing_message_fill?: boolean;
-	/**
-Accent color of outgoing messages in ARGB format.
-*/
-	outgoing_message_accent_color: number;
-}
-
-/**
 Describes a chat theme.
 */
 export interface ChatTheme {
@@ -21384,7 +21808,7 @@ Story identifier.
 }
 
 /**
-The link is a link to a theme. TDLib has no theme support yet.
+The link is a link to a cloud theme. TDLib has no theme support yet.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeTheme {
@@ -21545,7 +21969,7 @@ If found, the linked message; may be null.
 	message: Message;
 	/**
 Timestamp from which the video/audio/video note/voice note/story playing must start, in seconds; 0 if not specified. The
-media can be in the message content or in its web page preview.
+media can be in the message content or in its link preview.
 */
 	media_timestamp: number;
 	/**
@@ -26557,6 +26981,40 @@ export type PageBlock =
 	| PageBlockRelatedArticles
 	| PageBlockMap;
 
+export type LinkPreviewAlbumMedia =
+	| LinkPreviewAlbumMediaPhoto
+	| LinkPreviewAlbumMediaVideo;
+
+export type LinkPreviewType =
+	| LinkPreviewTypeAlbum
+	| LinkPreviewTypeAnimation
+	| LinkPreviewTypeApp
+	| LinkPreviewTypeArticle
+	| LinkPreviewTypeAudio
+	| LinkPreviewTypeBackground
+	| LinkPreviewTypeChannelBoost
+	| LinkPreviewTypeChat
+	| LinkPreviewTypeDocument
+	| LinkPreviewTypeEmbeddedAudioPlayer
+	| LinkPreviewTypeEmbeddedVideoPlayer
+	| LinkPreviewTypeInvoice
+	| LinkPreviewTypeMessage
+	| LinkPreviewTypePhoto
+	| LinkPreviewTypePremiumGiftCode
+	| LinkPreviewTypeShareableChatFolder
+	| LinkPreviewTypeSticker
+	| LinkPreviewTypeStickerSet
+	| LinkPreviewTypeStory
+	| LinkPreviewTypeSupergroupBoost
+	| LinkPreviewTypeTheme
+	| LinkPreviewTypeUnsupported
+	| LinkPreviewTypeUser
+	| LinkPreviewTypeVideo
+	| LinkPreviewTypeVideoChat
+	| LinkPreviewTypeVideoNote
+	| LinkPreviewTypeVoiceNote
+	| LinkPreviewTypeWebApp;
+
 export type CollectibleItemType =
 	| CollectibleItemTypeUsername
 	| CollectibleItemTypePhoneNumber;
@@ -26713,6 +27171,7 @@ export type MessageContent =
 	| MessageGameScore
 	| MessagePaymentSuccessful
 	| MessagePaymentSuccessfulBot
+	| MessagePaymentRefunded
 	| MessageGiftedPremium
 	| MessagePremiumGiftCode
 	| MessagePremiumGiveawayCreated
@@ -29737,7 +30196,7 @@ Identifier of the message.
 	message_id: number;
 	/**
 If not 0, timestamp from which the video/audio/video note/voice note/story playing must start, in seconds. The media can
-be in the message content or in its web page preview.
+be in the message content or in its link preview.
 */
 	media_timestamp: number;
 	/**
@@ -32395,7 +32854,7 @@ The link.
 
 /**
 Returns information about an action to be done when the current user clicks an external link. Don't use this method for
-links from secret chats if web page preview is disabled in secret chats.
+links from secret chats if link preview is disabled in secret chats.
 Request type for {@link Tdjson#getExternalLinkInfo}.
 */
 export interface GetExternalLinkInfo {
@@ -36736,10 +37195,10 @@ Hashtag to delete.
 /**
 Returns a link preview by the text of a message. Do not call this function too often. Returns a 404 error if the text
 has no link preview.
-Request type for {@link Tdjson#getWebPagePreview}.
+Request type for {@link Tdjson#getLinkPreview}.
 */
-export interface GetWebPagePreview {
-	'@type': 'getWebPagePreview';
+export interface GetLinkPreview {
+	'@type': 'getLinkPreview';
 	/**
 Message text with formatting.
 */
@@ -38802,8 +39261,8 @@ Request type for {@link Tdjson#getStarRevenueStatistics}.
 export interface GetStarRevenueStatistics {
 	'@type': 'getStarRevenueStatistics';
 	/**
-Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of an owned channel
-chat.
+Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of a channel chat with
+supergroupFullInfo.can_get_star_revenue_statistics == true.
 */
 	owner_id: MessageSender;
 	/**
@@ -39829,7 +40288,7 @@ export interface GetStarTransactions {
 	'@type': 'getStarTransactions';
 	/**
 Identifier of the owner of the Telegram stars; can be the identifier of the current user, identifier of an owned bot, or
-identifier of a channel chat with supergroupFullInfo.can_get_revenue_statistics == true.
+identifier of a channel chat with supergroupFullInfo.can_get_star_revenue_statistics == true.
 */
 	owner_id: MessageSender;
 	/**
@@ -41031,7 +41490,7 @@ export type Request =
 	| GetRecentInlineBots
 	| SearchHashtags
 	| RemoveRecentHashtag
-	| GetWebPagePreview
+	| GetLinkPreview
 	| GetWebPageInstantView
 	| SetProfilePhoto
 	| DeleteProfilePhoto
@@ -43931,7 +44390,7 @@ before authorization.
 
 	/**
 Returns information about an action to be done when the current user clicks an external link. Don't use this method for
-links from secret chats if web page preview is disabled in secret chats.
+links from secret chats if link preview is disabled in secret chats.
 */
 	async getExternalLinkInfo(options: Omit<GetExternalLinkInfo, '@type'>): Promise<LoginUrlInfo> {
 		return this._request({
@@ -46612,10 +47071,10 @@ Removes a hashtag from the list of recently used hashtags.
 Returns a link preview by the text of a message. Do not call this function too often. Returns a 404 error if the text
 has no link preview.
 */
-	async getWebPagePreview(options: Omit<GetWebPagePreview, '@type'>): Promise<WebPage> {
+	async getLinkPreview(options: Omit<GetLinkPreview, '@type'>): Promise<LinkPreview> {
 		return this._request({
 			...options,
-			'@type': 'getWebPagePreview',
+			'@type': 'getLinkPreview',
 		});
 	}
 
