@@ -4106,7 +4106,7 @@ supergroup or channel was received through getChatSimilarChats, getChatsToSendSt
 getGroupsInCommon, getInactiveSupergroupChats, getRecommendedChats, getSuitableDiscussionChats,
 getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchChatsNearby, searchPublicChats, or in
 chatFolderInviteLinkInfo.missing_chat_ids, or in userFullInfo.personal_chat_id, or for chats with messages or stories
-from publicForwards.
+from publicForwards and foundStories.
 */
 	member_count: number;
 	/**
@@ -34328,7 +34328,7 @@ Request type for {@link Tdjson#canSendStory}.
 export interface CanSendStory {
 	'@type': 'canSendStory';
 	/**
-Chat identifier.
+Chat identifier. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
 */
 	chat_id: number;
 }
@@ -34341,7 +34341,8 @@ Request type for {@link Tdjson#sendStory}.
 export interface SendStory {
 	'@type': 'sendStory';
 	/**
-Identifier of the chat that will post the story.
+Identifier of the chat that will post the story. Pass Saved Messages chat identifier when posting a story on behalf of
+the current user.
 */
 	chat_id: number;
 	/**
@@ -34367,7 +34368,8 @@ for Telegram Premium users, and 86400 otherwise.
 */
 	active_period: number;
 	/**
-Full identifier of the original story, which content was used to create the story.
+Full identifier of the original story, which content was used to create the story; pass null if the story isn't repost
+of another story.
 */
 	from_story_full_id: StoryFullId;
 	/**
