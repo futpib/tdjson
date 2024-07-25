@@ -28,10 +28,10 @@
   "types": "lib/index.d.ts",
   "devDependencies": {
     "@ava/typescript": "^2.0.0",
-    "@types/invariant": "^2.2.35",
-    "@types/node": "^16.11.12",
+    "@types/invariant": "^2.2.37",
+    "@types/node": "^16.18.104",
     "@types/node-fetch": "^2",
-    "@types/sinon": "^10.0.6",
+    "@types/sinon": "^10.0.20",
     "arcsecond": "^4.1.0",
     "ava": "^3.15.0",
     "coveralls": "^3.1.1",
@@ -39,14 +39,15 @@
     "husky": "^7.0.4",
     "invariant": "^2.2.4",
     "node-fetch": "^2",
-    "nodemon": "^2.0.15",
+    "nodemon": "^2.0.22",
     "nyc": "^15.1.0",
     "outdent": "^0.8.0",
     "pascal-case": "^3.1.2",
     "sinon": "^12.0.1",
-    "ts-node": "^10.4.0",
-    "typedoc": "^0.25.2",
-    "typescript": "^5.2.2",
+    "ts-node": "^10.9.2",
+    "tty-strings": "^1.4.0",
+    "typedoc": "^0.25.13",
+    "typescript": "^5.5.4",
     "xo": "^0.47.0"
   },
   "engines": {
@@ -87,8 +88,5 @@
       "compile": "tsc"
     }
   },
-  "packageManager": "yarn@4.3.1",
-  "dependencies": {
-    "tty-strings": "^1.1.0"
-  }
+  "packageManager": "yarn@4.3.1"
 }
