@@ -1778,6 +1778,10 @@ private and channel chats a bot can always read all messages.
 */
 	can_read_all_group_messages?: boolean;
 	/**
+True, if the bot has the main Web App.
+*/
+	has_main_web_app?: boolean;
+	/**
 True, if the bot supports inline queries.
 */
 	is_inline?: boolean;
@@ -1797,6 +1801,10 @@ True, if the bot supports connection to Telegram Business accounts.
 True, if the bot can be added to attachment or side menu.
 */
 	can_be_added_to_attachment_menu?: boolean;
+	/**
+The number of recently active users of the bot.
+*/
+	active_user_count: number;
 }
 
 /**
@@ -2687,7 +2695,7 @@ Point in time (Unix timestamp) when the code was activated; 0 if none.
 }
 
 /**
-Describes an option for buying Telegram stars. Use telegramPaymentPurposeStars for out-of-store payments.
+Describes an option for buying Telegram Stars. Use telegramPaymentPurposeStars for out-of-store payments.
 */
 export interface StarPaymentOption {
 	'@type': 'starPaymentOption';
@@ -2700,7 +2708,7 @@ The amount to pay, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Number of Telegram stars that will be purchased.
+Number of Telegram Stars that will be purchased.
 */
 	star_count: number;
 	/**
@@ -2714,7 +2722,7 @@ True, if the option must be shown only in the full list of payment options.
 }
 
 /**
-Contains a list of options for buying Telegram stars.
+Contains a list of options for buying Telegram Stars.
 */
 export interface StarPaymentOptions {
 	'@type': 'starPaymentOptions';
@@ -2725,7 +2733,7 @@ The list of options.
 }
 
 /**
-Describes direction of a transaction with Telegram stars.
+Describes direction of a transaction with Telegram Stars.
 Subtype of {@link StarTransactionDirection}.
 */
 export interface StarTransactionDirectionIncoming {
@@ -2734,7 +2742,7 @@ export interface StarTransactionDirectionIncoming {
 }
 
 /**
-The transaction is outgoing and decreases the number of owned Telegram stars.
+The transaction is outgoing and decreases the number of owned Telegram Stars.
 Subtype of {@link StarTransactionDirection}.
 */
 export interface StarTransactionDirectionOutgoing {
@@ -2743,7 +2751,7 @@ export interface StarTransactionDirectionOutgoing {
 }
 
 /**
-Describes source or recipient of a transaction with Telegram stars.
+Describes source or recipient of a transaction with Telegram Stars.
 Subtype of {@link StarTransactionPartner}.
 */
 export interface StarTransactionPartnerTelegram {
@@ -2797,9 +2805,9 @@ Subtype of {@link StarTransactionPartner}.
 export interface StarTransactionPartnerBot {
 	'@type': 'starTransactionPartnerBot';
 	/**
-Identifier of the bot.
+Identifier of the bot for the user, or the user for the bot.
 */
-	bot_user_id: number;
+	user_id: number;
 	/**
 Information about the bought product; may be null if not applicable.
 */
@@ -2831,6 +2839,22 @@ Information about the bought media.
 }
 
 /**
+The transaction is a gift of Telegram Stars from another user.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerUser {
+	'@type': 'starTransactionPartnerUser';
+	/**
+Identifier of the user; 0 if the gift was anonymous.
+*/
+	user_id: number;
+	/**
+A sticker to be shown in the transaction information; may be null if unknown.
+*/
+	sticker: Sticker;
+}
+
+/**
 The transaction is a transaction with unknown partner.
 Subtype of {@link StarTransactionPartner}.
 */
@@ -2840,7 +2864,7 @@ export interface StarTransactionPartnerUnsupported {
 }
 
 /**
-Represents a transaction changing the amount of owned Telegram stars.
+Represents a transaction changing the amount of owned Telegram Stars.
 */
 export interface StarTransaction {
 	'@type': 'starTransaction';
@@ -2849,7 +2873,7 @@ Unique identifier of the transaction.
 */
 	id: string;
 	/**
-The amount of added owned Telegram stars; negative for outgoing transactions.
+The amount of added owned Telegram Stars; negative for outgoing transactions.
 */
 	star_count: number;
 	/**
@@ -2867,16 +2891,16 @@ Source of the incoming transaction, or its recipient for outgoing transactions.
 }
 
 /**
-Represents a list of Telegram star transactions.
+Represents a list of Telegram Star transactions.
 */
 export interface StarTransactions {
 	'@type': 'starTransactions';
 	/**
-The amount of owned Telegram stars.
+The amount of owned Telegram Stars.
 */
 	star_count: number;
 	/**
-List of transactions with Telegram stars.
+List of transactions with Telegram Stars.
 */
 	transactions: StarTransaction[];
 	/**
@@ -3279,6 +3303,10 @@ Default administrator rights for adding the bot to channels; may be null.
 */
 	default_channel_administrator_rights: ChatAdministratorRights;
 	/**
+True, if the bot has media previews.
+*/
+	has_media_previews?: boolean;
+	/**
 The internal link, which can be used to edit bot commands; may be null.
 */
 	edit_commands_link: InternalLinkType;
@@ -3403,6 +3431,21 @@ Approximate total number of users found.
 A list of user identifiers.
 */
 	user_ids: number[];
+}
+
+/**
+Represents a list of found users.
+*/
+export interface FoundUsers {
+	'@type': 'foundUsers';
+	/**
+Identifiers of the found users.
+*/
+	user_ids: number[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
 }
 
 /**
@@ -4875,7 +4918,7 @@ The cause of the message sending failure.
 */
 	error: Error;
 	/**
-True, if the message can be re-sent.
+True, if the message can be re-sent using resendMessages or readdQuickReplyShortcutMessages.
 */
 	can_retry?: boolean;
 	/**
@@ -4994,7 +5037,8 @@ Subtype of {@link InputMessageReplyTo}.
 export interface InputMessageReplyToMessage {
 	'@type': 'inputMessageReplyToMessage';
 	/**
-The identifier of the message to be replied in the same chat and forum topic.
+The identifier of the message to be replied in the same chat and forum topic. A message can be replied in the same chat
+and forum topic only if messageProperties.can_be_replied.
 */
 	message_id: number;
 	/**
@@ -5014,8 +5058,8 @@ The identifier of the chat to which the message to be replied belongs.
 */
 	chat_id: number;
 	/**
-The identifier of the message to be replied in the specified chat. A message can be replied in another chat or topic
-only if message.can_be_replied_in_another_chat.
+The identifier of the message to be replied in the specified chat. A message can be replied in another chat or forum
+topic only if messageProperties.can_be_replied_in_another_chat.
 */
 	message_id: number;
 	/**
@@ -5095,59 +5139,9 @@ service message.
 */
 	is_from_offline?: boolean;
 	/**
-True, if the message can be edited. For live location and poll messages this fields shows whether
-editMessageLiveLocation or stopPoll can be used with this message by the application.
-*/
-	can_be_edited?: boolean;
-	/**
-True, if the message can be forwarded.
-*/
-	can_be_forwarded?: boolean;
-	/**
-True, if the message can be replied in another chat or topic.
-*/
-	can_be_replied_in_another_chat?: boolean;
-	/**
 True, if content of the message can be saved locally or copied.
 */
 	can_be_saved?: boolean;
-	/**
-True, if the message can be deleted only for the current user while other users will continue to see it.
-*/
-	can_be_deleted_only_for_self?: boolean;
-	/**
-True, if the message can be deleted for all users.
-*/
-	can_be_deleted_for_all_users?: boolean;
-	/**
-True, if the list of added reactions is available through getMessageAddedReactions.
-*/
-	can_get_added_reactions?: boolean;
-	/**
-True, if the message statistics are available through getMessageStatistics.
-*/
-	can_get_statistics?: boolean;
-	/**
-True, if information about the message thread is available through getMessageThread and getMessageThreadHistory.
-*/
-	can_get_message_thread?: boolean;
-	/**
-True, if read date of the message can be received through getMessageReadDate.
-*/
-	can_get_read_date?: boolean;
-	/**
-True, if chat members already viewed the message can be received through getMessageViewers.
-*/
-	can_get_viewers?: boolean;
-	/**
-True, if media timestamp links can be generated for media timestamp entities in the message text, caption or link
-preview description through getMessageLink.
-*/
-	can_get_media_timestamp_links?: boolean;
-	/**
-True, if reactions on the message can be reported through reportMessageReactions.
-*/
-	can_report_reactions?: boolean;
 	/**
 True, if media timestamp entities refers to a media in this message as opposed to a media in the replied message.
 */
@@ -7229,6 +7223,21 @@ A Web App URL to open in a web view.
 }
 
 /**
+Contains information about the main Web App of a bot.
+*/
+export interface MainWebApp {
+	'@type': 'mainWebApp';
+	/**
+URL of the Web App to open.
+*/
+	url: string;
+	/**
+True, if the Web App must always be opened in the compact mode instead of the full-size mode.
+*/
+	is_compact?: boolean;
+}
+
+/**
 Contains information about a message thread.
 */
 export interface MessageThreadInfo {
@@ -7250,7 +7259,7 @@ Approximate number of unread messages in the message thread.
 */
 	unread_message_count: number;
 	/**
-The messages from which the thread starts. The messages are returned in a reverse chronological order (i.e., in order of
+The messages from which the thread starts. The messages are returned in reverse chronological order (i.e., in order of
 decreasing message_id).
 */
 	messages: Message[];
@@ -8662,6 +8671,38 @@ Author of the document.
 }
 
 /**
+The link is a link to an animation player.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeEmbeddedAnimationPlayer {
+	'@type': 'linkPreviewTypeEmbeddedAnimationPlayer';
+	/**
+URL of the external animation player.
+*/
+	url: string;
+	/**
+Thumbnail of the animation; may be null if unknown.
+*/
+	thumbnail: Photo;
+	/**
+Duration of the animation, in seconds.
+*/
+	duration: number;
+	/**
+Author of the animation.
+*/
+	author: string;
+	/**
+Expected width of the embedded player.
+*/
+	width: number;
+	/**
+Expected height of the embedded player.
+*/
+	height: number;
+}
+
+/**
 The link is a link to an audio player.
 Subtype of {@link LinkPreviewType}.
 */
@@ -8672,6 +8713,10 @@ URL of the external audio player.
 */
 	url: string;
 	/**
+Thumbnail of the audio; may be null if unknown.
+*/
+	thumbnail: Photo;
+	/**
 Duration of the audio, in seconds.
 */
 	duration: number;
@@ -8679,6 +8724,14 @@ Duration of the audio, in seconds.
 Author of the audio.
 */
 	author: string;
+	/**
+Expected width of the embedded player.
+*/
+	width: number;
+	/**
+Expected height of the embedded player.
+*/
+	height: number;
 }
 
 /**
@@ -8692,6 +8745,10 @@ URL of the external video player.
 */
 	url: string;
 	/**
+Thumbnail of the video; may be null if unknown.
+*/
+	thumbnail: Photo;
+	/**
 Duration of the video, in seconds.
 */
 	duration: number;
@@ -8700,11 +8757,11 @@ Author of the video.
 */
 	author: string;
 	/**
-Expected width of the preview.
+Expected width of the embedded player.
 */
 	width: number;
 	/**
-Expected height of the preview.
+Expected height of the embedded player.
 */
 	height: number;
 }
@@ -8980,6 +9037,10 @@ True, if large media preview must be shown; otherwise, the media preview must be
 must be shown for videos.
 */
 	show_large_media?: boolean;
+	/**
+True, if media must be shown above link preview description; otherwise, the media must be shown below the description.
+*/
+	show_media_above_description?: boolean;
 	/**
 True, if there is no need to show an ordinary open URL confirmation, when opening the URL from the preview, because the
 URL is shown in the message text in clear.
@@ -9558,13 +9619,13 @@ True, if the user will be able to save credentials, if sets up a 2-step verifica
 }
 
 /**
-The payment form is for a payment in Telegram stars.
+The payment form is for a payment in Telegram Stars.
 Subtype of {@link PaymentFormType}.
 */
 export interface PaymentFormTypeStars {
 	'@type': 'paymentFormTypeStars';
 	/**
-Number of Telegram stars that will be paid.
+Number of Telegram Stars that will be paid.
 */
 	star_count: number;
 }
@@ -9656,13 +9717,13 @@ The amount of tip chosen by the buyer in the smallest units of the currency.
 }
 
 /**
-The payment was done using Telegram stars.
+The payment was done using Telegram Stars.
 Subtype of {@link PaymentReceiptType}.
 */
 export interface PaymentReceiptTypeStars {
 	'@type': 'paymentReceiptTypeStars';
 	/**
-Number of Telegram stars that were paid.
+Number of Telegram Stars that were paid.
 */
 	star_count: number;
 	/**
@@ -10911,7 +10972,7 @@ Subtype of {@link MessageContent}.
 export interface MessagePaidMedia {
 	'@type': 'messagePaidMedia';
 	/**
-Number of stars needed to buy access to the media in the message.
+Number of Telegram Stars needed to buy access to the media in the message.
 */
 	star_count: number;
 	/**
@@ -11746,7 +11807,7 @@ Subtype of {@link MessageContent}.
 export interface MessagePaymentRefunded {
 	'@type': 'messagePaymentRefunded';
 	/**
-Identifier of the previous owner of the Telegram stars that refunds them.
+Identifier of the previous owner of the Telegram Stars that refunds them.
 */
 	owner_id: MessageSender;
 	/**
@@ -11772,15 +11833,19 @@ Provider payment identifier.
 }
 
 /**
-Telegram Premium was gifted to the user.
+Telegram Premium was gifted to a user.
 Subtype of {@link MessageContent}.
 */
 export interface MessageGiftedPremium {
 	'@type': 'messageGiftedPremium';
 	/**
-The identifier of a user that gifted Telegram Premium; 0 if the gift was anonymous.
+The identifier of a user that gifted Telegram Premium; 0 if the gift was anonymous or is outgoing.
 */
 	gifter_user_id: number;
+	/**
+The identifier of a user that received Telegram Premium; 0 if the gift is incoming.
+*/
+	receiver_user_id: number;
 	/**
 Currency for the paid amount.
 */
@@ -11961,6 +12026,50 @@ Up to 100 user identifiers of the winners of the giveaway.
 Number of undistributed prizes.
 */
 	unclaimed_prize_count: number;
+}
+
+/**
+Telegram Stars were gifted to a user.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageGiftedStars {
+	'@type': 'messageGiftedStars';
+	/**
+The identifier of a user that gifted Telegram Stars; 0 if the gift was anonymous or is outgoing.
+*/
+	gifter_user_id: number;
+	/**
+The identifier of a user that received Telegram Stars; 0 if the gift is incoming.
+*/
+	receiver_user_id: number;
+	/**
+Currency for the paid amount.
+*/
+	currency: string;
+	/**
+The paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Cryptocurrency used to pay for the gift; may be empty if none.
+*/
+	cryptocurrency: string;
+	/**
+The paid amount, in the smallest units of the cryptocurrency; 0 if none.
+*/
+	cryptocurrency_amount: string;
+	/**
+Number of Telegram Stars that were gifted.
+*/
+	star_count: number;
+	/**
+Identifier of the transaction for Telegram Stars purchase; for receiver only.
+*/
+	transaction_id: string;
+	/**
+A sticker to be shown in the message; may be null if unknown.
+*/
+	sticker: Sticker;
 }
 
 /**
@@ -12634,7 +12743,7 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessagePaidMedia {
 	'@type': 'inputMessagePaidMedia';
 	/**
-The number of stars that must be paid to see the media; 1-getOption("paid_media_message_star_count_max").
+The number of Telegram Stars that must be paid to see the media; 1-getOption("paid_media_message_star_count_max").
 */
 	star_count: number;
 	/**
@@ -13047,7 +13156,7 @@ Identifier for the chat this forwarded message came from.
 */
 	from_chat_id: number;
 	/**
-Identifier of the message to forward. A message can be forwarded only if message.can_be_forwarded.
+Identifier of the message to forward. A message can be forwarded only if messageProperties.can_be_forwarded.
 */
 	message_id: number;
 	/**
@@ -13059,6 +13168,119 @@ Options to be used to copy content of the message without reference to the origi
 message as usual.
 */
 	copy_options: MessageCopyOptions;
+}
+
+/**
+Contains properties of a message and describes actions that can be done with the message right now.
+*/
+export interface MessageProperties {
+	'@type': 'messageProperties';
+	/**
+True, if the message can be deleted only for the current user while other users will continue to see it using the method
+deleteMessages with revoke == false.
+*/
+	can_be_deleted_only_for_self?: boolean;
+	/**
+True, if the message can be deleted for all users using the method deleteMessages with revoke == true.
+*/
+	can_be_deleted_for_all_users?: boolean;
+	/**
+True, if the message can be edited using the methods editMessageText, editMessageMedia, editMessageCaption, or
+editMessageReplyMarkup. For live location and poll messages this fields shows whether editMessageLiveLocation or
+stopPoll can be used with this message.
+*/
+	can_be_edited?: boolean;
+	/**
+True, if the message can be forwarded using inputMessageForwarded or forwardMessages.
+*/
+	can_be_forwarded?: boolean;
+	/**
+True, if the message can be paid using inputInvoiceMessage.
+*/
+	can_be_paid?: boolean;
+	/**
+True, if the message can be pinned or unpinned in the chat using pinChatMessage or unpinChatMessage.
+*/
+	can_be_pinned?: boolean;
+	/**
+True, if the message can be replied in the same chat and forum topic using inputMessageReplyToMessage.
+*/
+	can_be_replied?: boolean;
+	/**
+True, if the message can be replied in another chat or forum topic using inputMessageReplyToExternalMessage.
+*/
+	can_be_replied_in_another_chat?: boolean;
+	/**
+True, if content of the message can be saved locally or copied using inputMessageForwarded or forwardMessages with copy
+options.
+*/
+	can_be_saved?: boolean;
+	/**
+True, if the message can be shared in a story using inputStoryAreaTypeMessage.
+*/
+	can_be_shared_in_story?: boolean;
+	/**
+True, if scheduling state of the message can be edited.
+*/
+	can_edit_scheduling_state?: boolean;
+	/**
+True, if the list of added reactions is available using getMessageAddedReactions.
+*/
+	can_get_added_reactions?: boolean;
+	/**
+True, if code for message embedding can be received using getMessageEmbeddingCode.
+*/
+	can_get_embedding_code?: boolean;
+	/**
+True, if a link can be generated for the message using getMessageLink.
+*/
+	can_get_link?: boolean;
+	/**
+True, if media timestamp links can be generated for media timestamp entities in the message text, caption or link
+preview description using getMessageLink.
+*/
+	can_get_media_timestamp_links?: boolean;
+	/**
+True, if information about the message thread is available through getMessageThread and getMessageThreadHistory.
+*/
+	can_get_message_thread?: boolean;
+	/**
+True, if read date of the message can be received through getMessageReadDate.
+*/
+	can_get_read_date?: boolean;
+	/**
+True, if message statistics are available through getMessageStatistics and message forwards can be received using
+getMessagePublicForwards.
+*/
+	can_get_statistics?: boolean;
+	/**
+True, if chat members already viewed the message can be received through getMessageViewers.
+*/
+	can_get_viewers?: boolean;
+	/**
+True, if speech can be recognized for the message through recognizeSpeech.
+*/
+	can_recognize_speech?: boolean;
+	/**
+True, if the message can be reported using reportChat.
+*/
+	can_report_chat?: boolean;
+	/**
+True, if reactions on the message can be reported through reportMessageReactions.
+*/
+	can_report_reactions?: boolean;
+	/**
+True, if the message can be reported using reportSupergroupSpam.
+*/
+	can_report_supergroup_spam?: boolean;
+	/**
+True, if fact check for the message can be changed through setMessageFactCheck.
+*/
+	can_set_fact_check?: boolean;
+	/**
+True, if message statistics must be available from context menu of the message.
+*/
+	need_show_statistics?: boolean;
 }
 
 /**
@@ -13758,6 +13980,21 @@ export interface EmojiCategoryTypeChatPhoto {
 }
 
 /**
+Describes the current weather.
+*/
+export interface CurrentWeather {
+	'@type': 'currentWeather';
+	/**
+Temperature, in degree Celsius.
+*/
+	temperature: number;
+	/**
+Emoji representing the weather.
+*/
+	emoji: string;
+}
+
+/**
 Describes position of a clickable rectangle area on a story media.
 */
 export interface StoryAreaPosition {
@@ -13789,7 +14026,7 @@ The radius of the rectangle corner rounding, as a percentage of the media width.
 }
 
 /**
-Describes type of clickable rectangle area on a story media.
+Describes type of clickable area on a story media.
 Subtype of {@link StoryAreaType}.
 */
 export interface StoryAreaTypeLocation {
@@ -13870,6 +14107,26 @@ HTTP or tg:// URL to be opened when the area is clicked.
 }
 
 /**
+An area with information about weather.
+Subtype of {@link StoryAreaType}.
+*/
+export interface StoryAreaTypeWeather {
+	'@type': 'storyAreaTypeWeather';
+	/**
+Temperature, in degree Celsius.
+*/
+	temperature: number;
+	/**
+Emoji representing the weather.
+*/
+	emoji: string;
+	/**
+A color of the area background in the ARGB format.
+*/
+	background_color: number;
+}
+
+/**
 Describes a clickable rectangle area on a story media.
 */
 export interface StoryArea {
@@ -13885,7 +14142,7 @@ Type of the area.
 }
 
 /**
-Describes type of clickable rectangle area on a story media to be added.
+Describes type of clickable area on a story media to be added.
 Subtype of {@link InputStoryAreaType}.
 */
 export interface InputStoryAreaTypeLocation {
@@ -13963,7 +14220,7 @@ Identifier of the chat with the message. Currently, the chat must be a supergrou
 */
 	chat_id: number;
 	/**
-Identifier of the message. Only successfully sent non-scheduled messages can be specified.
+Identifier of the message. Use messageProperties.can_be_shared_in_story to check whether the message is suitable.
 */
 	message_id: number;
 }
@@ -13978,6 +14235,26 @@ export interface InputStoryAreaTypeLink {
 HTTP or tg:// URL to be opened when the area is clicked.
 */
 	url: string;
+}
+
+/**
+An area with information about weather.
+Subtype of {@link InputStoryAreaType}.
+*/
+export interface InputStoryAreaTypeWeather {
+	'@type': 'inputStoryAreaTypeWeather';
+	/**
+Temperature, in degree Celsius.
+*/
+	temperature: number;
+	/**
+Emoji representing the weather.
+*/
+	emoji: string;
+	/**
+A color of the area background in the ARGB format.
+*/
+	background_color: number;
 }
 
 /**
@@ -14004,8 +14281,8 @@ export interface InputStoryAreas {
 List of input story areas. Currently, a story can have up to 10 inputStoryAreaTypeLocation,
 inputStoryAreaTypeFoundVenue, and inputStoryAreaTypePreviousVenue areas, up to
 getOption("story_suggested_reaction_area_count_max") inputStoryAreaTypeSuggestedReaction areas, up to 1
-inputStoryAreaTypeMessage area, and up to getOption("story_link_area_count_max") inputStoryAreaTypeLink areas if the
-current user is a Telegram Premium user.
+inputStoryAreaTypeMessage area, up to getOption("story_link_area_count_max") inputStoryAreaTypeLink areas if the current
+user is a Telegram Premium user, and up to 3 inputStoryAreaTypeWeather areas.
 */
 	areas: InputStoryArea[];
 }
@@ -14048,6 +14325,10 @@ Video thumbnail in JPEG or MPEG4 format; may be null.
 Size of file prefix, which is supposed to be preloaded, in bytes.
 */
 	preload_prefix_size: number;
+	/**
+Timestamp of the frame used as video thumbnail.
+*/
+	cover_frame_timestamp: number;
 	/**
 File containing the video.
 */
@@ -14126,6 +14407,10 @@ File identifiers of the stickers added to the video, if applicable.
 Precise duration of the video, in seconds; 0-60.
 */
 	duration: number;
+	/**
+Timestamp of the frame, which will be used as video thumbnail.
+*/
+	cover_frame_timestamp: number;
 	/**
 True, if the video has no sound.
 */
@@ -14416,7 +14701,7 @@ Identifier of the last read active story.
 */
 	max_read_story_id: number;
 	/**
-Basic information about the stories; use getStory to get full information about the stories. The stories are in a
+Basic information about the stories; use getStory to get full information about the stories. The stories are in
 chronological order (i.e., in order of increasing story identifiers).
 */
 	stories: StoryInfo[];
@@ -14623,6 +14908,48 @@ List of found public forwards and reposts.
 The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Describes media previews of a bot.
+*/
+export interface BotMediaPreview {
+	'@type': 'botMediaPreview';
+	/**
+Point in time (Unix timestamp) when the preview was added or changed last time.
+*/
+	date: number;
+	/**
+Content of the preview.
+*/
+	content: StoryContent;
+}
+
+/**
+Contains a list of media previews of a bot.
+*/
+export interface BotMediaPreviews {
+	'@type': 'botMediaPreviews';
+	/**
+List of media previews.
+*/
+	previews: BotMediaPreview[];
+}
+
+/**
+Contains a list of media previews of a bot for the given language and the list of languages for which the bot has
+dedicated previews.
+*/
+export interface BotMediaPreviewInfo {
+	'@type': 'botMediaPreviewInfo';
+	/**
+List of media previews.
+*/
+	previews: BotMediaPreview[];
+	/**
+List of language codes for which the bot has dedicated previews.
+*/
+	language_codes: string[];
 }
 
 /**
@@ -18811,7 +19138,7 @@ Subtype of {@link StorePaymentPurpose}.
 export interface StorePaymentPurposeGiftedPremium {
 	'@type': 'storePaymentPurposeGiftedPremium';
 	/**
-Identifier of the user to which Premium was gifted.
+Identifier of the user to which Telegram Premium is gifted.
 */
 	user_id: number;
 	/**
@@ -18870,7 +19197,7 @@ Paid amount, in the smallest units of the currency.
 }
 
 /**
-The user buying Telegram stars.
+The user buying Telegram Stars.
 Subtype of {@link StorePaymentPurpose}.
 */
 export interface StorePaymentPurposeStars {
@@ -18884,7 +19211,31 @@ Paid amount, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Number of bought stars.
+Number of bought Telegram Stars.
+*/
+	star_count: number;
+}
+
+/**
+The user buying Telegram Stars for other users.
+Subtype of {@link StorePaymentPurpose}.
+*/
+export interface StorePaymentPurposeGiftedStars {
+	'@type': 'storePaymentPurposeGiftedStars';
+	/**
+Identifier of the user to which Telegram Stars are gifted.
+*/
+	user_id: number;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of bought Telegram Stars.
 */
 	star_count: number;
 }
@@ -18947,7 +19298,7 @@ Number of months the Telegram Premium subscription will be active for the users.
 }
 
 /**
-The user buying Telegram stars.
+The user buying Telegram Stars.
 Subtype of {@link TelegramPaymentPurpose}.
 */
 export interface TelegramPaymentPurposeStars {
@@ -18961,7 +19312,31 @@ Paid amount, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Number of bought stars.
+Number of bought Telegram Stars.
+*/
+	star_count: number;
+}
+
+/**
+The user buying Telegram Stars for other users.
+Subtype of {@link TelegramPaymentPurpose}.
+*/
+export interface TelegramPaymentPurposeGiftedStars {
+	'@type': 'telegramPaymentPurposeGiftedStars';
+	/**
+Identifier of the user to which Telegram Stars are gifted.
+*/
+	user_id: number;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of bought Telegram Stars.
 */
 	star_count: number;
 }
@@ -19779,7 +20154,7 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentPaidMedia {
 	'@type': 'pushMessageContentPaidMedia';
 	/**
-Number of stars needed to buy access to the media in the message; 0 for pinned message.
+Number of Telegram Stars needed to buy access to the media in the message; 0 for pinned message.
 */
 	star_count: number;
 	/**
@@ -21273,7 +21648,7 @@ export interface InternalLinkTypeActiveSessions {
 The link is a link to an attachment menu bot to be opened in the specified or a chosen chat. Process given target_chat
 to open the chat. Then, call searchPublicChat with the given bot username, check that the user is a bot and can be added
 to attachment menu. Then, use getAttachmentMenuBot to receive information about the bot. If the bot isn't added to
-attachment menu, then show a disclaimer about Mini Apps being a third-party apps, ask the user to accept their Terms of
+attachment menu, then show a disclaimer about Mini Apps being third-party apps, ask the user to accept their Terms of
 service and confirm adding the bot to side and attachment menu. If the user accept the terms and confirms adding, then
 use toggleBotIsAddedToAttachmentMenu to add the bot. If the attachment menu bot can't be used in the opened chat, show
 an error to the user. If the bot is added to attachment menu and can be used in the chat, then use openWebApp with the
@@ -21553,6 +21928,31 @@ export interface InternalLinkTypeLanguageSettings {
 }
 
 /**
+The link is a link to the main Web App of a bot. Call searchPublicChat with the given bot username, check that the user
+is a bot and has the main Web App. If the bot can be added to attachment menu, then use getAttachmentMenuBot to receive
+information about the bot, then if the bot isn't added to side menu, show a disclaimer about Mini Apps being third-party
+apps, ask the user to accept their Terms of service and confirm adding the bot to side and attachment menu, then if the
+user accepts the terms and confirms adding, use toggleBotIsAddedToAttachmentMenu to add the bot. Then, use getMainWebApp
+with the given start parameter and open the returned URL as a Web App.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeMainWebApp {
+	'@type': 'internalLinkTypeMainWebApp';
+	/**
+Username of the bot.
+*/
+	bot_username: string;
+	/**
+Start parameter to be passed to getMainWebApp.
+*/
+	start_parameter: string;
+	/**
+True, if the Web App must be opened in the compact mode instead of the full-size mode.
+*/
+	is_compact?: boolean;
+}
+
+/**
 The link is a link to a Telegram message or a forum topic. Call getMessageLinkInfo with the given URL to process the
 link, and then open received forum topic or chat and show the message there.
 Subtype of {@link InternalLinkType}.
@@ -21717,6 +22117,10 @@ Username of the chat.
 Draft text for message to send in the chat.
 */
 	draft_text: string;
+	/**
+True, if chat profile information screen must be opened; otherwise, the chat itself must be opened.
+*/
+	open_profile?: boolean;
 }
 
 /**
@@ -21746,31 +22150,6 @@ Subtype of {@link InternalLinkType}.
 export interface InternalLinkTypeSettings {
 	'@type': 'internalLinkTypeSettings';
 
-}
-
-/**
-The link is a link to a bot, which can be installed to the side menu. Call searchPublicChat with the given bot username,
-check that the user is a bot and can be added to attachment menu. Then, use getAttachmentMenuBot to receive information
-about the bot. If the bot isn't added to side menu, then show a disclaimer about Mini Apps being a third-party apps, ask
-the user to accept their Terms of service and confirm adding the bot to side and attachment menu. If the user accept the
-terms and confirms adding, then use toggleBotIsAddedToAttachmentMenu to add the bot. If the bot is added to side menu,
-then use getWebAppUrl with the given URL and open the returned URL as a Web App.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeSideMenuBot {
-	'@type': 'internalLinkTypeSideMenuBot';
-	/**
-Username of the bot.
-*/
-	bot_username: string;
-	/**
-URL to be passed to getWebAppUrl.
-*/
-	url: string;
-	/**
-True, if the Web App must be opened in a compact mode instead of a full-size mode.
-*/
-	is_compact?: boolean;
 }
 
 /**
@@ -21851,8 +22230,8 @@ export interface InternalLinkTypeUnsupportedProxy {
 
 /**
 The link is a link to a user by its phone number. Call searchUserByPhoneNumber with the given phone number to process
-the link. If the user is found, then call createPrivateChat and open the chat. If draft text isn't empty, then put the
-draft text in the input field.
+the link. If the user is found, then call createPrivateChat and open user's profile information screen or the chat
+itself. If draft text isn't empty, then put the draft text in the input field.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeUserPhoneNumber {
@@ -21865,6 +22244,10 @@ Phone number of the user.
 Draft text for message to send in the chat.
 */
 	draft_text: string;
+	/**
+True, if user's profile information screen must be opened; otherwise, the chat itself must be opened.
+*/
+	open_profile?: boolean;
 }
 
 /**
@@ -21905,7 +22288,7 @@ True, if the video chat is expected to be a live stream in a channel or a broadc
 The link is a link to a Web App. Call searchPublicChat with the given bot username, check that the user is a bot, then
 call searchWebApp with the received bot and the given web_app_short_name. Process received foundWebApp by showing a
 confirmation dialog if needed. If the bot can be added to attachment or side menu, but isn't added yet, then show a
-disclaimer about Mini Apps being a third-party apps instead of the dialog and ask the user to accept their Terms of
+disclaimer about Mini Apps being third-party apps instead of the dialog and ask the user to accept their Terms of
 service. If the user accept the terms and confirms adding, then use toggleBotIsAddedToAttachmentMenu to add the bot.
 Then, call getWebAppLinkUrl and open the returned URL as a Web App.
 Subtype of {@link InternalLinkType}.
@@ -21925,7 +22308,7 @@ Start parameter to be passed to getWebAppLinkUrl.
 */
 	start_parameter: string;
 	/**
-True, if the Web App must be opened in a compact mode instead of a full-size mode.
+True, if the Web App must be opened in the compact mode instead of the full-size mode.
 */
 	is_compact?: boolean;
 }
@@ -22660,6 +23043,15 @@ Subtype of {@link TopChatCategory}.
 */
 export interface TopChatCategoryInlineBots {
 	'@type': 'topChatCategoryInlineBots';
+
+}
+
+/**
+A category containing frequently used chats with bots, which Web Apps were opened.
+Subtype of {@link TopChatCategory}.
+*/
+export interface TopChatCategoryWebAppBots {
+	'@type': 'topChatCategoryWebAppBots';
 
 }
 
@@ -23643,24 +24035,24 @@ List of transactions.
 }
 
 /**
-Contains information about Telegram stars earned by a bot or a chat.
+Contains information about Telegram Stars earned by a bot or a chat.
 */
 export interface StarRevenueStatus {
 	'@type': 'starRevenueStatus';
 	/**
-Total number of the stars earned.
+Total number of Telegram Stars earned.
 */
 	total_count: number;
 	/**
-The number of Telegram stars that aren't withdrawn yet.
+The number of Telegram Stars that aren't withdrawn yet.
 */
 	current_count: number;
 	/**
-The number of Telegram stars that are available for withdrawal.
+The number of Telegram Stars that are available for withdrawal.
 */
 	available_count: number;
 	/**
-True, if Telegram stars can be withdrawn now or later.
+True, if Telegram Stars can be withdrawn now or later.
 */
 	withdrawal_enabled?: boolean;
 	/**
@@ -23670,7 +24062,7 @@ Time left before the next withdrawal can be started, in seconds; 0 if withdrawal
 }
 
 /**
-A detailed statistics about Telegram stars earned by a bot or a chat.
+A detailed statistics about Telegram Stars earned by a bot or a chat.
 */
 export interface StarRevenueStatistics {
 	'@type': 'starRevenueStatistics';
@@ -23679,11 +24071,11 @@ A graph containing amount of revenue in a given day.
 */
 	revenue_by_day_graph: StatisticalGraph;
 	/**
-Telegram star revenue status.
+Telegram Star revenue status.
 */
 	status: StarRevenueStatus;
 	/**
-Current conversion rate of a Telegram star to USD.
+Current conversion rate of a Telegram Star to USD.
 */
 	usd_rate: number;
 }
@@ -25804,13 +26196,13 @@ The new tags.
 }
 
 /**
-The number of Telegram stars owned by the current user has changed.
+The number of Telegram Stars owned by the current user has changed.
 Subtype of {@link Update}.
 */
 export interface UpdateOwnedStarCount {
 	'@type': 'updateOwnedStarCount';
 	/**
-The new number of Telegram stars owned.
+The new number of Telegram Stars owned.
 */
 	star_count: number;
 }
@@ -25833,18 +26225,18 @@ New amount of earned revenue.
 }
 
 /**
-The Telegram star revenue earned by a bot or a chat has changed. If star transactions screen of the chat is opened, then
-getStarTransactions may be called to fetch new transactions.
+The Telegram Star revenue earned by a bot or a chat has changed. If Telegram Star transaction screen of the chat is
+opened, then getStarTransactions may be called to fetch new transactions.
 Subtype of {@link Update}.
 */
 export interface UpdateStarRevenueStatus {
 	'@type': 'updateStarRevenueStatus';
 	/**
-Identifier of the owner of the Telegram stars.
+Identifier of the owner of the Telegram Stars.
 */
 	owner_id: MessageSender;
 	/**
-New Telegram star revenue status.
+New Telegram Star revenue status.
 */
 	status: StarRevenueStatus;
 }
@@ -26737,6 +27129,7 @@ export type StarTransactionPartner =
 	| StarTransactionPartnerTelegramAds
 	| StarTransactionPartnerBot
 	| StarTransactionPartnerChannel
+	| StarTransactionPartnerUser
 	| StarTransactionPartnerUnsupported;
 
 export type PremiumGiveawayParticipantStatus =
@@ -26995,6 +27388,7 @@ export type LinkPreviewType =
 	| LinkPreviewTypeChannelBoost
 	| LinkPreviewTypeChat
 	| LinkPreviewTypeDocument
+	| LinkPreviewTypeEmbeddedAnimationPlayer
 	| LinkPreviewTypeEmbeddedAudioPlayer
 	| LinkPreviewTypeEmbeddedVideoPlayer
 	| LinkPreviewTypeInvoice
@@ -27178,6 +27572,7 @@ export type MessageContent =
 	| MessagePremiumGiveaway
 	| MessagePremiumGiveawayCompleted
 	| MessagePremiumGiveawayWinners
+	| MessageGiftedStars
 	| MessageContactRegistered
 	| MessageUsersShared
 	| MessageChatShared
@@ -27305,7 +27700,8 @@ export type StoryAreaType =
 	| StoryAreaTypeVenue
 	| StoryAreaTypeSuggestedReaction
 	| StoryAreaTypeMessage
-	| StoryAreaTypeLink;
+	| StoryAreaTypeLink
+	| StoryAreaTypeWeather;
 
 export type InputStoryAreaType =
 	| InputStoryAreaTypeLocation
@@ -27313,7 +27709,8 @@ export type InputStoryAreaType =
 	| InputStoryAreaTypePreviousVenue
 	| InputStoryAreaTypeSuggestedReaction
 	| InputStoryAreaTypeMessage
-	| InputStoryAreaTypeLink;
+	| InputStoryAreaTypeLink
+	| InputStoryAreaTypeWeather;
 
 export type StoryContent =
 	| StoryContentPhoto
@@ -27583,12 +27980,14 @@ export type StorePaymentPurpose =
 	| StorePaymentPurposeGiftedPremium
 	| StorePaymentPurposePremiumGiftCodes
 	| StorePaymentPurposePremiumGiveaway
-	| StorePaymentPurposeStars;
+	| StorePaymentPurposeStars
+	| StorePaymentPurposeGiftedStars;
 
 export type TelegramPaymentPurpose =
 	| TelegramPaymentPurposePremiumGiftCodes
 	| TelegramPaymentPurposePremiumGiveaway
-	| TelegramPaymentPurposeStars;
+	| TelegramPaymentPurposeStars
+	| TelegramPaymentPurposeGiftedStars;
 
 export type DeviceToken =
 	| DeviceTokenFirebaseCloudMessaging
@@ -27812,6 +28211,7 @@ export type InternalLinkType =
 	| InternalLinkTypeInvoice
 	| InternalLinkTypeLanguagePack
 	| InternalLinkTypeLanguageSettings
+	| InternalLinkTypeMainWebApp
 	| InternalLinkTypeMessage
 	| InternalLinkTypeMessageDraft
 	| InternalLinkTypePassportDataRequest
@@ -27825,7 +28225,6 @@ export type InternalLinkType =
 	| InternalLinkTypeQrCodeAuthentication
 	| InternalLinkTypeRestorePurchases
 	| InternalLinkTypeSettings
-	| InternalLinkTypeSideMenuBot
 	| InternalLinkTypeStickerSet
 	| InternalLinkTypeStory
 	| InternalLinkTypeTheme
@@ -27892,6 +28291,7 @@ export type TopChatCategory =
 	| TopChatCategoryGroups
 	| TopChatCategoryChannels
 	| TopChatCategoryInlineBots
+	| TopChatCategoryWebAppBots
 	| TopChatCategoryCalls
 	| TopChatCategoryForwardChats;
 
@@ -28909,7 +29309,23 @@ Identifiers of the messages to get.
 }
 
 /**
-Returns information about a message thread. Can be used only if message.can_get_message_thread == true.
+Returns properties of a message; this is an offline request.
+Request type for {@link Tdjson#getMessageProperties}.
+*/
+export interface GetMessageProperties {
+	'@type': 'getMessageProperties';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Returns information about a message thread. Can be used only if messageProperties.can_get_message_thread == true.
 Request type for {@link Tdjson#getMessageThread}.
 */
 export interface GetMessageThread {
@@ -28925,8 +29341,8 @@ Identifier of the message.
 }
 
 /**
-Returns read date of a recent outgoing message in a private chat. The method can be called if message.can_get_read_date
-== true and the message is read.
+Returns read date of a recent outgoing message in a private chat. The method can be called if
+messageProperties.can_get_read_date == true.
 Request type for {@link Tdjson#getMessageReadDate}.
 */
 export interface GetMessageReadDate {
@@ -28943,7 +29359,8 @@ Identifier of the message.
 
 /**
 Returns viewers of a recent outgoing message in a basic group or a supergroup chat. For video notes and voice notes only
-users, opened content of the message, are returned. The method can be called if message.can_get_viewers == true.
+users, opened content of the message, are returned. The method can be called if messageProperties.can_get_viewers ==
+true.
 Request type for {@link Tdjson#getMessageViewers}.
 */
 export interface GetMessageViewers {
@@ -29338,8 +29755,8 @@ can be smaller than the specified limit, even if the end of the list is not reac
 }
 
 /**
-Returns messages in a Saved Messages topic. The messages are returned in a reverse chronological order (i.e., in order
-of decreasing message_id).
+Returns messages in a Saved Messages topic. The messages are returned in reverse chronological order (i.e., in order of
+decreasing message_id).
 Request type for {@link Tdjson#getSavedMessagesTopicHistory}.
 */
 export interface GetSavedMessagesTopicHistory {
@@ -29464,7 +29881,7 @@ The maximum number of chats to be returned; up to 100.
 }
 
 /**
-Returns messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of decreasing
+Returns messages in a chat. The messages are returned in reverse chronological order (i.e., in order of decreasing
 message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline request if
 only_local is true.
 Request type for {@link Tdjson#getChatHistory}.
@@ -29497,10 +29914,10 @@ Pass true to get only messages that are available without sending network reques
 }
 
 /**
-Returns messages in a message thread of a message. Can be used only if message.can_get_message_thread == true. Message
-thread of a channel message is in the channel's linked supergroup. The messages are returned in a reverse chronological
-order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by
-TDLib.
+Returns messages in a message thread of a message. Can be used only if messageProperties.can_get_message_thread == true.
+Message thread of a channel message is in the channel's linked supergroup. The messages are returned in reverse
+chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages
+is chosen by TDLib.
 Request type for {@link Tdjson#getMessageThreadHistory}.
 */
 export interface GetMessageThreadHistory {
@@ -30084,7 +30501,7 @@ messages, or for chats other than Saved Messages.
 }
 
 /**
-Returns all scheduled messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of
+Returns all scheduled messages in a chat. The messages are returned in reverse chronological order (i.e., in order of
 decreasing message_id).
 Request type for {@link Tdjson#getChatScheduledMessages}.
 */
@@ -30180,8 +30597,8 @@ The maximum identifier of removed notifications.
 }
 
 /**
-Returns an HTTPS link to a message in a chat. Available only for already sent messages in supergroups and channels, or
-if message.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
+Returns an HTTPS link to a message in a chat. Available only if messageProperties.can_get_link, or if
+messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
 Request type for {@link Tdjson#getMessageLink}.
 */
 export interface GetMessageLink {
@@ -30210,7 +30627,7 @@ Pass true to create a link to the message as a channel post comment, in a messag
 }
 
 /**
-Returns an HTML code for embedding the message. Available only for messages in supergroups and channels with a username.
+Returns an HTML code for embedding the message. Available only if messageProperties.can_get_embedding_code.
 Request type for {@link Tdjson#getMessageEmbeddingCode}.
 */
 export interface GetMessageEmbeddingCode {
@@ -30293,8 +30710,7 @@ Language code of the language to which the message is translated. Must be one of
 }
 
 /**
-Recognizes speech in a video note or a voice note message. The message must be successfully sent, must not be scheduled,
-and must be from a non-secret chat.
+Recognizes speech in a video note or a voice note message.
 Request type for {@link Tdjson#recognizeSpeech}.
 */
 export interface RecognizeSpeech {
@@ -30304,7 +30720,7 @@ Identifier of the chat to which the message belongs.
 */
 	chat_id: number;
 	/**
-Identifier of the message.
+Identifier of the message. Use messageProperties.can_recognize_speech to check whether the message is suitable.
 */
 	message_id: number;
 }
@@ -30501,7 +30917,7 @@ Identifier of the chat from which to forward messages.
 	from_chat_id: number;
 	/**
 Identifiers of the messages to forward. Message identifiers must be in a strictly increasing order. At most 100 messages
-can be forwarded simultaneously. A message can be forwarded only if message.can_be_forwarded.
+can be forwarded simultaneously. A message can be forwarded only if messageProperties.can_be_forwarded.
 */
 	message_ids: number[];
 	/**
@@ -30604,7 +31020,8 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Identifiers of the messages to be deleted.
+Identifiers of the messages to be deleted. Use messageProperties.can_be_deleted_only_for_self and
+messageProperties.can_be_deleted_for_all_users to get suitable messages.
 */
 	message_ids: number[];
 	/**
@@ -30657,7 +31074,7 @@ Pass true to delete chat messages for all users; private chats only.
 
 /**
 Edits the text of a message (or a text of a game message). Returns the edited message after the edit is completed on the
-server side. Can be used only if message.can_be_edited == true.
+server side.
 Request type for {@link Tdjson#editMessageText}.
 */
 export interface EditMessageText {
@@ -30667,7 +31084,7 @@ The chat the message belongs to.
 */
 	chat_id: number;
 	/**
-Identifier of the message.
+Identifier of the message. Use messageProperties.can_be_edited to check whether the message can be edited.
 */
 	message_id: number;
 	/**
@@ -30682,8 +31099,7 @@ New text content of the message. Must be of type inputMessageText.
 
 /**
 Edits the message content of a live location. Messages can be edited for a limited period of time specified in the live
-location. Returns the edited message after the edit is completed on the server side. Can be used only if
-message.can_be_edited == true.
+location. Returns the edited message after the edit is completed on the server side.
 Request type for {@link Tdjson#editMessageLiveLocation}.
 */
 export interface EditMessageLiveLocation {
@@ -30693,7 +31109,7 @@ The chat the message belongs to.
 */
 	chat_id: number;
 	/**
-Identifier of the message.
+Identifier of the message. Use messageProperties.can_be_edited to check whether the message can be edited.
 */
 	message_id: number;
 	/**
@@ -30725,7 +31141,7 @@ Edits the content of a message with an animation, an audio, a document, a photo 
 If only the caption needs to be edited, use editMessageCaption instead. The media can't be edited if the message was set
 to self-destruct or to a self-destructing media. The type of message content in an album can't be changed with exception
 of replacing a photo with a video or vice versa. Returns the edited message after the edit is completed on the server
-side. Can be used only if message.can_be_edited == true.
+side.
 Request type for {@link Tdjson#editMessageMedia}.
 */
 export interface EditMessageMedia {
@@ -30735,7 +31151,7 @@ The chat the message belongs to.
 */
 	chat_id: number;
 	/**
-Identifier of the message.
+Identifier of the message. Use messageProperties.can_be_edited to check whether the message can be edited.
 */
 	message_id: number;
 	/**
@@ -30750,8 +31166,7 @@ inputMessageDocument, inputMessagePhoto or inputMessageVideo.
 }
 
 /**
-Edits the message content caption. Returns the edited message after the edit is completed on the server side. Can be
-used only if message.can_be_edited == true.
+Edits the message content caption. Returns the edited message after the edit is completed on the server side.
 Request type for {@link Tdjson#editMessageCaption}.
 */
 export interface EditMessageCaption {
@@ -30761,7 +31176,7 @@ The chat the message belongs to.
 */
 	chat_id: number;
 	/**
-Identifier of the message.
+Identifier of the message. Use messageProperties.can_be_edited to check whether the message can be edited.
 */
 	message_id: number;
 	/**
@@ -30781,7 +31196,7 @@ for animation, photo, and video messages.
 
 /**
 Edits the message reply markup; for bots only. Returns the edited message after the edit is completed on the server
-side. Can be used only if message.can_be_edited == true.
+side.
 Request type for {@link Tdjson#editMessageReplyMarkup}.
 */
 export interface EditMessageReplyMarkup {
@@ -30791,7 +31206,7 @@ The chat the message belongs to.
 */
 	chat_id: number;
 	/**
-Identifier of the message.
+Identifier of the message. Use messageProperties.can_be_edited to check whether the message can be edited.
 */
 	message_id: number;
 	/**
@@ -30929,7 +31344,7 @@ The chat the message belongs to.
 */
 	chat_id: number;
 	/**
-Identifier of the message.
+Identifier of the message. Use messageProperties.can_edit_scheduling_state to check whether the message is suitable.
 */
 	message_id: number;
 	/**
@@ -30939,7 +31354,7 @@ The new message scheduling state; pass null to send the message immediately.
 }
 
 /**
-Changes the fact-check of a message. Can be only used if getOption("can_edit_fact_check") == true.
+Changes the fact-check of a message. Can be only used if messageProperties.can_set_fact_check == true.
 Request type for {@link Tdjson#setMessageFactCheck}.
 */
 export interface SetMessageFactCheck {
@@ -30949,8 +31364,7 @@ The channel chat the message belongs to.
 */
 	chat_id: number;
 	/**
-Identifier of the message. The message must be one of the following types: messageAnimation, messageAudio,
-messageDocument, messagePhoto, messageText, messageVideo.
+Identifier of the message.
 */
 	message_id: number;
 	/**
@@ -31218,6 +31632,30 @@ Identifier of the message containing the poll.
 The new message reply markup; pass null if none.
 */
 	reply_markup: ReplyMarkup;
+}
+
+/**
+Pins or unpins a message sent on behalf of a business account; for bots only.
+Request type for {@link Tdjson#setBusinessMessageIsPinned}.
+*/
+export interface SetBusinessMessageIsPinned {
+	'@type': 'setBusinessMessageIsPinned';
+	/**
+Unique identifier of business connection on behalf of which the message was sent.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Pass true to pin the message, pass false to unpin it.
+*/
+	is_pinned?: boolean;
 }
 
 /**
@@ -31812,7 +32250,8 @@ Identifier of the chat to which the message belongs.
 */
 	chat_id: number;
 	/**
-Identifier of the message.
+Identifier of the message. Use messageProperties.can_get_added_reactions to check whether added reactions can be
+received for the message.
 */
 	message_id: number;
 	/**
@@ -32124,7 +32563,7 @@ list has not been reached.
 }
 
 /**
-Stops a poll. A poll in a message can be stopped when the message has can_be_edited flag is set.
+Stops a poll.
 Request type for {@link Tdjson#stopPoll}.
 */
 export interface StopPoll {
@@ -32134,7 +32573,8 @@ Identifier of the chat to which the poll belongs.
 */
 	chat_id: number;
 	/**
-Identifier of the message containing the poll.
+Identifier of the message containing the poll. Use messageProperties.can_be_edited to check whether the poll can be
+stopped.
 */
 	message_id: number;
 	/**
@@ -32188,7 +32628,7 @@ Chat identifier of the message with the button.
 */
 	chat_id: number;
 	/**
-Message identifier of the message with the button.
+Message identifier of the message with the button. The message must not be scheduled.
 */
 	message_id: number;
 	/**
@@ -32346,6 +32786,23 @@ Offset for the next inline query; pass an empty string if there are no more resu
 }
 
 /**
+Returns popular Web App bots.
+Request type for {@link Tdjson#getPopularWebAppBots}.
+*/
+export interface GetPopularWebAppBots {
+	'@type': 'getPopularWebAppBots';
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of bots to be returned; up to 100.
+*/
+	limit: number;
+}
+
+/**
 Returns information about a Web App by its short name. Returns a 404 error if the Web App is not found.
 Request type for {@link Tdjson#searchWebApp}.
 */
@@ -32388,7 +32845,7 @@ Preferred Web App theme; pass null to use the default theme.
 */
 	theme: ThemeParameters;
 	/**
-Short name of the application; 0-64 English letters, digits, and underscores.
+Short name of the current application; 0-64 English letters, digits, and underscores.
 */
 	application_name: string;
 	/**
@@ -32398,8 +32855,36 @@ Pass true if the current user allowed the bot to send them messages.
 }
 
 /**
-Returns an HTTPS URL of a Web App to open from the side menu, a keyboardButtonTypeWebApp button, an
-inlineQueryResultsButtonTypeWebApp button, or an internalLinkTypeSideMenuBot link.
+Returns information needed to open the main Web App of a bot.
+Request type for {@link Tdjson#getMainWebApp}.
+*/
+export interface GetMainWebApp {
+	'@type': 'getMainWebApp';
+	/**
+Identifier of the chat in which the Web App is opened; pass 0 if none.
+*/
+	chat_id: number;
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+Start parameter from internalLinkTypeMainWebApp.
+*/
+	start_parameter: string;
+	/**
+Preferred Web App theme; pass null to use the default theme.
+*/
+	theme: ThemeParameters;
+	/**
+Short name of the current application; 0-64 English letters, digits, and underscores.
+*/
+	application_name: string;
+}
+
+/**
+Returns an HTTPS URL of a Web App to open from the side menu, a keyboardButtonTypeWebApp button, or an
+inlineQueryResultsButtonTypeWebApp button.
 Request type for {@link Tdjson#getWebAppUrl}.
 */
 export interface GetWebAppUrl {
@@ -32409,8 +32894,8 @@ Identifier of the target bot.
 */
 	bot_user_id: number;
 	/**
-The URL from a keyboardButtonTypeWebApp button, inlineQueryResultsButtonTypeWebApp button, an
-internalLinkTypeSideMenuBot link, or an empty when the bot is opened from the side menu.
+The URL from a keyboardButtonTypeWebApp button, inlineQueryResultsButtonTypeWebApp button, or an empty string when the
+bot is opened from the side menu.
 */
 	url: string;
 	/**
@@ -32418,7 +32903,7 @@ Preferred Web App theme; pass null to use the default theme.
 */
 	theme: ThemeParameters;
 	/**
-Short name of the application; 0-64 English letters, digits, and underscores.
+Short name of the current application; 0-64 English letters, digits, and underscores.
 */
 	application_name: string;
 }
@@ -32469,7 +32954,7 @@ Preferred Web App theme; pass null to use the default theme.
 */
 	theme: ThemeParameters;
 	/**
-Short name of the application; 0-64 English letters, digits, and underscores.
+Short name of the current application; 0-64 English letters, digits, and underscores.
 */
 	application_name: string;
 	/**
@@ -32523,7 +33008,7 @@ Identifier of the chat with the message.
 */
 	chat_id: number;
 	/**
-Identifier of the message from which the query originated.
+Identifier of the message from which the query originated. The message must not be scheduled.
 */
 	message_id: number;
 	/**
@@ -33842,8 +34327,7 @@ New slow mode delay for the chat, in seconds; must be one of 0, 10, 30, 60, 300,
 }
 
 /**
-Pins a message in a chat; requires can_pin_messages member right if the chat is a basic group or supergroup, or
-can_edit_messages administrator right if the chat is a channel.
+Pins a message in a chat. A message can be pinned only if messageProperties.can_be_pinned.
 Request type for {@link Tdjson#pinChatMessage}.
 */
 export interface PinChatMessage {
@@ -34291,6 +34775,18 @@ Chat list in which to mark all chats as read.
 }
 
 /**
+Returns the current weather in the given location.
+Request type for {@link Tdjson#getCurrentWeather}.
+*/
+export interface GetCurrentWeather {
+	'@type': 'getCurrentWeather';
+	/**
+The location.
+*/
+	location: Location;
+}
+
+/**
 Returns a story.
 Request type for {@link Tdjson#getStory}.
 */
@@ -34412,6 +34908,26 @@ New story caption; pass null to keep the current caption.
 }
 
 /**
+Changes cover of a video story. Can be called only if story.can_be_edited == true and the story isn't being edited now.
+Request type for {@link Tdjson#editStoryCover}.
+*/
+export interface EditStoryCover {
+	'@type': 'editStoryCover';
+	/**
+Identifier of the chat that posted the story.
+*/
+	story_sender_chat_id: number;
+	/**
+Identifier of the story to edit.
+*/
+	story_id: number;
+	/**
+New timestamp of the frame, which will be used as video thumbnail.
+*/
+	cover_frame_timestamp: number;
+}
+
+/**
 Changes privacy settings of a story. The method can be called only for stories posted on behalf of the current user and
 if story.can_be_edited == true.
 Request type for {@link Tdjson#setStoryPrivacySettings}.
@@ -34518,7 +35034,7 @@ Chat identifier.
 
 /**
 Returns the list of stories that posted by the given chat to its chat page. If from_story_id == 0, then pinned stories
-are returned first. Then, stories are returned in a reverse chronological order (i.e., in order of decreasing story_id).
+are returned first. Then, stories are returned in reverse chronological order (i.e., in order of decreasing story_id).
 For optimal performance, the number of returned stories is chosen by TDLib.
 Request type for {@link Tdjson#getChatPostedToChatPageStories}.
 */
@@ -34542,8 +35058,8 @@ and can be smaller than the specified limit.
 
 /**
 Returns the list of all stories posted by the given chat; requires can_edit_stories right in the chat. The stories are
-returned in a reverse chronological order (i.e., in order of decreasing story_id). For optimal performance, the number
-of returned stories is chosen by TDLib.
+returned in reverse chronological order (i.e., in order of decreasing story_id). For optimal performance, the number of
+returned stories is chosen by TDLib.
 Request type for {@link Tdjson#getChatArchivedStories}.
 */
 export interface GetChatArchivedStories {
@@ -37849,6 +38365,124 @@ JSON-serialized method parameters.
 }
 
 /**
+Returns the list of media previews of a bot.
+Request type for {@link Tdjson#getBotMediaPreviews}.
+*/
+export interface GetBotMediaPreviews {
+	'@type': 'getBotMediaPreviews';
+	/**
+Identifier of the target bot. The bot must have the main Web App.
+*/
+	bot_user_id: number;
+}
+
+/**
+Returns the list of media previews for the given language and the list of languages for which the bot has dedicated
+previews.
+Request type for {@link Tdjson#getBotMediaPreviewInfo}.
+*/
+export interface GetBotMediaPreviewInfo {
+	'@type': 'getBotMediaPreviewInfo';
+	/**
+Identifier of the target bot. The bot must be owned and must have the main Web App.
+*/
+	bot_user_id: number;
+	/**
+A two-letter ISO 639-1 language code for which to get previews. If empty, then default previews are returned.
+*/
+	language_code: string;
+}
+
+/**
+Adds a new media preview to the beginning of the list of media previews of a bot. Returns the added preview after
+addition is completed server-side. The total number of previews must not exceed getOption("bot_media_preview_count_max")
+for the given language.
+Request type for {@link Tdjson#addBotMediaPreview}.
+*/
+export interface AddBotMediaPreview {
+	'@type': 'addBotMediaPreview';
+	/**
+Identifier of the target bot. The bot must be owned and must have the main Web App.
+*/
+	bot_user_id: number;
+	/**
+A two-letter ISO 639-1 language code for which preview is added. If empty, then the preview will be shown to all users
+for whose languages there are no dedicated previews. If non-empty, then there must be an official language pack of the
+same name, which is returned by getLocalizationTargetInfo.
+*/
+	language_code: string;
+	/**
+Content of the added preview.
+*/
+	content: InputStoryContent;
+}
+
+/**
+Replaces media preview in the list of media previews of a bot. Returns the new preview after edit is completed
+server-side.
+Request type for {@link Tdjson#editBotMediaPreview}.
+*/
+export interface EditBotMediaPreview {
+	'@type': 'editBotMediaPreview';
+	/**
+Identifier of the target bot. The bot must be owned and must have the main Web App.
+*/
+	bot_user_id: number;
+	/**
+Language code of the media preview to edit.
+*/
+	language_code: string;
+	/**
+File identifier of the media to replace.
+*/
+	file_id: number;
+	/**
+Content of the new preview.
+*/
+	content: InputStoryContent;
+}
+
+/**
+Changes order of media previews in the list of media previews of a bot.
+Request type for {@link Tdjson#reorderBotMediaPreviews}.
+*/
+export interface ReorderBotMediaPreviews {
+	'@type': 'reorderBotMediaPreviews';
+	/**
+Identifier of the target bot. The bot must be owned and must have the main Web App.
+*/
+	bot_user_id: number;
+	/**
+Language code of the media previews to reorder.
+*/
+	language_code: string;
+	/**
+File identifiers of the media in the new order.
+*/
+	file_ids: number[];
+}
+
+/**
+Delete media previews from the list of media previews of a bot.
+Request type for {@link Tdjson#deleteBotMediaPreviews}.
+*/
+export interface DeleteBotMediaPreviews {
+	'@type': 'deleteBotMediaPreviews';
+	/**
+Identifier of the target bot. The bot must be owned and must have the main Web App.
+*/
+	bot_user_id: number;
+	/**
+Language code of the media previews to delete.
+*/
+	language_code: string;
+	/**
+File identifiers of the media to delete.
+*/
+	file_ids: number[];
+}
+
+/**
 Sets the name of a bot. Can be called only if userTypeBot.can_be_edited == true.
 Request type for {@link Tdjson#setBotName}.
 */
@@ -38411,7 +39045,7 @@ Supergroup identifier.
 */
 	supergroup_id: number;
 	/**
-Identifiers of messages to report.
+Identifiers of messages to report. Use messageProperties.can_be_reported to check whether the message can be reported.
 */
 	message_ids: number[];
 }
@@ -38428,7 +39062,7 @@ Supergroup identifier.
 */
 	supergroup_id: number;
 	/**
-Identifier of the erroneously deleted message.
+Identifier of the erroneously deleted message from chatEventMessageDeleted.
 */
 	message_id: number;
 }
@@ -38573,7 +39207,7 @@ Identifier of a chosen shipping option, if applicable.
 */
 	shipping_option_id: string;
 	/**
-The credentials chosen by user for payment; pass null for a payment in Telegram stars.
+The credentials chosen by user for payment; pass null for a payment in Telegram Stars.
 */
 	credentials: InputCredentials;
 	/**
@@ -39143,7 +39777,8 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Identifiers of reported messages; may be empty to report the whole chat.
+Identifiers of reported messages; may be empty to report the whole chat. Use messageProperties.can_be_reported to check
+whether the message can be reported.
 */
 	message_ids: number[];
 	/**
@@ -39182,7 +39817,7 @@ Additional report details; 0-1024 characters.
 
 /**
 Reports reactions set on a message to the Telegram moderators. Reactions on a message can be reported only if
-message.can_report_reactions.
+messageProperties.can_report_reactions.
 Request type for {@link Tdjson#reportMessageReactions}.
 */
 export interface ReportMessageReactions {
@@ -39257,13 +39892,13 @@ The maximum number of transactions to be returned; up to 200.
 }
 
 /**
-Returns detailed Telegram star revenue statistics.
+Returns detailed Telegram Star revenue statistics.
 Request type for {@link Tdjson#getStarRevenueStatistics}.
 */
 export interface GetStarRevenueStatistics {
 	'@type': 'getStarRevenueStatistics';
 	/**
-Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of a channel chat with
+Identifier of the owner of the Telegram Stars; can be identifier of an owned bot, or identifier of a channel chat with
 supergroupFullInfo.can_get_star_revenue_statistics == true.
 */
 	owner_id: MessageSender;
@@ -39274,18 +39909,18 @@ Pass true if a dark theme is used by the application.
 }
 
 /**
-Returns a URL for Telegram star withdrawal.
+Returns a URL for Telegram Star withdrawal.
 Request type for {@link Tdjson#getStarWithdrawalUrl}.
 */
 export interface GetStarWithdrawalUrl {
 	'@type': 'getStarWithdrawalUrl';
 	/**
-Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of an owned channel
+Identifier of the owner of the Telegram Stars; can be identifier of an owned bot, or identifier of an owned channel
 chat.
 */
 	owner_id: MessageSender;
 	/**
-The number of Telegram stars to withdraw. Must be at least getOption("star_withdrawal_count_min").
+The number of Telegram Stars to withdraw. Must be at least getOption("star_withdrawal_count_min").
 */
 	star_count: number;
 	/**
@@ -39296,13 +39931,13 @@ The 2-step verification password of the current user.
 
 /**
 Returns a URL for a Telegram Ad platform account that can be used to set up advertisements for the chat paid in the
-owned Telegram stars.
+owned Telegram Stars.
 Request type for {@link Tdjson#getStarAdAccountUrl}.
 */
 export interface GetStarAdAccountUrl {
 	'@type': 'getStarAdAccountUrl';
 	/**
-Identifier of the owner of the Telegram stars; can be identifier of an owned bot, or identifier of an owned channel
+Identifier of the owner of the Telegram Stars; can be identifier of an owned bot, or identifier of an owned channel
 chat.
 */
 	owner_id: MessageSender;
@@ -39326,7 +39961,7 @@ Pass true if a dark theme is used by the application.
 }
 
 /**
-Returns detailed statistics about a message. Can be used only if message.can_get_statistics == true.
+Returns detailed statistics about a message. Can be used only if messageProperties.can_get_statistics == true.
 Request type for {@link Tdjson#getMessageStatistics}.
 */
 export interface GetMessageStatistics {
@@ -39347,8 +39982,8 @@ Pass true if a dark theme is used by the application.
 
 /**
 Returns forwarded copies of a channel message to different public channels and public reposts as a story. Can be used
-only if message.can_get_statistics == true. For optimal performance, the number of returned messages and stories is
-chosen by TDLib.
+only if messageProperties.can_get_statistics == true. For optimal performance, the number of returned messages and
+stories is chosen by TDLib.
 Request type for {@link Tdjson#getMessagePublicForwards}.
 */
 export interface GetMessagePublicForwards {
@@ -40274,7 +40909,7 @@ Identifier of the giveaway or a giveaway winners message in the chat.
 }
 
 /**
-Returns available options for Telegram stars purchase.
+Returns available options for Telegram Stars purchase.
 Request type for {@link Tdjson#getStarPaymentOptions}.
 */
 export interface GetStarPaymentOptions {
@@ -40283,13 +40918,25 @@ export interface GetStarPaymentOptions {
 }
 
 /**
-Returns the list of Telegram star transactions for the specified owner.
+Returns available options for Telegram Stars gifting.
+Request type for {@link Tdjson#getStarGiftPaymentOptions}.
+*/
+export interface GetStarGiftPaymentOptions {
+	'@type': 'getStarGiftPaymentOptions';
+	/**
+Identifier of the user that will receive Telegram Stars; pass 0 to get options for an unspecified user.
+*/
+	user_id: number;
+}
+
+/**
+Returns the list of Telegram Star transactions for the specified owner.
 Request type for {@link Tdjson#getStarTransactions}.
 */
 export interface GetStarTransactions {
 	'@type': 'getStarTransactions';
 	/**
-Identifier of the owner of the Telegram stars; can be the identifier of the current user, identifier of an owned bot, or
+Identifier of the owner of the Telegram Stars; can be the identifier of the current user, identifier of an owned bot, or
 identifier of a channel chat with supergroupFullInfo.can_get_star_revenue_statistics == true.
 */
 	owner_id: MessageSender;
@@ -41039,6 +41686,7 @@ export type Request =
 	| GetChatPinnedMessage
 	| GetCallbackQueryMessage
 	| GetMessages
+	| GetMessageProperties
 	| GetMessageThread
 	| GetMessageReadDate
 	| GetMessageViewers
@@ -41147,6 +41795,7 @@ export type Request =
 	| EditBusinessMessageCaption
 	| EditBusinessMessageReplyMarkup
 	| StopBusinessPoll
+	| SetBusinessMessageIsPinned
 	| CheckQuickReplyShortcutName
 	| LoadQuickReplyShortcuts
 	| SetQuickReplyShortcutName
@@ -41208,8 +41857,10 @@ export type Request =
 	| ShareChatWithBot
 	| GetInlineQueryResults
 	| AnswerInlineQuery
+	| GetPopularWebAppBots
 	| SearchWebApp
 	| GetWebAppLinkUrl
+	| GetMainWebApp
 	| GetWebAppUrl
 	| SendWebAppData
 	| OpenWebApp
@@ -41320,11 +41971,13 @@ export type Request =
 	| ToggleChatIsPinned
 	| SetPinnedChats
 	| ReadChatList
+	| GetCurrentWeather
 	| GetStory
 	| GetChatsToSendStories
 	| CanSendStory
 	| SendStory
 	| EditStory
+	| EditStoryCover
 	| SetStoryPrivacySettings
 	| ToggleStoryIsPostedToChatPage
 	| DeleteStory
@@ -41540,6 +42193,12 @@ export type Request =
 	| CanBotSendMessages
 	| AllowBotToSendMessages
 	| SendWebAppCustomRequest
+	| GetBotMediaPreviews
+	| GetBotMediaPreviewInfo
+	| AddBotMediaPreview
+	| EditBotMediaPreview
+	| ReorderBotMediaPreviews
+	| DeleteBotMediaPreviews
 	| SetBotName
 	| GetBotName
 	| SetBotProfilePhoto
@@ -41696,6 +42355,7 @@ export type Request =
 	| LaunchPrepaidPremiumGiveaway
 	| GetPremiumGiveawayInfo
 	| GetStarPaymentOptions
+	| GetStarGiftPaymentOptions
 	| GetStarTransactions
 	| CanPurchaseFromStore
 	| AssignAppStoreTransaction
@@ -42327,7 +42987,17 @@ Returns information about messages. If a message is not found, returns null on t
 	}
 
 	/**
-Returns information about a message thread. Can be used only if message.can_get_message_thread == true.
+Returns properties of a message; this is an offline request.
+*/
+	async getMessageProperties(options: Omit<GetMessageProperties, '@type'>): Promise<MessageProperties> {
+		return this._request({
+			...options,
+			'@type': 'getMessageProperties',
+		});
+	}
+
+	/**
+Returns information about a message thread. Can be used only if messageProperties.can_get_message_thread == true.
 */
 	async getMessageThread(options: Omit<GetMessageThread, '@type'>): Promise<MessageThreadInfo> {
 		return this._request({
@@ -42337,8 +43007,8 @@ Returns information about a message thread. Can be used only if message.can_get_
 	}
 
 	/**
-Returns read date of a recent outgoing message in a private chat. The method can be called if message.can_get_read_date
-== true and the message is read.
+Returns read date of a recent outgoing message in a private chat. The method can be called if
+messageProperties.can_get_read_date == true.
 */
 	async getMessageReadDate(options: Omit<GetMessageReadDate, '@type'>): Promise<MessageReadDate> {
 		return this._request({
@@ -42349,7 +43019,8 @@ Returns read date of a recent outgoing message in a private chat. The method can
 
 	/**
 Returns viewers of a recent outgoing message in a basic group or a supergroup chat. For video notes and voice notes only
-users, opened content of the message, are returned. The method can be called if message.can_get_viewers == true.
+users, opened content of the message, are returned. The method can be called if messageProperties.can_get_viewers ==
+true.
 */
 	async getMessageViewers(options: Omit<GetMessageViewers, '@type'>): Promise<MessageViewers> {
 		return this._request({
@@ -42647,8 +43318,8 @@ their topic.order in descending order. Returns a 404 error if all topics have be
 	}
 
 	/**
-Returns messages in a Saved Messages topic. The messages are returned in a reverse chronological order (i.e., in order
-of decreasing message_id).
+Returns messages in a Saved Messages topic. The messages are returned in reverse chronological order (i.e., in order of
+decreasing message_id).
 */
 	async getSavedMessagesTopicHistory(options: Omit<GetSavedMessagesTopicHistory, '@type'>): Promise<Messages> {
 		return this._request({
@@ -42720,7 +43391,7 @@ Returns a list of common group chats with a given user. Chats are sorted by thei
 	}
 
 	/**
-Returns messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of decreasing
+Returns messages in a chat. The messages are returned in reverse chronological order (i.e., in order of decreasing
 message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline request if
 only_local is true.
 */
@@ -42732,10 +43403,10 @@ only_local is true.
 	}
 
 	/**
-Returns messages in a message thread of a message. Can be used only if message.can_get_message_thread == true. Message
-thread of a channel message is in the channel's linked supergroup. The messages are returned in a reverse chronological
-order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages is chosen by
-TDLib.
+Returns messages in a message thread of a message. Can be used only if messageProperties.can_get_message_thread == true.
+Message thread of a channel message is in the channel's linked supergroup. The messages are returned in reverse
+chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages
+is chosen by TDLib.
 */
 	async getMessageThreadHistory(options: Omit<GetMessageThreadHistory, '@type'>): Promise<Messages> {
 		return this._request({
@@ -42999,7 +43670,7 @@ chat. Cannot be used in secret chats.
 	}
 
 	/**
-Returns all scheduled messages in a chat. The messages are returned in a reverse chronological order (i.e., in order of
+Returns all scheduled messages in a chat. The messages are returned in reverse chronological order (i.e., in order of
 decreasing message_id).
 */
 	async getChatScheduledMessages(options: Omit<GetChatScheduledMessages, '@type'>): Promise<Messages> {
@@ -43063,8 +43734,8 @@ user.
 	}
 
 	/**
-Returns an HTTPS link to a message in a chat. Available only for already sent messages in supergroups and channels, or
-if message.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
+Returns an HTTPS link to a message in a chat. Available only if messageProperties.can_get_link, or if
+messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
 */
 	async getMessageLink(options: Omit<GetMessageLink, '@type'>): Promise<MessageLink> {
 		return this._request({
@@ -43074,7 +43745,7 @@ if message.can_get_media_timestamp_links and a media timestamp link is generated
 	}
 
 	/**
-Returns an HTML code for embedding the message. Available only for messages in supergroups and channels with a username.
+Returns an HTML code for embedding the message. Available only if messageProperties.can_get_embedding_code.
 */
 	async getMessageEmbeddingCode(options: Omit<GetMessageEmbeddingCode, '@type'>): Promise<Text> {
 		return this._request({
@@ -43117,8 +43788,7 @@ Premium user, then text formatting is preserved.
 	}
 
 	/**
-Recognizes speech in a video note or a voice note message. The message must be successfully sent, must not be scheduled,
-and must be from a non-secret chat.
+Recognizes speech in a video note or a voice note message.
 */
 	async recognizeSpeech(options: Omit<RecognizeSpeech, '@type'>): Promise<Ok> {
 		return this._request({
@@ -43280,7 +43950,7 @@ sent in the last 30 seconds will not be deleted.
 
 	/**
 Edits the text of a message (or a text of a game message). Returns the edited message after the edit is completed on the
-server side. Can be used only if message.can_be_edited == true.
+server side.
 */
 	async editMessageText(options: Omit<EditMessageText, '@type'>): Promise<Message> {
 		return this._request({
@@ -43291,8 +43961,7 @@ server side. Can be used only if message.can_be_edited == true.
 
 	/**
 Edits the message content of a live location. Messages can be edited for a limited period of time specified in the live
-location. Returns the edited message after the edit is completed on the server side. Can be used only if
-message.can_be_edited == true.
+location. Returns the edited message after the edit is completed on the server side.
 */
 	async editMessageLiveLocation(options: Omit<EditMessageLiveLocation, '@type'>): Promise<Message> {
 		return this._request({
@@ -43306,7 +43975,7 @@ Edits the content of a message with an animation, an audio, a document, a photo 
 If only the caption needs to be edited, use editMessageCaption instead. The media can't be edited if the message was set
 to self-destruct or to a self-destructing media. The type of message content in an album can't be changed with exception
 of replacing a photo with a video or vice versa. Returns the edited message after the edit is completed on the server
-side. Can be used only if message.can_be_edited == true.
+side.
 */
 	async editMessageMedia(options: Omit<EditMessageMedia, '@type'>): Promise<Message> {
 		return this._request({
@@ -43316,8 +43985,7 @@ side. Can be used only if message.can_be_edited == true.
 	}
 
 	/**
-Edits the message content caption. Returns the edited message after the edit is completed on the server side. Can be
-used only if message.can_be_edited == true.
+Edits the message content caption. Returns the edited message after the edit is completed on the server side.
 */
 	async editMessageCaption(options: Omit<EditMessageCaption, '@type'>): Promise<Message> {
 		return this._request({
@@ -43328,7 +43996,7 @@ used only if message.can_be_edited == true.
 
 	/**
 Edits the message reply markup; for bots only. Returns the edited message after the edit is completed on the server
-side. Can be used only if message.can_be_edited == true.
+side.
 */
 	async editMessageReplyMarkup(options: Omit<EditMessageReplyMarkup, '@type'>): Promise<Message> {
 		return this._request({
@@ -43400,7 +44068,7 @@ together with the message will be also changed.
 	}
 
 	/**
-Changes the fact-check of a message. Can be only used if getOption("can_edit_fact_check") == true.
+Changes the fact-check of a message. Can be only used if messageProperties.can_set_fact_check == true.
 */
 	async setMessageFactCheck(options: Omit<SetMessageFactCheck, '@type'>): Promise<Ok> {
 		return this._request({
@@ -43489,6 +44157,16 @@ Stops a poll sent on behalf of a business account; for bots only.
 		return this._request({
 			...options,
 			'@type': 'stopBusinessPoll',
+		});
+	}
+
+	/**
+Pins or unpins a message sent on behalf of a business account; for bots only.
+*/
+	async setBusinessMessageIsPinned(options: Omit<SetBusinessMessageIsPinned, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessMessageIsPinned',
 		});
 	}
 
@@ -44033,7 +44711,7 @@ returned users is chosen by TDLib.
 	}
 
 	/**
-Stops a poll. A poll in a message can be stopped when the message has can_be_edited flag is set.
+Stops a poll.
 */
 	async stopPoll(options: Omit<StopPoll, '@type'>): Promise<Ok> {
 		return this._request({
@@ -44136,6 +44814,16 @@ Sets the result of an inline query; for bots only.
 	}
 
 	/**
+Returns popular Web App bots.
+*/
+	async getPopularWebAppBots(options: Omit<GetPopularWebAppBots, '@type'>): Promise<FoundUsers> {
+		return this._request({
+			...options,
+			'@type': 'getPopularWebAppBots',
+		});
+	}
+
+	/**
 Returns information about a Web App by its short name. Returns a 404 error if the Web App is not found.
 */
 	async searchWebApp(options: Omit<SearchWebApp, '@type'>): Promise<FoundWebApp> {
@@ -44156,8 +44844,18 @@ Returns an HTTPS URL of a Web App to open after a link of the type internalLinkT
 	}
 
 	/**
-Returns an HTTPS URL of a Web App to open from the side menu, a keyboardButtonTypeWebApp button, an
-inlineQueryResultsButtonTypeWebApp button, or an internalLinkTypeSideMenuBot link.
+Returns information needed to open the main Web App of a bot.
+*/
+	async getMainWebApp(options: Omit<GetMainWebApp, '@type'>): Promise<MainWebApp> {
+		return this._request({
+			...options,
+			'@type': 'getMainWebApp',
+		});
+	}
+
+	/**
+Returns an HTTPS URL of a Web App to open from the side menu, a keyboardButtonTypeWebApp button, or an
+inlineQueryResultsButtonTypeWebApp button.
 */
 	async getWebAppUrl(options: Omit<GetWebAppUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
@@ -45014,8 +45712,7 @@ Changes the slow mode delay of a chat. Available only for supergroups; requires 
 	}
 
 	/**
-Pins a message in a chat; requires can_pin_messages member right if the chat is a basic group or supergroup, or
-can_edit_messages administrator right if the chat is a channel.
+Pins a message in a chat. A message can be pinned only if messageProperties.can_be_pinned.
 */
 	async pinChatMessage(options: Omit<PinChatMessage, '@type'>): Promise<Ok> {
 		return this._request({
@@ -45310,6 +46007,16 @@ Traverse all chats in a chat list and marks all messages in the chats as read.
 	}
 
 	/**
+Returns the current weather in the given location.
+*/
+	async getCurrentWeather(options: Omit<GetCurrentWeather, '@type'>): Promise<CurrentWeather> {
+		return this._request({
+			...options,
+			'@type': 'getCurrentWeather',
+		});
+	}
+
+	/**
 Returns a story.
 */
 	async getStory(options: Omit<GetStory, '@type'>): Promise<Story> {
@@ -45358,6 +46065,16 @@ Changes content and caption of a story. Can be called only if story.can_be_edite
 		return this._request({
 			...options,
 			'@type': 'editStory',
+		});
+	}
+
+	/**
+Changes cover of a video story. Can be called only if story.can_be_edited == true and the story isn't being edited now.
+*/
+	async editStoryCover(options: Omit<EditStoryCover, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editStoryCover',
 		});
 	}
 
@@ -45436,7 +46153,7 @@ Returns the list of active stories posted by the given chat.
 
 	/**
 Returns the list of stories that posted by the given chat to its chat page. If from_story_id == 0, then pinned stories
-are returned first. Then, stories are returned in a reverse chronological order (i.e., in order of decreasing story_id).
+are returned first. Then, stories are returned in reverse chronological order (i.e., in order of decreasing story_id).
 For optimal performance, the number of returned stories is chosen by TDLib.
 */
 	async getChatPostedToChatPageStories(options: Omit<GetChatPostedToChatPageStories, '@type'>): Promise<Stories> {
@@ -45448,8 +46165,8 @@ For optimal performance, the number of returned stories is chosen by TDLib.
 
 	/**
 Returns the list of all stories posted by the given chat; requires can_edit_stories right in the chat. The stories are
-returned in a reverse chronological order (i.e., in order of decreasing story_id). For optimal performance, the number
-of returned stories is chosen by TDLib.
+returned in reverse chronological order (i.e., in order of decreasing story_id). For optimal performance, the number of
+returned stories is chosen by TDLib.
 */
 	async getChatArchivedStories(options: Omit<GetChatArchivedStories, '@type'>): Promise<Stories> {
 		return this._request({
@@ -47559,6 +48276,70 @@ Sends a custom request from a Web App.
 	}
 
 	/**
+Returns the list of media previews of a bot.
+*/
+	async getBotMediaPreviews(options: Omit<GetBotMediaPreviews, '@type'>): Promise<BotMediaPreviews> {
+		return this._request({
+			...options,
+			'@type': 'getBotMediaPreviews',
+		});
+	}
+
+	/**
+Returns the list of media previews for the given language and the list of languages for which the bot has dedicated
+previews.
+*/
+	async getBotMediaPreviewInfo(options: Omit<GetBotMediaPreviewInfo, '@type'>): Promise<BotMediaPreviewInfo> {
+		return this._request({
+			...options,
+			'@type': 'getBotMediaPreviewInfo',
+		});
+	}
+
+	/**
+Adds a new media preview to the beginning of the list of media previews of a bot. Returns the added preview after
+addition is completed server-side. The total number of previews must not exceed getOption("bot_media_preview_count_max")
+for the given language.
+*/
+	async addBotMediaPreview(options: Omit<AddBotMediaPreview, '@type'>): Promise<BotMediaPreview> {
+		return this._request({
+			...options,
+			'@type': 'addBotMediaPreview',
+		});
+	}
+
+	/**
+Replaces media preview in the list of media previews of a bot. Returns the new preview after edit is completed
+server-side.
+*/
+	async editBotMediaPreview(options: Omit<EditBotMediaPreview, '@type'>): Promise<BotMediaPreview> {
+		return this._request({
+			...options,
+			'@type': 'editBotMediaPreview',
+		});
+	}
+
+	/**
+Changes order of media previews in the list of media previews of a bot.
+*/
+	async reorderBotMediaPreviews(options: Omit<ReorderBotMediaPreviews, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reorderBotMediaPreviews',
+		});
+	}
+
+	/**
+Delete media previews from the list of media previews of a bot.
+*/
+	async deleteBotMediaPreviews(options: Omit<DeleteBotMediaPreviews, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteBotMediaPreviews',
+		});
+	}
+
+	/**
 Sets the name of a bot. Can be called only if userTypeBot.can_be_edited == true.
 */
 	async setBotName(options: Omit<SetBotName, '@type'>): Promise<Ok> {
@@ -48466,7 +49247,7 @@ Reports a chat photo to the Telegram moderators. A chat photo can be reported on
 
 	/**
 Reports reactions set on a message to the Telegram moderators. Reactions on a message can be reported only if
-message.can_report_reactions.
+messageProperties.can_report_reactions.
 */
 	async reportMessageReactions(options: Omit<ReportMessageReactions, '@type'>): Promise<Ok> {
 		return this._request({
@@ -48509,7 +49290,7 @@ supergroupFullInfo.can_get_revenue_statistics == true.
 	}
 
 	/**
-Returns detailed Telegram star revenue statistics.
+Returns detailed Telegram Star revenue statistics.
 */
 	async getStarRevenueStatistics(options: Omit<GetStarRevenueStatistics, '@type'>): Promise<StarRevenueStatistics> {
 		return this._request({
@@ -48519,7 +49300,7 @@ Returns detailed Telegram star revenue statistics.
 	}
 
 	/**
-Returns a URL for Telegram star withdrawal.
+Returns a URL for Telegram Star withdrawal.
 */
 	async getStarWithdrawalUrl(options: Omit<GetStarWithdrawalUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
@@ -48530,7 +49311,7 @@ Returns a URL for Telegram star withdrawal.
 
 	/**
 Returns a URL for a Telegram Ad platform account that can be used to set up advertisements for the chat paid in the
-owned Telegram stars.
+owned Telegram Stars.
 */
 	async getStarAdAccountUrl(options: Omit<GetStarAdAccountUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
@@ -48551,7 +49332,7 @@ used only if supergroupFullInfo.can_get_statistics == true.
 	}
 
 	/**
-Returns detailed statistics about a message. Can be used only if message.can_get_statistics == true.
+Returns detailed statistics about a message. Can be used only if messageProperties.can_get_statistics == true.
 */
 	async getMessageStatistics(options: Omit<GetMessageStatistics, '@type'>): Promise<MessageStatistics> {
 		return this._request({
@@ -48562,8 +49343,8 @@ Returns detailed statistics about a message. Can be used only if message.can_get
 
 	/**
 Returns forwarded copies of a channel message to different public channels and public reposts as a story. Can be used
-only if message.can_get_statistics == true. For optimal performance, the number of returned messages and stories is
-chosen by TDLib.
+only if messageProperties.can_get_statistics == true. For optimal performance, the number of returned messages and
+stories is chosen by TDLib.
 */
 	async getMessagePublicForwards(options: Omit<GetMessagePublicForwards, '@type'>): Promise<PublicForwards> {
 		return this._request({
@@ -49150,7 +49931,7 @@ Returns information about a Telegram Premium giveaway.
 	}
 
 	/**
-Returns available options for Telegram stars purchase.
+Returns available options for Telegram Stars purchase.
 */
 	async getStarPaymentOptions(): Promise<StarPaymentOptions> {
 		return this._request({
@@ -49159,7 +49940,17 @@ Returns available options for Telegram stars purchase.
 	}
 
 	/**
-Returns the list of Telegram star transactions for the specified owner.
+Returns available options for Telegram Stars gifting.
+*/
+	async getStarGiftPaymentOptions(options: Omit<GetStarGiftPaymentOptions, '@type'>): Promise<StarPaymentOptions> {
+		return this._request({
+			...options,
+			'@type': 'getStarGiftPaymentOptions',
+		});
+	}
+
+	/**
+Returns the list of Telegram Star transactions for the specified owner.
 */
 	async getStarTransactions(options: Omit<GetStarTransactions, '@type'>): Promise<StarTransactions> {
 		return this._request({
