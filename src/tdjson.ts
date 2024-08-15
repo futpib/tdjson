@@ -2542,6 +2542,85 @@ only.
 }
 
 /**
+Describes subscription plan paid in Telegram Stars.
+*/
+export interface StarSubscriptionPricing {
+	'@type': 'starSubscriptionPricing';
+	/**
+The number of seconds between consecutive Telegram Star debiting.
+*/
+	period: number;
+	/**
+The amount of Telegram Stars that must be paid for each period.
+*/
+	star_count: number;
+}
+
+/**
+Contains information about subscription to a channel chat paid in Telegram Stars.
+*/
+export interface StarSubscription {
+	'@type': 'starSubscription';
+	/**
+Unique identifier of the subscription.
+*/
+	id: string;
+	/**
+Identifier of the channel chat that is subscribed.
+*/
+	chat_id: number;
+	/**
+Point in time (Unix timestamp) when the subscription will expire or expired.
+*/
+	expiration_date: number;
+	/**
+True, if the subscription is active and the user can use the method reuseStarSubscription to join the subscribed chat
+again.
+*/
+	can_reuse?: boolean;
+	/**
+True, if the subscription was canceled.
+*/
+	is_canceled?: boolean;
+	/**
+True, if the subscription expires soon and there are no enough Telegram Stars on the user's balance to extend it.
+*/
+	is_expiring?: boolean;
+	/**
+The invite link that can be used to renew the subscription if it has been expired; may be empty, if the link isn't
+available anymore.
+*/
+	invite_link: string;
+	/**
+The subscription plan.
+*/
+	pricing: StarSubscriptionPricing;
+}
+
+/**
+Represents a list of Telegram Star subscriptions.
+*/
+export interface StarSubscriptions {
+	'@type': 'starSubscriptions';
+	/**
+The amount of owned Telegram Stars.
+*/
+	star_count: number;
+	/**
+List of subbscriptions for Telegram Stars.
+*/
+	subscriptions: StarSubscription[];
+	/**
+The number of Telegram Stars required to buy to extend subscriptions expiring soon.
+*/
+	required_star_count: number;
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
 Contains information about a product that can be paid with invoice.
 */
 export interface ProductInfo {
@@ -2751,6 +2830,74 @@ export interface StarTransactionDirectionOutgoing {
 }
 
 /**
+Describes purpose of a transaction with a bot.
+Subtype of {@link BotTransactionPurpose}.
+*/
+export interface BotTransactionPurposePaidMedia {
+	'@type': 'botTransactionPurposePaidMedia';
+	/**
+The bought media if the trancastion wasn't refunded.
+*/
+	media: PaidMedia[];
+}
+
+/**
+User bought a product from the bot.
+Subtype of {@link BotTransactionPurpose}.
+*/
+export interface BotTransactionPurposeInvoicePayment {
+	'@type': 'botTransactionPurposeInvoicePayment';
+	/**
+Information about the bought product; may be null if not applicable.
+*/
+	product_info: ProductInfo;
+	/**
+Invoice payload; for bots only.
+*/
+	invoice_payload: string;
+}
+
+/**
+Describes purpose of a transaction with a channel.
+Subtype of {@link ChannelTransactionPurpose}.
+*/
+export interface ChannelTransactionPurposePaidMedia {
+	'@type': 'channelTransactionPurposePaidMedia';
+	/**
+Identifier of the corresponding message with paid media; can be an identifier of a deleted message.
+*/
+	message_id: number;
+	/**
+The bought media if the trancastion wasn't refunded.
+*/
+	media: PaidMedia[];
+}
+
+/**
+User joined the channel and subscribed to regular payments in Telegram Stars.
+Subtype of {@link ChannelTransactionPurpose}.
+*/
+export interface ChannelTransactionPurposeJoin {
+	'@type': 'channelTransactionPurposeJoin';
+	/**
+The number of seconds between consecutive Telegram Star debiting.
+*/
+	period: number;
+}
+
+/**
+User paid for a reaction.
+Subtype of {@link ChannelTransactionPurpose}.
+*/
+export interface ChannelTransactionPurposeReaction {
+	'@type': 'channelTransactionPurposeReaction';
+	/**
+Identifier of the reacted message; can be an identifier of a deleted message.
+*/
+	message_id: number;
+}
+
+/**
 Describes source or recipient of a transaction with Telegram Stars.
 Subtype of {@link StarTransactionPartner}.
 */
@@ -2805,17 +2952,29 @@ Subtype of {@link StarTransactionPartner}.
 export interface StarTransactionPartnerBot {
 	'@type': 'starTransactionPartnerBot';
 	/**
-Identifier of the bot for the user, or the user for the bot.
+Identifier of the bot.
 */
 	user_id: number;
 	/**
-Information about the bought product; may be null if not applicable.
+Purpose of the transaction.
 */
-	product_info: ProductInfo;
+	purpose: BotTransactionPurpose;
+}
+
+/**
+The transaction is a transaction with a business account.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerBusiness {
+	'@type': 'starTransactionPartnerBusiness';
 	/**
-Invoice payload; for bots only.
+Identifier of the business account user.
 */
-	invoice_payload: string;
+	user_id: number;
+	/**
+The bought media if the trancastion wasn't refunded.
+*/
+	media: PaidMedia[];
 }
 
 /**
@@ -2829,13 +2988,9 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Identifier of the corresponding message with paid media; can be an identifier of a deleted message.
+Purpose of the transaction.
 */
-	paid_media_message_id: number;
-	/**
-Information about the bought media.
-*/
-	media: PaidMedia[];
+	purpose: ChannelTransactionPurpose;
 }
 
 /**
@@ -3295,6 +3450,11 @@ List of the bot commands.
 */
 	commands: BotCommand[];
 	/**
+The HTTP link to the privacy policy of the bot. If empty, then /privacy command must be used if supported by the bot. If
+the command isn't supported, then https://telegram.org/privacy-tpa must be opened.
+*/
+	privacy_policy_url: string;
+	/**
 Default administrator rights for adding the bot to basic group and supergroup chats; may be null.
 */
 	default_group_administrator_rights: ChatAdministratorRights;
@@ -3526,7 +3686,11 @@ Subtype of {@link ChatMemberStatus}.
 */
 export interface ChatMemberStatusMember {
 	'@type': 'chatMemberStatusMember';
-
+	/**
+Point in time (Unix timestamp) when the user will be removed from the chat because of the expired subscription; 0 if
+never. Ignored in setChatMemberStatus.
+*/
+	member_until_date: number;
 }
 
 /**
@@ -3800,6 +3964,11 @@ Point in time (Unix timestamp) when the link will expire; 0 if never.
 */
 	expiration_date: number;
 	/**
+Information about subscription plan that is applied to the users joining the chat by the link; may be null if the link
+doesn't require subscription.
+*/
+	subscription_pricing: StarSubscriptionPricing;
+	/**
 The maximum number of members, which can join the chat using the link simultaneously; 0 if not limited. Always 0 if the
 link requires approval.
 */
@@ -3808,6 +3977,11 @@ link requires approval.
 Number of chat members, which joined the chat using the link.
 */
 	member_count: number;
+	/**
+Number of chat members, which joined the chat using the link, but have already left because of expired subscription; for
+subscription links only.
+*/
+	expired_member_count: number;
 	/**
 Number of pending join requests created using this link.
 */
@@ -3938,6 +4112,26 @@ export interface InviteLinkChatTypeChannel {
 }
 
 /**
+Contains information about subscription plan that must be paid by the user to use a chat invite link.
+*/
+export interface ChatInviteLinkSubscriptionInfo {
+	'@type': 'chatInviteLinkSubscriptionInfo';
+	/**
+Information about subscription plan that must be paid by the user to use the link.
+*/
+	pricing: StarSubscriptionPricing;
+	/**
+True, if the user has already paid for the subscription and can use joinChatByInviteLink to join the subscribed chat
+again.
+*/
+	can_reuse?: boolean;
+	/**
+Identifier of the payment form to use for subscription payment; 0 if the subscription can't be paid.
+*/
+	form_id: string;
+}
+
+/**
 Contains information about a chat invite link.
 */
 export interface ChatInviteLinkInfo {
@@ -3978,6 +4172,11 @@ Number of members in the chat.
 User identifiers of some chat members that may be known to the current user.
 */
 	member_user_ids: number[];
+	/**
+Information about subscription plan that must be paid by the user to use the link; may be null if the link doesn't
+require subscription.
+*/
+	subscription_info: ChatInviteLinkSubscriptionInfo;
 	/**
 True, if the link only creates join request.
 */
@@ -4165,10 +4364,13 @@ True, if the supergroup is connected to a location, i.e. the supergroup is a loc
 */
 	has_location?: boolean;
 	/**
-True, if messages sent to the channel need to contain information about the sender. This field is only applicable to
-channels.
+True, if messages sent to the channel contains name of the sender. This field is only applicable to channels.
 */
 	sign_messages?: boolean;
+	/**
+True, if messages sent to the channel have information about the sender user. This field is only applicable to channels.
+*/
+	show_message_sender?: boolean;
 	/**
 True, if users need to join the supergroup before they can send messages. Always true for channels and non-discussion
 supergroups.
@@ -4200,6 +4402,10 @@ True, if the supergroup is a forum with topics.
 True, if the supergroup or channel is verified.
 */
 	is_verified?: boolean;
+	/**
+True, if content of media messages in the supergroup or channel chat must be hidden with 18+ spoiler.
+*/
+	has_sensitive_content?: boolean;
 	/**
 If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be
 restricted.
@@ -4266,6 +4472,10 @@ Time left before next message can be sent in the supergroup, in seconds. An upda
 triggered when value of this field changes, but both new and old values are non-zero.
 */
 	slow_mode_delay_expires_in: number;
+	/**
+True, if paid reaction can be enabled in the channel chat; for channels only.
+*/
+	can_enable_paid_reaction?: boolean;
 	/**
 True, if members of the chat can be retrieved via getSupergroupMembers or searchChatMembers.
 */
@@ -4686,6 +4896,43 @@ Unique identifier of the custom emoji.
 }
 
 /**
+The paid reaction in a channel chat.
+Subtype of {@link ReactionType}.
+*/
+export interface ReactionTypePaid {
+	'@type': 'reactionTypePaid';
+
+}
+
+/**
+Contains information about a user that added paid reactions.
+*/
+export interface PaidReactor {
+	'@type': 'paidReactor';
+	/**
+Identifier of the user or chat that added the reactions; may be null for anonymous reactors that aren't the current
+user.
+*/
+	sender_id: MessageSender;
+	/**
+Number of Telegram Stars added.
+*/
+	star_count: number;
+	/**
+True, if the reactor is one of the most active reactors; can be false if the reactor is the current user.
+*/
+	is_top?: boolean;
+	/**
+True, if the paid reaction was added by the current user.
+*/
+	is_me?: boolean;
+	/**
+True, if the reactor is anonymous.
+*/
+	is_anonymous?: boolean;
+}
+
+/**
 Contains information about a forwarded message.
 */
 export interface MessageForwardInfo {
@@ -4795,6 +5042,14 @@ List of added reactions.
 True, if the reactions are tags and Telegram Premium users can filter messages by them.
 */
 	are_tags?: boolean;
+	/**
+Information about top users that added the paid reaction.
+*/
+	paid_reactors: PaidReactor[];
+	/**
+True, if the list of added reactions is available using getMessageAddedReactions.
+*/
+	can_get_added_reactions?: boolean;
 }
 
 /**
@@ -5241,6 +5496,10 @@ Unique identifier of the effect added to the message; 0 if none.
 */
 	effect_id: string;
 	/**
+True, if media content of the message must be hidden with 18+ spoiler.
+*/
+	has_sensitive_content?: boolean;
+	/**
 If non-empty, contains a human-readable description of the reason why access to this message must be restricted.
 */
 	restriction_reason: string;
@@ -5525,7 +5784,8 @@ True, if the message can be reported to Telegram moderators through reportChatSp
 */
 	can_be_reported?: boolean;
 	/**
-Content of the message. Currently, can be only of the type messageText.
+Content of the message. Currently, can be only of the types messageText, messageAnimation, messagePhoto, or
+messageVideo.
 */
 	content: MessageContent;
 	/**
@@ -8620,6 +8880,10 @@ export interface LinkPreviewTypeBackground {
 Document with the background; may be null for filled backgrounds.
 */
 	document: Document;
+	/**
+Type of the background; may be null if unknown.
+*/
+	background_type: BackgroundType;
 }
 
 /**
@@ -8819,13 +9083,13 @@ export interface LinkPreviewTypeShareableChatFolder {
 }
 
 /**
-The link is a link to a sticker message.
+The link is a link to a sticker.
 Subtype of {@link LinkPreviewType}.
 */
 export interface LinkPreviewTypeSticker {
 	'@type': 'linkPreviewTypeSticker';
 	/**
-The sticker.
+The sticker. It can be an arbitrary WEBP image and can have dimensions bigger than 512.
 */
 	sticker: Sticker;
 }
@@ -13223,10 +13487,6 @@ True, if the message can be shared in a story using inputStoryAreaTypeMessage.
 True, if scheduling state of the message can be edited.
 */
 	can_edit_scheduling_state?: boolean;
-	/**
-True, if the list of added reactions is available using getMessageAddedReactions.
-*/
-	can_get_added_reactions?: boolean;
 	/**
 True, if code for message embedding can be received using getMessageEmbeddingCode.
 */
@@ -17945,6 +18205,18 @@ New value of sign_messages.
 }
 
 /**
+The show_message_sender setting of a channel was toggled.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventShowMessageSenderToggled {
+	'@type': 'chatEventShowMessageSenderToggled';
+	/**
+New value of show_message_sender.
+*/
+	show_message_sender?: boolean;
+}
+
+/**
 A chat invite link was edited.
 Subtype of {@link ChatEventAction}.
 */
@@ -19339,6 +19611,18 @@ Paid amount, in the smallest units of the currency.
 Number of bought Telegram Stars.
 */
 	star_count: number;
+}
+
+/**
+The user joins a chat and subscribes to regular payments in Telegram Stars.
+Subtype of {@link TelegramPaymentPurpose}.
+*/
+export interface TelegramPaymentPurposeJoinChat {
+	'@type': 'telegramPaymentPurposeJoinChat';
+	/**
+Invite link to use.
+*/
+	invite_link: string;
 }
 
 /**
@@ -21648,11 +21932,11 @@ export interface InternalLinkTypeActiveSessions {
 The link is a link to an attachment menu bot to be opened in the specified or a chosen chat. Process given target_chat
 to open the chat. Then, call searchPublicChat with the given bot username, check that the user is a bot and can be added
 to attachment menu. Then, use getAttachmentMenuBot to receive information about the bot. If the bot isn't added to
-attachment menu, then show a disclaimer about Mini Apps being third-party apps, ask the user to accept their Terms of
-service and confirm adding the bot to side and attachment menu. If the user accept the terms and confirms adding, then
-use toggleBotIsAddedToAttachmentMenu to add the bot. If the attachment menu bot can't be used in the opened chat, show
-an error to the user. If the bot is added to attachment menu and can be used in the chat, then use openWebApp with the
-given URL.
+attachment menu, then show a disclaimer about Mini Apps being third-party applications, ask the user to accept their
+Terms of service and confirm adding the bot to side and attachment menu. If the user accept the terms and confirms
+adding, then use toggleBotIsAddedToAttachmentMenu to add the bot. If the attachment menu bot can't be used in the opened
+chat, show an error to the user. If the bot is added to attachment menu and can be used in the chat, then use openWebApp
+with the given URL.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeAttachmentMenuBot {
@@ -21783,7 +22067,24 @@ Name of the link.
 }
 
 /**
-The link is a link to the change phone number section of the app.
+The link is a link to the Telegram Star purchase section of the application.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeBuyStars {
+	'@type': 'internalLinkTypeBuyStars';
+	/**
+The number of Telegram Stars that must be owned by the user.
+*/
+	star_count: number;
+	/**
+Purpose of Telegram Star purchase. Arbitrary string specified by the server, for example, "subs" if the Telegram Stars
+are required to extend channel subscriptions.
+*/
+	purpose: string;
+}
+
+/**
+The link is a link to the change phone number section of the application.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeChangePhoneNumber {
@@ -21819,7 +22120,7 @@ Internal representation of the invite link.
 }
 
 /**
-The link is a link to the folder section of the app settings.
+The link is a link to the folder section of the application settings.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeChatFolderSettings {
@@ -21841,7 +22142,7 @@ Internal representation of the invite link.
 }
 
 /**
-The link is a link to the default message auto-delete timer settings section of the app settings.
+The link is a link to the default message auto-delete timer settings section of the application settings.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeDefaultMessageAutoDeleteTimerSettings {
@@ -21850,7 +22151,7 @@ export interface InternalLinkTypeDefaultMessageAutoDeleteTimerSettings {
 }
 
 /**
-The link is a link to the edit profile section of the app settings.
+The link is a link to the edit profile section of the application settings.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeEditProfileSettings {
@@ -21919,7 +22220,7 @@ Language pack identifier.
 }
 
 /**
-The link is a link to the language section of the app settings.
+The link is a link to the language section of the application settings.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeLanguageSettings {
@@ -21931,9 +22232,9 @@ export interface InternalLinkTypeLanguageSettings {
 The link is a link to the main Web App of a bot. Call searchPublicChat with the given bot username, check that the user
 is a bot and has the main Web App. If the bot can be added to attachment menu, then use getAttachmentMenuBot to receive
 information about the bot, then if the bot isn't added to side menu, show a disclaimer about Mini Apps being third-party
-apps, ask the user to accept their Terms of service and confirm adding the bot to side and attachment menu, then if the
-user accepts the terms and confirms adding, use toggleBotIsAddedToAttachmentMenu to add the bot. Then, use getMainWebApp
-with the given start parameter and open the returned URL as a Web App.
+applications, ask the user to accept their Terms of service and confirm adding the bot to side and attachment menu, then
+if the user accepts the terms and confirms adding, use toggleBotIsAddedToAttachmentMenu to add the bot. Then, use
+getMainWebApp with the given start parameter and open the returned URL as a Web App.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeMainWebApp {
@@ -22073,7 +22374,7 @@ The Telegram Premium gift code.
 }
 
 /**
-The link is a link to the privacy and security section of the app settings.
+The link is a link to the privacy and security section of the application settings.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePrivacyAndSecuritySettings {
@@ -22199,7 +22500,7 @@ Name of the theme.
 }
 
 /**
-The link is a link to the theme section of the app settings.
+The link is a link to the theme section of the application settings.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeThemeSettings {
@@ -22288,8 +22589,8 @@ True, if the video chat is expected to be a live stream in a channel or a broadc
 The link is a link to a Web App. Call searchPublicChat with the given bot username, check that the user is a bot, then
 call searchWebApp with the received bot and the given web_app_short_name. Process received foundWebApp by showing a
 confirmation dialog if needed. If the bot can be added to attachment or side menu, but isn't added yet, then show a
-disclaimer about Mini Apps being third-party apps instead of the dialog and ask the user to accept their Terms of
-service. If the user accept the terms and confirms adding, then use toggleBotIsAddedToAttachmentMenu to add the bot.
+disclaimer about Mini Apps being third-party applications instead of the dialog and ask the user to accept their Terms
+of service. If the user accept the terms and confirms adding, then use toggleBotIsAddedToAttachmentMenu to add the bot.
 Then, call getWebAppLinkUrl and open the returned URL as a Web App.
 Subtype of {@link InternalLinkType}.
 */
@@ -23290,6 +23591,16 @@ export interface SuggestedActionExtendPremium {
 A URL for managing Telegram Premium subscription.
 */
 	manage_premium_subscription_url: string;
+}
+
+/**
+Suggests the user to extend their expiring Telegram Star subscriptions. Call getStarSubscriptions with only_expiring ==
+true to get the number of expiring subscriptions and the number of required to buy Telegram Stars.
+Subtype of {@link SuggestedAction}.
+*/
+export interface SuggestedActionExtendStarSubscriptions {
+	'@type': 'suggestedActionExtendStarSubscriptions';
+
 }
 
 /**
@@ -26196,6 +26507,19 @@ The new tags.
 }
 
 /**
+The list of messages with active live location that need to be updated by the application has changed. The list is
+persistent across application restarts only if the message database is used.
+Subtype of {@link Update}.
+*/
+export interface UpdateActiveLiveLocationMessages {
+	'@type': 'updateActiveLiveLocationMessages';
+	/**
+The list of messages with active live locations.
+*/
+	messages: Message[];
+}
+
+/**
 The number of Telegram Stars owned by the current user has changed.
 Subtype of {@link Update}.
 */
@@ -27121,6 +27445,15 @@ export type StarTransactionDirection =
 	| StarTransactionDirectionIncoming
 	| StarTransactionDirectionOutgoing;
 
+export type BotTransactionPurpose =
+	| BotTransactionPurposePaidMedia
+	| BotTransactionPurposeInvoicePayment;
+
+export type ChannelTransactionPurpose =
+	| ChannelTransactionPurposePaidMedia
+	| ChannelTransactionPurposeJoin
+	| ChannelTransactionPurposeReaction;
+
 export type StarTransactionPartner =
 	| StarTransactionPartnerTelegram
 	| StarTransactionPartnerAppStore
@@ -27128,6 +27461,7 @@ export type StarTransactionPartner =
 	| StarTransactionPartnerFragment
 	| StarTransactionPartnerTelegramAds
 	| StarTransactionPartnerBot
+	| StarTransactionPartnerBusiness
 	| StarTransactionPartnerChannel
 	| StarTransactionPartnerUser
 	| StarTransactionPartnerUnsupported;
@@ -27199,7 +27533,8 @@ export type MessageOrigin =
 
 export type ReactionType =
 	| ReactionTypeEmoji
-	| ReactionTypeCustomEmoji;
+	| ReactionTypeCustomEmoji
+	| ReactionTypePaid;
 
 export type MessageEffectType =
 	| MessageEffectTypeEmojiReaction
@@ -27877,6 +28212,7 @@ export type ChatEventAction =
 	| ChatEventIsAllHistoryAvailableToggled
 	| ChatEventHasAggressiveAntiSpamEnabledToggled
 	| ChatEventSignMessagesToggled
+	| ChatEventShowMessageSenderToggled
 	| ChatEventInviteLinkEdited
 	| ChatEventInviteLinkRevoked
 	| ChatEventInviteLinkDeleted
@@ -27987,7 +28323,8 @@ export type TelegramPaymentPurpose =
 	| TelegramPaymentPurposePremiumGiftCodes
 	| TelegramPaymentPurposePremiumGiveaway
 	| TelegramPaymentPurposeStars
-	| TelegramPaymentPurposeGiftedStars;
+	| TelegramPaymentPurposeGiftedStars
+	| TelegramPaymentPurposeJoinChat;
 
 export type DeviceToken =
 	| DeviceTokenFirebaseCloudMessaging
@@ -28199,6 +28536,7 @@ export type InternalLinkType =
 	| InternalLinkTypeBotStart
 	| InternalLinkTypeBotStartInGroup
 	| InternalLinkTypeBusinessChat
+	| InternalLinkTypeBuyStars
 	| InternalLinkTypeChangePhoneNumber
 	| InternalLinkTypeChatBoost
 	| InternalLinkTypeChatFolderInvite
@@ -28313,7 +28651,8 @@ export type SuggestedAction =
 	| SuggestedActionSubscribeToAnnualPremium
 	| SuggestedActionGiftPremiumForChristmas
 	| SuggestedActionSetBirthdate
-	| SuggestedActionExtendPremium;
+	| SuggestedActionExtendPremium
+	| SuggestedActionExtendStarSubscriptions;
 
 export type TextParseMode =
 	| TextParseModeMarkdown
@@ -28484,6 +28823,7 @@ export type Update =
 	| UpdateAvailableMessageEffects
 	| UpdateDefaultReactionType
 	| UpdateSavedMessagesTags
+	| UpdateActiveLiveLocationMessages
 	| UpdateOwnedStarCount
 	| UpdateChatRevenueAmount
 	| UpdateStarRevenueStatus
@@ -30357,16 +30697,6 @@ The maximum number of messages to be returned.
 }
 
 /**
-Returns all active live locations that need to be updated by the application. The list is persistent across application
-restarts only if the message database is used.
-Request type for {@link Tdjson#getActiveLiveLocationMessages}.
-*/
-export interface GetActiveLiveLocationMessages {
-	'@type': 'getActiveLiveLocationMessages';
-
-}
-
-/**
 Returns the last message sent in a chat no later than the specified date.
 Request type for {@link Tdjson#getChatMessageByDate}.
 */
@@ -32182,7 +32512,7 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Type of the reaction to add.
+Type of the reaction to add. Use addPaidMessageReaction instead to add the paid reaction.
 */
 	reaction_type: ReactionType;
 	/**
@@ -32210,9 +32540,74 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Type of the reaction to remove.
+Type of the reaction to remove. The paid reaction can't be removed.
 */
 	reaction_type: ReactionType;
+}
+
+/**
+Adds the paid message reaction to a message. Use getMessageAvailableReactions to receive the list of available reactions
+for the message.
+Request type for {@link Tdjson#addPaidMessageReaction}.
+*/
+export interface AddPaidMessageReaction {
+	'@type': 'addPaidMessageReaction';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Number of Telegram Stars to be used for the reaction; 1-getOption("paid_reaction_star_count_max").
+*/
+	star_count: number;
+	/**
+Pass true to make paid reaction of the user on the message anonymous; pass false to make the user's profile visible
+among top reactors.
+*/
+	is_anonymous?: boolean;
+}
+
+/**
+Removes all pending paid reactions on a message. Can be called within 5 seconds after the last addPaidMessageReaction
+call.
+Request type for {@link Tdjson#removePendingPaidMessageReactions}.
+*/
+export interface RemovePendingPaidMessageReactions {
+	'@type': 'removePendingPaidMessageReactions';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Changes whether the paid message reaction of the user to a message is anonymous. The message must have paid reaction
+added by the user.
+Request type for {@link Tdjson#togglePaidMessageReactionIsAnonymous}.
+*/
+export interface TogglePaidMessageReactionIsAnonymous {
+	'@type': 'togglePaidMessageReactionIsAnonymous';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Pass true to make paid reaction of the user on the message anonymous; pass false to make the user's profile visible
+among top reactors.
+*/
+	is_anonymous?: boolean;
 }
 
 /**
@@ -32250,12 +32645,12 @@ Identifier of the chat to which the message belongs.
 */
 	chat_id: number;
 	/**
-Identifier of the message. Use messageProperties.can_get_added_reactions to check whether added reactions can be
-received for the message.
+Identifier of the message. Use message.interaction_info.reactions.can_get_added_reactions to check whether added
+reactions can be received for the message.
 */
 	message_id: number;
 	/**
-Type of the reactions to return; pass null to return all added reactions.
+Type of the reactions to return; pass null to return all added reactions; reactionTypePaid isn't supported.
 */
 	reaction_type: ReactionType;
 	/**
@@ -32276,7 +32671,7 @@ Request type for {@link Tdjson#setDefaultReactionType}.
 export interface SetDefaultReactionType {
 	'@type': 'setDefaultReactionType';
 	/**
-New type of the default reaction.
+New type of the default reaction. The paid reaction can't be set as default.
 */
 	reaction_type: ReactionType;
 }
@@ -35155,8 +35550,8 @@ The identifier of the story.
 */
 	story_id: number;
 	/**
-Type of the reaction to set; pass null to remove the reaction. `reactionTypeCustomEmoji` reactions can be used only by
-Telegram Premium users.
+Type of the reaction to set; pass null to remove the reaction. Custom emoji reactions can be used only by Telegram
+Premium users. Paid reactions can't be set.
 */
 	reaction_type: ReactionType;
 	/**
@@ -35221,7 +35616,7 @@ Story identifier.
 	story_id: number;
 	/**
 Pass the default heart reaction or a suggested reaction type to receive only interactions with the specified reaction
-type; pass null to receive all interactions.
+type; pass null to receive all interactions; reactionTypePaid isn't supported.
 */
 	reaction_type: ReactionType;
 	/**
@@ -35971,8 +36366,30 @@ must be 0.
 }
 
 /**
-Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. Requires
-administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links.
+Creates a new subscription invite link for a channel chat. Requires can_invite_users right in the chat.
+Request type for {@link Tdjson#createChatSubscriptionInviteLink}.
+*/
+export interface CreateChatSubscriptionInviteLink {
+	'@type': 'createChatSubscriptionInviteLink';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link name; 0-32 characters.
+*/
+	name: string;
+	/**
+Information about subscription plan that will be applied to the users joining the chat via the link. Subscription period
+must be 2592000 in production environment, and 60 or 300 if Telegram test environment is used.
+*/
+	subscription_pricing: StarSubscriptionPricing;
+}
+
+/**
+Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. If the link creates a
+subscription, then expiration_date, member_limit and creates_join_request must not be used Requires administrator
+privileges and can_invite_users right in the chat for own links and owner privileges for other links.
 Request type for {@link Tdjson#editChatInviteLink}.
 */
 export interface EditChatInviteLink {
@@ -36002,6 +36419,27 @@ Pass true if users joining the chat via the link need to be approved by chat adm
 must be 0.
 */
 	creates_join_request?: boolean;
+}
+
+/**
+Edits a subscription invite link for a channel chat. Requires can_invite_users right in the chat for own links and owner
+privileges for other links.
+Request type for {@link Tdjson#editChatSubscriptionInviteLink}.
+*/
+export interface EditChatSubscriptionInviteLink {
+	'@type': 'editChatSubscriptionInviteLink';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Invite link to be edited.
+*/
+	invite_link: string;
+	/**
+Invite link name; 0-32 characters.
+*/
+	name: string;
 }
 
 /**
@@ -36081,6 +36519,10 @@ Chat identifier.
 Invite link for which to return chat members.
 */
 	invite_link: string;
+	/**
+Pass true if the link is a subscription link and only members with expired subscription must be returned.
+*/
+	only_with_expired_subscription?: boolean;
 	/**
 A chat member from which to return next chat members; pass null to get results from the beginning.
 */
@@ -38888,7 +39330,8 @@ New value of the unrestrict_boost_count supergroup setting; 0-8. Use 0 to remove
 }
 
 /**
-Toggles whether sender signature is added to sent messages in a channel; requires can_change_info member right.
+Toggles whether sender signature or link to the account is added to sent messages in a channel; requires can_change_info
+member right.
 Request type for {@link Tdjson#toggleSupergroupSignMessages}.
 */
 export interface ToggleSupergroupSignMessages {
@@ -38901,6 +39344,10 @@ Identifier of the channel.
 New value of sign_messages.
 */
 	sign_messages?: boolean;
+	/**
+New value of show_message_sender.
+*/
+	show_message_sender?: boolean;
 }
 
 /**
@@ -40941,6 +41388,10 @@ identifier of a channel chat with supergroupFullInfo.can_get_star_revenue_statis
 */
 	owner_id: MessageSender;
 	/**
+If non-empty, only transactions related to the Star Subscription will be returned.
+*/
+	subscription_id: string;
+	/**
 Direction of the transactions to receive; pass null to get all transactions.
 */
 	direction: StarTransactionDirection;
@@ -40953,6 +41404,23 @@ of results.
 The maximum number of transactions to return.
 */
 	limit: number;
+}
+
+/**
+Returns the list of Telegram Star subscriptions for the current user.
+Request type for {@link Tdjson#getStarSubscriptions}.
+*/
+export interface GetStarSubscriptions {
+	'@type': 'getStarSubscriptions';
+	/**
+Pass true to receive only expiring subscriptions for which there are no enough Telegram Stars to extend.
+*/
+	only_expiring?: boolean;
+	/**
+Offset of the first subscription to return as received from the previous request; use empty string to get the first
+chunk of results.
+*/
+	offset: string;
 }
 
 /**
@@ -41005,6 +41473,34 @@ Google Play purchase token.
 Transaction purpose.
 */
 	purpose: StorePaymentPurpose;
+}
+
+/**
+Cancels or reenables Telegram Star subscription to a channel.
+Request type for {@link Tdjson#editStarSubscription}.
+*/
+export interface EditStarSubscription {
+	'@type': 'editStarSubscription';
+	/**
+Identifier of the subscription to change.
+*/
+	subscription_id: string;
+	/**
+New value of is_canceled.
+*/
+	is_canceled?: boolean;
+}
+
+/**
+Reuses an active subscription and joins the subscribed chat again.
+Request type for {@link Tdjson#reuseStarSubscription}.
+*/
+export interface ReuseStarSubscription {
+	'@type': 'reuseStarSubscription';
+	/**
+Identifier of the subscription.
+*/
+	subscription_id: string;
 }
 
 /**
@@ -41743,7 +42239,6 @@ export type Request =
 	| ClearSearchedForTags
 	| DeleteAllCallMessages
 	| SearchChatRecentLocationMessages
-	| GetActiveLiveLocationMessages
 	| GetChatMessageByDate
 	| GetChatSparseMessagePositions
 	| GetChatMessageCalendar
@@ -41826,6 +42321,9 @@ export type Request =
 	| ClearRecentReactions
 	| AddMessageReaction
 	| RemoveMessageReaction
+	| AddPaidMessageReaction
+	| RemovePendingPaidMessageReactions
+	| TogglePaidMessageReactionIsAnonymous
 	| SetMessageReactions
 	| GetMessageAddedReactions
 	| SetDefaultReactionType
@@ -42038,7 +42536,9 @@ export type Request =
 	| ImportMessages
 	| ReplacePrimaryChatInviteLink
 	| CreateChatInviteLink
+	| CreateChatSubscriptionInviteLink
 	| EditChatInviteLink
+	| EditChatSubscriptionInviteLink
 	| GetChatInviteLink
 	| GetChatInviteLinkCounts
 	| GetChatInviteLinks
@@ -42357,9 +42857,12 @@ export type Request =
 	| GetStarPaymentOptions
 	| GetStarGiftPaymentOptions
 	| GetStarTransactions
+	| GetStarSubscriptions
 	| CanPurchaseFromStore
 	| AssignAppStoreTransaction
 	| AssignGooglePlayTransaction
+	| EditStarSubscription
+	| ReuseStarSubscription
 	| GetBusinessFeatures
 	| AcceptTermsOfService
 	| SearchStringsByPrefix
@@ -43605,16 +44108,6 @@ message per user.
 	}
 
 	/**
-Returns all active live locations that need to be updated by the application. The list is persistent across application
-restarts only if the message database is used.
-*/
-	async getActiveLiveLocationMessages(): Promise<Messages> {
-		return this._request({
-			'@type': 'getActiveLiveLocationMessages',
-		});
-	}
-
-	/**
 Returns the last message sent in a chat no later than the specified date.
 */
 	async getChatMessageByDate(options: Omit<GetChatMessageByDate, '@type'>): Promise<Message> {
@@ -44488,6 +44981,39 @@ Removes a reaction from a message. A chosen reaction can always be removed.
 		return this._request({
 			...options,
 			'@type': 'removeMessageReaction',
+		});
+	}
+
+	/**
+Adds the paid message reaction to a message. Use getMessageAvailableReactions to receive the list of available reactions
+for the message.
+*/
+	async addPaidMessageReaction(options: Omit<AddPaidMessageReaction, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addPaidMessageReaction',
+		});
+	}
+
+	/**
+Removes all pending paid reactions on a message. Can be called within 5 seconds after the last addPaidMessageReaction
+call.
+*/
+	async removePendingPaidMessageReactions(options: Omit<RemovePendingPaidMessageReactions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removePendingPaidMessageReactions',
+		});
+	}
+
+	/**
+Changes whether the paid message reaction of the user to a message is anonymous. The message must have paid reaction
+added by the user.
+*/
+	async togglePaidMessageReactionIsAnonymous(options: Omit<TogglePaidMessageReactionIsAnonymous, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'togglePaidMessageReactionIsAnonymous',
 		});
 	}
 
@@ -46697,13 +47223,35 @@ privileges and can_invite_users right in the chat.
 	}
 
 	/**
-Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. Requires
-administrator privileges and can_invite_users right in the chat for own links and owner privileges for other links.
+Creates a new subscription invite link for a channel chat. Requires can_invite_users right in the chat.
+*/
+	async createChatSubscriptionInviteLink(options: Omit<CreateChatSubscriptionInviteLink, '@type'>): Promise<ChatInviteLink> {
+		return this._request({
+			...options,
+			'@type': 'createChatSubscriptionInviteLink',
+		});
+	}
+
+	/**
+Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. If the link creates a
+subscription, then expiration_date, member_limit and creates_join_request must not be used Requires administrator
+privileges and can_invite_users right in the chat for own links and owner privileges for other links.
 */
 	async editChatInviteLink(options: Omit<EditChatInviteLink, '@type'>): Promise<ChatInviteLink> {
 		return this._request({
 			...options,
 			'@type': 'editChatInviteLink',
+		});
+	}
+
+	/**
+Edits a subscription invite link for a channel chat. Requires can_invite_users right in the chat for own links and owner
+privileges for other links.
+*/
+	async editChatSubscriptionInviteLink(options: Omit<EditChatSubscriptionInviteLink, '@type'>): Promise<ChatInviteLink> {
+		return this._request({
+			...options,
+			'@type': 'editChatSubscriptionInviteLink',
 		});
 	}
 
@@ -48607,7 +49155,8 @@ restrictions; requires can_restrict_members administrator right.
 	}
 
 	/**
-Toggles whether sender signature is added to sent messages in a channel; requires can_change_info member right.
+Toggles whether sender signature or link to the account is added to sent messages in a channel; requires can_change_info
+member right.
 */
 	async toggleSupergroupSignMessages(options: Omit<ToggleSupergroupSignMessages, '@type'>): Promise<Ok> {
 		return this._request({
@@ -49960,6 +50509,16 @@ Returns the list of Telegram Star transactions for the specified owner.
 	}
 
 	/**
+Returns the list of Telegram Star subscriptions for the current user.
+*/
+	async getStarSubscriptions(options: Omit<GetStarSubscriptions, '@type'>): Promise<StarSubscriptions> {
+		return this._request({
+			...options,
+			'@type': 'getStarSubscriptions',
+		});
+	}
+
+	/**
 Checks whether an in-store purchase is possible. Must be called before any in-store purchase.
 */
 	async canPurchaseFromStore(options: Omit<CanPurchaseFromStore, '@type'>): Promise<Ok> {
@@ -49986,6 +50545,26 @@ Informs server about a purchase through Google Play. For official applications o
 		return this._request({
 			...options,
 			'@type': 'assignGooglePlayTransaction',
+		});
+	}
+
+	/**
+Cancels or reenables Telegram Star subscription to a channel.
+*/
+	async editStarSubscription(options: Omit<EditStarSubscription, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editStarSubscription',
+		});
+	}
+
+	/**
+Reuses an active subscription and joins the subscribed chat again.
+*/
+	async reuseStarSubscription(options: Omit<ReuseStarSubscription, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reuseStarSubscription',
 		});
 	}
 
