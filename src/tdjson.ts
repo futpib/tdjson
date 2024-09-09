@@ -2695,8 +2695,8 @@ Identifier of the last in-store transaction for the currently used option.
 }
 
 /**
-Describes an option for creating Telegram Premium gift codes. Use telegramPaymentPurposePremiumGiftCodes for
-out-of-store payments.
+Describes an option for creating Telegram Premium gift codes or Telegram Premium giveaway. Use
+telegramPaymentPurposePremiumGiftCodes or telegramPaymentPurposePremiumGiveaway for out-of-store payments.
 */
 export interface PremiumGiftCodePaymentOption {
 	'@type': 'premiumGiftCodePaymentOption';
@@ -2711,7 +2711,7 @@ The amount to pay, in the smallest units of the currency.
 	/**
 Number of users which will be able to activate the gift codes.
 */
-	user_count: number;
+	winner_count: number;
 	/**
 Number of months the Telegram Premium subscription will be active.
 */
@@ -2727,7 +2727,7 @@ Number of times the store product must be paid.
 }
 
 /**
-Contains a list of options for creating Telegram Premium gift codes.
+Contains a list of options for creating Telegram Premium gift codes or Telegram Premium giveaway.
 */
 export interface PremiumGiftCodePaymentOptions {
 	'@type': 'premiumGiftCodePaymentOptions';
@@ -2812,6 +2812,76 @@ The list of options.
 }
 
 /**
+Describes an option for the number of winners of a Telegram Star giveaway.
+*/
+export interface StarGiveawayWinnerOption {
+	'@type': 'starGiveawayWinnerOption';
+	/**
+The number of users that will be chosen as winners.
+*/
+	winner_count: number;
+	/**
+The number of Telegram Stars that will be won by the winners of the giveaway.
+*/
+	won_star_count: number;
+	/**
+True, if the option must be chosen by default.
+*/
+	is_default?: boolean;
+}
+
+/**
+Describes an option for creating Telegram Star giveaway. Use telegramPaymentPurposeStarGiveaway for out-of-store
+payments.
+*/
+export interface StarGiveawayPaymentOption {
+	'@type': 'starGiveawayPaymentOption';
+	/**
+ISO 4217 currency code for the payment.
+*/
+	currency: string;
+	/**
+The amount to pay, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Number of Telegram Stars that will be distributed among winners.
+*/
+	star_count: number;
+	/**
+Identifier of the store product associated with the option; may be empty if none.
+*/
+	store_product_id: string;
+	/**
+Number of times the chat will be boosted for one year if the option is chosen.
+*/
+	yearly_boost_count: number;
+	/**
+Allowed options for the number of giveaway winners.
+*/
+	winner_options: StarGiveawayWinnerOption[];
+	/**
+True, if the option must be chosen by default.
+*/
+	is_default?: boolean;
+	/**
+True, if the option must be shown only in the full list of payment options.
+*/
+	is_additional?: boolean;
+}
+
+/**
+Contains a list of options for creating Telegram Star giveaway.
+*/
+export interface StarGiveawayPaymentOptions {
+	'@type': 'starGiveawayPaymentOptions';
+	/**
+The list of options.
+*/
+	options: StarGiveawayPaymentOption[];
+}
+
+/**
 Describes direction of a transaction with Telegram Stars.
 Subtype of {@link StarTransactionDirection}.
 */
@@ -2839,6 +2909,10 @@ export interface BotTransactionPurposePaidMedia {
 The bought media if the trancastion wasn't refunded.
 */
 	media: PaidMedia[];
+	/**
+Bot-provided payload; for bots only.
+*/
+	payload: string;
 }
 
 /**
@@ -2858,13 +2932,13 @@ Invoice payload; for bots only.
 }
 
 /**
-Describes purpose of a transaction with a channel.
-Subtype of {@link ChannelTransactionPurpose}.
+Describes purpose of a transaction with a supergroup or a channel.
+Subtype of {@link ChatTransactionPurpose}.
 */
-export interface ChannelTransactionPurposePaidMedia {
-	'@type': 'channelTransactionPurposePaidMedia';
+export interface ChatTransactionPurposePaidMedia {
+	'@type': 'chatTransactionPurposePaidMedia';
 	/**
-Identifier of the corresponding message with paid media; can be an identifier of a deleted message.
+Identifier of the corresponding message with paid media; can be 0 or an identifier of a deleted message.
 */
 	message_id: number;
 	/**
@@ -2875,10 +2949,10 @@ The bought media if the trancastion wasn't refunded.
 
 /**
 User joined the channel and subscribed to regular payments in Telegram Stars.
-Subtype of {@link ChannelTransactionPurpose}.
+Subtype of {@link ChatTransactionPurpose}.
 */
-export interface ChannelTransactionPurposeJoin {
-	'@type': 'channelTransactionPurposeJoin';
+export interface ChatTransactionPurposeJoin {
+	'@type': 'chatTransactionPurposeJoin';
 	/**
 The number of seconds between consecutive Telegram Star debiting.
 */
@@ -2887,14 +2961,26 @@ The number of seconds between consecutive Telegram Star debiting.
 
 /**
 User paid for a reaction.
-Subtype of {@link ChannelTransactionPurpose}.
+Subtype of {@link ChatTransactionPurpose}.
 */
-export interface ChannelTransactionPurposeReaction {
-	'@type': 'channelTransactionPurposeReaction';
+export interface ChatTransactionPurposeReaction {
+	'@type': 'chatTransactionPurposeReaction';
 	/**
-Identifier of the reacted message; can be an identifier of a deleted message.
+Identifier of the reacted message; can be 0 or an identifier of a deleted message.
 */
 	message_id: number;
+}
+
+/**
+User received Telegram Stars from a giveaway.
+Subtype of {@link ChatTransactionPurpose}.
+*/
+export interface ChatTransactionPurposeGiveaway {
+	'@type': 'chatTransactionPurposeGiveaway';
+	/**
+Identifier of the message with giveaway; can be 0 or an identifier of a deleted message.
+*/
+	giveaway_message_id: number;
 }
 
 /**
@@ -2978,11 +3064,11 @@ The bought media if the trancastion wasn't refunded.
 }
 
 /**
-The transaction is a transaction with a channel chat.
+The transaction is a transaction with a supergroup or a channel chat.
 Subtype of {@link StarTransactionPartner}.
 */
-export interface StarTransactionPartnerChannel {
-	'@type': 'starTransactionPartnerChannel';
+export interface StarTransactionPartnerChat {
+	'@type': 'starTransactionPartnerChat';
 	/**
 Identifier of the chat.
 */
@@ -2990,7 +3076,7 @@ Identifier of the chat.
 	/**
 Purpose of the transaction.
 */
-	purpose: ChannelTransactionPurpose;
+	purpose: ChatTransactionPurpose;
 }
 
 /**
@@ -3065,29 +3151,29 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
-Contains information about status of a user in a Telegram Premium giveaway.
-Subtype of {@link PremiumGiveawayParticipantStatus}.
+Contains information about status of a user in a giveaway.
+Subtype of {@link GiveawayParticipantStatus}.
 */
-export interface PremiumGiveawayParticipantStatusEligible {
-	'@type': 'premiumGiveawayParticipantStatusEligible';
+export interface GiveawayParticipantStatusEligible {
+	'@type': 'giveawayParticipantStatusEligible';
 
 }
 
 /**
 The user participates in the giveaway.
-Subtype of {@link PremiumGiveawayParticipantStatus}.
+Subtype of {@link GiveawayParticipantStatus}.
 */
-export interface PremiumGiveawayParticipantStatusParticipating {
-	'@type': 'premiumGiveawayParticipantStatusParticipating';
+export interface GiveawayParticipantStatusParticipating {
+	'@type': 'giveawayParticipantStatusParticipating';
 
 }
 
 /**
 The user can't participate in the giveaway, because they have already been member of the chat.
-Subtype of {@link PremiumGiveawayParticipantStatus}.
+Subtype of {@link GiveawayParticipantStatus}.
 */
-export interface PremiumGiveawayParticipantStatusAlreadyWasMember {
-	'@type': 'premiumGiveawayParticipantStatusAlreadyWasMember';
+export interface GiveawayParticipantStatusAlreadyWasMember {
+	'@type': 'giveawayParticipantStatusAlreadyWasMember';
 	/**
 Point in time (Unix timestamp) when the user joined the chat.
 */
@@ -3097,10 +3183,10 @@ Point in time (Unix timestamp) when the user joined the chat.
 /**
 The user can't participate in the giveaway, because they are an administrator in one of the chats that created the
 giveaway.
-Subtype of {@link PremiumGiveawayParticipantStatus}.
+Subtype of {@link GiveawayParticipantStatus}.
 */
-export interface PremiumGiveawayParticipantStatusAdministrator {
-	'@type': 'premiumGiveawayParticipantStatusAdministrator';
+export interface GiveawayParticipantStatusAdministrator {
+	'@type': 'giveawayParticipantStatusAdministrator';
 	/**
 Identifier of the chat administered by the user.
 */
@@ -3109,10 +3195,10 @@ Identifier of the chat administered by the user.
 
 /**
 The user can't participate in the giveaway, because they phone number is from a disallowed country.
-Subtype of {@link PremiumGiveawayParticipantStatus}.
+Subtype of {@link GiveawayParticipantStatus}.
 */
-export interface PremiumGiveawayParticipantStatusDisallowedCountry {
-	'@type': 'premiumGiveawayParticipantStatusDisallowedCountry';
+export interface GiveawayParticipantStatusDisallowedCountry {
+	'@type': 'giveawayParticipantStatusDisallowedCountry';
 	/**
 A two-letter ISO 3166-1 alpha-2 country code of the user's country.
 */
@@ -3120,11 +3206,11 @@ A two-letter ISO 3166-1 alpha-2 country code of the user's country.
 }
 
 /**
-Contains information about Telegram Premium giveaway.
-Subtype of {@link PremiumGiveawayInfo}.
+Contains information about a giveaway.
+Subtype of {@link GiveawayInfo}.
 */
-export interface PremiumGiveawayInfoOngoing {
-	'@type': 'premiumGiveawayInfoOngoing';
+export interface GiveawayInfoOngoing {
+	'@type': 'giveawayInfoOngoing';
 	/**
 Point in time (Unix timestamp) when the giveaway was created.
 */
@@ -3132,7 +3218,7 @@ Point in time (Unix timestamp) when the giveaway was created.
 	/**
 Status of the current user in the giveaway.
 */
-	status: PremiumGiveawayParticipantStatus;
+	status: GiveawayParticipantStatus;
 	/**
 True, if the giveaway has ended and results are being prepared.
 */
@@ -3141,10 +3227,10 @@ True, if the giveaway has ended and results are being prepared.
 
 /**
 Describes a completed giveaway.
-Subtype of {@link PremiumGiveawayInfo}.
+Subtype of {@link GiveawayInfo}.
 */
-export interface PremiumGiveawayInfoCompleted {
-	'@type': 'premiumGiveawayInfoCompleted';
+export interface GiveawayInfoCompleted {
+	'@type': 'giveawayInfoCompleted';
 	/**
 Point in time (Unix timestamp) when the giveaway was created.
 */
@@ -3159,17 +3245,51 @@ True, if the giveaway was canceled and was fully refunded.
 */
 	was_refunded?: boolean;
 	/**
+True, if the cuurent user is a winner of the giveaway.
+*/
+	is_winner?: boolean;
+	/**
 Number of winners in the giveaway.
 */
 	winner_count: number;
 	/**
-Number of winners, which activated their gift codes.
+Number of winners, which activated their gift codes; for Telegram Premium giveaways only.
 */
 	activation_count: number;
 	/**
-Telegram Premium gift code that was received by the current user; empty if the user isn't a winner in the giveaway.
+Telegram Premium gift code that was received by the current user; empty if the user isn't a winner in the giveaway or
+the giveaway isn't a Telegram Premium giveaway.
 */
 	gift_code: string;
+	/**
+The amount of Telegram Stars won by the current user; 0 if the user isn't a winner in the giveaway or the giveaway isn't
+a Telegram Star giveaway.
+*/
+	won_star_count: number;
+}
+
+/**
+Contains information about a giveaway prize.
+Subtype of {@link GiveawayPrize}.
+*/
+export interface GiveawayPrizePremium {
+	'@type': 'giveawayPrizePremium';
+	/**
+Number of months the Telegram Premium subscription will be active after code activation.
+*/
+	month_count: number;
+}
+
+/**
+The giveaway sends Telegram Stars to the winners.
+Subtype of {@link GiveawayPrize}.
+*/
+export interface GiveawayPrizeStars {
+	'@type': 'giveawayPrizeStars';
+	/**
+Number of Telegram Stars that will be shared by all winners.
+*/
+	star_count: number;
 }
 
 /**
@@ -5262,9 +5382,9 @@ from the same chat.
 	/**
 Media content of the message if the message was from another chat or topic; may be null for messages from the same chat
 and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageContact,
-messageDice, messageDocument, messageGame, messageInvoice, messageLocation, messagePaidMedia, messagePhoto, messagePoll,
-messagePremiumGiveaway, messagePremiumGiveawayWinners, messageSticker, messageStory, messageText (for link preview),
-messageVenue, messageVideo, messageVideoNote, or messageVoiceNote.
+messageDice, messageDocument, messageGame, messageGiveaway, messageGiveawayWinners, messageInvoice, messageLocation,
+messagePaidMedia, messagePhoto, messagePoll, messageSticker, messageStory, messageText (for link preview), messageVenue,
+messageVideo, messageVideoNote, or messageVoiceNote.
 */
 	content: MessageContent;
 }
@@ -8804,10 +8924,6 @@ export interface LinkPreviewTypeAnimation {
 The animation.
 */
 	animation: Animation;
-	/**
-Author of the animation.
-*/
-	author: string;
 }
 
 /**
@@ -8820,10 +8936,6 @@ export interface LinkPreviewTypeApp {
 Photo for the app.
 */
 	photo: Photo;
-	/**
-Author of the app.
-*/
-	author: string;
 }
 
 /**
@@ -8836,10 +8948,6 @@ export interface LinkPreviewTypeArticle {
 Article's main photo; may be null.
 */
 	photo: Photo;
-	/**
-Author of the article.
-*/
-	author: string;
 }
 
 /**
@@ -8849,25 +8957,9 @@ Subtype of {@link LinkPreviewType}.
 export interface LinkPreviewTypeAudio {
 	'@type': 'linkPreviewTypeAudio';
 	/**
-URL of the audio; may be empty if none.
-*/
-	url: string;
-	/**
-MIME type of the audio file.
-*/
-	mime_type: string;
-	/**
-The audio description; may be null if unknown.
+The audio description.
 */
 	audio: Audio;
-	/**
-Duration of the audio, in seconds; 0 if unknown.
-*/
-	duration: number;
-	/**
-Author of the audio.
-*/
-	author: string;
 }
 
 /**
@@ -8928,10 +9020,6 @@ export interface LinkPreviewTypeDocument {
 The document description.
 */
 	document: Document;
-	/**
-Author of the document.
-*/
-	author: string;
 }
 
 /**
@@ -8952,10 +9040,6 @@ Thumbnail of the animation; may be null if unknown.
 Duration of the animation, in seconds.
 */
 	duration: number;
-	/**
-Author of the animation.
-*/
-	author: string;
 	/**
 Expected width of the embedded player.
 */
@@ -8985,10 +9069,6 @@ Duration of the audio, in seconds.
 */
 	duration: number;
 	/**
-Author of the audio.
-*/
-	author: string;
-	/**
 Expected width of the embedded player.
 */
 	width: number;
@@ -9017,10 +9097,6 @@ Duration of the video, in seconds.
 */
 	duration: number;
 	/**
-Author of the video.
-*/
-	author: string;
-	/**
 Expected width of the embedded player.
 */
 	width: number;
@@ -9028,6 +9104,54 @@ Expected width of the embedded player.
 Expected height of the embedded player.
 */
 	height: number;
+}
+
+/**
+The link is a link to an audio file.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeExternalAudio {
+	'@type': 'linkPreviewTypeExternalAudio';
+	/**
+URL of the audio file.
+*/
+	url: string;
+	/**
+MIME type of the audio file.
+*/
+	mime_type: string;
+	/**
+Duration of the audio, in seconds; 0 if unknown.
+*/
+	duration: number;
+}
+
+/**
+The link is a link to a video file.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeExternalVideo {
+	'@type': 'linkPreviewTypeExternalVideo';
+	/**
+URL of the video file.
+*/
+	url: string;
+	/**
+MIME type of the video file.
+*/
+	mime_type: string;
+	/**
+Expected width of the video preview; 0 if unknown.
+*/
+	width: number;
+	/**
+Expected height of the video preview; 0 if unknown.
+*/
+	height: number;
+	/**
+Duration of the video, in seconds; 0 if unknown.
+*/
+	duration: number;
 }
 
 /**
@@ -9058,10 +9182,6 @@ export interface LinkPreviewTypePhoto {
 The photo.
 */
 	photo: Photo;
-	/**
-Author of the photo.
-*/
-	author: string;
 }
 
 /**
@@ -9182,33 +9302,9 @@ Subtype of {@link LinkPreviewType}.
 export interface LinkPreviewTypeVideo {
 	'@type': 'linkPreviewTypeVideo';
 	/**
-URL of the video; may be empty if none.
-*/
-	url: string;
-	/**
-MIME type of the video file.
-*/
-	mime_type: string;
-	/**
-The video description; may be null if unknown.
+The video description.
 */
 	video: Video;
-	/**
-Expected width of the preview.
-*/
-	width: number;
-	/**
-Expected height of the preview.
-*/
-	height: number;
-	/**
-Duration of the video, in seconds; 0 if unknown.
-*/
-	duration: number;
-	/**
-Author of the video.
-*/
-	author: string;
 }
 
 /**
@@ -9288,6 +9384,10 @@ Title of the content.
 Describes a link preview.
 */
 	description: FormattedText;
+	/**
+Author of the content.
+*/
+	author: string;
 	/**
 Type of the link preview.
 */
@@ -9540,6 +9640,10 @@ A secondary color for the background in the RGB24 format.
 A color of the header background in the RGB24 format.
 */
 	header_background_color: number;
+	/**
+A color of the bottom bar background in the RGB24 format.
+*/
+	bottom_bar_background_color: number;
 	/**
 A color of the section background in the RGB24 format.
 */
@@ -10117,14 +10221,14 @@ export interface PaidMediaUnsupported {
 }
 
 /**
-Describes parameters of a Telegram Premium giveaway.
+Describes parameters of a giveaway.
 */
-export interface PremiumGiveawayParameters {
-	'@type': 'premiumGiveawayParameters';
+export interface GiveawayParameters {
+	'@type': 'giveawayParameters';
 	/**
 Identifier of the supergroup or channel chat, which will be automatically boosted by the winners of the giveaway for
-duration of the Premium subscription. If the chat is a channel, then can_post_messages right is required in the channel,
-otherwise, the user must be an administrator in the supergroup.
+duration of the Telegram Premium subscription, or for the specified time. If the chat is a channel, then
+can_post_messages right is required in the channel, otherwise, the user must be an administrator in the supergroup.
 */
 	boosted_chat_id: number;
 	/**
@@ -12185,33 +12289,36 @@ The gift code.
 }
 
 /**
-A Telegram Premium giveaway was created for the chat. Use telegramPaymentPurposePremiumGiveaway or
-storePaymentPurposePremiumGiveaway to create a giveaway.
+A giveaway was created for the chat. Use telegramPaymentPurposePremiumGiveaway, storePaymentPurposePremiumGiveaway,
+telegramPaymentPurposeStarGiveaway, or storePaymentPurposeStarGiveaway to create a giveaway.
 Subtype of {@link MessageContent}.
 */
-export interface MessagePremiumGiveawayCreated {
-	'@type': 'messagePremiumGiveawayCreated';
-
+export interface MessageGiveawayCreated {
+	'@type': 'messageGiveawayCreated';
+	/**
+Number of Telegram Stars that will be shared by winners of the giveaway; 0 for Telegram Premium giveaways.
+*/
+	star_count: number;
 }
 
 /**
-A Telegram Premium giveaway.
+A giveaway.
 Subtype of {@link MessageContent}.
 */
-export interface MessagePremiumGiveaway {
-	'@type': 'messagePremiumGiveaway';
+export interface MessageGiveaway {
+	'@type': 'messageGiveaway';
 	/**
 Giveaway parameters.
 */
-	parameters: PremiumGiveawayParameters;
+	parameters: GiveawayParameters;
 	/**
 Number of users which will receive Telegram Premium subscription gift codes.
 */
 	winner_count: number;
 	/**
-Number of months the Telegram Premium subscription will be active after code activation.
+Prize of the giveaway.
 */
-	month_count: number;
+	prize: GiveawayPrize;
 	/**
 A sticker to be shown in the message; may be null if unknown.
 */
@@ -12219,11 +12326,11 @@ A sticker to be shown in the message; may be null if unknown.
 }
 
 /**
-A Telegram Premium giveaway without public winners has been completed for the chat.
+A giveaway without public winners has been completed for the chat.
 Subtype of {@link MessageContent}.
 */
-export interface MessagePremiumGiveawayCompleted {
-	'@type': 'messagePremiumGiveawayCompleted';
+export interface MessageGiveawayCompleted {
+	'@type': 'messageGiveawayCompleted';
 	/**
 Identifier of the message with the giveaway; can be 0 if the message was deleted.
 */
@@ -12233,20 +12340,23 @@ Number of winners in the giveaway.
 */
 	winner_count: number;
 	/**
-Number of undistributed prizes.
+True, if the giveaway is a Telegram Star giveaway.
+*/
+	is_star_giveaway?: boolean;
+	/**
+Number of undistributed prizes; for Telegram Premium giveaways only.
 */
 	unclaimed_prize_count: number;
 }
 
 /**
-A Telegram Premium giveaway with public winners has been completed for the chat.
+A giveaway with public winners has been completed for the chat.
 Subtype of {@link MessageContent}.
 */
-export interface MessagePremiumGiveawayWinners {
-	'@type': 'messagePremiumGiveawayWinners';
+export interface MessageGiveawayWinners {
+	'@type': 'messageGiveawayWinners';
 	/**
-Identifier of the channel chat, which was automatically boosted by the winners of the giveaway for duration of the
-Premium subscription.
+Identifier of the supergroup or channel chat, which was automatically boosted by the winners of the giveaway.
 */
 	boosted_chat_id: number;
 	/**
@@ -12271,9 +12381,9 @@ True, if the giveaway was canceled and was fully refunded.
 */
 	was_refunded?: boolean;
 	/**
-Number of months the Telegram Premium subscription will be active after code activation.
+Prize of the giveaway.
 */
-	month_count: number;
+	prize: GiveawayPrize;
 	/**
 Additional description of the giveaway prize.
 */
@@ -12287,7 +12397,7 @@ Up to 100 user identifiers of the winners of the giveaway.
 */
 	winner_user_ids: number[];
 	/**
-Number of undistributed prizes.
+Number of undistributed prizes; for Telegram Premium giveaways only.
 */
 	unclaimed_prize_count: number;
 }
@@ -12330,6 +12440,38 @@ Number of Telegram Stars that were gifted.
 Identifier of the transaction for Telegram Stars purchase; for receiver only.
 */
 	transaction_id: string;
+	/**
+A sticker to be shown in the message; may be null if unknown.
+*/
+	sticker: Sticker;
+}
+
+/**
+A Telegram Stars were received by the cuurent user from a giveaway.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageGiveawayPrizeStars {
+	'@type': 'messageGiveawayPrizeStars';
+	/**
+Number of Telegram Stars that were received.
+*/
+	star_count: number;
+	/**
+Identifier of the transaction for Telegram Stars credit.
+*/
+	transaction_id: string;
+	/**
+Identifier of the supergroup or channel chat, which was automatically boosted by the winners of the giveaway.
+*/
+	boosted_chat_id: number;
+	/**
+Identifier of the message with the giveaway in the boosted chat; can be 0 if the message was deleted.
+*/
+	giveaway_message_id: number;
+	/**
+True, if the corresponding winner wasn't chosen and the Telegram Stars were received by the owner of the boosted chat.
+*/
+	is_unclaimed?: boolean;
 	/**
 A sticker to be shown in the message; may be null if unknown.
 */
@@ -12852,7 +12994,7 @@ Pass true to get a fake message instead of actually sending them.
 
 /**
 Options to be used when a message content is copied without reference to the original sender. Service messages, messages
-with messageInvoice, messagePaidMedia, messagePremiumGiveaway, or messagePremiumGiveawayWinners content can't be copied.
+with messageInvoice, messagePaidMedia, messageGiveaway, or messageGiveawayWinners content can't be copied.
 */
 export interface MessageCopyOptions {
 	'@type': 'messageCopyOptions';
@@ -13023,6 +13165,10 @@ True, if the caption must be shown above the video; otherwise, the caption must 
 in secret chats.
 */
 	show_caption_above_media?: boolean;
+	/**
+Bot-provided data for the paid media; bots only.
+*/
+	payload: string;
 }
 
 /**
@@ -13439,6 +13585,11 @@ Contains properties of a message and describes actions that can be done with the
 */
 export interface MessageProperties {
 	'@type': 'messageProperties';
+	/**
+True, if content of the message can be copied to a secret chat using inputMessageForwarded or forwardMessages with copy
+options.
+*/
+	can_be_copied_to_secret_chat?: boolean;
 	/**
 True, if the message can be deleted only for the current user while other users will continue to see it using the method
 deleteMessages with revoke == false.
@@ -15338,7 +15489,7 @@ already been claimed.
 }
 
 /**
-The chat created a Telegram Premium giveaway.
+The chat created a giveaway.
 Subtype of {@link ChatBoostSource}.
 */
 export interface ChatBoostSourceGiveaway {
@@ -15349,16 +15500,19 @@ Identifier of a user that won in the giveaway; 0 if none.
 	user_id: number;
 	/**
 The created Telegram Premium gift code if it was used by the user or can be claimed by the current user; an empty string
-otherwise.
+otherwise; for Telegram Premium giveways only.
 */
 	gift_code: string;
+	/**
+Number of Telegram Stars distributed among winners of the giveaway.
+*/
+	star_count: number;
 	/**
 Identifier of the corresponding giveaway message; can be an identifier of a deleted message.
 */
 	giveaway_message_id: number;
 	/**
-True, if the winner for the corresponding Telegram Premium subscription wasn't chosen, because there were not enough
-participants.
+True, if the winner for the corresponding giveaway prize wasn't chosen, because there were not enough participants.
 */
 	is_unclaimed?: boolean;
 }
@@ -15376,22 +15530,26 @@ Identifier of the user.
 }
 
 /**
-Describes a prepaid Telegram Premium giveaway.
+Describes a prepaid giveaway.
 */
-export interface PrepaidPremiumGiveaway {
-	'@type': 'prepaidPremiumGiveaway';
+export interface PrepaidGiveaway {
+	'@type': 'prepaidGiveaway';
 	/**
 Unique identifier of the prepaid giveaway.
 */
 	id: string;
 	/**
-Number of users which will receive Telegram Premium subscription gift codes.
+Number of users which will receive giveaway prize.
 */
 	winner_count: number;
 	/**
-Number of months the Telegram Premium subscription will be active after code activation.
+Prize of the giveaway.
 */
-	month_count: number;
+	prize: GiveawayPrize;
+	/**
+The number of boosts received by the chat from the giveaway; for Telegram Star giveaways only.
+*/
+	boost_count: number;
 	/**
 Point in time (Unix timestamp) when the giveaway was paid.
 */
@@ -15445,7 +15603,7 @@ chat.
 	/**
 The list of prepaid giveaways available for the chat; only for chat administrators.
 */
-	prepaid_giveaways: PrepaidPremiumGiveaway[];
+	prepaid_giveaways: PrepaidGiveaway[];
 }
 
 /**
@@ -17857,6 +18015,26 @@ New status of the chat member.
 }
 
 /**
+A chat member extended their subscription to the chat.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventMemberSubscriptionExtended {
+	'@type': 'chatEventMemberSubscriptionExtended';
+	/**
+Affected chat member user identifier.
+*/
+	user_id: number;
+	/**
+Previous status of the chat member.
+*/
+	old_status: ChatMemberStatus;
+	/**
+New status of the chat member.
+*/
+	new_status: ChatMemberStatus;
+}
+
+/**
 The chat available reactions were changed.
 Subtype of {@link ChatEventAction}.
 */
@@ -18507,6 +18685,10 @@ True, if video chat actions need to be returned.
 True, if forum-related actions need to be returned.
 */
 	forum_changes?: boolean;
+	/**
+True, if subscription extensions need to be returned.
+*/
+	subscription_extensions?: boolean;
 }
 
 /**
@@ -19457,7 +19639,7 @@ export interface StorePaymentPurposePremiumGiveaway {
 	/**
 Giveaway parameters.
 */
-	parameters: PremiumGiveawayParameters;
+	parameters: GiveawayParameters;
 	/**
 ISO 4217 currency code of the payment currency.
 */
@@ -19466,6 +19648,34 @@ ISO 4217 currency code of the payment currency.
 Paid amount, in the smallest units of the currency.
 */
 	amount: number;
+}
+
+/**
+The user creating a Telegram Star giveaway.
+Subtype of {@link StorePaymentPurpose}.
+*/
+export interface StorePaymentPurposeStarGiveaway {
+	'@type': 'storePaymentPurposeStarGiveaway';
+	/**
+Giveaway parameters.
+*/
+	parameters: GiveawayParameters;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+The number of users to receive Telegram Stars.
+*/
+	winner_count: number;
+	/**
+The number of Telegram Stars to be distributed through the giveaway.
+*/
+	star_count: number;
 }
 
 /**
@@ -19550,7 +19760,7 @@ export interface TelegramPaymentPurposePremiumGiveaway {
 	/**
 Giveaway parameters.
 */
-	parameters: PremiumGiveawayParameters;
+	parameters: GiveawayParameters;
 	/**
 ISO 4217 currency code of the payment currency.
 */
@@ -19609,6 +19819,34 @@ Paid amount, in the smallest units of the currency.
 	amount: number;
 	/**
 Number of bought Telegram Stars.
+*/
+	star_count: number;
+}
+
+/**
+The user creating a Telegram Star giveaway.
+Subtype of {@link TelegramPaymentPurpose}.
+*/
+export interface TelegramPaymentPurposeStarGiveaway {
+	'@type': 'telegramPaymentPurposeStarGiveaway';
+	/**
+Giveaway parameters.
+*/
+	parameters: GiveawayParameters;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+The number of users to receive Telegram Stars.
+*/
+	winner_count: number;
+	/**
+The number of Telegram Stars to be distributed through the giveaway.
 */
 	star_count: number;
 }
@@ -20504,19 +20742,19 @@ Number of months the Telegram Premium subscription will be active after code act
 }
 
 /**
-A message with a Telegram Premium giveaway.
+A message with a giveaway.
 Subtype of {@link PushMessageContent}.
 */
-export interface PushMessageContentPremiumGiveaway {
-	'@type': 'pushMessageContentPremiumGiveaway';
+export interface PushMessageContentGiveaway {
+	'@type': 'pushMessageContentGiveaway';
 	/**
-Number of users which will receive Telegram Premium subscription gift codes; 0 for pinned message.
+Number of users which will receive giveaway prizes; 0 for pinned message.
 */
 	winner_count: number;
 	/**
-Number of months the Telegram Premium subscription will be active after code activation; 0 for pinned message.
+Prize of the giveaway; may be null for pinned message.
 */
-	month_count: number;
+	prize: GiveawayPrize;
 	/**
 True, if the message is a pinned message with the specified content.
 */
@@ -21443,7 +21681,7 @@ deleted.
 export interface AccountTtl {
 	'@type': 'accountTtl';
 	/**
-Number of days of inactivity before the account will be flagged for deletion; 30-366 days.
+Number of days of inactivity before the account will be flagged for deletion; 30-730 days.
 */
 	days: number;
 }
@@ -24170,6 +24408,10 @@ Amount of the cryptocurrency that isn't withdrawn yet, in the smallest units of 
 Amount of the cryptocurrency available for withdrawal, in the smallest units of the cryptocurrency.
 */
 	available_amount: string;
+	/**
+True, if Telegram Stars can be withdrawn now or later.
+*/
+	withdrawal_enabled?: boolean;
 }
 
 /**
@@ -27174,6 +27416,22 @@ The list of reactions added to the message.
 }
 
 /**
+Paid media were purchased by a user; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdatePaidMediaPurchased {
+	'@type': 'updatePaidMediaPurchased';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+Bot-specified payload for the paid media.
+*/
+	payload: string;
+}
+
+/**
 Contains a list of updates.
 */
 export interface Updates {
@@ -27449,10 +27707,11 @@ export type BotTransactionPurpose =
 	| BotTransactionPurposePaidMedia
 	| BotTransactionPurposeInvoicePayment;
 
-export type ChannelTransactionPurpose =
-	| ChannelTransactionPurposePaidMedia
-	| ChannelTransactionPurposeJoin
-	| ChannelTransactionPurposeReaction;
+export type ChatTransactionPurpose =
+	| ChatTransactionPurposePaidMedia
+	| ChatTransactionPurposeJoin
+	| ChatTransactionPurposeReaction
+	| ChatTransactionPurposeGiveaway;
 
 export type StarTransactionPartner =
 	| StarTransactionPartnerTelegram
@@ -27462,20 +27721,24 @@ export type StarTransactionPartner =
 	| StarTransactionPartnerTelegramAds
 	| StarTransactionPartnerBot
 	| StarTransactionPartnerBusiness
-	| StarTransactionPartnerChannel
+	| StarTransactionPartnerChat
 	| StarTransactionPartnerUser
 	| StarTransactionPartnerUnsupported;
 
-export type PremiumGiveawayParticipantStatus =
-	| PremiumGiveawayParticipantStatusEligible
-	| PremiumGiveawayParticipantStatusParticipating
-	| PremiumGiveawayParticipantStatusAlreadyWasMember
-	| PremiumGiveawayParticipantStatusAdministrator
-	| PremiumGiveawayParticipantStatusDisallowedCountry;
+export type GiveawayParticipantStatus =
+	| GiveawayParticipantStatusEligible
+	| GiveawayParticipantStatusParticipating
+	| GiveawayParticipantStatusAlreadyWasMember
+	| GiveawayParticipantStatusAdministrator
+	| GiveawayParticipantStatusDisallowedCountry;
 
-export type PremiumGiveawayInfo =
-	| PremiumGiveawayInfoOngoing
-	| PremiumGiveawayInfoCompleted;
+export type GiveawayInfo =
+	| GiveawayInfoOngoing
+	| GiveawayInfoCompleted;
+
+export type GiveawayPrize =
+	| GiveawayPrizePremium
+	| GiveawayPrizeStars;
 
 export type ChatMemberStatus =
 	| ChatMemberStatusCreator
@@ -27726,6 +27989,8 @@ export type LinkPreviewType =
 	| LinkPreviewTypeEmbeddedAnimationPlayer
 	| LinkPreviewTypeEmbeddedAudioPlayer
 	| LinkPreviewTypeEmbeddedVideoPlayer
+	| LinkPreviewTypeExternalAudio
+	| LinkPreviewTypeExternalVideo
 	| LinkPreviewTypeInvoice
 	| LinkPreviewTypeMessage
 	| LinkPreviewTypePhoto
@@ -27903,11 +28168,12 @@ export type MessageContent =
 	| MessagePaymentRefunded
 	| MessageGiftedPremium
 	| MessagePremiumGiftCode
-	| MessagePremiumGiveawayCreated
-	| MessagePremiumGiveaway
-	| MessagePremiumGiveawayCompleted
-	| MessagePremiumGiveawayWinners
+	| MessageGiveawayCreated
+	| MessageGiveaway
+	| MessageGiveawayCompleted
+	| MessageGiveawayWinners
 	| MessageGiftedStars
+	| MessageGiveawayPrizeStars
 	| MessageContactRegistered
 	| MessageUsersShared
 	| MessageChatShared
@@ -28190,6 +28456,7 @@ export type ChatEventAction =
 	| ChatEventMemberLeft
 	| ChatEventMemberPromoted
 	| ChatEventMemberRestricted
+	| ChatEventMemberSubscriptionExtended
 	| ChatEventAvailableReactionsChanged
 	| ChatEventBackgroundChanged
 	| ChatEventDescriptionChanged
@@ -28316,6 +28583,7 @@ export type StorePaymentPurpose =
 	| StorePaymentPurposeGiftedPremium
 	| StorePaymentPurposePremiumGiftCodes
 	| StorePaymentPurposePremiumGiveaway
+	| StorePaymentPurposeStarGiveaway
 	| StorePaymentPurposeStars
 	| StorePaymentPurposeGiftedStars;
 
@@ -28324,6 +28592,7 @@ export type TelegramPaymentPurpose =
 	| TelegramPaymentPurposePremiumGiveaway
 	| TelegramPaymentPurposeStars
 	| TelegramPaymentPurposeGiftedStars
+	| TelegramPaymentPurposeStarGiveaway
 	| TelegramPaymentPurposeJoinChat;
 
 export type DeviceToken =
@@ -28408,7 +28677,7 @@ export type PushMessageContent =
 	| PushMessageContentPhoto
 	| PushMessageContentPoll
 	| PushMessageContentPremiumGiftCode
-	| PushMessageContentPremiumGiveaway
+	| PushMessageContentGiveaway
 	| PushMessageContentScreenshotTaken
 	| PushMessageContentSticker
 	| PushMessageContentStory
@@ -28854,7 +29123,8 @@ export type Update =
 	| UpdateNewChatJoinRequest
 	| UpdateChatBoost
 	| UpdateMessageReaction
-	| UpdateMessageReactions;
+	| UpdateMessageReactions
+	| UpdatePaidMediaPurchased;
 
 export type LogStream =
 	| LogStreamDefault
@@ -29584,8 +29854,7 @@ Identifier of the message to get.
 Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message,
 the game message, the invoice message, the message with a previously set same background, the giveaway message, and the
 topic creation message for messages of the types messagePinMessage, messageGameScore, messagePaymentSuccessful,
-messageChatSetBackground, messagePremiumGiveawayCompleted and topic messages without non-bundled replied message
-respectively.
+messageChatSetBackground, messageGiveawayCompleted and topic messages without non-bundled replied message respectively.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
 export interface GetRepliedMessage {
@@ -32001,8 +32270,8 @@ The name of the shortcut; 1-32 characters.
 }
 
 /**
-Loads quick reply shortcuts created by the current user. The loaded topics will be sent through
-updateQuickReplyShortcuts.
+Loads quick reply shortcuts created by the current user. The loaded data will be sent through updateQuickReplyShortcut
+and updateQuickReplyShortcuts.
 Request type for {@link Tdjson#loadQuickReplyShortcuts}.
 */
 export interface LoadQuickReplyShortcuts {
@@ -32512,7 +32781,7 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Type of the reaction to add. Use addPaidMessageReaction instead to add the paid reaction.
+Type of the reaction to add. Use addPendingPaidMessageReaction instead to add the paid reaction.
 */
 	reaction_type: ReactionType;
 	/**
@@ -32546,12 +32815,12 @@ Type of the reaction to remove. The paid reaction can't be removed.
 }
 
 /**
-Adds the paid message reaction to a message. Use getMessageAvailableReactions to receive the list of available reactions
+Adds the paid message reaction to a message. Use getMessageAvailableReactions to check whether the reaction is available
 for the message.
-Request type for {@link Tdjson#addPaidMessageReaction}.
+Request type for {@link Tdjson#addPendingPaidMessageReaction}.
 */
-export interface AddPaidMessageReaction {
-	'@type': 'addPaidMessageReaction';
+export interface AddPendingPaidMessageReaction {
+	'@type': 'addPendingPaidMessageReaction';
 	/**
 Identifier of the chat to which the message belongs.
 */
@@ -32561,19 +32830,39 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Number of Telegram Stars to be used for the reaction; 1-getOption("paid_reaction_star_count_max").
+Number of Telegram Stars to be used for the reaction. The total number of pending paid reactions must not exceed
+getOption("paid_reaction_star_count_max").
 */
 	star_count: number;
 	/**
+Pass true if the user didn't choose anonymity explicitly, for example, the reaction is set from the message bubble.
+*/
+	use_default_is_anonymous?: boolean;
+	/**
 Pass true to make paid reaction of the user on the message anonymous; pass false to make the user's profile visible
-among top reactors.
+among top reactors. Ignored if use_default_is_anonymous == true.
 */
 	is_anonymous?: boolean;
 }
 
 /**
-Removes all pending paid reactions on a message. Can be called within 5 seconds after the last addPaidMessageReaction
-call.
+Applies all pending paid reactions on a message.
+Request type for {@link Tdjson#commitPendingPaidMessageReactions}.
+*/
+export interface CommitPendingPaidMessageReactions {
+	'@type': 'commitPendingPaidMessageReactions';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Removes all pending paid reactions on a message.
 Request type for {@link Tdjson#removePendingPaidMessageReactions}.
 */
 export interface RemovePendingPaidMessageReactions {
@@ -33181,11 +33470,11 @@ Offset for the next inline query; pass an empty string if there are no more resu
 }
 
 /**
-Returns popular Web App bots.
-Request type for {@link Tdjson#getPopularWebAppBots}.
+Returns the most grossing Web App bots.
+Request type for {@link Tdjson#getGrossingWebAppBots}.
 */
-export interface GetPopularWebAppBots {
-	'@type': 'getPopularWebAppBots';
+export interface GetGrossingWebAppBots {
+	'@type': 'getGrossingWebAppBots';
 	/**
 Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
 results.
@@ -37764,6 +38053,18 @@ Identifier of the sticker set.
 }
 
 /**
+Returns name of a sticker set by its identifier.
+Request type for {@link Tdjson#getStickerSetName}.
+*/
+export interface GetStickerSetName {
+	'@type': 'getStickerSetName';
+	/**
+Identifier of the sticker set.
+*/
+	set_id: string;
+}
+
+/**
 Searches for a sticker set by its name.
 Request type for {@link Tdjson#searchStickerSet}.
 */
@@ -41287,7 +41588,7 @@ export interface GetPremiumState {
 }
 
 /**
-Returns available options for Telegram Premium gift code or giveaway creation.
+Returns available options for Telegram Premium gift code or Telegram Premium giveaway creation.
 Request type for {@link Tdjson#getPremiumGiftCodePaymentOptions}.
 */
 export interface GetPremiumGiftCodePaymentOptions {
@@ -41324,11 +41625,11 @@ The code to apply.
 }
 
 /**
-Launches a prepaid Telegram Premium giveaway.
-Request type for {@link Tdjson#launchPrepaidPremiumGiveaway}.
+Launches a prepaid giveaway.
+Request type for {@link Tdjson#launchPrepaidGiveaway}.
 */
-export interface LaunchPrepaidPremiumGiveaway {
-	'@type': 'launchPrepaidPremiumGiveaway';
+export interface LaunchPrepaidGiveaway {
+	'@type': 'launchPrepaidGiveaway';
 	/**
 Unique identifier of the prepaid giveaway.
 */
@@ -41336,15 +41637,23 @@ Unique identifier of the prepaid giveaway.
 	/**
 Giveaway parameters.
 */
-	parameters: PremiumGiveawayParameters;
+	parameters: GiveawayParameters;
+	/**
+The number of users to receive giveaway prize.
+*/
+	winner_count: number;
+	/**
+The number of Telegram Stars to be distributed through the giveaway; pass 0 for Telegram Premium giveaways.
+*/
+	star_count: number;
 }
 
 /**
-Returns information about a Telegram Premium giveaway.
-Request type for {@link Tdjson#getPremiumGiveawayInfo}.
+Returns information about a giveaway.
+Request type for {@link Tdjson#getGiveawayInfo}.
 */
-export interface GetPremiumGiveawayInfo {
-	'@type': 'getPremiumGiveawayInfo';
+export interface GetGiveawayInfo {
+	'@type': 'getGiveawayInfo';
 	/**
 Identifier of the channel chat which started the giveaway.
 */
@@ -41374,6 +41683,15 @@ export interface GetStarGiftPaymentOptions {
 Identifier of the user that will receive Telegram Stars; pass 0 to get options for an unspecified user.
 */
 	user_id: number;
+}
+
+/**
+Returns available options for Telegram Star giveaway creation.
+Request type for {@link Tdjson#getStarGiveawayPaymentOptions}.
+*/
+export interface GetStarGiveawayPaymentOptions {
+	'@type': 'getStarGiveawayPaymentOptions';
+
 }
 
 /**
@@ -42321,7 +42639,8 @@ export type Request =
 	| ClearRecentReactions
 	| AddMessageReaction
 	| RemoveMessageReaction
-	| AddPaidMessageReaction
+	| AddPendingPaidMessageReaction
+	| CommitPendingPaidMessageReactions
 	| RemovePendingPaidMessageReactions
 	| TogglePaidMessageReactionIsAnonymous
 	| SetMessageReactions
@@ -42355,7 +42674,7 @@ export type Request =
 	| ShareChatWithBot
 	| GetInlineQueryResults
 	| AnswerInlineQuery
-	| GetPopularWebAppBots
+	| GetGrossingWebAppBots
 	| SearchWebApp
 	| GetWebAppLinkUrl
 	| GetMainWebApp
@@ -42616,6 +42935,7 @@ export type Request =
 	| GetTrendingStickerSets
 	| GetAttachedStickerSets
 	| GetStickerSet
+	| GetStickerSetName
 	| SearchStickerSet
 	| SearchInstalledStickerSets
 	| SearchStickerSets
@@ -42852,10 +43172,11 @@ export type Request =
 	| GetPremiumGiftCodePaymentOptions
 	| CheckPremiumGiftCode
 	| ApplyPremiumGiftCode
-	| LaunchPrepaidPremiumGiveaway
-	| GetPremiumGiveawayInfo
+	| LaunchPrepaidGiveaway
+	| GetGiveawayInfo
 	| GetStarPaymentOptions
 	| GetStarGiftPaymentOptions
+	| GetStarGiveawayPaymentOptions
 	| GetStarTransactions
 	| GetStarSubscriptions
 	| CanPurchaseFromStore
@@ -43449,8 +43770,7 @@ Returns information about a message, if it is available without sending network 
 Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message,
 the game message, the invoice message, the message with a previously set same background, the giveaway message, and the
 topic creation message for messages of the types messagePinMessage, messageGameScore, messagePaymentSuccessful,
-messageChatSetBackground, messagePremiumGiveawayCompleted and topic messages without non-bundled replied message
-respectively.
+messageChatSetBackground, messageGiveawayCompleted and topic messages without non-bundled replied message respectively.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -44674,8 +44994,8 @@ Checks validness of a name for a quick reply shortcut. Can be called synchronous
 	}
 
 	/**
-Loads quick reply shortcuts created by the current user. The loaded topics will be sent through
-updateQuickReplyShortcuts.
+Loads quick reply shortcuts created by the current user. The loaded data will be sent through updateQuickReplyShortcut
+and updateQuickReplyShortcuts.
 */
 	async loadQuickReplyShortcuts(): Promise<Ok> {
 		return this._request({
@@ -44985,19 +45305,28 @@ Removes a reaction from a message. A chosen reaction can always be removed.
 	}
 
 	/**
-Adds the paid message reaction to a message. Use getMessageAvailableReactions to receive the list of available reactions
+Adds the paid message reaction to a message. Use getMessageAvailableReactions to check whether the reaction is available
 for the message.
 */
-	async addPaidMessageReaction(options: Omit<AddPaidMessageReaction, '@type'>): Promise<Ok> {
+	async addPendingPaidMessageReaction(options: Omit<AddPendingPaidMessageReaction, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'addPaidMessageReaction',
+			'@type': 'addPendingPaidMessageReaction',
 		});
 	}
 
 	/**
-Removes all pending paid reactions on a message. Can be called within 5 seconds after the last addPaidMessageReaction
-call.
+Applies all pending paid reactions on a message.
+*/
+	async commitPendingPaidMessageReactions(options: Omit<CommitPendingPaidMessageReactions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'commitPendingPaidMessageReactions',
+		});
+	}
+
+	/**
+Removes all pending paid reactions on a message.
 */
 	async removePendingPaidMessageReactions(options: Omit<RemovePendingPaidMessageReactions, '@type'>): Promise<Ok> {
 		return this._request({
@@ -45340,12 +45669,12 @@ Sets the result of an inline query; for bots only.
 	}
 
 	/**
-Returns popular Web App bots.
+Returns the most grossing Web App bots.
 */
-	async getPopularWebAppBots(options: Omit<GetPopularWebAppBots, '@type'>): Promise<FoundUsers> {
+	async getGrossingWebAppBots(options: Omit<GetGrossingWebAppBots, '@type'>): Promise<FoundUsers> {
 		return this._request({
 			...options,
-			'@type': 'getPopularWebAppBots',
+			'@type': 'getGrossingWebAppBots',
 		});
 	}
 
@@ -48041,6 +48370,16 @@ Returns information about a sticker set by its identifier.
 	}
 
 	/**
+Returns name of a sticker set by its identifier.
+*/
+	async getStickerSetName(options: Omit<GetStickerSetName, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'getStickerSetName',
+		});
+	}
+
+	/**
 Searches for a sticker set by its name.
 */
 	async searchStickerSet(options: Omit<SearchStickerSet, '@type'>): Promise<StickerSet> {
@@ -50430,7 +50769,7 @@ Returns state of Telegram Premium subscription and promotion videos for Premium 
 	}
 
 	/**
-Returns available options for Telegram Premium gift code or giveaway creation.
+Returns available options for Telegram Premium gift code or Telegram Premium giveaway creation.
 */
 	async getPremiumGiftCodePaymentOptions(options: Omit<GetPremiumGiftCodePaymentOptions, '@type'>): Promise<PremiumGiftCodePaymentOptions> {
 		return this._request({
@@ -50460,22 +50799,22 @@ Applies a Telegram Premium gift code.
 	}
 
 	/**
-Launches a prepaid Telegram Premium giveaway.
+Launches a prepaid giveaway.
 */
-	async launchPrepaidPremiumGiveaway(options: Omit<LaunchPrepaidPremiumGiveaway, '@type'>): Promise<Ok> {
+	async launchPrepaidGiveaway(options: Omit<LaunchPrepaidGiveaway, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'launchPrepaidPremiumGiveaway',
+			'@type': 'launchPrepaidGiveaway',
 		});
 	}
 
 	/**
-Returns information about a Telegram Premium giveaway.
+Returns information about a giveaway.
 */
-	async getPremiumGiveawayInfo(options: Omit<GetPremiumGiveawayInfo, '@type'>): Promise<PremiumGiveawayInfo> {
+	async getGiveawayInfo(options: Omit<GetGiveawayInfo, '@type'>): Promise<GiveawayInfo> {
 		return this._request({
 			...options,
-			'@type': 'getPremiumGiveawayInfo',
+			'@type': 'getGiveawayInfo',
 		});
 	}
 
@@ -50495,6 +50834,15 @@ Returns available options for Telegram Stars gifting.
 		return this._request({
 			...options,
 			'@type': 'getStarGiftPaymentOptions',
+		});
+	}
+
+	/**
+Returns available options for Telegram Star giveaway creation.
+*/
+	async getStarGiveawayPaymentOptions(): Promise<StarGiveawayPaymentOptions> {
+		return this._request({
+			'@type': 'getStarGiveawayPaymentOptions',
 		});
 	}
 
