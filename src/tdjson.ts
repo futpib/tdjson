@@ -2934,7 +2934,7 @@ just bought Telegram Stars, then full value can be claimed.
 */
 	default_sell_star_count: number;
 	/**
-Number of remaining times the gift can be purchased by all users; 0 if not limited.
+Number of remaining times the gift can be purchased by all users; 0 if not limited or the gift was sold out.
 */
 	remaining_count: number;
 	/**
@@ -40372,7 +40372,7 @@ export interface GetAvailableGifts {
 }
 
 /**
-Send a gift to another user.
+Sends a gift to another user. May return an error with a message "STARGIFT_USAGE_LIMITED" if the gift was sold out.
 Request type for {@link Tdjson#sendGift}.
 */
 export interface SendGift {
@@ -50198,7 +50198,7 @@ Returns gifts that can be sent to other users.
 	}
 
 	/**
-Send a gift to another user.
+Sends a gift to another user. May return an error with a message "STARGIFT_USAGE_LIMITED" if the gift was sold out.
 */
 	async sendGift(options: Omit<SendGift, '@type'>): Promise<Ok> {
 		return this._request({
