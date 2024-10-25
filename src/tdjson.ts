@@ -2636,7 +2636,7 @@ The amount of owned Telegram Stars.
 */
 	star_count: number;
 	/**
-List of subbscriptions for Telegram Stars.
+List of subscriptions for Telegram Stars.
 */
 	subscriptions: StarSubscription[];
 	/**
@@ -2934,7 +2934,7 @@ just bought Telegram Stars, then full value can be claimed.
 */
 	default_sell_star_count: number;
 	/**
-Number of remaining times the gift can be purchased by all users; 0 if not limited.
+Number of remaining times the gift can be purchased by all users; 0 if not limited or the gift was sold out.
 */
 	remaining_count: number;
 	/**
@@ -3038,7 +3038,7 @@ Subtype of {@link BotTransactionPurpose}.
 export interface BotTransactionPurposePaidMedia {
 	'@type': 'botTransactionPurposePaidMedia';
 	/**
-The bought media if the trancastion wasn't refunded.
+The bought media if the transaction wasn't refunded.
 */
 	media: PaidMedia[];
 	/**
@@ -3074,7 +3074,7 @@ Identifier of the corresponding message with paid media; can be 0 or an identifi
 */
 	message_id: number;
 	/**
-The bought media if the trancastion wasn't refunded.
+The bought media if the transaction wasn't refunded.
 */
 	media: PaidMedia[];
 }
@@ -3226,7 +3226,7 @@ Identifier of the business account user.
 */
 	user_id: number;
 	/**
-The bought media if the trancastion wasn't refunded.
+The bought media if the transaction wasn't refunded.
 */
 	media: PaidMedia[];
 }
@@ -3248,7 +3248,7 @@ Purpose of the transaction.
 }
 
 /**
-The transaction is a transcation with another user.
+The transaction is a transaction with another user.
 Subtype of {@link StarTransactionPartner}.
 */
 export interface StarTransactionPartnerUser {
@@ -4638,7 +4638,7 @@ Status of the current user in the supergroup or channel; custom title will alway
 Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the
 supergroup or channel was received through getChatSimilarChats, getChatsToSendStories, getCreatedPublicChats,
 getGroupsInCommon, getInactiveSupergroupChats, getRecommendedChats, getSuitableDiscussionChats,
-getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchChatsNearby, searchPublicChats, or in
+getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchPublicChats, or in
 chatFolderInviteLinkInfo.missing_chat_ids, or in userFullInfo.personal_chat_id, or for chats with messages or stories
 from publicForwards and foundStories.
 */
@@ -7175,36 +7175,6 @@ Information about failed to add members.
 }
 
 /**
-Describes a chat located nearby.
-*/
-export interface ChatNearby {
-	'@type': 'chatNearby';
-	/**
-Chat identifier.
-*/
-	chat_id: number;
-	/**
-Distance to the chat location, in meters.
-*/
-	distance: number;
-}
-
-/**
-Represents a list of chats located nearby.
-*/
-export interface ChatsNearby {
-	'@type': 'chatsNearby';
-	/**
-List of users nearby.
-*/
-	users_nearby: ChatNearby[];
-	/**
-List of location-based supergroups nearby.
-*/
-	supergroups_nearby: ChatNearby[];
-}
-
-/**
 Describes type of public chat.
 Subtype of {@link PublicChatType}.
 */
@@ -7236,16 +7206,6 @@ simultaneously with setting chat notification settings to default using setChatN
 }
 
 /**
-The chat is a location-based supergroup, which can be reported as having unrelated location using the method reportChat
-with the reason reportReasonUnrelatedLocation.
-Subtype of {@link ChatActionBar}.
-*/
-export interface ChatActionBarReportUnrelatedLocation {
-	'@type': 'chatActionBarReportUnrelatedLocation';
-
-}
-
-/**
 The chat is a recently created group chat to which new members can be invited.
 Subtype of {@link ChatActionBar}.
 */
@@ -7268,11 +7228,6 @@ If true, the chat was automatically archived and can be moved back to the main c
 simultaneously with setting chat notification settings to default using setChatNotificationSettings.
 */
 	can_unarchive?: boolean;
-	/**
-If non-negative, the current user was found by the other user through searchChatsNearby and this is the distance between
-the users.
-*/
-	distance: number;
 }
 
 /**
@@ -9450,7 +9405,7 @@ The list of files with theme description.
 */
 	documents: Document[];
 	/**
-Settings for the cloud theme.
+Settings for the cloud theme; may be null if unknown.
 */
 	settings: ThemeSettings;
 }
@@ -9539,7 +9494,7 @@ Subtype of {@link LinkPreviewType}.
 export interface LinkPreviewTypeWebApp {
 	'@type': 'linkPreviewTypeWebApp';
 	/**
-Web App photo.
+Web App photo; may be null if none.
 */
 	photo: Photo;
 }
@@ -9814,63 +9769,63 @@ Contains parameters of the application theme.
 export interface ThemeParameters {
 	'@type': 'themeParameters';
 	/**
-A color of the background in the RGB24 format.
+A color of the background in the RGB format.
 */
 	background_color: number;
 	/**
-A secondary color for the background in the RGB24 format.
+A secondary color for the background in the RGB format.
 */
 	secondary_background_color: number;
 	/**
-A color of the header background in the RGB24 format.
+A color of the header background in the RGB format.
 */
 	header_background_color: number;
 	/**
-A color of the bottom bar background in the RGB24 format.
+A color of the bottom bar background in the RGB format.
 */
 	bottom_bar_background_color: number;
 	/**
-A color of the section background in the RGB24 format.
+A color of the section background in the RGB format.
 */
 	section_background_color: number;
 	/**
-A color of the section separator in the RGB24 format.
+A color of the section separator in the RGB format.
 */
 	section_separator_color: number;
 	/**
-A color of text in the RGB24 format.
+A color of text in the RGB format.
 */
 	text_color: number;
 	/**
-An accent color of the text in the RGB24 format.
+An accent color of the text in the RGB format.
 */
 	accent_text_color: number;
 	/**
-A color of text on the section headers in the RGB24 format.
+A color of text on the section headers in the RGB format.
 */
 	section_header_text_color: number;
 	/**
-A color of the subtitle text in the RGB24 format.
+A color of the subtitle text in the RGB format.
 */
 	subtitle_text_color: number;
 	/**
-A color of the text for destructive actions in the RGB24 format.
+A color of the text for destructive actions in the RGB format.
 */
 	destructive_text_color: number;
 	/**
-A color of hints in the RGB24 format.
+A color of hints in the RGB format.
 */
 	hint_color: number;
 	/**
-A color of links in the RGB24 format.
+A color of links in the RGB format.
 */
 	link_color: number;
 	/**
-A color of the buttons in the RGB24 format.
+A color of the buttons in the RGB format.
 */
 	button_color: number;
 	/**
-A color of text on the buttons in the RGB24 format.
+A color of text on the buttons in the RGB format.
 */
 	button_text_color: number;
 }
@@ -10319,7 +10274,7 @@ Chat identifier of the message.
 */
 	chat_id: number;
 	/**
-Message identifier.
+Message identifier. Use messageProperties.can_be_paid to check whether the message can be used in the method.
 */
 	message_id: number;
 }
@@ -12404,6 +12359,10 @@ The identifier of a user that received Telegram Premium; 0 if the gift is incomi
 */
 	receiver_user_id: number;
 	/**
+Message added to the gifted Telegram Premium by the sender.
+*/
+	text: FormattedText;
+	/**
 Currency for the paid amount.
 */
 	currency: string;
@@ -12439,6 +12398,10 @@ export interface MessagePremiumGiftCode {
 Identifier of a chat or a user that created the gift code; may be null if unknown.
 */
 	creator_id: MessageSender;
+	/**
+Message added to the gift.
+*/
+	text: FormattedText;
 	/**
 True, if the gift code was created for a giveaway.
 */
@@ -12847,7 +12810,7 @@ export interface TextEntityTypeMention {
 }
 
 /**
-A hashtag text, beginning with "#".
+A hashtag text, beginning with "#" and optionally containing a chat username at the end.
 Subtype of {@link TextEntityType}.
 */
 export interface TextEntityTypeHashtag {
@@ -12856,7 +12819,8 @@ export interface TextEntityTypeHashtag {
 }
 
 /**
-A cashtag text, beginning with "$" and consisting of capital English letters (e.g., "$USD").
+A cashtag text, beginning with "$", consisting of capital English letters (e.g., "$USD"), and optionally containing a
+chat username at the end.
 Subtype of {@link TextEntityType}.
 */
 export interface TextEntityTypeCashtag {
@@ -13221,7 +13185,8 @@ export interface MessageCopyOptions {
 	'@type': 'messageCopyOptions';
 	/**
 True, if content of the message needs to be copied without reference to the original sender. Always true if the message
-is forwarded to a secret chat or is local.
+is forwarded to a secret chat or is local. Use messageProperties.can_be_saved and
+messageProperties.can_be_copied_to_secret_chat to check whether the message is suitable.
 */
 	send_copy?: boolean;
 	/**
@@ -16960,11 +16925,11 @@ Describes a color to highlight a bot added to attachment menu.
 export interface AttachmentMenuBotColor {
 	'@type': 'attachmentMenuBotColor';
 	/**
-Color in the RGB24 format for light themes.
+Color in the RGB format for light themes.
 */
 	light_color: number;
 	/**
-Color in the RGB24 format for dark themes.
+Color in the RGB format for dark themes.
 */
 	dark_color: number;
 }
@@ -19849,6 +19814,11 @@ Paid amount, in the smallest units of the currency.
 Identifiers of the users which can activate the gift codes.
 */
 	user_ids: number[];
+	/**
+Text to show along with the gift codes; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+*/
+	text: FormattedText;
 }
 
 /**
@@ -19970,6 +19940,11 @@ Identifiers of the users which can activate the gift codes.
 Number of months the Telegram Premium subscription will be active for the users.
 */
 	month_count: number;
+	/**
+Text to show along with the gift codes; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+*/
+	text: FormattedText;
 }
 
 /**
@@ -20279,7 +20254,7 @@ Subtype of {@link BackgroundFill}.
 export interface BackgroundFillSolid {
 	'@type': 'backgroundFillSolid';
 	/**
-A color of the background in the RGB24 format.
+A color of the background in the RGB format.
 */
 	color: number;
 }
@@ -20291,11 +20266,11 @@ Subtype of {@link BackgroundFill}.
 export interface BackgroundFillGradient {
 	'@type': 'backgroundFillGradient';
 	/**
-A top color of the background in the RGB24 format.
+A top color of the background in the RGB format.
 */
 	top_color: number;
 	/**
-A bottom color of the background in the RGB24 format.
+A bottom color of the background in the RGB format.
 */
 	bottom_color: number;
 	/**
@@ -20311,7 +20286,7 @@ Subtype of {@link BackgroundFill}.
 export interface BackgroundFillFreeformGradient {
 	'@type': 'backgroundFillFreeformGradient';
 	/**
-A list of 3 or 4 colors of the freeform gradient in the RGB24 format.
+A list of 3 or 4 colors of the freeform gradient in the RGB format.
 */
 	colors: number[];
 }
@@ -26970,19 +26945,6 @@ The new terms of service.
 }
 
 /**
-The list of users nearby has changed. The update is guaranteed to be sent only 60 seconds after a successful
-searchChatsNearby request.
-Subtype of {@link Update}.
-*/
-export interface UpdateUsersNearby {
-	'@type': 'updateUsersNearby';
-	/**
-The new list of users nearby.
-*/
-	users_nearby: ChatNearby[];
-}
-
-/**
 The first unconfirmed session has changed.
 Subtype of {@link Update}.
 */
@@ -28201,7 +28163,6 @@ export type PublicChatType =
 
 export type ChatActionBar =
 	| ChatActionBarReportSpam
-	| ChatActionBarReportUnrelatedLocation
 	| ChatActionBarInviteMembers
 	| ChatActionBarReportAddBlock
 	| ChatActionBarAddContact
@@ -29429,7 +29390,6 @@ export type Update =
 	| UpdateLanguagePackStrings
 	| UpdateConnectionState
 	| UpdateTermsOfService
-	| UpdateUsersNearby
 	| UpdateUnconfirmedSession
 	| UpdateAttachmentMenuBots
 	| UpdateWebAppMessageSent
@@ -30458,19 +30418,6 @@ Query to search for.
 The maximum number of chats to be returned.
 */
 	limit: number;
-}
-
-/**
-Returns a list of users and location-based supergroups nearby. The method was disabled and returns an empty list of
-chats now.
-Request type for {@link Tdjson#searchChatsNearby}.
-*/
-export interface SearchChatsNearby {
-	'@type': 'searchChatsNearby';
-	/**
-Current user location.
-*/
-	location: Location;
 }
 
 /**
@@ -31880,7 +31827,8 @@ Options to be used to send the messages; pass null to use default options.
 	options: MessageSendOptions;
 	/**
 Pass true to copy content of the messages without reference to the original sender. Always true if the messages are
-forwarded to a secret chat or are local.
+forwarded to a secret chat or are local. Use messageProperties.can_be_saved and
+messageProperties.can_be_copied_to_secret_chat to check whether the message is suitable.
 */
 	send_copy?: boolean;
 	/**
@@ -33269,7 +33217,7 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Types of the reaction to set.
+Types of the reaction to set; pass an empty list to remove the reactions.
 */
 	reaction_types: ReactionType[];
 	/**
@@ -38428,6 +38376,10 @@ export interface SearchStickerSet {
 Name of the sticker set.
 */
 	name: string;
+	/**
+Pass true to ignore local cache of sticker sets and always send a network request.
+*/
+	ignore_cache?: boolean;
 }
 
 /**
@@ -39005,19 +38957,6 @@ export interface SetEmojiStatus {
 New emoji status; pass null to switch to the default badge.
 */
 	emoji_status: EmojiStatus;
-}
-
-/**
-Changes the location of the current user. Needs to be called if getOption("is_location_visible") is true and location
-changes for more than 1 kilometer. Must not be called if the user has a business location.
-Request type for {@link Tdjson#setLocation}.
-*/
-export interface SetLocation {
-	'@type': 'setLocation';
-	/**
-The new location of the user.
-*/
-	location: Location;
 }
 
 /**
@@ -40372,7 +40311,7 @@ export interface GetAvailableGifts {
 }
 
 /**
-Send a gift to another user.
+Sends a gift to another user. May return an error with a message "STARGIFT_USAGE_LIMITED" if the gift was sold out.
 Request type for {@link Tdjson#sendGift}.
 */
 export interface SendGift {
@@ -42971,7 +42910,6 @@ export type Request =
 	| SearchPublicChats
 	| SearchChats
 	| SearchChatsOnServer
-	| SearchChatsNearby
 	| GetRecommendedChats
 	| GetChatSimilarChats
 	| GetChatSimilarChatCount
@@ -43438,7 +43376,6 @@ export type Request =
 	| SetBirthdate
 	| SetPersonalChat
 	| SetEmojiStatus
-	| SetLocation
 	| ToggleHasSponsoredMessagesEnabled
 	| SetBusinessLocation
 	| SetBusinessOpeningHours
@@ -44408,17 +44345,6 @@ chats in the order seen in the main chat list.
 		return this._request({
 			...options,
 			'@type': 'searchChatsOnServer',
-		});
-	}
-
-	/**
-Returns a list of users and location-based supergroups nearby. The method was disabled and returns an empty list of
-chats now.
-*/
-	async searchChatsNearby(options: Omit<SearchChatsNearby, '@type'>): Promise<ChatsNearby> {
-		return this._request({
-			...options,
-			'@type': 'searchChatsNearby',
 		});
 	}
 
@@ -49283,17 +49209,6 @@ Changes the emoji status of the current user; for Telegram Premium users only.
 	}
 
 	/**
-Changes the location of the current user. Needs to be called if getOption("is_location_visible") is true and location
-changes for more than 1 kilometer. Must not be called if the user has a business location.
-*/
-	async setLocation(options: Omit<SetLocation, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'setLocation',
-		});
-	}
-
-	/**
 Toggles whether the current user has sponsored messages enabled. The setting has no effect for users without Telegram
 Premium for which sponsored messages are always enabled.
 */
@@ -50198,7 +50113,7 @@ Returns gifts that can be sent to other users.
 	}
 
 	/**
-Send a gift to another user.
+Sends a gift to another user. May return an error with a message "STARGIFT_USAGE_LIMITED" if the gift was sold out.
 */
 	async sendGift(options: Omit<SendGift, '@type'>): Promise<Ok> {
 		return this._request({
