@@ -2739,6 +2739,10 @@ The amount to pay, in the smallest units of the currency.
 */
 	amount: number;
 	/**
+The discount associated with this option, as a percentage.
+*/
+	discount_percentage: number;
+	/**
 Number of users which will be able to activate the gift codes.
 */
 	winner_count: number;
@@ -2754,6 +2758,10 @@ Identifier of the store product associated with the option; may be empty if none
 Number of times the store product must be paid.
 */
 	store_product_quantity: number;
+	/**
+A sticker to be shown along with the gift code; may be null if unknown.
+*/
+	sticker: Sticker;
 }
 
 /**
@@ -2941,6 +2949,14 @@ Number of remaining times the gift can be purchased by all users; 0 if not limit
 Number of total times the gift can be purchased by all users; 0 if not limited.
 */
 	total_count: number;
+	/**
+Point in time (Unix timestamp) when the gift was send for the first time; for sold out gifts only.
+*/
+	first_send_date: number;
+	/**
+Point in time (Unix timestamp) when the gift was send for the last time; for sold out gifts only.
+*/
+	last_send_date: number;
 }
 
 /**
@@ -3185,7 +3201,7 @@ Subtype of {@link StarTransactionPartner}.
 export interface StarTransactionPartnerFragment {
 	'@type': 'starTransactionPartnerFragment';
 	/**
-State of the withdrawal; may be null for refunds from Fragment.
+State of the withdrawal; may be null for refunds from Fragment or for Telegram Stars bought on Fragment.
 */
 	withdrawal_state: RevenueWithdrawalState;
 }
@@ -3197,6 +3213,18 @@ Subtype of {@link StarTransactionPartner}.
 export interface StarTransactionPartnerTelegramAds {
 	'@type': 'starTransactionPartnerTelegramAds';
 
+}
+
+/**
+The transaction is a transaction with Telegram for API usage.
+Subtype of {@link StarTransactionPartner}.
+*/
+export interface StarTransactionPartnerTelegramApi {
+	'@type': 'starTransactionPartnerTelegramApi';
+	/**
+The number of billed requests.
+*/
+	request_count: number;
 }
 
 /**
@@ -3751,6 +3779,10 @@ Default administrator rights for adding the bot to channels; may be null.
 */
 	default_channel_administrator_rights: ChatAdministratorRights;
 	/**
+True, if the bot's revenue statistics are available.
+*/
+	can_get_revenue_statistics?: boolean;
+	/**
 True, if the bot has media previews.
 */
 	has_media_previews?: boolean;
@@ -3848,10 +3880,6 @@ Birthdate of the user; may be null if unknown.
 Identifier of the personal chat of the user; 0 if none.
 */
 	personal_chat_id: number;
-	/**
-The list of available options for gifting Telegram Premium to the user.
-*/
-	premium_gift_options: PremiumPaymentOption[];
 	/**
 Number of gifts saved to profile by the user.
 */
@@ -5708,11 +5736,11 @@ True, if the message contains an unread mention for the current user.
 */
 	contains_unread_mention?: boolean;
 	/**
-Point in time (Unix timestamp) when the message was sent.
+Point in time (Unix timestamp) when the message was sent; 0 for scheduled messages.
 */
 	date: number;
 	/**
-Point in time (Unix timestamp) when the message was last edited.
+Point in time (Unix timestamp) when the message was last edited; 0 for scheduled messages.
 */
 	edit_date: number;
 	/**
@@ -13114,6 +13142,18 @@ export interface MessageSchedulingStateSendWhenOnline {
 }
 
 /**
+The message will be sent when the video in the message is converted and optimized; can be used only by the server.
+Subtype of {@link MessageSchedulingState}.
+*/
+export interface MessageSchedulingStateSendWhenVideoProcessed {
+	'@type': 'messageSchedulingStateSendWhenVideoProcessed';
+	/**
+Approximate point in time (Unix timestamp) when the message is expected to be sent.
+*/
+	send_date: number;
+}
+
+/**
 Describes when a message will be self-destructed.
 Subtype of {@link MessageSelfDestructType}.
 */
@@ -13151,6 +13191,10 @@ Pass true if the message is sent from the background.
 Pass true if the content of the message must be protected from forwarding and saving; for bots only.
 */
 	protect_content?: boolean;
+	/**
+Pass true to allow the message to ignore regular broadcast limits for a small fee; for bots only.
+*/
+	allow_paid_broadcast?: boolean;
 	/**
 Pass true if the user explicitly chosen a sticker or a custom emoji from an installed sticker set; applicable only to
 sendMessage and sendMessageAlbum.
@@ -13492,7 +13536,8 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageVideoNote {
 	'@type': 'inputMessageVideoNote';
 	/**
-Video note to be sent.
+Video note to be sent. The video is expected to be encoded to MPEG4 format with H.264 codec and have no data outside of
+the visible circle.
 */
 	video_note: InputFile;
 	/**
@@ -13786,9 +13831,9 @@ True, if the message can be deleted for all users using the method deleteMessage
 */
 	can_be_deleted_for_all_users?: boolean;
 	/**
-True, if the message can be edited using the methods editMessageText, editMessageMedia, editMessageCaption, or
-editMessageReplyMarkup. For live location and poll messages this fields shows whether editMessageLiveLocation or
-stopPoll can be used with this message.
+True, if the message can be edited using the methods editMessageText, editMessageCaption, or editMessageReplyMarkup. For
+live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this
+message.
 */
 	can_be_edited?: boolean;
 	/**
@@ -13820,6 +13865,10 @@ options.
 True, if the message can be shared in a story using inputStoryAreaTypeMessage.
 */
 	can_be_shared_in_story?: boolean;
+	/**
+True, if the message can be edited using the method editMessageMedia.
+*/
+	can_edit_media?: boolean;
 	/**
 True, if scheduling state of the message can be edited.
 */
@@ -19772,26 +19821,6 @@ Pass true if this is an upgrade from a monthly subscription to early subscriptio
 }
 
 /**
-The user gifting Telegram Premium to another user.
-Subtype of {@link StorePaymentPurpose}.
-*/
-export interface StorePaymentPurposeGiftedPremium {
-	'@type': 'storePaymentPurposeGiftedPremium';
-	/**
-Identifier of the user to which Telegram Premium is gifted.
-*/
-	user_id: number;
-	/**
-ISO 4217 currency code of the payment currency.
-*/
-	currency: string;
-	/**
-Paid amount, in the smallest units of the currency.
-*/
-	amount: number;
-}
-
-/**
 The user creating Telegram Premium gift codes for other users.
 Subtype of {@link StorePaymentPurpose}.
 */
@@ -22885,8 +22914,8 @@ Referrer specified in the link.
 }
 
 /**
-The link is a link to the screen for gifting Telegram Premium subscriptions to friends via inputInvoiceTelegram payments
-or in-store purchases.
+The link is a link to the screen for gifting Telegram Premium subscriptions to friends via inputInvoiceTelegram with
+telegramPaymentPurposePremiumGiftCodes payments or in-store purchases.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePremiumGift {
@@ -25135,8 +25164,8 @@ Subtype of {@link Update}.
 export interface UpdateMessageSendSucceeded {
 	'@type': 'updateMessageSendSucceeded';
 	/**
-The sent message. Usually only the message identifier, date, and content are changed, but almost all other fields can
-also change.
+The sent message. Almost any field of the new message can be different from the corresponding field of the original
+message. For example, the field scheduling_state may change, making the message scheduled, or non-scheduled.
 */
 	message: Message;
 	/**
@@ -25344,6 +25373,22 @@ Identifier of the chat with the live location message.
 	chat_id: number;
 	/**
 Identifier of the message with live location.
+*/
+	message_id: number;
+}
+
+/**
+An automatically scheduled message with video has been successfully sent after conversion.
+Subtype of {@link Update}.
+*/
+export interface UpdateVideoPublished {
+	'@type': 'updateVideoPublished';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the sent message.
 */
 	message_id: number;
 }
@@ -28012,6 +28057,7 @@ export type StarTransactionPartner =
 	| StarTransactionPartnerGooglePlay
 	| StarTransactionPartnerFragment
 	| StarTransactionPartnerTelegramAds
+	| StarTransactionPartnerTelegramApi
 	| StarTransactionPartnerBot
 	| StarTransactionPartnerBusiness
 	| StarTransactionPartnerChat
@@ -28509,7 +28555,8 @@ export type InputPaidMediaType =
 
 export type MessageSchedulingState =
 	| MessageSchedulingStateSendAtDate
-	| MessageSchedulingStateSendWhenOnline;
+	| MessageSchedulingStateSendWhenOnline
+	| MessageSchedulingStateSendWhenVideoProcessed;
 
 export type MessageSelfDestructType =
 	| MessageSelfDestructTypeTimer
@@ -28874,7 +28921,6 @@ export type PremiumSource =
 
 export type StorePaymentPurpose =
 	| StorePaymentPurposePremiumSubscription
-	| StorePaymentPurposeGiftedPremium
 	| StorePaymentPurposePremiumGiftCodes
 	| StorePaymentPurposePremiumGiveaway
 	| StorePaymentPurposeStarGiveaway
@@ -29294,6 +29340,7 @@ export type Update =
 	| UpdateMessageUnreadReactions
 	| UpdateMessageFactCheck
 	| UpdateMessageLiveLocationViewed
+	| UpdateVideoPublished
 	| UpdateNewChat
 	| UpdateChatTitle
 	| UpdateChatPhoto
@@ -31123,6 +31170,10 @@ Request type for {@link Tdjson#searchPublicStoriesByTag}.
 export interface SearchPublicStoriesByTag {
 	'@type': 'searchPublicStoriesByTag';
 	/**
+Identifier of the chat that posted the stories to search for; pass 0 to search stories in all chats.
+*/
+	story_sender_chat_id: number;
+	/**
 Hashtag or cashtag to search for.
 */
 	tag: string;
@@ -31407,7 +31458,7 @@ Chat identifier.
 }
 
 /**
-Returns sponsored messages to be shown in a chat; for channel chats only.
+Returns sponsored messages to be shown in a chat; for channel chats and chats with bots only.
 Request type for {@link Tdjson#getChatSponsoredMessages}.
 */
 export interface GetChatSponsoredMessages {
@@ -32039,11 +32090,9 @@ The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if t
 }
 
 /**
-Edits the content of a message with an animation, an audio, a document, a photo or a video, including message caption.
-If only the caption needs to be edited, use editMessageCaption instead. The media can't be edited if the message was set
-to self-destruct or to a self-destructing media. The type of message content in an album can't be changed with exception
-of replacing a photo with a video or vice versa. Returns the edited message after the edit is completed on the server
-side.
+Edits the media content of a message, including message caption. If only the caption needs to be edited, use
+editMessageCaption instead. The type of message content in an album can't be changed with exception of replacing a photo
+with a video or vice versa. Returns the edited message after the edit is completed on the server side.
 Request type for {@link Tdjson#editMessageMedia}.
 */
 export interface EditMessageMedia {
@@ -32053,7 +32102,7 @@ The chat the message belongs to.
 */
 	chat_id: number;
 	/**
-Identifier of the message. Use messageProperties.can_be_edited to check whether the message can be edited.
+Identifier of the message. Use messageProperties.can_edit_media to check whether the message can be edited.
 */
 	message_id: number;
 	/**
@@ -32172,8 +32221,8 @@ The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if t
 }
 
 /**
-Edits the content of a message with an animation, an audio, a document, a photo or a video in an inline message sent via
-a bot; for bots only.
+Edits the media content of a message with a text, an animation, an audio, a document, a photo or a video in an inline
+message sent via a bot; for bots only.
 Request type for {@link Tdjson#editInlineMessageMedia}.
 */
 export interface EditInlineMessageMedia {
@@ -32250,7 +32299,8 @@ Identifier of the message. Use messageProperties.can_edit_scheduling_state to ch
 */
 	message_id: number;
 	/**
-The new message scheduling state; pass null to send the message immediately.
+The new message scheduling state; pass null to send the message immediately. Must be null for messages in the state
+messageSchedulingStateSendWhenVideoProcessed.
 */
 	scheduling_state: MessageSchedulingState;
 }
@@ -32426,8 +32476,8 @@ The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if t
 }
 
 /**
-Edits the content of a message with an animation, an audio, a document, a photo or a video in a message sent on behalf
-of a business account; for bots only.
+Edits the media content of a message with a text, an animation, an audio, a document, a photo or a video in a message
+sent on behalf of a business account; for bots only.
 Request type for {@link Tdjson#editBusinessMessageMedia}.
 */
 export interface EditBusinessMessageMedia {
@@ -32753,7 +32803,7 @@ Identifiers of the quick reply messages to readd. Message identifiers must be in
 
 /**
 Asynchronously edits the text, media or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
-whether a message can be edited. Text message can be edited only to a text message. The type of message content in an
+whether a message can be edited. Media message can be edited only to a media message. The type of message content in an
 album can't be changed with exception of replacing a photo with a video or vice versa.
 Request type for {@link Tdjson#editQuickReplyMessage}.
 */
@@ -40972,7 +41022,8 @@ Identifier of the sender, which added the reaction.
 
 /**
 Returns detailed revenue statistics about a chat. Currently, this method can be used only for channels if
-supergroupFullInfo.can_get_revenue_statistics == true.
+supergroupFullInfo.can_get_revenue_statistics == true or bots if userFullInfo.bot_info.can_get_revenue_statistics ==
+true.
 Request type for {@link Tdjson#getChatRevenueStatistics}.
 */
 export interface GetChatRevenueStatistics {
@@ -40988,8 +41039,10 @@ Pass true if a dark theme is used by the application.
 }
 
 /**
-Returns a URL for chat revenue withdrawal; requires owner privileges in the chat. Currently, this method can be used
-only for channels if supergroupFullInfo.can_get_revenue_statistics == true and getOption("can_withdraw_chat_revenue").
+Returns a URL for chat revenue withdrawal; requires owner privileges in the channel chat or the bot. Currently, this
+method can be used only if getOption("can_withdraw_chat_revenue") for channels with
+supergroupFullInfo.can_get_revenue_statistics == true or bots with userFullInfo.bot_info.can_get_revenue_statistics ==
+true.
 Request type for {@link Tdjson#getChatRevenueWithdrawalUrl}.
 */
 export interface GetChatRevenueWithdrawalUrl {
@@ -41006,7 +41059,8 @@ The 2-step verification password of the current user.
 
 /**
 Returns the list of revenue transactions for a chat. Currently, this method can be used only for channels if
-supergroupFullInfo.can_get_revenue_statistics == true.
+supergroupFullInfo.can_get_revenue_statistics == true or bots if userFullInfo.bot_info.can_get_revenue_statistics ==
+true.
 Request type for {@link Tdjson#getChatRevenueTransactions}.
 */
 export interface GetChatRevenueTransactions {
@@ -44887,7 +44941,7 @@ decreasing message_id).
 	}
 
 	/**
-Returns sponsored messages to be shown in a chat; for channel chats only.
+Returns sponsored messages to be shown in a chat; for channel chats and chats with bots only.
 */
 	async getChatSponsoredMessages(options: Omit<GetChatSponsoredMessages, '@type'>): Promise<SponsoredMessages> {
 		return this._request({
@@ -45177,11 +45231,9 @@ location. Returns the edited message after the edit is completed on the server s
 	}
 
 	/**
-Edits the content of a message with an animation, an audio, a document, a photo or a video, including message caption.
-If only the caption needs to be edited, use editMessageCaption instead. The media can't be edited if the message was set
-to self-destruct or to a self-destructing media. The type of message content in an album can't be changed with exception
-of replacing a photo with a video or vice versa. Returns the edited message after the edit is completed on the server
-side.
+Edits the media content of a message, including message caption. If only the caption needs to be edited, use
+editMessageCaption instead. The type of message content in an album can't be changed with exception of replacing a photo
+with a video or vice versa. Returns the edited message after the edit is completed on the server side.
 */
 	async editMessageMedia(options: Omit<EditMessageMedia, '@type'>): Promise<Message> {
 		return this._request({
@@ -45232,8 +45284,8 @@ Edits the content of a live location in an inline message sent via a bot; for bo
 	}
 
 	/**
-Edits the content of a message with an animation, an audio, a document, a photo or a video in an inline message sent via
-a bot; for bots only.
+Edits the media content of a message with a text, an animation, an audio, a document, a photo or a video in an inline
+message sent via a bot; for bots only.
 */
 	async editInlineMessageMedia(options: Omit<EditInlineMessageMedia, '@type'>): Promise<Ok> {
 		return this._request({
@@ -45326,8 +45378,8 @@ Edits the content of a live location in a message sent on behalf of a business a
 	}
 
 	/**
-Edits the content of a message with an animation, an audio, a document, a photo or a video in a message sent on behalf
-of a business account; for bots only.
+Edits the media content of a message with a text, an animation, an audio, a document, a photo or a video in a message
+sent on behalf of a business account; for bots only.
 */
 	async editBusinessMessageMedia(options: Omit<EditBusinessMessageMedia, '@type'>): Promise<BusinessMessage> {
 		return this._request({
@@ -45501,7 +45553,7 @@ message.
 
 	/**
 Asynchronously edits the text, media or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
-whether a message can be edited. Text message can be edited only to a text message. The type of message content in an
+whether a message can be edited. Media message can be edited only to a media message. The type of message content in an
 album can't be changed with exception of replacing a photo with a video or vice versa.
 */
 	async editQuickReplyMessage(options: Omit<EditQuickReplyMessage, '@type'>): Promise<Ok> {
@@ -50576,7 +50628,8 @@ messageProperties.can_report_reactions.
 
 	/**
 Returns detailed revenue statistics about a chat. Currently, this method can be used only for channels if
-supergroupFullInfo.can_get_revenue_statistics == true.
+supergroupFullInfo.can_get_revenue_statistics == true or bots if userFullInfo.bot_info.can_get_revenue_statistics ==
+true.
 */
 	async getChatRevenueStatistics(options: Omit<GetChatRevenueStatistics, '@type'>): Promise<ChatRevenueStatistics> {
 		return this._request({
@@ -50586,8 +50639,10 @@ supergroupFullInfo.can_get_revenue_statistics == true.
 	}
 
 	/**
-Returns a URL for chat revenue withdrawal; requires owner privileges in the chat. Currently, this method can be used
-only for channels if supergroupFullInfo.can_get_revenue_statistics == true and getOption("can_withdraw_chat_revenue").
+Returns a URL for chat revenue withdrawal; requires owner privileges in the channel chat or the bot. Currently, this
+method can be used only if getOption("can_withdraw_chat_revenue") for channels with
+supergroupFullInfo.can_get_revenue_statistics == true or bots with userFullInfo.bot_info.can_get_revenue_statistics ==
+true.
 */
 	async getChatRevenueWithdrawalUrl(options: Omit<GetChatRevenueWithdrawalUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
@@ -50598,7 +50653,8 @@ only for channels if supergroupFullInfo.can_get_revenue_statistics == true and g
 
 	/**
 Returns the list of revenue transactions for a chat. Currently, this method can be used only for channels if
-supergroupFullInfo.can_get_revenue_statistics == true.
+supergroupFullInfo.can_get_revenue_statistics == true or bots if userFullInfo.bot_info.can_get_revenue_statistics ==
+true.
 */
 	async getChatRevenueTransactions(options: Omit<GetChatRevenueTransactions, '@type'>): Promise<ChatRevenueTransactions> {
 		return this._request({
