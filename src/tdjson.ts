@@ -1046,7 +1046,8 @@ status, white color on chat photos, or another appropriate color in other places
 }
 
 /**
-Represents a closed vector path. The path begins at the end point of the last command.
+Represents a closed vector path. The path begins at the end point of the last command. The coordinate system origin is
+in the upper-left corner.
 */
 export interface ClosedVectorPath {
 	'@type': 'closedVectorPath';
@@ -1054,6 +1055,17 @@ export interface ClosedVectorPath {
 List of vector path commands.
 */
 	commands: VectorPathCommand[];
+}
+
+/**
+Represents outline of an image.
+*/
+export interface Outline {
+	'@type': 'outline';
+	/**
+The list of closed vector paths.
+*/
+	paths: ClosedVectorPath[];
 }
 
 /**
@@ -1282,11 +1294,6 @@ Sticker format.
 Sticker's full type.
 */
 	full_type: StickerFullType;
-	/**
-Sticker's outline represented as a list of closed vector paths; may be empty. The coordinate system origin is in the
-upper-left corner.
-*/
-	outline: ClosedVectorPath[];
 	/**
 Sticker thumbnail in WEBP or JPEG format; may be null.
 */
@@ -1625,7 +1632,7 @@ True, if the poll is closed.
 }
 
 /**
-Describes an alternative reencoded quality of a video file.
+Describes an alternative re-encoded quality of a video file.
 */
 export interface AlternativeVideo {
 	'@type': 'alternativeVideo';
@@ -2571,6 +2578,48 @@ only.
 }
 
 /**
+Describes type of subscription paid in Telegram Stars.
+Subtype of {@link StarSubscriptionType}.
+*/
+export interface StarSubscriptionTypeChannel {
+	'@type': 'starSubscriptionTypeChannel';
+	/**
+True, if the subscription is active and the user can use the method reuseStarSubscription to join the subscribed chat
+again.
+*/
+	can_reuse?: boolean;
+	/**
+The invite link that can be used to renew the subscription if it has been expired; may be empty, if the link isn't
+available anymore.
+*/
+	invite_link: string;
+}
+
+/**
+Describes a subscription in a bot or a business account.
+Subtype of {@link StarSubscriptionType}.
+*/
+export interface StarSubscriptionTypeBot {
+	'@type': 'starSubscriptionTypeBot';
+	/**
+True, if the subscription was canceled by the bot and can't be extended.
+*/
+	is_canceled_by_bot?: boolean;
+	/**
+Subscription invoice title.
+*/
+	title: string;
+	/**
+Subscription invoice photo.
+*/
+	photo: Photo;
+	/**
+The link to the subscription invoice.
+*/
+	invoice_link: string;
+}
+
+/**
 Describes subscription plan paid in Telegram Stars.
 */
 export interface StarSubscriptionPricing {
@@ -2586,7 +2635,7 @@ The amount of Telegram Stars that must be paid for each period.
 }
 
 /**
-Contains information about subscription to a channel chat paid in Telegram Stars.
+Contains information about subscription to a channel chat, a bot, or a business account that was paid in Telegram Stars.
 */
 export interface StarSubscription {
 	'@type': 'starSubscription';
@@ -2595,18 +2644,13 @@ Unique identifier of the subscription.
 */
 	id: string;
 	/**
-Identifier of the channel chat that is subscribed.
+Identifier of the chat that is subscribed.
 */
 	chat_id: number;
 	/**
 Point in time (Unix timestamp) when the subscription will expire or expired.
 */
 	expiration_date: number;
-	/**
-True, if the subscription is active and the user can use the method reuseStarSubscription to join the subscribed chat
-again.
-*/
-	can_reuse?: boolean;
 	/**
 True, if the subscription was canceled.
 */
@@ -2616,14 +2660,13 @@ True, if the subscription expires soon and there are no enough Telegram Stars on
 */
 	is_expiring?: boolean;
 	/**
-The invite link that can be used to renew the subscription if it has been expired; may be empty, if the link isn't
-available anymore.
-*/
-	invite_link: string;
-	/**
 The subscription plan.
 */
 	pricing: StarSubscriptionPricing;
+	/**
+Type of the subscription.
+*/
+	type: StarSubscriptionType;
 }
 
 /**
@@ -2942,6 +2985,10 @@ just bought Telegram Stars, then full value can be claimed.
 */
 	default_sell_star_count: number;
 	/**
+True, if the gift is a birthday gift.
+*/
+	is_for_birthday?: boolean;
+	/**
 Number of remaining times the gift can be purchased by all users; 0 if not limited or the gift was sold out.
 */
 	remaining_count: number;
@@ -3005,7 +3052,8 @@ message; only for the gift receiver.
 */
 	message_id: number;
 	/**
-Number of Telegram Stars that can be claimed by the receiver instead of the gift; only for the gift receiver.
+Number of Telegram Stars that can be claimed by the receiver instead of the gift; 0 if the gift can't be sold by the
+current user.
 */
 	sell_star_count: number;
 }
@@ -3080,6 +3128,26 @@ Invoice payload; for bots only.
 }
 
 /**
+User bought a subscription in a bot or a business account.
+Subtype of {@link BotTransactionPurpose}.
+*/
+export interface BotTransactionPurposeSubscription {
+	'@type': 'botTransactionPurposeSubscription';
+	/**
+The number of seconds between consecutive Telegram Star debiting.
+*/
+	period: number;
+	/**
+Information about the bought subscription; may be null if not applicable.
+*/
+	product_info: ProductInfo;
+	/**
+Invoice payload; for bots only.
+*/
+	invoice_payload: string;
+}
+
+/**
 Describes purpose of a transaction with a supergroup or a channel.
 Subtype of {@link ChatTransactionPurpose}.
 */
@@ -3144,7 +3212,7 @@ A sticker to be shown in the transaction information; may be null if unknown.
 }
 
 /**
-The current user sold a gift received from another user.
+The user sold a gift received from another user or bot.
 Subtype of {@link UserTransactionPurpose}.
 */
 export interface UserTransactionPurposeGiftSell {
@@ -3156,7 +3224,7 @@ The gift.
 }
 
 /**
-The current user sent a gift to another user.
+The user or the bot sent a gift to a user.
 Subtype of {@link UserTransactionPurpose}.
 */
 export interface UserTransactionPurposeGiftSend {
@@ -3779,9 +3847,29 @@ Default administrator rights for adding the bot to channels; may be null.
 */
 	default_channel_administrator_rights: ChatAdministratorRights;
 	/**
-True, if the bot's revenue statistics are available.
+Default light background color for bot Web Apps; -1 if not specified.
+*/
+	web_app_background_light_color: number;
+	/**
+Default dark background color for bot Web Apps; -1 if not specified.
+*/
+	web_app_background_dark_color: number;
+	/**
+Default light header color for bot Web Apps; -1 if not specified.
+*/
+	web_app_header_light_color: number;
+	/**
+Default dark header color for bot Web Apps; -1 if not specified.
+*/
+	web_app_header_dark_color: number;
+	/**
+True, if the bot's revenue statistics are available to the current user.
 */
 	can_get_revenue_statistics?: boolean;
+	/**
+True, if the bot can manage emoji status of the current user.
+*/
+	can_manage_emoji_status?: boolean;
 	/**
 True, if the bot has media previews.
 */
@@ -7736,6 +7824,100 @@ True, if the user must be asked for the permission to the bot to send them messa
 }
 
 /**
+Contains parameters of the application theme.
+*/
+export interface ThemeParameters {
+	'@type': 'themeParameters';
+	/**
+A color of the background in the RGB format.
+*/
+	background_color: number;
+	/**
+A secondary color for the background in the RGB format.
+*/
+	secondary_background_color: number;
+	/**
+A color of the header background in the RGB format.
+*/
+	header_background_color: number;
+	/**
+A color of the bottom bar background in the RGB format.
+*/
+	bottom_bar_background_color: number;
+	/**
+A color of the section background in the RGB format.
+*/
+	section_background_color: number;
+	/**
+A color of the section separator in the RGB format.
+*/
+	section_separator_color: number;
+	/**
+A color of text in the RGB format.
+*/
+	text_color: number;
+	/**
+An accent color of the text in the RGB format.
+*/
+	accent_text_color: number;
+	/**
+A color of text on the section headers in the RGB format.
+*/
+	section_header_text_color: number;
+	/**
+A color of the subtitle text in the RGB format.
+*/
+	subtitle_text_color: number;
+	/**
+A color of the text for destructive actions in the RGB format.
+*/
+	destructive_text_color: number;
+	/**
+A color of hints in the RGB format.
+*/
+	hint_color: number;
+	/**
+A color of links in the RGB format.
+*/
+	link_color: number;
+	/**
+A color of the buttons in the RGB format.
+*/
+	button_color: number;
+	/**
+A color of text on the buttons in the RGB format.
+*/
+	button_text_color: number;
+}
+
+/**
+Describes mode in which a Web App is opened.
+Subtype of {@link WebAppOpenMode}.
+*/
+export interface WebAppOpenModeCompact {
+	'@type': 'webAppOpenModeCompact';
+
+}
+
+/**
+The Web App is opened in the full-size mode.
+Subtype of {@link WebAppOpenMode}.
+*/
+export interface WebAppOpenModeFullSize {
+	'@type': 'webAppOpenModeFullSize';
+
+}
+
+/**
+The Web App is opened in the full-screen mode.
+Subtype of {@link WebAppOpenMode}.
+*/
+export interface WebAppOpenModeFullScreen {
+	'@type': 'webAppOpenModeFullScreen';
+
+}
+
+/**
 Contains information about a Web App found by its short name.
 */
 export interface FoundWebApp {
@@ -7780,9 +7962,28 @@ URL of the Web App to open.
 */
 	url: string;
 	/**
-True, if the Web App must always be opened in the compact mode instead of the full-size mode.
+The mode in which the Web App must be opened.
 */
-	is_compact?: boolean;
+	mode: WebAppOpenMode;
+}
+
+/**
+Options to be used when a Web App is opened.
+*/
+export interface WebAppOpenParameters {
+	'@type': 'webAppOpenParameters';
+	/**
+Preferred Web App theme; pass null to use the default theme.
+*/
+	theme: ThemeParameters;
+	/**
+Short name of the current application; 0-64 English letters, digits, and underscores.
+*/
+	application_name: string;
+	/**
+The mode in which the Web App is opened; pass null to open in webAppOpenModeFullSize.
+*/
+	mode: WebAppOpenMode;
 }
 
 /**
@@ -9792,73 +9993,6 @@ The address; empty if unknown.
 }
 
 /**
-Contains parameters of the application theme.
-*/
-export interface ThemeParameters {
-	'@type': 'themeParameters';
-	/**
-A color of the background in the RGB format.
-*/
-	background_color: number;
-	/**
-A secondary color for the background in the RGB format.
-*/
-	secondary_background_color: number;
-	/**
-A color of the header background in the RGB format.
-*/
-	header_background_color: number;
-	/**
-A color of the bottom bar background in the RGB format.
-*/
-	bottom_bar_background_color: number;
-	/**
-A color of the section background in the RGB format.
-*/
-	section_background_color: number;
-	/**
-A color of the section separator in the RGB format.
-*/
-	section_separator_color: number;
-	/**
-A color of text in the RGB format.
-*/
-	text_color: number;
-	/**
-An accent color of the text in the RGB format.
-*/
-	accent_text_color: number;
-	/**
-A color of text on the section headers in the RGB format.
-*/
-	section_header_text_color: number;
-	/**
-A color of the subtitle text in the RGB format.
-*/
-	subtitle_text_color: number;
-	/**
-A color of the text for destructive actions in the RGB format.
-*/
-	destructive_text_color: number;
-	/**
-A color of hints in the RGB format.
-*/
-	hint_color: number;
-	/**
-A color of links in the RGB format.
-*/
-	link_color: number;
-	/**
-A color of the buttons in the RGB format.
-*/
-	button_color: number;
-	/**
-A color of text on the buttons in the RGB format.
-*/
-	button_text_color: number;
-}
-
-/**
 Portion of the price of a product (e.g., "delivery cost", "tax amount").
 */
 export interface LabeledPricePart {
@@ -9886,6 +10020,11 @@ ISO 4217 currency code.
 A list of objects used to calculate the total price of the product.
 */
 	price_parts: LabeledPricePart[];
+	/**
+The number of seconds between consecutive Telegram Star debiting for subscription invoices; 0 if the invoice doesn't
+create subscription.
+*/
+	subscription_period: number;
 	/**
 The maximum allowed amount of tip in the smallest units of the currency.
 */
@@ -10164,6 +10303,18 @@ export interface PaymentFormTypeStars {
 Number of Telegram Stars that will be paid.
 */
 	star_count: number;
+}
+
+/**
+The payment form is for a payment in Telegram Stars for subscription.
+Subtype of {@link PaymentFormType}.
+*/
+export interface PaymentFormTypeStarSubscription {
+	'@type': 'paymentFormTypeStarSubscription';
+	/**
+Information about subscription plan.
+*/
+	pricing: StarSubscriptionPricing;
 }
 
 /**
@@ -12261,7 +12412,7 @@ New score.
 }
 
 /**
-A payment has been completed.
+A payment has been sent to a bot or a business account.
 Subtype of {@link MessageContent}.
 */
 export interface MessagePaymentSuccessful {
@@ -12283,6 +12434,10 @@ Total price for the product, in the smallest units of the currency.
 */
 	total_amount: number;
 	/**
+Point in time (Unix timestamp) when the subscription will expire; 0 if unknown or the payment isn't recurring.
+*/
+	subscription_until_date: number;
+	/**
 True, if this is a recurring payment.
 */
 	is_recurring?: boolean;
@@ -12297,7 +12452,7 @@ Name of the invoice; may be empty if unknown.
 }
 
 /**
-A payment has been completed; for bots only.
+A payment has been received by the bot or the business account.
 Subtype of {@link MessageContent}.
 */
 export interface MessagePaymentSuccessfulBot {
@@ -12311,6 +12466,10 @@ Total price for the product, in the smallest units of the currency.
 */
 	total_amount: number;
 	/**
+Point in time (Unix timestamp) when the subscription will expire; 0 if unknown or the payment isn't recurring.
+*/
+	subscription_until_date: number;
+	/**
 True, if this is a recurring payment.
 */
 	is_recurring?: boolean;
@@ -12323,11 +12482,11 @@ Invoice payload.
 */
 	invoice_payload: string;
 	/**
-Identifier of the shipping option chosen by the user; may be empty if not applicable.
+Identifier of the shipping option chosen by the user; may be empty if not applicable; for bots only.
 */
 	shipping_option_id: string;
 	/**
-Information about the order; may be null.
+Information about the order; may be null; for bots only.
 */
 	order_info: OrderInfo;
 	/**
@@ -12673,7 +12832,8 @@ Message added to the gift.
 */
 	text: FormattedText;
 	/**
-Number of Telegram Stars that can be claimed by the receiver instead of the gift.
+Number of Telegram Stars that can be claimed by the receiver instead of the gift; 0 if the gift can't be sold by the
+receiver.
 */
 	sell_star_count: number;
 	/**
@@ -13483,7 +13643,7 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageVideo {
 	'@type': 'inputMessageVideo';
 	/**
-Video to be sent. The video is expected to be reencoded to MPEG4 format with H.264 codec by the sender.
+Video to be sent. The video is expected to be re-encoded to MPEG4 format with H.264 codec by the sender.
 */
 	video: InputFile;
 	/**
@@ -14380,10 +14540,9 @@ only before the thumbnail is changed.
 */
 	thumbnail: Thumbnail;
 	/**
-Sticker set thumbnail's outline represented as a list of closed vector paths; may be empty. The coordinate system origin
-is in the upper-left corner.
+Sticker set thumbnail's outline; may be null if unknown.
 */
-	thumbnail_outline: ClosedVectorPath[];
+	thumbnail_outline: Outline;
 	/**
 True, if the sticker set is owned by the current user.
 */
@@ -14451,10 +14610,9 @@ only before the thumbnail is changed.
 */
 	thumbnail: Thumbnail;
 	/**
-Sticker set thumbnail's outline represented as a list of closed vector paths; may be empty. The coordinate system origin
-is in the upper-left corner.
+Sticker set thumbnail's outline; may be null if unknown.
 */
-	thumbnail_outline: ClosedVectorPath[];
+	thumbnail_outline: Outline;
 	/**
 True, if the sticker set is owned by the current user.
 */
@@ -17163,6 +17321,62 @@ Left time for which the link is valid, in seconds; 0 if the link is a public use
 }
 
 /**
+Describes allowed types for the target chat.
+*/
+export interface TargetChatTypes {
+	'@type': 'targetChatTypes';
+	/**
+True, if private chats with ordinary users are allowed.
+*/
+	allow_user_chats?: boolean;
+	/**
+True, if private chats with other bots are allowed.
+*/
+	allow_bot_chats?: boolean;
+	/**
+True, if basic group and supergroup chats are allowed.
+*/
+	allow_group_chats?: boolean;
+	/**
+True, if channel chats are allowed.
+*/
+	allow_channel_chats?: boolean;
+}
+
+/**
+Describes the target chat to be opened.
+Subtype of {@link TargetChat}.
+*/
+export interface TargetChatCurrent {
+	'@type': 'targetChatCurrent';
+
+}
+
+/**
+The chat needs to be chosen by the user among chats of the specified types.
+Subtype of {@link TargetChat}.
+*/
+export interface TargetChatChosen {
+	'@type': 'targetChatChosen';
+	/**
+Allowed types for the chat.
+*/
+	types: TargetChatTypes;
+}
+
+/**
+The chat needs to be open with the provided internal link.
+Subtype of {@link TargetChat}.
+*/
+export interface TargetChatInternalLink {
+	'@type': 'targetChatInternalLink';
+	/**
+An internal link pointing to the chat.
+*/
+	link: InternalLinkType;
+}
+
+/**
 Represents a single result of an inline query; for bots only.
 Subtype of {@link InputInlineQueryResult}.
 */
@@ -17973,6 +18187,40 @@ Results of the query.
 The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Represents an inline message that can be sent via the bot.
+*/
+export interface PreparedInlineMessageId {
+	'@type': 'preparedInlineMessageId';
+	/**
+Unique identifier for the message.
+*/
+	id: string;
+	/**
+Point in time (Unix timestamp) when the message can't be used anymore.
+*/
+	expiration_date: number;
+}
+
+/**
+Represents a ready to send inline message. Use sendInlineQueryResultMessage to send the message.
+*/
+export interface PreparedInlineMessage {
+	'@type': 'preparedInlineMessage';
+	/**
+Unique identifier of the inline query to pass to sendInlineQueryResultMessage.
+*/
+	inline_query_id: string;
+	/**
+Resulted inline message of the query.
+*/
+	result: InlineQueryResult;
+	/**
+Types of the chats to which the message can be sent.
+*/
+	chat_types: TargetChatTypes;
 }
 
 /**
@@ -21672,6 +21920,15 @@ export interface UserPrivacySettingRuleAllowContacts {
 }
 
 /**
+A rule to allow all bots to do something.
+Subtype of {@link UserPrivacySettingRule}.
+*/
+export interface UserPrivacySettingRuleAllowBots {
+	'@type': 'userPrivacySettingRuleAllowBots';
+
+}
+
+/**
 A rule to allow all Premium Users to do something; currently, allowed only for userPrivacySettingAllowChatInvites.
 Subtype of {@link UserPrivacySettingRule}.
 */
@@ -21719,6 +21976,15 @@ Subtype of {@link UserPrivacySettingRule}.
 */
 export interface UserPrivacySettingRuleRestrictContacts {
 	'@type': 'userPrivacySettingRuleRestrictContacts';
+
+}
+
+/**
+A rule to restrict all bots from doing something.
+Subtype of {@link UserPrivacySettingRule}.
+*/
+export interface UserPrivacySettingRuleRestrictBots {
+	'@type': 'userPrivacySettingRuleRestrictBots';
 
 }
 
@@ -21856,6 +22122,15 @@ Subtype of {@link UserPrivacySetting}.
 */
 export interface UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages {
 	'@type': 'userPrivacySettingAllowPrivateVoiceAndVideoNoteMessages';
+
+}
+
+/**
+A privacy setting for managing whether received gifts are automatically shown on the user's profile page.
+Subtype of {@link UserPrivacySetting}.
+*/
+export interface UserPrivacySettingAutosaveGifts {
+	'@type': 'userPrivacySettingAutosaveGifts';
 
 }
 
@@ -22441,51 +22716,6 @@ True, if the user can skip text adding.
 }
 
 /**
-Describes the target chat to be opened.
-Subtype of {@link TargetChat}.
-*/
-export interface TargetChatCurrent {
-	'@type': 'targetChatCurrent';
-
-}
-
-/**
-The chat needs to be chosen by the user among chats of the specified types.
-Subtype of {@link TargetChat}.
-*/
-export interface TargetChatChosen {
-	'@type': 'targetChatChosen';
-	/**
-True, if private chats with ordinary users are allowed.
-*/
-	allow_user_chats?: boolean;
-	/**
-True, if private chats with other bots are allowed.
-*/
-	allow_bot_chats?: boolean;
-	/**
-True, if basic group and supergroup chats are allowed.
-*/
-	allow_group_chats?: boolean;
-	/**
-True, if channel chats are allowed.
-*/
-	allow_channel_chats?: boolean;
-}
-
-/**
-The chat needs to be open with the provided internal link.
-Subtype of {@link TargetChat}.
-*/
-export interface TargetChatInternalLink {
-	'@type': 'targetChatInternalLink';
-	/**
-An internal link pointing to the chat.
-*/
-	link: InternalLinkType;
-}
-
-/**
 Describes an internal https://t.me or tg: link, which must be processed by the application in a special way.
 Subtype of {@link InternalLinkType}.
 */
@@ -22800,7 +23030,7 @@ is a bot and has the main Web App. If the bot can be added to attachment menu, t
 information about the bot, then if the bot isn't added to side menu, show a disclaimer about Mini Apps being third-party
 applications, ask the user to accept their Terms of service and confirm adding the bot to side and attachment menu, then
 if the user accepts the terms and confirms adding, use toggleBotIsAddedToAttachmentMenu to add the bot. Then, use
-getMainWebApp with the given start parameter and open the returned URL as a Web App.
+getMainWebApp with the given start parameter and mode and open the returned URL as a Web App.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeMainWebApp {
@@ -22814,9 +23044,9 @@ Start parameter to be passed to getMainWebApp.
 */
 	start_parameter: string;
 	/**
-True, if the Web App must be opened in the compact mode instead of the full-size mode.
+The mode to be passed to getMainWebApp.
 */
-	is_compact?: boolean;
+	mode: WebAppOpenMode;
 }
 
 /**
@@ -23175,9 +23405,9 @@ Start parameter to be passed to getWebAppLinkUrl.
 */
 	start_parameter: string;
 	/**
-True, if the Web App must be opened in the compact mode instead of the full-size mode.
+The mode in which the Web App must be opened.
 */
-	is_compact?: boolean;
+	mode: WebAppOpenMode;
 }
 
 /**
@@ -28032,13 +28262,18 @@ export type InputChatPhoto =
 	| InputChatPhotoAnimation
 	| InputChatPhotoSticker;
 
+export type StarSubscriptionType =
+	| StarSubscriptionTypeChannel
+	| StarSubscriptionTypeBot;
+
 export type StarTransactionDirection =
 	| StarTransactionDirectionIncoming
 	| StarTransactionDirectionOutgoing;
 
 export type BotTransactionPurpose =
 	| BotTransactionPurposePaidMedia
-	| BotTransactionPurposeInvoicePayment;
+	| BotTransactionPurposeInvoicePayment
+	| BotTransactionPurposeSubscription;
 
 export type ChatTransactionPurpose =
 	| ChatTransactionPurposePaidMedia
@@ -28246,6 +28481,11 @@ export type LoginUrlInfo =
 	| LoginUrlInfoOpen
 	| LoginUrlInfoRequestConfirmation;
 
+export type WebAppOpenMode =
+	| WebAppOpenModeCompact
+	| WebAppOpenModeFullSize
+	| WebAppOpenModeFullScreen;
+
 export type SavedMessagesTopicType =
 	| SavedMessagesTopicTypeMyNotes
 	| SavedMessagesTopicTypeAuthorHidden
@@ -28365,7 +28605,8 @@ export type PaymentProvider =
 
 export type PaymentFormType =
 	| PaymentFormTypeRegular
-	| PaymentFormTypeStars;
+	| PaymentFormTypeStars
+	| PaymentFormTypeStarSubscription;
 
 export type PaymentReceiptType =
 	| PaymentReceiptTypeRegular
@@ -28747,6 +28988,11 @@ export type BotWriteAccessAllowReason =
 	| BotWriteAccessAllowReasonLaunchedWebApp
 	| BotWriteAccessAllowReasonAcceptedRequest;
 
+export type TargetChat =
+	| TargetChatCurrent
+	| TargetChatChosen
+	| TargetChatInternalLink;
+
 export type InputInlineQueryResult =
 	| InputInlineQueryResultAnimation
 	| InputInlineQueryResultArticle
@@ -29075,11 +29321,13 @@ export type StoryPrivacySettings =
 export type UserPrivacySettingRule =
 	| UserPrivacySettingRuleAllowAll
 	| UserPrivacySettingRuleAllowContacts
+	| UserPrivacySettingRuleAllowBots
 	| UserPrivacySettingRuleAllowPremiumUsers
 	| UserPrivacySettingRuleAllowUsers
 	| UserPrivacySettingRuleAllowChatMembers
 	| UserPrivacySettingRuleRestrictAll
 	| UserPrivacySettingRuleRestrictContacts
+	| UserPrivacySettingRuleRestrictBots
 	| UserPrivacySettingRuleRestrictUsers
 	| UserPrivacySettingRuleRestrictChatMembers;
 
@@ -29094,7 +29342,8 @@ export type UserPrivacySetting =
 	| UserPrivacySettingAllowCalls
 	| UserPrivacySettingAllowPeerToPeerCalls
 	| UserPrivacySettingAllowFindingByPhoneNumber
-	| UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages;
+	| UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages
+	| UserPrivacySettingAutosaveGifts;
 
 export type CanSendMessageToUserResult =
 	| CanSendMessageToUserResultOk
@@ -29142,11 +29391,6 @@ export type ReportStoryResult =
 	| ReportStoryResultOk
 	| ReportStoryResultOptionRequired
 	| ReportStoryResultTextRequired;
-
-export type TargetChat =
-	| TargetChatCurrent
-	| TargetChatChosen
-	| TargetChatInternalLink;
 
 export type InternalLinkType =
 	| InternalLinkTypeActiveSessions
@@ -33823,6 +34067,42 @@ Offset for the next inline query; pass an empty string if there are no more resu
 }
 
 /**
+Saves an inline message to be sent by the given user; for bots only.
+Request type for {@link Tdjson#savePreparedInlineMessage}.
+*/
+export interface SavePreparedInlineMessage {
+	'@type': 'savePreparedInlineMessage';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+	/**
+The description of the message.
+*/
+	result: InputInlineQueryResult;
+	/**
+Types of the chats to which the message can be sent.
+*/
+	chat_types: TargetChatTypes;
+}
+
+/**
+Saves an inline message to be sent by the given user; for bots only.
+Request type for {@link Tdjson#getPreparedInlineMessage}.
+*/
+export interface GetPreparedInlineMessage {
+	'@type': 'getPreparedInlineMessage';
+	/**
+Identifier of the bot that created the message.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the prepared message.
+*/
+	prepared_message_id: string;
+}
+
+/**
 Returns the most grossing Web App bots.
 Request type for {@link Tdjson#getGrossingWebAppBots}.
 */
@@ -33856,6 +34136,19 @@ Short name of the Web App.
 }
 
 /**
+Returns a default placeholder for Web Apps of a bot; this is an offline request. Returns a 404 error if the placeholder
+isn't known.
+Request type for {@link Tdjson#getWebAppPlaceholder}.
+*/
+export interface GetWebAppPlaceholder {
+	'@type': 'getWebAppPlaceholder';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+}
+
+/**
 Returns an HTTPS URL of a Web App to open after a link of the type internalLinkTypeWebApp is clicked.
 Request type for {@link Tdjson#getWebAppLinkUrl}.
 */
@@ -33878,17 +34171,13 @@ Start parameter from internalLinkTypeWebApp.
 */
 	start_parameter: string;
 	/**
-Preferred Web App theme; pass null to use the default theme.
-*/
-	theme: ThemeParameters;
-	/**
-Short name of the current application; 0-64 English letters, digits, and underscores.
-*/
-	application_name: string;
-	/**
 Pass true if the current user allowed the bot to send them messages.
 */
 	allow_write_access?: boolean;
+	/**
+Parameters to use to open the Web App.
+*/
+	parameters: WebAppOpenParameters;
 }
 
 /**
@@ -33910,13 +34199,9 @@ Start parameter from internalLinkTypeMainWebApp.
 */
 	start_parameter: string;
 	/**
-Preferred Web App theme; pass null to use the default theme.
+Parameters to use to open the Web App.
 */
-	theme: ThemeParameters;
-	/**
-Short name of the current application; 0-64 English letters, digits, and underscores.
-*/
-	application_name: string;
+	parameters: WebAppOpenParameters;
 }
 
 /**
@@ -33936,13 +34221,9 @@ bot is opened from the side menu.
 */
 	url: string;
 	/**
-Preferred Web App theme; pass null to use the default theme.
+Parameters to use to open the Web App.
 */
-	theme: ThemeParameters;
-	/**
-Short name of the current application; 0-64 English letters, digits, and underscores.
-*/
-	application_name: string;
+	parameters: WebAppOpenParameters;
 }
 
 /**
@@ -33987,14 +34268,6 @@ link, or an empty string otherwise.
 */
 	url: string;
 	/**
-Preferred Web App theme; pass null to use the default theme.
-*/
-	theme: ThemeParameters;
-	/**
-Short name of the current application; 0-64 English letters, digits, and underscores.
-*/
-	application_name: string;
-	/**
 If not 0, the message thread identifier in which the message will be sent.
 */
 	message_thread_id: number;
@@ -34002,6 +34275,10 @@ If not 0, the message thread identifier in which the message will be sent.
 Information about the message or story to be replied in the message sent by the Web App; pass null if none.
 */
 	reply_to: InputMessageReplyTo;
+	/**
+Parameters to use to open the Web App.
+*/
+	parameters: WebAppOpenParameters;
 }
 
 /**
@@ -34031,6 +34308,26 @@ Identifier of the Web App query.
 The result of the query.
 */
 	result: InputInlineQueryResult;
+}
+
+/**
+Checks whether a file can be downloaded and saved locally by Web App request.
+Request type for {@link Tdjson#checkWebAppFileDownload}.
+*/
+export interface CheckWebAppFileDownload {
+	'@type': 'checkWebAppFileDownload';
+	/**
+Identifier of the bot, providing the Web App.
+*/
+	bot_user_id: number;
+	/**
+Name of the file.
+*/
+	file_name: string;
+	/**
+URL of the file.
+*/
+	url: string;
 }
 
 /**
@@ -37513,7 +37810,7 @@ Pass true to create an RTMP stream instead of an ordinary video chat; requires o
 }
 
 /**
-Returns RTMP URL for streaming to the chat; requires owner privileges.
+Returns RTMP URL for streaming to the chat; requires can_manage_video_chats administrator right.
 Request type for {@link Tdjson#getVideoChatRtmpUrl}.
 */
 export interface GetVideoChatRtmpUrl {
@@ -38186,6 +38483,38 @@ Profile photo to suggest; inputChatPhotoPrevious isn't supported in this functio
 }
 
 /**
+Toggles whether the bot can manage emoji status of the current user.
+Request type for {@link Tdjson#toggleBotCanManageEmojiStatus}.
+*/
+export interface ToggleBotCanManageEmojiStatus {
+	'@type': 'toggleBotCanManageEmojiStatus';
+	/**
+User identifier of the bot.
+*/
+	bot_user_id: number;
+	/**
+Pass true if the bot is allowed to change emoji status of the user; pass false otherwise.
+*/
+	can_manage_emoji_status?: boolean;
+}
+
+/**
+Changes the emoji status of a user; for bots only.
+Request type for {@link Tdjson#setUserEmojiStatus}.
+*/
+export interface SetUserEmojiStatus {
+	'@type': 'setUserEmojiStatus';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+	/**
+New emoji status; pass null to switch to the default badge.
+*/
+	emoji_status: EmojiStatus;
+}
+
+/**
 Searches a user by their phone number. Returns a 404 error if the user can't be found.
 Request type for {@link Tdjson#searchUserByPhoneNumber}.
 */
@@ -38232,6 +38561,26 @@ The number of photos to skip; must be non-negative.
 The maximum number of photos to be returned; up to 100.
 */
 	limit: number;
+}
+
+/**
+Returns outline of a sticker; this is an offline request. Returns a 404 error if the outline isn't known.
+Request type for {@link Tdjson#getStickerOutline}.
+*/
+export interface GetStickerOutline {
+	'@type': 'getStickerOutline';
+	/**
+File identifier of the sticker.
+*/
+	sticker_file_id: number;
+	/**
+Pass true to get the outline scaled for animated emoji.
+*/
+	for_animated_emoji?: boolean;
+	/**
+Pass true to get the outline scaled for clicked animated emoji message.
+*/
+	for_clicked_animated_emoji_message?: boolean;
 }
 
 /**
@@ -40451,6 +40800,10 @@ Request type for {@link Tdjson#createInvoiceLink}.
 export interface CreateInvoiceLink {
 	'@type': 'createInvoiceLink';
 	/**
+Unique identifier of business connection on behalf of which to send the request.
+*/
+	business_connection_id: string;
+	/**
 Information about the invoice of the type inputMessageInvoice.
 */
 	invoice: InputMessageContent;
@@ -42246,7 +42599,7 @@ Transaction purpose.
 }
 
 /**
-Cancels or reenables Telegram Star subscription to a channel.
+Cancels or re-enables Telegram Star subscription.
 Request type for {@link Tdjson#editStarSubscription}.
 */
 export interface EditStarSubscription {
@@ -42262,7 +42615,27 @@ New value of is_canceled.
 }
 
 /**
-Reuses an active subscription and joins the subscribed chat again.
+Cancels or re-enables Telegram Star subscription for a user; for bots only.
+Request type for {@link Tdjson#editUserStarSubscription}.
+*/
+export interface EditUserStarSubscription {
+	'@type': 'editUserStarSubscription';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+Telegram payment identifier of the subscription.
+*/
+	telegram_payment_charge_id: string;
+	/**
+Pass true to cancel the subscription; pass false to allow the user to enable it.
+*/
+	is_canceled?: boolean;
+}
+
+/**
+Reuses an active Telegram Star subscription to a channel chat and joins the chat again.
 Request type for {@link Tdjson#reuseStarSubscription}.
 */
 export interface ReuseStarSubscription {
@@ -43125,8 +43498,11 @@ export type Request =
 	| ShareChatWithBot
 	| GetInlineQueryResults
 	| AnswerInlineQuery
+	| SavePreparedInlineMessage
+	| GetPreparedInlineMessage
 	| GetGrossingWebAppBots
 	| SearchWebApp
+	| GetWebAppPlaceholder
 	| GetWebAppLinkUrl
 	| GetMainWebApp
 	| GetWebAppUrl
@@ -43134,6 +43510,7 @@ export type Request =
 	| OpenWebApp
 	| CloseWebApp
 	| AnswerWebAppQuery
+	| CheckWebAppFileDownload
 	| GetCallbackQueryAnswer
 	| AnswerCallbackQuery
 	| AnswerShippingQuery
@@ -43373,9 +43750,12 @@ export type Request =
 	| GetCloseFriends
 	| SetUserPersonalProfilePhoto
 	| SuggestUserProfilePhoto
+	| ToggleBotCanManageEmojiStatus
+	| SetUserEmojiStatus
 	| SearchUserByPhoneNumber
 	| SharePhoneNumber
 	| GetUserProfilePhotos
+	| GetStickerOutline
 	| GetStickers
 	| GetAllStickerEmojis
 	| SearchStickers
@@ -43639,6 +44019,7 @@ export type Request =
 	| AssignAppStoreTransaction
 	| AssignGooglePlayTransaction
 	| EditStarSubscription
+	| EditUserStarSubscription
 	| ReuseStarSubscription
 	| GetBusinessFeatures
 	| AcceptTermsOfService
@@ -46114,6 +46495,26 @@ Sets the result of an inline query; for bots only.
 	}
 
 	/**
+Saves an inline message to be sent by the given user; for bots only.
+*/
+	async savePreparedInlineMessage(options: Omit<SavePreparedInlineMessage, '@type'>): Promise<PreparedInlineMessageId> {
+		return this._request({
+			...options,
+			'@type': 'savePreparedInlineMessage',
+		});
+	}
+
+	/**
+Saves an inline message to be sent by the given user; for bots only.
+*/
+	async getPreparedInlineMessage(options: Omit<GetPreparedInlineMessage, '@type'>): Promise<PreparedInlineMessage> {
+		return this._request({
+			...options,
+			'@type': 'getPreparedInlineMessage',
+		});
+	}
+
+	/**
 Returns the most grossing Web App bots.
 */
 	async getGrossingWebAppBots(options: Omit<GetGrossingWebAppBots, '@type'>): Promise<FoundUsers> {
@@ -46130,6 +46531,17 @@ Returns information about a Web App by its short name. Returns a 404 error if th
 		return this._request({
 			...options,
 			'@type': 'searchWebApp',
+		});
+	}
+
+	/**
+Returns a default placeholder for Web Apps of a bot; this is an offline request. Returns a 404 error if the placeholder
+isn't known.
+*/
+	async getWebAppPlaceholder(options: Omit<GetWebAppPlaceholder, '@type'>): Promise<Outline> {
+		return this._request({
+			...options,
+			'@type': 'getWebAppPlaceholder',
 		});
 	}
 
@@ -46204,6 +46616,16 @@ which the query originated; for bots only.
 		return this._request({
 			...options,
 			'@type': 'answerWebAppQuery',
+		});
+	}
+
+	/**
+Checks whether a file can be downloaded and saved locally by Web App request.
+*/
+	async checkWebAppFileDownload(options: Omit<CheckWebAppFileDownload, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'checkWebAppFileDownload',
 		});
 	}
 
@@ -48258,7 +48680,7 @@ can_manage_video_chats administrator right.
 	}
 
 	/**
-Returns RTMP URL for streaming to the chat; requires owner privileges.
+Returns RTMP URL for streaming to the chat; requires can_manage_video_chats administrator right.
 */
 	async getVideoChatRtmpUrl(options: Omit<GetVideoChatRtmpUrl, '@type'>): Promise<RtmpUrl> {
 		return this._request({
@@ -48680,6 +49102,26 @@ Suggests a profile photo to another regular user with common messages.
 	}
 
 	/**
+Toggles whether the bot can manage emoji status of the current user.
+*/
+	async toggleBotCanManageEmojiStatus(options: Omit<ToggleBotCanManageEmojiStatus, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleBotCanManageEmojiStatus',
+		});
+	}
+
+	/**
+Changes the emoji status of a user; for bots only.
+*/
+	async setUserEmojiStatus(options: Omit<SetUserEmojiStatus, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setUserEmojiStatus',
+		});
+	}
+
+	/**
 Searches a user by their phone number. Returns a 404 error if the user can't be found.
 */
 	async searchUserByPhoneNumber(options: Omit<SearchUserByPhoneNumber, '@type'>): Promise<User> {
@@ -48707,6 +49149,16 @@ Returns the profile photos of a user. Personal and public photo aren't returned.
 		return this._request({
 			...options,
 			'@type': 'getUserProfilePhotos',
+		});
+	}
+
+	/**
+Returns outline of a sticker; this is an offline request. Returns a 404 error if the outline isn't known.
+*/
+	async getStickerOutline(options: Omit<GetStickerOutline, '@type'>): Promise<Outline> {
+		return this._request({
+			...options,
+			'@type': 'getStickerOutline',
 		});
 	}
 
@@ -51393,7 +51845,7 @@ Informs server about a purchase through Google Play. For official applications o
 	}
 
 	/**
-Cancels or reenables Telegram Star subscription to a channel.
+Cancels or re-enables Telegram Star subscription.
 */
 	async editStarSubscription(options: Omit<EditStarSubscription, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51403,7 +51855,17 @@ Cancels or reenables Telegram Star subscription to a channel.
 	}
 
 	/**
-Reuses an active subscription and joins the subscribed chat again.
+Cancels or re-enables Telegram Star subscription for a user; for bots only.
+*/
+	async editUserStarSubscription(options: Omit<EditUserStarSubscription, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editUserStarSubscription',
+		});
+	}
+
+	/**
+Reuses an active Telegram Star subscription to a channel chat and joins the chat again.
 */
 	async reuseStarSubscription(options: Omit<ReuseStarSubscription, '@type'>): Promise<Ok> {
 		return this._request({
