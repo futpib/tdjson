@@ -2578,6 +2578,21 @@ only.
 }
 
 /**
+Describes a possibly non-integer amount of Telegram Stars.
+*/
+export interface StarAmount {
+	'@type': 'starAmount';
+	/**
+The integer amount of Telegram Stars rounded to 0.
+*/
+	star_count: number;
+	/**
+The number of 1/1000000000 shares of Telegram Stars; from -999999999 to 999999999.
+*/
+	nanostar_count: number;
+}
+
+/**
 Describes type of subscription paid in Telegram Stars.
 Subtype of {@link StarSubscriptionType}.
 */
@@ -2677,7 +2692,7 @@ export interface StarSubscriptions {
 	/**
 The amount of owned Telegram Stars.
 */
-	star_count: number;
+	star_amount: StarAmount;
 	/**
 List of subscriptions for Telegram Stars.
 */
@@ -2686,6 +2701,177 @@ List of subscriptions for Telegram Stars.
 The number of Telegram Stars required to buy to extend subscriptions expiring soon.
 */
 	required_star_count: number;
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
+Describes the order of the found affiliate programs.
+Subtype of {@link AffiliateProgramSortOrder}.
+*/
+export interface AffiliateProgramSortOrderProfitability {
+	'@type': 'affiliateProgramSortOrderProfitability';
+
+}
+
+/**
+The affiliate programs must be sorted by creation date.
+Subtype of {@link AffiliateProgramSortOrder}.
+*/
+export interface AffiliateProgramSortOrderCreationDate {
+	'@type': 'affiliateProgramSortOrderCreationDate';
+
+}
+
+/**
+The affiliate programs must be sorted by the expected revenue.
+Subtype of {@link AffiliateProgramSortOrder}.
+*/
+export interface AffiliateProgramSortOrderRevenue {
+	'@type': 'affiliateProgramSortOrderRevenue';
+
+}
+
+/**
+Describes parameters of an affiliate program.
+*/
+export interface AffiliateProgramParameters {
+	'@type': 'affiliateProgramParameters';
+	/**
+The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the program owner;
+getOption("affiliate_program_commission_per_mille_min")-getOption("affiliate_program_commission_per_mille_max").
+*/
+	commission_per_mille: number;
+	/**
+Number of months the program will be active; 0-36. If 0, then the program is eternal.
+*/
+	month_count: number;
+}
+
+/**
+Contains information about an active affiliate program.
+*/
+export interface AffiliateProgramInfo {
+	'@type': 'affiliateProgramInfo';
+	/**
+Parameters of the affiliate program.
+*/
+	parameters: AffiliateProgramParameters;
+	/**
+Point in time (Unix timestamp) when the affiliate program will be closed; 0 if the affiliate program isn't scheduled to
+be closed. If positive, then the program can't be connected using connectChatAffiliateProgram, but active connections
+will work until the date.
+*/
+	end_date: number;
+	/**
+The amount of daily revenue per user in Telegram Stars of the bot that created the affiliate program.
+*/
+	daily_revenue_per_user_amount: StarAmount;
+}
+
+/**
+Contains information about an affiliate that received commission from a Telegram Star transaction.
+*/
+export interface AffiliateInfo {
+	'@type': 'affiliateInfo';
+	/**
+The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the program owner.
+*/
+	commission_per_mille: number;
+	/**
+Identifier of the chat which received the commission.
+*/
+	affiliate_chat_id: number;
+	/**
+The amount of Telegram Stars that were received by the affiliate; can be negative for refunds.
+*/
+	star_amount: StarAmount;
+}
+
+/**
+Describes a found affiliate program.
+*/
+export interface FoundAffiliateProgram {
+	'@type': 'foundAffiliateProgram';
+	/**
+User identifier of the bot created the program.
+*/
+	bot_user_id: number;
+	/**
+Information about the affiliate program.
+*/
+	parameters: AffiliateProgramInfo;
+}
+
+/**
+Represents a list of found affiliate programs.
+*/
+export interface FoundAffiliatePrograms {
+	'@type': 'foundAffiliatePrograms';
+	/**
+The total number of found affiliate programs.
+*/
+	total_count: number;
+	/**
+The list of affiliate programs.
+*/
+	programs: FoundAffiliateProgram[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
+Describes an affiliate program that was connected to a chat.
+*/
+export interface ChatAffiliateProgram {
+	'@type': 'chatAffiliateProgram';
+	/**
+The link that can be used to refer users if the program is still active.
+*/
+	url: string;
+	/**
+User identifier of the bot created the program.
+*/
+	bot_user_id: number;
+	/**
+The parameters of the affiliate program.
+*/
+	parameters: AffiliateProgramParameters;
+	/**
+Point in time (Unix timestamp) when the affiliate program was connected.
+*/
+	connection_date: number;
+	/**
+True, if the program was canceled by the bot, or disconnected by the chat owner and isn't available anymore.
+*/
+	is_disconnected?: boolean;
+	/**
+The number of users that used the affiliate program.
+*/
+	user_count: string;
+	/**
+The number of Telegram Stars that were earned by the affiliate program.
+*/
+	revenue_star_count: string;
+}
+
+/**
+Represents a list of affiliate programs that were connected to a chat.
+*/
+export interface ChatAffiliatePrograms {
+	'@type': 'chatAffiliatePrograms';
+	/**
+The total number of affiliate programs that were connected to the chat.
+*/
+	total_count: number;
+	/**
+The list of connected affiliate programs.
+*/
+	programs: ChatAffiliateProgram[];
 	/**
 The offset for the next request. If empty, then there are no more results.
 */
@@ -3096,63 +3282,157 @@ export interface StarTransactionDirectionOutgoing {
 }
 
 /**
-Describes purpose of a transaction with a bot.
-Subtype of {@link BotTransactionPurpose}.
+Describes type of transaction with Telegram Stars.
+Subtype of {@link StarTransactionType}.
 */
-export interface BotTransactionPurposePaidMedia {
-	'@type': 'botTransactionPurposePaidMedia';
+export interface StarTransactionTypePremiumBotDeposit {
+	'@type': 'starTransactionTypePremiumBotDeposit';
+
+}
+
+/**
+The transaction is a deposit of Telegram Stars from App Store; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeAppStoreDeposit {
+	'@type': 'starTransactionTypeAppStoreDeposit';
+
+}
+
+/**
+The transaction is a deposit of Telegram Stars from Google Play; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGooglePlayDeposit {
+	'@type': 'starTransactionTypeGooglePlayDeposit';
+
+}
+
+/**
+The transaction is a deposit of Telegram Stars from Fragment; for regular users and bots only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeFragmentDeposit {
+	'@type': 'starTransactionTypeFragmentDeposit';
+
+}
+
+/**
+The transaction is a deposit of Telegram Stars by another user; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeUserDeposit {
+	'@type': 'starTransactionTypeUserDeposit';
+	/**
+Identifier of the user that gifted Telegram Stars; 0 if the user was anonymous.
+*/
+	user_id: number;
+	/**
+The sticker to be shown in the transaction information; may be null if unknown.
+*/
+	sticker: Sticker;
+}
+
+/**
+The transaction is a deposit of Telegram Stars from a giveaway; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiveawayDeposit {
+	'@type': 'starTransactionTypeGiveawayDeposit';
+	/**
+Identifier of a supergroup or a channel chat that created the giveaway.
+*/
+	chat_id: number;
+	/**
+Identifier of the message with the giveaway; can be 0 or an identifier of a deleted message.
+*/
+	giveaway_message_id: number;
+}
+
+/**
+The transaction is a withdrawal of earned Telegram Stars to Fragment; for bots and channel chats only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeFragmentWithdrawal {
+	'@type': 'starTransactionTypeFragmentWithdrawal';
+	/**
+State of the withdrawal; may be null for refunds from Fragment.
+*/
+	withdrawal_state: RevenueWithdrawalState;
+}
+
+/**
+The transaction is a withdrawal of earned Telegram Stars to Telegram Ad platform; for bots and channel chats only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeTelegramAdsWithdrawal {
+	'@type': 'starTransactionTypeTelegramAdsWithdrawal';
+
+}
+
+/**
+The transaction is a payment for Telegram API usage; for bots only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeTelegramApiUsage {
+	'@type': 'starTransactionTypeTelegramApiUsage';
+	/**
+The number of billed requests.
+*/
+	request_count: number;
+}
+
+/**
+The transaction is a purchase of paid media from a bot or a business account by the current user; for regular users
+only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeBotPaidMediaPurchase {
+	'@type': 'starTransactionTypeBotPaidMediaPurchase';
+	/**
+Identifier of the bot or the business account user that sent the paid media.
+*/
+	user_id: number;
 	/**
 The bought media if the transaction wasn't refunded.
 */
 	media: PaidMedia[];
+}
+
+/**
+The transaction is a sale of paid media by the bot or a business account managed by the bot; for bots only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeBotPaidMediaSale {
+	'@type': 'starTransactionTypeBotPaidMediaSale';
 	/**
-Bot-provided payload; for bots only.
+Identifier of the user that bought the media.
+*/
+	user_id: number;
+	/**
+The bought media.
+*/
+	media: PaidMedia[];
+	/**
+Bot-provided payload.
 */
 	payload: string;
+	/**
+Information about the affiliate which received commission from the transaction; may be null if none.
+*/
+	affiliate: AffiliateInfo;
 }
 
 /**
-User bought a product from the bot.
-Subtype of {@link BotTransactionPurpose}.
+The transaction is a purchase of paid media from a channel by the current user; for regular users only.
+Subtype of {@link StarTransactionType}.
 */
-export interface BotTransactionPurposeInvoicePayment {
-	'@type': 'botTransactionPurposeInvoicePayment';
+export interface StarTransactionTypeChannelPaidMediaPurchase {
+	'@type': 'starTransactionTypeChannelPaidMediaPurchase';
 	/**
-Information about the bought product; may be null if not applicable.
+Identifier of the channel chat that sent the paid media.
 */
-	product_info: ProductInfo;
-	/**
-Invoice payload; for bots only.
-*/
-	invoice_payload: string;
-}
-
-/**
-User bought a subscription in a bot or a business account.
-Subtype of {@link BotTransactionPurpose}.
-*/
-export interface BotTransactionPurposeSubscription {
-	'@type': 'botTransactionPurposeSubscription';
-	/**
-The number of seconds between consecutive Telegram Star debiting.
-*/
-	period: number;
-	/**
-Information about the bought subscription; may be null if not applicable.
-*/
-	product_info: ProductInfo;
-	/**
-Invoice payload; for bots only.
-*/
-	invoice_payload: string;
-}
-
-/**
-Describes purpose of a transaction with a supergroup or a channel.
-Subtype of {@link ChatTransactionPurpose}.
-*/
-export interface ChatTransactionPurposePaidMedia {
-	'@type': 'chatTransactionPurposePaidMedia';
+	chat_id: number;
 	/**
 Identifier of the corresponding message with paid media; can be 0 or an identifier of a deleted message.
 */
@@ -3164,23 +3444,189 @@ The bought media if the transaction wasn't refunded.
 }
 
 /**
-User joined the channel and subscribed to regular payments in Telegram Stars.
-Subtype of {@link ChatTransactionPurpose}.
+The transaction is a sale of paid media by the channel chat; for channel chats only.
+Subtype of {@link StarTransactionType}.
 */
-export interface ChatTransactionPurposeJoin {
-	'@type': 'chatTransactionPurposeJoin';
+export interface StarTransactionTypeChannelPaidMediaSale {
+	'@type': 'starTransactionTypeChannelPaidMediaSale';
 	/**
-The number of seconds between consecutive Telegram Star debiting.
+Identifier of the user that bought the media.
 */
-	period: number;
+	user_id: number;
+	/**
+Identifier of the corresponding message with paid media; can be 0 or an identifier of a deleted message.
+*/
+	message_id: number;
+	/**
+The bought media.
+*/
+	media: PaidMedia[];
 }
 
 /**
-User paid for a reaction.
-Subtype of {@link ChatTransactionPurpose}.
+The transaction is a purchase of a product from a bot or a business account by the current user; for regular users only.
+Subtype of {@link StarTransactionType}.
 */
-export interface ChatTransactionPurposeReaction {
-	'@type': 'chatTransactionPurposeReaction';
+export interface StarTransactionTypeBotInvoicePurchase {
+	'@type': 'starTransactionTypeBotInvoicePurchase';
+	/**
+Identifier of the bot or the business account user that created the invoice.
+*/
+	user_id: number;
+	/**
+Information about the bought product.
+*/
+	product_info: ProductInfo;
+}
+
+/**
+The transaction is a sale of a product by the bot; for bots only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeBotInvoiceSale {
+	'@type': 'starTransactionTypeBotInvoiceSale';
+	/**
+Identifier of the user that bought the product.
+*/
+	user_id: number;
+	/**
+Information about the bought product.
+*/
+	product_info: ProductInfo;
+	/**
+Invoice payload.
+*/
+	invoice_payload: string;
+	/**
+Information about the affiliate which received commission from the transaction; may be null if none.
+*/
+	affiliate: AffiliateInfo;
+}
+
+/**
+The transaction is a purchase of a subscription from a bot or a business account by the current user; for regular users
+only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeBotSubscriptionPurchase {
+	'@type': 'starTransactionTypeBotSubscriptionPurchase';
+	/**
+Identifier of the bot or the business account user that created the subscription link.
+*/
+	user_id: number;
+	/**
+The number of seconds between consecutive Telegram Star debitings.
+*/
+	subscription_period: number;
+	/**
+Information about the bought subscription.
+*/
+	product_info: ProductInfo;
+}
+
+/**
+The transaction is a sale of a subscription by the bot; for bots only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeBotSubscriptionSale {
+	'@type': 'starTransactionTypeBotSubscriptionSale';
+	/**
+Identifier of the user that bought the subscription.
+*/
+	user_id: number;
+	/**
+The number of seconds between consecutive Telegram Star debitings.
+*/
+	subscription_period: number;
+	/**
+Information about the bought subscription.
+*/
+	product_info: ProductInfo;
+	/**
+Invoice payload.
+*/
+	invoice_payload: string;
+	/**
+Information about the affiliate which received commission from the transaction; may be null if none.
+*/
+	affiliate: AffiliateInfo;
+}
+
+/**
+The transaction is a purchase of a subscription to a channel chat by the current user; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeChannelSubscriptionPurchase {
+	'@type': 'starTransactionTypeChannelSubscriptionPurchase';
+	/**
+Identifier of the channel chat that created the subscription.
+*/
+	chat_id: number;
+	/**
+The number of seconds between consecutive Telegram Star debitings.
+*/
+	subscription_period: number;
+}
+
+/**
+The transaction is a sale of a subscription by the channel chat; for channel chats only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeChannelSubscriptionSale {
+	'@type': 'starTransactionTypeChannelSubscriptionSale';
+	/**
+Identifier of the user that bought the subscription.
+*/
+	user_id: number;
+	/**
+The number of seconds between consecutive Telegram Star debitings.
+*/
+	subscription_period: number;
+}
+
+/**
+The transaction is a purchase of a gift to another user; for regular users and bots only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiftPurchase {
+	'@type': 'starTransactionTypeGiftPurchase';
+	/**
+Identifier of the user that received the gift.
+*/
+	user_id: number;
+	/**
+The gift.
+*/
+	gift: Gift;
+}
+
+/**
+The transaction is a sale of a gift received from another user or bot; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiftSale {
+	'@type': 'starTransactionTypeGiftSale';
+	/**
+Identifier of the user that sent the gift.
+*/
+	user_id: number;
+	/**
+The gift.
+*/
+	gift: Gift;
+}
+
+/**
+The transaction is a sending of a paid reaction to a message in a channel chat by the current user; for regular users
+only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeChannelPaidReactionSend {
+	'@type': 'starTransactionTypeChannelPaidReactionSend';
+	/**
+Identifier of the channel chat.
+*/
+	chat_id: number;
 	/**
 Identifier of the reacted message; can be 0 or an identifier of a deleted message.
 */
@@ -3188,183 +3634,44 @@ Identifier of the reacted message; can be 0 or an identifier of a deleted messag
 }
 
 /**
-User received Telegram Stars from a giveaway.
-Subtype of {@link ChatTransactionPurpose}.
+The transaction is a receiving of a paid reaction to a message by the channel chat; for channel chats only.
+Subtype of {@link StarTransactionType}.
 */
-export interface ChatTransactionPurposeGiveaway {
-	'@type': 'chatTransactionPurposeGiveaway';
+export interface StarTransactionTypeChannelPaidReactionReceive {
+	'@type': 'starTransactionTypeChannelPaidReactionReceive';
 	/**
-Identifier of the message with giveaway; can be 0 or an identifier of a deleted message.
-*/
-	giveaway_message_id: number;
-}
-
-/**
-Describes purpose of a transaction with a user.
-Subtype of {@link UserTransactionPurpose}.
-*/
-export interface UserTransactionPurposeGiftedStars {
-	'@type': 'userTransactionPurposeGiftedStars';
-	/**
-A sticker to be shown in the transaction information; may be null if unknown.
-*/
-	sticker: Sticker;
-}
-
-/**
-The user sold a gift received from another user or bot.
-Subtype of {@link UserTransactionPurpose}.
-*/
-export interface UserTransactionPurposeGiftSell {
-	'@type': 'userTransactionPurposeGiftSell';
-	/**
-The gift.
-*/
-	gift: Gift;
-}
-
-/**
-The user or the bot sent a gift to a user.
-Subtype of {@link UserTransactionPurpose}.
-*/
-export interface UserTransactionPurposeGiftSend {
-	'@type': 'userTransactionPurposeGiftSend';
-	/**
-The gift.
-*/
-	gift: Gift;
-}
-
-/**
-Describes source or recipient of a transaction with Telegram Stars.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerTelegram {
-	'@type': 'starTransactionPartnerTelegram';
-
-}
-
-/**
-The transaction is a transaction with App Store.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerAppStore {
-	'@type': 'starTransactionPartnerAppStore';
-
-}
-
-/**
-The transaction is a transaction with Google Play.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerGooglePlay {
-	'@type': 'starTransactionPartnerGooglePlay';
-
-}
-
-/**
-The transaction is a transaction with Fragment.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerFragment {
-	'@type': 'starTransactionPartnerFragment';
-	/**
-State of the withdrawal; may be null for refunds from Fragment or for Telegram Stars bought on Fragment.
-*/
-	withdrawal_state: RevenueWithdrawalState;
-}
-
-/**
-The transaction is a transaction with Telegram Ad platform.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerTelegramAds {
-	'@type': 'starTransactionPartnerTelegramAds';
-
-}
-
-/**
-The transaction is a transaction with Telegram for API usage.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerTelegramApi {
-	'@type': 'starTransactionPartnerTelegramApi';
-	/**
-The number of billed requests.
-*/
-	request_count: number;
-}
-
-/**
-The transaction is a transaction with a bot.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerBot {
-	'@type': 'starTransactionPartnerBot';
-	/**
-Identifier of the bot.
+Identifier of the user that added the paid reaction.
 */
 	user_id: number;
 	/**
-Purpose of the transaction.
+Identifier of the reacted message; can be 0 or an identifier of a deleted message.
 */
-	purpose: BotTransactionPurpose;
+	message_id: number;
 }
 
 /**
-The transaction is a transaction with a business account.
-Subtype of {@link StarTransactionPartner}.
+The transaction is a receiving of a commission from an affiliate program; for regular users, bots and channel chats
+only.
+Subtype of {@link StarTransactionType}.
 */
-export interface StarTransactionPartnerBusiness {
-	'@type': 'starTransactionPartnerBusiness';
+export interface StarTransactionTypeAffiliateProgramCommission {
+	'@type': 'starTransactionTypeAffiliateProgramCommission';
 	/**
-Identifier of the business account user.
-*/
-	user_id: number;
-	/**
-The bought media if the transaction wasn't refunded.
-*/
-	media: PaidMedia[];
-}
-
-/**
-The transaction is a transaction with a supergroup or a channel chat.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerChat {
-	'@type': 'starTransactionPartnerChat';
-	/**
-Identifier of the chat.
+Identifier of the chat that created the affiliate program.
 */
 	chat_id: number;
 	/**
-Purpose of the transaction.
+The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the program owner.
 */
-	purpose: ChatTransactionPurpose;
+	commission_per_mille: number;
 }
 
 /**
-The transaction is a transaction with another user.
-Subtype of {@link StarTransactionPartner}.
+The transaction is a transaction of an unsupported type.
+Subtype of {@link StarTransactionType}.
 */
-export interface StarTransactionPartnerUser {
-	'@type': 'starTransactionPartnerUser';
-	/**
-Identifier of the user; 0 if the user was anonymous.
-*/
-	user_id: number;
-	/**
-Purpose of the transaction.
-*/
-	purpose: UserTransactionPurpose;
-}
-
-/**
-The transaction is a transaction with unknown partner.
-Subtype of {@link StarTransactionPartner}.
-*/
-export interface StarTransactionPartnerUnsupported {
-	'@type': 'starTransactionPartnerUnsupported';
+export interface StarTransactionTypeUnsupported {
+	'@type': 'starTransactionTypeUnsupported';
 
 }
 
@@ -3380,7 +3687,7 @@ Unique identifier of the transaction.
 	/**
 The amount of added owned Telegram Stars; negative for outgoing transactions.
 */
-	star_count: number;
+	star_amount: StarAmount;
 	/**
 True, if the transaction is a refund of a previous transaction.
 */
@@ -3390,9 +3697,9 @@ Point in time (Unix timestamp) when the transaction was completed.
 */
 	date: number;
 	/**
-Source of the incoming transaction, or its recipient for outgoing transactions.
+Type of the transaction.
 */
-	partner: StarTransactionPartner;
+	type: StarTransactionType;
 }
 
 /**
@@ -3403,7 +3710,7 @@ export interface StarTransactions {
 	/**
 The amount of owned Telegram Stars.
 */
-	star_count: number;
+	star_amount: StarAmount;
 	/**
 List of transactions with Telegram Stars.
 */
@@ -3846,6 +4153,10 @@ Default administrator rights for adding the bot to basic group and supergroup ch
 Default administrator rights for adding the bot to channels; may be null.
 */
 	default_channel_administrator_rights: ChatAdministratorRights;
+	/**
+Information about the affiliate program of the bot; may be null if none.
+*/
+	affiliate_program: AffiliateProgramInfo;
 	/**
 Default light background color for bot Web Apps; -1 if not specified.
 */
@@ -22889,6 +23200,23 @@ export interface InternalLinkTypeChangePhoneNumber {
 }
 
 /**
+The link is an affiliate program link. Call searchChatAffiliateProgram with the given username and referrer to process
+the link.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeChatAffiliateProgram {
+	'@type': 'internalLinkTypeChatAffiliateProgram';
+	/**
+Username to be passed to searchChatAffiliateProgram.
+*/
+	username: string;
+	/**
+Referrer to be passed to searchChatAffiliateProgram.
+*/
+	referrer: string;
+}
+
+/**
 The link is a link to boost a Telegram chat. Call getChatBoostLinkInfo with the given URL to process the link. If the
 chat is found, then call getChatBoostStatus and getAvailableChatBoostSlots to get the current boost status and check
 whether the chat can be boosted. If the user wants to boost the chat and the chat can be boosted, then call boostChat.
@@ -23613,6 +23941,42 @@ Subtype of {@link FileType}.
 */
 export interface FileTypeSecure {
 	'@type': 'fileTypeSecure';
+
+}
+
+/**
+The file is a self-destructing photo in a private chat.
+Subtype of {@link FileType}.
+*/
+export interface FileTypeSelfDestructingPhoto {
+	'@type': 'fileTypeSelfDestructingPhoto';
+
+}
+
+/**
+The file is a self-destructing video in a private chat.
+Subtype of {@link FileType}.
+*/
+export interface FileTypeSelfDestructingVideo {
+	'@type': 'fileTypeSelfDestructingVideo';
+
+}
+
+/**
+The file is a self-destructing video note in a private chat.
+Subtype of {@link FileType}.
+*/
+export interface FileTypeSelfDestructingVideoNote {
+	'@type': 'fileTypeSelfDestructingVideoNote';
+
+}
+
+/**
+The file is a self-destructing voice note in a private chat.
+Subtype of {@link FileType}.
+*/
+export interface FileTypeSelfDestructingVoiceNote {
+	'@type': 'fileTypeSelfDestructingVoiceNote';
 
 }
 
@@ -25151,17 +25515,17 @@ Contains information about Telegram Stars earned by a bot or a chat.
 export interface StarRevenueStatus {
 	'@type': 'starRevenueStatus';
 	/**
-Total number of Telegram Stars earned.
+Total amount of Telegram Stars earned.
 */
-	total_count: number;
+	total_amount: StarAmount;
 	/**
-The number of Telegram Stars that aren't withdrawn yet.
+The amount of Telegram Stars that aren't withdrawn yet.
 */
-	current_count: number;
+	current_amount: StarAmount;
 	/**
-The number of Telegram Stars that are available for withdrawal.
+The amount of Telegram Stars that are available for withdrawal.
 */
-	available_count: number;
+	available_amount: StarAmount;
 	/**
 True, if Telegram Stars can be withdrawn now or later.
 */
@@ -27331,9 +27695,9 @@ Subtype of {@link Update}.
 export interface UpdateOwnedStarCount {
 	'@type': 'updateOwnedStarCount';
 	/**
-The new number of Telegram Stars owned.
+The new amount of owned Telegram Stars.
 */
-	star_count: number;
+	star_amount: StarAmount;
 }
 
 /**
@@ -28266,38 +28630,41 @@ export type StarSubscriptionType =
 	| StarSubscriptionTypeChannel
 	| StarSubscriptionTypeBot;
 
+export type AffiliateProgramSortOrder =
+	| AffiliateProgramSortOrderProfitability
+	| AffiliateProgramSortOrderCreationDate
+	| AffiliateProgramSortOrderRevenue;
+
 export type StarTransactionDirection =
 	| StarTransactionDirectionIncoming
 	| StarTransactionDirectionOutgoing;
 
-export type BotTransactionPurpose =
-	| BotTransactionPurposePaidMedia
-	| BotTransactionPurposeInvoicePayment
-	| BotTransactionPurposeSubscription;
-
-export type ChatTransactionPurpose =
-	| ChatTransactionPurposePaidMedia
-	| ChatTransactionPurposeJoin
-	| ChatTransactionPurposeReaction
-	| ChatTransactionPurposeGiveaway;
-
-export type UserTransactionPurpose =
-	| UserTransactionPurposeGiftedStars
-	| UserTransactionPurposeGiftSell
-	| UserTransactionPurposeGiftSend;
-
-export type StarTransactionPartner =
-	| StarTransactionPartnerTelegram
-	| StarTransactionPartnerAppStore
-	| StarTransactionPartnerGooglePlay
-	| StarTransactionPartnerFragment
-	| StarTransactionPartnerTelegramAds
-	| StarTransactionPartnerTelegramApi
-	| StarTransactionPartnerBot
-	| StarTransactionPartnerBusiness
-	| StarTransactionPartnerChat
-	| StarTransactionPartnerUser
-	| StarTransactionPartnerUnsupported;
+export type StarTransactionType =
+	| StarTransactionTypePremiumBotDeposit
+	| StarTransactionTypeAppStoreDeposit
+	| StarTransactionTypeGooglePlayDeposit
+	| StarTransactionTypeFragmentDeposit
+	| StarTransactionTypeUserDeposit
+	| StarTransactionTypeGiveawayDeposit
+	| StarTransactionTypeFragmentWithdrawal
+	| StarTransactionTypeTelegramAdsWithdrawal
+	| StarTransactionTypeTelegramApiUsage
+	| StarTransactionTypeBotPaidMediaPurchase
+	| StarTransactionTypeBotPaidMediaSale
+	| StarTransactionTypeChannelPaidMediaPurchase
+	| StarTransactionTypeChannelPaidMediaSale
+	| StarTransactionTypeBotInvoicePurchase
+	| StarTransactionTypeBotInvoiceSale
+	| StarTransactionTypeBotSubscriptionPurchase
+	| StarTransactionTypeBotSubscriptionSale
+	| StarTransactionTypeChannelSubscriptionPurchase
+	| StarTransactionTypeChannelSubscriptionSale
+	| StarTransactionTypeGiftPurchase
+	| StarTransactionTypeGiftSale
+	| StarTransactionTypeChannelPaidReactionSend
+	| StarTransactionTypeChannelPaidReactionReceive
+	| StarTransactionTypeAffiliateProgramCommission
+	| StarTransactionTypeUnsupported;
 
 export type GiveawayParticipantStatus =
 	| GiveawayParticipantStatusEligible
@@ -29403,6 +29770,7 @@ export type InternalLinkType =
 	| InternalLinkTypeBusinessChat
 	| InternalLinkTypeBuyStars
 	| InternalLinkTypeChangePhoneNumber
+	| InternalLinkTypeChatAffiliateProgram
 	| InternalLinkTypeChatBoost
 	| InternalLinkTypeChatFolderInvite
 	| InternalLinkTypeChatFolderSettings
@@ -29455,6 +29823,10 @@ export type FileType =
 	| FileTypeSecret
 	| FileTypeSecretThumbnail
 	| FileTypeSecure
+	| FileTypeSelfDestructingPhoto
+	| FileTypeSelfDestructingVideo
+	| FileTypeSelfDestructingVideoNote
+	| FileTypeSelfDestructingVoiceNote
 	| FileTypeSticker
 	| FileTypeThumbnail
 	| FileTypeUnknown
@@ -34087,7 +34459,7 @@ Types of the chats to which the message can be sent.
 }
 
 /**
-Saves an inline message to be sent by the given user; for bots only.
+Saves an inline message to be sent by the given user.
 Request type for {@link Tdjson#getPreparedInlineMessage}.
 */
 export interface GetPreparedInlineMessage {
@@ -37804,7 +38176,7 @@ chat immediately. The date must be at least 10 seconds and at most 8 days in the
 */
 	start_date: number;
 	/**
-Pass true to create an RTMP stream instead of an ordinary video chat; requires owner privileges.
+Pass true to create an RTMP stream instead of an ordinary video chat.
 */
 	is_rtmp_stream?: boolean;
 }
@@ -38644,9 +39016,21 @@ Type of the stickers to return.
 */
 	sticker_type: StickerType;
 	/**
-Space-separated list of emojis to search for; must be non-empty.
+Space-separated list of emojis to search for.
 */
 	emojis: string;
+	/**
+Query to search for; may be empty to search for emoji only.
+*/
+	query: string;
+	/**
+List of possible IETF language tags of the user's input language; may be empty if unknown.
+*/
+	input_language_codes: string[];
+	/**
+The offset from which to return the stickers; must be non-negative.
+*/
+	offset: number;
 	/**
 The maximum number of stickers to be returned; 0-100.
 */
@@ -39127,6 +39511,15 @@ Request type for {@link Tdjson#getRecentInlineBots}.
 */
 export interface GetRecentInlineBots {
 	'@type': 'getRecentInlineBots';
+
+}
+
+/**
+Returns the list of owned by the current user bots.
+Request type for {@link Tdjson#getOwnedBots}.
+*/
+export interface GetOwnedBots {
+	'@type': 'getOwnedBots';
 
 }
 
@@ -42647,6 +43040,139 @@ Identifier of the subscription.
 }
 
 /**
+Changes affiliate program for a bot.
+Request type for {@link Tdjson#setChatAffiliateProgram}.
+*/
+export interface SetChatAffiliateProgram {
+	'@type': 'setChatAffiliateProgram';
+	/**
+Identifier of the chat with an owned bot for which affiliate program is changed.
+*/
+	chat_id: number;
+	/**
+Parameters of the affiliate program; pass null to close the currently active program. If there is an active program,
+then commission and program duration can only be increased. If the active program is scheduled to be closed, then it
+can't be changed anymore.
+*/
+	parameters: AffiliateProgramParameters;
+}
+
+/**
+Searches a chat with an affiliate program. Returns the chat if found and the program is active.
+Request type for {@link Tdjson#searchChatAffiliateProgram}.
+*/
+export interface SearchChatAffiliateProgram {
+	'@type': 'searchChatAffiliateProgram';
+	/**
+Username of the chat.
+*/
+	username: string;
+	/**
+The referrer from an internalLinkTypeChatAffiliateProgram link.
+*/
+	referrer: string;
+}
+
+/**
+Searches affiliate programs that can be applied to the given chat.
+Request type for {@link Tdjson#searchAffiliatePrograms}.
+*/
+export interface SearchAffiliatePrograms {
+	'@type': 'searchAffiliatePrograms';
+	/**
+Identifier of the chat for which affiliate programs are searched for. Can be an identifier of the Saved Messages chat,
+of a chat with an owned bot, or of a channel chat with can_post_messages administrator right.
+*/
+	chat_id: number;
+	/**
+Sort order for the results.
+*/
+	sort_order: AffiliateProgramSortOrder;
+	/**
+Offset of the first affiliate program to return as received from the previous request; use empty string to get the first
+chunk of results.
+*/
+	offset: string;
+	/**
+The maximum number of affiliate programs to return.
+*/
+	limit: number;
+}
+
+/**
+Connects an affiliate program to the given chat. Returns information about the connected affiliate program.
+Request type for {@link Tdjson#connectChatAffiliateProgram}.
+*/
+export interface ConnectChatAffiliateProgram {
+	'@type': 'connectChatAffiliateProgram';
+	/**
+Identifier of the chat to which the affiliate program will be connected. Can be an identifier of the Saved Messages
+chat, of a chat with an owned bot, or of a channel chat with can_post_messages administrator right.
+*/
+	chat_id: number;
+	/**
+Identifier of the bot, which affiliate program is connected.
+*/
+	bot_user_id: number;
+}
+
+/**
+Disconnects an affiliate program from the given chat and immediately deactivates its referral link. Returns updated
+information about the disconnected affiliate program.
+Request type for {@link Tdjson#disconnectChatAffiliateProgram}.
+*/
+export interface DisconnectChatAffiliateProgram {
+	'@type': 'disconnectChatAffiliateProgram';
+	/**
+Identifier of the chat for which the affiliate program is connected.
+*/
+	chat_id: number;
+	/**
+The referral link of the affiliate program.
+*/
+	url: string;
+}
+
+/**
+Returns an affiliate program that were connected to the given chat by identifier of the bot that created the program.
+Request type for {@link Tdjson#getChatAffiliateProgram}.
+*/
+export interface GetChatAffiliateProgram {
+	'@type': 'getChatAffiliateProgram';
+	/**
+Identifier of the chat for which the affiliate program was connected. Can be an identifier of the Saved Messages chat,
+of a chat with an owned bot, or of a channel chat with can_post_messages administrator right.
+*/
+	chat_id: number;
+	/**
+Identifier of the bot that created the program.
+*/
+	bot_user_id: number;
+}
+
+/**
+Returns affiliate programs that were connected to the given chat.
+Request type for {@link Tdjson#getChatAffiliatePrograms}.
+*/
+export interface GetChatAffiliatePrograms {
+	'@type': 'getChatAffiliatePrograms';
+	/**
+Identifier of the chat for which the affiliate programs were connected. Can be an identifier of the Saved Messages chat,
+of a chat with an owned bot, or of a channel chat with can_post_messages administrator right.
+*/
+	chat_id: number;
+	/**
+Offset of the first affiliate program to return as received from the previous request; use empty string to get the first
+chunk of results.
+*/
+	offset: string;
+	/**
+The maximum number of affiliate programs to return.
+*/
+	limit: number;
+}
+
+/**
 Returns information about features, available to Business users.
 Request type for {@link Tdjson#getBusinessFeatures}.
 */
@@ -43794,6 +44320,7 @@ export type Request =
 	| AddSavedAnimation
 	| RemoveSavedAnimation
 	| GetRecentInlineBots
+	| GetOwnedBots
 	| SearchHashtags
 	| RemoveRecentHashtag
 	| GetLinkPreview
@@ -44021,6 +44548,13 @@ export type Request =
 	| EditStarSubscription
 	| EditUserStarSubscription
 	| ReuseStarSubscription
+	| SetChatAffiliateProgram
+	| SearchChatAffiliateProgram
+	| SearchAffiliatePrograms
+	| ConnectChatAffiliateProgram
+	| DisconnectChatAffiliateProgram
+	| GetChatAffiliateProgram
+	| GetChatAffiliatePrograms
 	| GetBusinessFeatures
 	| AcceptTermsOfService
 	| SearchStringsByPrefix
@@ -46505,7 +47039,7 @@ Saves an inline message to be sent by the given user; for bots only.
 	}
 
 	/**
-Saves an inline message to be sent by the given user; for bots only.
+Saves an inline message to be sent by the given user.
 */
 	async getPreparedInlineMessage(options: Omit<GetPreparedInlineMessage, '@type'>): Promise<PreparedInlineMessage> {
 		return this._request({
@@ -49550,6 +50084,15 @@ Returns up to 20 recently used inline bots in the order of their last usage.
 	}
 
 	/**
+Returns the list of owned by the current user bots.
+*/
+	async getOwnedBots(): Promise<Users> {
+		return this._request({
+			'@type': 'getOwnedBots',
+		});
+	}
+
+	/**
 Searches for recently used hashtags by their prefix.
 */
 	async searchHashtags(options: Omit<SearchHashtags, '@type'>): Promise<Hashtags> {
@@ -51871,6 +52414,77 @@ Reuses an active Telegram Star subscription to a channel chat and joins the chat
 		return this._request({
 			...options,
 			'@type': 'reuseStarSubscription',
+		});
+	}
+
+	/**
+Changes affiliate program for a bot.
+*/
+	async setChatAffiliateProgram(options: Omit<SetChatAffiliateProgram, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setChatAffiliateProgram',
+		});
+	}
+
+	/**
+Searches a chat with an affiliate program. Returns the chat if found and the program is active.
+*/
+	async searchChatAffiliateProgram(options: Omit<SearchChatAffiliateProgram, '@type'>): Promise<Chat> {
+		return this._request({
+			...options,
+			'@type': 'searchChatAffiliateProgram',
+		});
+	}
+
+	/**
+Searches affiliate programs that can be applied to the given chat.
+*/
+	async searchAffiliatePrograms(options: Omit<SearchAffiliatePrograms, '@type'>): Promise<FoundAffiliatePrograms> {
+		return this._request({
+			...options,
+			'@type': 'searchAffiliatePrograms',
+		});
+	}
+
+	/**
+Connects an affiliate program to the given chat. Returns information about the connected affiliate program.
+*/
+	async connectChatAffiliateProgram(options: Omit<ConnectChatAffiliateProgram, '@type'>): Promise<ChatAffiliateProgram> {
+		return this._request({
+			...options,
+			'@type': 'connectChatAffiliateProgram',
+		});
+	}
+
+	/**
+Disconnects an affiliate program from the given chat and immediately deactivates its referral link. Returns updated
+information about the disconnected affiliate program.
+*/
+	async disconnectChatAffiliateProgram(options: Omit<DisconnectChatAffiliateProgram, '@type'>): Promise<ChatAffiliateProgram> {
+		return this._request({
+			...options,
+			'@type': 'disconnectChatAffiliateProgram',
+		});
+	}
+
+	/**
+Returns an affiliate program that were connected to the given chat by identifier of the bot that created the program.
+*/
+	async getChatAffiliateProgram(options: Omit<GetChatAffiliateProgram, '@type'>): Promise<ChatAffiliateProgram> {
+		return this._request({
+			...options,
+			'@type': 'getChatAffiliateProgram',
+		});
+	}
+
+	/**
+Returns affiliate programs that were connected to the given chat.
+*/
+	async getChatAffiliatePrograms(options: Omit<GetChatAffiliatePrograms, '@type'>): Promise<ChatAffiliatePrograms> {
+		return this._request({
+			...options,
+			'@type': 'getChatAffiliatePrograms',
 		});
 	}
 
