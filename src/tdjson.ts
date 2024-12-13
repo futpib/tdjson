@@ -4020,26 +4020,23 @@ Profile photo of the user; may be null.
 */
 	profile_photo: ProfilePhoto;
 	/**
-Identifier of the accent color for name, and backgrounds of profile photo, reply header, and link preview. For Telegram
-Premium users only.
+Identifier of the accent color for name, and backgrounds of profile photo, reply header, and link preview.
 */
 	accent_color_id: number;
 	/**
-Identifier of a custom emoji to be shown on the reply header and link preview background; 0 if none. For Telegram
-Premium users only.
+Identifier of a custom emoji to be shown on the reply header and link preview background; 0 if none.
 */
 	background_custom_emoji_id: string;
 	/**
-Identifier of the accent color for the user's profile; -1 if none. For Telegram Premium users only.
+Identifier of the accent color for the user's profile; -1 if none.
 */
 	profile_accent_color_id: number;
 	/**
-Identifier of a custom emoji to be shown on the background of the user's profile; 0 if none. For Telegram Premium users
-only.
+Identifier of a custom emoji to be shown on the background of the user's profile; 0 if none.
 */
 	profile_background_custom_emoji_id: string;
 	/**
-Emoji status to be shown instead of the default Telegram Premium badge; may be null. For Telegram Premium users only.
+Emoji status to be shown instead of the default Telegram Premium badge; may be null.
 */
 	emoji_status: EmojiStatus;
 	/**
@@ -27511,7 +27508,7 @@ identifiers 0-6 must be taken from the app theme.
 	colors: AccentColor[];
 	/**
 The list of accent color identifiers, which can be set through setAccentColor and setChatAccentColor. The colors must be
-shown in the specififed order.
+shown in the specified order.
 */
 	available_accent_color_ids: number[];
 }
@@ -27528,7 +27525,7 @@ Information about supported colors.
 	colors: ProfileAccentColor[];
 	/**
 The list of accent color identifiers, which can be set through setProfileAccentColor and setChatProfileAccentColor. The
-colors must be shown in the specififed order.
+colors must be shown in the specified order.
 */
 	available_accent_color_ids: number[];
 }
@@ -36645,7 +36642,7 @@ Identifier of the story.
 */
 	story_id: number;
 	/**
-The new privacy settigs for the story.
+The new privacy settings for the story.
 */
 	privacy_settings: StoryPrivacySettings;
 }
@@ -39515,7 +39512,7 @@ export interface GetRecentInlineBots {
 }
 
 /**
-Returns the list of owned by the current user bots.
+Returns the list of bots owned by the current user.
 Request type for {@link Tdjson#getOwnedBots}.
 */
 export interface GetOwnedBots {
@@ -50084,7 +50081,7 @@ Returns up to 20 recently used inline bots in the order of their last usage.
 	}
 
 	/**
-Returns the list of owned by the current user bots.
+Returns the list of bots owned by the current user.
 */
 	async getOwnedBots(): Promise<Users> {
 		return this._request({
