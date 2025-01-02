@@ -1900,6 +1900,72 @@ processed accordingly. Otherwise, the link must be passed to openWebApp.
 }
 
 /**
+Describes parameters of verification that is provided by a bot.
+*/
+export interface BotVerificationParameters {
+	'@type': 'botVerificationParameters';
+	/**
+Identifier of the custom emoji that is used as the verification sign.
+*/
+	icon_custom_emoji_id: string;
+	/**
+Name of the organization that provides verification.
+*/
+	organization_name: string;
+	/**
+Default custom description of verification reason to be used as placeholder in setMessageSenderBotVerification; may be
+null if none.
+*/
+	default_custom_description: FormattedText;
+	/**
+True, if the bot is allowed to provide custom description for verified entities.
+*/
+	can_set_custom_description?: boolean;
+}
+
+/**
+Describes verification status provided by a bot.
+*/
+export interface BotVerification {
+	'@type': 'botVerification';
+	/**
+Identifier of the bot that provided the verification.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the custom emoji that is used as the verification sign.
+*/
+	icon_custom_emoji_id: string;
+	/**
+Custom description of verification reason set by the bot.
+*/
+	custom_description: FormattedText;
+}
+
+/**
+Contains information about verification status of a chat or a user.
+*/
+export interface VerificationStatus {
+	'@type': 'verificationStatus';
+	/**
+True, if the chat or the user is verified by Telegram.
+*/
+	is_verified?: boolean;
+	/**
+True, if the chat or the user is marked as scam by Telegram.
+*/
+	is_scam?: boolean;
+	/**
+True, if the chat or the user is marked as fake by Telegram.
+*/
+	is_fake?: boolean;
+	/**
+Identifier of the custom emoji to be shown as verification sign provided by a bot for the user; 0 if none.
+*/
+	bot_verification_icon_custom_emoji_id: string;
+}
+
+/**
 Represents a location to which a chat is connected.
 */
 export interface ChatLocation {
@@ -2708,6 +2774,39 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
+Describes type of affiliate for an affiliate program.
+Subtype of {@link AffiliateType}.
+*/
+export interface AffiliateTypeCurrentUser {
+	'@type': 'affiliateTypeCurrentUser';
+
+}
+
+/**
+The affiliate is a bot owned by the current user.
+Subtype of {@link AffiliateType}.
+*/
+export interface AffiliateTypeBot {
+	'@type': 'affiliateTypeBot';
+	/**
+User identifier of the bot.
+*/
+	user_id: number;
+}
+
+/**
+The affiliate is a channel chat where the current user has can_post_messages administrator right.
+Subtype of {@link AffiliateType}.
+*/
+export interface AffiliateTypeChannel {
+	'@type': 'affiliateTypeChannel';
+	/**
+Identifier of the channel chat.
+*/
+	chat_id: number;
+}
+
+/**
 Describes the order of the found affiliate programs.
 Subtype of {@link AffiliateProgramSortOrder}.
 */
@@ -2761,8 +2860,8 @@ Parameters of the affiliate program.
 	parameters: AffiliateProgramParameters;
 	/**
 Point in time (Unix timestamp) when the affiliate program will be closed; 0 if the affiliate program isn't scheduled to
-be closed. If positive, then the program can't be connected using connectChatAffiliateProgram, but active connections
-will work until the date.
+be closed. If positive, then the program can't be connected using connectAffiliateProgram, but active connections will
+work until the date.
 */
 	end_date: number;
 	/**
@@ -2802,7 +2901,7 @@ User identifier of the bot created the program.
 	/**
 Information about the affiliate program.
 */
-	parameters: AffiliateProgramInfo;
+	info: AffiliateProgramInfo;
 }
 
 /**
@@ -2825,10 +2924,10 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
-Describes an affiliate program that was connected to a chat.
+Describes an affiliate program that was connected to an affiliate.
 */
-export interface ChatAffiliateProgram {
-	'@type': 'chatAffiliateProgram';
+export interface ConnectedAffiliateProgram {
+	'@type': 'connectedAffiliateProgram';
 	/**
 The link that can be used to refer users if the program is still active.
 */
@@ -2860,18 +2959,18 @@ The number of Telegram Stars that were earned by the affiliate program.
 }
 
 /**
-Represents a list of affiliate programs that were connected to a chat.
+Represents a list of affiliate programs that were connected to an affiliate.
 */
-export interface ChatAffiliatePrograms {
-	'@type': 'chatAffiliatePrograms';
+export interface ConnectedAffiliatePrograms {
+	'@type': 'connectedAffiliatePrograms';
 	/**
-The total number of affiliate programs that were connected to the chat.
+The total number of affiliate programs that were connected to the affiliate.
 */
 	total_count: number;
 	/**
 The list of connected affiliate programs.
 */
-	programs: ChatAffiliateProgram[];
+	programs: ConnectedAffiliateProgram[];
 	/**
 The offset for the next request. If empty, then there are no more results.
 */
@@ -3149,6 +3248,98 @@ The list of options.
 }
 
 /**
+Describes a model of an upgraded gift.
+*/
+export interface UpgradedGiftModel {
+	'@type': 'upgradedGiftModel';
+	/**
+Name of the model.
+*/
+	name: string;
+	/**
+The sticker representing the upgraded gift.
+*/
+	sticker: Sticker;
+	/**
+The number of upgraded gift that receive this model for each 1000 gifts upgraded.
+*/
+	rarity_per_mille: number;
+}
+
+/**
+Describes a symbol shown on the pattern of an upgraded gift.
+*/
+export interface UpgradedGiftSymbol {
+	'@type': 'upgradedGiftSymbol';
+	/**
+Name of the symbol.
+*/
+	name: string;
+	/**
+The sticker representing the upgraded gift.
+*/
+	sticker: Sticker;
+	/**
+The number of upgraded gift that receive this symbol for each 1000 gifts upgraded.
+*/
+	rarity_per_mille: number;
+}
+
+/**
+Describes a backdrop of an upgraded gift.
+*/
+export interface UpgradedGiftBackdrop {
+	'@type': 'upgradedGiftBackdrop';
+	/**
+Name of the backdrop.
+*/
+	name: string;
+	/**
+A color in the center of the backdrop in the RGB format.
+*/
+	center_color: number;
+	/**
+A color on the edges of the backdrop in the RGB format.
+*/
+	edge_color: number;
+	/**
+A color to be applied for the symbol in the RGB format.
+*/
+	symbol_color: number;
+	/**
+A color for the text on the backdrop in the RGB format.
+*/
+	text_color: number;
+	/**
+The number of upgraded gift that receive this backdrop for each 1000 gifts upgraded.
+*/
+	rarity_per_mille: number;
+}
+
+/**
+Describes the original details about the gift.
+*/
+export interface UpgradedGiftOriginalDetails {
+	'@type': 'upgradedGiftOriginalDetails';
+	/**
+Identifier of the user that sent the gift; 0 if the gift was private.
+*/
+	sender_user_id: number;
+	/**
+Identifier of the user that received the gift.
+*/
+	receiver_user_id: number;
+	/**
+Message added to the gift.
+*/
+	text: FormattedText;
+	/**
+Point in time (Unix timestamp) when the gift was sent.
+*/
+	date: number;
+}
+
+/**
 Describes a gift that can be sent to another user.
 */
 export interface Gift {
@@ -3166,10 +3357,14 @@ Number of Telegram Stars that must be paid for the gift.
 */
 	star_count: number;
 	/**
-Number of Telegram Stars that can be claimed by the receiver instead of the gift by default. If the gift was paid with
-just bought Telegram Stars, then full value can be claimed.
+Number of Telegram Stars that can be claimed by the receiver instead of the regular gift by default. If the gift was
+paid with just bought Telegram Stars, then full value can be claimed.
 */
 	default_sell_star_count: number;
+	/**
+Number of Telegram Stars that must be paid to upgrade the gift; 0 if upgrade isn't possible.
+*/
+	upgrade_star_count: number;
 	/**
 True, if the gift is a birthday gift.
 */
@@ -3204,6 +3399,104 @@ The list of gifts.
 }
 
 /**
+Describes an upgraded gift that can be gifted to another user or transferred to TON blockchain as an NFT.
+*/
+export interface UpgradedGift {
+	'@type': 'upgradedGift';
+	/**
+Unique identifier of the gift.
+*/
+	id: string;
+	/**
+The title of the upgraded gift.
+*/
+	title: string;
+	/**
+Unique number of the upgraded gift among gifts upgraded from the same gift.
+*/
+	number: number;
+	/**
+Total number of gifts that were upgraded from the same gift.
+*/
+	total_upgraded_count: number;
+	/**
+The maximum number of gifts that can be upgraded from the same gift.
+*/
+	max_upgraded_count: number;
+	/**
+User identifier of the user that owns the upgraded gift; 0 if none.
+*/
+	owner_user_id: number;
+	/**
+Model of the upgraded gift.
+*/
+	model: UpgradedGiftModel;
+	/**
+Symbol of the upgraded gift.
+*/
+	symbol: UpgradedGiftSymbol;
+	/**
+Backdrop of the upgraded gift.
+*/
+	backdrop: UpgradedGiftBackdrop;
+	/**
+Information about the originally sent gift; may be null if unknown.
+*/
+	original_details: UpgradedGiftOriginalDetails;
+}
+
+/**
+Contains result of gift upgrading.
+*/
+export interface UpgradeGiftResult {
+	'@type': 'upgradeGiftResult';
+	/**
+The upgraded gift.
+*/
+	gift: UpgradedGift;
+	/**
+True, if the gift is displayed on the user's profile page.
+*/
+	is_saved?: boolean;
+	/**
+True, if the gift can be transferred to another user.
+*/
+	can_be_transferred?: boolean;
+	/**
+Number of Telegram Stars that must be paid to transfer the upgraded gift.
+*/
+	transfer_star_count: number;
+	/**
+Point in time (Unix timestamp) when the gift can be transferred to TON blockchain as an NFT.
+*/
+	export_date: number;
+}
+
+/**
+Represents a gift received by a user.
+Subtype of {@link SentGift}.
+*/
+export interface SentGiftRegular {
+	'@type': 'sentGiftRegular';
+	/**
+The gift.
+*/
+	gift: Gift;
+}
+
+/**
+Upgraded gift.
+Subtype of {@link SentGift}.
+*/
+export interface SentGiftUpgraded {
+	'@type': 'sentGiftUpgraded';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+}
+
+/**
 Represents a gift received by a user.
 */
 export interface UserGift {
@@ -3221,9 +3514,21 @@ True, if the sender and gift text are shown only to the gift receiver; otherwise
 */
 	is_private?: boolean;
 	/**
-True, if the gift is displayed on the user's profile page; may be false only for the receiver of the gift.
+True, if the gift is displayed on the user's profile page; only for the receiver of the gift.
 */
 	is_saved?: boolean;
+	/**
+True, if the gift is a regular gift that can be upgraded to a unique gift; only for the receiver of the gift.
+*/
+	can_be_upgraded?: boolean;
+	/**
+True, if the gift is an upgraded gift that can be transferred to another user; only for the receiver of the gift.
+*/
+	can_be_transferred?: boolean;
+	/**
+True, if the gift was refunded and isn't available anymore.
+*/
+	was_refunded?: boolean;
 	/**
 Point in time (Unix timestamp) when the gift was sent.
 */
@@ -3231,17 +3536,30 @@ Point in time (Unix timestamp) when the gift was sent.
 	/**
 The gift.
 */
-	gift: Gift;
+	gift: SentGift;
 	/**
 Identifier of the message with the gift in the chat with the sender of the gift; can be 0 or an identifier of a deleted
-message; only for the gift receiver.
+message; only for the receiver of the gift.
 */
 	message_id: number;
 	/**
-Number of Telegram Stars that can be claimed by the receiver instead of the gift; 0 if the gift can't be sold by the
-current user.
+Number of Telegram Stars that can be claimed by the receiver instead of the regular gift; 0 if the gift can't be sold by
+the current user.
 */
 	sell_star_count: number;
+	/**
+Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift.
+*/
+	prepaid_upgrade_star_count: number;
+	/**
+Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
+*/
+	transfer_star_count: number;
+	/**
+Point in time (Unix timestamp) when the upgraded gift can be transferred to TON blockchain as an NFT; 0 if NFT export
+isn't possible; only for the receiver of the gift.
+*/
+	export_date: number;
 }
 
 /**
@@ -3261,6 +3579,25 @@ The list of gifts.
 The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Contains examples of possible upgraded gifts for the given regular gift.
+*/
+export interface GiftUpgradePreview {
+	'@type': 'giftUpgradePreview';
+	/**
+Examples of possible models that can be chosen for the gift after upgrade.
+*/
+	models: UpgradedGiftModel[];
+	/**
+Examples of possible symbols that can be chosen for the gift after upgrade.
+*/
+	symbols: UpgradedGiftSymbol[];
+	/**
+Examples of possible backdrops that can be chosen for the gift after upgrade.
+*/
+	backdrops: UpgradedGiftBackdrop[];
 }
 
 /**
@@ -3585,7 +3922,7 @@ The number of seconds between consecutive Telegram Star debitings.
 }
 
 /**
-The transaction is a purchase of a gift to another user; for regular users and bots only.
+The transaction is a purchase of a regular gift to another user; for regular users and bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftPurchase {
@@ -3598,6 +3935,22 @@ Identifier of the user that received the gift.
 The gift.
 */
 	gift: Gift;
+}
+
+/**
+The transaction is a transfer of an upgraded gift to another user; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiftTransfer {
+	'@type': 'starTransactionTypeGiftTransfer';
+	/**
+Identifier of the user that received the gift.
+*/
+	user_id: number;
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
 }
 
 /**
@@ -3614,6 +3967,18 @@ Identifier of the user that sent the gift.
 The gift.
 */
 	gift: Gift;
+}
+
+/**
+The transaction is an upgrade of a gift; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiftUpgrade {
+	'@type': 'starTransactionTypeGiftUpgrade';
+	/**
+The upgraded gift.
+*/
+	gift: UpgradedGift;
 }
 
 /**
@@ -4020,26 +4385,23 @@ Profile photo of the user; may be null.
 */
 	profile_photo: ProfilePhoto;
 	/**
-Identifier of the accent color for name, and backgrounds of profile photo, reply header, and link preview. For Telegram
-Premium users only.
+Identifier of the accent color for name, and backgrounds of profile photo, reply header, and link preview.
 */
 	accent_color_id: number;
 	/**
-Identifier of a custom emoji to be shown on the reply header and link preview background; 0 if none. For Telegram
-Premium users only.
+Identifier of a custom emoji to be shown on the reply header and link preview background; 0 if none.
 */
 	background_custom_emoji_id: string;
 	/**
-Identifier of the accent color for the user's profile; -1 if none. For Telegram Premium users only.
+Identifier of the accent color for the user's profile; -1 if none.
 */
 	profile_accent_color_id: number;
 	/**
-Identifier of a custom emoji to be shown on the background of the user's profile; 0 if none. For Telegram Premium users
-only.
+Identifier of a custom emoji to be shown on the background of the user's profile; 0 if none.
 */
 	profile_background_custom_emoji_id: string;
 	/**
-Emoji status to be shown instead of the default Telegram Premium badge; may be null. For Telegram Premium users only.
+Emoji status to be shown instead of the default Telegram Premium badge; may be null.
 */
 	emoji_status: EmojiStatus;
 	/**
@@ -4055,9 +4417,9 @@ The user is a close friend of the current user; implies that the user is a conta
 */
 	is_close_friend?: boolean;
 	/**
-True, if the user is verified.
+Information about verification status of the user; may be null if none.
 */
-	is_verified?: boolean;
+	verification_status: VerificationStatus;
 	/**
 True, if the user is a Telegram Premium user.
 */
@@ -4070,14 +4432,6 @@ True, if the user is Telegram support account.
 If non-empty, it contains a human-readable description of the reason why access to this user must be restricted.
 */
 	restriction_reason: string;
-	/**
-True, if many users reported this user as a scam.
-*/
-	is_scam?: boolean;
-	/**
-True, if many users reported this user as a fake account.
-*/
-	is_fake?: boolean;
 	/**
 True, if the user has non-expired stories available to the current user.
 */
@@ -4173,6 +4527,11 @@ Default light header color for bot Web Apps; -1 if not specified.
 Default dark header color for bot Web Apps; -1 if not specified.
 */
 	web_app_header_dark_color: number;
+	/**
+Parameters of the verification that can be provided by the bot; may be null if none or the current user isn't the owner
+of the bot.
+*/
+	verification_parameters: BotVerificationParameters;
 	/**
 True, if the bot's revenue statistics are available to the current user.
 */
@@ -4287,6 +4646,10 @@ Number of gifts saved to profile by the user.
 Number of group chats where both the other user and the current user are a member; 0 for the current user.
 */
 	group_in_common_count: number;
+	/**
+Information about verification status of the user provided by a bot; may be null if none or unknown.
+*/
+	bot_verification: BotVerification;
 	/**
 Information about business settings for Telegram Business accounts; may be null if none.
 */
@@ -4905,17 +5268,9 @@ True, if the chat is a public supergroup or channel, i.e. it has a username or i
 */
 	is_public?: boolean;
 	/**
-True, if the chat is verified.
+Information about verification status of the chat; may be null if none.
 */
-	is_verified?: boolean;
-	/**
-True, if many users reported this chat as a scam.
-*/
-	is_scam?: boolean;
-	/**
-True, if many users reported this chat as a fake account.
-*/
-	is_fake?: boolean;
+	verification_status: VerificationStatus;
 }
 
 /**
@@ -5118,9 +5473,9 @@ True, if the supergroup is a forum with topics.
 */
 	is_forum?: boolean;
 	/**
-True, if the supergroup or channel is verified.
+Information about verification status of the supergroup or channel; may be null if none.
 */
-	is_verified?: boolean;
+	verification_status: VerificationStatus;
 	/**
 True, if content of media messages in the supergroup or channel chat must be hidden with 18+ spoiler.
 */
@@ -5130,14 +5485,6 @@ If non-empty, contains a human-readable description of the reason why access to 
 restricted.
 */
 	restriction_reason: string;
-	/**
-True, if many users reported this supergroup or channel as a scam.
-*/
-	is_scam?: boolean;
-	/**
-True, if many users reported this supergroup or channel as a fake account.
-*/
-	is_fake?: boolean;
 	/**
 True, if the supergroup or channel has non-expired stories available to the current user.
 */
@@ -5285,6 +5632,11 @@ Primary invite link for the chat; may be null. For chat administrators with can_
 List of commands of bots in the group.
 */
 	bot_commands: BotCommands[];
+	/**
+Information about verification status of the supergroup or the channel provided by a bot; may be null if none or
+unknown.
+*/
+	bot_verification: BotVerification;
 	/**
 Identifier of the basic group from which supergroup was upgraded; 0 if none.
 */
@@ -6969,14 +7321,29 @@ The chosen icon name for short folder representation; one of "All", "Unread", "U
 }
 
 /**
+Describes name of a chat folder.
+*/
+export interface ChatFolderName {
+	'@type': 'chatFolderName';
+	/**
+The text of the chat folder name; 1-12 characters without line feeds. May contain only CustomEmoji entities.
+*/
+	text: FormattedText;
+	/**
+True, if custom emoji in the name must be animated.
+*/
+	animate_custom_emoji?: boolean;
+}
+
+/**
 Represents a folder for user chats.
 */
 export interface ChatFolder {
 	'@type': 'chatFolder';
 	/**
-The title of the folder; 1-12 characters without line feeds.
+The name of the folder.
 */
-	title: string;
+	name: ChatFolderName;
 	/**
 The chosen icon for the chat folder; may be null. If null, use getChatFolderDefaultIconName to get default icon name for
 the folder.
@@ -7053,9 +7420,9 @@ Unique chat folder identifier.
 */
 	id: number;
 	/**
-The title of the folder; 1-12 characters without line feeds.
+The name of the folder.
 */
-	title: string;
+	name: ChatFolderName;
 	/**
 The chosen or default icon for the chat folder.
 */
@@ -13129,7 +13496,7 @@ A sticker to be shown in the message; may be null if unknown.
 }
 
 /**
-A gift was received or sent by the current user.
+A regular gift was received or sent by the current user.
 Subtype of {@link MessageContent}.
 */
 export interface MessageGift {
@@ -13143,10 +13510,14 @@ Message added to the gift.
 */
 	text: FormattedText;
 	/**
-Number of Telegram Stars that can be claimed by the receiver instead of the gift; 0 if the gift can't be sold by the
-receiver.
+Number of Telegram Stars that can be claimed by the receiver instead of the regular gift; 0 if the gift can't be sold by
+the receiver.
 */
 	sell_star_count: number;
+	/**
+Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift.
+*/
+	prepaid_upgrade_star_count: number;
 	/**
 True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them.
 */
@@ -13156,9 +13527,79 @@ True, if the gift is displayed on the user's profile page; only for the receiver
 */
 	is_saved?: boolean;
 	/**
+True, if the gift can be upgraded to a unique gift; only for the receiver of the gift.
+*/
+	can_be_upgraded?: boolean;
+	/**
 True, if the gift was converted to Telegram Stars; only for the receiver of the gift.
 */
 	was_converted?: boolean;
+	/**
+True, if the gift was upgraded to a unique gift.
+*/
+	was_upgraded?: boolean;
+	/**
+True, if the gift was refunded and isn't available anymore.
+*/
+	was_refunded?: boolean;
+	/**
+Identifier of the service message messageUpgradedGift or messageRefundedUpgradedGift with upgraded version of the gift;
+can be 0 if none or an identifier of a deleted message. Use getUserGift to get information about the gift.
+*/
+	upgrade_message_id: number;
+}
+
+/**
+An upgraded gift was received or sent by the current user.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageUpgradedGift {
+	'@type': 'messageUpgradedGift';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+	/**
+True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
+*/
+	is_upgrade?: boolean;
+	/**
+True, if the gift is displayed on the user's profile page; only for the receiver of the gift.
+*/
+	is_saved?: boolean;
+	/**
+True, if the gift can be transferred to another user; only for the receiver of the gift.
+*/
+	can_be_transferred?: boolean;
+	/**
+True, if the gift was transferred to another user; only for the receiver of the gift.
+*/
+	was_transferred?: boolean;
+	/**
+Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
+*/
+	transfer_star_count: number;
+	/**
+Point in time (Unix timestamp) when the gift can be transferred to TON blockchain as an NFT; 0 if NFT export isn't
+possible; only for the receiver of the gift.
+*/
+	export_date: number;
+}
+
+/**
+A gift which purchase, upgrade or transfer were refunded.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageRefundedUpgradedGift {
+	'@type': 'messageRefundedUpgradedGift';
+	/**
+The gift.
+*/
+	gift: Gift;
+	/**
+True, if the gift was obtained by upgrading of a previously received gift.
+*/
+	is_upgrade?: boolean;
 }
 
 /**
@@ -14552,6 +14993,33 @@ Subtype of {@link SearchMessagesFilter}.
 */
 export interface SearchMessagesFilterPinned {
 	'@type': 'searchMessagesFilterPinned';
+
+}
+
+/**
+Represents a filter for type of the chats in which to search messages.
+Subtype of {@link SearchMessagesChatTypeFilter}.
+*/
+export interface SearchMessagesChatTypeFilterPrivate {
+	'@type': 'searchMessagesChatTypeFilterPrivate';
+
+}
+
+/**
+Returns only messages in basic group and supergroup chats.
+Subtype of {@link SearchMessagesChatTypeFilter}.
+*/
+export interface SearchMessagesChatTypeFilterGroup {
+	'@type': 'searchMessagesChatTypeFilterGroup';
+
+}
+
+/**
+Returns only messages in channel chats.
+Subtype of {@link SearchMessagesChatTypeFilter}.
+*/
+export interface SearchMessagesChatTypeFilterChannel {
+	'@type': 'searchMessagesChatTypeFilterChannel';
 
 }
 
@@ -16461,6 +16929,19 @@ export interface CallDiscardReasonHungUp {
 }
 
 /**
+The call was ended because it has been used successfully to transfer private encryption key for the associated group
+call.
+Subtype of {@link CallDiscardReason}.
+*/
+export interface CallDiscardReasonAllowGroupCall {
+	'@type': 'callDiscardReasonAllowGroupCall';
+	/**
+Encrypted using the call private key encryption key for the associated group call.
+*/
+	encrypted_group_call_key: string;
+}
+
+/**
 Specifies the supported call protocols.
 */
 export interface CallProtocol {
@@ -17083,6 +17564,11 @@ True, if the call is a video call.
 Call state.
 */
 	state: CallState;
+	/**
+Identifier of the group call associated with the call; 0 if the group call isn't created yet. The group call can be
+received through the method getGroupCall.
+*/
+	group_call_id: number;
 }
 
 /**
@@ -17755,10 +18241,6 @@ URL of the result, if it exists.
 */
 	url: string;
 	/**
-True, if the URL must be not shown.
-*/
-	hide_url?: boolean;
-	/**
 Title of the result.
 */
 	title: string;
@@ -18196,10 +18678,6 @@ Unique identifier of the query result.
 URL of the result, if it exists.
 */
 	url: string;
-	/**
-True, if the URL must be not shown.
-*/
-	hide_url?: boolean;
 	/**
 Title of the result.
 */
@@ -21558,6 +22036,18 @@ Number of Telegram Stars that sender paid for the gift.
 }
 
 /**
+A message with an upgraded gift.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentUpgradedGift {
+	'@type': 'pushMessageContentUpgradedGift';
+	/**
+True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
+*/
+	is_upgrade?: boolean;
+}
+
+/**
 A screenshot of a message in the chat has been taken.
 Subtype of {@link PushMessageContent}.
 */
@@ -24742,6 +25232,15 @@ export interface SuggestedActionSetBirthdate {
 }
 
 /**
+Suggests the user to set profile photo.
+Subtype of {@link SuggestedAction}.
+*/
+export interface SuggestedActionSetProfilePhoto {
+	'@type': 'suggestedActionSetProfilePhoto';
+
+}
+
+/**
 Suggests the user to extend their expiring Telegram Premium subscription.
 Subtype of {@link SuggestedAction}.
 */
@@ -27511,7 +28010,7 @@ identifiers 0-6 must be taken from the app theme.
 	colors: AccentColor[];
 	/**
 The list of accent color identifiers, which can be set through setAccentColor and setChatAccentColor. The colors must be
-shown in the specififed order.
+shown in the specified order.
 */
 	available_accent_color_ids: number[];
 }
@@ -27528,7 +28027,7 @@ Information about supported colors.
 	colors: ProfileAccentColor[];
 	/**
 The list of accent color identifiers, which can be set through setProfileAccentColor and setChatProfileAccentColor. The
-colors must be shown in the specififed order.
+colors must be shown in the specified order.
 */
 	available_accent_color_ids: number[];
 }
@@ -28630,10 +29129,19 @@ export type StarSubscriptionType =
 	| StarSubscriptionTypeChannel
 	| StarSubscriptionTypeBot;
 
+export type AffiliateType =
+	| AffiliateTypeCurrentUser
+	| AffiliateTypeBot
+	| AffiliateTypeChannel;
+
 export type AffiliateProgramSortOrder =
 	| AffiliateProgramSortOrderProfitability
 	| AffiliateProgramSortOrderCreationDate
 	| AffiliateProgramSortOrderRevenue;
+
+export type SentGift =
+	| SentGiftRegular
+	| SentGiftUpgraded;
 
 export type StarTransactionDirection =
 	| StarTransactionDirectionIncoming
@@ -28660,7 +29168,9 @@ export type StarTransactionType =
 	| StarTransactionTypeChannelSubscriptionPurchase
 	| StarTransactionTypeChannelSubscriptionSale
 	| StarTransactionTypeGiftPurchase
+	| StarTransactionTypeGiftTransfer
 	| StarTransactionTypeGiftSale
+	| StarTransactionTypeGiftUpgrade
 	| StarTransactionTypeChannelPaidReactionSend
 	| StarTransactionTypeChannelPaidReactionReceive
 	| StarTransactionTypeAffiliateProgramCommission
@@ -29122,6 +29632,8 @@ export type MessageContent =
 	| MessageGiftedStars
 	| MessageGiveawayPrizeStars
 	| MessageGift
+	| MessageUpgradedGift
+	| MessageRefundedUpgradedGift
 	| MessageContactRegistered
 	| MessageUsersShared
 	| MessageChatShared
@@ -29209,6 +29721,11 @@ export type SearchMessagesFilter =
 	| SearchMessagesFilterUnreadReaction
 	| SearchMessagesFilterFailedToSend
 	| SearchMessagesFilterPinned;
+
+export type SearchMessagesChatTypeFilter =
+	| SearchMessagesChatTypeFilterPrivate
+	| SearchMessagesChatTypeFilterGroup
+	| SearchMessagesChatTypeFilterChannel;
 
 export type ChatAction =
 	| ChatActionTyping
@@ -29302,7 +29819,8 @@ export type CallDiscardReason =
 	| CallDiscardReasonMissed
 	| CallDiscardReasonDeclined
 	| CallDiscardReasonDisconnected
-	| CallDiscardReasonHungUp;
+	| CallDiscardReasonHungUp
+	| CallDiscardReasonAllowGroupCall;
 
 export type CallServerType =
 	| CallServerTypeTelegramReflector
@@ -29632,6 +30150,7 @@ export type PushMessageContent =
 	| PushMessageContentPremiumGiftCode
 	| PushMessageContentGiveaway
 	| PushMessageContentGift
+	| PushMessageContentUpgradedGift
 	| PushMessageContentScreenshotTaken
 	| PushMessageContentSticker
 	| PushMessageContentStory
@@ -29888,6 +30407,7 @@ export type SuggestedAction =
 	| SuggestedActionSubscribeToAnnualPremium
 	| SuggestedActionGiftPremiumForChristmas
 	| SuggestedActionSetBirthdate
+	| SuggestedActionSetProfilePhoto
 	| SuggestedActionExtendPremium
 	| SuggestedActionExtendStarSubscriptions;
 
@@ -31614,10 +32134,6 @@ Archive chat lists are supported.
 */
 	chat_list: ChatList;
 	/**
-Pass true to search only for messages in channels.
-*/
-	only_in_channels?: boolean;
-	/**
 Query to search for.
 */
 	query: string;
@@ -31637,6 +32153,10 @@ searchMessagesFilterUnreadMention, searchMessagesFilterUnreadReaction, searchMes
 searchMessagesFilterPinned are unsupported in this function.
 */
 	filter: SearchMessagesFilter;
+	/**
+Additional filter for type of the chat of the searched messages; pass null to search for messages in all chats.
+*/
+	chat_type_filter: SearchMessagesChatTypeFilter;
 	/**
 If not 0, the minimum date of the messages to return.
 */
@@ -36645,7 +37165,7 @@ Identifier of the story.
 */
 	story_id: number;
 	/**
-The new privacy settigs for the story.
+The new privacy settings for the story.
 */
 	privacy_settings: StoryPrivacySettings;
 }
@@ -38009,6 +38529,11 @@ The call protocols supported by the application.
 Pass true to create a video call.
 */
 	is_video?: boolean;
+	/**
+Identifier of the group call to which the user will be added after exchanging private key via the call; pass 0 if none;
+currently, ignored.
+*/
+	group_call_id: number;
 }
 
 /**
@@ -38179,6 +38704,18 @@ chat immediately. The date must be at least 10 seconds and at most 8 days in the
 Pass true to create an RTMP stream instead of an ordinary video chat.
 */
 	is_rtmp_stream?: boolean;
+}
+
+/**
+Creates a group call from a one-to-one call.
+Request type for {@link Tdjson#createGroupCall}.
+*/
+export interface CreateGroupCall {
+	'@type': 'createGroupCall';
+	/**
+Call identifier.
+*/
+	call_id: number;
 }
 
 /**
@@ -39515,7 +40052,7 @@ export interface GetRecentInlineBots {
 }
 
 /**
-Returns the list of owned by the current user bots.
+Returns the list of bots owned by the current user.
 Request type for {@link Tdjson#getOwnedBots}.
 */
 export interface GetOwnedBots {
@@ -40481,6 +41018,44 @@ A two-letter ISO 639-1 language code or an empty string.
 }
 
 /**
+Changes the verification status of a user or a chat by an owned bot.
+Request type for {@link Tdjson#setMessageSenderBotVerification}.
+*/
+export interface SetMessageSenderBotVerification {
+	'@type': 'setMessageSenderBotVerification';
+	/**
+Identifier of the owned bot, which will verify the user or the chat.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the user or the supergroup or channel chat, which will be verified by the bot.
+*/
+	verified_id: MessageSender;
+	/**
+Custom description of verification reason; 0-getOption("bot_verification_custom_description_length_max"). If empty, then
+"was verified by organization "organization_name"" will be used as description. Can be specified only if the bot is
+allowed to provide custom description.
+*/
+	custom_description: string;
+}
+
+/**
+Removes the verification status of a user or a chat by an owned bot.
+Request type for {@link Tdjson#removeMessageSenderBotVerification}.
+*/
+export interface RemoveMessageSenderBotVerification {
+	'@type': 'removeMessageSenderBotVerification';
+	/**
+Identifier of the owned bot, which verified the user or the chat.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the user or the supergroup or channel chat, which verification is removed.
+*/
+	verified_id: MessageSender;
+}
+
+/**
 Returns all active sessions of the current user.
 Request type for {@link Tdjson#getActiveSessions}.
 */
@@ -41126,6 +41701,10 @@ Pass true to show the current user as sender and gift text only to the gift rece
 to see them.
 */
 	is_private?: boolean;
+	/**
+Pass true to additionally pay for the gift upgrade and allow the receiver to upgrade it for free.
+*/
+	pay_for_upgrade?: boolean;
 }
 
 /**
@@ -41165,6 +41744,63 @@ Pass true to display the gift on the user's profile page; pass false to remove i
 }
 
 /**
+Returns examples of possible upgraded gifts for a regular gift.
+Request type for {@link Tdjson#getGiftUpgradePreview}.
+*/
+export interface GetGiftUpgradePreview {
+	'@type': 'getGiftUpgradePreview';
+	/**
+Identifier of the gift.
+*/
+	gift_id: string;
+}
+
+/**
+Upgrades a gift received by the current user. Unless the gift has prepaid_upgrade_star_count > 0, the user must pay
+gift.upgrade_star_count Telegram Stars for the upgrade.
+Request type for {@link Tdjson#upgradeGift}.
+*/
+export interface UpgradeGift {
+	'@type': 'upgradeGift';
+	/**
+Identifier of the user that sent the gift.
+*/
+	sender_user_id: number;
+	/**
+Identifier of the message with the gift in the chat with the user.
+*/
+	message_id: number;
+	/**
+Pass true to keep the original gift text, sender and receiver in the upgraded gift.
+*/
+	keep_original_details?: boolean;
+}
+
+/**
+Sends a gift upgraded by the current user to another user.
+Request type for {@link Tdjson#transferGift}.
+*/
+export interface TransferGift {
+	'@type': 'transferGift';
+	/**
+Identifier of the user that sent the gift.
+*/
+	sender_user_id: number;
+	/**
+Identifier of the message with the upgraded gift in the chat with the user.
+*/
+	message_id: number;
+	/**
+Identifier of the user that will receive the gift.
+*/
+	receiver_user_id: number;
+	/**
+The amount of Telegram Stars required for the transfer.
+*/
+	star_count: number;
+}
+
+/**
 Returns gifts saved to profile by the given user.
 Request type for {@link Tdjson#getUserGifts}.
 */
@@ -41184,6 +41820,18 @@ The maximum number of gifts to be returned; must be positive and can't be greate
 number of returned objects is chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
+}
+
+/**
+Returns information about a gift received or sent by the current user.
+Request type for {@link Tdjson#getUserGift}.
+*/
+export interface GetUserGift {
+	'@type': 'getUserGift';
+	/**
+Identifier of the message with the gift.
+*/
+	message_id: number;
 }
 
 /**
@@ -43074,16 +43722,15 @@ The referrer from an internalLinkTypeChatAffiliateProgram link.
 }
 
 /**
-Searches affiliate programs that can be applied to the given chat.
+Searches affiliate programs that can be connected to the given affiliate.
 Request type for {@link Tdjson#searchAffiliatePrograms}.
 */
 export interface SearchAffiliatePrograms {
 	'@type': 'searchAffiliatePrograms';
 	/**
-Identifier of the chat for which affiliate programs are searched for. Can be an identifier of the Saved Messages chat,
-of a chat with an owned bot, or of a channel chat with can_post_messages administrator right.
+The affiliate for which affiliate programs are searched for.
 */
-	chat_id: number;
+	affiliate: AffiliateType;
 	/**
 Sort order for the results.
 */
@@ -43100,16 +43747,15 @@ The maximum number of affiliate programs to return.
 }
 
 /**
-Connects an affiliate program to the given chat. Returns information about the connected affiliate program.
-Request type for {@link Tdjson#connectChatAffiliateProgram}.
+Connects an affiliate program to the given affiliate. Returns information about the connected affiliate program.
+Request type for {@link Tdjson#connectAffiliateProgram}.
 */
-export interface ConnectChatAffiliateProgram {
-	'@type': 'connectChatAffiliateProgram';
+export interface ConnectAffiliateProgram {
+	'@type': 'connectAffiliateProgram';
 	/**
-Identifier of the chat to which the affiliate program will be connected. Can be an identifier of the Saved Messages
-chat, of a chat with an owned bot, or of a channel chat with can_post_messages administrator right.
+The affiliate to which the affiliate program will be connected.
 */
-	chat_id: number;
+	affiliate: AffiliateType;
 	/**
 Identifier of the bot, which affiliate program is connected.
 */
@@ -43117,16 +43763,16 @@ Identifier of the bot, which affiliate program is connected.
 }
 
 /**
-Disconnects an affiliate program from the given chat and immediately deactivates its referral link. Returns updated
+Disconnects an affiliate program from the given affiliate and immediately deactivates its referral link. Returns updated
 information about the disconnected affiliate program.
-Request type for {@link Tdjson#disconnectChatAffiliateProgram}.
+Request type for {@link Tdjson#disconnectAffiliateProgram}.
 */
-export interface DisconnectChatAffiliateProgram {
-	'@type': 'disconnectChatAffiliateProgram';
+export interface DisconnectAffiliateProgram {
+	'@type': 'disconnectAffiliateProgram';
 	/**
-Identifier of the chat for which the affiliate program is connected.
+The affiliate to which the affiliate program is connected.
 */
-	chat_id: number;
+	affiliate: AffiliateType;
 	/**
 The referral link of the affiliate program.
 */
@@ -43134,16 +43780,16 @@ The referral link of the affiliate program.
 }
 
 /**
-Returns an affiliate program that were connected to the given chat by identifier of the bot that created the program.
-Request type for {@link Tdjson#getChatAffiliateProgram}.
+Returns an affiliate program that were connected to the given affiliate by identifier of the bot that created the
+program.
+Request type for {@link Tdjson#getConnectedAffiliateProgram}.
 */
-export interface GetChatAffiliateProgram {
-	'@type': 'getChatAffiliateProgram';
+export interface GetConnectedAffiliateProgram {
+	'@type': 'getConnectedAffiliateProgram';
 	/**
-Identifier of the chat for which the affiliate program was connected. Can be an identifier of the Saved Messages chat,
-of a chat with an owned bot, or of a channel chat with can_post_messages administrator right.
+The affiliate to which the affiliate program will be connected.
 */
-	chat_id: number;
+	affiliate: AffiliateType;
 	/**
 Identifier of the bot that created the program.
 */
@@ -43151,16 +43797,15 @@ Identifier of the bot that created the program.
 }
 
 /**
-Returns affiliate programs that were connected to the given chat.
-Request type for {@link Tdjson#getChatAffiliatePrograms}.
+Returns affiliate programs that were connected to the given affiliate.
+Request type for {@link Tdjson#getConnectedAffiliatePrograms}.
 */
-export interface GetChatAffiliatePrograms {
-	'@type': 'getChatAffiliatePrograms';
+export interface GetConnectedAffiliatePrograms {
+	'@type': 'getConnectedAffiliatePrograms';
 	/**
-Identifier of the chat for which the affiliate programs were connected. Can be an identifier of the Saved Messages chat,
-of a chat with an owned bot, or of a channel chat with can_post_messages administrator right.
+The affiliate to which the affiliate program were connected.
 */
-	chat_id: number;
+	affiliate: AffiliateType;
 	/**
 Offset of the first affiliate program to return as received from the previous request; use empty string to get the first
 chunk of results.
@@ -44234,6 +44879,7 @@ export type Request =
 	| GetVideoChatAvailableParticipants
 	| SetVideoChatDefaultParticipant
 	| CreateVideoChat
+	| CreateGroupCall
 	| GetVideoChatRtmpUrl
 	| ReplaceVideoChatRtmpUrl
 	| GetGroupCall
@@ -44385,6 +45031,8 @@ export type Request =
 	| GetBotInfoDescription
 	| SetBotInfoShortDescription
 	| GetBotInfoShortDescription
+	| SetMessageSenderBotVerification
+	| RemoveMessageSenderBotVerification
 	| GetActiveSessions
 	| TerminateSession
 	| TerminateAllOtherSessions
@@ -44428,7 +45076,11 @@ export type Request =
 	| SendGift
 	| SellGift
 	| ToggleGiftIsSaved
+	| GetGiftUpgradePreview
+	| UpgradeGift
+	| TransferGift
 	| GetUserGifts
+	| GetUserGift
 	| CreateInvoiceLink
 	| RefundStarPayment
 	| GetSupportUser
@@ -44551,10 +45203,10 @@ export type Request =
 	| SetChatAffiliateProgram
 	| SearchChatAffiliateProgram
 	| SearchAffiliatePrograms
-	| ConnectChatAffiliateProgram
-	| DisconnectChatAffiliateProgram
-	| GetChatAffiliateProgram
-	| GetChatAffiliatePrograms
+	| ConnectAffiliateProgram
+	| DisconnectAffiliateProgram
+	| GetConnectedAffiliateProgram
+	| GetConnectedAffiliatePrograms
 	| GetBusinessFeatures
 	| AcceptTermsOfService
 	| SearchStringsByPrefix
@@ -49214,6 +49866,16 @@ can_manage_video_chats administrator right.
 	}
 
 	/**
+Creates a group call from a one-to-one call.
+*/
+	async createGroupCall(options: Omit<CreateGroupCall, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'createGroupCall',
+		});
+	}
+
+	/**
 Returns RTMP URL for streaming to the chat; requires can_manage_video_chats administrator right.
 */
 	async getVideoChatRtmpUrl(options: Omit<GetVideoChatRtmpUrl, '@type'>): Promise<RtmpUrl> {
@@ -50084,7 +50746,7 @@ Returns up to 20 recently used inline bots in the order of their last usage.
 	}
 
 	/**
-Returns the list of owned by the current user bots.
+Returns the list of bots owned by the current user.
 */
 	async getOwnedBots(): Promise<Users> {
 		return this._request({
@@ -50751,6 +51413,26 @@ language. Can be called only if userTypeBot.can_be_edited == true.
 	}
 
 	/**
+Changes the verification status of a user or a chat by an owned bot.
+*/
+	async setMessageSenderBotVerification(options: Omit<SetMessageSenderBotVerification, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setMessageSenderBotVerification',
+		});
+	}
+
+	/**
+Removes the verification status of a user or a chat by an owned bot.
+*/
+	async removeMessageSenderBotVerification(options: Omit<RemoveMessageSenderBotVerification, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeMessageSenderBotVerification',
+		});
+	}
+
+	/**
 Returns all active sessions of the current user.
 */
 	async getActiveSessions(): Promise<Sessions> {
@@ -51190,12 +51872,53 @@ Toggles whether a gift is shown on the current user's profile page.
 	}
 
 	/**
+Returns examples of possible upgraded gifts for a regular gift.
+*/
+	async getGiftUpgradePreview(options: Omit<GetGiftUpgradePreview, '@type'>): Promise<GiftUpgradePreview> {
+		return this._request({
+			...options,
+			'@type': 'getGiftUpgradePreview',
+		});
+	}
+
+	/**
+Upgrades a gift received by the current user. Unless the gift has prepaid_upgrade_star_count > 0, the user must pay
+gift.upgrade_star_count Telegram Stars for the upgrade.
+*/
+	async upgradeGift(options: Omit<UpgradeGift, '@type'>): Promise<UpgradeGiftResult> {
+		return this._request({
+			...options,
+			'@type': 'upgradeGift',
+		});
+	}
+
+	/**
+Sends a gift upgraded by the current user to another user.
+*/
+	async transferGift(options: Omit<TransferGift, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'transferGift',
+		});
+	}
+
+	/**
 Returns gifts saved to profile by the given user.
 */
 	async getUserGifts(options: Omit<GetUserGifts, '@type'>): Promise<UserGifts> {
 		return this._request({
 			...options,
 			'@type': 'getUserGifts',
+		});
+	}
+
+	/**
+Returns information about a gift received or sent by the current user.
+*/
+	async getUserGift(options: Omit<GetUserGift, '@type'>): Promise<UserGift> {
+		return this._request({
+			...options,
+			'@type': 'getUserGift',
 		});
 	}
 
@@ -52438,7 +53161,7 @@ Searches a chat with an affiliate program. Returns the chat if found and the pro
 	}
 
 	/**
-Searches affiliate programs that can be applied to the given chat.
+Searches affiliate programs that can be connected to the given affiliate.
 */
 	async searchAffiliatePrograms(options: Omit<SearchAffiliatePrograms, '@type'>): Promise<FoundAffiliatePrograms> {
 		return this._request({
@@ -52448,43 +53171,44 @@ Searches affiliate programs that can be applied to the given chat.
 	}
 
 	/**
-Connects an affiliate program to the given chat. Returns information about the connected affiliate program.
+Connects an affiliate program to the given affiliate. Returns information about the connected affiliate program.
 */
-	async connectChatAffiliateProgram(options: Omit<ConnectChatAffiliateProgram, '@type'>): Promise<ChatAffiliateProgram> {
+	async connectAffiliateProgram(options: Omit<ConnectAffiliateProgram, '@type'>): Promise<ConnectedAffiliateProgram> {
 		return this._request({
 			...options,
-			'@type': 'connectChatAffiliateProgram',
+			'@type': 'connectAffiliateProgram',
 		});
 	}
 
 	/**
-Disconnects an affiliate program from the given chat and immediately deactivates its referral link. Returns updated
+Disconnects an affiliate program from the given affiliate and immediately deactivates its referral link. Returns updated
 information about the disconnected affiliate program.
 */
-	async disconnectChatAffiliateProgram(options: Omit<DisconnectChatAffiliateProgram, '@type'>): Promise<ChatAffiliateProgram> {
+	async disconnectAffiliateProgram(options: Omit<DisconnectAffiliateProgram, '@type'>): Promise<ConnectedAffiliateProgram> {
 		return this._request({
 			...options,
-			'@type': 'disconnectChatAffiliateProgram',
+			'@type': 'disconnectAffiliateProgram',
 		});
 	}
 
 	/**
-Returns an affiliate program that were connected to the given chat by identifier of the bot that created the program.
+Returns an affiliate program that were connected to the given affiliate by identifier of the bot that created the
+program.
 */
-	async getChatAffiliateProgram(options: Omit<GetChatAffiliateProgram, '@type'>): Promise<ChatAffiliateProgram> {
+	async getConnectedAffiliateProgram(options: Omit<GetConnectedAffiliateProgram, '@type'>): Promise<ConnectedAffiliateProgram> {
 		return this._request({
 			...options,
-			'@type': 'getChatAffiliateProgram',
+			'@type': 'getConnectedAffiliateProgram',
 		});
 	}
 
 	/**
-Returns affiliate programs that were connected to the given chat.
+Returns affiliate programs that were connected to the given affiliate.
 */
-	async getChatAffiliatePrograms(options: Omit<GetChatAffiliatePrograms, '@type'>): Promise<ChatAffiliatePrograms> {
+	async getConnectedAffiliatePrograms(options: Omit<GetConnectedAffiliatePrograms, '@type'>): Promise<ConnectedAffiliatePrograms> {
 		return this._request({
 			...options,
-			'@type': 'getChatAffiliatePrograms',
+			'@type': 'getConnectedAffiliatePrograms',
 		});
 	}
 
