@@ -1937,7 +1937,8 @@ Identifier of the custom emoji that is used as the verification sign.
 */
 	icon_custom_emoji_id: string;
 	/**
-Custom description of verification reason set by the bot.
+Custom description of verification reason set by the bot. Can contain only Mention, Hashtag, Cashtag, PhoneNumber,
+BankCardNumber, Url, and EmailAddress entities.
 */
 	custom_description: FormattedText;
 }
@@ -3286,14 +3287,10 @@ The number of upgraded gift that receive this symbol for each 1000 gifts upgrade
 }
 
 /**
-Describes a backdrop of an upgraded gift.
+Describes colors of a backdrop of an upgraded gift.
 */
-export interface UpgradedGiftBackdrop {
-	'@type': 'upgradedGiftBackdrop';
-	/**
-Name of the backdrop.
-*/
-	name: string;
+export interface UpgradedGiftBackdropColors {
+	'@type': 'upgradedGiftBackdropColors';
 	/**
 A color in the center of the backdrop in the RGB format.
 */
@@ -3310,6 +3307,21 @@ A color to be applied for the symbol in the RGB format.
 A color for the text on the backdrop in the RGB format.
 */
 	text_color: number;
+}
+
+/**
+Describes a backdrop of an upgraded gift.
+*/
+export interface UpgradedGiftBackdrop {
+	'@type': 'upgradedGiftBackdrop';
+	/**
+Name of the backdrop.
+*/
+	name: string;
+	/**
+Colors of the backdrop.
+*/
+	colors: UpgradedGiftBackdropColors;
 	/**
 The number of upgraded gift that receive this backdrop for each 1000 gifts upgraded.
 */
@@ -3322,13 +3334,13 @@ Describes the original details about the gift.
 export interface UpgradedGiftOriginalDetails {
 	'@type': 'upgradedGiftOriginalDetails';
 	/**
-Identifier of the user that sent the gift; 0 if the gift was private.
+Identifier of the user or the chat that sent the gift; may be null if the gift was private.
 */
-	sender_user_id: number;
+	sender_id: MessageSender;
 	/**
-Identifier of the user that received the gift.
+Identifier of the user or the chat that received the gift.
 */
-	receiver_user_id: number;
+	receiver_id: MessageSender;
 	/**
 Message added to the gift.
 */
@@ -3340,7 +3352,7 @@ Point in time (Unix timestamp) when the gift was sent.
 }
 
 /**
-Describes a gift that can be sent to another user.
+Describes a gift that can be sent to another user or channel chat.
 */
 export interface Gift {
 	'@type': 'gift';
@@ -3370,11 +3382,11 @@ True, if the gift is a birthday gift.
 */
 	is_for_birthday?: boolean;
 	/**
-Number of remaining times the gift can be purchased by all users; 0 if not limited or the gift was sold out.
+Number of remaining times the gift can be purchased; 0 if not limited or the gift was sold out.
 */
 	remaining_count: number;
 	/**
-Number of total times the gift can be purchased by all users; 0 if not limited.
+Number of total times the gift can be purchased; 0 if not limited.
 */
 	total_count: number;
 	/**
@@ -3388,7 +3400,7 @@ Point in time (Unix timestamp) when the gift was send for the last time; for sol
 }
 
 /**
-Contains a list of gifts that can be sent to another user.
+Contains a list of gifts that can be sent to another user or channel chat.
 */
 export interface Gifts {
 	'@type': 'gifts';
@@ -3399,7 +3411,7 @@ The list of gifts.
 }
 
 /**
-Describes an upgraded gift that can be gifted to another user or transferred to TON blockchain as an NFT.
+Describes an upgraded gift that can be transferred to another owner or transferred to the TON blockchain as an NFT.
 */
 export interface UpgradedGift {
 	'@type': 'upgradedGift';
@@ -3411,6 +3423,10 @@ Unique identifier of the gift.
 The title of the upgraded gift.
 */
 	title: string;
+	/**
+Unique name of the upgraded gift that can be used with internalLinkTypeUpgradedGift.
+*/
+	name: string;
 	/**
 Unique number of the upgraded gift among gifts upgraded from the same gift.
 */
@@ -3424,9 +3440,17 @@ The maximum number of gifts that can be upgraded from the same gift.
 */
 	max_upgraded_count: number;
 	/**
-User identifier of the user that owns the upgraded gift; 0 if none.
+Identifier of the user or the chat that owns the upgraded gift; may be null if none or unknown.
 */
-	owner_user_id: number;
+	owner_id: MessageSender;
+	/**
+Address of the gift NFT owner in TON blockchain; may be empty if none.
+*/
+	owner_address: string;
+	/**
+Name of the owner for the case when owner identifier and address aren't known.
+*/
+	owner_name: string;
 	/**
 Model of the upgraded gift.
 */
@@ -3455,11 +3479,15 @@ The upgraded gift.
 */
 	gift: UpgradedGift;
 	/**
-True, if the gift is displayed on the user's profile page.
+Unique identifier of the received gift for the current user.
+*/
+	received_gift_id: string;
+	/**
+True, if the gift is displayed on the user's or the channel's profile page.
 */
 	is_saved?: boolean;
 	/**
-True, if the gift can be transferred to another user.
+True, if the gift can be transferred to another owner.
 */
 	can_be_transferred?: boolean;
 	/**
@@ -3467,13 +3495,13 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift.
 */
 	transfer_star_count: number;
 	/**
-Point in time (Unix timestamp) when the gift can be transferred to TON blockchain as an NFT.
+Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT.
 */
 	export_date: number;
 }
 
 /**
-Represents a gift received by a user.
+Represents content of a gift received by a user or a channel chat.
 Subtype of {@link SentGift}.
 */
 export interface SentGiftRegular {
@@ -3497,14 +3525,18 @@ The gift.
 }
 
 /**
-Represents a gift received by a user.
+Represents a gift received by a user or a chat.
 */
-export interface UserGift {
-	'@type': 'userGift';
+export interface ReceivedGift {
+	'@type': 'receivedGift';
 	/**
-Identifier of the user that sent the gift; 0 if unknown.
+Unique identifier of the received gift for the current user; only for the receiver of the gift.
 */
-	sender_user_id: number;
+	received_gift_id: string;
+	/**
+Identifier of a user or a chat that sent the gift; may be null if unknown.
+*/
+	sender_id: MessageSender;
 	/**
 Message added to the gift.
 */
@@ -3514,7 +3546,7 @@ True, if the sender and gift text are shown only to the gift receiver; otherwise
 */
 	is_private?: boolean;
 	/**
-True, if the gift is displayed on the user's profile page; only for the receiver of the gift.
+True, if the gift is displayed on the chat's profile page; only for the receiver of the gift.
 */
 	is_saved?: boolean;
 	/**
@@ -3522,7 +3554,7 @@ True, if the gift is a regular gift that can be upgraded to a unique gift; only 
 */
 	can_be_upgraded?: boolean;
 	/**
-True, if the gift is an upgraded gift that can be transferred to another user; only for the receiver of the gift.
+True, if the gift is an upgraded gift that can be transferred to another owner; only for the receiver of the gift.
 */
 	can_be_transferred?: boolean;
 	/**
@@ -3538,11 +3570,6 @@ The gift.
 */
 	gift: SentGift;
 	/**
-Identifier of the message with the gift in the chat with the sender of the gift; can be 0 or an identifier of a deleted
-message; only for the receiver of the gift.
-*/
-	message_id: number;
-	/**
 Number of Telegram Stars that can be claimed by the receiver instead of the regular gift; 0 if the gift can't be sold by
 the current user.
 */
@@ -3556,17 +3583,17 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift; only f
 */
 	transfer_star_count: number;
 	/**
-Point in time (Unix timestamp) when the upgraded gift can be transferred to TON blockchain as an NFT; 0 if NFT export
-isn't possible; only for the receiver of the gift.
+Point in time (Unix timestamp) when the upgraded gift can be transferred to the TON blockchain as an NFT; 0 if NFT
+export isn't possible; only for the receiver of the gift.
 */
 	export_date: number;
 }
 
 /**
-Represents a list of gifts received by a user.
+Represents a list of gifts received by a user or a chat.
 */
-export interface UserGifts {
-	'@type': 'userGifts';
+export interface ReceivedGifts {
+	'@type': 'receivedGifts';
 	/**
 The total number of received gifts.
 */
@@ -3574,7 +3601,11 @@ The total number of received gifts.
 	/**
 The list of gifts.
 */
-	gifts: UserGift[];
+	gifts: ReceivedGift[];
+	/**
+True, if notifications about new gifts of the owner are enabled.
+*/
+	are_notifications_enabled?: boolean;
 	/**
 The offset for the next request. If empty, then there are no more results.
 */
@@ -3922,15 +3953,15 @@ The number of seconds between consecutive Telegram Star debitings.
 }
 
 /**
-The transaction is a purchase of a regular gift to another user; for regular users and bots only.
+The transaction is a purchase of a regular gift; for regular users and bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftPurchase {
 	'@type': 'starTransactionTypeGiftPurchase';
 	/**
-Identifier of the user that received the gift.
+Identifier of the user or the channel that received the gift.
 */
-	user_id: number;
+	owner_id: MessageSender;
 	/**
 The gift.
 */
@@ -3938,15 +3969,15 @@ The gift.
 }
 
 /**
-The transaction is a transfer of an upgraded gift to another user; for regular users only.
+The transaction is a transfer of an upgraded gift; for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftTransfer {
 	'@type': 'starTransactionTypeGiftTransfer';
 	/**
-Identifier of the user that received the gift.
+Identifier of the user or the channel that received the gift.
 */
-	user_id: number;
+	owner_id: MessageSender;
 	/**
 The gift.
 */
@@ -3954,7 +3985,7 @@ The gift.
 }
 
 /**
-The transaction is a sale of a gift received from another user or bot; for regular users only.
+The transaction is a sale of a received gift; for regular users and channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftSale {
@@ -4304,14 +4335,58 @@ The minimum chat boost level required to use the color in a channel chat.
 }
 
 /**
-Describes a custom emoji to be shown instead of the Telegram Premium badge.
+Describes type of emoji status.
+Subtype of {@link EmojiStatusType}.
 */
-export interface EmojiStatus {
-	'@type': 'emojiStatus';
+export interface EmojiStatusTypeCustomEmoji {
+	'@type': 'emojiStatusTypeCustomEmoji';
 	/**
 Identifier of the custom emoji in stickerFormatTgs format.
 */
 	custom_emoji_id: string;
+}
+
+/**
+An upgraded gift set as emoji status.
+Subtype of {@link EmojiStatusType}.
+*/
+export interface EmojiStatusTypeUpgradedGift {
+	'@type': 'emojiStatusTypeUpgradedGift';
+	/**
+Identifier of the upgraded gift.
+*/
+	upgraded_gift_id: string;
+	/**
+The title of the upgraded gift.
+*/
+	gift_title: string;
+	/**
+Unique name of the upgraded gift that can be used with internalLinkTypeUpgradedGift.
+*/
+	gift_name: string;
+	/**
+Custom emoji identifier of the model of the upgraded gift.
+*/
+	model_custom_emoji_id: string;
+	/**
+Custom emoji identifier of the symbol of the upgraded gift.
+*/
+	symbol_custom_emoji_id: string;
+	/**
+Colors of the backdrop of the upgraded gift.
+*/
+	backdrop_colors: UpgradedGiftBackdropColors;
+}
+
+/**
+Describes an emoji to be shown instead of the Telegram Premium badge.
+*/
+export interface EmojiStatus {
+	'@type': 'emojiStatus';
+	/**
+Type of the emoji status.
+*/
+	type: EmojiStatusType;
 	/**
 Point in time (Unix timestamp) when the status will expire; 0 if never.
 */
@@ -4319,10 +4394,21 @@ Point in time (Unix timestamp) when the status will expire; 0 if never.
 }
 
 /**
-Contains a list of custom emoji identifiers for emoji statuses.
+Contains a list of emoji statuses.
 */
 export interface EmojiStatuses {
 	'@type': 'emojiStatuses';
+	/**
+The list of emoji statuses identifiers.
+*/
+	emoji_statuses: EmojiStatus[];
+}
+
+/**
+Contains a list of custom emoji identifiers for emoji statuses.
+*/
+export interface EmojiStatusCustomEmojis {
+	'@type': 'emojiStatusCustomEmojis';
 	/**
 The list of custom emoji identifiers.
 */
@@ -4639,7 +4725,7 @@ Identifier of the personal chat of the user; 0 if none.
 */
 	personal_chat_id: number;
 	/**
-Number of gifts saved to profile by the user.
+Number of saved to profile gifts for other users or the total number of received gifts for the current user.
 */
 	gift_count: number;
 	/**
@@ -5576,6 +5662,10 @@ True, if the supergroup or channel Telegram Star revenue statistics are availabl
 */
 	can_get_star_revenue_statistics?: boolean;
 	/**
+True, if the user can send a gift to the supergroup or channel using sendGift or transferGift.
+*/
+	can_send_gift?: boolean;
+	/**
 True, if aggressive anti-spam checks can be enabled or disabled in the supergroup.
 */
 	can_toggle_aggressive_anti_spam?: boolean;
@@ -5602,6 +5692,11 @@ True, if paid media can be sent and forwarded to the channel chat; for channels 
 True, if the supergroup or channel has pinned stories.
 */
 	has_pinned_stories?: boolean;
+	/**
+Number of saved to profile gifts for channels without can_post_messages administrator right, otherwise, the total number
+of received gifts.
+*/
+	gift_count: number;
 	/**
 Number of times the current user boosted the supergroup or channel.
 */
@@ -10327,6 +10422,18 @@ export interface LinkPreviewTypeUnsupported {
 }
 
 /**
+The link is a link to an upgraded gift.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeUpgradedGift {
+	'@type': 'linkPreviewTypeUpgradedGift';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+}
+
+/**
 The link is a link to a user.
 Subtype of {@link LinkPreviewType}.
 */
@@ -11206,6 +11313,14 @@ export interface PaidMediaVideo {
 The video.
 */
 	video: Video;
+	/**
+Cover of the video; may be null if none.
+*/
+	cover: Photo;
+	/**
+Timestamp from which the video playing must start, in seconds.
+*/
+	start_timestamp: number;
 }
 
 /**
@@ -12413,6 +12528,14 @@ Alternative qualities of the video.
 */
 	alternative_videos: AlternativeVideo[];
 	/**
+Cover of the video; may be null if none.
+*/
+	cover: Photo;
+	/**
+Timestamp from which the video playing must start, in seconds.
+*/
+	start_timestamp: number;
+	/**
 Video caption.
 */
 	caption: FormattedText;
@@ -13496,7 +13619,7 @@ A sticker to be shown in the message; may be null if unknown.
 }
 
 /**
-A regular gift was received or sent by the current user.
+A regular gift was received or sent by the current user, or the current user was notified about a channel gift.
 Subtype of {@link MessageContent}.
 */
 export interface MessageGift {
@@ -13505,6 +13628,14 @@ export interface MessageGift {
 The gift.
 */
 	gift: Gift;
+	/**
+Sender of the gift.
+*/
+	sender_id: MessageSender;
+	/**
+Unique identifier of the received gift for the current user; only for the receiver of the gift.
+*/
+	received_gift_id: string;
 	/**
 Message added to the gift.
 */
@@ -13523,7 +13654,7 @@ True, if the sender and gift text are shown only to the gift receiver; otherwise
 */
 	is_private?: boolean;
 	/**
-True, if the gift is displayed on the user's profile page; only for the receiver of the gift.
+True, if the gift is displayed on the user's or the channel's profile page; only for the receiver of the gift.
 */
 	is_saved?: boolean;
 	/**
@@ -13543,14 +13674,14 @@ True, if the gift was refunded and isn't available anymore.
 */
 	was_refunded?: boolean;
 	/**
-Identifier of the service message messageUpgradedGift or messageRefundedUpgradedGift with upgraded version of the gift;
-can be 0 if none or an identifier of a deleted message. Use getUserGift to get information about the gift.
+Identifier of the corresponding upgraded gift; may be empty if unknown. Use getReceivedGift to get information about the
+gift.
 */
-	upgrade_message_id: number;
+	upgraded_received_gift_id: string;
 }
 
 /**
-An upgraded gift was received or sent by the current user.
+An upgraded gift was received or sent by the current user, or the current user was notified about a channel gift.
 Subtype of {@link MessageContent}.
 */
 export interface MessageUpgradedGift {
@@ -13560,19 +13691,27 @@ The gift.
 */
 	gift: UpgradedGift;
 	/**
+Sender of the gift; may be null for anonymous gifts.
+*/
+	sender_id: MessageSender;
+	/**
+Unique identifier of the received gift for the current user; only for the receiver of the gift.
+*/
+	received_gift_id: string;
+	/**
 True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
 */
 	is_upgrade?: boolean;
 	/**
-True, if the gift is displayed on the user's profile page; only for the receiver of the gift.
+True, if the gift is displayed on the user's or the channel's profile page; only for the receiver of the gift.
 */
 	is_saved?: boolean;
 	/**
-True, if the gift can be transferred to another user; only for the receiver of the gift.
+True, if the gift can be transferred to another owner; only for the receiver of the gift.
 */
 	can_be_transferred?: boolean;
 	/**
-True, if the gift was transferred to another user; only for the receiver of the gift.
+True, if the gift was transferred to another owner; only for the receiver of the gift.
 */
 	was_transferred?: boolean;
 	/**
@@ -13580,7 +13719,7 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift; only f
 */
 	transfer_star_count: number;
 	/**
-Point in time (Unix timestamp) when the gift can be transferred to TON blockchain as an NFT; 0 if NFT export isn't
+Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT; 0 if NFT export isn't
 possible; only for the receiver of the gift.
 */
 	export_date: number;
@@ -13596,6 +13735,10 @@ export interface MessageRefundedUpgradedGift {
 The gift.
 */
 	gift: Gift;
+	/**
+Sender of the gift.
+*/
+	sender_id: MessageSender;
 	/**
 True, if the gift was obtained by upgrading of a previously received gift.
 */
@@ -13990,6 +14133,14 @@ Subtype of {@link InputPaidMediaType}.
 */
 export interface InputPaidMediaTypeVideo {
 	'@type': 'inputPaidMediaTypeVideo';
+	/**
+Cover of the video; pass null to skip cover uploading.
+*/
+	cover: InputFile;
+	/**
+Timestamp from which the video playing must start, in seconds.
+*/
+	start_timestamp: number;
 	/**
 Duration of the video, in seconds.
 */
@@ -14403,6 +14554,14 @@ Video thumbnail; pass null to skip thumbnail uploading.
 */
 	thumbnail: InputThumbnail;
 	/**
+Cover of the video; pass null to skip cover uploading; not supported in secret chats and for self-destructing messages.
+*/
+	cover: InputFile;
+	/**
+Timestamp from which the video playing must start, in seconds.
+*/
+	start_timestamp: number;
+	/**
 File identifiers of the stickers added to the video, if applicable.
 */
 	added_sticker_file_ids: number[];
@@ -14713,9 +14872,17 @@ Identifier of the message to forward. A message can be forwarded only if message
 */
 	message_id: number;
 	/**
-True, if a game message is being shared from a launched game; applies only to game messages.
+Pass true if a game message is being shared from a launched game; applies only to game messages.
 */
 	in_game_share?: boolean;
+	/**
+Pass true to replace video start timestamp in the forwarded message.
+*/
+	replace_video_start_timestamp?: boolean;
+	/**
+The new video start timestamp; ignored if replace_video_start_timestamp == false.
+*/
+	new_video_start_timestamp: number;
 	/**
 Options to be used to copy content of the message without reference to the original sender; pass null to forward the
 message as usual.
@@ -15710,6 +15877,18 @@ A color of the area background in the ARGB format.
 }
 
 /**
+An area with an upgraded gift.
+Subtype of {@link StoryAreaType}.
+*/
+export interface StoryAreaTypeUpgradedGift {
+	'@type': 'storyAreaTypeUpgradedGift';
+	/**
+Unique name of the upgraded gift.
+*/
+	gift_name: string;
+}
+
+/**
 Describes a clickable rectangle area on a story media.
 */
 export interface StoryArea {
@@ -15841,6 +16020,18 @@ A color of the area background in the ARGB format.
 }
 
 /**
+An area with an upgraded gift.
+Subtype of {@link InputStoryAreaType}.
+*/
+export interface InputStoryAreaTypeUpgradedGift {
+	'@type': 'inputStoryAreaTypeUpgradedGift';
+	/**
+Unique name of the upgraded gift.
+*/
+	gift_name: string;
+}
+
+/**
 Describes a clickable rectangle area on a story media to be added.
 */
 export interface InputStoryArea {
@@ -15865,7 +16056,8 @@ List of input story areas. Currently, a story can have up to 10 inputStoryAreaTy
 inputStoryAreaTypeFoundVenue, and inputStoryAreaTypePreviousVenue areas, up to
 getOption("story_suggested_reaction_area_count_max") inputStoryAreaTypeSuggestedReaction areas, up to 1
 inputStoryAreaTypeMessage area, up to getOption("story_link_area_count_max") inputStoryAreaTypeLink areas if the current
-user is a Telegram Premium user, and up to 3 inputStoryAreaTypeWeather areas.
+user is a Telegram Premium user, up to 3 inputStoryAreaTypeWeather areas, and up to 1 inputStoryAreaTypeUpgradedGift
+area.
 */
 	areas: InputStoryArea[];
 }
@@ -24144,6 +24336,18 @@ export interface InternalLinkTypeUnsupportedProxy {
 }
 
 /**
+The link is a link to an upgraded gift. Call getUpgradedGift with the given name to process the link.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeUpgradedGift {
+	'@type': 'internalLinkTypeUpgradedGift';
+	/**
+Name of the unique gift.
+*/
+	name: string;
+}
+
+/**
 The link is a link to a user by its phone number. Call searchUserByPhoneNumber with the given phone number to process
 the link. If the user is found, then call createPrivateChat and open user's profile information screen or the chat
 itself. If draft text isn't empty, then put the draft text in the input field.
@@ -29191,6 +29395,10 @@ export type GiveawayPrize =
 	| GiveawayPrizePremium
 	| GiveawayPrizeStars;
 
+export type EmojiStatusType =
+	| EmojiStatusTypeCustomEmoji
+	| EmojiStatusTypeUpgradedGift;
+
 export type ChatMemberStatus =
 	| ChatMemberStatusCreator
 	| ChatMemberStatusAdministrator
@@ -29458,6 +29666,7 @@ export type LinkPreviewType =
 	| LinkPreviewTypeSupergroupBoost
 	| LinkPreviewTypeTheme
 	| LinkPreviewTypeUnsupported
+	| LinkPreviewTypeUpgradedGift
 	| LinkPreviewTypeUser
 	| LinkPreviewTypeVideo
 	| LinkPreviewTypeVideoChat
@@ -29768,7 +29977,8 @@ export type StoryAreaType =
 	| StoryAreaTypeSuggestedReaction
 	| StoryAreaTypeMessage
 	| StoryAreaTypeLink
-	| StoryAreaTypeWeather;
+	| StoryAreaTypeWeather
+	| StoryAreaTypeUpgradedGift;
 
 export type InputStoryAreaType =
 	| InputStoryAreaTypeLocation
@@ -29777,7 +29987,8 @@ export type InputStoryAreaType =
 	| InputStoryAreaTypeSuggestedReaction
 	| InputStoryAreaTypeMessage
 	| InputStoryAreaTypeLink
-	| InputStoryAreaTypeWeather;
+	| InputStoryAreaTypeWeather
+	| InputStoryAreaTypeUpgradedGift;
 
 export type StoryContent =
 	| StoryContentPhoto
@@ -30321,6 +30532,7 @@ export type InternalLinkType =
 	| InternalLinkTypeThemeSettings
 	| InternalLinkTypeUnknownDeepLink
 	| InternalLinkTypeUnsupportedProxy
+	| InternalLinkTypeUpgradedGift
 	| InternalLinkTypeUserPhoneNumber
 	| InternalLinkTypeUserToken
 	| InternalLinkTypeVideoChat
@@ -31655,6 +31867,50 @@ Identifier of the original chat, which similar chats were requested.
 Identifier of the opened chat.
 */
 	opened_chat_id: number;
+}
+
+/**
+Returns a list of bots similar to the given bot.
+Request type for {@link Tdjson#getBotSimilarBots}.
+*/
+export interface GetBotSimilarBots {
+	'@type': 'getBotSimilarBots';
+	/**
+User identifier of the target bot.
+*/
+	bot_user_id: number;
+}
+
+/**
+Returns approximate number of bots similar to the given bot.
+Request type for {@link Tdjson#getBotSimilarBotCount}.
+*/
+export interface GetBotSimilarBotCount {
+	'@type': 'getBotSimilarBotCount';
+	/**
+User identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+Pass true to get the number of bots without sending network requests, or -1 if the number of bots is unknown locally.
+*/
+	return_local?: boolean;
+}
+
+/**
+Informs TDLib that a bot was opened from the list of similar bots.
+Request type for {@link Tdjson#openBotSimilarBot}.
+*/
+export interface OpenBotSimilarBot {
+	'@type': 'openBotSimilarBot';
+	/**
+Identifier of the original bot, which similar bots were requested.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the opened bot.
+*/
+	opened_bot_user_id: number;
 }
 
 /**
@@ -33121,7 +33377,7 @@ Pass true to delete messages for all chat members. Always true for supergroups, 
 
 /**
 Deletes all messages sent by the specified message sender in a chat. Supported only for supergroups; requires
-can_delete_messages administrator privileges.
+can_delete_messages administrator right.
 Request type for {@link Tdjson#deleteChatMessagesBySender}.
 */
 export interface DeleteChatMessagesBySender {
@@ -37714,6 +37970,15 @@ export interface GetRecentEmojiStatuses {
 }
 
 /**
+Returns available upgraded gift emoji statuses for self status.
+Request type for {@link Tdjson#getUpgradedGiftEmojiStatuses}.
+*/
+export interface GetUpgradedGiftEmojiStatuses {
+	'@type': 'getUpgradedGiftEmojiStatuses';
+
+}
+
+/**
 Returns default emoji statuses for self status.
 Request type for {@link Tdjson#getDefaultEmojiStatuses}.
 */
@@ -41669,7 +41934,7 @@ export interface DeleteSavedCredentials {
 }
 
 /**
-Returns gifts that can be sent to other users.
+Returns gifts that can be sent to other users and channel chats.
 Request type for {@link Tdjson#getAvailableGifts}.
 */
 export interface GetAvailableGifts {
@@ -41678,7 +41943,8 @@ export interface GetAvailableGifts {
 }
 
 /**
-Sends a gift to another user. May return an error with a message "STARGIFT_USAGE_LIMITED" if the gift was sold out.
+Sends a gift to another user or channel chat. May return an error with a message "STARGIFT_USAGE_LIMITED" if the gift
+was sold out.
 Request type for {@link Tdjson#sendGift}.
 */
 export interface SendGift {
@@ -41688,17 +41954,16 @@ Identifier of the gift to send.
 */
 	gift_id: string;
 	/**
-Identifier of the user that will receive the gift.
+Identifier of the user or the channel chat that will receive the gift.
 */
-	user_id: number;
+	owner_id: MessageSender;
 	/**
 Text to show along with the gift; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
 Strikethrough, Spoiler, and CustomEmoji entities are allowed.
 */
 	text: FormattedText;
 	/**
-Pass true to show the current user as sender and gift text only to the gift receiver; otherwise, everyone will be able
-to see them.
+Pass true to show gift text and sender only to the gift receiver; otherwise, everyone will be able to see them.
 */
 	is_private?: boolean;
 	/**
@@ -41708,39 +41973,50 @@ Pass true to additionally pay for the gift upgrade and allow the receiver to upg
 }
 
 /**
-Sells a gift received by the current user for Telegram Stars.
+Sells a gift for Telegram Stars.
 Request type for {@link Tdjson#sellGift}.
 */
 export interface SellGift {
 	'@type': 'sellGift';
 	/**
-Identifier of the user that sent the gift.
+Identifier of the gift.
 */
-	sender_user_id: number;
-	/**
-Identifier of the message with the gift in the chat with the user.
-*/
-	message_id: number;
+	received_gift_id: string;
 }
 
 /**
-Toggles whether a gift is shown on the current user's profile page.
+Toggles whether a gift is shown on the current user's or the channel's profile page; requires can_post_messages
+administrator right in the chat.
 Request type for {@link Tdjson#toggleGiftIsSaved}.
 */
 export interface ToggleGiftIsSaved {
 	'@type': 'toggleGiftIsSaved';
 	/**
-Identifier of the user that sent the gift.
+Identifier of the gift.
 */
-	sender_user_id: number;
+	received_gift_id: string;
 	/**
-Identifier of the message with the gift in the chat with the user.
-*/
-	message_id: number;
-	/**
-Pass true to display the gift on the user's profile page; pass false to remove it from the profile page.
+Pass true to display the gift on the user's or the channel's profile page; pass false to remove it from the profile
+page.
 */
 	is_saved?: boolean;
+}
+
+/**
+Toggles whether notifications for new gifts received by a channel chat are sent to the current user; requires
+can_post_messages administrator right in the chat.
+Request type for {@link Tdjson#toggleChatGiftNotifications}.
+*/
+export interface ToggleChatGiftNotifications {
+	'@type': 'toggleChatGiftNotifications';
+	/**
+Identifier of the channel chat.
+*/
+	chat_id: number;
+	/**
+Pass true to enable notifications about new gifts owned by the channel chat; pass false to disable the notifications.
+*/
+	are_enabled?: boolean;
 }
 
 /**
@@ -41756,60 +42032,85 @@ Identifier of the gift.
 }
 
 /**
-Upgrades a gift received by the current user. Unless the gift has prepaid_upgrade_star_count > 0, the user must pay
-gift.upgrade_star_count Telegram Stars for the upgrade.
+Upgrades a regular gift.
 Request type for {@link Tdjson#upgradeGift}.
 */
 export interface UpgradeGift {
 	'@type': 'upgradeGift';
 	/**
-Identifier of the user that sent the gift.
+Identifier of the gift.
 */
-	sender_user_id: number;
-	/**
-Identifier of the message with the gift in the chat with the user.
-*/
-	message_id: number;
+	received_gift_id: string;
 	/**
 Pass true to keep the original gift text, sender and receiver in the upgraded gift.
 */
 	keep_original_details?: boolean;
-}
-
-/**
-Sends a gift upgraded by the current user to another user.
-Request type for {@link Tdjson#transferGift}.
-*/
-export interface TransferGift {
-	'@type': 'transferGift';
 	/**
-Identifier of the user that sent the gift.
-*/
-	sender_user_id: number;
-	/**
-Identifier of the message with the upgraded gift in the chat with the user.
-*/
-	message_id: number;
-	/**
-Identifier of the user that will receive the gift.
-*/
-	receiver_user_id: number;
-	/**
-The amount of Telegram Stars required for the transfer.
+The amount of Telegram Stars required to pay for the upgrade. It the gift has prepaid_upgrade_star_count > 0, then pass
+0, otherwise, pass gift.upgrade_star_count.
 */
 	star_count: number;
 }
 
 /**
-Returns gifts saved to profile by the given user.
-Request type for {@link Tdjson#getUserGifts}.
+Sends an upgraded gift to another user or a channel chat.
+Request type for {@link Tdjson#transferGift}.
 */
-export interface GetUserGifts {
-	'@type': 'getUserGifts';
+export interface TransferGift {
+	'@type': 'transferGift';
 	/**
-Identifier of the user.
+Identifier of the gift.
 */
-	user_id: number;
+	received_gift_id: string;
+	/**
+Identifier of the user or the channel chat that will receive the gift.
+*/
+	new_owner_id: MessageSender;
+	/**
+The amount of Telegram Stars required to pay for the transfer.
+*/
+	star_count: number;
+}
+
+/**
+Returns gifts received by the given user or chat.
+Request type for {@link Tdjson#getReceivedGifts}.
+*/
+export interface GetReceivedGifts {
+	'@type': 'getReceivedGifts';
+	/**
+Identifier of the gift receiver.
+*/
+	owner_id: MessageSender;
+	/**
+Pass true to exclude gifts that aren't saved to the chat's profile page. Always true for gifts received by other users
+and channel chats without can_post_messages administrator right.
+*/
+	exclude_unsaved?: boolean;
+	/**
+Pass true to exclude gifts that are saved to the chat's profile page; for channel chats with can_post_messages
+administrator right only.
+*/
+	exclude_saved?: boolean;
+	/**
+Pass true to exclude gifts that can be purchased unlimited number of times; for channel chats with can_post_messages
+administrator right only.
+*/
+	exclude_unlimited?: boolean;
+	/**
+Pass true to exclude gifts that can be purchased limited number of times; for channel chats with can_post_messages
+administrator right only.
+*/
+	exclude_limited?: boolean;
+	/**
+Pass true to exclude upgraded gifts; for channel chats with can_post_messages administrator right only.
+*/
+	exclude_upgraded?: boolean;
+	/**
+Pass true to sort results by gift price instead of send date; for channel chats with can_post_messages administrator
+right only.
+*/
+	sort_by_price?: boolean;
 	/**
 Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
 results.
@@ -41823,15 +42124,44 @@ number of returned objects is chosen by TDLib and can be smaller than the specif
 }
 
 /**
-Returns information about a gift received or sent by the current user.
-Request type for {@link Tdjson#getUserGift}.
+Returns information about a received gift.
+Request type for {@link Tdjson#getReceivedGift}.
 */
-export interface GetUserGift {
-	'@type': 'getUserGift';
+export interface GetReceivedGift {
+	'@type': 'getReceivedGift';
 	/**
-Identifier of the message with the gift.
+Identifier of the gift.
 */
-	message_id: number;
+	received_gift_id: string;
+}
+
+/**
+Returns information about an upgraded gift by its name.
+Request type for {@link Tdjson#getUpgradedGift}.
+*/
+export interface GetUpgradedGift {
+	'@type': 'getUpgradedGift';
+	/**
+Unique name of the upgraded gift.
+*/
+	name: string;
+}
+
+/**
+Returns a URL for upgraded gift withdrawal in the TON blockchain as an NFT; requires owner privileges for gifts owned by
+a chat.
+Request type for {@link Tdjson#getUpgradedGiftWithdrawalUrl}.
+*/
+export interface GetUpgradedGiftWithdrawalUrl {
+	'@type': 'getUpgradedGiftWithdrawalUrl';
+	/**
+Identifier of the gift.
+*/
+	received_gift_id: string;
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
 }
 
 /**
@@ -44512,6 +44842,9 @@ export type Request =
 	| GetChatSimilarChats
 	| GetChatSimilarChatCount
 	| OpenChatSimilarChat
+	| GetBotSimilarBots
+	| GetBotSimilarBotCount
+	| OpenBotSimilarBot
 	| GetTopChats
 	| RemoveTopChat
 	| SearchRecentlyFoundChats
@@ -44826,6 +45159,7 @@ export type Request =
 	| ToggleBotIsAddedToAttachmentMenu
 	| GetThemedEmojiStatuses
 	| GetRecentEmojiStatuses
+	| GetUpgradedGiftEmojiStatuses
 	| GetDefaultEmojiStatuses
 	| ClearRecentEmojiStatuses
 	| GetThemedChatEmojiStatuses
@@ -45076,11 +45410,14 @@ export type Request =
 	| SendGift
 	| SellGift
 	| ToggleGiftIsSaved
+	| ToggleChatGiftNotifications
 	| GetGiftUpgradePreview
 	| UpgradeGift
 	| TransferGift
-	| GetUserGifts
-	| GetUserGift
+	| GetReceivedGifts
+	| GetReceivedGift
+	| GetUpgradedGift
+	| GetUpgradedGiftWithdrawalUrl
 	| CreateInvoiceLink
 	| RefundStarPayment
 	| GetSupportUser
@@ -46010,6 +46347,36 @@ methods.
 	}
 
 	/**
+Returns a list of bots similar to the given bot.
+*/
+	async getBotSimilarBots(options: Omit<GetBotSimilarBots, '@type'>): Promise<Users> {
+		return this._request({
+			...options,
+			'@type': 'getBotSimilarBots',
+		});
+	}
+
+	/**
+Returns approximate number of bots similar to the given bot.
+*/
+	async getBotSimilarBotCount(options: Omit<GetBotSimilarBotCount, '@type'>): Promise<Count> {
+		return this._request({
+			...options,
+			'@type': 'getBotSimilarBotCount',
+		});
+	}
+
+	/**
+Informs TDLib that a bot was opened from the list of similar bots.
+*/
+	async openBotSimilarBot(options: Omit<OpenBotSimilarBot, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'openBotSimilarBot',
+		});
+	}
+
+	/**
 Returns a list of frequently used chats.
 */
 	async getTopChats(options: Omit<GetTopChats, '@type'>): Promise<Chats> {
@@ -46755,7 +47122,7 @@ Deletes messages.
 
 	/**
 Deletes all messages sent by the specified message sender in a chat. Supported only for supergroups; requires
-can_delete_messages administrator privileges.
+can_delete_messages administrator right.
 */
 	async deleteChatMessagesBySender(options: Omit<DeleteChatMessagesBySender, '@type'>): Promise<Ok> {
 		return this._request({
@@ -49302,7 +49669,7 @@ userTypeBot.can_be_added_to_attachment_menu == true.
 Returns up to 8 emoji statuses, which must be shown right after the default Premium Badge in the emoji status list for
 self status.
 */
-	async getThemedEmojiStatuses(): Promise<EmojiStatuses> {
+	async getThemedEmojiStatuses(): Promise<EmojiStatusCustomEmojis> {
 		return this._request({
 			'@type': 'getThemedEmojiStatuses',
 		});
@@ -49318,9 +49685,18 @@ Returns recent emoji statuses for self status.
 	}
 
 	/**
+Returns available upgraded gift emoji statuses for self status.
+*/
+	async getUpgradedGiftEmojiStatuses(): Promise<EmojiStatuses> {
+		return this._request({
+			'@type': 'getUpgradedGiftEmojiStatuses',
+		});
+	}
+
+	/**
 Returns default emoji statuses for self status.
 */
-	async getDefaultEmojiStatuses(): Promise<EmojiStatuses> {
+	async getDefaultEmojiStatuses(): Promise<EmojiStatusCustomEmojis> {
 		return this._request({
 			'@type': 'getDefaultEmojiStatuses',
 		});
@@ -49338,7 +49714,7 @@ Clears the list of recently used emoji statuses for self status.
 	/**
 Returns up to 8 emoji statuses, which must be shown in the emoji status list for chats.
 */
-	async getThemedChatEmojiStatuses(): Promise<EmojiStatuses> {
+	async getThemedChatEmojiStatuses(): Promise<EmojiStatusCustomEmojis> {
 		return this._request({
 			'@type': 'getThemedChatEmojiStatuses',
 		});
@@ -49347,7 +49723,7 @@ Returns up to 8 emoji statuses, which must be shown in the emoji status list for
 	/**
 Returns default emoji statuses for chats.
 */
-	async getDefaultChatEmojiStatuses(): Promise<EmojiStatuses> {
+	async getDefaultChatEmojiStatuses(): Promise<EmojiStatusCustomEmojis> {
 		return this._request({
 			'@type': 'getDefaultChatEmojiStatuses',
 		});
@@ -49357,7 +49733,7 @@ Returns default emoji statuses for chats.
 Returns the list of emoji statuses, which can't be used as chat emoji status, even they are from a sticker set with
 is_allowed_as_chat_emoji_status == true.
 */
-	async getDisallowedChatEmojiStatuses(): Promise<EmojiStatuses> {
+	async getDisallowedChatEmojiStatuses(): Promise<EmojiStatusCustomEmojis> {
 		return this._request({
 			'@type': 'getDisallowedChatEmojiStatuses',
 		});
@@ -51833,7 +52209,7 @@ Deletes saved credentials for all payment provider bots.
 	}
 
 	/**
-Returns gifts that can be sent to other users.
+Returns gifts that can be sent to other users and channel chats.
 */
 	async getAvailableGifts(): Promise<Gifts> {
 		return this._request({
@@ -51842,7 +52218,8 @@ Returns gifts that can be sent to other users.
 	}
 
 	/**
-Sends a gift to another user. May return an error with a message "STARGIFT_USAGE_LIMITED" if the gift was sold out.
+Sends a gift to another user or channel chat. May return an error with a message "STARGIFT_USAGE_LIMITED" if the gift
+was sold out.
 */
 	async sendGift(options: Omit<SendGift, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51852,7 +52229,7 @@ Sends a gift to another user. May return an error with a message "STARGIFT_USAGE
 	}
 
 	/**
-Sells a gift received by the current user for Telegram Stars.
+Sells a gift for Telegram Stars.
 */
 	async sellGift(options: Omit<SellGift, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51862,12 +52239,24 @@ Sells a gift received by the current user for Telegram Stars.
 	}
 
 	/**
-Toggles whether a gift is shown on the current user's profile page.
+Toggles whether a gift is shown on the current user's or the channel's profile page; requires can_post_messages
+administrator right in the chat.
 */
 	async toggleGiftIsSaved(options: Omit<ToggleGiftIsSaved, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGiftIsSaved',
+		});
+	}
+
+	/**
+Toggles whether notifications for new gifts received by a channel chat are sent to the current user; requires
+can_post_messages administrator right in the chat.
+*/
+	async toggleChatGiftNotifications(options: Omit<ToggleChatGiftNotifications, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleChatGiftNotifications',
 		});
 	}
 
@@ -51882,8 +52271,7 @@ Returns examples of possible upgraded gifts for a regular gift.
 	}
 
 	/**
-Upgrades a gift received by the current user. Unless the gift has prepaid_upgrade_star_count > 0, the user must pay
-gift.upgrade_star_count Telegram Stars for the upgrade.
+Upgrades a regular gift.
 */
 	async upgradeGift(options: Omit<UpgradeGift, '@type'>): Promise<UpgradeGiftResult> {
 		return this._request({
@@ -51893,7 +52281,7 @@ gift.upgrade_star_count Telegram Stars for the upgrade.
 	}
 
 	/**
-Sends a gift upgraded by the current user to another user.
+Sends an upgraded gift to another user or a channel chat.
 */
 	async transferGift(options: Omit<TransferGift, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51903,22 +52291,43 @@ Sends a gift upgraded by the current user to another user.
 	}
 
 	/**
-Returns gifts saved to profile by the given user.
+Returns gifts received by the given user or chat.
 */
-	async getUserGifts(options: Omit<GetUserGifts, '@type'>): Promise<UserGifts> {
+	async getReceivedGifts(options: Omit<GetReceivedGifts, '@type'>): Promise<ReceivedGifts> {
 		return this._request({
 			...options,
-			'@type': 'getUserGifts',
+			'@type': 'getReceivedGifts',
 		});
 	}
 
 	/**
-Returns information about a gift received or sent by the current user.
+Returns information about a received gift.
 */
-	async getUserGift(options: Omit<GetUserGift, '@type'>): Promise<UserGift> {
+	async getReceivedGift(options: Omit<GetReceivedGift, '@type'>): Promise<ReceivedGift> {
 		return this._request({
 			...options,
-			'@type': 'getUserGift',
+			'@type': 'getReceivedGift',
+		});
+	}
+
+	/**
+Returns information about an upgraded gift by its name.
+*/
+	async getUpgradedGift(options: Omit<GetUpgradedGift, '@type'>): Promise<UpgradedGift> {
+		return this._request({
+			...options,
+			'@type': 'getUpgradedGift',
+		});
+	}
+
+	/**
+Returns a URL for upgraded gift withdrawal in the TON blockchain as an NFT; requires owner privileges for gifts owned by
+a chat.
+*/
+	async getUpgradedGiftWithdrawalUrl(options: Omit<GetUpgradedGiftWithdrawalUrl, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getUpgradedGiftWithdrawalUrl',
 		});
 	}
 
