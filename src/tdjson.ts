@@ -3452,6 +3452,10 @@ Name of the owner for the case when owner identifier and address aren't known.
 */
 	owner_name: string;
 	/**
+Address of the gift NFT in TON blockchain; may be empty if none.
+*/
+	gift_address: string;
+	/**
 Model of the upgraded gift.
 */
 	model: UpgradedGiftModel;
@@ -6068,6 +6072,36 @@ Subtype of {@link ReactionType}.
 export interface ReactionTypePaid {
 	'@type': 'reactionTypePaid';
 
+}
+
+/**
+Describes type of paid message reaction.
+Subtype of {@link PaidReactionType}.
+*/
+export interface PaidReactionTypeRegular {
+	'@type': 'paidReactionTypeRegular';
+
+}
+
+/**
+An anonymous paid reaction.
+Subtype of {@link PaidReactionType}.
+*/
+export interface PaidReactionTypeAnonymous {
+	'@type': 'paidReactionTypeAnonymous';
+
+}
+
+/**
+A paid reaction on behalf of an owned chat.
+Subtype of {@link PaidReactionType}.
+*/
+export interface PaidReactionTypeChat {
+	'@type': 'paidReactionTypeChat';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
 }
 
 /**
@@ -10459,6 +10493,14 @@ export interface LinkPreviewTypeVideo {
 The video description.
 */
 	video: Video;
+	/**
+Cover of the video; may be null if none.
+*/
+	cover: Photo;
+	/**
+Timestamp from which the video playing must start, in seconds.
+*/
+	start_timestamp: number;
 }
 
 /**
@@ -24404,12 +24446,13 @@ True, if the video chat is expected to be a live stream in a channel or a broadc
 }
 
 /**
-The link is a link to a Web App. Call searchPublicChat with the given bot username, check that the user is a bot, then
-call searchWebApp with the received bot and the given web_app_short_name. Process received foundWebApp by showing a
-confirmation dialog if needed. If the bot can be added to attachment or side menu, but isn't added yet, then show a
-disclaimer about Mini Apps being third-party applications instead of the dialog and ask the user to accept their Terms
-of service. If the user accept the terms and confirms adding, then use toggleBotIsAddedToAttachmentMenu to add the bot.
-Then, call getWebAppLinkUrl and open the returned URL as a Web App.
+The link is a link to a Web App. Call searchPublicChat with the given bot username, check that the user is a bot. If the
+bot is restricted for the current user, then show an error message. Otherwise, call searchWebApp with the received bot
+and the given web_app_short_name. Process received foundWebApp by showing a confirmation dialog if needed. If the bot
+can be added to attachment or side menu, but isn't added yet, then show a disclaimer about Mini Apps being third-party
+applications instead of the dialog and ask the user to accept their Terms of service. If the user accept the terms and
+confirms adding, then use toggleBotIsAddedToAttachmentMenu to add the bot. Then, call getWebAppLinkUrl and open the
+returned URL as a Web App.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeWebApp {
@@ -27824,6 +27867,27 @@ Cloud project number to pass to the Play Integrity API on Android.
 }
 
 /**
+A request can't be completed unless reCAPTCHA verification is performed; for official mobile applications only. The
+method setApplicationVerificationToken must be called once the verification is completed or failed.
+Subtype of {@link Update}.
+*/
+export interface UpdateAppRecaptchaVerificationRequired {
+	'@type': 'updateApplicationRecaptchaVerificationRequired';
+	/**
+Unique identifier for the verification process.
+*/
+	verification_id: number;
+	/**
+The action for the check.
+*/
+	action: string;
+	/**
+Identifier of the reCAPTCHA key.
+*/
+	recaptcha_key_id: string;
+}
+
+/**
 New call was created or information about a call was updated.
 Subtype of {@link Update}.
 */
@@ -28360,6 +28424,18 @@ export interface UpdateDefaultReactionType {
 The new type of the default reaction.
 */
 	reaction_type: ReactionType;
+}
+
+/**
+The type of default paid reaction has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateDefaultPaidReactionType {
+	'@type': 'updateDefaultPaidReactionType';
+	/**
+The new type of the default paid reaction.
+*/
+	type: PaidReactionType;
 }
 
 /**
@@ -29457,6 +29533,11 @@ export type ReactionType =
 	| ReactionTypeEmoji
 	| ReactionTypeCustomEmoji
 	| ReactionTypePaid;
+
+export type PaidReactionType =
+	| PaidReactionTypeRegular
+	| PaidReactionTypeAnonymous
+	| PaidReactionTypeChat;
 
 export type MessageEffectType =
 	| MessageEffectTypeEmojiReaction
@@ -30756,6 +30837,7 @@ export type Update =
 	| UpdateFileDownload
 	| UpdateFileRemovedFromDownloads
 	| UpdateAppVerificationRequired
+	| UpdateAppRecaptchaVerificationRequired
 	| UpdateCall
 	| UpdateGroupCall
 	| UpdateGroupCallParticipant
@@ -30791,6 +30873,7 @@ export type Update =
 	| UpdateActiveEmojiReactions
 	| UpdateAvailableMessageEffects
 	| UpdateDefaultReactionType
+	| UpdateDefaultPaidReactionType
 	| UpdateSavedMessagesTags
 	| UpdateActiveLiveLocationMessages
 	| UpdateOwnedStarCount
@@ -34560,6 +34643,18 @@ Type of the reaction to remove. The paid reaction can't be removed.
 }
 
 /**
+Returns the list of message sender identifiers, which can be used to send a paid reaction in a chat.
+Request type for {@link Tdjson#getChatAvailablePaidMessageReactionSenders}.
+*/
+export interface GetChatAvailablePaidMessageReactionSenders {
+	'@type': 'getChatAvailablePaidMessageReactionSenders';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
 Adds the paid message reaction to a message. Use getMessageAvailableReactions to check whether the reaction is available
 for the message.
 Request type for {@link Tdjson#addPendingPaidMessageReaction}.
@@ -34580,14 +34675,10 @@ getOption("paid_reaction_star_count_max").
 */
 	star_count: number;
 	/**
-Pass true if the user didn't choose anonymity explicitly, for example, the reaction is set from the message bubble.
+Type of the paid reaction; pass null if the user didn't choose reaction type explicitly, for example, the reaction is
+set from the message bubble.
 */
-	use_default_is_anonymous?: boolean;
-	/**
-Pass true to make paid reaction of the user on the message anonymous; pass false to make the user's profile visible
-among top reactors. Ignored if use_default_is_anonymous == true.
-*/
-	is_anonymous?: boolean;
+	type: PaidReactionType;
 }
 
 /**
@@ -34623,12 +34714,12 @@ Identifier of the message.
 }
 
 /**
-Changes whether the paid message reaction of the user to a message is anonymous. The message must have paid reaction
-added by the user.
-Request type for {@link Tdjson#togglePaidMessageReactionIsAnonymous}.
+Changes type of paid message reaction of the current user on a message. The message must have paid reaction added by the
+current user.
+Request type for {@link Tdjson#setPaidMessageReactionType}.
 */
-export interface TogglePaidMessageReactionIsAnonymous {
-	'@type': 'togglePaidMessageReactionIsAnonymous';
+export interface SetPaidMessageReactionType {
+	'@type': 'setPaidMessageReactionType';
 	/**
 Identifier of the chat to which the message belongs.
 */
@@ -34638,10 +34729,9 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Pass true to make paid reaction of the user on the message anonymous; pass false to make the user's profile visible
-among top reactors.
+New type of the paid reaction.
 */
-	is_anonymous?: boolean;
+	type: PaidReactionType;
 }
 
 /**
@@ -35339,7 +35429,8 @@ Identifier of the chat in which the Web App is opened; pass 0 if none.
 */
 	chat_id: number;
 	/**
-Identifier of the target bot.
+Identifier of the target bot. If the bot is restricted for the current user, then show an error instead of calling the
+method.
 */
 	bot_user_id: number;
 	/**
@@ -35360,7 +35451,8 @@ Request type for {@link Tdjson#getWebAppUrl}.
 export interface GetWebAppUrl {
 	'@type': 'getWebAppUrl';
 	/**
-Identifier of the target bot.
+Identifier of the target bot. If the bot is restricted for the current user, then show an error instead of calling the
+method.
 */
 	bot_user_id: number;
 	/**
@@ -35407,7 +35499,8 @@ Identifier of the chat in which the Web App is opened. The Web App can't be open
 */
 	chat_id: number;
 	/**
-Identifier of the bot, providing the Web App.
+Identifier of the bot, providing the Web App. If the bot is restricted for the current user, then show an error instead
+of calling the method.
 */
 	bot_user_id: number;
 	/**
@@ -38353,18 +38446,20 @@ The maximum number of files to be returned.
 }
 
 /**
-Application verification has been completed. Can be called before authorization.
+Application or reCAPTCHA verification has been completed. Can be called before authorization.
 Request type for {@link Tdjson#setApplicationVerificationToken}.
 */
 export interface SetAppVerificationToken {
 	'@type': 'setApplicationVerificationToken';
 	/**
-Unique identifier for the verification process as received from updateApplicationVerificationRequired.
+Unique identifier for the verification process as received from updateApplicationVerificationRequired or
+updateApplicationRecaptchaVerificationRequired.
 */
 	verification_id: number;
 	/**
-Play Integrity API token for the Android application, or secret from push notification for the iOS application; pass an
-empty string to abort verification and receive error VERIFICATION_FAILED for the request.
+Play Integrity API token for the Android application, or secret from push notification for the iOS application for
+application verification, or reCAPTCHA token for reCAPTCHA verifications; pass an empty string to abort verification and
+receive error VERIFICATION_FAILED for the request.
 */
 	token: string;
 }
@@ -42088,27 +42183,24 @@ and channel chats without can_post_messages administrator right.
 */
 	exclude_unsaved?: boolean;
 	/**
-Pass true to exclude gifts that are saved to the chat's profile page; for channel chats with can_post_messages
-administrator right only.
+Pass true to exclude gifts that are saved to the chat's profile page. Always false for gifts received by other users and
+channel chats without can_post_messages administrator right.
 */
 	exclude_saved?: boolean;
 	/**
-Pass true to exclude gifts that can be purchased unlimited number of times; for channel chats with can_post_messages
-administrator right only.
+Pass true to exclude gifts that can be purchased unlimited number of times.
 */
 	exclude_unlimited?: boolean;
 	/**
-Pass true to exclude gifts that can be purchased limited number of times; for channel chats with can_post_messages
-administrator right only.
+Pass true to exclude gifts that can be purchased limited number of times.
 */
 	exclude_limited?: boolean;
 	/**
-Pass true to exclude upgraded gifts; for channel chats with can_post_messages administrator right only.
+Pass true to exclude upgraded gifts.
 */
 	exclude_upgraded?: boolean;
 	/**
-Pass true to sort results by gift price instead of send date; for channel chats with can_post_messages administrator
-right only.
+Pass true to sort results by gift price instead of send date.
 */
 	sort_by_price?: boolean;
 	/**
@@ -44967,10 +45059,11 @@ export type Request =
 	| ClearRecentReactions
 	| AddMessageReaction
 	| RemoveMessageReaction
+	| GetChatAvailablePaidMessageReactionSenders
 	| AddPendingPaidMessageReaction
 	| CommitPendingPaidMessageReactions
 	| RemovePendingPaidMessageReactions
-	| TogglePaidMessageReactionIsAnonymous
+	| SetPaidMessageReactionType
 	| SetMessageReactions
 	| GetMessageAddedReactions
 	| SetDefaultReactionType
@@ -47684,6 +47777,16 @@ Removes a reaction from a message. A chosen reaction can always be removed.
 	}
 
 	/**
+Returns the list of message sender identifiers, which can be used to send a paid reaction in a chat.
+*/
+	async getChatAvailablePaidMessageReactionSenders(options: Omit<GetChatAvailablePaidMessageReactionSenders, '@type'>): Promise<MessageSenders> {
+		return this._request({
+			...options,
+			'@type': 'getChatAvailablePaidMessageReactionSenders',
+		});
+	}
+
+	/**
 Adds the paid message reaction to a message. Use getMessageAvailableReactions to check whether the reaction is available
 for the message.
 */
@@ -47715,13 +47818,13 @@ Removes all pending paid reactions on a message.
 	}
 
 	/**
-Changes whether the paid message reaction of the user to a message is anonymous. The message must have paid reaction
-added by the user.
+Changes type of paid message reaction of the current user on a message. The message must have paid reaction added by the
+current user.
 */
-	async togglePaidMessageReactionIsAnonymous(options: Omit<TogglePaidMessageReactionIsAnonymous, '@type'>): Promise<Ok> {
+	async setPaidMessageReactionType(options: Omit<SetPaidMessageReactionType, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'togglePaidMessageReactionIsAnonymous',
+			'@type': 'setPaidMessageReactionType',
 		});
 	}
 
@@ -49918,7 +50021,7 @@ Searches for files in the file download list or recently downloaded files from t
 	}
 
 	/**
-Application verification has been completed. Can be called before authorization.
+Application or reCAPTCHA verification has been completed. Can be called before authorization.
 */
 	async setApplicationVerificationToken(options: Omit<SetAppVerificationToken, '@type'>): Promise<Ok> {
 		return this._request({
