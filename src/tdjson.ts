@@ -1637,6 +1637,10 @@ Describes an alternative re-encoded quality of a video file.
 export interface AlternativeVideo {
 	'@type': 'alternativeVideo';
 	/**
+Unique identifier of the alternative video, which is used in the HLS file.
+*/
+	id: string;
+	/**
 Video width.
 */
 	width: number;
@@ -3054,11 +3058,58 @@ Identifier of the last in-store transaction for the currently used option.
 }
 
 /**
-Describes an option for creating Telegram Premium gift codes or Telegram Premium giveaway. Use
-telegramPaymentPurposePremiumGiftCodes or telegramPaymentPurposePremiumGiveaway for out-of-store payments.
+Describes an option for gifting Telegram Premium to a user. Use telegramPaymentPurposePremiumGift for out-of-store
+payments or payments in Telegram Stars.
 */
-export interface PremiumGiftCodePaymentOption {
-	'@type': 'premiumGiftCodePaymentOption';
+export interface PremiumGiftPaymentOption {
+	'@type': 'premiumGiftPaymentOption';
+	/**
+ISO 4217 currency code for the payment.
+*/
+	currency: string;
+	/**
+The amount to pay, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+The alternative amount of Telegram Stars to pay; 0 if payment in Telegram Stars is not possible.
+*/
+	star_count: number;
+	/**
+The discount associated with this option, as a percentage.
+*/
+	discount_percentage: number;
+	/**
+Number of months the Telegram Premium subscription will be active.
+*/
+	month_count: number;
+	/**
+Identifier of the store product associated with the option.
+*/
+	store_product_id: string;
+	/**
+A sticker to be shown along with the option; may be null if unknown.
+*/
+	sticker: Sticker;
+}
+
+/**
+Contains a list of options for gifting Telegram Premium to a user.
+*/
+export interface PremiumGiftPaymentOptions {
+	'@type': 'premiumGiftPaymentOptions';
+	/**
+The list of options sorted by Telegram Premium subscription duration.
+*/
+	options: PremiumGiftPaymentOption[];
+}
+
+/**
+Describes an option for creating of Telegram Premium giveaway or manual distribution of Telegram Premium among chat
+members. Use telegramPaymentPurposePremiumGiftCodes or telegramPaymentPurposePremiumGiveaway for out-of-store payments.
+*/
+export interface PremiumGiveawayPaymentOption {
+	'@type': 'premiumGiveawayPaymentOption';
 	/**
 ISO 4217 currency code for Telegram Premium gift code payment.
 */
@@ -3067,10 +3118,6 @@ ISO 4217 currency code for Telegram Premium gift code payment.
 The amount to pay, in the smallest units of the currency.
 */
 	amount: number;
-	/**
-The discount associated with this option, as a percentage.
-*/
-	discount_percentage: number;
 	/**
 Number of users which will be able to activate the gift codes.
 */
@@ -3087,21 +3134,18 @@ Identifier of the store product associated with the option; may be empty if none
 Number of times the store product must be paid.
 */
 	store_product_quantity: number;
-	/**
-A sticker to be shown along with the gift code; may be null if unknown.
-*/
-	sticker: Sticker;
 }
 
 /**
-Contains a list of options for creating Telegram Premium gift codes or Telegram Premium giveaway.
+Contains a list of options for creating of Telegram Premium giveaway or manual distribution of Telegram Premium among
+chat members.
 */
-export interface PremiumGiftCodePaymentOptions {
-	'@type': 'premiumGiftCodePaymentOptions';
+export interface PremiumGiveawayPaymentOptions {
+	'@type': 'premiumGiveawayPaymentOptions';
 	/**
 The list of options.
 */
-	options: PremiumGiftCodePaymentOption[];
+	options: PremiumGiveawayPaymentOption[];
 }
 
 /**
@@ -3198,7 +3242,7 @@ True, if the option must be chosen by default.
 }
 
 /**
-Describes an option for creating Telegram Star giveaway. Use telegramPaymentPurposeStarGiveaway for out-of-store
+Describes an option for creating of Telegram Star giveaway. Use telegramPaymentPurposeStarGiveaway for out-of-store
 payments.
 */
 export interface StarGiveawayPaymentOption {
@@ -3238,7 +3282,7 @@ True, if the option must be shown only in the full list of payment options.
 }
 
 /**
-Contains a list of options for creating Telegram Star giveaway.
+Contains a list of options for creating of Telegram Star giveaway.
 */
 export interface StarGiveawayPaymentOptions {
 	'@type': 'starGiveawayPaymentOptions';
@@ -3554,6 +3598,10 @@ True, if the gift is displayed on the chat's profile page; only for the receiver
 */
 	is_saved?: boolean;
 	/**
+True, if the gift is pinned to the top of the chat's profile page.
+*/
+	is_pinned?: boolean;
+	/**
 True, if the gift is a regular gift that can be upgraded to a unique gift; only for the receiver of the gift.
 */
 	can_be_upgraded?: boolean;
@@ -3722,7 +3770,8 @@ Identifier of the message with the giveaway; can be 0 or an identifier of a dele
 }
 
 /**
-The transaction is a withdrawal of earned Telegram Stars to Fragment; for bots and channel chats only.
+The transaction is a withdrawal of earned Telegram Stars to Fragment; for regular users, bots, supergroup and channel
+chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeFragmentWithdrawal {
@@ -4011,6 +4060,10 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeGiftUpgrade {
 	'@type': 'starTransactionTypeGiftUpgrade';
 	/**
+Identifier of the user that initially sent the gift.
+*/
+	user_id: number;
+	/**
 The upgraded gift.
 */
 	gift: UpgradedGift;
@@ -4064,6 +4117,66 @@ Identifier of the chat that created the affiliate program.
 The number of Telegram Stars received by the affiliate for each 1000 Telegram Stars received by the program owner.
 */
 	commission_per_mille: number;
+}
+
+/**
+The transaction is a sending of a paid message; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypePaidMessageSend {
+	'@type': 'starTransactionTypePaidMessageSend';
+	/**
+Identifier of the chat that received the payment.
+*/
+	chat_id: number;
+	/**
+Number of sent paid messages.
+*/
+	message_count: number;
+}
+
+/**
+The transaction is a receiving of a paid message; for regular users and supergroup chats only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypePaidMessageReceive {
+	'@type': 'starTransactionTypePaidMessageReceive';
+	/**
+Identifier of the sender of the message.
+*/
+	sender_id: MessageSender;
+	/**
+Number of received paid messages.
+*/
+	message_count: number;
+	/**
+The number of Telegram Stars received by the Telegram for each 1000 Telegram Stars paid for message sending.
+*/
+	commission_per_mille: number;
+	/**
+The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
+*/
+	commission_star_amount: StarAmount;
+}
+
+/**
+The transaction is a purchase of Telegram Premium subscription; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypePremiumPurchase {
+	'@type': 'starTransactionTypePremiumPurchase';
+	/**
+Identifier of the user that received the Telegram Premium subscription.
+*/
+	user_id: number;
+	/**
+Number of months the Telegram Premium subscription will be active.
+*/
+	month_count: number;
+	/**
+A sticker to be shown in the transaction information; may be null if unknown.
+*/
+	sticker: Sticker;
 }
 
 /**
@@ -4536,6 +4649,11 @@ can message the user or try to create a chat with them.
 */
 	restricts_new_chats?: boolean;
 	/**
+Number of Telegram Stars that must be paid by general user for each sent message to the user. If positive and
+userFullInfo is unknown, use canSendMessageToUser to check whether the current user must pay.
+*/
+	paid_message_star_count: number;
+	/**
 If false, the user is inaccessible, and the only information known about the user is inside this class. Identifier of
 the user can't be passed to any method.
 */
@@ -4736,6 +4854,14 @@ Number of saved to profile gifts for other users or the total number of received
 Number of group chats where both the other user and the current user are a member; 0 for the current user.
 */
 	group_in_common_count: number;
+	/**
+Number of Telegram Stars that must be paid by the user for each sent message to the current user.
+*/
+	incoming_paid_message_star_count: number;
+	/**
+Number of Telegram Stars that must be paid by the current user for each sent message to the user.
+*/
+	outgoing_paid_message_star_count: number;
 	/**
 Information about verification status of the user provided by a bot; may be null if none or unknown.
 */
@@ -5576,6 +5702,10 @@ restricted.
 */
 	restriction_reason: string;
 	/**
+Number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message.
+*/
+	paid_message_star_count: number;
+	/**
 True, if the supergroup or channel has non-expired stories available to the current user.
 */
 	has_active_stories?: boolean;
@@ -5628,6 +5758,10 @@ Time left before next message can be sent in the supergroup, in seconds. An upda
 triggered when value of this field changes, but both new and old values are non-zero.
 */
 	slow_mode_delay_expires_in: number;
+	/**
+True, if paid messages can be enabled in the supergroup chat; for supergroup only.
+*/
+	can_enable_paid_messages?: boolean;
 	/**
 True, if paid reaction can be enabled in the channel chat; for channels only.
 */
@@ -6390,6 +6524,10 @@ resendMessages.
 */
 	need_drop_reply?: boolean;
 	/**
+The number of Telegram Stars that must be paid to send the message; 0 if the current amount is correct.
+*/
+	required_paid_message_star_count: number;
+	/**
 Time left before the message can be re-sent, in seconds. No update is sent when this field changes.
 */
 	retry_after: number;
@@ -6683,6 +6821,10 @@ Number of times the sender of the message boosted the supergroup at the time the
 For messages sent by the current user, supergroupFullInfo.my_boost_count must be used instead.
 */
 	sender_boost_count: number;
+	/**
+The number of Telegram Stars the sender paid to send the message.
+*/
+	paid_message_star_count: number;
 	/**
 For channel posts and anonymous group messages, optional author signature.
 */
@@ -8116,6 +8258,33 @@ export interface PublicChatTypeIsLocationBased {
 }
 
 /**
+Contains basic information about another user that started a chat with the current user.
+*/
+export interface AccountInfo {
+	'@type': 'accountInfo';
+	/**
+Month when the user was registered in Telegram; 0-12; may be 0 if unknown.
+*/
+	registration_month: number;
+	/**
+Year when the user was registered in Telegram; 0-9999; may be 0 if unknown.
+*/
+	registration_year: number;
+	/**
+A two-letter ISO 3166-1 alpha-2 country code based on the phone number of the user; may be empty if unknown.
+*/
+	phone_number_country_code: string;
+	/**
+Point in time (Unix timestamp) when the user changed name last time; 0 if unknown.
+*/
+	last_name_change_date: number;
+	/**
+Point in time (Unix timestamp) when the user changed photo last time; 0 if unknown.
+*/
+	last_photo_change_date: number;
+}
+
+/**
 Describes actions which must be possible to do through a chat action bar.
 Subtype of {@link ChatActionBar}.
 */
@@ -8151,6 +8320,10 @@ If true, the chat was automatically archived and can be moved back to the main c
 simultaneously with setting chat notification settings to default using setChatNotificationSettings.
 */
 	can_unarchive?: boolean;
+	/**
+Basic information about the other user in the chat; may be null if unknown.
+*/
+	account_info: AccountInfo;
 }
 
 /**
@@ -14301,13 +14474,17 @@ Pass true to allow the message to ignore regular broadcast limits for a small fe
 */
 	allow_paid_broadcast?: boolean;
 	/**
+The number of Telegram Stars the user agreed to pay to send the messages.
+*/
+	paid_message_star_count: number;
+	/**
 Pass true if the user explicitly chosen a sticker or a custom emoji from an installed sticker set; applicable only to
 sendMessage and sendMessageAlbum.
 */
 	update_order_of_installed_sticker_sets?: boolean;
 	/**
-Message scheduling state; pass null to send message immediately. Messages sent to a secret chat, live location messages
-and self-destructing messages can't be scheduled.
+Message scheduling state; pass null to send message immediately. Messages sent to a secret chat, to a chat with paid
+messages, live location messages and self-destructing messages can't be scheduled.
 */
 	scheduling_state: MessageSchedulingState;
 	/**
@@ -17493,6 +17670,10 @@ export interface GroupCall {
 Group call identifier.
 */
 	id: number;
+	/**
+Identifier of one-to-one call from which the group call was created; 0 if unknown.
+*/
+	from_call_id: number;
 	/**
 Group call title.
 */
@@ -21092,14 +21273,39 @@ Pass true if this is an upgrade from a monthly subscription to early subscriptio
 }
 
 /**
-The user creating Telegram Premium gift codes for other users.
+The user gifting Telegram Premium to another user.
+Subtype of {@link StorePaymentPurpose}.
+*/
+export interface StorePaymentPurposePremiumGift {
+	'@type': 'storePaymentPurposePremiumGift';
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Identifiers of the user which will receive Telegram Premium.
+*/
+	user_id: number;
+	/**
+Text to show along with the gift codes; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+*/
+	text: FormattedText;
+}
+
+/**
+The user boosting a chat by creating Telegram Premium gift codes for other users.
 Subtype of {@link StorePaymentPurpose}.
 */
 export interface StorePaymentPurposePremiumGiftCodes {
 	'@type': 'storePaymentPurposePremiumGiftCodes';
 	/**
 Identifier of the supergroup or channel chat, which will be automatically boosted by the users for duration of the
-Premium subscription and which is administered by the user; 0 if none.
+Premium subscription and which is administered by the user.
 */
 	boosted_chat_id: number;
 	/**
@@ -21217,11 +21423,40 @@ Number of bought Telegram Stars.
 Describes a purpose of a payment toward Telegram.
 Subtype of {@link TelegramPaymentPurpose}.
 */
+export interface TelegramPaymentPurposePremiumGift {
+	'@type': 'telegramPaymentPurposePremiumGift';
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+	/**
+Identifier of the user which will receive Telegram Premium.
+*/
+	user_id: number;
+	/**
+Number of months the Telegram Premium subscription will be active for the user.
+*/
+	month_count: number;
+	/**
+Text to show to the user receiving Telegram Premium; 0-getOption("gift_text_length_max") characters. Only Bold, Italic,
+Underline, Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+*/
+	text: FormattedText;
+}
+
+/**
+The user boosting a chat by creating Telegram Premium gift codes for other users.
+Subtype of {@link TelegramPaymentPurpose}.
+*/
 export interface TelegramPaymentPurposePremiumGiftCodes {
 	'@type': 'telegramPaymentPurposePremiumGiftCodes';
 	/**
 Identifier of the supergroup or channel chat, which will be automatically boosted by the users for duration of the
-Premium subscription and which is administered by the user; 0 if none.
+Premium subscription and which is administered by the user.
 */
 	boosted_chat_id: number;
 	/**
@@ -22317,6 +22552,10 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentStory {
 	'@type': 'pushMessageContentStory';
 	/**
+True, if the user was mentioned in the story.
+*/
+	is_mention?: boolean;
+	/**
 True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
@@ -22401,6 +22640,36 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentBasicGroupChatCreate {
 	'@type': 'pushMessageContentBasicGroupChatCreate';
 
+}
+
+/**
+A video chat or live stream was started.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentVideoChatStarted {
+	'@type': 'pushMessageContentVideoChatStarted';
+
+}
+
+/**
+A video chat or live stream has ended.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentVideoChatEnded {
+	'@type': 'pushMessageContentVideoChatEnded';
+
+}
+
+/**
+An invitation of participants to a video chat or live stream.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentInviteVideoChatParticipants {
+	'@type': 'pushMessageContentInviteVideoChatParticipants';
+	/**
+True, if the current user was invited to the video chat or the live stream.
+*/
+	is_current_user?: boolean;
 }
 
 /**
@@ -22525,6 +22794,18 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentSuggestProfilePhoto {
 	'@type': 'pushMessageContentSuggestProfilePhoto';
 
+}
+
+/**
+A user in the chat came within proximity alert range from the current user.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentProximityAlertTriggered {
+	'@type': 'pushMessageContentProximityAlertTriggered';
+	/**
+The distance to the user.
+*/
+	distance: number;
 }
 
 /**
@@ -23170,6 +23451,15 @@ export interface UserPrivacySettingAutosaveGifts {
 }
 
 /**
+A privacy setting for managing whether the user can receive messages without additional payment.
+Subtype of {@link UserPrivacySetting}.
+*/
+export interface UserPrivacySettingAllowUnpaidMessages {
+	'@type': 'userPrivacySettingAllowUnpaidMessages';
+
+}
+
+/**
 Contains privacy settings for message read date in private chats. Read dates are always shown to the users that can see
 online status of the current user regardless of this setting.
 */
@@ -23183,7 +23473,7 @@ Premium user, then they will not be able to see other's message read date.
 }
 
 /**
-Contains privacy settings for new chats with non-contacts.
+Contains privacy settings for chats with non-contacts.
 */
 export interface NewChatPrivacySettings {
 	'@type': 'newChatPrivacySettings';
@@ -23192,6 +23482,13 @@ True, if non-contacts users are able to write first to the current user. Telegra
 first regardless of this setting.
 */
 	allow_new_chats_from_unknown_users?: boolean;
+	/**
+Number of Telegram Stars that must be paid for every incoming private message by non-contacts;
+0-getOption("paid_message_star_count_max"). If positive, then allow_new_chats_from_unknown_users must be true. The
+current user will receive getOption("paid_message_earnings_per_mille") Telegram Stars for each 1000 Telegram Stars paid
+for message sending.
+*/
+	incoming_paid_message_star_count: number;
 }
 
 /**
@@ -23201,6 +23498,18 @@ Subtype of {@link CanSendMessageToUserResult}.
 export interface CanSendMessageToUserResultOk {
 	'@type': 'canSendMessageToUserResultOk';
 
+}
+
+/**
+The user can be messaged, but the messages are paid.
+Subtype of {@link CanSendMessageToUserResult}.
+*/
+export interface CanSendMessageToUserResultUserHasPaidMessages {
+	'@type': 'canSendMessageToUserResultUserHasPaidMessages';
+	/**
+Number of Telegram Stars that must be paid by the current user for each sent message to the user.
+*/
+	outgoing_paid_message_star_count: number;
 }
 
 /**
@@ -24197,7 +24506,7 @@ Referrer specified in the link.
 
 /**
 The link is a link to the screen for gifting Telegram Premium subscriptions to friends via inputInvoiceTelegram with
-telegramPaymentPurposePremiumGiftCodes payments or in-store purchases.
+telegramPaymentPurposePremiumGift payments or in-store purchases.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypePremiumGift {
@@ -25551,6 +25860,17 @@ export interface FileDownloadedPrefixSize {
 The prefix size, in bytes.
 */
 	size: number;
+}
+
+/**
+Contains a number of Telegram Stars.
+*/
+export interface StarCount {
+	'@type': 'starCount';
+	/**
+Number of Telegram Stars.
+*/
+	star_count: number;
 }
 
 /**
@@ -29454,6 +29774,9 @@ export type StarTransactionType =
 	| StarTransactionTypeChannelPaidReactionSend
 	| StarTransactionTypeChannelPaidReactionReceive
 	| StarTransactionTypeAffiliateProgramCommission
+	| StarTransactionTypePaidMessageSend
+	| StarTransactionTypePaidMessageReceive
+	| StarTransactionTypePremiumPurchase
 	| StarTransactionTypeUnsupported;
 
 export type GiveawayParticipantStatus =
@@ -30344,6 +30667,7 @@ export type PremiumSource =
 
 export type StorePaymentPurpose =
 	| StorePaymentPurposePremiumSubscription
+	| StorePaymentPurposePremiumGift
 	| StorePaymentPurposePremiumGiftCodes
 	| StorePaymentPurposePremiumGiveaway
 	| StorePaymentPurposeStarGiveaway
@@ -30351,6 +30675,7 @@ export type StorePaymentPurpose =
 	| StorePaymentPurposeGiftedStars;
 
 export type TelegramPaymentPurpose =
+	| TelegramPaymentPurposePremiumGift
 	| TelegramPaymentPurposePremiumGiftCodes
 	| TelegramPaymentPurposePremiumGiveaway
 	| TelegramPaymentPurposeStars
@@ -30451,6 +30776,9 @@ export type PushMessageContent =
 	| PushMessageContentVideoNote
 	| PushMessageContentVoiceNote
 	| PushMessageContentBasicGroupChatCreate
+	| PushMessageContentVideoChatStarted
+	| PushMessageContentVideoChatEnded
+	| PushMessageContentInviteVideoChatParticipants
 	| PushMessageContentChatAddMembers
 	| PushMessageContentChatChangePhoto
 	| PushMessageContentChatChangeTitle
@@ -30461,6 +30789,7 @@ export type PushMessageContent =
 	| PushMessageContentChatJoinByRequest
 	| PushMessageContentRecurringPayment
 	| PushMessageContentSuggestProfilePhoto
+	| PushMessageContentProximityAlertTriggered
 	| PushMessageContentMessageForwards
 	| PushMessageContentMediaAlbum;
 
@@ -30521,10 +30850,12 @@ export type UserPrivacySetting =
 	| UserPrivacySettingAllowPeerToPeerCalls
 	| UserPrivacySettingAllowFindingByPhoneNumber
 	| UserPrivacySettingAllowPrivateVoiceAndVideoNoteMessages
-	| UserPrivacySettingAutosaveGifts;
+	| UserPrivacySettingAutosaveGifts
+	| UserPrivacySettingAllowUnpaidMessages;
 
 export type CanSendMessageToUserResult =
 	| CanSendMessageToUserResultOk
+	| CanSendMessageToUserResultUserHasPaidMessages
 	| CanSendMessageToUserResultUserIsDeleted
 	| CanSendMessageToUserResultUserRestrictsNewChats;
 
@@ -33364,7 +33695,8 @@ Pass true to remove media captions of message copies. Ignored if send_copy is fa
 }
 
 /**
-Sends messages from a quick reply shortcut. Requires Telegram Business subscription.
+Sends messages from a quick reply shortcut. Requires Telegram Business subscription. Can't be used to send paid
+messages.
 Request type for {@link Tdjson#sendQuickReplyShortcutMessages}.
 */
 export interface SendQuickReplyShortcutMessages {
@@ -33406,6 +33738,11 @@ New manually chosen quote from the message to be replied; pass null if none. Ign
 re-sent, or if messageSendingStateFailed.need_another_reply_quote == false.
 */
 	quote: InputTextQuote;
+	/**
+The number of Telegram Stars the user agreed to pay to send the messages. Ignored if
+messageSendingStateFailed.required_paid_message_star_count == 0.
+*/
+	paid_message_star_count: number;
 }
 
 /**
@@ -38890,8 +39227,7 @@ Pass true to create a video call.
 */
 	is_video?: boolean;
 	/**
-Identifier of the group call to which the user will be added after exchanging private key via the call; pass 0 if none;
-currently, ignored.
+Identifier of the group call to which the user will be added after exchanging private key via the call; pass 0 if none.
 */
 	group_call_id: number;
 }
@@ -39177,6 +39513,10 @@ Pass true if the user's video is enabled.
 If non-empty, invite hash to be used to join the group call without being muted by administrators.
 */
 	invite_hash: string;
+	/**
+Fingerprint of the encryption key for E2E group calls not bound to a chat; pass 0 for voice chats.
+*/
+	key_fingerprint: string;
 }
 
 /**
@@ -39736,7 +40076,7 @@ Profile photo to set; pass null to delete the photo; inputChatPhotoPrevious isn'
 }
 
 /**
-Suggests a profile photo to another regular user with common messages.
+Suggests a profile photo to another regular user with common messages and allowing non-paid messages.
 Request type for {@link Tdjson#suggestUserProfilePhoto}.
 */
 export interface SuggestUserProfilePhoto {
@@ -40466,8 +40806,8 @@ Options to be used for generation of the link preview; pass null to use default 
 }
 
 /**
-Returns an instant view version of a web page if available. Returns a 404 error if the web page has no instant view
-page.
+Returns an instant view version of a web page if available. This is an offline request if only_local is true. Returns a
+404 error if the web page has no instant view page.
 Request type for {@link Tdjson#getWebPageInstantView}.
 */
 export interface GetWebPageInstantView {
@@ -40477,9 +40817,9 @@ The web page URL.
 */
 	url: string;
 	/**
-Pass true to get full instant view for the web page.
+Pass true to get only locally available information without sending network requests.
 */
-	force_full?: boolean;
+	only_local?: boolean;
 }
 
 /**
@@ -42054,7 +42394,7 @@ Identifier of the user or the channel chat that will receive the gift.
 	owner_id: MessageSender;
 	/**
 Text to show along with the gift; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+Strikethrough, Spoiler, and CustomEmoji entities are allowed. Must be empty if the receiver enabled paid messages.
 */
 	text: FormattedText;
 	/**
@@ -42081,7 +42421,7 @@ Identifier of the gift.
 
 /**
 Toggles whether a gift is shown on the current user's or the channel's profile page; requires can_post_messages
-administrator right in the chat.
+administrator right in the channel chat.
 Request type for {@link Tdjson#toggleGiftIsSaved}.
 */
 export interface ToggleGiftIsSaved {
@@ -42095,6 +42435,24 @@ Pass true to display the gift on the user's or the channel's profile page; pass 
 page.
 */
 	is_saved?: boolean;
+}
+
+/**
+Changes the list of pinned gifts on the current user's or the channel's profile page; requires can_post_messages
+administrator right in the channel chat.
+Request type for {@link Tdjson#setPinnedGifts}.
+*/
+export interface SetPinnedGifts {
+	'@type': 'setPinnedGifts';
+	/**
+Identifier of the user or the channel chat that received the gifts.
+*/
+	owner_id: MessageSender;
+	/**
+New list of pinned gifts. All gifts must be upgraded and saved on the profile page first. There can be up to
+getOption("pinned_gift_count_max") pinned gifts.
+*/
+	received_gift_ids: string[];
 }
 
 /**
@@ -42646,6 +43004,54 @@ export interface GetNewChatPrivacySettings {
 }
 
 /**
+Returns the total number of Telegram Stars received by the current user for paid messages from the given user.
+Request type for {@link Tdjson#getPaidMessageRevenue}.
+*/
+export interface GetPaidMessageRevenue {
+	'@type': 'getPaidMessageRevenue';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+}
+
+/**
+Allows the specified user to send unpaid private messages to the current user by adding a rule to
+userPrivacySettingAllowUnpaidMessages.
+Request type for {@link Tdjson#allowUnpaidMessagesFromUser}.
+*/
+export interface AllowUnpaidMessagesFromUser {
+	'@type': 'allowUnpaidMessagesFromUser';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+	/**
+Pass true to refund the user previously paid messages.
+*/
+	refund_payments?: boolean;
+}
+
+/**
+Changes the amount of Telegram Stars that must be paid to send a message to a supergroup chat; requires
+can_restrict_members administrator right and supergroupFullInfo.can_enable_paid_messages.
+Request type for {@link Tdjson#setChatPaidMessageStarCount}.
+*/
+export interface SetChatPaidMessageStarCount {
+	'@type': 'setChatPaidMessageStarCount';
+	/**
+Identifier of the supergroup chat.
+*/
+	chat_id: number;
+	/**
+The new number of Telegram Stars that must be paid for each message that is sent to the supergroup chat unless the
+sender is an administrator of the chat; 0-getOption("paid_message_star_count_max"). The supergroup will receive
+getOption("paid_message_earnings_per_mille") Telegram Stars for each 1000 Telegram Stars paid for message sending.
+*/
+	paid_message_star_count: number;
+}
+
+/**
 Check whether the current user can message another user or try to create a chat with them.
 Request type for {@link Tdjson#canSendMessageToUser}.
 */
@@ -42902,8 +43308,8 @@ Request type for {@link Tdjson#getStarRevenueStatistics}.
 export interface GetStarRevenueStatistics {
 	'@type': 'getStarRevenueStatistics';
 	/**
-Identifier of the owner of the Telegram Stars; can be identifier of an owned bot, or identifier of a channel chat with
-supergroupFullInfo.can_get_star_revenue_statistics == true.
+Identifier of the owner of the Telegram Stars; can be identifier of the current user, an owned bot, or a supergroup or a
+channel chat with supergroupFullInfo.can_get_star_revenue_statistics == true.
 */
 	owner_id: MessageSender;
 	/**
@@ -42919,8 +43325,8 @@ Request type for {@link Tdjson#getStarWithdrawalUrl}.
 export interface GetStarWithdrawalUrl {
 	'@type': 'getStarWithdrawalUrl';
 	/**
-Identifier of the owner of the Telegram Stars; can be identifier of an owned bot, or identifier of an owned channel
-chat.
+Identifier of the owner of the Telegram Stars; can be identifier of the current user, an owned bot, or an owned
+supergroup or channel chat.
 */
 	owner_id: MessageSender;
 	/**
@@ -43856,14 +44262,24 @@ export interface GetPremiumState {
 }
 
 /**
-Returns available options for Telegram Premium gift code or Telegram Premium giveaway creation.
-Request type for {@link Tdjson#getPremiumGiftCodePaymentOptions}.
+Returns available options for gifting Telegram Premium to a user.
+Request type for {@link Tdjson#getPremiumGiftPaymentOptions}.
 */
-export interface GetPremiumGiftCodePaymentOptions {
-	'@type': 'getPremiumGiftCodePaymentOptions';
+export interface GetPremiumGiftPaymentOptions {
+	'@type': 'getPremiumGiftPaymentOptions';
+
+}
+
+/**
+Returns available options for creating of Telegram Premium giveaway or manual distribution of Telegram Premium among
+chat members.
+Request type for {@link Tdjson#getPremiumGiveawayPaymentOptions}.
+*/
+export interface GetPremiumGiveawayPaymentOptions {
+	'@type': 'getPremiumGiveawayPaymentOptions';
 	/**
 Identifier of the supergroup or channel chat, which will be automatically boosted by receivers of the gift codes and
-which is administered by the user; 0 if none.
+which is administered by the user.
 */
 	boosted_chat_id: number;
 }
@@ -43970,7 +44386,7 @@ export interface GetStarTransactions {
 	'@type': 'getStarTransactions';
 	/**
 Identifier of the owner of the Telegram Stars; can be the identifier of the current user, identifier of an owned bot, or
-identifier of a channel chat with supergroupFullInfo.can_get_star_revenue_statistics == true.
+identifier of a supergroup or a channel chat with supergroupFullInfo.can_get_star_revenue_statistics == true.
 */
 	owner_id: MessageSender;
 	/**
@@ -45503,6 +45919,7 @@ export type Request =
 	| SendGift
 	| SellGift
 	| ToggleGiftIsSaved
+	| SetPinnedGifts
 	| ToggleChatGiftNotifications
 	| GetGiftUpgradePreview
 	| UpgradeGift
@@ -45540,6 +45957,9 @@ export type Request =
 	| GetReadDatePrivacySettings
 	| SetNewChatPrivacySettings
 	| GetNewChatPrivacySettings
+	| GetPaidMessageRevenue
+	| AllowUnpaidMessagesFromUser
+	| SetChatPaidMessageStarCount
 	| CanSendMessageToUser
 	| GetOption
 	| SetOption
@@ -45614,7 +46034,8 @@ export type Request =
 	| ViewPremiumFeature
 	| ClickPremiumSubscriptionButton
 	| GetPremiumState
-	| GetPremiumGiftCodePaymentOptions
+	| GetPremiumGiftPaymentOptions
+	| GetPremiumGiveawayPaymentOptions
 	| CheckPremiumGiftCode
 	| ApplyPremiumGiftCode
 	| LaunchPrepaidGiveaway
@@ -47170,7 +47591,8 @@ message_ids. If a message can't be forwarded, null will be returned instead of t
 	}
 
 	/**
-Sends messages from a quick reply shortcut. Requires Telegram Business subscription.
+Sends messages from a quick reply shortcut. Requires Telegram Business subscription. Can't be used to send paid
+messages.
 */
 	async sendQuickReplyShortcutMessages(options: Omit<SendQuickReplyShortcutMessages, '@type'>): Promise<Messages> {
 		return this._request({
@@ -50767,7 +51189,7 @@ Changes a personal profile photo of a contact user.
 	}
 
 	/**
-Suggests a profile photo to another regular user with common messages.
+Suggests a profile photo to another regular user with common messages and allowing non-paid messages.
 */
 	async suggestUserProfilePhoto(options: Omit<SuggestUserProfilePhoto, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51265,8 +51687,8 @@ has no link preview.
 	}
 
 	/**
-Returns an instant view version of a web page if available. Returns a 404 error if the web page has no instant view
-page.
+Returns an instant view version of a web page if available. This is an offline request if only_local is true. Returns a
+404 error if the web page has no instant view page.
 */
 	async getWebPageInstantView(options: Omit<GetWebPageInstantView, '@type'>): Promise<WebPageInstantView> {
 		return this._request({
@@ -52343,12 +52765,23 @@ Sells a gift for Telegram Stars.
 
 	/**
 Toggles whether a gift is shown on the current user's or the channel's profile page; requires can_post_messages
-administrator right in the chat.
+administrator right in the channel chat.
 */
 	async toggleGiftIsSaved(options: Omit<ToggleGiftIsSaved, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGiftIsSaved',
+		});
+	}
+
+	/**
+Changes the list of pinned gifts on the current user's or the channel's profile page; requires can_post_messages
+administrator right in the channel chat.
+*/
+	async setPinnedGifts(options: Omit<SetPinnedGifts, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setPinnedGifts',
 		});
 	}
 
@@ -52728,6 +53161,38 @@ Returns privacy settings for new chat creation.
 	async getNewChatPrivacySettings(): Promise<NewChatPrivacySettings> {
 		return this._request({
 			'@type': 'getNewChatPrivacySettings',
+		});
+	}
+
+	/**
+Returns the total number of Telegram Stars received by the current user for paid messages from the given user.
+*/
+	async getPaidMessageRevenue(options: Omit<GetPaidMessageRevenue, '@type'>): Promise<StarCount> {
+		return this._request({
+			...options,
+			'@type': 'getPaidMessageRevenue',
+		});
+	}
+
+	/**
+Allows the specified user to send unpaid private messages to the current user by adding a rule to
+userPrivacySettingAllowUnpaidMessages.
+*/
+	async allowUnpaidMessagesFromUser(options: Omit<AllowUnpaidMessagesFromUser, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'allowUnpaidMessagesFromUser',
+		});
+	}
+
+	/**
+Changes the amount of Telegram Stars that must be paid to send a message to a supergroup chat; requires
+can_restrict_members administrator right and supergroupFullInfo.can_enable_paid_messages.
+*/
+	async setChatPaidMessageStarCount(options: Omit<SetChatPaidMessageStarCount, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setChatPaidMessageStarCount',
 		});
 	}
 
@@ -53495,12 +53960,22 @@ Returns state of Telegram Premium subscription and promotion videos for Premium 
 	}
 
 	/**
-Returns available options for Telegram Premium gift code or Telegram Premium giveaway creation.
+Returns available options for gifting Telegram Premium to a user.
 */
-	async getPremiumGiftCodePaymentOptions(options: Omit<GetPremiumGiftCodePaymentOptions, '@type'>): Promise<PremiumGiftCodePaymentOptions> {
+	async getPremiumGiftPaymentOptions(): Promise<PremiumGiftPaymentOptions> {
+		return this._request({
+			'@type': 'getPremiumGiftPaymentOptions',
+		});
+	}
+
+	/**
+Returns available options for creating of Telegram Premium giveaway or manual distribution of Telegram Premium among
+chat members.
+*/
+	async getPremiumGiveawayPaymentOptions(options: Omit<GetPremiumGiveawayPaymentOptions, '@type'>): Promise<PremiumGiveawayPaymentOptions> {
 		return this._request({
 			...options,
-			'@type': 'getPremiumGiftCodePaymentOptions',
+			'@type': 'getPremiumGiveawayPaymentOptions',
 		});
 	}
 
