@@ -31246,7 +31246,7 @@ export type LogStream =
 	| LogStreamEmpty;
 
 /**
-Returns the current authorization state; this is an offline request. For informational purposes only. Use
+Returns the current authorization state. This is an offline method. For informational purposes only. Use
 updateAuthorizationState instead to maintain the current authorization state. Can be called before initialization.
 Request type for {@link Tdjson#getAuthorizationState}.
 */
@@ -31836,7 +31836,7 @@ export interface GetMe {
 }
 
 /**
-Returns information about a user by their identifier. This is an offline request if the current user is not a bot.
+Returns information about a user by their identifier. This is an offline method if the current user is not a bot.
 Request type for {@link Tdjson#getUser}.
 */
 export interface GetUser {
@@ -31860,7 +31860,7 @@ User identifier.
 }
 
 /**
-Returns information about a basic group by its identifier. This is an offline request if the current user is not a bot.
+Returns information about a basic group by its identifier. This is an offline method if the current user is not a bot.
 Request type for {@link Tdjson#getBasicGroup}.
 */
 export interface GetBasicGroup {
@@ -31884,7 +31884,7 @@ Basic group identifier.
 }
 
 /**
-Returns information about a supergroup or a channel by its identifier. This is an offline request if the current user is
+Returns information about a supergroup or a channel by its identifier. This is an offline method if the current user is
 not a bot.
 Request type for {@link Tdjson#getSupergroup}.
 */
@@ -31909,7 +31909,7 @@ Supergroup or channel identifier.
 }
 
 /**
-Returns information about a secret chat by its identifier. This is an offline request.
+Returns information about a secret chat by its identifier. This is an offline method.
 Request type for {@link Tdjson#getSecretChat}.
 */
 export interface GetSecretChat {
@@ -31921,7 +31921,7 @@ Secret chat identifier.
 }
 
 /**
-Returns information about a chat by its identifier; this is an offline request if the current user is not a bot.
+Returns information about a chat by its identifier. This is an offline method if the current user is not a bot.
 Request type for {@link Tdjson#getChat}.
 */
 export interface GetChat {
@@ -31950,7 +31950,7 @@ Identifier of the message to get.
 
 /**
 Returns information about a message, if it is available without sending network request. Returns a 404 error if message
-isn't available locally. This is an offline request.
+isn't available locally. This is an offline method.
 Request type for {@link Tdjson#getMessageLocally}.
 */
 export interface GetMessageLocally {
@@ -32034,7 +32034,7 @@ Identifiers of the messages to get.
 }
 
 /**
-Returns properties of a message; this is an offline request.
+Returns properties of a message. This is an offline method.
 Request type for {@link Tdjson#getMessageProperties}.
 */
 export interface GetMessageProperties {
@@ -32101,7 +32101,7 @@ Identifier of the message.
 }
 
 /**
-Returns information about a file; this is an offline request.
+Returns information about a file. This is an offline method.
 Request type for {@link Tdjson#getFile}.
 */
 export interface GetFile {
@@ -32113,11 +32113,11 @@ Identifier of the file to get.
 }
 
 /**
-Returns information about a file by its remote identifier; this is an offline request. Can be used to register a URL as
-a file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is
-still accessible to the user. For example, if the file is from a message, then the message must be not deleted and
-accessible to the user. If the file database is disabled, then the corresponding object with the file must be preloaded
-by the application.
+Returns information about a file by its remote identifier. This is an offline method. Can be used to register a URL as a
+file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is still
+accessible to the user. For example, if the file is from a message, then the message must be not deleted and accessible
+to the user. If the file database is disabled, then the corresponding object with the file must be preloaded by the
+application.
 Request type for {@link Tdjson#getRemoteFile}.
 */
 export interface GetRemoteFile {
@@ -32196,7 +32196,7 @@ Query to search for.
 }
 
 /**
-Searches for the specified query in the title and username of already known chats; this is an offline request. Returns
+Searches for the specified query in the title and username of already known chats. This is an offline method. Returns
 chats in the order seen in the main chat list.
 Request type for {@link Tdjson#searchChats}.
 */
@@ -32360,7 +32360,7 @@ Chat identifier.
 }
 
 /**
-Searches for the specified query in the title and username of up to 50 recently found chats; this is an offline request.
+Searches for the specified query in the title and username of up to 50 recently found chats. This is an offline method.
 Request type for {@link Tdjson#searchRecentlyFoundChats}.
 */
 export interface SearchRecentlyFoundChats {
@@ -32410,7 +32410,7 @@ export interface ClearRecentlyFoundChats {
 }
 
 /**
-Returns recently opened chats; this is an offline request. Returns chats in the order of last opening.
+Returns recently opened chats. This is an offline method. Returns chats in the order of last opening.
 Request type for {@link Tdjson#getRecentlyOpenedChats}.
 */
 export interface GetRecentlyOpenedChats {
@@ -32637,7 +32637,7 @@ The maximum number of chats to be returned; up to 100.
 
 /**
 Returns messages in a chat. The messages are returned in reverse chronological order (i.e., in order of decreasing
-message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline request if
+message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline method if
 only_local is true.
 Request type for {@link Tdjson#getChatHistory}.
 */
@@ -33356,7 +33356,7 @@ The maximum identifier of removed notifications.
 
 /**
 Returns an HTTPS link to a message in a chat. Available only if messageProperties.can_get_link, or if
-messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
+messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline method.
 Request type for {@link Tdjson#getMessageLink}.
 */
 export interface GetMessageLink {
@@ -34716,7 +34716,7 @@ Message thread identifier of the forum topic.
 }
 
 /**
-Returns an HTTPS link to a topic in a forum chat. This is an offline request.
+Returns an HTTPS link to a topic in a forum chat. This is an offline method.
 Request type for {@link Tdjson#getForumTopicLink}.
 */
 export interface GetForumTopicLink {
@@ -35711,7 +35711,7 @@ Short name of the Web App.
 }
 
 /**
-Returns a default placeholder for Web Apps of a bot; this is an offline request. Returns a 404 error if the placeholder
+Returns a default placeholder for Web Apps of a bot. This is an offline method. Returns a 404 error if the placeholder
 isn't known.
 Request type for {@link Tdjson#getWebAppPlaceholder}.
 */
@@ -36485,7 +36485,7 @@ Identifier of the chat to upgrade.
 }
 
 /**
-Returns chat lists to which the chat can be added. This is an offline request.
+Returns chat lists to which the chat can be added. This is an offline method.
 Request type for {@link Tdjson#getChatListsToAddChat}.
 */
 export interface GetChatListsToAddChat {
@@ -38216,7 +38216,7 @@ performance, the number of returned objects is chosen by TDLib and can be smalle
 }
 
 /**
-Returns the list of features available on the specific chat boost level; this is an offline request.
+Returns the list of features available on the specific chat boost level. This is an offline method.
 Request type for {@link Tdjson#getChatBoostLevelFeatures}.
 */
 export interface GetChatBoostLevelFeatures {
@@ -38232,7 +38232,7 @@ Chat boost level.
 }
 
 /**
-Returns the list of features available for different chat boost levels; this is an offline request.
+Returns the list of features available for different chat boost levels. This is an offline method.
 Request type for {@link Tdjson#getChatBoostFeatures}.
 */
 export interface GetChatBoostFeatures {
@@ -40173,7 +40173,7 @@ The maximum number of photos to be returned; up to 100.
 }
 
 /**
-Returns outline of a sticker; this is an offline request. Returns a 404 error if the outline isn't known.
+Returns outline of a sticker. This is an offline method. Returns a 404 error if the outline isn't known.
 Request type for {@link Tdjson#getStickerOutline}.
 */
 export interface GetStickerOutline {
@@ -40806,7 +40806,7 @@ Options to be used for generation of the link preview; pass null to use default 
 }
 
 /**
-Returns an instant view version of a web page if available. This is an offline request if only_local is true. Returns a
+Returns an instant view version of a web page if available. This is an offline method if only_local is true. Returns a
 404 error if the web page has no instant view page.
 Request type for {@link Tdjson#getWebPageInstantView}.
 */
@@ -42749,7 +42749,7 @@ export interface ResetInstalledBackgrounds {
 }
 
 /**
-Returns information about the current localization target. This is an offline request if only_local is true. Can be
+Returns information about the current localization target. This is an offline method if only_local is true. Can be
 called before authorization.
 Request type for {@link Tdjson#getLocalizationTargetInfo}.
 */
@@ -46108,7 +46108,7 @@ export type Request =
 
 export abstract class Tdjson {
 	/**
-Returns the current authorization state; this is an offline request. For informational purposes only. Use
+Returns the current authorization state. This is an offline method. For informational purposes only. Use
 updateAuthorizationState instead to maintain the current authorization state. Can be called before initialization.
 */
 	async getAuthorizationState(): Promise<AuthorizationState> {
@@ -46540,7 +46540,7 @@ Returns the current user.
 	}
 
 	/**
-Returns information about a user by their identifier. This is an offline request if the current user is not a bot.
+Returns information about a user by their identifier. This is an offline method if the current user is not a bot.
 */
 	async getUser(options: Omit<GetUser, '@type'>): Promise<User> {
 		return this._request({
@@ -46560,7 +46560,7 @@ Returns full information about a user by their identifier.
 	}
 
 	/**
-Returns information about a basic group by its identifier. This is an offline request if the current user is not a bot.
+Returns information about a basic group by its identifier. This is an offline method if the current user is not a bot.
 */
 	async getBasicGroup(options: Omit<GetBasicGroup, '@type'>): Promise<BasicGroup> {
 		return this._request({
@@ -46580,7 +46580,7 @@ Returns full information about a basic group by its identifier.
 	}
 
 	/**
-Returns information about a supergroup or a channel by its identifier. This is an offline request if the current user is
+Returns information about a supergroup or a channel by its identifier. This is an offline method if the current user is
 not a bot.
 */
 	async getSupergroup(options: Omit<GetSupergroup, '@type'>): Promise<Supergroup> {
@@ -46601,7 +46601,7 @@ Returns full information about a supergroup or a channel by its identifier, cach
 	}
 
 	/**
-Returns information about a secret chat by its identifier. This is an offline request.
+Returns information about a secret chat by its identifier. This is an offline method.
 */
 	async getSecretChat(options: Omit<GetSecretChat, '@type'>): Promise<SecretChat> {
 		return this._request({
@@ -46611,7 +46611,7 @@ Returns information about a secret chat by its identifier. This is an offline re
 	}
 
 	/**
-Returns information about a chat by its identifier; this is an offline request if the current user is not a bot.
+Returns information about a chat by its identifier. This is an offline method if the current user is not a bot.
 */
 	async getChat(options: Omit<GetChat, '@type'>): Promise<Chat> {
 		return this._request({
@@ -46632,7 +46632,7 @@ Returns information about a message. Returns a 404 error if the message doesn't 
 
 	/**
 Returns information about a message, if it is available without sending network request. Returns a 404 error if message
-isn't available locally. This is an offline request.
+isn't available locally. This is an offline method.
 */
 	async getMessageLocally(options: Omit<GetMessageLocally, '@type'>): Promise<Message> {
 		return this._request({
@@ -46686,7 +46686,7 @@ Returns information about messages. If a message is not found, returns null on t
 	}
 
 	/**
-Returns properties of a message; this is an offline request.
+Returns properties of a message. This is an offline method.
 */
 	async getMessageProperties(options: Omit<GetMessageProperties, '@type'>): Promise<MessageProperties> {
 		return this._request({
@@ -46729,7 +46729,7 @@ true.
 	}
 
 	/**
-Returns information about a file; this is an offline request.
+Returns information about a file. This is an offline method.
 */
 	async getFile(options: Omit<GetFile, '@type'>): Promise<File> {
 		return this._request({
@@ -46739,11 +46739,11 @@ Returns information about a file; this is an offline request.
 	}
 
 	/**
-Returns information about a file by its remote identifier; this is an offline request. Can be used to register a URL as
-a file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is
-still accessible to the user. For example, if the file is from a message, then the message must be not deleted and
-accessible to the user. If the file database is disabled, then the corresponding object with the file must be preloaded
-by the application.
+Returns information about a file by its remote identifier. This is an offline method. Can be used to register a URL as a
+file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is still
+accessible to the user. For example, if the file is from a message, then the message must be not deleted and accessible
+to the user. If the file database is disabled, then the corresponding object with the file must be preloaded by the
+application.
 */
 	async getRemoteFile(options: Omit<GetRemoteFile, '@type'>): Promise<File> {
 		return this._request({
@@ -46799,7 +46799,7 @@ chats from the chat list from the results.
 	}
 
 	/**
-Searches for the specified query in the title and username of already known chats; this is an offline request. Returns
+Searches for the specified query in the title and username of already known chats. This is an offline method. Returns
 chats in the order seen in the main chat list.
 */
 	async searchChats(options: Omit<SearchChats, '@type'>): Promise<Chats> {
@@ -46911,7 +46911,7 @@ Removes a chat from the list of frequently used chats. Supported only if the cha
 	}
 
 	/**
-Searches for the specified query in the title and username of up to 50 recently found chats; this is an offline request.
+Searches for the specified query in the title and username of up to 50 recently found chats. This is an offline method.
 */
 	async searchRecentlyFoundChats(options: Omit<SearchRecentlyFoundChats, '@type'>): Promise<Chats> {
 		return this._request({
@@ -46951,7 +46951,7 @@ Clears the list of recently found chats.
 	}
 
 	/**
-Returns recently opened chats; this is an offline request. Returns chats in the order of last opening.
+Returns recently opened chats. This is an offline method. Returns chats in the order of last opening.
 */
 	async getRecentlyOpenedChats(options: Omit<GetRecentlyOpenedChats, '@type'>): Promise<Chats> {
 		return this._request({
@@ -47109,7 +47109,7 @@ Returns a list of common group chats with a given user. Chats are sorted by thei
 
 	/**
 Returns messages in a chat. The messages are returned in reverse chronological order (i.e., in order of decreasing
-message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline request if
+message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline method if
 only_local is true.
 */
 	async getChatHistory(options: Omit<GetChatHistory, '@type'>): Promise<Messages> {
@@ -47443,7 +47443,7 @@ user.
 
 	/**
 Returns an HTTPS link to a message in a chat. Available only if messageProperties.can_get_link, or if
-messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
+messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline method.
 */
 	async getMessageLink(options: Omit<GetMessageLink, '@type'>): Promise<MessageLink> {
 		return this._request({
@@ -48054,7 +48054,7 @@ Returns information about a forum topic.
 	}
 
 	/**
-Returns an HTTPS link to a topic in a forum chat. This is an offline request.
+Returns an HTTPS link to a topic in a forum chat. This is an offline method.
 */
 	async getForumTopicLink(options: Omit<GetForumTopicLink, '@type'>): Promise<MessageLink> {
 		return this._request({
@@ -48613,7 +48613,7 @@ Returns information about a Web App by its short name. Returns a 404 error if th
 	}
 
 	/**
-Returns a default placeholder for Web Apps of a bot; this is an offline request. Returns a 404 error if the placeholder
+Returns a default placeholder for Web Apps of a bot. This is an offline method. Returns a 404 error if the placeholder
 isn't known.
 */
 	async getWebAppPlaceholder(options: Omit<GetWebAppPlaceholder, '@type'>): Promise<Outline> {
@@ -49034,7 +49034,7 @@ messageChatUpgradeFrom; requires owner privileges. Deactivates the original basi
 	}
 
 	/**
-Returns chat lists to which the chat can be added. This is an offline request.
+Returns chat lists to which the chat can be added. This is an offline method.
 */
 	async getChatListsToAddChat(options: Omit<GetChatListsToAddChat, '@type'>): Promise<ChatLists> {
 		return this._request({
@@ -50080,7 +50080,7 @@ returned messages and stories is chosen by TDLib.
 	}
 
 	/**
-Returns the list of features available on the specific chat boost level; this is an offline request.
+Returns the list of features available on the specific chat boost level. This is an offline method.
 */
 	async getChatBoostLevelFeatures(options: Omit<GetChatBoostLevelFeatures, '@type'>): Promise<ChatBoostLevelFeatures> {
 		return this._request({
@@ -50090,7 +50090,7 @@ Returns the list of features available on the specific chat boost level; this is
 	}
 
 	/**
-Returns the list of features available for different chat boost levels; this is an offline request.
+Returns the list of features available for different chat boost levels. This is an offline method.
 */
 	async getChatBoostFeatures(options: Omit<GetChatBoostFeatures, '@type'>): Promise<ChatBoostFeatures> {
 		return this._request({
@@ -51250,7 +51250,7 @@ Returns the profile photos of a user. Personal and public photo aren't returned.
 	}
 
 	/**
-Returns outline of a sticker; this is an offline request. Returns a 404 error if the outline isn't known.
+Returns outline of a sticker. This is an offline method. Returns a 404 error if the outline isn't known.
 */
 	async getStickerOutline(options: Omit<GetStickerOutline, '@type'>): Promise<Outline> {
 		return this._request({
@@ -51687,7 +51687,7 @@ has no link preview.
 	}
 
 	/**
-Returns an instant view version of a web page if available. This is an offline request if only_local is true. Returns a
+Returns an instant view version of a web page if available. This is an offline method if only_local is true. Returns a
 404 error if the web page has no instant view page.
 */
 	async getWebPageInstantView(options: Omit<GetWebPageInstantView, '@type'>): Promise<WebPageInstantView> {
@@ -52966,7 +52966,7 @@ Resets list of installed backgrounds to its default value.
 	}
 
 	/**
-Returns information about the current localization target. This is an offline request if only_local is true. Can be
+Returns information about the current localization target. This is an offline method if only_local is true. Can be
 called before authorization.
 */
 	async getLocalizationTargetInfo(options: Omit<GetLocalizationTargetInfo, '@type'>): Promise<LocalizationTargetInfo> {
