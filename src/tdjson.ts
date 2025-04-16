@@ -358,6 +358,19 @@ export interface AuthorizationStateWaitPhoneNumber {
 }
 
 /**
+The user must buy Telegram Premium as an in-store purchase to log in. Call checkAuthenticationPremiumPurchase and then
+setAuthenticationPremiumPurchaseTransaction.
+Subtype of {@link AuthorizationState}.
+*/
+export interface AuthorizationStateWaitPremiumPurchase {
+	'@type': 'authorizationStateWaitPremiumPurchase';
+	/**
+Identifier of the store product that must be bought.
+*/
+	store_product_id: string;
+}
+
+/**
 TDLib needs the user's email address to authorize. Call setAuthenticationEmailAddress to provide the email address, or
 directly call checkAuthenticationEmailCode with Apple ID/Google ID token if allowed.
 Subtype of {@link AuthorizationState}.
@@ -2147,6 +2160,70 @@ The number of days after which a chat will be considered as inactive; currently,
 }
 
 /**
+Describes rights of a business bot.
+*/
+export interface BusinessBotRights {
+	'@type': 'businessBotRights';
+	/**
+True, if the bot can send and edit messages in the private chats that had incoming messages in the last 24 hours.
+*/
+	can_reply?: boolean;
+	/**
+True, if the bot can mark incoming private messages as read.
+*/
+	can_read_messages?: boolean;
+	/**
+True, if the bot can delete sent messages.
+*/
+	can_delete_sent_messages?: boolean;
+	/**
+True, if the bot can delete any message.
+*/
+	can_delete_all_messages?: boolean;
+	/**
+True, if the bot can edit name of the business account.
+*/
+	can_edit_name?: boolean;
+	/**
+True, if the bot can edit bio of the business account.
+*/
+	can_edit_bio?: boolean;
+	/**
+True, if the bot can edit profile photo of the business account.
+*/
+	can_edit_profile_photo?: boolean;
+	/**
+True, if the bot can edit username of the business account.
+*/
+	can_edit_username?: boolean;
+	/**
+True, if the bot can view gifts and amount of Telegram Stars owned by the business account.
+*/
+	can_view_gifts_and_stars?: boolean;
+	/**
+True, if the bot can sell regular gifts received by the business account.
+*/
+	can_sell_gifts?: boolean;
+	/**
+True, if the bot can change gift receiving settings of the business account.
+*/
+	can_change_gift_settings?: boolean;
+	/**
+True, if the bot can transfer and upgrade gifts received by the business account.
+*/
+	can_transfer_and_upgrade_gifts?: boolean;
+	/**
+True, if the bot can transfer Telegram Stars received by the business account to account of the bot, or use them to
+upgrade and transfer gifts.
+*/
+	can_transfer_stars?: boolean;
+	/**
+True, if the bot can send, edit and delete stories.
+*/
+	can_manage_stories?: boolean;
+}
+
+/**
 Describes a bot connected to a business account.
 */
 export interface BusinessConnectedBot {
@@ -2160,9 +2237,9 @@ Private chats that will be accessible to the bot.
 */
 	recipients: BusinessRecipients;
 	/**
-True, if the bot can send messages to the private chats; false otherwise.
+Rights of the bot.
 */
-	can_reply?: boolean;
+	rights: BusinessBotRights;
 }
 
 /**
@@ -3293,6 +3370,44 @@ The list of options.
 }
 
 /**
+Describes gift types that are accepted by a user.
+*/
+export interface AcceptedGiftTypes {
+	'@type': 'acceptedGiftTypes';
+	/**
+True, if unlimited regular gifts are accepted.
+*/
+	unlimited_gifts?: boolean;
+	/**
+True, if limited regular gifts are accepted.
+*/
+	limited_gifts?: boolean;
+	/**
+True, if upgraded gifts and regular gifts that can be upgraded for free are accepted.
+*/
+	upgraded_gifts?: boolean;
+	/**
+True, if Telegram Premium subscription is accepted.
+*/
+	premium_subscription?: boolean;
+}
+
+/**
+Contains settings for gift receiving for a user.
+*/
+export interface GiftSettings {
+	'@type': 'giftSettings';
+	/**
+True, if a button for sending a gift to the user or by the user must always be shown in the input field.
+*/
+	show_gift_button?: boolean;
+	/**
+Types of gifts accepted by the user; for Telegram Premium users only.
+*/
+	accepted_gift_types: AcceptedGiftTypes;
+}
+
+/**
 Describes a model of an upgraded gift.
 */
 export interface UpgradedGiftModel {
@@ -3306,7 +3421,7 @@ The sticker representing the upgraded gift.
 */
 	sticker: Sticker;
 	/**
-The number of upgraded gift that receive this model for each 1000 gifts upgraded.
+The number of upgraded gifts that receive this model for each 1000 gifts upgraded.
 */
 	rarity_per_mille: number;
 }
@@ -3321,11 +3436,11 @@ Name of the symbol.
 */
 	name: string;
 	/**
-The sticker representing the upgraded gift.
+The sticker representing the symbol.
 */
 	sticker: Sticker;
 	/**
-The number of upgraded gift that receive this symbol for each 1000 gifts upgraded.
+The number of upgraded gifts that receive this symbol for each 1000 gifts upgraded.
 */
 	rarity_per_mille: number;
 }
@@ -3367,7 +3482,7 @@ Colors of the backdrop.
 */
 	colors: UpgradedGiftBackdropColors;
 	/**
-The number of upgraded gift that receive this backdrop for each 1000 gifts upgraded.
+The number of upgraded gifts that receive this backdrop for each 1000 gifts upgraded.
 */
 	rarity_per_mille: number;
 }
@@ -3488,7 +3603,8 @@ Identifier of the user or the chat that owns the upgraded gift; may be null if n
 */
 	owner_id: MessageSender;
 	/**
-Address of the gift NFT owner in TON blockchain; may be empty if none.
+Address of the gift NFT owner in TON blockchain; may be empty if none. Append the address to
+getOption("ton_blockchain_explorer_url") to get a link with information about the address.
 */
 	owner_address: string;
 	/**
@@ -3496,7 +3612,8 @@ Name of the owner for the case when owner identifier and address aren't known.
 */
 	owner_name: string;
 	/**
-Address of the gift NFT in TON blockchain; may be empty if none.
+Address of the gift NFT in TON blockchain; may be empty if none. Append the address to
+getOption("ton_blockchain_explorer_url") to get a link with information about the address.
 */
 	gift_address: string;
 	/**
@@ -4160,7 +4277,7 @@ The amount of Telegram Stars that were received by Telegram; can be negative for
 }
 
 /**
-The transaction is a purchase of Telegram Premium subscription; for regular users only.
+The transaction is a purchase of Telegram Premium subscription; for regular users and bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePremiumPurchase {
@@ -4177,6 +4294,30 @@ Number of months the Telegram Premium subscription will be active.
 A sticker to be shown in the transaction information; may be null if unknown.
 */
 	sticker: Sticker;
+}
+
+/**
+The transaction is a transfer of Telegram Stars to a business bot; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeBusinessBotTransferSend {
+	'@type': 'starTransactionTypeBusinessBotTransferSend';
+	/**
+Identifier of the bot that received Telegram Stars.
+*/
+	user_id: number;
+}
+
+/**
+The transaction is a transfer of Telegram Stars from a business account; for bots only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeBusinessBotTransferReceive {
+	'@type': 'starTransactionTypeBusinessBotTransferReceive';
+	/**
+Identifier of the user that sent Telegram Stars.
+*/
+	user_id: number;
 }
 
 /**
@@ -4862,6 +5003,10 @@ Number of Telegram Stars that must be paid by the user for each sent message to 
 Number of Telegram Stars that must be paid by the current user for each sent message to the user.
 */
 	outgoing_paid_message_star_count: number;
+	/**
+Settings for gift receiving for the user.
+*/
+	gift_settings: GiftSettings;
 	/**
 Information about verification status of the user provided by a bot; may be null if none or unknown.
 */
@@ -7174,6 +7319,40 @@ all ordinary messages.
 }
 
 /**
+Describes a sponsored chat.
+*/
+export interface SponsoredChat {
+	'@type': 'sponsoredChat';
+	/**
+Unique identifier of this result.
+*/
+	unique_id: number;
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Additional optional information about the sponsor to be shown along with the chat.
+*/
+	sponsor_info: string;
+	/**
+If non-empty, additional information about the sponsored chat to be shown along with the chat.
+*/
+	additional_info: string;
+}
+
+/**
+Contains a list of sponsored chats.
+*/
+export interface SponsoredChats {
+	'@type': 'sponsoredChats';
+	/**
+List of sponsored chats.
+*/
+	chats: SponsoredChat[];
+}
+
+/**
 Describes an option to report an entity to Telegram.
 */
 export interface ReportOption {
@@ -7189,29 +7368,29 @@ Text of the option.
 }
 
 /**
-Describes result of sponsored message report.
-Subtype of {@link ReportChatSponsoredMessageResult}.
+Describes result of sponsored message or chat report.
+Subtype of {@link ReportSponsoredResult}.
 */
-export interface ReportChatSponsoredMessageResultOk {
-	'@type': 'reportChatSponsoredMessageResultOk';
+export interface ReportSponsoredResultOk {
+	'@type': 'reportSponsoredResultOk';
 
 }
 
 /**
 The sponsored message is too old or not found.
-Subtype of {@link ReportChatSponsoredMessageResult}.
+Subtype of {@link ReportSponsoredResult}.
 */
-export interface ReportChatSponsoredMessageResultFailed {
-	'@type': 'reportChatSponsoredMessageResultFailed';
+export interface ReportSponsoredResultFailed {
+	'@type': 'reportSponsoredResultFailed';
 
 }
 
 /**
 The user must choose an option to report the message and repeat request with the chosen option.
-Subtype of {@link ReportChatSponsoredMessageResult}.
+Subtype of {@link ReportSponsoredResult}.
 */
-export interface ReportChatSponsoredMessageResultOptionRequired {
-	'@type': 'reportChatSponsoredMessageResultOptionRequired';
+export interface ReportSponsoredResultOptionRequired {
+	'@type': 'reportSponsoredResultOptionRequired';
 	/**
 Title for the option choice.
 */
@@ -7224,19 +7403,19 @@ List of available options.
 
 /**
 Sponsored messages were hidden for the user in all chats.
-Subtype of {@link ReportChatSponsoredMessageResult}.
+Subtype of {@link ReportSponsoredResult}.
 */
-export interface ReportChatSponsoredMessageResultAdsHidden {
-	'@type': 'reportChatSponsoredMessageResultAdsHidden';
+export interface ReportSponsoredResultAdsHidden {
+	'@type': 'reportSponsoredResultAdsHidden';
 
 }
 
 /**
 The user asked to hide sponsored messages, but Telegram Premium is required for this.
-Subtype of {@link ReportChatSponsoredMessageResult}.
+Subtype of {@link ReportSponsoredResult}.
 */
-export interface ReportChatSponsoredMessageResultPremiumRequired {
-	'@type': 'reportChatSponsoredMessageResultPremiumRequired';
+export interface ReportSponsoredResultPremiumRequired {
+	'@type': 'reportSponsoredResultPremiumRequired';
 
 }
 
@@ -9081,6 +9260,10 @@ Contains basic information about a forum topic.
 export interface ForumTopicInfo {
 	'@type': 'forumTopicInfo';
 	/**
+Identifier of the forum chat to which the topic belongs.
+*/
+	chat_id: number;
+	/**
 Message thread identifier of the topic.
 */
 	message_thread_id: number;
@@ -9131,6 +9314,11 @@ Basic information about the topic.
 Last message in the topic; may be null if unknown.
 */
 	last_message: Message;
+	/**
+A parameter used to determine order of the topic in the topic list. Topics must be sorted by the order in descending
+order.
+*/
+	order: string;
 	/**
 True, if the topic is pinned in the topic list.
 */
@@ -13961,6 +14149,35 @@ True, if the gift was obtained by upgrading of a previously received gift.
 }
 
 /**
+Paid messages were refunded.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePaidMessagesRefunded {
+	'@type': 'messagePaidMessagesRefunded';
+	/**
+The number of refunded messages.
+*/
+	message_count: number;
+	/**
+The number of refunded Telegram Stars.
+*/
+	star_count: number;
+}
+
+/**
+A price for paid messages was changed in the supergroup chat.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePaidMessagePriceChanged {
+	'@type': 'messagePaidMessagePriceChanged';
+	/**
+The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent
+message.
+*/
+	paid_message_star_count: number;
+}
+
+/**
 A contact has registered with Telegram.
 Subtype of {@link MessageContent}.
 */
@@ -18329,9 +18546,9 @@ Point in time (Unix timestamp) when the connection was established.
 */
 	date: number;
 	/**
-True, if the bot can send messages to the connected user; false otherwise.
+Rights of the bot; may be null if the connection was disabled.
 */
-	can_reply?: boolean;
+	rights: BusinessBotRights;
 	/**
 True, if the connection is enabled; false otherwise.
 */
@@ -21420,13 +21637,45 @@ Number of bought Telegram Stars.
 }
 
 /**
+Describes an in-store transaction.
+Subtype of {@link StoreTransaction}.
+*/
+export interface StoreTransactionAppStore {
+	'@type': 'storeTransactionAppStore';
+	/**
+App Store receipt.
+*/
+	receipt: string;
+}
+
+/**
+A purchase through Google Play.
+Subtype of {@link StoreTransaction}.
+*/
+export interface StoreTransactionGooglePlay {
+	'@type': 'storeTransactionGooglePlay';
+	/**
+Application package name.
+*/
+	package_name: string;
+	/**
+Identifier of the purchased store product.
+*/
+	store_product_id: string;
+	/**
+Google Play purchase token.
+*/
+	purchase_token: string;
+}
+
+/**
 Describes a purpose of a payment toward Telegram.
 Subtype of {@link TelegramPaymentPurpose}.
 */
 export interface TelegramPaymentPurposePremiumGift {
 	'@type': 'telegramPaymentPurposePremiumGift';
 	/**
-ISO 4217 currency code of the payment currency.
+ISO 4217 currency code of the payment currency, or "XTR" for payments in Telegram Stars.
 */
 	currency: string;
 	/**
@@ -23486,7 +23735,7 @@ first regardless of this setting.
 Number of Telegram Stars that must be paid for every incoming private message by non-contacts;
 0-getOption("paid_message_star_count_max"). If positive, then allow_new_chats_from_unknown_users must be true. The
 current user will receive getOption("paid_message_earnings_per_mille") Telegram Stars for each 1000 Telegram Stars paid
-for message sending.
+for message sending. Can be positive, only if getOption("can_enable_paid_messages") is true.
 */
 	incoming_paid_message_star_count: number;
 }
@@ -27729,13 +27978,37 @@ Subtype of {@link Update}.
 export interface UpdateForumTopicInfo {
 	'@type': 'updateForumTopicInfo';
 	/**
+New information about the topic.
+*/
+	info: ForumTopicInfo;
+}
+
+/**
+Information about a topic in a forum chat was changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateForumTopic {
+	'@type': 'updateForumTopic';
+	/**
 Chat identifier.
 */
 	chat_id: number;
 	/**
-New information about the topic.
+Message thread identifier of the topic.
 */
-	info: ForumTopicInfo;
+	message_thread_id: number;
+	/**
+True, if the topic is pinned in the topic list.
+*/
+	is_pinned?: boolean;
+	/**
+Identifier of the last read outgoing message.
+*/
+	last_read_outbox_message_id: number;
+	/**
+Notification settings for the topic.
+*/
+	notification_settings: ChatNotificationSettings;
 }
 
 /**
@@ -28651,6 +28924,30 @@ export interface UpdateConnectionState {
 The new connection state.
 */
 	state: ConnectionState;
+}
+
+/**
+The freeze state of the current user's account has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateFreezeState {
+	'@type': 'updateFreezeState';
+	/**
+True, if the account is frozen.
+*/
+	is_frozen?: boolean;
+	/**
+Point in time (Unix timestamp) when the account was frozen; 0 if the account isn't frozen.
+*/
+	freezing_date: number;
+	/**
+Point in time (Unix timestamp) when the account will be deleted and can't be unfrozen; 0 if the account isn't frozen.
+*/
+	deletion_date: number;
+	/**
+The link to open to send an appeal to unfreeze the account.
+*/
+	appeal_link: string;
 }
 
 /**
@@ -29649,6 +29946,7 @@ export type EmailAddressResetState =
 export type AuthorizationState =
 	| AuthorizationStateWaitTdlibParameters
 	| AuthorizationStateWaitPhoneNumber
+	| AuthorizationStateWaitPremiumPurchase
 	| AuthorizationStateWaitEmailAddress
 	| AuthorizationStateWaitEmailCode
 	| AuthorizationStateWaitCode
@@ -29777,6 +30075,8 @@ export type StarTransactionType =
 	| StarTransactionTypePaidMessageSend
 	| StarTransactionTypePaidMessageReceive
 	| StarTransactionTypePremiumPurchase
+	| StarTransactionTypeBusinessBotTransferSend
+	| StarTransactionTypeBusinessBotTransferReceive
 	| StarTransactionTypeUnsupported;
 
 export type GiveawayParticipantStatus =
@@ -29891,12 +30191,12 @@ export type MessageSource =
 	| MessageSourceScreenshot
 	| MessageSourceOther;
 
-export type ReportChatSponsoredMessageResult =
-	| ReportChatSponsoredMessageResultOk
-	| ReportChatSponsoredMessageResultFailed
-	| ReportChatSponsoredMessageResultOptionRequired
-	| ReportChatSponsoredMessageResultAdsHidden
-	| ReportChatSponsoredMessageResultPremiumRequired;
+export type ReportSponsoredResult =
+	| ReportSponsoredResultOk
+	| ReportSponsoredResultFailed
+	| ReportSponsoredResultOptionRequired
+	| ReportSponsoredResultAdsHidden
+	| ReportSponsoredResultPremiumRequired;
 
 export type NotificationSettingsScope =
 	| NotificationSettingsScopePrivateChats
@@ -30247,6 +30547,8 @@ export type MessageContent =
 	| MessageGift
 	| MessageUpgradedGift
 	| MessageRefundedUpgradedGift
+	| MessagePaidMessagesRefunded
+	| MessagePaidMessagePriceChanged
 	| MessageContactRegistered
 	| MessageUsersShared
 	| MessageChatShared
@@ -30673,6 +30975,10 @@ export type StorePaymentPurpose =
 	| StorePaymentPurposeStarGiveaway
 	| StorePaymentPurposeStars
 	| StorePaymentPurposeGiftedStars;
+
+export type StoreTransaction =
+	| StoreTransactionAppStore
+	| StoreTransactionGooglePlay;
 
 export type TelegramPaymentPurpose =
 	| TelegramPaymentPurposePremiumGift
@@ -31143,6 +31449,7 @@ export type Update =
 	| UpdateQuickReplyShortcuts
 	| UpdateQuickReplyShortcutMessages
 	| UpdateForumTopicInfo
+	| UpdateForumTopic
 	| UpdateScopeNotificationSettings
 	| UpdateReactionNotificationSettings
 	| UpdateNotification
@@ -31197,6 +31504,7 @@ export type Update =
 	| UpdateProfileAccentColors
 	| UpdateLanguagePackStrings
 	| UpdateConnectionState
+	| UpdateFreezeState
 	| UpdateTermsOfService
 	| UpdateUnconfirmedSession
 	| UpdateAttachmentMenuBots
@@ -31246,7 +31554,7 @@ export type LogStream =
 	| LogStreamEmpty;
 
 /**
-Returns the current authorization state; this is an offline request. For informational purposes only. Use
+Returns the current authorization state. This is an offline method. For informational purposes only. Use
 updateAuthorizationState instead to maintain the current authorization state. Can be called before initialization.
 Request type for {@link Tdjson#getAuthorizationState}.
 */
@@ -31325,8 +31633,9 @@ Application version; must be non-empty.
 /**
 Sets the phone number of the user and sends an authentication code to the user. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
-authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress,
+authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or
+authorizationStateWaitPassword.
 Request type for {@link Tdjson#setAuthenticationPhoneNumber}.
 */
 export interface SetAuthenticationPhoneNumber {
@@ -31339,6 +31648,48 @@ The phone number of the user, in international format.
 Settings for the authentication of the user's phone number; pass null to use default settings.
 */
 	settings: PhoneNumberAuthenticationSettings;
+}
+
+/**
+Checks whether an in-store purchase of Telegram Premium is possible before authorization. Works only when the current
+authorization state is authorizationStateWaitPremiumPurchase.
+Request type for {@link Tdjson#checkAuthenticationPremiumPurchase}.
+*/
+export interface CheckAuthenticationPremiumPurchase {
+	'@type': 'checkAuthenticationPremiumPurchase';
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
+}
+
+/**
+Informs server about an in-store purchase of Telegram Premium before authorization. Works only when the current
+authorization state is authorizationStateWaitPremiumPurchase.
+Request type for {@link Tdjson#setAuthenticationPremiumPurchaseTransaction}.
+*/
+export interface SetAuthenticationPremiumPurchaseTransaction {
+	'@type': 'setAuthenticationPremiumPurchaseTransaction';
+	/**
+Information about the transaction.
+*/
+	transaction: StoreTransaction;
+	/**
+Pass true if this is a restore of a Telegram Premium purchase; only for App Store.
+*/
+	is_restore?: boolean;
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Paid amount, in the smallest units of the currency.
+*/
+	amount: number;
 }
 
 /**
@@ -31396,8 +31747,9 @@ Authentication code to check.
 /**
 Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
-authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress,
+authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or
+authorizationStateWaitPassword.
 Request type for {@link Tdjson#requestQrCodeAuthentication}.
 */
 export interface RequestQrCodeAuthentication {
@@ -31836,7 +32188,7 @@ export interface GetMe {
 }
 
 /**
-Returns information about a user by their identifier. This is an offline request if the current user is not a bot.
+Returns information about a user by their identifier. This is an offline method if the current user is not a bot.
 Request type for {@link Tdjson#getUser}.
 */
 export interface GetUser {
@@ -31860,7 +32212,7 @@ User identifier.
 }
 
 /**
-Returns information about a basic group by its identifier. This is an offline request if the current user is not a bot.
+Returns information about a basic group by its identifier. This is an offline method if the current user is not a bot.
 Request type for {@link Tdjson#getBasicGroup}.
 */
 export interface GetBasicGroup {
@@ -31884,7 +32236,7 @@ Basic group identifier.
 }
 
 /**
-Returns information about a supergroup or a channel by its identifier. This is an offline request if the current user is
+Returns information about a supergroup or a channel by its identifier. This is an offline method if the current user is
 not a bot.
 Request type for {@link Tdjson#getSupergroup}.
 */
@@ -31909,7 +32261,7 @@ Supergroup or channel identifier.
 }
 
 /**
-Returns information about a secret chat by its identifier. This is an offline request.
+Returns information about a secret chat by its identifier. This is an offline method.
 Request type for {@link Tdjson#getSecretChat}.
 */
 export interface GetSecretChat {
@@ -31921,7 +32273,7 @@ Secret chat identifier.
 }
 
 /**
-Returns information about a chat by its identifier; this is an offline request if the current user is not a bot.
+Returns information about a chat by its identifier. This is an offline method if the current user is not a bot.
 Request type for {@link Tdjson#getChat}.
 */
 export interface GetChat {
@@ -31950,7 +32302,7 @@ Identifier of the message to get.
 
 /**
 Returns information about a message, if it is available without sending network request. Returns a 404 error if message
-isn't available locally. This is an offline request.
+isn't available locally. This is an offline method.
 Request type for {@link Tdjson#getMessageLocally}.
 */
 export interface GetMessageLocally {
@@ -32034,7 +32386,7 @@ Identifiers of the messages to get.
 }
 
 /**
-Returns properties of a message; this is an offline request.
+Returns properties of a message. This is an offline method.
 Request type for {@link Tdjson#getMessageProperties}.
 */
 export interface GetMessageProperties {
@@ -32101,7 +32453,7 @@ Identifier of the message.
 }
 
 /**
-Returns information about a file; this is an offline request.
+Returns information about a file. This is an offline method.
 Request type for {@link Tdjson#getFile}.
 */
 export interface GetFile {
@@ -32113,11 +32465,11 @@ Identifier of the file to get.
 }
 
 /**
-Returns information about a file by its remote identifier; this is an offline request. Can be used to register a URL as
-a file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is
-still accessible to the user. For example, if the file is from a message, then the message must be not deleted and
-accessible to the user. If the file database is disabled, then the corresponding object with the file must be preloaded
-by the application.
+Returns information about a file by its remote identifier. This is an offline method. Can be used to register a URL as a
+file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is still
+accessible to the user. For example, if the file is from a message, then the message must be not deleted and accessible
+to the user. If the file database is disabled, then the corresponding object with the file must be preloaded by the
+application.
 Request type for {@link Tdjson#getRemoteFile}.
 */
 export interface GetRemoteFile {
@@ -32196,7 +32548,7 @@ Query to search for.
 }
 
 /**
-Searches for the specified query in the title and username of already known chats; this is an offline request. Returns
+Searches for the specified query in the title and username of already known chats. This is an offline method. Returns
 chats in the order seen in the main chat list.
 Request type for {@link Tdjson#searchChats}.
 */
@@ -32360,7 +32712,7 @@ Chat identifier.
 }
 
 /**
-Searches for the specified query in the title and username of up to 50 recently found chats; this is an offline request.
+Searches for the specified query in the title and username of up to 50 recently found chats. This is an offline method.
 Request type for {@link Tdjson#searchRecentlyFoundChats}.
 */
 export interface SearchRecentlyFoundChats {
@@ -32410,7 +32762,7 @@ export interface ClearRecentlyFoundChats {
 }
 
 /**
-Returns recently opened chats; this is an offline request. Returns chats in the order of last opening.
+Returns recently opened chats. This is an offline method. Returns chats in the order of last opening.
 Request type for {@link Tdjson#getRecentlyOpenedChats}.
 */
 export interface GetRecentlyOpenedChats {
@@ -32637,7 +32989,7 @@ The maximum number of chats to be returned; up to 100.
 
 /**
 Returns messages in a chat. The messages are returned in reverse chronological order (i.e., in order of decreasing
-message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline request if
+message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline method if
 only_local is true.
 Request type for {@link Tdjson#getChatHistory}.
 */
@@ -33321,6 +33673,58 @@ Option identifier chosen by the user; leave empty for the initial request.
 }
 
 /**
+Returns sponsored chats to be shown in the search results.
+Request type for {@link Tdjson#getSearchSponsoredChats}.
+*/
+export interface GetSearchSponsoredChats {
+	'@type': 'getSearchSponsoredChats';
+	/**
+Query the user searches for.
+*/
+	query: string;
+}
+
+/**
+Informs TDLib that the user fully viewed a sponsored chat.
+Request type for {@link Tdjson#viewSponsoredChat}.
+*/
+export interface ViewSponsoredChat {
+	'@type': 'viewSponsoredChat';
+	/**
+Unique identifier of the sponsored chat.
+*/
+	sponsored_chat_unique_id: number;
+}
+
+/**
+Informs TDLib that the user opened a sponsored chat.
+Request type for {@link Tdjson#openSponsoredChat}.
+*/
+export interface OpenSponsoredChat {
+	'@type': 'openSponsoredChat';
+	/**
+Unique identifier of the sponsored chat.
+*/
+	sponsored_chat_unique_id: number;
+}
+
+/**
+Reports a sponsored chat to Telegram moderators.
+Request type for {@link Tdjson#reportSponsoredChat}.
+*/
+export interface ReportSponsoredChat {
+	'@type': 'reportSponsoredChat';
+	/**
+Unique identifier of the sponsored chat.
+*/
+	sponsored_chat_unique_id: number;
+	/**
+Option identifier chosen by the user; leave empty for the initial request.
+*/
+	option_id: string;
+}
+
+/**
 Removes an active notification from notification list. Needs to be called only if the notification is removed by the
 current user.
 Request type for {@link Tdjson#removeNotification}.
@@ -33356,7 +33760,7 @@ The maximum identifier of removed notifications.
 
 /**
 Returns an HTTPS link to a message in a chat. Available only if messageProperties.can_get_link, or if
-messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
+messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline method.
 Request type for {@link Tdjson#getMessageLink}.
 */
 export interface GetMessageLink {
@@ -34423,6 +34827,206 @@ Pass true to pin the message, pass false to unpin it.
 }
 
 /**
+Reads a message on behalf of a business account; for bots only.
+Request type for {@link Tdjson#readBusinessMessage}.
+*/
+export interface ReadBusinessMessage {
+	'@type': 'readBusinessMessage';
+	/**
+Unique identifier of business connection through which the message was received.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Deletes messages on behalf of a business account; for bots only.
+Request type for {@link Tdjson#deleteBusinessMessages}.
+*/
+export interface DeleteBusinessMessages {
+	'@type': 'deleteBusinessMessages';
+	/**
+Unique identifier of business connection through which the messages were received.
+*/
+	business_connection_id: string;
+	/**
+Identifier of the messages.
+*/
+	message_ids: number[];
+}
+
+/**
+Changes a story sent by the bot on behalf of a business account; for bots only.
+Request type for {@link Tdjson#editBusinessStory}.
+*/
+export interface EditBusinessStory {
+	'@type': 'editBusinessStory';
+	/**
+Identifier of the chat that posted the story.
+*/
+	story_sender_chat_id: number;
+	/**
+Identifier of the story to edit.
+*/
+	story_id: number;
+	/**
+New content of the story.
+*/
+	content: InputStoryContent;
+	/**
+New clickable rectangle areas to be shown on the story media.
+*/
+	areas: InputStoryAreas;
+	/**
+New story caption.
+*/
+	caption: FormattedText;
+	/**
+The new privacy settings for the story.
+*/
+	privacy_settings: StoryPrivacySettings;
+}
+
+/**
+Deletes a story sent by the bot on behalf of a business account; for bots only.
+Request type for {@link Tdjson#deleteBusinessStory}.
+*/
+export interface DeleteBusinessStory {
+	'@type': 'deleteBusinessStory';
+	/**
+Unique identifier of business connection.
+*/
+	business_connection_id: string;
+	/**
+Identifier of the story to delete.
+*/
+	story_id: number;
+}
+
+/**
+Changes the first and last name of a business account; for bots only.
+Request type for {@link Tdjson#setBusinessAccountName}.
+*/
+export interface SetBusinessAccountName {
+	'@type': 'setBusinessAccountName';
+	/**
+Unique identifier of business connection.
+*/
+	business_connection_id: string;
+	/**
+The new value of the first name for the business account; 1-64 characters.
+*/
+	first_name: string;
+	/**
+The new value of the optional last name for the business account; 0-64 characters.
+*/
+	last_name: string;
+}
+
+/**
+Changes the bio of a business account; for bots only.
+Request type for {@link Tdjson#setBusinessAccountBio}.
+*/
+export interface SetBusinessAccountBio {
+	'@type': 'setBusinessAccountBio';
+	/**
+Unique identifier of business connection.
+*/
+	business_connection_id: string;
+	/**
+The new value of the bio; 0-getOption("bio_length_max") characters without line feeds.
+*/
+	bio: string;
+}
+
+/**
+Changes a profile photo of a business account; for bots only.
+Request type for {@link Tdjson#setBusinessAccountProfilePhoto}.
+*/
+export interface SetBusinessAccountProfilePhoto {
+	'@type': 'setBusinessAccountProfilePhoto';
+	/**
+Unique identifier of business connection.
+*/
+	business_connection_id: string;
+	/**
+Profile photo to set; pass null to remove the photo.
+*/
+	photo: InputChatPhoto;
+	/**
+Pass true to set the public photo, which will be visible even the main photo is hidden by privacy settings.
+*/
+	is_public?: boolean;
+}
+
+/**
+Changes the editable username of a business account; for bots only.
+Request type for {@link Tdjson#setBusinessAccountUsername}.
+*/
+export interface SetBusinessAccountUsername {
+	'@type': 'setBusinessAccountUsername';
+	/**
+Unique identifier of business connection.
+*/
+	business_connection_id: string;
+	/**
+The new value of the username.
+*/
+	username: string;
+}
+
+/**
+Changes settings for gift receiving of a business account; for bots only.
+Request type for {@link Tdjson#setBusinessAccountGiftSettings}.
+*/
+export interface SetBusinessAccountGiftSettings {
+	'@type': 'setBusinessAccountGiftSettings';
+	/**
+Unique identifier of business connection.
+*/
+	business_connection_id: string;
+	/**
+The new settings.
+*/
+	settings: GiftSettings;
+}
+
+/**
+Returns the amount of Telegram Stars owned by a business account; for bots only.
+Request type for {@link Tdjson#getBusinessAccountStarAmount}.
+*/
+export interface GetBusinessAccountStarAmount {
+	'@type': 'getBusinessAccountStarAmount';
+	/**
+Unique identifier of business connection.
+*/
+	business_connection_id: string;
+}
+
+/**
+Transfer Telegram Stars from the business account to the business bot; for bots only.
+Request type for {@link Tdjson#transferBusinessAccountStars}.
+*/
+export interface TransferBusinessAccountStars {
+	'@type': 'transferBusinessAccountStars';
+	/**
+Unique identifier of business connection.
+*/
+	business_connection_id: string;
+	/**
+Number of Telegram Stars to transfer.
+*/
+	star_count: number;
+}
+
+/**
 Checks validness of a name for a quick reply shortcut. Can be called synchronously.
 Request type for {@link Tdjson#checkQuickReplyShortcutName}.
 */
@@ -34716,7 +35320,7 @@ Message thread identifier of the forum topic.
 }
 
 /**
-Returns an HTTPS link to a topic in a forum chat. This is an offline request.
+Returns an HTTPS link to a topic in a forum chat. This is an offline method.
 Request type for {@link Tdjson#getForumTopicLink}.
 */
 export interface GetForumTopicLink {
@@ -35711,7 +36315,7 @@ Short name of the Web App.
 }
 
 /**
-Returns a default placeholder for Web Apps of a bot; this is an offline request. Returns a 404 error if the placeholder
+Returns a default placeholder for Web Apps of a bot. This is an offline method. Returns a 404 error if the placeholder
 isn't known.
 Request type for {@link Tdjson#getWebAppPlaceholder}.
 */
@@ -36485,7 +37089,7 @@ Identifier of the chat to upgrade.
 }
 
 /**
-Returns chat lists to which the chat can be added. This is an offline request.
+Returns chat lists to which the chat can be added. This is an offline method.
 Request type for {@link Tdjson#getChatListsToAddChat}.
 */
 export interface GetChatListsToAddChat {
@@ -38216,7 +38820,7 @@ performance, the number of returned objects is chosen by TDLib and can be smalle
 }
 
 /**
-Returns the list of features available on the specific chat boost level; this is an offline request.
+Returns the list of features available on the specific chat boost level. This is an offline method.
 Request type for {@link Tdjson#getChatBoostLevelFeatures}.
 */
 export interface GetChatBoostLevelFeatures {
@@ -38232,7 +38836,7 @@ Chat boost level.
 }
 
 /**
-Returns the list of features available for different chat boost levels; this is an offline request.
+Returns the list of features available for different chat boost levels. This is an offline method.
 Request type for {@link Tdjson#getChatBoostFeatures}.
 */
 export interface GetChatBoostFeatures {
@@ -40173,7 +40777,7 @@ The maximum number of photos to be returned; up to 100.
 }
 
 /**
-Returns outline of a sticker; this is an offline request. Returns a 404 error if the outline isn't known.
+Returns outline of a sticker. This is an offline method. Returns a 404 error if the outline isn't known.
 Request type for {@link Tdjson#getStickerOutline}.
 */
 export interface GetStickerOutline {
@@ -40806,7 +41410,7 @@ Options to be used for generation of the link preview; pass null to use default 
 }
 
 /**
-Returns an instant view version of a web page if available. This is an offline request if only_local is true. Returns a
+Returns an instant view version of a web page if available. This is an offline method if only_local is true. Returns a
 404 error if the web page has no instant view page.
 Request type for {@link Tdjson#getWebPageInstantView}.
 */
@@ -40833,7 +41437,7 @@ Profile photo to set.
 */
 	photo: InputChatPhoto;
 	/**
-Pass true to set a public photo, which will be visible even the main photo is hidden by privacy settings.
+Pass true to set the public photo, which will be visible even the main photo is hidden by privacy settings.
 */
 	is_public?: boolean;
 }
@@ -42369,6 +42973,18 @@ export interface DeleteSavedCredentials {
 }
 
 /**
+Changes settings for gift receiving for the current user.
+Request type for {@link Tdjson#setGiftSettings}.
+*/
+export interface SetGiftSettings {
+	'@type': 'setGiftSettings';
+	/**
+The new settings.
+*/
+	settings: GiftSettings;
+}
+
+/**
 Returns gifts that can be sent to other users and channel chats.
 Request type for {@link Tdjson#getAvailableGifts}.
 */
@@ -42413,6 +43029,10 @@ Request type for {@link Tdjson#sellGift}.
 */
 export interface SellGift {
 	'@type': 'sellGift';
+	/**
+Unique identifier of business connection on behalf of which to send the request; for bots only.
+*/
+	business_connection_id: string;
 	/**
 Identifier of the gift.
 */
@@ -42491,6 +43111,10 @@ Request type for {@link Tdjson#upgradeGift}.
 export interface UpgradeGift {
 	'@type': 'upgradeGift';
 	/**
+Unique identifier of business connection on behalf of which to send the request; for bots only.
+*/
+	business_connection_id: string;
+	/**
 Identifier of the gift.
 */
 	received_gift_id: string;
@@ -42512,6 +43136,10 @@ Request type for {@link Tdjson#transferGift}.
 export interface TransferGift {
 	'@type': 'transferGift';
 	/**
+Unique identifier of business connection on behalf of which to send the request; for bots only.
+*/
+	business_connection_id: string;
+	/**
 Identifier of the gift.
 */
 	received_gift_id: string;
@@ -42531,6 +43159,10 @@ Request type for {@link Tdjson#getReceivedGifts}.
 */
 export interface GetReceivedGifts {
 	'@type': 'getReceivedGifts';
+	/**
+Unique identifier of business connection on behalf of which to send the request; for bots only.
+*/
+	business_connection_id: string;
 	/**
 Identifier of the gift receiver.
 */
@@ -42749,7 +43381,7 @@ export interface ResetInstalledBackgrounds {
 }
 
 /**
-Returns information about the current localization target. This is an offline request if only_local is true. Can be
+Returns information about the current localization target. This is an offline method if only_local is true. Can be
 called before authorization.
 Request type for {@link Tdjson#getLocalizationTargetInfo}.
 */
@@ -44309,6 +44941,31 @@ The code to apply.
 }
 
 /**
+Allows to buy a Telegram Premium subscription for another user with payment in Telegram Stars; for bots only.
+Request type for {@link Tdjson#giftPremiumWithStars}.
+*/
+export interface GiftPremiumWithStars {
+	'@type': 'giftPremiumWithStars';
+	/**
+Identifier of the user which will receive Telegram Premium.
+*/
+	user_id: number;
+	/**
+The number of Telegram Stars to pay for subscription.
+*/
+	star_count: number;
+	/**
+Number of months the Telegram Premium subscription will be active for the user.
+*/
+	month_count: number;
+	/**
+Text to show to the user receiving Telegram Premium; 0-getOption("gift_text_length_max") characters. Only Bold, Italic,
+Underline, Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+*/
+	text: FormattedText;
+}
+
+/**
 Launches a prepaid giveaway.
 Request type for {@link Tdjson#launchPrepaidGiveaway}.
 */
@@ -44426,7 +45083,8 @@ chunk of results.
 }
 
 /**
-Checks whether an in-store purchase is possible. Must be called before any in-store purchase.
+Checks whether an in-store purchase is possible. Must be called before any in-store purchase. For official applications
+only.
 Request type for {@link Tdjson#canPurchaseFromStore}.
 */
 export interface CanPurchaseFromStore {
@@ -44438,39 +45096,15 @@ Transaction purpose.
 }
 
 /**
-Informs server about a purchase through App Store. For official applications only.
-Request type for {@link Tdjson#assignAppStoreTransaction}.
+Informs server about an in-store purchase. For official applications only.
+Request type for {@link Tdjson#assignStoreTransaction}.
 */
-export interface AssignAppStoreTransaction {
-	'@type': 'assignAppStoreTransaction';
+export interface AssignStoreTransaction {
+	'@type': 'assignStoreTransaction';
 	/**
-App Store receipt.
+Information about the transaction.
 */
-	receipt: string;
-	/**
-Transaction purpose.
-*/
-	purpose: StorePaymentPurpose;
-}
-
-/**
-Informs server about a purchase through Google Play. For official applications only.
-Request type for {@link Tdjson#assignGooglePlayTransaction}.
-*/
-export interface AssignGooglePlayTransaction {
-	'@type': 'assignGooglePlayTransaction';
-	/**
-Application package name.
-*/
-	package_name: string;
-	/**
-Identifier of the purchased store product.
-*/
-	store_product_id: string;
-	/**
-Google Play purchase token.
-*/
-	purchase_token: string;
+	transaction: StoreTransaction;
 	/**
 Transaction purpose.
 */
@@ -45282,6 +45916,8 @@ export type Request =
 	| GetAuthorizationState
 	| SetTdlibParameters
 	| SetAuthenticationPhoneNumber
+	| CheckAuthenticationPremiumPurchase
+	| SetAuthenticationPremiumPurchaseTransaction
 	| SetAuthenticationEmailAddress
 	| ResendAuthenticationCode
 	| CheckAuthenticationEmailCode
@@ -45402,6 +46038,10 @@ export type Request =
 	| GetChatSponsoredMessages
 	| ClickChatSponsoredMessage
 	| ReportChatSponsoredMessage
+	| GetSearchSponsoredChats
+	| ViewSponsoredChat
+	| OpenSponsoredChat
+	| ReportSponsoredChat
 	| RemoveNotification
 	| RemoveNotificationGroup
 	| GetMessageLink
@@ -45445,6 +46085,17 @@ export type Request =
 	| EditBusinessMessageReplyMarkup
 	| StopBusinessPoll
 	| SetBusinessMessageIsPinned
+	| ReadBusinessMessage
+	| DeleteBusinessMessages
+	| EditBusinessStory
+	| DeleteBusinessStory
+	| SetBusinessAccountName
+	| SetBusinessAccountBio
+	| SetBusinessAccountProfilePhoto
+	| SetBusinessAccountUsername
+	| SetBusinessAccountGiftSettings
+	| GetBusinessAccountStarAmount
+	| TransferBusinessAccountStars
 	| CheckQuickReplyShortcutName
 	| LoadQuickReplyShortcuts
 	| SetQuickReplyShortcutName
@@ -45915,6 +46566,7 @@ export type Request =
 	| GetSavedOrderInfo
 	| DeleteSavedOrderInfo
 	| DeleteSavedCredentials
+	| SetGiftSettings
 	| GetAvailableGifts
 	| SendGift
 	| SellGift
@@ -46038,6 +46690,7 @@ export type Request =
 	| GetPremiumGiveawayPaymentOptions
 	| CheckPremiumGiftCode
 	| ApplyPremiumGiftCode
+	| GiftPremiumWithStars
 	| LaunchPrepaidGiveaway
 	| GetGiveawayInfo
 	| GetStarPaymentOptions
@@ -46046,8 +46699,7 @@ export type Request =
 	| GetStarTransactions
 	| GetStarSubscriptions
 	| CanPurchaseFromStore
-	| AssignAppStoreTransaction
-	| AssignGooglePlayTransaction
+	| AssignStoreTransaction
 	| EditStarSubscription
 	| EditUserStarSubscription
 	| ReuseStarSubscription
@@ -46108,7 +46760,7 @@ export type Request =
 
 export abstract class Tdjson {
 	/**
-Returns the current authorization state; this is an offline request. For informational purposes only. Use
+Returns the current authorization state. This is an offline method. For informational purposes only. Use
 updateAuthorizationState instead to maintain the current authorization state. Can be called before initialization.
 */
 	async getAuthorizationState(): Promise<AuthorizationState> {
@@ -46131,13 +46783,36 @@ authorizationStateWaitTdlibParameters.
 	/**
 Sets the phone number of the user and sends an authentication code to the user. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
-authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress,
+authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or
+authorizationStateWaitPassword.
 */
 	async setAuthenticationPhoneNumber(options: Omit<SetAuthenticationPhoneNumber, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'setAuthenticationPhoneNumber',
+		});
+	}
+
+	/**
+Checks whether an in-store purchase of Telegram Premium is possible before authorization. Works only when the current
+authorization state is authorizationStateWaitPremiumPurchase.
+*/
+	async checkAuthenticationPremiumPurchase(options: Omit<CheckAuthenticationPremiumPurchase, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'checkAuthenticationPremiumPurchase',
+		});
+	}
+
+	/**
+Informs server about an in-store purchase of Telegram Premium before authorization. Works only when the current
+authorization state is authorizationStateWaitPremiumPurchase.
+*/
+	async setAuthenticationPremiumPurchaseTransaction(options: Omit<SetAuthenticationPremiumPurchaseTransaction, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setAuthenticationPremiumPurchaseTransaction',
 		});
 	}
 
@@ -46188,8 +46863,9 @@ Checks the authentication code. Works only when the current authorization state 
 	/**
 Requests QR code authentication by scanning a QR code on another logged in device. Works only when the current
 authorization state is authorizationStateWaitPhoneNumber, or if there is no pending authentication query and the current
-authorization state is authorizationStateWaitEmailAddress, authorizationStateWaitEmailCode, authorizationStateWaitCode,
-authorizationStateWaitRegistration, or authorizationStateWaitPassword.
+authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress,
+authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or
+authorizationStateWaitPassword.
 */
 	async requestQrCodeAuthentication(options: Omit<RequestQrCodeAuthentication, '@type'>): Promise<Ok> {
 		return this._request({
@@ -46540,7 +47216,7 @@ Returns the current user.
 	}
 
 	/**
-Returns information about a user by their identifier. This is an offline request if the current user is not a bot.
+Returns information about a user by their identifier. This is an offline method if the current user is not a bot.
 */
 	async getUser(options: Omit<GetUser, '@type'>): Promise<User> {
 		return this._request({
@@ -46560,7 +47236,7 @@ Returns full information about a user by their identifier.
 	}
 
 	/**
-Returns information about a basic group by its identifier. This is an offline request if the current user is not a bot.
+Returns information about a basic group by its identifier. This is an offline method if the current user is not a bot.
 */
 	async getBasicGroup(options: Omit<GetBasicGroup, '@type'>): Promise<BasicGroup> {
 		return this._request({
@@ -46580,7 +47256,7 @@ Returns full information about a basic group by its identifier.
 	}
 
 	/**
-Returns information about a supergroup or a channel by its identifier. This is an offline request if the current user is
+Returns information about a supergroup or a channel by its identifier. This is an offline method if the current user is
 not a bot.
 */
 	async getSupergroup(options: Omit<GetSupergroup, '@type'>): Promise<Supergroup> {
@@ -46601,7 +47277,7 @@ Returns full information about a supergroup or a channel by its identifier, cach
 	}
 
 	/**
-Returns information about a secret chat by its identifier. This is an offline request.
+Returns information about a secret chat by its identifier. This is an offline method.
 */
 	async getSecretChat(options: Omit<GetSecretChat, '@type'>): Promise<SecretChat> {
 		return this._request({
@@ -46611,7 +47287,7 @@ Returns information about a secret chat by its identifier. This is an offline re
 	}
 
 	/**
-Returns information about a chat by its identifier; this is an offline request if the current user is not a bot.
+Returns information about a chat by its identifier. This is an offline method if the current user is not a bot.
 */
 	async getChat(options: Omit<GetChat, '@type'>): Promise<Chat> {
 		return this._request({
@@ -46632,7 +47308,7 @@ Returns information about a message. Returns a 404 error if the message doesn't 
 
 	/**
 Returns information about a message, if it is available without sending network request. Returns a 404 error if message
-isn't available locally. This is an offline request.
+isn't available locally. This is an offline method.
 */
 	async getMessageLocally(options: Omit<GetMessageLocally, '@type'>): Promise<Message> {
 		return this._request({
@@ -46686,7 +47362,7 @@ Returns information about messages. If a message is not found, returns null on t
 	}
 
 	/**
-Returns properties of a message; this is an offline request.
+Returns properties of a message. This is an offline method.
 */
 	async getMessageProperties(options: Omit<GetMessageProperties, '@type'>): Promise<MessageProperties> {
 		return this._request({
@@ -46729,7 +47405,7 @@ true.
 	}
 
 	/**
-Returns information about a file; this is an offline request.
+Returns information about a file. This is an offline method.
 */
 	async getFile(options: Omit<GetFile, '@type'>): Promise<File> {
 		return this._request({
@@ -46739,11 +47415,11 @@ Returns information about a file; this is an offline request.
 	}
 
 	/**
-Returns information about a file by its remote identifier; this is an offline request. Can be used to register a URL as
-a file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is
-still accessible to the user. For example, if the file is from a message, then the message must be not deleted and
-accessible to the user. If the file database is disabled, then the corresponding object with the file must be preloaded
-by the application.
+Returns information about a file by its remote identifier. This is an offline method. Can be used to register a URL as a
+file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is still
+accessible to the user. For example, if the file is from a message, then the message must be not deleted and accessible
+to the user. If the file database is disabled, then the corresponding object with the file must be preloaded by the
+application.
 */
 	async getRemoteFile(options: Omit<GetRemoteFile, '@type'>): Promise<File> {
 		return this._request({
@@ -46799,7 +47475,7 @@ chats from the chat list from the results.
 	}
 
 	/**
-Searches for the specified query in the title and username of already known chats; this is an offline request. Returns
+Searches for the specified query in the title and username of already known chats. This is an offline method. Returns
 chats in the order seen in the main chat list.
 */
 	async searchChats(options: Omit<SearchChats, '@type'>): Promise<Chats> {
@@ -46911,7 +47587,7 @@ Removes a chat from the list of frequently used chats. Supported only if the cha
 	}
 
 	/**
-Searches for the specified query in the title and username of up to 50 recently found chats; this is an offline request.
+Searches for the specified query in the title and username of up to 50 recently found chats. This is an offline method.
 */
 	async searchRecentlyFoundChats(options: Omit<SearchRecentlyFoundChats, '@type'>): Promise<Chats> {
 		return this._request({
@@ -46951,7 +47627,7 @@ Clears the list of recently found chats.
 	}
 
 	/**
-Returns recently opened chats; this is an offline request. Returns chats in the order of last opening.
+Returns recently opened chats. This is an offline method. Returns chats in the order of last opening.
 */
 	async getRecentlyOpenedChats(options: Omit<GetRecentlyOpenedChats, '@type'>): Promise<Chats> {
 		return this._request({
@@ -47109,7 +47785,7 @@ Returns a list of common group chats with a given user. Chats are sorted by thei
 
 	/**
 Returns messages in a chat. The messages are returned in reverse chronological order (i.e., in order of decreasing
-message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline request if
+message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline method if
 only_local is true.
 */
 	async getChatHistory(options: Omit<GetChatHistory, '@type'>): Promise<Messages> {
@@ -47412,10 +48088,50 @@ sponsored message text, or the media in the sponsored message.
 	/**
 Reports a sponsored message to Telegram moderators.
 */
-	async reportChatSponsoredMessage(options: Omit<ReportChatSponsoredMessage, '@type'>): Promise<ReportChatSponsoredMessageResult> {
+	async reportChatSponsoredMessage(options: Omit<ReportChatSponsoredMessage, '@type'>): Promise<ReportSponsoredResult> {
 		return this._request({
 			...options,
 			'@type': 'reportChatSponsoredMessage',
+		});
+	}
+
+	/**
+Returns sponsored chats to be shown in the search results.
+*/
+	async getSearchSponsoredChats(options: Omit<GetSearchSponsoredChats, '@type'>): Promise<SponsoredChats> {
+		return this._request({
+			...options,
+			'@type': 'getSearchSponsoredChats',
+		});
+	}
+
+	/**
+Informs TDLib that the user fully viewed a sponsored chat.
+*/
+	async viewSponsoredChat(options: Omit<ViewSponsoredChat, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'viewSponsoredChat',
+		});
+	}
+
+	/**
+Informs TDLib that the user opened a sponsored chat.
+*/
+	async openSponsoredChat(options: Omit<OpenSponsoredChat, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'openSponsoredChat',
+		});
+	}
+
+	/**
+Reports a sponsored chat to Telegram moderators.
+*/
+	async reportSponsoredChat(options: Omit<ReportSponsoredChat, '@type'>): Promise<ReportSponsoredResult> {
+		return this._request({
+			...options,
+			'@type': 'reportSponsoredChat',
 		});
 	}
 
@@ -47443,7 +48159,7 @@ user.
 
 	/**
 Returns an HTTPS link to a message in a chat. Available only if messageProperties.can_get_link, or if
-messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline request.
+messageProperties.can_get_media_timestamp_links and a media timestamp link is generated. This is an offline method.
 */
 	async getMessageLink(options: Omit<GetMessageLink, '@type'>): Promise<MessageLink> {
 		return this._request({
@@ -47878,6 +48594,116 @@ Pins or unpins a message sent on behalf of a business account; for bots only.
 	}
 
 	/**
+Reads a message on behalf of a business account; for bots only.
+*/
+	async readBusinessMessage(options: Omit<ReadBusinessMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readBusinessMessage',
+		});
+	}
+
+	/**
+Deletes messages on behalf of a business account; for bots only.
+*/
+	async deleteBusinessMessages(options: Omit<DeleteBusinessMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteBusinessMessages',
+		});
+	}
+
+	/**
+Changes a story sent by the bot on behalf of a business account; for bots only.
+*/
+	async editBusinessStory(options: Omit<EditBusinessStory, '@type'>): Promise<Story> {
+		return this._request({
+			...options,
+			'@type': 'editBusinessStory',
+		});
+	}
+
+	/**
+Deletes a story sent by the bot on behalf of a business account; for bots only.
+*/
+	async deleteBusinessStory(options: Omit<DeleteBusinessStory, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteBusinessStory',
+		});
+	}
+
+	/**
+Changes the first and last name of a business account; for bots only.
+*/
+	async setBusinessAccountName(options: Omit<SetBusinessAccountName, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessAccountName',
+		});
+	}
+
+	/**
+Changes the bio of a business account; for bots only.
+*/
+	async setBusinessAccountBio(options: Omit<SetBusinessAccountBio, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessAccountBio',
+		});
+	}
+
+	/**
+Changes a profile photo of a business account; for bots only.
+*/
+	async setBusinessAccountProfilePhoto(options: Omit<SetBusinessAccountProfilePhoto, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessAccountProfilePhoto',
+		});
+	}
+
+	/**
+Changes the editable username of a business account; for bots only.
+*/
+	async setBusinessAccountUsername(options: Omit<SetBusinessAccountUsername, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessAccountUsername',
+		});
+	}
+
+	/**
+Changes settings for gift receiving of a business account; for bots only.
+*/
+	async setBusinessAccountGiftSettings(options: Omit<SetBusinessAccountGiftSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setBusinessAccountGiftSettings',
+		});
+	}
+
+	/**
+Returns the amount of Telegram Stars owned by a business account; for bots only.
+*/
+	async getBusinessAccountStarAmount(options: Omit<GetBusinessAccountStarAmount, '@type'>): Promise<StarAmount> {
+		return this._request({
+			...options,
+			'@type': 'getBusinessAccountStarAmount',
+		});
+	}
+
+	/**
+Transfer Telegram Stars from the business account to the business bot; for bots only.
+*/
+	async transferBusinessAccountStars(options: Omit<TransferBusinessAccountStars, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'transferBusinessAccountStars',
+		});
+	}
+
+	/**
 Checks validness of a name for a quick reply shortcut. Can be called synchronously.
 */
 	async checkQuickReplyShortcutName(options: Omit<CheckQuickReplyShortcutName, '@type'>): Promise<Ok> {
@@ -48054,7 +48880,7 @@ Returns information about a forum topic.
 	}
 
 	/**
-Returns an HTTPS link to a topic in a forum chat. This is an offline request.
+Returns an HTTPS link to a topic in a forum chat. This is an offline method.
 */
 	async getForumTopicLink(options: Omit<GetForumTopicLink, '@type'>): Promise<MessageLink> {
 		return this._request({
@@ -48613,7 +49439,7 @@ Returns information about a Web App by its short name. Returns a 404 error if th
 	}
 
 	/**
-Returns a default placeholder for Web Apps of a bot; this is an offline request. Returns a 404 error if the placeholder
+Returns a default placeholder for Web Apps of a bot. This is an offline method. Returns a 404 error if the placeholder
 isn't known.
 */
 	async getWebAppPlaceholder(options: Omit<GetWebAppPlaceholder, '@type'>): Promise<Outline> {
@@ -49034,7 +49860,7 @@ messageChatUpgradeFrom; requires owner privileges. Deactivates the original basi
 	}
 
 	/**
-Returns chat lists to which the chat can be added. This is an offline request.
+Returns chat lists to which the chat can be added. This is an offline method.
 */
 	async getChatListsToAddChat(options: Omit<GetChatListsToAddChat, '@type'>): Promise<ChatLists> {
 		return this._request({
@@ -50080,7 +50906,7 @@ returned messages and stories is chosen by TDLib.
 	}
 
 	/**
-Returns the list of features available on the specific chat boost level; this is an offline request.
+Returns the list of features available on the specific chat boost level. This is an offline method.
 */
 	async getChatBoostLevelFeatures(options: Omit<GetChatBoostLevelFeatures, '@type'>): Promise<ChatBoostLevelFeatures> {
 		return this._request({
@@ -50090,7 +50916,7 @@ Returns the list of features available on the specific chat boost level; this is
 	}
 
 	/**
-Returns the list of features available for different chat boost levels; this is an offline request.
+Returns the list of features available for different chat boost levels. This is an offline method.
 */
 	async getChatBoostFeatures(options: Omit<GetChatBoostFeatures, '@type'>): Promise<ChatBoostFeatures> {
 		return this._request({
@@ -51250,7 +52076,7 @@ Returns the profile photos of a user. Personal and public photo aren't returned.
 	}
 
 	/**
-Returns outline of a sticker; this is an offline request. Returns a 404 error if the outline isn't known.
+Returns outline of a sticker. This is an offline method. Returns a 404 error if the outline isn't known.
 */
 	async getStickerOutline(options: Omit<GetStickerOutline, '@type'>): Promise<Outline> {
 		return this._request({
@@ -51687,7 +52513,7 @@ has no link preview.
 	}
 
 	/**
-Returns an instant view version of a web page if available. This is an offline request if only_local is true. Returns a
+Returns an instant view version of a web page if available. This is an offline method if only_local is true. Returns a
 404 error if the web page has no instant view page.
 */
 	async getWebPageInstantView(options: Omit<GetWebPageInstantView, '@type'>): Promise<WebPageInstantView> {
@@ -52734,6 +53560,16 @@ Deletes saved credentials for all payment provider bots.
 	}
 
 	/**
+Changes settings for gift receiving for the current user.
+*/
+	async setGiftSettings(options: Omit<SetGiftSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setGiftSettings',
+		});
+	}
+
+	/**
 Returns gifts that can be sent to other users and channel chats.
 */
 	async getAvailableGifts(): Promise<Gifts> {
@@ -52966,7 +53802,7 @@ Resets list of installed backgrounds to its default value.
 	}
 
 	/**
-Returns information about the current localization target. This is an offline request if only_local is true. Can be
+Returns information about the current localization target. This is an offline method if only_local is true. Can be
 called before authorization.
 */
 	async getLocalizationTargetInfo(options: Omit<GetLocalizationTargetInfo, '@type'>): Promise<LocalizationTargetInfo> {
@@ -54000,6 +54836,16 @@ Applies a Telegram Premium gift code.
 	}
 
 	/**
+Allows to buy a Telegram Premium subscription for another user with payment in Telegram Stars; for bots only.
+*/
+	async giftPremiumWithStars(options: Omit<GiftPremiumWithStars, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'giftPremiumWithStars',
+		});
+	}
+
+	/**
 Launches a prepaid giveaway.
 */
 	async launchPrepaidGiveaway(options: Omit<LaunchPrepaidGiveaway, '@type'>): Promise<Ok> {
@@ -54068,7 +54914,8 @@ Returns the list of Telegram Star subscriptions for the current user.
 	}
 
 	/**
-Checks whether an in-store purchase is possible. Must be called before any in-store purchase.
+Checks whether an in-store purchase is possible. Must be called before any in-store purchase. For official applications
+only.
 */
 	async canPurchaseFromStore(options: Omit<CanPurchaseFromStore, '@type'>): Promise<Ok> {
 		return this._request({
@@ -54078,22 +54925,12 @@ Checks whether an in-store purchase is possible. Must be called before any in-st
 	}
 
 	/**
-Informs server about a purchase through App Store. For official applications only.
+Informs server about an in-store purchase. For official applications only.
 */
-	async assignAppStoreTransaction(options: Omit<AssignAppStoreTransaction, '@type'>): Promise<Ok> {
+	async assignStoreTransaction(options: Omit<AssignStoreTransaction, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'assignAppStoreTransaction',
-		});
-	}
-
-	/**
-Informs server about a purchase through Google Play. For official applications only.
-*/
-	async assignGooglePlayTransaction(options: Omit<AssignGooglePlayTransaction, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'assignGooglePlayTransaction',
+			'@type': 'assignStoreTransaction',
 		});
 	}
 
