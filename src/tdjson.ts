@@ -2218,7 +2218,7 @@ upgrade and transfer gifts.
 */
 	can_transfer_stars?: boolean;
 	/**
-True, if the bot can send, edit and delete stories.
+True, if the bot can post, edit and delete stories.
 */
 	can_manage_stories?: boolean;
 }
@@ -5779,7 +5779,7 @@ Status of the current user in the supergroup or channel; custom title will alway
 	status: ChatMemberStatus;
 	/**
 Number of members in the supergroup or channel; 0 if unknown. Currently, it is guaranteed to be known only if the
-supergroup or channel was received through getChatSimilarChats, getChatsToSendStories, getCreatedPublicChats,
+supergroup or channel was received through getChatSimilarChats, getChatsToPostStories, getCreatedPublicChats,
 getGroupsInCommon, getInactiveSupergroupChats, getRecommendedChats, getSuitableDiscussionChats,
 getUserPrivacySettingRules, getVideoChatAvailableParticipants, searchPublicChats, or in
 chatFolderInviteLinkInfo.missing_chat_ids, or in userFullInfo.personal_chat_id, or for chats with messages or stories
@@ -6759,9 +6759,9 @@ Subtype of {@link MessageReplyTo}.
 export interface MessageReplyToStory {
 	'@type': 'messageReplyToStory';
 	/**
-The identifier of the sender of the story.
+The identifier of the poster of the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 The identifier of the story.
 */
@@ -6813,10 +6813,10 @@ Subtype of {@link InputMessageReplyTo}.
 export interface InputMessageReplyToStory {
 	'@type': 'inputMessageReplyToStory';
 	/**
-The identifier of the sender of the story. Currently, stories can be replied only in the sender's chat and channel
-stories can't be replied.
+The identifier of the poster of the story. Currently, stories can be replied only in the chat that posted the story;
+channel stories can't be replied.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 The identifier of the story.
 */
@@ -7558,13 +7558,13 @@ Identifier of the notification sound to be played for stories; 0 if sound is dis
 */
 	story_sound_id: string;
 	/**
-If true, the value for the relevant type of chat is used instead of show_story_sender.
+If true, the value for the relevant type of chat is used instead of show_story_poster.
 */
-	use_default_show_story_sender?: boolean;
+	use_default_show_story_poster?: boolean;
 	/**
-True, if the sender of stories must be displayed in notifications.
+True, if the chat that posted a story must be displayed in notifications.
 */
-	show_story_sender?: boolean;
+	show_story_poster?: boolean;
 	/**
 If true, the value for the relevant type of chat or the forum chat is used instead of
 disable_pinned_message_notifications.
@@ -7615,9 +7615,9 @@ Identifier of the notification sound to be played for stories; 0 if sound is dis
 */
 	story_sound_id: string;
 	/**
-True, if the sender of stories must be displayed in notifications.
+True, if the chat that posted a story must be displayed in notifications.
 */
-	show_story_sender?: boolean;
+	show_story_poster?: boolean;
 	/**
 True, if notifications for incoming pinned messages will be created as for an ordinary unread message.
 */
@@ -8160,7 +8160,7 @@ True, if the bot can reply.
 }
 
 /**
-Describes a video chat.
+Describes a video chat, i.e. a group call bound to a chat.
 */
 export interface VideoChat {
 	'@type': 'videoChat';
@@ -10692,6 +10692,15 @@ Duration of the video, in seconds; 0 if unknown.
 }
 
 /**
+The link is a link to a group call that isn't bound to a chat.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeGroupCall {
+	'@type': 'linkPreviewTypeGroupCall';
+
+}
+
+/**
 The link is a link to an invoice.
 Subtype of {@link LinkPreviewType}.
 */
@@ -10772,7 +10781,7 @@ export interface LinkPreviewTypeStory {
 	/**
 The identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Story identifier.
 */
@@ -13167,7 +13176,7 @@ export interface MessageStory {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Story identifier.
 */
@@ -13240,6 +13249,37 @@ Reason why the call was discarded.
 Call duration, in seconds.
 */
 	duration: number;
+}
+
+/**
+A message with information about a group call not bound to a chat. If the message is incoming, the call isn't active,
+isn't missed, and has no duration, and getOption("can_accept_calls") is true, then incoming call screen must be shown to
+the user. Use joinGroupCall to accept the call or declineGroupCallInvitation to decline it. If the call become active or
+missed, then the call screen must be hidden.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageGroupCall {
+	'@type': 'messageGroupCall';
+	/**
+True, if the call is active, i.e. the called user joined the call.
+*/
+	is_active?: boolean;
+	/**
+True, if the called user missed or declined the call.
+*/
+	was_missed?: boolean;
+	/**
+True, if the call is a video call.
+*/
+	is_video?: boolean;
+	/**
+Call duration, in seconds; for left calls only.
+*/
+	duration: number;
+	/**
+Identifiers of some other call participants.
+*/
+	other_participant_ids: MessageSender[];
 }
 
 /**
@@ -15277,7 +15317,7 @@ True, if the poll needs to be sent already closed; for bots only.
 }
 
 /**
-A message with a forwarded story. Stories can't be sent to secret chats. A story can be forwarded only if
+A message with a forwarded story. Stories can't be forwarded to secret chats. A story can be forwarded only if
 story.can_be_forwarded.
 Subtype of {@link InputMessageContent}.
 */
@@ -15286,7 +15326,7 @@ export interface InputMessageStory {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Story identifier.
 */
@@ -16499,7 +16539,7 @@ area.
 }
 
 /**
-Describes a video file sent in a story.
+Describes a video file posted as a story.
 */
 export interface StoryVideo {
 	'@type': 'storyVideo';
@@ -16584,7 +16624,7 @@ export interface StoryContentUnsupported {
 }
 
 /**
-The content of a story to send.
+The content of a story to post.
 Subtype of {@link InputStoryContent}.
 */
 export interface InputStoryContentPhoto {
@@ -16663,15 +16703,15 @@ Story identifier of the original story.
 }
 
 /**
-The original story was sent by an unknown user.
+The original story was posted by an unknown user.
 Subtype of {@link StoryOrigin}.
 */
 export interface StoryOriginHiddenUser {
 	'@type': 'storyOriginHiddenUser';
 	/**
-Name of the story sender.
+Name of the user or the chat that posted the story.
 */
-	sender_name: string;
+	poster_name: string;
 }
 
 /**
@@ -16718,25 +16758,26 @@ Represents a story.
 export interface Story {
 	'@type': 'story';
 	/**
-Unique story identifier among stories of the given sender.
+Unique story identifier among stories posted by the given chat.
 */
 	id: number;
 	/**
 Identifier of the chat that posted the story.
 */
-	sender_chat_id: number;
+	poster_chat_id: number;
 	/**
-Identifier of the sender of the story; may be null if the story is posted on behalf of the sender_chat_id.
+Identifier of the user or chat that posted the story; may be null if the story is posted on behalf of the
+poster_chat_id.
 */
-	sender_id: MessageSender;
+	poster_id: MessageSender;
 	/**
 Point in time (Unix timestamp) when the story was published.
 */
 	date: number;
 	/**
-True, if the story is being sent by the current user.
+True, if the story is being posted by the current user.
 */
-	is_being_sent?: boolean;
+	is_being_posted?: boolean;
 	/**
 True, if the story is being edited by the current user.
 */
@@ -16746,7 +16787,7 @@ True, if the story was edited.
 */
 	is_edited?: boolean;
 	/**
-True, if the story is saved in the sender's profile and will be available there after expiration.
+True, if the story is saved in the profile of the chat that posted it and will be available there after expiration.
 */
 	is_posted_to_chat_page?: boolean;
 	/**
@@ -16767,7 +16808,7 @@ forbidden.
 */
 	can_be_forwarded?: boolean;
 	/**
-True, if the story can be replied in the chat with the story sender.
+True, if the story can be replied in the chat with the user that posted the story.
 */
 	can_be_replied?: boolean;
 	/**
@@ -16856,16 +16897,16 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
-Contains identifier of a story along with identifier of its sender.
+Contains identifier of a story along with identifier of the chat that posted it.
 */
 export interface StoryFullId {
 	'@type': 'storyFullId';
 	/**
 Identifier of the chat that posted the story.
 */
-	sender_chat_id: number;
+	poster_chat_id: number;
 	/**
-Unique story identifier among stories of the given sender.
+Unique story identifier among stories of the chat.
 */
 	story_id: number;
 }
@@ -16876,7 +16917,7 @@ Contains basic information about a story.
 export interface StoryInfo {
 	'@type': 'storyInfo';
 	/**
-Unique story identifier among stories of the given sender.
+Unique story identifier among stories of the chat.
 */
 	story_id: number;
 	/**
@@ -16904,7 +16945,7 @@ Identifier of the story list in which the stories are shown; may be null if the 
 	list: StoryList;
 	/**
 A parameter used to determine order of the stories in the story list; 0 if the stories doesn't need to be shown in the
-story list. Stories must be sorted by the pair (order, story_sender_chat_id) in descending order.
+story list. Stories must be sorted by the pair (order, story_poster_chat_id) in descending order.
 */
 	order: number;
 	/**
@@ -17557,16 +17598,15 @@ export interface CallDiscardReasonHungUp {
 }
 
 /**
-The call was ended because it has been used successfully to transfer private encryption key for the associated group
-call.
+The call was ended because it has been upgraded to a group call.
 Subtype of {@link CallDiscardReason}.
 */
-export interface CallDiscardReasonAllowGroupCall {
-	'@type': 'callDiscardReasonAllowGroupCall';
+export interface CallDiscardReasonUpgradeToGroupCall {
+	'@type': 'callDiscardReasonUpgradeToGroupCall';
 	/**
-Encrypted using the call private key encryption key for the associated group call.
+Invite link for the group call.
 */
-	encrypted_group_call_key: string;
+	invite_link: string;
 }
 
 /**
@@ -17741,6 +17781,10 @@ True, if peer-to-peer connection is allowed by users privacy settings.
 */
 	allow_p2p?: boolean;
 	/**
+True, if the other party supports upgrading of the call to a group call.
+*/
+	is_group_call_supported?: boolean;
+	/**
 Custom JSON-encoded call parameters to be passed to tgcalls.
 */
 	custom_parameters: string;
@@ -17792,6 +17836,29 @@ Error. An error with the code 4005000 will be returned if an outgoing call is mi
 }
 
 /**
+Describes parameters used to join a group call.
+*/
+export interface GroupCallJoinParameters {
+	'@type': 'groupCallJoinParameters';
+	/**
+Audio channel synchronization source identifier; received from tgcalls.
+*/
+	audio_source_id: number;
+	/**
+Group call join payload; received from tgcalls.
+*/
+	payload: string;
+	/**
+Pass true to join the call with muted microphone.
+*/
+	is_muted?: boolean;
+	/**
+Pass true if the user's video is enabled.
+*/
+	is_my_video_enabled?: boolean;
+}
+
+/**
 Describes the quality of a group call video.
 Subtype of {@link GroupCallVideoQuality}.
 */
@@ -17819,10 +17886,10 @@ export interface GroupCallVideoQualityFull {
 }
 
 /**
-Describes an available stream in a group call.
+Describes an available stream in a video chat.
 */
-export interface GroupCallStream {
-	'@type': 'groupCallStream';
+export interface VideoChatStream {
+	'@type': 'videoChatStream';
 	/**
 Identifier of an audio/video channel.
 */
@@ -17838,14 +17905,14 @@ Point in time when the stream currently ends; Unix timestamp in milliseconds.
 }
 
 /**
-Represents a list of group call streams.
+Represents a list of video chat streams.
 */
-export interface GroupCallStreams {
-	'@type': 'groupCallStreams';
+export interface VideoChatStreams {
+	'@type': 'videoChatStreams';
 	/**
-A list of group call streams.
+A list of video chat streams.
 */
-	streams: GroupCallStream[];
+	streams: VideoChatStream[];
 }
 
 /**
@@ -17888,20 +17955,22 @@ Group call identifier.
 */
 	id: number;
 	/**
-Identifier of one-to-one call from which the group call was created; 0 if unknown.
-*/
-	from_call_id: number;
-	/**
-Group call title.
+Group call title; for video chats only.
 */
 	title: string;
 	/**
+Invite link for the group call; for group calls that aren't bound to a chat. For video chats call getVideoChatInviteLink
+to get the link.
+*/
+	invite_link: string;
+	/**
 Point in time (Unix timestamp) when the group call is expected to be started by an administrator; 0 if it is already
-active or was ended.
+active or was ended; for video chats only.
 */
 	scheduled_start_date: number;
 	/**
-True, if the group call is scheduled and the current user will receive a notification when the group call starts.
+True, if the group call is scheduled and the current user will receive a notification when the group call starts; for
+video chats only.
 */
 	enabled_start_notification?: boolean;
 	/**
@@ -17909,7 +17978,11 @@ True, if the call is active.
 */
 	is_active?: boolean;
 	/**
-True, if the chat is an RTMP stream instead of an ordinary video chat.
+True, if the call is bound to a chat.
+*/
+	is_video_chat?: boolean;
+	/**
+True, if the call is an RTMP stream instead of an ordinary video chat; for video chats only.
 */
 	is_rtmp_stream?: boolean;
 	/**
@@ -17921,7 +17994,12 @@ True, if user was kicked from the call because of network loss and the call need
 */
 	need_rejoin?: boolean;
 	/**
-True, if the current user can manage the group call.
+True, if the user is the owner of the call and can end the call, change volume level of other users, or ban users there;
+for group calls that aren't bound to a chat.
+*/
+	is_owned?: boolean;
+	/**
+True, if the current user can manage the group call; for video chats only.
 */
 	can_be_managed?: boolean;
 	/**
@@ -17929,7 +18007,7 @@ Number of participants in the group call.
 */
 	participant_count: number;
 	/**
-True, if group call participants, which are muted, aren't returned in participant list.
+True, if group call participants, which are muted, aren't returned in participant list; for video chats only.
 */
 	has_hidden_listeners?: boolean;
 	/**
@@ -17953,11 +18031,11 @@ True, if the current user can broadcast video or share screen.
 */
 	can_enable_video?: boolean;
 	/**
-True, if only group call administrators can unmute new participants.
+True, if only group call administrators can unmute new participants; for video chats only.
 */
 	mute_new_participants?: boolean;
 	/**
-True, if the current user can enable or disable mute_new_participants setting.
+True, if the current user can enable or disable mute_new_participants setting; for video chats only.
 */
 	can_toggle_mute_new_participants?: boolean;
 	/**
@@ -18091,6 +18169,127 @@ higher is user in the list. If order is empty, the user must be removed from the
 }
 
 /**
+Contains identifiers of group call participants.
+*/
+export interface GroupCallParticipants {
+	'@type': 'groupCallParticipants';
+	/**
+Total number of group call participants.
+*/
+	total_count: number;
+	/**
+Identifiers of the participants.
+*/
+	participant_ids: MessageSender[];
+}
+
+/**
+Contains information about a just created or just joined group call.
+*/
+export interface GroupCallInfo {
+	'@type': 'groupCallInfo';
+	/**
+Identifier of the group call.
+*/
+	group_call_id: number;
+	/**
+Join response payload for tgcalls; empty if the call isn't joined.
+*/
+	join_payload: string;
+}
+
+/**
+Describes result of group call participant invitation.
+Subtype of {@link InviteGroupCallParticipantResult}.
+*/
+export interface InviteGroupCallParticipantResultUserPrivacyRestricted {
+	'@type': 'inviteGroupCallParticipantResultUserPrivacyRestricted';
+
+}
+
+/**
+The user can't be invited because they are already a participant of the call.
+Subtype of {@link InviteGroupCallParticipantResult}.
+*/
+export interface InviteGroupCallParticipantResultUserAlreadyParticipant {
+	'@type': 'inviteGroupCallParticipantResultUserAlreadyParticipant';
+
+}
+
+/**
+The user can't be invited because they were banned by the owner of the call and can be invited back only by the owner of
+the group call.
+Subtype of {@link InviteGroupCallParticipantResult}.
+*/
+export interface InviteGroupCallParticipantResultUserWasBanned {
+	'@type': 'inviteGroupCallParticipantResultUserWasBanned';
+
+}
+
+/**
+The user was invited and a service message of the type messageGroupCall was sent which can be used in
+declineGroupCallInvitation to cancel the invitation.
+Subtype of {@link InviteGroupCallParticipantResult}.
+*/
+export interface InviteGroupCallParticipantResultSuccess {
+	'@type': 'inviteGroupCallParticipantResultSuccess';
+	/**
+Identifier of the chat with the invitation message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Describes data channel for a group call.
+Subtype of {@link GroupCallDataChannel}.
+*/
+export interface GroupCallDataChannelMain {
+	'@type': 'groupCallDataChannelMain';
+
+}
+
+/**
+The data channel for screen sharing.
+Subtype of {@link GroupCallDataChannel}.
+*/
+export interface GroupCallDataChannelScreenSharing {
+	'@type': 'groupCallDataChannelScreenSharing';
+
+}
+
+/**
+Describes a non-joined group call that isn't bound to a chat.
+Subtype of {@link InputGroupCall}.
+*/
+export interface InputGroupCallLink {
+	'@type': 'inputGroupCallLink';
+	/**
+The link for the group call.
+*/
+	link: string;
+}
+
+/**
+The group call is accessible through a message of the type messageGroupCall.
+Subtype of {@link InputGroupCall}.
+*/
+export interface InputGroupCallMessage {
+	'@type': 'inputGroupCallMessage';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message of the type messageGroupCall.
+*/
+	message_id: number;
+}
+
+/**
 Describes the exact type of problem with a call.
 Subtype of {@link CallProblem}.
 */
@@ -18196,11 +18395,6 @@ True, if the call is a video call.
 Call state.
 */
 	state: CallState;
-	/**
-Identifier of the group call associated with the call; 0 if the group call isn't created yet. The group call can be
-received through the method getGroupCall.
-*/
-	group_call_id: number;
 }
 
 /**
@@ -18261,7 +18455,7 @@ For official Android and iOS applications only; pass null otherwise. Settings fo
 	firebase_authentication_settings: FirebaseAuthenticationSettings;
 	/**
 List of up to 20 authentication tokens, recently received in updateOption("authentication_token") in previously logged
-out sessions.
+out sessions; for setAuthenticationPhoneNumber only.
 */
 	authentication_tokens: string[];
 }
@@ -20874,25 +21068,25 @@ export interface PremiumLimitTypeActiveStoryCount {
 }
 
 /**
-The maximum number of stories sent per week.
+The maximum number of stories posted per week.
 Subtype of {@link PremiumLimitType}.
 */
-export interface PremiumLimitTypeWeeklySentStoryCount {
-	'@type': 'premiumLimitTypeWeeklySentStoryCount';
+export interface PremiumLimitTypeWeeklyPostedStoryCount {
+	'@type': 'premiumLimitTypeWeeklyPostedStoryCount';
 
 }
 
 /**
-The maximum number of stories sent per month.
+The maximum number of stories posted per month.
 Subtype of {@link PremiumLimitType}.
 */
-export interface PremiumLimitTypeMonthlySentStoryCount {
-	'@type': 'premiumLimitTypeMonthlySentStoryCount';
+export interface PremiumLimitTypeMonthlyPostedStoryCount {
+	'@type': 'premiumLimitTypeMonthlyPostedStoryCount';
 
 }
 
 /**
-The maximum length of captions of sent stories.
+The maximum length of captions of posted stories.
 Subtype of {@link PremiumLimitType}.
 */
 export interface PremiumLimitTypeStoryCaptionLength {
@@ -22239,52 +22433,52 @@ A list of hashtags.
 }
 
 /**
-Represents result of checking whether the current user can send a story in the specific chat.
-Subtype of {@link CanSendStoryResult}.
+Represents result of checking whether the current user can post a story on behalf of the specific chat.
+Subtype of {@link CanPostStoryResult}.
 */
-export interface CanSendStoryResultOk {
-	'@type': 'canSendStoryResultOk';
+export interface CanPostStoryResultOk {
+	'@type': 'canPostStoryResultOk';
 
 }
 
 /**
 The user must subscribe to Telegram Premium to be able to post stories.
-Subtype of {@link CanSendStoryResult}.
+Subtype of {@link CanPostStoryResult}.
 */
-export interface CanSendStoryResultPremiumNeeded {
-	'@type': 'canSendStoryResultPremiumNeeded';
+export interface CanPostStoryResultPremiumNeeded {
+	'@type': 'canPostStoryResultPremiumNeeded';
 
 }
 
 /**
 The chat must be boosted first by Telegram Premium subscribers to post more stories. Call getChatBoostStatus to get
 current boost status of the chat.
-Subtype of {@link CanSendStoryResult}.
+Subtype of {@link CanPostStoryResult}.
 */
-export interface CanSendStoryResultBoostNeeded {
-	'@type': 'canSendStoryResultBoostNeeded';
+export interface CanPostStoryResultBoostNeeded {
+	'@type': 'canPostStoryResultBoostNeeded';
 
 }
 
 /**
 The limit for the number of active stories exceeded. The user can buy Telegram Premium, delete an active story, or wait
 for the oldest story to expire.
-Subtype of {@link CanSendStoryResult}.
+Subtype of {@link CanPostStoryResult}.
 */
-export interface CanSendStoryResultActiveStoryLimitExceeded {
-	'@type': 'canSendStoryResultActiveStoryLimitExceeded';
+export interface CanPostStoryResultActiveStoryLimitExceeded {
+	'@type': 'canPostStoryResultActiveStoryLimitExceeded';
 
 }
 
 /**
 The weekly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified
 time.
-Subtype of {@link CanSendStoryResult}.
+Subtype of {@link CanPostStoryResult}.
 */
-export interface CanSendStoryResultWeeklyLimitExceeded {
-	'@type': 'canSendStoryResultWeeklyLimitExceeded';
+export interface CanPostStoryResultWeeklyLimitExceeded {
+	'@type': 'canPostStoryResultWeeklyLimitExceeded';
 	/**
-Time left before the user can send the next story.
+Time left before the user can post the next story.
 */
 	retry_after: number;
 }
@@ -22292,12 +22486,12 @@ Time left before the user can send the next story.
 /**
 The monthly limit for the number of posted stories exceeded. The user needs to buy Telegram Premium or wait specified
 time.
-Subtype of {@link CanSendStoryResult}.
+Subtype of {@link CanPostStoryResult}.
 */
-export interface CanSendStoryResultMonthlyLimitExceeded {
-	'@type': 'canSendStoryResultMonthlyLimitExceeded';
+export interface CanPostStoryResultMonthlyLimitExceeded {
+	'@type': 'canPostStoryResultMonthlyLimitExceeded';
 	/**
-Time left before the user can send the next story.
+Time left before the user can post the next story.
 */
 	retry_after: number;
 }
@@ -24583,6 +24777,18 @@ Short name of the game.
 }
 
 /**
+The link is a link to a group call that isn't bound to a chat. Call joinGroupCall with the given invite_link.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeGroupCall {
+	'@type': 'internalLinkTypeGroupCall';
+	/**
+Internal representation of the invite link.
+*/
+	invite_link: string;
+}
+
+/**
 The link must be opened in an Instant View. Call getWebPageInstantView with the given URL to process the link. If
 Instant View is found, then show it, otherwise, open the fallback URL in an external browser.
 Subtype of {@link InternalLinkType}.
@@ -24877,16 +25083,16 @@ True, if the sticker set is expected to contain custom emoji.
 }
 
 /**
-The link is a link to a story. Call searchPublicChat with the given sender username, then call getStory with the
+The link is a link to a story. Call searchPublicChat with the given poster username, then call getStory with the
 received chat identifier and the given story identifier, then show the story if received.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeStory {
 	'@type': 'internalLinkTypeStory';
 	/**
-Username of the sender of the story.
+Username of the poster of the story.
 */
-	story_sender_username: string;
+	story_poster_username: string;
 	/**
 Story identifier.
 */
@@ -24983,7 +25189,7 @@ The token.
 }
 
 /**
-The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinGroupCall with the
+The link is a link to a video chat. Call searchPublicChat with the given chat username, and then joinVideoChat with the
 given invite hash to process the link.
 Subtype of {@link InternalLinkType}.
 */
@@ -25127,17 +25333,6 @@ Subtype of {@link BlockList}.
 export interface BlockListStories {
 	'@type': 'blockListStories';
 
-}
-
-/**
-Contains a part of a file.
-*/
-export interface FilePart {
-	'@type': 'filePart';
-	/**
-File bytes.
-*/
-	data: string;
 }
 
 /**
@@ -26090,6 +26285,17 @@ Text.
 }
 
 /**
+Contains some binary data.
+*/
+export interface Data {
+	'@type': 'data';
+	/**
+Data.
+*/
+	data: string;
+}
+
+/**
 Contains a value representing a number of seconds.
 */
 export interface Seconds {
@@ -26365,7 +26571,7 @@ Message identifier.
 }
 
 /**
-Describes a story sent by the chat.
+Describes a story posted on behalf of the chat.
 Subtype of {@link ChatStatisticsObjectType}.
 */
 export interface ChatStatisticsObjectTypeStory {
@@ -26377,7 +26583,7 @@ Story identifier.
 }
 
 /**
-Contains statistics about interactions with a message sent in the chat or a story sent by the chat.
+Contains statistics about interactions with a message sent in the chat or a story posted on behalf of the chat.
 */
 export interface ChatStatisticsInteractionInfo {
 	'@type': 'chatStatisticsInteractionInfo';
@@ -26555,15 +26761,15 @@ Mean number of times reactions were added to the recently sent messages.
 */
 	mean_message_reaction_count: StatisticalValue;
 	/**
-Mean number of times the recently sent stories were viewed.
+Mean number of times the recently posted stories were viewed.
 */
 	mean_story_view_count: StatisticalValue;
 	/**
-Mean number of times the recently sent stories were shared.
+Mean number of times the recently posted stories were shared.
 */
 	mean_story_share_count: StatisticalValue;
 	/**
-Mean number of times reactions were added to the recently sent stories.
+Mean number of times reactions were added to the recently posted stories.
 */
 	mean_story_reaction_count: StatisticalValue;
 	/**
@@ -26619,7 +26825,7 @@ A graph containing number of views of associated with the chat instant views.
 */
 	instant_view_interaction_graph: StatisticalGraph;
 	/**
-Detailed statistics about number of views and shares of recently sent messages and stories.
+Detailed statistics about number of views and shares of recently sent messages and posted stories.
 */
 	recent_interactions: ChatStatisticsInteractionInfo[];
 }
@@ -28002,6 +28208,10 @@ True, if the topic is pinned in the topic list.
 */
 	is_pinned?: boolean;
 	/**
+Identifier of the last read incoming message.
+*/
+	last_read_inbox_message_id: number;
+	/**
 Identifier of the last read outgoing message.
 */
 	last_read_outbox_message_id: number;
@@ -28499,7 +28709,7 @@ Subtype of {@link Update}.
 export interface UpdateGroupCall {
 	'@type': 'updateGroupCall';
 	/**
-New data about a group call.
+New data about the group call.
 */
 	group_call: GroupCall;
 }
@@ -28512,13 +28722,52 @@ Subtype of {@link Update}.
 export interface UpdateGroupCallParticipant {
 	'@type': 'updateGroupCallParticipant';
 	/**
-Identifier of group call.
+Identifier of the group call.
 */
 	group_call_id: number;
 	/**
-New data about a participant.
+New data about the participant.
 */
 	participant: GroupCallParticipant;
+}
+
+/**
+The list of group call participants that can send and receive encrypted call data has changed; for group calls not bound
+to a chat only.
+Subtype of {@link Update}.
+*/
+export interface UpdateGroupCallParticipants {
+	'@type': 'updateGroupCallParticipants';
+	/**
+Identifier of the group call.
+*/
+	group_call_id: number;
+	/**
+New list of group call participant user identifiers. The identifiers may be invalid or the corresponding users may be
+unknown. The participants must be shown in the list of group call participants even there is no information about them.
+*/
+	participant_user_ids: string[];
+}
+
+/**
+The verification state of an encrypted group call has changed; for group calls not bound to a chat only.
+Subtype of {@link Update}.
+*/
+export interface UpdateGroupCallVerificationState {
+	'@type': 'updateGroupCallVerificationState';
+	/**
+Identifier of the group call.
+*/
+	group_call_id: number;
+	/**
+The call state generation to which the emoji corresponds. If generation is different for two users, then their emoji may
+be also different.
+*/
+	generation: number;
+	/**
+Group call state fingerprint represented as 4 emoji; may be empty if the state isn't verified yet.
+*/
+	emojis: string[];
 }
 
 /**
@@ -28627,7 +28876,7 @@ export interface UpdateStoryDeleted {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Story identifier.
 */
@@ -28635,13 +28884,13 @@ Story identifier.
 }
 
 /**
-A story has been successfully sent.
+A story has been successfully posted.
 Subtype of {@link Update}.
 */
-export interface UpdateStorySendSucceeded {
-	'@type': 'updateStorySendSucceeded';
+export interface UpdateStoryPostSucceeded {
+	'@type': 'updateStoryPostSucceeded';
 	/**
-The sent story.
+The posted story.
 */
 	story: Story;
 	/**
@@ -28651,24 +28900,24 @@ The previous temporary story identifier.
 }
 
 /**
-A story failed to send. If the story sending is canceled, then updateStoryDeleted will be received instead of this
+A story failed to post. If the story posting is canceled, then updateStoryDeleted will be received instead of this
 update.
 Subtype of {@link Update}.
 */
-export interface UpdateStorySendFailed {
-	'@type': 'updateStorySendFailed';
+export interface UpdateStoryPostFailed {
+	'@type': 'updateStoryPostFailed';
 	/**
-The failed to send story.
+The failed to post story.
 */
 	story: Story;
 	/**
-The cause of the story sending failure.
+The cause of the story posting failure.
 */
 	error: Error;
 	/**
 Type of the error; may be null if unknown.
 */
-	error_type: CanSendStoryResult;
+	error_type: CanPostStoryResult;
 }
 
 /**
@@ -30359,6 +30608,7 @@ export type LinkPreviewType =
 	| LinkPreviewTypeEmbeddedVideoPlayer
 	| LinkPreviewTypeExternalAudio
 	| LinkPreviewTypeExternalVideo
+	| LinkPreviewTypeGroupCall
 	| LinkPreviewTypeInvoice
 	| LinkPreviewTypeMessage
 	| LinkPreviewTypePhoto
@@ -30505,6 +30755,7 @@ export type MessageContent =
 	| MessageStory
 	| MessageInvoice
 	| MessageCall
+	| MessageGroupCall
 	| MessageVideoChatScheduled
 	| MessageVideoChatStarted
 	| MessageVideoChatEnded
@@ -30737,7 +30988,7 @@ export type CallDiscardReason =
 	| CallDiscardReasonDeclined
 	| CallDiscardReasonDisconnected
 	| CallDiscardReasonHungUp
-	| CallDiscardReasonAllowGroupCall;
+	| CallDiscardReasonUpgradeToGroupCall;
 
 export type CallServerType =
 	| CallServerTypeTelegramReflector
@@ -30755,6 +31006,20 @@ export type GroupCallVideoQuality =
 	| GroupCallVideoQualityThumbnail
 	| GroupCallVideoQualityMedium
 	| GroupCallVideoQualityFull;
+
+export type InviteGroupCallParticipantResult =
+	| InviteGroupCallParticipantResultUserPrivacyRestricted
+	| InviteGroupCallParticipantResultUserAlreadyParticipant
+	| InviteGroupCallParticipantResultUserWasBanned
+	| InviteGroupCallParticipantResultSuccess;
+
+export type GroupCallDataChannel =
+	| GroupCallDataChannelMain
+	| GroupCallDataChannelScreenSharing;
+
+export type InputGroupCall =
+	| InputGroupCallLink
+	| InputGroupCallMessage;
 
 export type CallProblem =
 	| CallProblemEcho
@@ -30905,8 +31170,8 @@ export type PremiumLimitType =
 	| PremiumLimitTypeChatFolderInviteLinkCount
 	| PremiumLimitTypeShareableChatFolderCount
 	| PremiumLimitTypeActiveStoryCount
-	| PremiumLimitTypeWeeklySentStoryCount
-	| PremiumLimitTypeMonthlySentStoryCount
+	| PremiumLimitTypeWeeklyPostedStoryCount
+	| PremiumLimitTypeMonthlyPostedStoryCount
 	| PremiumLimitTypeStoryCaptionLength
 	| PremiumLimitTypeStorySuggestedReactionAreaCount
 	| PremiumLimitTypeSimilarChatCount;
@@ -31019,13 +31284,13 @@ export type InputBackground =
 	| InputBackgroundRemote
 	| InputBackgroundPrevious;
 
-export type CanSendStoryResult =
-	| CanSendStoryResultOk
-	| CanSendStoryResultPremiumNeeded
-	| CanSendStoryResultBoostNeeded
-	| CanSendStoryResultActiveStoryLimitExceeded
-	| CanSendStoryResultWeeklyLimitExceeded
-	| CanSendStoryResultMonthlyLimitExceeded;
+export type CanPostStoryResult =
+	| CanPostStoryResultOk
+	| CanPostStoryResultPremiumNeeded
+	| CanPostStoryResultBoostNeeded
+	| CanPostStoryResultActiveStoryLimitExceeded
+	| CanPostStoryResultWeeklyLimitExceeded
+	| CanPostStoryResultMonthlyLimitExceeded;
 
 export type CanTransferOwnershipResult =
 	| CanTransferOwnershipResultOk
@@ -31226,6 +31491,7 @@ export type InternalLinkType =
 	| InternalLinkTypeDefaultMessageAutoDeleteTimerSettings
 	| InternalLinkTypeEditProfileSettings
 	| InternalLinkTypeGame
+	| InternalLinkTypeGroupCall
 	| InternalLinkTypeInstantView
 	| InternalLinkTypeInvoice
 	| InternalLinkTypeLanguagePack
@@ -31479,14 +31745,16 @@ export type Update =
 	| UpdateCall
 	| UpdateGroupCall
 	| UpdateGroupCallParticipant
+	| UpdateGroupCallParticipants
+	| UpdateGroupCallVerificationState
 	| UpdateNewCallSignalingData
 	| UpdateUserPrivacySettingRules
 	| UpdateUnreadMessageCount
 	| UpdateUnreadChatCount
 	| UpdateStory
 	| UpdateStoryDeleted
-	| UpdateStorySendSucceeded
-	| UpdateStorySendFailed
+	| UpdateStoryPostSucceeded
+	| UpdateStoryPostFailed
 	| UpdateChatActiveStories
 	| UpdateStoryListChatCount
 	| UpdateStoryStealthMode
@@ -33258,8 +33526,8 @@ TDLib and can be smaller than the specified limit.
 }
 
 /**
-Searches for call messages. Returns the results in reverse chronological order (i.e., in order of decreasing
-message_id). For optimal performance, the number of returned messages is chosen by TDLib.
+Searches for call and group call messages. Returns the results in reverse chronological order (i.e., in order of
+decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
 Request type for {@link Tdjson#searchCallMessages}.
 */
 export interface SearchCallMessages {
@@ -33330,7 +33598,7 @@ export interface SearchPublicStoriesByTag {
 	/**
 Identifier of the chat that posted the stories to search for; pass 0 to search stories in all chats.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Hashtag or cashtag to search for.
 */
@@ -34863,7 +35131,7 @@ Identifier of the messages.
 }
 
 /**
-Changes a story sent by the bot on behalf of a business account; for bots only.
+Changes a story posted by the bot on behalf of a business account; for bots only.
 Request type for {@link Tdjson#editBusinessStory}.
 */
 export interface EditBusinessStory {
@@ -34871,7 +35139,7 @@ export interface EditBusinessStory {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Identifier of the story to edit.
 */
@@ -34895,7 +35163,7 @@ The new privacy settings for the story.
 }
 
 /**
-Deletes a story sent by the bot on behalf of a business account; for bots only.
+Deletes a story posted by the bot on behalf of a business account; for bots only.
 Request type for {@link Tdjson#deleteBusinessStory}.
 */
 export interface DeleteBusinessStory {
@@ -38311,7 +38579,7 @@ export interface GetStory {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Story identifier.
 */
@@ -38324,21 +38592,21 @@ Pass true to get only locally available information without sending network requ
 
 /**
 Returns supergroup and channel chats in which the current user has the right to post stories. The chats must be
-rechecked with canSendStory before actually trying to post a story there.
-Request type for {@link Tdjson#getChatsToSendStories}.
+rechecked with canPostStory before actually trying to post a story there.
+Request type for {@link Tdjson#getChatsToPostStories}.
 */
-export interface GetChatsToSendStories {
-	'@type': 'getChatsToSendStories';
+export interface GetChatsToPostStories {
+	'@type': 'getChatsToPostStories';
 
 }
 
 /**
-Checks whether the current user can send a story on behalf of a chat; requires can_post_stories right for supergroup and
+Checks whether the current user can post a story on behalf of a chat; requires can_post_stories right for supergroup and
 channel chats.
-Request type for {@link Tdjson#canSendStory}.
+Request type for {@link Tdjson#canPostStory}.
 */
-export interface CanSendStory {
-	'@type': 'canSendStory';
+export interface CanPostStory {
+	'@type': 'canPostStory';
 	/**
 Chat identifier. Pass Saved Messages chat identifier when posting a story on behalf of the current user.
 */
@@ -38346,12 +38614,12 @@ Chat identifier. Pass Saved Messages chat identifier when posting a story on beh
 }
 
 /**
-Sends a new story to a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary
-story.
-Request type for {@link Tdjson#sendStory}.
+Posts a new story on behalf of a chat; requires can_post_stories right for supergroup and channel chats. Returns a
+temporary story.
+Request type for {@link Tdjson#postStory}.
 */
-export interface SendStory {
-	'@type': 'sendStory';
+export interface PostStory {
+	'@type': 'postStory';
 	/**
 Identifier of the chat that will post the story. Pass Saved Messages chat identifier when posting a story on behalf of
 the current user.
@@ -38371,7 +38639,7 @@ only if getOption("can_use_text_entities_in_story_caption").
 */
 	caption: FormattedText;
 	/**
-The privacy settings for the story; ignored for stories sent to supergroup and channel chats.
+The privacy settings for the story; ignored for stories posted on behalf of supergroup and channel chats.
 */
 	privacy_settings: StoryPrivacySettings;
 	/**
@@ -38403,7 +38671,7 @@ export interface EditStory {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Identifier of the story to edit.
 */
@@ -38432,7 +38700,7 @@ export interface EditStoryCover {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Identifier of the story to edit.
 */
@@ -38470,7 +38738,7 @@ export interface ToggleStoryIsPostedToChatPage {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Identifier of the story.
 */
@@ -38482,7 +38750,7 @@ Pass true to make the story accessible after expiration; pass false to make it p
 }
 
 /**
-Deletes a previously sent story. Can be called only if story.can_be_deleted == true.
+Deletes a previously posted story. Can be called only if story.can_be_deleted == true.
 Request type for {@link Tdjson#deleteStory}.
 */
 export interface DeleteStory {
@@ -38490,7 +38758,7 @@ export interface DeleteStory {
 	/**
 Identifier of the chat that posted the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Identifier of the story to delete.
 */
@@ -38508,7 +38776,7 @@ export interface GetStoryNotificationSettingsExceptions {
 
 /**
 Loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted
-by the pair (active_stories.order, active_stories.story_sender_chat_id) in descending order. Returns a 404 error if all
+by the pair (active_stories.order, active_stories.story_poster_chat_id) in descending order. Returns a 404 error if all
 active stories have been loaded.
 Request type for {@link Tdjson#loadActiveStories}.
 */
@@ -38619,9 +38887,9 @@ Request type for {@link Tdjson#openStory}.
 export interface OpenStory {
 	'@type': 'openStory';
 	/**
-The identifier of the sender of the opened story.
+The identifier of the chat that posted the opened story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 The identifier of the story.
 */
@@ -38635,9 +38903,9 @@ Request type for {@link Tdjson#closeStory}.
 export interface CloseStory {
 	'@type': 'closeStory';
 	/**
-The identifier of the sender of the story to close.
+The identifier of the poster of the story to close.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 The identifier of the story.
 */
@@ -38663,9 +38931,9 @@ Request type for {@link Tdjson#setStoryReaction}.
 export interface SetStoryReaction {
 	'@type': 'setStoryReaction';
 	/**
-The identifier of the sender of the story.
+The identifier of the poster of the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 The identifier of the story.
 */
@@ -38728,9 +38996,9 @@ Request type for {@link Tdjson#getChatStoryInteractions}.
 export interface GetChatStoryInteractions {
 	'@type': 'getChatStoryInteractions';
 	/**
-The identifier of the sender of the story.
+The identifier of the poster of the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 Story identifier.
 */
@@ -38763,9 +39031,9 @@ Request type for {@link Tdjson#reportStory}.
 export interface ReportStory {
 	'@type': 'reportStory';
 	/**
-The identifier of the sender of the story to report.
+The identifier of the poster of the story to report.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 The identifier of the story to report.
 */
@@ -38800,9 +39068,9 @@ Request type for {@link Tdjson#getStoryPublicForwards}.
 export interface GetStoryPublicForwards {
 	'@type': 'getStoryPublicForwards';
 	/**
-The identifier of the sender of the story.
+The identifier of the poster of the story.
 */
-	story_sender_chat_id: number;
+	story_poster_chat_id: number;
 	/**
 The identifier of the story.
 */
@@ -39830,10 +40098,6 @@ The call protocols supported by the application.
 Pass true to create a video call.
 */
 	is_video?: boolean;
-	/**
-Identifier of the group call to which the user will be added after exchanging private key via the call; pass 0 if none.
-*/
-	group_call_id: number;
 }
 
 /**
@@ -39882,6 +40146,10 @@ Call identifier.
 Pass true if the user was disconnected.
 */
 	is_disconnected?: boolean;
+	/**
+If the call was upgraded to a group call, pass invite link to the group call.
+*/
+	invite_link: string;
 	/**
 The call duration, in seconds.
 */
@@ -40007,19 +40275,19 @@ Pass true to create an RTMP stream instead of an ordinary video chat.
 }
 
 /**
-Creates a group call from a one-to-one call.
+Creates a new group call that isn't bound to a chat.
 Request type for {@link Tdjson#createGroupCall}.
 */
 export interface CreateGroupCall {
 	'@type': 'createGroupCall';
 	/**
-Call identifier.
+Parameters to join the call; pass null to only create call link without joining the call.
 */
-	call_id: number;
+	join_parameters: GroupCallJoinParameters;
 }
 
 /**
-Returns RTMP URL for streaming to the chat; requires can_manage_video_chats administrator right.
+Returns RTMP URL for streaming to the video chat of a chat; requires can_manage_video_chats administrator right.
 Request type for {@link Tdjson#getVideoChatRtmpUrl}.
 */
 export interface GetVideoChatRtmpUrl {
@@ -40031,7 +40299,7 @@ Chat identifier.
 }
 
 /**
-Replaces the current RTMP URL for streaming to the chat; requires owner privileges.
+Replaces the current RTMP URL for streaming to the video chat of a chat; requires owner privileges in the chat.
 Request type for {@link Tdjson#replaceVideoChatRtmpUrl}.
 */
 export interface ReplaceVideoChatRtmpUrl {
@@ -40055,23 +40323,23 @@ Group call identifier.
 }
 
 /**
-Starts a scheduled group call.
-Request type for {@link Tdjson#startScheduledGroupCall}.
+Starts a scheduled video chat.
+Request type for {@link Tdjson#startScheduledVideoChat}.
 */
-export interface StartScheduledGroupCall {
-	'@type': 'startScheduledGroupCall';
+export interface StartScheduledVideoChat {
+	'@type': 'startScheduledVideoChat';
 	/**
-Group call identifier.
+Group call identifier of the video chat.
 */
 	group_call_id: number;
 }
 
 /**
-Toggles whether the current user will receive a notification when the group call starts; scheduled group calls only.
-Request type for {@link Tdjson#toggleGroupCallEnabledStartNotification}.
+Toggles whether the current user will receive a notification when the video chat starts; for scheduled video chats only.
+Request type for {@link Tdjson#toggleVideoChatEnabledStartNotification}.
 */
-export interface ToggleGroupCallEnabledStartNotification {
-	'@type': 'toggleGroupCallEnabledStartNotification';
+export interface ToggleVideoChatEnabledStartNotification {
+	'@type': 'toggleVideoChatEnabledStartNotification';
 	/**
 Group call identifier.
 */
@@ -40083,11 +40351,27 @@ New value of the enabled_start_notification setting.
 }
 
 /**
-Joins an active group call. Returns join response payload for tgcalls.
+Joins a group call that is not bound to a chat.
 Request type for {@link Tdjson#joinGroupCall}.
 */
 export interface JoinGroupCall {
 	'@type': 'joinGroupCall';
+	/**
+The group call to join.
+*/
+	input_group_call: InputGroupCall;
+	/**
+Parameters to join the call.
+*/
+	join_parameters: GroupCallJoinParameters;
+}
+
+/**
+Joins an active video chat. Returns join response payload for tgcalls.
+Request type for {@link Tdjson#joinVideoChat}.
+*/
+export interface JoinVideoChat {
+	'@type': 'joinVideoChat';
 	/**
 Group call identifier.
 */
@@ -40098,29 +40382,13 @@ only.
 */
 	participant_id: MessageSender;
 	/**
-Caller audio channel synchronization source identifier; received from tgcalls.
+Parameters to join the call.
 */
-	audio_source_id: number;
+	join_parameters: GroupCallJoinParameters;
 	/**
-Group call join payload; received from tgcalls.
-*/
-	payload: string;
-	/**
-Pass true to join the call with muted microphone.
-*/
-	is_muted?: boolean;
-	/**
-Pass true if the user's video is enabled.
-*/
-	is_my_video_enabled?: boolean;
-	/**
-If non-empty, invite hash to be used to join the group call without being muted by administrators.
+Invite hash as received from internalLinkTypeVideoChat.
 */
 	invite_hash: string;
-	/**
-Fingerprint of the encryption key for E2E group calls not bound to a chat; pass 0 for voice chats.
-*/
-	key_fingerprint: string;
 }
 
 /**
@@ -40172,11 +40440,11 @@ Group call identifier.
 }
 
 /**
-Sets group call title. Requires groupCall.can_be_managed group call flag.
-Request type for {@link Tdjson#setGroupCallTitle}.
+Sets title of a video chat; requires groupCall.can_be_managed right.
+Request type for {@link Tdjson#setVideoChatTitle}.
 */
-export interface SetGroupCallTitle {
-	'@type': 'setGroupCallTitle';
+export interface SetVideoChatTitle {
+	'@type': 'setVideoChatTitle';
 	/**
 Group call identifier.
 */
@@ -40188,12 +40456,12 @@ New group call title; 1-64 characters.
 }
 
 /**
-Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires
-groupCall.can_toggle_mute_new_participants group call flag.
-Request type for {@link Tdjson#toggleGroupCallMuteNewParticipants}.
+Toggles whether new participants of a video chat can be unmuted only by administrators of the video chat. Requires
+groupCall.can_toggle_mute_new_participants right.
+Request type for {@link Tdjson#toggleVideoChatMuteNewParticipants}.
 */
-export interface ToggleGroupCallMuteNewParticipants {
-	'@type': 'toggleGroupCallMuteNewParticipants';
+export interface ToggleVideoChatMuteNewParticipants {
+	'@type': 'toggleVideoChatMuteNewParticipants';
 	/**
 Group call identifier.
 */
@@ -40205,12 +40473,68 @@ New value of the mute_new_participants setting.
 }
 
 /**
-Invites users to an active group call. Sends a service message of type messageInviteVideoChatParticipants for video
-chats.
-Request type for {@link Tdjson#inviteGroupCallParticipants}.
+Invites a user to an active group call; for group calls not bound to a chat only. Sends a service message of the type
+messageGroupCall. The group call can have at most getOption("group_call_participant_count_max") participants.
+Request type for {@link Tdjson#inviteGroupCallParticipant}.
 */
-export interface InviteGroupCallParticipants {
-	'@type': 'inviteGroupCallParticipants';
+export interface InviteGroupCallParticipant {
+	'@type': 'inviteGroupCallParticipant';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+Pass true if the group call is a video call.
+*/
+	is_video?: boolean;
+}
+
+/**
+Declines an invitation to an active group call via messageGroupCall. Can be called both by the sender and the receiver
+of the invitation.
+Request type for {@link Tdjson#declineGroupCallInvitation}.
+*/
+export interface DeclineGroupCallInvitation {
+	'@type': 'declineGroupCallInvitation';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message of the type messageGroupCall.
+*/
+	message_id: number;
+}
+
+/**
+Bans users from a group call not bound to a chat; requires groupCall.is_owned. Only the owner of the group call can
+invite the banned users back.
+Request type for {@link Tdjson#banGroupCallParticipants}.
+*/
+export interface BanGroupCallParticipants {
+	'@type': 'banGroupCallParticipants';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Identifiers of group call participants to ban; identifiers of unknown users from the update updateGroupCallParticipants
+can be also passed to the method.
+*/
+	user_ids: string[];
+}
+
+/**
+Invites users to an active video chat. Sends a service message of the type messageInviteVideoChatParticipants to the
+chat bound to the group call.
+Request type for {@link Tdjson#inviteVideoChatParticipants}.
+*/
+export interface InviteVideoChatParticipants {
+	'@type': 'inviteVideoChatParticipants';
 	/**
 Group call identifier.
 */
@@ -40223,23 +40547,24 @@ User identifiers. At most 10 users can be invited simultaneously.
 
 /**
 Returns invite link to a video chat in a public chat.
-Request type for {@link Tdjson#getGroupCallInviteLink}.
+Request type for {@link Tdjson#getVideoChatInviteLink}.
 */
-export interface GetGroupCallInviteLink {
-	'@type': 'getGroupCallInviteLink';
+export interface GetVideoChatInviteLink {
+	'@type': 'getVideoChatInviteLink';
 	/**
 Group call identifier.
 */
 	group_call_id: number;
 	/**
-Pass true if the invite link needs to contain an invite hash, passing which to joinGroupCall would allow the invited
-user to unmute themselves. Requires groupCall.can_be_managed group call flag.
+Pass true if the invite link needs to contain an invite hash, passing which to joinVideoChat would allow the invited
+user to unmute themselves. Requires groupCall.can_be_managed right.
 */
 	can_self_unmute?: boolean;
 }
 
 /**
-Revokes invite link for a group call. Requires groupCall.can_be_managed group call flag.
+Revokes invite link for a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned
+otherwise.
 Request type for {@link Tdjson#revokeGroupCallInviteLink}.
 */
 export interface RevokeGroupCallInviteLink {
@@ -40251,7 +40576,7 @@ Group call identifier.
 }
 
 /**
-Starts recording of an active group call. Requires groupCall.can_be_managed group call flag.
+Starts recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
 Request type for {@link Tdjson#startGroupCallRecording}.
 */
 export interface StartGroupCallRecording {
@@ -40275,7 +40600,7 @@ Pass true to use portrait orientation for video instead of landscape one.
 }
 
 /**
-Ends recording of an active group call. Requires groupCall.can_be_managed group call flag.
+Ends recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
 Request type for {@link Tdjson#endGroupCallRecording}.
 */
 export interface EndGroupCallRecording {
@@ -40319,7 +40644,7 @@ Pass true if the current user's video is enabled.
 }
 
 /**
-Informs TDLib that speaking state of a participant of an active group has changed.
+Informs TDLib that speaking state of a participant of an active group call has changed.
 Request type for {@link Tdjson#setGroupCallParticipantIsSpeaking}.
 */
 export interface SetGroupCallParticipantIsSpeaking {
@@ -40359,8 +40684,9 @@ Pass true to mute the user; pass false to unmute them.
 }
 
 /**
-Changes volume level of a participant of an active group call. If the current user can manage the group call, then the
-participant's volume level will be changed for all users with the default volume level.
+Changes volume level of a participant of an active group call. If the current user can manage the group call or is the
+owner of the group call, then the participant's volume level will be changed for all users with the default volume
+level.
 Request type for {@link Tdjson#setGroupCallParticipantVolumeLevel}.
 */
 export interface SetGroupCallParticipantVolumeLevel {
@@ -40380,7 +40706,7 @@ New participant's volume level; 1-20000 in hundreds of percents.
 }
 
 /**
-Toggles whether a group call participant hand is rased.
+Toggles whether a group call participant hand is rased; for video chats only.
 Request type for {@link Tdjson#toggleGroupCallParticipantIsHandRaised}.
 */
 export interface ToggleGroupCallParticipantIsHandRaised {
@@ -40394,10 +40720,26 @@ Participant identifier.
 */
 	participant_id: MessageSender;
 	/**
-Pass true if the user's hand needs to be raised. Only self hand can be raised. Requires groupCall.can_be_managed group
-call flag to lower other's hand.
+Pass true if the user's hand needs to be raised. Only self hand can be raised. Requires groupCall.can_be_managed right
+to lower other's hand.
 */
 	is_hand_raised?: boolean;
+}
+
+/**
+Returns information about participants of a non-joined group call that is not bound to a chat.
+Request type for {@link Tdjson#getGroupCallParticipants}.
+*/
+export interface GetGroupCallParticipants {
+	'@type': 'getGroupCallParticipants';
+	/**
+The group call which participants will be returned.
+*/
+	input_group_call: InputGroupCall;
+	/**
+The maximum number of participants to return; must be positive.
+*/
+	limit: number;
 }
 
 /**
@@ -40431,7 +40773,7 @@ Group call identifier.
 }
 
 /**
-Ends a group call. Requires groupCall.can_be_managed.
+Ends a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
 Request type for {@link Tdjson#endGroupCall}.
 */
 export interface EndGroupCall {
@@ -40443,11 +40785,11 @@ Group call identifier.
 }
 
 /**
-Returns information about available group call streams.
-Request type for {@link Tdjson#getGroupCallStreams}.
+Returns information about available video chat streams.
+Request type for {@link Tdjson#getVideoChatStreams}.
 */
-export interface GetGroupCallStreams {
-	'@type': 'getGroupCallStreams';
+export interface GetVideoChatStreams {
+	'@type': 'getVideoChatStreams';
 	/**
 Group call identifier.
 */
@@ -40455,11 +40797,11 @@ Group call identifier.
 }
 
 /**
-Returns a file with a segment of a group call stream in a modified OGG format for audio or MPEG-4 format for video.
-Request type for {@link Tdjson#getGroupCallStreamSegment}.
+Returns a file with a segment of a video chat stream in a modified OGG format for audio or MPEG-4 format for video.
+Request type for {@link Tdjson#getVideoChatStreamSegment}.
 */
-export interface GetGroupCallStreamSegment {
-	'@type': 'getGroupCallStreamSegment';
+export interface GetVideoChatStreamSegment {
+	'@type': 'getVideoChatStreamSegment';
 	/**
 Group call identifier.
 */
@@ -40480,6 +40822,54 @@ Identifier of an audio/video channel to get as received from tgcalls.
 Video quality as received from tgcalls; pass null to get the worst available quality.
 */
 	video_quality: GroupCallVideoQuality;
+}
+
+/**
+Encrypts group call data before sending them over network using tgcalls.
+Request type for {@link Tdjson#encryptGroupCallData}.
+*/
+export interface EncryptGroupCallData {
+	'@type': 'encryptGroupCallData';
+	/**
+Group call identifier. The call must not be a video chat.
+*/
+	group_call_id: number;
+	/**
+Data channel for which data is encrypted.
+*/
+	data_channel: GroupCallDataChannel;
+	/**
+Data to encrypt.
+*/
+	data: string;
+	/**
+Size of data prefix that must be kept unencrypted.
+*/
+	unencrypted_prefix_size: number;
+}
+
+/**
+Decrypts group call data received by tgcalls.
+Request type for {@link Tdjson#decryptGroupCallData}.
+*/
+export interface DecryptGroupCallData {
+	'@type': 'decryptGroupCallData';
+	/**
+Group call identifier. The call must not be a video chat.
+*/
+	group_call_id: number;
+	/**
+Identifier of the group call participant, which sent the data.
+*/
+	participant_id: MessageSender;
+	/**
+Data channel for which data was encrypted; pass null if unknown.
+*/
+	data_channel: GroupCallDataChannel;
+	/**
+Data to decrypt.
+*/
+	data: string;
 }
 
 /**
@@ -46282,9 +46672,9 @@ export type Request =
 	| ReadChatList
 	| GetCurrentWeather
 	| GetStory
-	| GetChatsToSendStories
-	| CanSendStory
-	| SendStory
+	| GetChatsToPostStories
+	| CanPostStory
+	| PostStory
 	| EditStory
 	| EditStoryCover
 	| SetStoryPrivacySettings
@@ -46377,16 +46767,20 @@ export type Request =
 	| GetVideoChatRtmpUrl
 	| ReplaceVideoChatRtmpUrl
 	| GetGroupCall
-	| StartScheduledGroupCall
-	| ToggleGroupCallEnabledStartNotification
+	| StartScheduledVideoChat
+	| ToggleVideoChatEnabledStartNotification
 	| JoinGroupCall
+	| JoinVideoChat
 	| StartGroupCallScreenSharing
 	| ToggleGroupCallScreenSharingIsPaused
 	| EndGroupCallScreenSharing
-	| SetGroupCallTitle
-	| ToggleGroupCallMuteNewParticipants
-	| InviteGroupCallParticipants
-	| GetGroupCallInviteLink
+	| SetVideoChatTitle
+	| ToggleVideoChatMuteNewParticipants
+	| InviteGroupCallParticipant
+	| DeclineGroupCallInvitation
+	| BanGroupCallParticipants
+	| InviteVideoChatParticipants
+	| GetVideoChatInviteLink
 	| RevokeGroupCallInviteLink
 	| StartGroupCallRecording
 	| EndGroupCallRecording
@@ -46396,11 +46790,14 @@ export type Request =
 	| ToggleGroupCallParticipantIsMuted
 	| SetGroupCallParticipantVolumeLevel
 	| ToggleGroupCallParticipantIsHandRaised
+	| GetGroupCallParticipants
 	| LoadGroupCallParticipants
 	| LeaveGroupCall
 	| EndGroupCall
-	| GetGroupCallStreams
-	| GetGroupCallStreamSegment
+	| GetVideoChatStreams
+	| GetVideoChatStreamSegment
+	| EncryptGroupCallData
+	| DecryptGroupCallData
 	| SetMessageSenderBlockList
 	| BlockMessageSenderFromReplies
 	| GetBlockedMessageSenders
@@ -47881,8 +48278,8 @@ optimal performance, the number of returned messages is chosen by TDLib and can 
 	}
 
 	/**
-Searches for call messages. Returns the results in reverse chronological order (i.e., in order of decreasing
-message_id). For optimal performance, the number of returned messages is chosen by TDLib.
+Searches for call and group call messages. Returns the results in reverse chronological order (i.e., in order of
+decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
 */
 	async searchCallMessages(options: Omit<SearchCallMessages, '@type'>): Promise<FoundMessages> {
 		return this._request({
@@ -48614,7 +49011,7 @@ Deletes messages on behalf of a business account; for bots only.
 	}
 
 	/**
-Changes a story sent by the bot on behalf of a business account; for bots only.
+Changes a story posted by the bot on behalf of a business account; for bots only.
 */
 	async editBusinessStory(options: Omit<EditBusinessStory, '@type'>): Promise<Story> {
 		return this._request({
@@ -48624,7 +49021,7 @@ Changes a story sent by the bot on behalf of a business account; for bots only.
 	}
 
 	/**
-Deletes a story sent by the bot on behalf of a business account; for bots only.
+Deletes a story posted by the bot on behalf of a business account; for bots only.
 */
 	async deleteBusinessStory(options: Omit<DeleteBusinessStory, '@type'>): Promise<Ok> {
 		return this._request({
@@ -50654,33 +51051,33 @@ Returns a story.
 
 	/**
 Returns supergroup and channel chats in which the current user has the right to post stories. The chats must be
-rechecked with canSendStory before actually trying to post a story there.
+rechecked with canPostStory before actually trying to post a story there.
 */
-	async getChatsToSendStories(): Promise<Chats> {
+	async getChatsToPostStories(): Promise<Chats> {
 		return this._request({
-			'@type': 'getChatsToSendStories',
+			'@type': 'getChatsToPostStories',
 		});
 	}
 
 	/**
-Checks whether the current user can send a story on behalf of a chat; requires can_post_stories right for supergroup and
+Checks whether the current user can post a story on behalf of a chat; requires can_post_stories right for supergroup and
 channel chats.
 */
-	async canSendStory(options: Omit<CanSendStory, '@type'>): Promise<CanSendStoryResult> {
+	async canPostStory(options: Omit<CanPostStory, '@type'>): Promise<CanPostStoryResult> {
 		return this._request({
 			...options,
-			'@type': 'canSendStory',
+			'@type': 'canPostStory',
 		});
 	}
 
 	/**
-Sends a new story to a chat; requires can_post_stories right for supergroup and channel chats. Returns a temporary
-story.
+Posts a new story on behalf of a chat; requires can_post_stories right for supergroup and channel chats. Returns a
+temporary story.
 */
-	async sendStory(options: Omit<SendStory, '@type'>): Promise<Story> {
+	async postStory(options: Omit<PostStory, '@type'>): Promise<Story> {
 		return this._request({
 			...options,
-			'@type': 'sendStory',
+			'@type': 'postStory',
 		});
 	}
 
@@ -50727,7 +51124,7 @@ true.
 	}
 
 	/**
-Deletes a previously sent story. Can be called only if story.can_be_deleted == true.
+Deletes a previously posted story. Can be called only if story.can_be_deleted == true.
 */
 	async deleteStory(options: Omit<DeleteStory, '@type'>): Promise<Ok> {
 		return this._request({
@@ -50747,7 +51144,7 @@ Returns the list of chats with non-default notification settings for stories.
 
 	/**
 Loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted
-by the pair (active_stories.order, active_stories.story_sender_chat_id) in descending order. Returns a 404 error if all
+by the pair (active_stories.order, active_stories.story_poster_chat_id) in descending order. Returns a 404 error if all
 active stories have been loaded.
 */
 	async loadActiveStories(options: Omit<LoadActiveStories, '@type'>): Promise<Ok> {
@@ -51188,7 +51585,7 @@ Finishes the file generation.
 Reads a part of a file from the TDLib file cache and returns read bytes. This method is intended to be used only if the
 application has no direct access to TDLib's file system, because it is usually slower than a direct read from the file.
 */
-	async readFilePart(options: Omit<ReadFilePart, '@type'>): Promise<FilePart> {
+	async readFilePart(options: Omit<ReadFilePart, '@type'>): Promise<Data> {
 		return this._request({
 			...options,
 			'@type': 'readFilePart',
@@ -51593,9 +51990,9 @@ can_manage_video_chats administrator right.
 	}
 
 	/**
-Creates a group call from a one-to-one call.
+Creates a new group call that isn't bound to a chat.
 */
-	async createGroupCall(options: Omit<CreateGroupCall, '@type'>): Promise<Ok> {
+	async createGroupCall(options: Omit<CreateGroupCall, '@type'>): Promise<GroupCallInfo> {
 		return this._request({
 			...options,
 			'@type': 'createGroupCall',
@@ -51603,7 +52000,7 @@ Creates a group call from a one-to-one call.
 	}
 
 	/**
-Returns RTMP URL for streaming to the chat; requires can_manage_video_chats administrator right.
+Returns RTMP URL for streaming to the video chat of a chat; requires can_manage_video_chats administrator right.
 */
 	async getVideoChatRtmpUrl(options: Omit<GetVideoChatRtmpUrl, '@type'>): Promise<RtmpUrl> {
 		return this._request({
@@ -51613,7 +52010,7 @@ Returns RTMP URL for streaming to the chat; requires can_manage_video_chats admi
 	}
 
 	/**
-Replaces the current RTMP URL for streaming to the chat; requires owner privileges.
+Replaces the current RTMP URL for streaming to the video chat of a chat; requires owner privileges in the chat.
 */
 	async replaceVideoChatRtmpUrl(options: Omit<ReplaceVideoChatRtmpUrl, '@type'>): Promise<RtmpUrl> {
 		return this._request({
@@ -51633,32 +52030,42 @@ Returns information about a group call.
 	}
 
 	/**
-Starts a scheduled group call.
+Starts a scheduled video chat.
 */
-	async startScheduledGroupCall(options: Omit<StartScheduledGroupCall, '@type'>): Promise<Ok> {
+	async startScheduledVideoChat(options: Omit<StartScheduledVideoChat, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'startScheduledGroupCall',
+			'@type': 'startScheduledVideoChat',
 		});
 	}
 
 	/**
-Toggles whether the current user will receive a notification when the group call starts; scheduled group calls only.
+Toggles whether the current user will receive a notification when the video chat starts; for scheduled video chats only.
 */
-	async toggleGroupCallEnabledStartNotification(options: Omit<ToggleGroupCallEnabledStartNotification, '@type'>): Promise<Ok> {
+	async toggleVideoChatEnabledStartNotification(options: Omit<ToggleVideoChatEnabledStartNotification, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'toggleGroupCallEnabledStartNotification',
+			'@type': 'toggleVideoChatEnabledStartNotification',
 		});
 	}
 
 	/**
-Joins an active group call. Returns join response payload for tgcalls.
+Joins a group call that is not bound to a chat.
 */
-	async joinGroupCall(options: Omit<JoinGroupCall, '@type'>): Promise<Text> {
+	async joinGroupCall(options: Omit<JoinGroupCall, '@type'>): Promise<GroupCallInfo> {
 		return this._request({
 			...options,
 			'@type': 'joinGroupCall',
+		});
+	}
+
+	/**
+Joins an active video chat. Returns join response payload for tgcalls.
+*/
+	async joinVideoChat(options: Omit<JoinVideoChat, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'joinVideoChat',
 		});
 	}
 
@@ -51693,49 +52100,83 @@ Ends screen sharing in a joined group call.
 	}
 
 	/**
-Sets group call title. Requires groupCall.can_be_managed group call flag.
+Sets title of a video chat; requires groupCall.can_be_managed right.
 */
-	async setGroupCallTitle(options: Omit<SetGroupCallTitle, '@type'>): Promise<Ok> {
+	async setVideoChatTitle(options: Omit<SetVideoChatTitle, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'setGroupCallTitle',
+			'@type': 'setVideoChatTitle',
 		});
 	}
 
 	/**
-Toggles whether new participants of a group call can be unmuted only by administrators of the group call. Requires
-groupCall.can_toggle_mute_new_participants group call flag.
+Toggles whether new participants of a video chat can be unmuted only by administrators of the video chat. Requires
+groupCall.can_toggle_mute_new_participants right.
 */
-	async toggleGroupCallMuteNewParticipants(options: Omit<ToggleGroupCallMuteNewParticipants, '@type'>): Promise<Ok> {
+	async toggleVideoChatMuteNewParticipants(options: Omit<ToggleVideoChatMuteNewParticipants, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'toggleGroupCallMuteNewParticipants',
+			'@type': 'toggleVideoChatMuteNewParticipants',
 		});
 	}
 
 	/**
-Invites users to an active group call. Sends a service message of type messageInviteVideoChatParticipants for video
-chats.
+Invites a user to an active group call; for group calls not bound to a chat only. Sends a service message of the type
+messageGroupCall. The group call can have at most getOption("group_call_participant_count_max") participants.
 */
-	async inviteGroupCallParticipants(options: Omit<InviteGroupCallParticipants, '@type'>): Promise<Ok> {
+	async inviteGroupCallParticipant(options: Omit<InviteGroupCallParticipant, '@type'>): Promise<InviteGroupCallParticipantResult> {
 		return this._request({
 			...options,
-			'@type': 'inviteGroupCallParticipants',
+			'@type': 'inviteGroupCallParticipant',
+		});
+	}
+
+	/**
+Declines an invitation to an active group call via messageGroupCall. Can be called both by the sender and the receiver
+of the invitation.
+*/
+	async declineGroupCallInvitation(options: Omit<DeclineGroupCallInvitation, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'declineGroupCallInvitation',
+		});
+	}
+
+	/**
+Bans users from a group call not bound to a chat; requires groupCall.is_owned. Only the owner of the group call can
+invite the banned users back.
+*/
+	async banGroupCallParticipants(options: Omit<BanGroupCallParticipants, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'banGroupCallParticipants',
+		});
+	}
+
+	/**
+Invites users to an active video chat. Sends a service message of the type messageInviteVideoChatParticipants to the
+chat bound to the group call.
+*/
+	async inviteVideoChatParticipants(options: Omit<InviteVideoChatParticipants, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'inviteVideoChatParticipants',
 		});
 	}
 
 	/**
 Returns invite link to a video chat in a public chat.
 */
-	async getGroupCallInviteLink(options: Omit<GetGroupCallInviteLink, '@type'>): Promise<HttpUrl> {
+	async getVideoChatInviteLink(options: Omit<GetVideoChatInviteLink, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
-			'@type': 'getGroupCallInviteLink',
+			'@type': 'getVideoChatInviteLink',
 		});
 	}
 
 	/**
-Revokes invite link for a group call. Requires groupCall.can_be_managed group call flag.
+Revokes invite link for a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned
+otherwise.
 */
 	async revokeGroupCallInviteLink(options: Omit<RevokeGroupCallInviteLink, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51745,7 +52186,7 @@ Revokes invite link for a group call. Requires groupCall.can_be_managed group ca
 	}
 
 	/**
-Starts recording of an active group call. Requires groupCall.can_be_managed group call flag.
+Starts recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
 */
 	async startGroupCallRecording(options: Omit<StartGroupCallRecording, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51755,7 +52196,7 @@ Starts recording of an active group call. Requires groupCall.can_be_managed grou
 	}
 
 	/**
-Ends recording of an active group call. Requires groupCall.can_be_managed group call flag.
+Ends recording of an active group call; for video chats only. Requires groupCall.can_be_managed right.
 */
 	async endGroupCallRecording(options: Omit<EndGroupCallRecording, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51785,7 +52226,7 @@ Toggles whether current user's video is enabled.
 	}
 
 	/**
-Informs TDLib that speaking state of a participant of an active group has changed.
+Informs TDLib that speaking state of a participant of an active group call has changed.
 */
 	async setGroupCallParticipantIsSpeaking(options: Omit<SetGroupCallParticipantIsSpeaking, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51805,8 +52246,9 @@ Toggles whether a participant of an active group call is muted, unmuted, or allo
 	}
 
 	/**
-Changes volume level of a participant of an active group call. If the current user can manage the group call, then the
-participant's volume level will be changed for all users with the default volume level.
+Changes volume level of a participant of an active group call. If the current user can manage the group call or is the
+owner of the group call, then the participant's volume level will be changed for all users with the default volume
+level.
 */
 	async setGroupCallParticipantVolumeLevel(options: Omit<SetGroupCallParticipantVolumeLevel, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51816,12 +52258,22 @@ participant's volume level will be changed for all users with the default volume
 	}
 
 	/**
-Toggles whether a group call participant hand is rased.
+Toggles whether a group call participant hand is rased; for video chats only.
 */
 	async toggleGroupCallParticipantIsHandRaised(options: Omit<ToggleGroupCallParticipantIsHandRaised, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleGroupCallParticipantIsHandRaised',
+		});
+	}
+
+	/**
+Returns information about participants of a non-joined group call that is not bound to a chat.
+*/
+	async getGroupCallParticipants(options: Omit<GetGroupCallParticipants, '@type'>): Promise<GroupCallParticipants> {
+		return this._request({
+			...options,
+			'@type': 'getGroupCallParticipants',
 		});
 	}
 
@@ -51847,7 +52299,7 @@ Leaves a group call.
 	}
 
 	/**
-Ends a group call. Requires groupCall.can_be_managed.
+Ends a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
 */
 	async endGroupCall(options: Omit<EndGroupCall, '@type'>): Promise<Ok> {
 		return this._request({
@@ -51857,22 +52309,42 @@ Ends a group call. Requires groupCall.can_be_managed.
 	}
 
 	/**
-Returns information about available group call streams.
+Returns information about available video chat streams.
 */
-	async getGroupCallStreams(options: Omit<GetGroupCallStreams, '@type'>): Promise<GroupCallStreams> {
+	async getVideoChatStreams(options: Omit<GetVideoChatStreams, '@type'>): Promise<VideoChatStreams> {
 		return this._request({
 			...options,
-			'@type': 'getGroupCallStreams',
+			'@type': 'getVideoChatStreams',
 		});
 	}
 
 	/**
-Returns a file with a segment of a group call stream in a modified OGG format for audio or MPEG-4 format for video.
+Returns a file with a segment of a video chat stream in a modified OGG format for audio or MPEG-4 format for video.
 */
-	async getGroupCallStreamSegment(options: Omit<GetGroupCallStreamSegment, '@type'>): Promise<FilePart> {
+	async getVideoChatStreamSegment(options: Omit<GetVideoChatStreamSegment, '@type'>): Promise<Data> {
 		return this._request({
 			...options,
-			'@type': 'getGroupCallStreamSegment',
+			'@type': 'getVideoChatStreamSegment',
+		});
+	}
+
+	/**
+Encrypts group call data before sending them over network using tgcalls.
+*/
+	async encryptGroupCallData(options: Omit<EncryptGroupCallData, '@type'>): Promise<Data> {
+		return this._request({
+			...options,
+			'@type': 'encryptGroupCallData',
+		});
+	}
+
+	/**
+Decrypts group call data received by tgcalls.
+*/
+	async decryptGroupCallData(options: Omit<DecryptGroupCallData, '@type'>): Promise<Data> {
+		return this._request({
+			...options,
+			'@type': 'decryptGroupCallData',
 		});
 	}
 
