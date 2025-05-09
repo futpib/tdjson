@@ -3474,6 +3474,10 @@ Describes a backdrop of an upgraded gift.
 export interface UpgradedGiftBackdrop {
 	'@type': 'upgradedGiftBackdrop';
 	/**
+Unique identifier of the backdrop.
+*/
+	id: number;
+	/**
 Name of the backdrop.
 */
 	name: string;
@@ -3559,17 +3563,6 @@ Point in time (Unix timestamp) when the gift was send for the last time; for sol
 }
 
 /**
-Contains a list of gifts that can be sent to another user or channel chat.
-*/
-export interface Gifts {
-	'@type': 'gifts';
-	/**
-The list of gifts.
-*/
-	gifts: Gift[];
-}
-
-/**
 Describes an upgraded gift that can be transferred to another owner or transferred to the TON blockchain as an NFT.
 */
 export interface UpgradedGift {
@@ -3583,7 +3576,7 @@ The title of the upgraded gift.
 */
 	title: string;
 	/**
-Unique name of the upgraded gift that can be used with internalLinkTypeUpgradedGift.
+Unique name of the upgraded gift that can be used with internalLinkTypeUpgradedGift or sendResoldGift.
 */
 	name: string;
 	/**
@@ -3632,6 +3625,10 @@ Backdrop of the upgraded gift.
 Information about the originally sent gift; may be null if unknown.
 */
 	original_details: UpgradedGiftOriginalDetails;
+	/**
+Number of Telegram Stars that must be paid to buy the gift and send it to someone else; 0 if resale isn't possible.
+*/
+	resale_star_count: number;
 }
 
 /**
@@ -3660,9 +3657,207 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift.
 */
 	transfer_star_count: number;
 	/**
+Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred
+immediately or transfer isn't possible.
+*/
+	next_transfer_date: number;
+	/**
+Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the
+receiver of the gift.
+*/
+	next_resale_date: number;
+	/**
 Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT.
 */
 	export_date: number;
+}
+
+/**
+Describes a gift that is available for purchase.
+*/
+export interface AvailableGift {
+	'@type': 'availableGift';
+	/**
+The gift.
+*/
+	gift: Gift;
+	/**
+Number of gifts that are available for resale.
+*/
+	resale_count: number;
+	/**
+The minimum price for the gifts available for resale; 0 if there are no such gifts.
+*/
+	min_resale_star_count: number;
+	/**
+The title of the upgraded gift; empty if the gift isn't available for resale.
+*/
+	title: string;
+}
+
+/**
+Contains a list of gifts that can be sent to another user or channel chat.
+*/
+export interface AvailableGifts {
+	'@type': 'availableGifts';
+	/**
+The list of gifts.
+*/
+	gifts: AvailableGift[];
+}
+
+/**
+Contains identifier of an upgraded gift attribute to search for.
+Subtype of {@link UpgradedGiftAttributeId}.
+*/
+export interface UpgradedGiftAttributeIdModel {
+	'@type': 'upgradedGiftAttributeIdModel';
+	/**
+Identifier of the sticker representing the model.
+*/
+	sticker_id: string;
+}
+
+/**
+Identifier of a gift symbol.
+Subtype of {@link UpgradedGiftAttributeId}.
+*/
+export interface UpgradedGiftAttributeIdSymbol {
+	'@type': 'upgradedGiftAttributeIdSymbol';
+	/**
+Identifier of the sticker representing the symbol.
+*/
+	sticker_id: string;
+}
+
+/**
+Identifier of a gift backdrop.
+Subtype of {@link UpgradedGiftAttributeId}.
+*/
+export interface UpgradedGiftAttributeIdBackdrop {
+	'@type': 'upgradedGiftAttributeIdBackdrop';
+	/**
+Identifier of the backdrop.
+*/
+	backdrop_id: number;
+}
+
+/**
+Describes a model of an upgraded gift with the number of gifts found.
+*/
+export interface UpgradedGiftModelCount {
+	'@type': 'upgradedGiftModelCount';
+	/**
+The model.
+*/
+	model: UpgradedGiftModel;
+	/**
+Total number of gifts with the model.
+*/
+	total_count: number;
+}
+
+/**
+Describes a symbol shown on the pattern of an upgraded gift.
+*/
+export interface UpgradedGiftSymbolCount {
+	'@type': 'upgradedGiftSymbolCount';
+	/**
+The symbol.
+*/
+	symbol: UpgradedGiftSymbol;
+	/**
+Total number of gifts with the symbol.
+*/
+	total_count: number;
+}
+
+/**
+Describes a backdrop of an upgraded gift.
+*/
+export interface UpgradedGiftBackdropCount {
+	'@type': 'upgradedGiftBackdropCount';
+	/**
+The backdrop.
+*/
+	backdrop: UpgradedGiftBackdrop;
+	/**
+Total number of gifts with the symbol.
+*/
+	total_count: number;
+}
+
+/**
+Describes order in which upgraded gifts for resale will be sorted.
+Subtype of {@link GiftForResaleOrder}.
+*/
+export interface GiftForResaleOrderPrice {
+	'@type': 'giftForResaleOrderPrice';
+
+}
+
+/**
+The gifts will be sorted by the last date when their price was changed from the newest to the oldest.
+Subtype of {@link GiftForResaleOrder}.
+*/
+export interface GiftForResaleOrderPriceChangeDate {
+	'@type': 'giftForResaleOrderPriceChangeDate';
+
+}
+
+/**
+The gifts will be sorted by their number from the smallest to the largest.
+Subtype of {@link GiftForResaleOrder}.
+*/
+export interface GiftForResaleOrderNumber {
+	'@type': 'giftForResaleOrderNumber';
+
+}
+
+/**
+Describes a gift available for resale.
+*/
+export interface GiftForResale {
+	'@type': 'giftForResale';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+	/**
+Unique identifier of the received gift for the current user; only for the gifts owned by the current user.
+*/
+	received_gift_id: string;
+}
+
+/**
+Describes gifts available for resale.
+*/
+export interface GiftsForResale {
+	'@type': 'giftsForResale';
+	/**
+Total number of gifts found.
+*/
+	total_count: number;
+	/**
+The gifts.
+*/
+	gifts: GiftForResale[];
+	/**
+Available models; for searchGiftsForResale requests without offset and attributes only.
+*/
+	models: UpgradedGiftModelCount[];
+	/**
+Available symbols; for searchGiftsForResale requests without offset and attributes only.
+*/
+	symbols: UpgradedGiftSymbolCount[];
+	/**
+Available backdrops; for searchGiftsForResale requests without offset and attributes only.
+*/
+	backdrops: UpgradedGiftBackdropCount[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
 }
 
 /**
@@ -3751,6 +3946,16 @@ Number of Telegram Stars that were paid by the sender for the ability to upgrade
 Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
 */
 	transfer_star_count: number;
+	/**
+Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred
+immediately or transfer isn't possible; only for the receiver of the gift.
+*/
+	next_transfer_date: number;
+	/**
+Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the
+receiver of the gift.
+*/
+	next_resale_date: number;
 	/**
 Point in time (Unix timestamp) when the upgraded gift can be transferred to the TON blockchain as an NFT; 0 if NFT
 export isn't possible; only for the receiver of the gift.
@@ -4184,6 +4389,42 @@ Identifier of the user that initially sent the gift.
 The upgraded gift.
 */
 	gift: UpgradedGift;
+}
+
+/**
+The transaction is a purchase of an upgraded gift for some user or channel; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeUpgradedGiftPurchase {
+	'@type': 'starTransactionTypeUpgradedGiftPurchase';
+	/**
+Identifier of the user that sold the gift.
+*/
+	user_id: number;
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+}
+
+/**
+The transaction is a sale of an upgraded gift; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeUpgradedGiftSale {
+	'@type': 'starTransactionTypeUpgradedGiftSale';
+	/**
+Identifier of the user that bought the gift.
+*/
+	user_id: number;
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+	/**
+Information about commission received by Telegram from the transaction.
+*/
+	affiliate: AffiliateInfo;
 }
 
 /**
@@ -5790,6 +6031,10 @@ from publicForwards and foundStories.
 Approximate boost level for the chat.
 */
 	boost_level: number;
+	/**
+True, if automatic translation of messages is enabled in the channel.
+*/
+	has_automatic_translation?: boolean;
 	/**
 True, if the channel has a discussion group, or the supergroup is the designated discussion group for a channel.
 */
@@ -14142,7 +14387,8 @@ Unique identifier of the received gift for the current user; only for the receiv
 */
 	received_gift_id: string;
 	/**
-True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
+True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold
+gift.
 */
 	is_upgrade?: boolean;
 	/**
@@ -14158,9 +14404,23 @@ True, if the gift was transferred to another owner; only for the receiver of the
 */
 	was_transferred?: boolean;
 	/**
+Number of Telegram Stars that were paid by the sender for the gift; 0 if the gift was upgraded or transferred.
+*/
+	last_resale_star_count: number;
+	/**
 Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
 */
 	transfer_star_count: number;
+	/**
+Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred
+immediately or transfer isn't possible; only for the receiver of the gift.
+*/
+	next_transfer_date: number;
+	/**
+Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the
+receiver of the gift.
+*/
+	next_resale_date: number;
 	/**
 Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT; 0 if NFT export isn't
 possible; only for the receiver of the gift.
@@ -14183,7 +14443,8 @@ Sender of the gift.
 */
 	sender_id: MessageSender;
 	/**
-True, if the gift was obtained by upgrading of a previously received gift.
+True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold
+gift.
 */
 	is_upgrade?: boolean;
 }
@@ -17258,6 +17519,10 @@ True, if custom emoji sticker set can be set for the chat.
 */
 	can_set_custom_emoji_sticker_set?: boolean;
 	/**
+True, if automatic translation of messages can be enabled in the chat.
+*/
+	can_enable_automatic_translation?: boolean;
+	/**
 True, if speech recognition can be used for video note and voice note messages by all users.
 */
 	can_recognize_speech?: boolean;
@@ -17301,6 +17566,11 @@ The minimum boost level required to set custom chat background.
 The minimum boost level required to set custom emoji sticker set for the chat; for supergroup chats only.
 */
 	min_custom_emoji_sticker_set_boost_level: number;
+	/**
+The minimum boost level allowing to enable automatic translation of messages for non-Premium users; for channel chats
+only.
+*/
+	min_automatic_translation_boost_level: number;
 	/**
 The minimum boost level allowing to recognize speech in video note and voice note messages for non-Premium users; for
 supergroup chats only.
@@ -20493,6 +20763,18 @@ New value of show_message_sender.
 }
 
 /**
+The has_automatic_translation setting of a channel was toggled.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventAutomaticTranslationToggled {
+	'@type': 'chatEventAutomaticTranslationToggled';
+	/**
+New value of has_automatic_translation.
+*/
+	has_automatic_translation?: boolean;
+}
+
+/**
 A chat invite link was edited.
 Subtype of {@link ChatEventAction}.
 */
@@ -22438,7 +22720,10 @@ Subtype of {@link CanPostStoryResult}.
 */
 export interface CanPostStoryResultOk {
 	'@type': 'canPostStoryResultOk';
-
+	/**
+Number of stories that can be posted by the user.
+*/
+	story_count: number;
 }
 
 /**
@@ -22954,7 +23239,8 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentUpgradedGift {
 	'@type': 'pushMessageContentUpgradedGift';
 	/**
-True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred gift.
+True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold
+gift.
 */
 	is_upgrade?: boolean;
 }
@@ -24897,6 +25183,15 @@ link must be selected.
 }
 
 /**
+The link is a link to the screen with information about Telegram Star balance and transactions of the current user.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeMyStars {
+	'@type': 'internalLinkTypeMyStars';
+
+}
+
+/**
 The link contains a request of Telegram passport data. Call getPassportAuthorizationForm with the given parameters to
 process the link if the link was received from outside of the application; otherwise, ignore it.
 Subtype of {@link InternalLinkType}.
@@ -26260,6 +26555,30 @@ Subtype of {@link SuggestedAction}.
 export interface SuggestedActionExtendStarSubscriptions {
 	'@type': 'suggestedActionExtendStarSubscriptions';
 
+}
+
+/**
+A custom suggestion to be shown at the top of the chat list.
+Subtype of {@link SuggestedAction}.
+*/
+export interface SuggestedActionCustom {
+	'@type': 'suggestedActionCustom';
+	/**
+Unique name of the suggestion.
+*/
+	name: string;
+	/**
+Title of the suggestion.
+*/
+	title: FormattedText;
+	/**
+A custom suggestion to be shown at the top of the chat list.
+*/
+	description: FormattedText;
+	/**
+The link to open when the suggestion is clicked.
+*/
+	url: string;
 }
 
 /**
@@ -30286,6 +30605,16 @@ export type AffiliateProgramSortOrder =
 	| AffiliateProgramSortOrderCreationDate
 	| AffiliateProgramSortOrderRevenue;
 
+export type UpgradedGiftAttributeId =
+	| UpgradedGiftAttributeIdModel
+	| UpgradedGiftAttributeIdSymbol
+	| UpgradedGiftAttributeIdBackdrop;
+
+export type GiftForResaleOrder =
+	| GiftForResaleOrderPrice
+	| GiftForResaleOrderPriceChangeDate
+	| GiftForResaleOrderNumber;
+
 export type SentGift =
 	| SentGiftRegular
 	| SentGiftUpgraded;
@@ -30318,6 +30647,8 @@ export type StarTransactionType =
 	| StarTransactionTypeGiftTransfer
 	| StarTransactionTypeGiftSale
 	| StarTransactionTypeGiftUpgrade
+	| StarTransactionTypeUpgradedGiftPurchase
+	| StarTransactionTypeUpgradedGiftSale
 	| StarTransactionTypeChannelPaidReactionSend
 	| StarTransactionTypeChannelPaidReactionReceive
 	| StarTransactionTypeAffiliateProgramCommission
@@ -31134,6 +31465,7 @@ export type ChatEventAction =
 	| ChatEventHasAggressiveAntiSpamEnabledToggled
 	| ChatEventSignMessagesToggled
 	| ChatEventShowMessageSenderToggled
+	| ChatEventAutomaticTranslationToggled
 	| ChatEventInviteLinkEdited
 	| ChatEventInviteLinkRevoked
 	| ChatEventInviteLinkDeleted
@@ -31499,6 +31831,7 @@ export type InternalLinkType =
 	| InternalLinkTypeMainWebApp
 	| InternalLinkTypeMessage
 	| InternalLinkTypeMessageDraft
+	| InternalLinkTypeMyStars
 	| InternalLinkTypePassportDataRequest
 	| InternalLinkTypePhoneNumberConfirmation
 	| InternalLinkTypePremiumFeatures
@@ -31605,7 +31938,8 @@ export type SuggestedAction =
 	| SuggestedActionSetBirthdate
 	| SuggestedActionSetProfilePhoto
 	| SuggestedActionExtendPremium
-	| SuggestedActionExtendStarSubscriptions;
+	| SuggestedActionExtendStarSubscriptions
+	| SuggestedActionCustom;
 
 export type TextParseMode =
 	| TextParseModeMarkdown
@@ -43074,6 +43408,24 @@ The new value of can_have_sponsored_messages.
 }
 
 /**
+Toggles whether messages are automatically translated in the channel chat; requires can_change_info administrator right
+in the channel. The chat must have at least chatBoostFeatures.min_automatic_translation_boost_level boost level to
+enable automatic translation.
+Request type for {@link Tdjson#toggleSupergroupHasAutomaticTranslation}.
+*/
+export interface ToggleSupergroupHasAutomaticTranslation {
+	'@type': 'toggleSupergroupHasAutomaticTranslation';
+	/**
+The identifier of the channel.
+*/
+	supergroup_id: number;
+	/**
+The new value of has_automatic_translation.
+*/
+	has_automatic_translation?: boolean;
+}
+
+/**
 Toggles whether non-administrators can receive only administrators and bots using getSupergroupMembers or
 searchChatMembers. Can be called only if supergroupFullInfo.can_hide_members == true.
 Request type for {@link Tdjson#toggleSupergroupHasHiddenMembers}.
@@ -43544,6 +43896,27 @@ The amount of Telegram Stars required to pay for the transfer.
 }
 
 /**
+Sends an upgraded gift that is available for resale to another user or channel chat; gifts already owned by the current
+user must be transferred using transferGift and can't be passed to the method.
+Request type for {@link Tdjson#sendResoldGift}.
+*/
+export interface SendResoldGift {
+	'@type': 'sendResoldGift';
+	/**
+Name of the upgraded gift to send.
+*/
+	gift_name: string;
+	/**
+Identifier of the user or the channel chat that will receive the gift.
+*/
+	owner_id: MessageSender;
+	/**
+The amount of Telegram Stars required to pay for the gift.
+*/
+	star_count: number;
+}
+
+/**
 Returns gifts received by the given user or chat.
 Request type for {@link Tdjson#getReceivedGifts}.
 */
@@ -43634,6 +44007,54 @@ Identifier of the gift.
 The 2-step verification password of the current user.
 */
 	password: string;
+}
+
+/**
+Changes resale price of a unique gift owned by the current user.
+Request type for {@link Tdjson#setGiftResalePrice}.
+*/
+export interface SetGiftResalePrice {
+	'@type': 'setGiftResalePrice';
+	/**
+Identifier of the unique gift.
+*/
+	received_gift_id: string;
+	/**
+The new price for the unique gift; 0 or getOption("gift_resale_star_count_min")-getOption("gift_resale_star_count_max").
+Pass 0 to disallow gift resale. The current user will receive getOption("gift_resale_earnings_per_mille") Telegram Stars
+for each 1000 Telegram Stars paid for the gift.
+*/
+	resale_star_count: number;
+}
+
+/**
+Returns upgraded gifts that can be bought from other owners.
+Request type for {@link Tdjson#searchGiftsForResale}.
+*/
+export interface SearchGiftsForResale {
+	'@type': 'searchGiftsForResale';
+	/**
+Identifier of the regular gift that was upgraded to a unique gift.
+*/
+	gift_id: string;
+	/**
+Order in which the results will be sorted.
+*/
+	order: GiftForResaleOrder;
+	/**
+Attributes used to filter received gifts. If multiple attributes of the same type are specified, then all of them are
+allowed. If none attributes of specific type are specified, then all values for this attribute type are allowed.
+*/
+	attributes: UpgradedGiftAttributeId[];
+	/**
+Offset of the first entry to return as received from the previous request with the same order and attributes; use empty
+string to get the first chunk of results.
+*/
+	offset: string;
+	/**
+The maximum number of gifts to return.
+*/
+	limit: number;
 }
 
 /**
@@ -46946,6 +47367,7 @@ export type Request =
 	| ToggleSupergroupJoinByRequest
 	| ToggleSupergroupIsAllHistoryAvailable
 	| ToggleSupergroupCanHaveSponsoredMessages
+	| ToggleSupergroupHasAutomaticTranslation
 	| ToggleSupergroupHasHiddenMembers
 	| ToggleSupergroupHasAggressiveAntiSpamEnabled
 	| ToggleSupergroupIsForum
@@ -46973,10 +47395,13 @@ export type Request =
 	| GetGiftUpgradePreview
 	| UpgradeGift
 	| TransferGift
+	| SendResoldGift
 	| GetReceivedGifts
 	| GetReceivedGift
 	| GetUpgradedGift
 	| GetUpgradedGiftWithdrawalUrl
+	| SetGiftResalePrice
+	| SearchGiftsForResale
 	| CreateInvoiceLink
 	| RefundStarPayment
 	| GetSupportUser
@@ -53858,6 +54283,18 @@ messages.
 	}
 
 	/**
+Toggles whether messages are automatically translated in the channel chat; requires can_change_info administrator right
+in the channel. The chat must have at least chatBoostFeatures.min_automatic_translation_boost_level boost level to
+enable automatic translation.
+*/
+	async toggleSupergroupHasAutomaticTranslation(options: Omit<ToggleSupergroupHasAutomaticTranslation, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleSupergroupHasAutomaticTranslation',
+		});
+	}
+
+	/**
 Toggles whether non-administrators can receive only administrators and bots using getSupergroupMembers or
 searchChatMembers. Can be called only if supergroupFullInfo.can_hide_members == true.
 */
@@ -54044,7 +54481,7 @@ Changes settings for gift receiving for the current user.
 	/**
 Returns gifts that can be sent to other users and channel chats.
 */
-	async getAvailableGifts(): Promise<Gifts> {
+	async getAvailableGifts(): Promise<AvailableGifts> {
 		return this._request({
 			'@type': 'getAvailableGifts',
 		});
@@ -54135,6 +54572,17 @@ Sends an upgraded gift to another user or a channel chat.
 	}
 
 	/**
+Sends an upgraded gift that is available for resale to another user or channel chat; gifts already owned by the current
+user must be transferred using transferGift and can't be passed to the method.
+*/
+	async sendResoldGift(options: Omit<SendResoldGift, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'sendResoldGift',
+		});
+	}
+
+	/**
 Returns gifts received by the given user or chat.
 */
 	async getReceivedGifts(options: Omit<GetReceivedGifts, '@type'>): Promise<ReceivedGifts> {
@@ -54172,6 +54620,26 @@ a chat.
 		return this._request({
 			...options,
 			'@type': 'getUpgradedGiftWithdrawalUrl',
+		});
+	}
+
+	/**
+Changes resale price of a unique gift owned by the current user.
+*/
+	async setGiftResalePrice(options: Omit<SetGiftResalePrice, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setGiftResalePrice',
+		});
+	}
+
+	/**
+Returns upgraded gifts that can be bought from other owners.
+*/
+	async searchGiftsForResale(options: Omit<SearchGiftsForResale, '@type'>): Promise<GiftsForResale> {
+		return this._request({
+			...options,
+			'@type': 'searchGiftsForResale',
 		});
 	}
 
