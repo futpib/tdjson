@@ -2657,8 +2657,8 @@ export interface ChatAdministratorRights {
 	'@type': 'chatAdministratorRights';
 	/**
 True, if the administrator can access the chat event log, get boost list, see hidden supergroup and channel members,
-report supergroup spam messages and ignore slow mode. Implied by any other privilege; applicable to supergroups and
-channels only.
+report supergroup spam messages, ignore slow mode, and send messages to the chat without paying Telegram Stars. Implied
+by any other privilege; applicable to supergroups and channels only.
 */
 	can_manage_chat?: boolean;
 	/**
@@ -2666,7 +2666,8 @@ True, if the administrator can change the chat title, photo, and other settings.
 */
 	can_change_info?: boolean;
 	/**
-True, if the administrator can create channel posts or view channel statistics; applicable to channels only.
+True, if the administrator can create channel posts, answer to channel direct messages, or view channel statistics;
+applicable to channels only.
 */
 	can_post_messages?: boolean;
 	/**
@@ -4494,7 +4495,7 @@ Number of sent paid messages.
 }
 
 /**
-The transaction is a receiving of a paid message; for regular users and supergroup chats only.
+The transaction is a receiving of a paid message; for regular users, supergroup and channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePaidMessageReceive {
@@ -6079,9 +6080,25 @@ True, if the supergroup is a forum with topics.
 */
 	is_forum?: boolean;
 	/**
+True, if the supergroup is a direct message group for a channel chat.
+*/
+	is_direct_messages_group?: boolean;
+	/**
+True, if the supergroup is a direct messages group for a channel chat that is administered by the current user.
+*/
+	is_administered_direct_messages_group?: boolean;
+	/**
 Information about verification status of the supergroup or channel; may be null if none.
 */
 	verification_status: VerificationStatus;
+	/**
+True, if the channel has direct messages group.
+*/
+	has_direct_messages_group?: boolean;
+	/**
+True, if the supergroup is a forum, which topics are shown in the same way as in channel direct messages groups.
+*/
+	has_forum_tabs?: boolean;
 	/**
 True, if content of media messages in the supergroup or channel chat must be hidden with 18+ spoiler.
 */
@@ -6139,6 +6156,11 @@ Chat identifier of a discussion group for the channel, or a channel, for which t
 discussion group; 0 if none or unknown.
 */
 	linked_chat_id: number;
+	/**
+Chat identifier of a direct messages group for the channel, or a channel, for which the supergroup is the designated
+direct messages group; 0 if none.
+*/
+	direct_messages_chat_id: number;
 	/**
 Delay between consecutive sent messages for non-administrator supergroup members, in seconds.
 */
@@ -6820,6 +6842,42 @@ True, if the reaction was added with a big animation.
 }
 
 /**
+Describes a topic of messages in a chat.
+Subtype of {@link MessageTopic}.
+*/
+export interface MessageTopicForum {
+	'@type': 'messageTopicForum';
+	/**
+Unique identifier of the forum topic; all messages in a non-forum supergroup chats belongs to the General topic.
+*/
+	forum_topic_id: number;
+}
+
+/**
+A topic in a channel direct messages chat administered by the current user.
+Subtype of {@link MessageTopic}.
+*/
+export interface MessageTopicDirectMessages {
+	'@type': 'messageTopicDirectMessages';
+	/**
+Unique identifier of the topic.
+*/
+	direct_messages_chat_topic_id: number;
+}
+
+/**
+A topic in Saved Messages chat.
+Subtype of {@link MessageTopic}.
+*/
+export interface MessageTopicSavedMessages {
+	'@type': 'messageTopicSavedMessages';
+	/**
+Unique identifier of the Saved Messages topic.
+*/
+	saved_messages_topic_id: number;
+}
+
+/**
 Describes type of emoji effect.
 Subtype of {@link MessageEffectType}.
 */
@@ -7122,8 +7180,7 @@ service message.
 */
 	is_from_offline?: boolean;
 	/**
-True, if content of the message can be saved locally or copied using inputMessageForwarded or forwardMessages with copy
-options.
+True, if content of the message can be saved locally.
 */
 	can_be_saved?: boolean;
 	/**
@@ -7135,10 +7192,6 @@ True, if the message is a channel post. All messages to channels are channel pos
 posts.
 */
 	is_channel_post?: boolean;
-	/**
-True, if the message is a forum topic message.
-*/
-	is_topic_message?: boolean;
 	/**
 True, if the message contains an unread mention for the current user.
 */
@@ -7182,9 +7235,9 @@ belongs.
 */
 	message_thread_id: number;
 	/**
-Identifier of the Saved Messages topic for the message; 0 for messages not from Saved Messages.
+Identifier of the topic within the chat to which the message belongs; may be null if none.
 */
-	saved_messages_topic_id: number;
+	topic_id: MessageTopic;
 	/**
 The message's self-destruct type; may be null if none.
 */
@@ -7399,7 +7452,7 @@ export interface MessageSourceChatHistory {
 }
 
 /**
-The message is from a message thread history.
+The message is from history of a message thread.
 Subtype of {@link MessageSource}.
 */
 export interface MessageSourceMessageThreadHistory {
@@ -7408,11 +7461,20 @@ export interface MessageSourceMessageThreadHistory {
 }
 
 /**
-The message is from a forum topic history.
+The message is from history of a forum topic.
 Subtype of {@link MessageSource}.
 */
 export interface MessageSourceForumTopicHistory {
 	'@type': 'messageSourceForumTopicHistory';
+
+}
+
+/**
+The message is from history of a topic in a channel direct messages chat administered by the current user.
+Subtype of {@link MessageSource}.
+*/
+export interface MessageSourceDirectMessagesChatTopicHistory {
+	'@type': 'messageSourceDirectMessagesChatTopicHistory';
 
 }
 
@@ -9485,6 +9547,58 @@ A draft of a message in the topic; may be null if none.
 }
 
 /**
+Contains information about a topic in a channel direct messages chat administered by the current user.
+*/
+export interface DirectMessagesChatTopic {
+	'@type': 'directMessagesChatTopic';
+	/**
+Identifier of the chat to which the topic belongs.
+*/
+	chat_id: number;
+	/**
+Unique topic identifier.
+*/
+	id: number;
+	/**
+Identifier of the user or chat that sends the messages to the topic.
+*/
+	sender_id: MessageSender;
+	/**
+A parameter used to determine order of the topic in the topic list. Topics must be sorted by the order in descending
+order.
+*/
+	order: string;
+	/**
+True, if the forum topic is marked as unread.
+*/
+	is_marked_as_unread?: boolean;
+	/**
+Number of unread messages in the chat.
+*/
+	unread_count: number;
+	/**
+Identifier of the last read incoming message.
+*/
+	last_read_inbox_message_id: number;
+	/**
+Identifier of the last read outgoing message.
+*/
+	last_read_outbox_message_id: number;
+	/**
+Number of messages with unread reactions in the chat.
+*/
+	unread_reaction_count: number;
+	/**
+Last message in the topic; may be null if none or unknown.
+*/
+	last_message: Message;
+	/**
+A draft of a message in the topic; may be null if none.
+*/
+	draft_message: DraftMessage;
+}
+
+/**
 Describes a forum topic icon.
 */
 export interface ForumTopicIcon {
@@ -9508,6 +9622,10 @@ export interface ForumTopicInfo {
 Identifier of the forum chat to which the topic belongs.
 */
 	chat_id: number;
+	/**
+Forum topic identifier of the topic.
+*/
+	forum_topic_id: number;
 	/**
 Message thread identifier of the topic.
 */
@@ -13499,8 +13617,9 @@ Call duration, in seconds.
 /**
 A message with information about a group call not bound to a chat. If the message is incoming, the call isn't active,
 isn't missed, and has no duration, and getOption("can_accept_calls") is true, then incoming call screen must be shown to
-the user. Use joinGroupCall to accept the call or declineGroupCallInvitation to decline it. If the call become active or
-missed, then the call screen must be hidden.
+the user. Use getGroupCallParticipants to show current group call participants on the screen. Use joinGroupCall to
+accept the call or declineGroupCallInvitation to decline it. If the call become active or missed, then the call screen
+must be hidden.
 Subtype of {@link MessageContent}.
 */
 export interface MessageGroupCall {
@@ -14321,6 +14440,10 @@ Sender of the gift.
 */
 	sender_id: MessageSender;
 	/**
+Receiver of the gift.
+*/
+	receiver_id: MessageSender;
+	/**
 Unique identifier of the received gift for the current user; only for the receiver of the gift.
 */
 	received_gift_id: string;
@@ -14383,6 +14506,10 @@ Sender of the gift; may be null for anonymous gifts.
 */
 	sender_id: MessageSender;
 	/**
+Receiver of the gift.
+*/
+	receiver_id: MessageSender;
+	/**
 Unique identifier of the received gift for the current user; only for the receiver of the gift.
 */
 	received_gift_id: string;
@@ -14443,6 +14570,10 @@ Sender of the gift.
 */
 	sender_id: MessageSender;
 	/**
+Receiver of the gift.
+*/
+	receiver_id: MessageSender;
+	/**
 True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold
 gift.
 */
@@ -14474,6 +14605,23 @@ export interface MessagePaidMessagePriceChanged {
 	/**
 The new number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent
 message.
+*/
+	paid_message_star_count: number;
+}
+
+/**
+A price for direct messages was changed in the channel chat.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageDirectMessagePriceChanged {
+	'@type': 'messageDirectMessagePriceChanged';
+	/**
+True, if direct messages group was enabled for the channel; false otherwise.
+*/
+	is_enabled?: boolean;
+	/**
+The new number of Telegram Stars that must be paid by non-administrator users of the channel chat for each message sent
+to the direct messages group; 0 if the direct messages group was disabled or the messages are free.
 */
 	paid_message_star_count: number;
 }
@@ -14976,6 +15124,11 @@ Options to be used when a message is sent.
 export interface MessageSendOptions {
 	'@type': 'messageSendOptions';
 	/**
+Unique identifier of the topic in a channel direct messages chat administered by the current user; pass 0 if the chat
+isn't a channel direct messages chat administered by the current user.
+*/
+	direct_messages_chat_topic_id: number;
+	/**
 Pass true to disable notification for the message.
 */
 	disable_notification?: boolean;
@@ -15002,7 +15155,7 @@ sendMessage and sendMessageAlbum.
 	update_order_of_installed_sticker_sets?: boolean;
 	/**
 Message scheduling state; pass null to send message immediately. Messages sent to a secret chat, to a chat with paid
-messages, live location messages and self-destructing messages can't be scheduled.
+messages, to a channel direct messages chat, live location messages and self-destructing messages can't be scheduled.
 */
 	scheduling_state: MessageSchedulingState;
 	/**
@@ -15029,7 +15182,7 @@ export interface MessageCopyOptions {
 	'@type': 'messageCopyOptions';
 	/**
 True, if content of the message needs to be copied without reference to the original sender. Always true if the message
-is forwarded to a secret chat or is local. Use messageProperties.can_be_saved and
+is forwarded to a secret chat or is local. Use messageProperties.can_be_copied and
 messageProperties.can_be_copied_to_secret_chat to check whether the message is suitable.
 */
 	send_copy?: boolean;
@@ -15540,7 +15693,8 @@ Paid media caption; pass null to use an empty caption; 0-getOption("message_capt
 }
 
 /**
-A message with a poll. Polls can't be sent to secret chats. Polls can be sent only to a private chat with a bot.
+A message with a poll. Polls can't be sent to secret chats and channel direct messages chats. Polls can be sent to a
+private chat only if the chat is a chat with a bot or the Saved Messages chat.
 Subtype of {@link InputMessageContent}.
 */
 export interface InputMessagePoll {
@@ -15551,8 +15705,8 @@ only by Premium users.
 */
 	question: FormattedText;
 	/**
-List of poll answer options, 2-10 strings 1-100 characters each. Only custom emoji entities are allowed to be added and
-only by Premium users.
+List of poll answer options, 2-getOption("poll_answer_count_max") strings 1-100 characters each. Only custom emoji
+entities are allowed to be added and only by Premium users.
 */
 	options: FormattedText[];
 	/**
@@ -15633,6 +15787,10 @@ Contains properties of a message and describes actions that can be done with the
 export interface MessageProperties {
 	'@type': 'messageProperties';
 	/**
+True, if content of the message can be copied using inputMessageForwarded or forwardMessages with copy options.
+*/
+	can_be_copied?: boolean;
+	/**
 True, if content of the message can be copied to a secret chat using inputMessageForwarded or forwardMessages with copy
 options.
 */
@@ -15653,7 +15811,7 @@ message.
 */
 	can_be_edited?: boolean;
 	/**
-True, if the message can be forwarded using inputMessageForwarded or forwardMessages.
+True, if the message can be forwarded using inputMessageForwarded or forwardMessages without copy options.
 */
 	can_be_forwarded?: boolean;
 	/**
@@ -15673,8 +15831,7 @@ True, if the message can be replied in another chat or forum topic using inputMe
 */
 	can_be_replied_in_another_chat?: boolean;
 	/**
-True, if content of the message can be saved locally or copied using inputMessageForwarded or forwardMessages with copy
-options.
+True, if content of the message can be saved locally.
 */
 	can_be_saved?: boolean;
 	/**
@@ -15689,6 +15846,10 @@ True, if the message can be edited using the method editMessageMedia.
 True, if scheduling state of the message can be edited.
 */
 	can_edit_scheduling_state?: boolean;
+	/**
+True, if author of the message sent on behalf of a chat can be received through getMessageAuthor.
+*/
+	can_get_author?: boolean;
 	/**
 True, if code for message embedding can be received using getMessageEmbeddingCode.
 */
@@ -17817,7 +17978,8 @@ Subtype of {@link ResendCodeReason}.
 export interface ResendCodeReasonVerificationFailed {
 	'@type': 'resendCodeReasonVerificationFailed';
 	/**
-Cause of the verification failure, for example, PLAY_SERVICES_NOT_AVAILABLE, APNS_RECEIVE_TIMEOUT, or APNS_INIT_FAILED.
+Cause of the verification failure, for example, "PLAY_SERVICES_NOT_AVAILABLE", "APNS_RECEIVE_TIMEOUT", or
+"APNS_INIT_FAILED".
 */
 	error_message: string;
 }
@@ -25063,7 +25225,9 @@ Short name of the game.
 }
 
 /**
-The link is a link to a group call that isn't bound to a chat. Call joinGroupCall with the given invite_link.
+The link is a link to a group call that isn't bound to a chat. Use getGroupCallParticipants to get the list of group
+call participants and show them on the join group call screen. Call joinGroupCall with the given invite_link to join the
+call.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeGroupCall {
@@ -28444,6 +28608,39 @@ Approximate total number of Saved Messages topics.
 }
 
 /**
+Basic information about a topic in a channel direct messages chat administered by the current user has changed. This
+update is guaranteed to come before the topic identifier is returned to the application.
+Subtype of {@link Update}.
+*/
+export interface UpdateDirectMessagesChatTopic {
+	'@type': 'updateDirectMessagesChatTopic';
+	/**
+New data about the topic.
+*/
+	topic: DirectMessagesChatTopic;
+}
+
+/**
+Number of messages in a topic has changed; for Saved Messages and channel direct messages chat topics only.
+Subtype of {@link Update}.
+*/
+export interface UpdateTopicMessageCount {
+	'@type': 'updateTopicMessageCount';
+	/**
+Identifier of the chat in topic of which the number of messages has changed.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic.
+*/
+	topic_id: MessageTopic;
+	/**
+Approximate number of messages in the topics.
+*/
+	message_count: number;
+}
+
+/**
 Basic information about a quick reply shortcut has changed. This update is guaranteed to come before the quick shortcut
 name is returned to the application.
 Subtype of {@link Update}.
@@ -28534,6 +28731,14 @@ Identifier of the last read incoming message.
 Identifier of the last read outgoing message.
 */
 	last_read_outbox_message_id: number;
+	/**
+Number of unread messages with a mention/reply in the topic.
+*/
+	unread_mention_count: number;
+	/**
+Number of messages with unread reactions in the topic.
+*/
+	unread_reaction_count: number;
 	/**
 Notification settings for the topic.
 */
@@ -30742,6 +30947,11 @@ export type PaidReactionType =
 	| PaidReactionTypeAnonymous
 	| PaidReactionTypeChat;
 
+export type MessageTopic =
+	| MessageTopicForum
+	| MessageTopicDirectMessages
+	| MessageTopicSavedMessages;
+
 export type MessageEffectType =
 	| MessageEffectTypeEmojiReaction
 	| MessageEffectTypePremiumSticker;
@@ -30763,6 +30973,7 @@ export type MessageSource =
 	| MessageSourceChatHistory
 	| MessageSourceMessageThreadHistory
 	| MessageSourceForumTopicHistory
+	| MessageSourceDirectMessagesChatTopicHistory
 	| MessageSourceHistoryPreview
 	| MessageSourceChatList
 	| MessageSourceSearch
@@ -31131,6 +31342,7 @@ export type MessageContent =
 	| MessageRefundedUpgradedGift
 	| MessagePaidMessagesRefunded
 	| MessagePaidMessagePriceChanged
+	| MessageDirectMessagePriceChanged
 	| MessageContactRegistered
 	| MessageUsersShared
 	| MessageChatShared
@@ -32044,6 +32256,8 @@ export type Update =
 	| UpdateChatOnlineMemberCount
 	| UpdateSavedMessagesTopic
 	| UpdateSavedMessagesTopicCount
+	| UpdateDirectMessagesChatTopic
+	| UpdateTopicMessageCount
 	| UpdateQuickReplyShortcut
 	| UpdateQuickReplyShortcutDeleted
 	| UpdateQuickReplyShortcuts
@@ -33055,6 +33269,23 @@ Identifier of the message.
 }
 
 /**
+Returns information about actual author of a message sent on behalf of a channel. The method can be called if
+messageProperties.can_get_author == true.
+Request type for {@link Tdjson#getMessageAuthor}.
+*/
+export interface GetMessageAuthor {
+	'@type': 'getMessageAuthor';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
 Returns information about a file. This is an offline method.
 Request type for {@link Tdjson#getFile}.
 */
@@ -33431,8 +33662,8 @@ export interface GetSuitableDiscussionChats {
 
 /**
 Returns a list of recently inactive supergroups and channels. Can be used when user reaches limit on the number of
-joined supergroups and channels and receives CHANNELS_TOO_MUCH error. Also, the limit can be increased with Telegram
-Premium.
+joined supergroups and channels and receives the error "CHANNELS_TOO_MUCH". Also, the limit can be increased with
+Telegram Premium.
 Request type for {@link Tdjson#getInactiveSupergroupChats}.
 */
 export interface GetInactiveSupergroupChats {
@@ -33447,6 +33678,208 @@ Request type for {@link Tdjson#getSuitablePersonalChats}.
 export interface GetSuitablePersonalChats {
 	'@type': 'getSuitablePersonalChats';
 
+}
+
+/**
+Loads more topics in a channel direct messages chat administered by the current user. The loaded topics will be sent
+through updateDirectMessagesChatTopic. Topics are sorted by their topic.order in descending order. Returns a 404 error
+if all topics have been loaded.
+Request type for {@link Tdjson#loadDirectMessagesChatTopics}.
+*/
+export interface LoadDirectMessagesChatTopics {
+	'@type': 'loadDirectMessagesChatTopics';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+The maximum number of topics to be loaded. For optimal performance, the number of loaded topics is chosen by TDLib and
+can be smaller than the specified limit, even if the end of the list is not reached.
+*/
+	limit: number;
+}
+
+/**
+Returns information about the topic in a channel direct messages chat administered by the current user.
+Request type for {@link Tdjson#getDirectMessagesChatTopic}.
+*/
+export interface GetDirectMessagesChatTopic {
+	'@type': 'getDirectMessagesChatTopic';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic to get.
+*/
+	topic_id: number;
+}
+
+/**
+Returns messages in the topic in a channel direct messages chat administered by the current user. The messages are
+returned in reverse chronological order (i.e., in order of decreasing message_id).
+Request type for {@link Tdjson#getDirectMessagesChatTopicHistory}.
+*/
+export interface GetDirectMessagesChatTopicHistory {
+	'@type': 'getDirectMessagesChatTopicHistory';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic which messages will be fetched.
+*/
+	topic_id: number;
+	/**
+Identifier of the message starting from which messages must be fetched; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+	/**
+Specify 0 to get results from exactly the message from_message_id or a negative offset up to 99 to get additionally some
+newer messages.
+*/
+	offset: number;
+	/**
+The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
+negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
+is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Returns the last message sent in the topic in a channel direct messages chat administered by the current user no later
+than the specified date.
+Request type for {@link Tdjson#getDirectMessagesChatTopicMessageByDate}.
+*/
+export interface GetDirectMessagesChatTopicMessageByDate {
+	'@type': 'getDirectMessagesChatTopicMessageByDate';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic which messages will be fetched.
+*/
+	topic_id: number;
+	/**
+Point in time (Unix timestamp) relative to which to search for messages.
+*/
+	date: number;
+}
+
+/**
+Deletes all messages in the topic in a channel direct messages chat administered by the current user.
+Request type for {@link Tdjson#deleteDirectMessagesChatTopicHistory}.
+*/
+export interface DeleteDirectMessagesChatTopicHistory {
+	'@type': 'deleteDirectMessagesChatTopicHistory';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic which messages will be deleted.
+*/
+	topic_id: number;
+}
+
+/**
+Deletes all messages between the specified dates in the topic in a channel direct messages chat administered by the
+current user. Messages sent in the last 30 seconds will not be deleted.
+Request type for {@link Tdjson#deleteDirectMessagesChatTopicMessagesByDate}.
+*/
+export interface DeleteDirectMessagesChatTopicMessagesByDate {
+	'@type': 'deleteDirectMessagesChatTopicMessagesByDate';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic which messages will be deleted.
+*/
+	topic_id: number;
+	/**
+The minimum date of the messages to delete.
+*/
+	min_date: number;
+	/**
+The maximum date of the messages to delete.
+*/
+	max_date: number;
+}
+
+/**
+Changes the marked as unread state of the topic in a channel direct messages chat administered by the current user.
+Request type for {@link Tdjson#setDirectMessagesChatTopicIsMarkedAsUnread}.
+*/
+export interface SetDirectMessagesChatTopicIsMarkedAsUnread {
+	'@type': 'setDirectMessagesChatTopicIsMarkedAsUnread';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Topic identifier.
+*/
+	topic_id: number;
+	/**
+New value of is_marked_as_unread.
+*/
+	is_marked_as_unread?: boolean;
+}
+
+/**
+Changes the draft message in the topic in a channel direct messages chat administered by the current user.
+Request type for {@link Tdjson#setDirectMessagesChatTopicDraftMessage}.
+*/
+export interface SetDirectMessagesChatTopicDraftMessage {
+	'@type': 'setDirectMessagesChatTopicDraftMessage';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Topic identifier.
+*/
+	topic_id: number;
+	/**
+New draft message; pass null to remove the draft. All files in draft message content must be of the type inputFileLocal.
+Media thumbnails and captions are ignored.
+*/
+	draft_message: DraftMessage;
+}
+
+/**
+Removes all pinned messages from the topic in a channel direct messages chat administered by the current user.
+Request type for {@link Tdjson#unpinAllDirectMessagesChatTopicMessages}.
+*/
+export interface UnpinAllDirectMessagesChatTopicMessages {
+	'@type': 'unpinAllDirectMessagesChatTopicMessages';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Topic identifier.
+*/
+	topic_id: number;
+}
+
+/**
+Removes all unread reactions in the topic in a channel direct messages chat administered by the current user.
+Request type for {@link Tdjson#readAllDirectMessagesChatTopicReactions}.
+*/
+export interface ReadAllDirectMessagesChatTopicReactions {
+	'@type': 'readAllDirectMessagesChatTopicReactions';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Topic identifier.
+*/
+	topic_id: number;
 }
 
 /**
@@ -33695,8 +34128,8 @@ Chat identifier.
 Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of
 decreasing message_id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
 instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit. A combination of query, sender_id, filter and message_thread_id
-search criteria is expected to be supported, only if it is required for Telegram official application implementation.
+TDLib and can be smaller than the specified limit. A combination of query, sender_id, filter and topic_id search
+criteria is expected to be supported, only if it is required for Telegram official application implementation.
 Request type for {@link Tdjson#searchChatMessages}.
 */
 export interface SearchChatMessages {
@@ -33705,6 +34138,10 @@ export interface SearchChatMessages {
 Identifier of the chat in which to search messages.
 */
 	chat_id: number;
+	/**
+Pass topic identifier to search messages only in specific topic; pass null to search for messages in all topics.
+*/
+	topic_id: MessageTopic;
 	/**
 Query to search for.
 */
@@ -33733,15 +34170,6 @@ TDLib and can be smaller than the specified limit.
 Additional filter for messages to search; pass null to search for all messages.
 */
 	filter: SearchMessagesFilter;
-	/**
-If not 0, only messages in the specified thread will be returned; supergroups only.
-*/
-	message_thread_id: number;
-	/**
-If not 0, only messages in the specified Saved Messages topic will be returned; pass 0 to return all messages, or for
-chats other than Saved Messages.
-*/
-	saved_messages_topic_id: number;
 }
 
 /**
@@ -34132,6 +34560,11 @@ Identifier of the chat in which to return information about messages.
 */
 	chat_id: number;
 	/**
+Pass topic identifier to get the result only in specific topic; pass null to get the result in all topics; forum topics
+aren't supported.
+*/
+	topic_id: MessageTopic;
+	/**
 Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterMention,
 searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are unsupported in this function.
 */
@@ -34140,15 +34573,10 @@ searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are un
 The message identifier from which to return information about messages; use 0 to get results from the last message.
 */
 	from_message_id: number;
-	/**
-If not0, only messages in the specified Saved Messages topic will be considered; pass 0 to consider all messages, or for
-chats other than Saved Messages.
-*/
-	saved_messages_topic_id: number;
 }
 
 /**
-Returns approximate number of messages of the specified type in the chat.
+Returns approximate number of messages of the specified type in the chat or its topic.
 Request type for {@link Tdjson#getChatMessageCount}.
 */
 export interface GetChatMessageCount {
@@ -34158,14 +34586,14 @@ Identifier of the chat in which to count messages.
 */
 	chat_id: number;
 	/**
+Pass topic identifier to get number of messages only in specific topic; pass null to get number of messages in all
+topics.
+*/
+	topic_id: MessageTopic;
+	/**
 Filter for message content; searchMessagesFilterEmpty is unsupported in this function.
 */
 	filter: SearchMessagesFilter;
-	/**
-If not 0, only messages in the specified Saved Messages topic will be counted; pass 0 to count all messages, or for
-chats other than Saved Messages.
-*/
-	saved_messages_topic_id: number;
 	/**
 Pass true to get the number of messages without sending network requests, or -1 if the number of messages is unknown
 locally.
@@ -34174,8 +34602,8 @@ locally.
 }
 
 /**
-Returns approximate 1-based position of a message among messages, which can be found by the specified filter in the
-chat. Cannot be used in secret chats.
+Returns approximate 1-based position of a message among messages, which can be found by the specified filter in the chat
+and topic. Cannot be used in secret chats.
 Request type for {@link Tdjson#getChatMessagePosition}.
 */
 export interface GetChatMessagePosition {
@@ -34185,23 +34613,19 @@ Identifier of the chat in which to find message position.
 */
 	chat_id: number;
 	/**
-Message identifier.
+Pass topic identifier to get position among messages only in specific topic; pass null to get position among all chat
+messages.
 */
-	message_id: number;
+	topic_id: MessageTopic;
 	/**
 Filter for message content; searchMessagesFilterEmpty, searchMessagesFilterUnreadMention,
 searchMessagesFilterUnreadReaction, and searchMessagesFilterFailedToSend are unsupported in this function.
 */
 	filter: SearchMessagesFilter;
 	/**
-If not 0, only messages in the specified thread will be considered; supergroups only.
+Message identifier.
 */
-	message_thread_id: number;
-	/**
-If not 0, only messages in the specified Saved Messages topic will be considered; pass 0 to consider all relevant
-messages, or for chats other than Saved Messages.
-*/
-	saved_messages_topic_id: number;
+	message_id: number;
 }
 
 /**
@@ -34690,7 +35114,7 @@ Options to be used to send the messages; pass null to use default options.
 	options: MessageSendOptions;
 	/**
 Pass true to copy content of the messages without reference to the original sender. Always true if the messages are
-forwarded to a secret chat or are local. Use messageProperties.can_be_saved and
+forwarded to a secret chat or are local. Use messageProperties.can_be_copied and
 messageProperties.can_be_copied_to_secret_chat to check whether the message is suitable.
 */
 	send_copy?: boolean;
@@ -34759,7 +35183,7 @@ Request type for {@link Tdjson#addLocalMessage}.
 export interface AddLocalMessage {
 	'@type': 'addLocalMessage';
 	/**
-Target chat.
+Target chat; channel direct messages chats aren't supported.
 */
 	chat_id: number;
 	/**
@@ -37052,9 +37476,13 @@ link, or an empty string otherwise.
 */
 	url: string;
 	/**
-If not 0, the message thread identifier in which the message will be sent.
+If not 0, the message thread identifier to which the message will be sent.
 */
 	message_thread_id: number;
+	/**
+If not 0, unique identifier of the topic of channel direct messages chat to which the message will be sent.
+*/
+	direct_messages_chat_topic_id: number;
 	/**
 Information about the message or story to be replied in the message sent by the Web App; pass null if none.
 */
@@ -38409,6 +38837,29 @@ new chat members don't have access to old messages in the supergroup, then toggl
 used first to change that.
 */
 	discussion_chat_id: number;
+}
+
+/**
+Changes direct messages group settings for a channel chat; requires owner privileges in the chat.
+Request type for {@link Tdjson#setChatDirectMessagesGroup}.
+*/
+export interface SetChatDirectMessagesGroup {
+	'@type': 'setChatDirectMessagesGroup';
+	/**
+Identifier of the channel chat.
+*/
+	chat_id: number;
+	/**
+Pass true if the direct messages group is enabled for the channel chat; pass false otherwise.
+*/
+	is_enabled?: boolean;
+	/**
+The new number of Telegram Stars that must be paid for each message that is sent to the direct messages chat unless the
+sender is an administrator of the channel chat; 0-getOption("paid_message_star_count_max"). The channel will receive
+getOption("paid_message_earnings_per_mille") Telegram Stars for each 1000 Telegram Stars paid for message sending.
+Requires supergroupFullInfo.can_enable_paid_messages for positive amounts.
+*/
+	paid_message_star_count: number;
 }
 
 /**
@@ -40002,7 +40453,7 @@ updateApplicationRecaptchaVerificationRequired.
 	/**
 Play Integrity API token for the Android application, or secret from push notification for the iOS application for
 application verification, or reCAPTCHA token for reCAPTCHA verifications; pass an empty string to abort verification and
-receive error VERIFICATION_FAILED for the request.
+receive the error "VERIFICATION_FAILED" for the request.
 */
 	token: string;
 }
@@ -40978,7 +41429,8 @@ Pass true if the current user's video is enabled.
 }
 
 /**
-Informs TDLib that speaking state of a participant of an active group call has changed.
+Informs TDLib that speaking state of a participant of an active group call has changed. Returns identifier of the
+participant if it is found.
 Request type for {@link Tdjson#setGroupCallParticipantIsSpeaking}.
 */
 export interface SetGroupCallParticipantIsSpeaking {
@@ -43474,6 +43926,10 @@ Identifier of the supergroup.
 New value of is_forum.
 */
 	is_forum?: boolean;
+	/**
+New value of has_forum_tabs; ignored if is_forum is false.
+*/
+	has_forum_tabs?: boolean;
 }
 
 /**
@@ -46785,6 +47241,7 @@ export type Request =
 	| GetMessageThread
 	| GetMessageReadDate
 	| GetMessageViewers
+	| GetMessageAuthor
 	| GetFile
 	| GetRemoteFile
 	| LoadChats
@@ -46813,6 +47270,16 @@ export type Request =
 	| GetSuitableDiscussionChats
 	| GetInactiveSupergroupChats
 	| GetSuitablePersonalChats
+	| LoadDirectMessagesChatTopics
+	| GetDirectMessagesChatTopic
+	| GetDirectMessagesChatTopicHistory
+	| GetDirectMessagesChatTopicMessageByDate
+	| DeleteDirectMessagesChatTopicHistory
+	| DeleteDirectMessagesChatTopicMessagesByDate
+	| SetDirectMessagesChatTopicIsMarkedAsUnread
+	| SetDirectMessagesChatTopicDraftMessage
+	| UnpinAllDirectMessagesChatTopicMessages
+	| ReadAllDirectMessagesChatTopicReactions
 	| LoadSavedMessagesTopics
 	| GetSavedMessagesTopicHistory
 	| GetSavedMessagesTopicMessageByDate
@@ -47061,6 +47528,7 @@ export type Request =
 	| SetChatClientData
 	| SetChatDescription
 	| SetChatDiscussionGroup
+	| SetChatDirectMessagesGroup
 	| SetChatLocation
 	| SetChatSlowModeDelay
 	| PinChatMessage
@@ -48227,6 +48695,17 @@ true.
 	}
 
 	/**
+Returns information about actual author of a message sent on behalf of a channel. The method can be called if
+messageProperties.can_get_author == true.
+*/
+	async getMessageAuthor(options: Omit<GetMessageAuthor, '@type'>): Promise<User> {
+		return this._request({
+			...options,
+			'@type': 'getMessageAuthor',
+		});
+	}
+
+	/**
 Returns information about a file. This is an offline method.
 */
 	async getFile(options: Omit<GetFile, '@type'>): Promise<File> {
@@ -48503,8 +48982,8 @@ first.
 
 	/**
 Returns a list of recently inactive supergroups and channels. Can be used when user reaches limit on the number of
-joined supergroups and channels and receives CHANNELS_TOO_MUCH error. Also, the limit can be increased with Telegram
-Premium.
+joined supergroups and channels and receives the error "CHANNELS_TOO_MUCH". Also, the limit can be increased with
+Telegram Premium.
 */
 	async getInactiveSupergroupChats(): Promise<Chats> {
 		return this._request({
@@ -48518,6 +48997,111 @@ Returns a list of channel chats, which can be used as a personal chat.
 	async getSuitablePersonalChats(): Promise<Chats> {
 		return this._request({
 			'@type': 'getSuitablePersonalChats',
+		});
+	}
+
+	/**
+Loads more topics in a channel direct messages chat administered by the current user. The loaded topics will be sent
+through updateDirectMessagesChatTopic. Topics are sorted by their topic.order in descending order. Returns a 404 error
+if all topics have been loaded.
+*/
+	async loadDirectMessagesChatTopics(options: Omit<LoadDirectMessagesChatTopics, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'loadDirectMessagesChatTopics',
+		});
+	}
+
+	/**
+Returns information about the topic in a channel direct messages chat administered by the current user.
+*/
+	async getDirectMessagesChatTopic(options: Omit<GetDirectMessagesChatTopic, '@type'>): Promise<DirectMessagesChatTopic> {
+		return this._request({
+			...options,
+			'@type': 'getDirectMessagesChatTopic',
+		});
+	}
+
+	/**
+Returns messages in the topic in a channel direct messages chat administered by the current user. The messages are
+returned in reverse chronological order (i.e., in order of decreasing message_id).
+*/
+	async getDirectMessagesChatTopicHistory(options: Omit<GetDirectMessagesChatTopicHistory, '@type'>): Promise<Messages> {
+		return this._request({
+			...options,
+			'@type': 'getDirectMessagesChatTopicHistory',
+		});
+	}
+
+	/**
+Returns the last message sent in the topic in a channel direct messages chat administered by the current user no later
+than the specified date.
+*/
+	async getDirectMessagesChatTopicMessageByDate(options: Omit<GetDirectMessagesChatTopicMessageByDate, '@type'>): Promise<Message> {
+		return this._request({
+			...options,
+			'@type': 'getDirectMessagesChatTopicMessageByDate',
+		});
+	}
+
+	/**
+Deletes all messages in the topic in a channel direct messages chat administered by the current user.
+*/
+	async deleteDirectMessagesChatTopicHistory(options: Omit<DeleteDirectMessagesChatTopicHistory, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteDirectMessagesChatTopicHistory',
+		});
+	}
+
+	/**
+Deletes all messages between the specified dates in the topic in a channel direct messages chat administered by the
+current user. Messages sent in the last 30 seconds will not be deleted.
+*/
+	async deleteDirectMessagesChatTopicMessagesByDate(options: Omit<DeleteDirectMessagesChatTopicMessagesByDate, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteDirectMessagesChatTopicMessagesByDate',
+		});
+	}
+
+	/**
+Changes the marked as unread state of the topic in a channel direct messages chat administered by the current user.
+*/
+	async setDirectMessagesChatTopicIsMarkedAsUnread(options: Omit<SetDirectMessagesChatTopicIsMarkedAsUnread, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setDirectMessagesChatTopicIsMarkedAsUnread',
+		});
+	}
+
+	/**
+Changes the draft message in the topic in a channel direct messages chat administered by the current user.
+*/
+	async setDirectMessagesChatTopicDraftMessage(options: Omit<SetDirectMessagesChatTopicDraftMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setDirectMessagesChatTopicDraftMessage',
+		});
+	}
+
+	/**
+Removes all pinned messages from the topic in a channel direct messages chat administered by the current user.
+*/
+	async unpinAllDirectMessagesChatTopicMessages(options: Omit<UnpinAllDirectMessagesChatTopicMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'unpinAllDirectMessagesChatTopicMessages',
+		});
+	}
+
+	/**
+Removes all unread reactions in the topic in a channel direct messages chat administered by the current user.
+*/
+	async readAllDirectMessagesChatTopicReactions(options: Omit<ReadAllDirectMessagesChatTopicReactions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readAllDirectMessagesChatTopicReactions',
 		});
 	}
 
@@ -48657,8 +49241,8 @@ applied to the chat.
 Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of
 decreasing message_id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
 instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit. A combination of query, sender_id, filter and message_thread_id
-search criteria is expected to be supported, only if it is required for Telegram official application implementation.
+TDLib and can be smaller than the specified limit. A combination of query, sender_id, filter and topic_id search
+criteria is expected to be supported, only if it is required for Telegram official application implementation.
 */
 	async searchChatMessages(options: Omit<SearchChatMessages, '@type'>): Promise<FoundChatMessages> {
 		return this._request({
@@ -48855,7 +49439,7 @@ value of the option "utc_time_offset".
 	}
 
 	/**
-Returns approximate number of messages of the specified type in the chat.
+Returns approximate number of messages of the specified type in the chat or its topic.
 */
 	async getChatMessageCount(options: Omit<GetChatMessageCount, '@type'>): Promise<Count> {
 		return this._request({
@@ -48865,8 +49449,8 @@ Returns approximate number of messages of the specified type in the chat.
 	}
 
 	/**
-Returns approximate 1-based position of a message among messages, which can be found by the specified filter in the
-chat. Cannot be used in secret chats.
+Returns approximate 1-based position of a message among messages, which can be found by the specified filter in the chat
+and topic. Cannot be used in secret chats.
 */
 	async getChatMessagePosition(options: Omit<GetChatMessagePosition, '@type'>): Promise<Count> {
 		return this._request({
@@ -51139,6 +51723,16 @@ specified.
 	}
 
 	/**
+Changes direct messages group settings for a channel chat; requires owner privileges in the chat.
+*/
+	async setChatDirectMessagesGroup(options: Omit<SetChatDirectMessagesGroup, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setChatDirectMessagesGroup',
+		});
+	}
+
+	/**
 Changes the location of a chat. Available only for some location-based supergroups, use
 supergroupFullInfo.can_set_location to check whether the method is allowed to use.
 */
@@ -52651,9 +53245,10 @@ Toggles whether current user's video is enabled.
 	}
 
 	/**
-Informs TDLib that speaking state of a participant of an active group call has changed.
+Informs TDLib that speaking state of a participant of an active group call has changed. Returns identifier of the
+participant if it is found.
 */
-	async setGroupCallParticipantIsSpeaking(options: Omit<SetGroupCallParticipantIsSpeaking, '@type'>): Promise<Ok> {
+	async setGroupCallParticipantIsSpeaking(options: Omit<SetGroupCallParticipantIsSpeaking, '@type'>): Promise<MessageSender> {
 		return this._request({
 			...options,
 			'@type': 'setGroupCallParticipantIsSpeaking',
