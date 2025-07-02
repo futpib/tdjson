@@ -1138,6 +1138,102 @@ line feeds; empty for a yet unanswered poll.
 }
 
 /**
+Describes a task in a checklist.
+*/
+export interface ChecklistTask {
+	'@type': 'checklistTask';
+	/**
+Unique identifier of the task.
+*/
+	id: number;
+	/**
+Text of the task; may contain only Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Url, EmailAddress,
+Mention, Hashtag, Cashtag and PhoneNumber entities.
+*/
+	text: FormattedText;
+	/**
+Identifier of the user that completed the task; 0 if the task isn't completed.
+*/
+	completed_by_user_id: number;
+	/**
+Point in time (Unix timestamp) when the task was completed; 0 if the task isn't completed.
+*/
+	completion_date: number;
+}
+
+/**
+Describes a task in a checklist to be sent.
+*/
+export interface InputChecklistTask {
+	'@type': 'inputChecklistTask';
+	/**
+Unique identifier of the task; must be positive.
+*/
+	id: number;
+	/**
+Text of the task; 1-getOption("checklist_task_text_length_max") characters without line feeds. May contain only Bold,
+Italic, Underline, Strikethrough, Spoiler, and CustomEmoji entities.
+*/
+	text: FormattedText;
+}
+
+/**
+Describes a checklist.
+*/
+export interface Checklist {
+	'@type': 'checklist';
+	/**
+Title of the checklist; may contain only Bold, Italic, Underline, Strikethrough, Spoiler, and CustomEmoji entities.
+*/
+	title: FormattedText;
+	/**
+List of tasks in the checklist.
+*/
+	tasks: ChecklistTask[];
+	/**
+True, if users other than creator of the list can add tasks to the list.
+*/
+	others_can_add_tasks?: boolean;
+	/**
+True, if the current user can add tasks to the list if they have Telegram Premium subscription.
+*/
+	can_add_tasks?: boolean;
+	/**
+True, if users other than creator of the list can mark tasks as done or not done. If true, then the checklist is called
+"group checklist".
+*/
+	others_can_mark_tasks_as_done?: boolean;
+	/**
+True, if the current user can mark tasks as done or not done if they have Telegram Premium subscription.
+*/
+	can_mark_tasks_as_done?: boolean;
+}
+
+/**
+Describes a checklist to be sent.
+*/
+export interface InputChecklist {
+	'@type': 'inputChecklist';
+	/**
+Title of the checklist; 1-getOption("checklist_title_length_max") characters. May contain only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities.
+*/
+	title: FormattedText;
+	/**
+List of tasks in the checklist; 1-getOption("checklist_task_count_max") tasks.
+*/
+	tasks: InputChecklistTask[];
+	/**
+True, if other users can add tasks to the list.
+*/
+	others_can_add_tasks?: boolean;
+	/**
+True, if other users can mark tasks as done or not done.
+*/
+	others_can_mark_tasks_as_done?: boolean;
+}
+
+/**
 Describes an animation file. The animation must be encoded in GIF or MPEG4 format.
 */
 export interface Animation {
@@ -1673,6 +1769,29 @@ HLS file describing the video.
 File containing the video.
 */
 	video: File;
+}
+
+/**
+Describes a storyboard for a video.
+*/
+export interface VideoStoryboard {
+	'@type': 'videoStoryboard';
+	/**
+A JPEG file that contains tiled previews of video.
+*/
+	storyboard_file: File;
+	/**
+Width of a tile.
+*/
+	width: number;
+	/**
+Height of a tile.
+*/
+	height: number;
+	/**
+File that describes mapping of position in the video to a tile in the JPEG file.
+*/
+	map_file: File;
 }
 
 /**
@@ -2621,7 +2740,7 @@ True, if the user can send voice notes.
 */
 	can_send_voice_notes?: boolean;
 	/**
-True, if the user can send polls.
+True, if the user can send polls and checklists.
 */
 	can_send_polls?: boolean;
 	/**
@@ -6257,6 +6376,10 @@ unspecified.
 */
 	unrestrict_boost_count: number;
 	/**
+Number of Telegram Stars that must be paid by the current user for each sent message to the supergroup.
+*/
+	outgoing_paid_message_star_count: number;
+	/**
 Identifier of the supergroup sticker set that must be shown before user sticker sets; 0 if none.
 */
 	sticker_set_id: string;
@@ -7047,10 +7170,10 @@ from the same chat.
 	origin_send_date: number;
 	/**
 Media content of the message if the message was from another chat or topic; may be null for messages from the same chat
-and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageContact,
-messageDice, messageDocument, messageGame, messageGiveaway, messageGiveawayWinners, messageInvoice, messageLocation,
-messagePaidMedia, messagePhoto, messagePoll, messageSticker, messageStory, messageText (for link preview), messageVenue,
-messageVideo, messageVideoNote, or messageVoiceNote.
+and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageChecklist,
+messageContact, messageDice, messageDocument, messageGame, messageGiveaway, messageGiveawayWinners, messageInvoice,
+messageLocation, messagePaidMedia, messagePhoto, messagePoll, messageSticker, messageStory, messageText (for link
+preview), messageVenue, messageVideo, messageVideoNote, or messageVoiceNote.
 */
 	content: MessageContent;
 }
@@ -7542,12 +7665,12 @@ export interface MessageSourceOther {
 }
 
 /**
-Information about the sponsor of a message.
+Information about the sponsor of an advertisement.
 */
-export interface MessageSponsor {
-	'@type': 'messageSponsor';
+export interface AdvertisementSponsor {
+	'@type': 'advertisementSponsor';
 	/**
-URL of the sponsor to be opened when the message is clicked.
+URL of the sponsor to be opened when the advertisement is clicked.
 */
 	url: string;
 	/**
@@ -7555,7 +7678,7 @@ Photo of the sponsor; may be null if must not be shown.
 */
 	photo: Photo;
 	/**
-Additional optional information about the sponsor to be shown along with the message.
+Additional optional information about the sponsor to be shown along with the advertisement.
 */
 	info: string;
 }
@@ -7586,7 +7709,7 @@ messageVideo. Video messages can be viewed fullscreen.
 	/**
 Information about the sponsor of the message.
 */
-	sponsor: MessageSponsor;
+	sponsor: AdvertisementSponsor;
 	/**
 Title of the sponsored message.
 */
@@ -7657,6 +7780,64 @@ export interface SponsoredChats {
 List of sponsored chats.
 */
 	chats: SponsoredChat[];
+}
+
+/**
+Describes an advertisent to be shown while a video from a message is watched.
+*/
+export interface VideoMessageAdvertisement {
+	'@type': 'videoMessageAdvertisement';
+	/**
+Unique identifier of this result.
+*/
+	unique_id: number;
+	/**
+Text of the advertisement.
+*/
+	text: string;
+	/**
+The minimum amount of time the advertisement must be dispalyed before it can be hidden by the user, in seconds.
+*/
+	min_display_duration: number;
+	/**
+The maximum amount of time the advertisement must be dispalyed before it must be automatically hidden, in seconds.
+*/
+	max_display_duration: number;
+	/**
+True, if the advertisement can be reported to Telegram moderators through reportVideoMessageAdvertisement.
+*/
+	can_be_reported?: boolean;
+	/**
+Information about the sponsor of the advertisement.
+*/
+	sponsor: AdvertisementSponsor;
+	/**
+Title of the sponsored message.
+*/
+	title: string;
+	/**
+If non-empty, additional information about the sponsored message to be shown along with the message.
+*/
+	additional_info: string;
+}
+
+/**
+Contains a list of advertisements to be shown while a video from a message is watched.
+*/
+export interface VideoMessageAdvertisements {
+	'@type': 'videoMessageAdvertisements';
+	/**
+List of advertisements.
+*/
+	advertisements: VideoMessageAdvertisement[];
+	/**
+Delay before the first advertisement is shown, in seconds.
+*/
+	start_delay: number;
+	/**
+Delay between consecutive advertisements, in seconds.
+*/
+	between_delay: number;
 }
 
 /**
@@ -9568,6 +9749,10 @@ A parameter used to determine order of the topic in the topic list. Topics must 
 order.
 */
 	order: string;
+	/**
+True, if the other party can send unpaid messages even if the chat has paid messages enabled.
+*/
+	can_send_unpaid_messages?: boolean;
 	/**
 True, if the forum topic is marked as unread.
 */
@@ -13303,6 +13488,10 @@ Alternative qualities of the video.
 */
 	alternative_videos: AlternativeVideo[];
 	/**
+Available storyboards for the video.
+*/
+	storyboards: VideoStoryboard[];
+	/**
 Cover of the video; may be null if none.
 */
 	cover: Photo;
@@ -13548,6 +13737,18 @@ Story identifier.
 True, if the story was automatically forwarded because of a mention of the user.
 */
 	via_mention?: boolean;
+}
+
+/**
+A message with a checklist.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChecklist {
+	'@type': 'messageChecklist';
+	/**
+The checklist description.
+*/
+	list: Checklist;
 }
 
 /**
@@ -14624,6 +14825,42 @@ The new number of Telegram Stars that must be paid by non-administrator users of
 to the direct messages group; 0 if the direct messages group was disabled or the messages are free.
 */
 	paid_message_star_count: number;
+}
+
+/**
+Some tasks from a checklist were marked as done or not done.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChecklistTasksDone {
+	'@type': 'messageChecklistTasksDone';
+	/**
+Identifier of the message with the checklist; can be 0 if the message was deleted.
+*/
+	checklist_message_id: number;
+	/**
+Identifiers of tasks that were marked as done.
+*/
+	marked_as_done_task_ids: number[];
+	/**
+Identifiers of tasks that were marked as not done.
+*/
+	marked_as_not_done_task_ids: number[];
+}
+
+/**
+Some tasks were added to a checklist.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChecklistTasksAdded {
+	'@type': 'messageChecklistTasksAdded';
+	/**
+Identifier of the message with the checklist; can be 0 if the message was deleted.
+*/
+	checklist_message_id: number;
+	/**
+List of tasks added to the checklist.
+*/
+	tasks: ChecklistTask[];
 }
 
 /**
@@ -15749,6 +15986,19 @@ Story identifier.
 }
 
 /**
+A message with a checklist. Checklists can't be sent to secret chats, channel chats and channel direct messages chats;
+for Telegram Premium users only.
+Subtype of {@link InputMessageContent}.
+*/
+export interface InputMessageChecklist {
+	'@type': 'inputMessageChecklist';
+	/**
+The checklist to send.
+*/
+	checklist: InputChecklist;
+}
+
+/**
 A forwarded message.
 Subtype of {@link InputMessageContent}.
 */
@@ -15787,6 +16037,11 @@ Contains properties of a message and describes actions that can be done with the
 export interface MessageProperties {
 	'@type': 'messageProperties';
 	/**
+True, if tasks can be added to the message's checklist using addChecklistTasks if the current user has Telegram Premium
+subscription.
+*/
+	can_add_tasks?: boolean;
+	/**
 True, if content of the message can be copied using inputMessageForwarded or forwardMessages with copy options.
 */
 	can_be_copied?: boolean;
@@ -15806,8 +16061,8 @@ True, if the message can be deleted for all users using the method deleteMessage
 	can_be_deleted_for_all_users?: boolean;
 	/**
 True, if the message can be edited using the methods editMessageText, editMessageCaption, or editMessageReplyMarkup. For
-live location and poll messages this fields shows whether editMessageLiveLocation or stopPoll can be used with this
-message.
+live location, poll, and checklist messages this fields shows whether editMessageLiveLocation, stopPoll, or
+editMessageChecklist respectively can be used with this message.
 */
 	can_be_edited?: boolean;
 	/**
@@ -15877,9 +16132,18 @@ getMessagePublicForwards.
 */
 	can_get_statistics?: boolean;
 	/**
+True, if advertisements for video of the message can be received though getVideoMessageAdvertisements.
+*/
+	can_get_video_advertisements?: boolean;
+	/**
 True, if chat members already viewed the message can be received through getMessageViewers.
 */
 	can_get_viewers?: boolean;
+	/**
+True, if tasks can be marked as done or not done in the message's checklist using markChecklistTasksAsDone if the
+current user has Telegram Premium subscription.
+*/
+	can_mark_tasks_as_done?: boolean;
 	/**
 True, if speech can be recognized for the message through recognizeSpeech.
 */
@@ -21777,6 +22041,15 @@ export interface PremiumFeatureMessageEffects {
 }
 
 /**
+The ability to create and use checklist messages.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureChecklists {
+	'@type': 'premiumFeatureChecklists';
+
+}
+
+/**
 Describes a feature available to Business user accounts.
 Subtype of {@link BusinessFeature}.
 */
@@ -23469,6 +23742,22 @@ True, if the message is a pinned message with the specified content.
 }
 
 /**
+A message with a checklist.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentChecklist {
+	'@type': 'pushMessageContentChecklist';
+	/**
+Checklist title.
+*/
+	title: string;
+	/**
+True, if the message is a pinned message with the specified content.
+*/
+	is_pinned?: boolean;
+}
+
+/**
 A video message.
 Subtype of {@link PushMessageContent}.
 */
@@ -23697,6 +23986,30 @@ export interface PushMessageContentProximityAlertTriggered {
 The distance to the user.
 */
 	distance: number;
+}
+
+/**
+Some tasks were added to a checklist.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentChecklistTasksAdded {
+	'@type': 'pushMessageContentChecklistTasksAdded';
+	/**
+Number of added tasks.
+*/
+	task_count: number;
+}
+
+/**
+Some tasks from a checklist were marked as done or not done.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentChecklistTasksDone {
+	'@type': 'pushMessageContentChecklistTasksDone';
+	/**
+Number of changed tasks.
+*/
+	task_count: number;
 }
 
 /**
@@ -31295,6 +31608,7 @@ export type MessageContent =
 	| MessageGame
 	| MessagePoll
 	| MessageStory
+	| MessageChecklist
 	| MessageInvoice
 	| MessageCall
 	| MessageGroupCall
@@ -31343,6 +31657,8 @@ export type MessageContent =
 	| MessagePaidMessagesRefunded
 	| MessagePaidMessagePriceChanged
 	| MessageDirectMessagePriceChanged
+	| MessageChecklistTasksDone
+	| MessageChecklistTasksAdded
 	| MessageContactRegistered
 	| MessageUsersShared
 	| MessageChatShared
@@ -31410,6 +31726,7 @@ export type InputMessageContent =
 	| InputMessageInvoice
 	| InputMessagePoll
 	| InputMessageStory
+	| InputMessageChecklist
 	| InputMessageForwarded;
 
 export type SearchMessagesFilter =
@@ -31744,7 +32061,8 @@ export type PremiumFeature =
 	| PremiumFeatureMessagePrivacy
 	| PremiumFeatureLastSeenTimes
 	| PremiumFeatureBusiness
-	| PremiumFeatureMessageEffects;
+	| PremiumFeatureMessageEffects
+	| PremiumFeatureChecklists;
 
 export type BusinessFeature =
 	| BusinessFeatureLocation
@@ -31887,6 +32205,7 @@ export type PushMessageContent =
 	| PushMessageContentSticker
 	| PushMessageContentStory
 	| PushMessageContentText
+	| PushMessageContentChecklist
 	| PushMessageContentVideo
 	| PushMessageContentVideoNote
 	| PushMessageContentVoiceNote
@@ -31905,6 +32224,8 @@ export type PushMessageContent =
 	| PushMessageContentRecurringPayment
 	| PushMessageContentSuggestProfilePhoto
 	| PushMessageContentProximityAlertTriggered
+	| PushMessageContentChecklistTasksAdded
+	| PushMessageContentChecklistTasksDone
 	| PushMessageContentMessageForwards
 	| PushMessageContentMediaAlbum;
 
@@ -33135,10 +33456,11 @@ Identifier of the message to get.
 
 /**
 Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message,
-the game message, the invoice message, the message with a previously set same background, the giveaway message, and the
-topic creation message for messages of the types messagePinMessage, messageGameScore, messagePaymentSuccessful,
-messageChatSetBackground, messageGiveawayCompleted and topic messages without non-bundled replied message respectively.
-Returns a 404 error if the message doesn't exist.
+the game message, the invoice message, the message with a previously set same background, the giveaway message, the
+checklist message, and the topic creation message for messages of the types messagePinMessage, messageGameScore,
+messagePaymentSuccessful, messageChatSetBackground, messageGiveawayCompleted, messageChecklistTasksDone and
+messageChecklistTasksAdded, and topic messages without non-bundled replied message respectively. Returns a 404 error if
+the message doesn't exist.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
 export interface GetRepliedMessage {
@@ -33880,6 +34202,46 @@ Identifier of the chat.
 Topic identifier.
 */
 	topic_id: number;
+}
+
+/**
+Returns the total number of Telegram Stars received by the channel chat for direct messages from the given topic.
+Request type for {@link Tdjson#getDirectMessagesChatTopicRevenue}.
+*/
+export interface GetDirectMessagesChatTopicRevenue {
+	'@type': 'getDirectMessagesChatTopicRevenue';
+	/**
+Chat identifier of the channel direct messages chat administered by the current user.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic.
+*/
+	topic_id: number;
+}
+
+/**
+Allows to send unpaid messages to the given topic of the channel direct messages chat administered by the current user.
+Request type for {@link Tdjson#toggleDirectMessagesChatTopicCanSendUnpaidMessages}.
+*/
+export interface ToggleDirectMessagesChatTopicCanSendUnpaidMessages {
+	'@type': 'toggleDirectMessagesChatTopicCanSendUnpaidMessages';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic.
+*/
+	topic_id: number;
+	/**
+Pass true to allow unpaid messages; pass false to disallow unpaid messages.
+*/
+	can_send_unpaid_messages?: boolean;
+	/**
+Pass true to refund the user previously paid messages.
+*/
+	refund_payments?: boolean;
 }
 
 /**
@@ -34751,6 +35113,63 @@ Option identifier chosen by the user; leave empty for the initial request.
 }
 
 /**
+Returns advertisements to be shown while a video from a message is watched. Available only if
+messageProperties.can_get_video_advertisements.
+Request type for {@link Tdjson#getVideoMessageAdvertisements}.
+*/
+export interface GetVideoMessageAdvertisements {
+	'@type': 'getVideoMessageAdvertisements';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
+Informs TDLib that the user viewed a video message advertisement.
+Request type for {@link Tdjson#viewVideoMessageAdvertisement}.
+*/
+export interface ViewVideoMessageAdvertisement {
+	'@type': 'viewVideoMessageAdvertisement';
+	/**
+Unique identifier of the advertisement.
+*/
+	advertisement_unique_id: number;
+}
+
+/**
+Informs TDLib that the user clicked a video message advertisement.
+Request type for {@link Tdjson#clickVideoMessageAdvertisement}.
+*/
+export interface ClickVideoMessageAdvertisement {
+	'@type': 'clickVideoMessageAdvertisement';
+	/**
+Unique identifier of the advertisement.
+*/
+	advertisement_unique_id: number;
+}
+
+/**
+Reports a video message advertisement to Telegram moderators.
+Request type for {@link Tdjson#reportVideoMessageAdvertisement}.
+*/
+export interface ReportVideoMessageAdvertisement {
+	'@type': 'reportVideoMessageAdvertisement';
+	/**
+Unique identifier of the advertisement.
+*/
+	advertisement_unique_id: number;
+	/**
+Option identifier chosen by the user; leave empty for the initial request.
+*/
+	option_id: string;
+}
+
+/**
 Removes an active notification from notification list. Needs to be called only if the notification is removed by the
 current user.
 Request type for {@link Tdjson#removeNotification}.
@@ -35332,6 +35751,30 @@ The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if t
 }
 
 /**
+Edits the message content of a checklist. Returns the edited message after the edit is completed on the server side.
+Request type for {@link Tdjson#editMessageChecklist}.
+*/
+export interface EditMessageChecklist {
+	'@type': 'editMessageChecklist';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message. Use messageProperties.can_be_edited to check whether the message can be edited.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+The new checklist. If some tasks were completed, this information will be kept.
+*/
+	checklist: InputChecklist;
+}
+
+/**
 Edits the media content of a message, including message caption. If only the caption needs to be edited, use
 editMessageCaption instead. The type of message content in an album can't be changed with exception of replacing a photo
 with a video or vice versa. Returns the edited message after the edit is completed on the server side.
@@ -35715,6 +36158,34 @@ The new direction in which the location moves, in degrees; 1-360. Pass 0 if unkn
 The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
 */
 	proximity_alert_radius: number;
+}
+
+/**
+Edits the content of a checklist in a message sent on behalf of a business account; for bots only.
+Request type for {@link Tdjson#editBusinessMessageChecklist}.
+*/
+export interface EditBusinessMessageChecklist {
+	'@type': 'editBusinessMessageChecklist';
+	/**
+Unique identifier of business connection on behalf of which the message was sent.
+*/
+	business_connection_id: string;
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+The new checklist. If some tasks were completed, this information will be kept.
+*/
+	checklist: InputChecklist;
 }
 
 /**
@@ -36161,7 +36632,7 @@ Identifier of a quick reply message in the same shortcut to be replied; pass 0 i
 */
 	reply_to_message_id: number;
 	/**
-The content of the message to be added; inputMessagePoll, inputMessageForwarded and inputMessageLocation with
+The content of the message to be added; inputMessagePaidMedia, inputMessageForwarded and inputMessageLocation with
 live_period aren't supported.
 */
 	input_message_content: InputMessageContent;
@@ -36245,8 +36716,9 @@ Identifiers of the quick reply messages to readd. Message identifiers must be in
 
 /**
 Asynchronously edits the text, media or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
-whether a message can be edited. Media message can be edited only to a media message. The type of message content in an
-album can't be changed with exception of replacing a photo with a video or vice versa.
+whether a message can be edited. Media message can be edited only to a media message. Checklist messages can be edited
+only to a checklist message. The type of message content in an album can't be changed with exception of replacing a
+photo with a video or vice versa.
 Request type for {@link Tdjson#editQuickReplyMessage}.
 */
 export interface EditQuickReplyMessage {
@@ -36260,8 +36732,8 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-New content of the message. Must be one of the following types: inputMessageText, inputMessageAnimation,
-inputMessageAudio, inputMessageDocument, inputMessagePhoto or inputMessageVideo.
+New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
+inputMessageChecklist, inputMessageDocument, inputMessagePhoto, inputMessageText, or inputMessageVideo.
 */
 	input_message_content: InputMessageContent;
 }
@@ -37067,6 +37539,52 @@ stopped.
 The new message reply markup; pass null if none; for bots only.
 */
 	reply_markup: ReplyMarkup;
+}
+
+/**
+Adds tasks to a checklist in a message.
+Request type for {@link Tdjson#addChecklistTasks}.
+*/
+export interface AddChecklistTasks {
+	'@type': 'addChecklistTasks';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the checklist. Use messageProperties.can_add_tasks to check whether the tasks can
+be added.
+*/
+	message_id: number;
+	/**
+List of added tasks.
+*/
+	tasks: InputChecklistTask[];
+}
+
+/**
+Adds tasks of a checklist in a message as done or not done.
+Request type for {@link Tdjson#markChecklistTasksAsDone}.
+*/
+export interface MarkChecklistTasksAsDone {
+	'@type': 'markChecklistTasksAsDone';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the checklist. Use messageProperties.can_mark_tasks_as_done to check whether the
+tasks can be marked as done or not done.
+*/
+	message_id: number;
+	/**
+Identifiers of tasks that were marked as done.
+*/
+	marked_as_done_task_ids: number[];
+	/**
+Identifiers of tasks that were marked as not done.
+*/
+	marked_as_not_done_task_ids: number[];
 }
 
 /**
@@ -47280,6 +47798,8 @@ export type Request =
 	| SetDirectMessagesChatTopicDraftMessage
 	| UnpinAllDirectMessagesChatTopicMessages
 	| ReadAllDirectMessagesChatTopicReactions
+	| GetDirectMessagesChatTopicRevenue
+	| ToggleDirectMessagesChatTopicCanSendUnpaidMessages
 	| LoadSavedMessagesTopics
 	| GetSavedMessagesTopicHistory
 	| GetSavedMessagesTopicMessageByDate
@@ -47320,6 +47840,10 @@ export type Request =
 	| ViewSponsoredChat
 	| OpenSponsoredChat
 	| ReportSponsoredChat
+	| GetVideoMessageAdvertisements
+	| ViewVideoMessageAdvertisement
+	| ClickVideoMessageAdvertisement
+	| ReportVideoMessageAdvertisement
 	| RemoveNotification
 	| RemoveNotificationGroup
 	| GetMessageLink
@@ -47344,6 +47868,7 @@ export type Request =
 	| DeleteChatMessagesByDate
 	| EditMessageText
 	| EditMessageLiveLocation
+	| EditMessageChecklist
 	| EditMessageMedia
 	| EditMessageCaption
 	| EditMessageReplyMarkup
@@ -47358,6 +47883,7 @@ export type Request =
 	| SendBusinessMessageAlbum
 	| EditBusinessMessageText
 	| EditBusinessMessageLiveLocation
+	| EditBusinessMessageChecklist
 	| EditBusinessMessageMedia
 	| EditBusinessMessageCaption
 	| EditBusinessMessageReplyMarkup
@@ -47431,6 +47957,8 @@ export type Request =
 	| SetPollAnswer
 	| GetPollVoters
 	| StopPoll
+	| AddChecklistTasks
+	| MarkChecklistTasksAsDone
 	| HideSuggestedAction
 	| HideContactCloseBirthdays
 	| GetBusinessConnection
@@ -48609,10 +49137,11 @@ isn't available locally. This is an offline method.
 
 	/**
 Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message,
-the game message, the invoice message, the message with a previously set same background, the giveaway message, and the
-topic creation message for messages of the types messagePinMessage, messageGameScore, messagePaymentSuccessful,
-messageChatSetBackground, messageGiveawayCompleted and topic messages without non-bundled replied message respectively.
-Returns a 404 error if the message doesn't exist.
+the game message, the invoice message, the message with a previously set same background, the giveaway message, the
+checklist message, and the topic creation message for messages of the types messagePinMessage, messageGameScore,
+messagePaymentSuccessful, messageChatSetBackground, messageGiveawayCompleted, messageChecklistTasksDone and
+messageChecklistTasksAdded, and topic messages without non-bundled replied message respectively. Returns a 404 error if
+the message doesn't exist.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -49106,6 +49635,26 @@ Removes all unread reactions in the topic in a channel direct messages chat admi
 	}
 
 	/**
+Returns the total number of Telegram Stars received by the channel chat for direct messages from the given topic.
+*/
+	async getDirectMessagesChatTopicRevenue(options: Omit<GetDirectMessagesChatTopicRevenue, '@type'>): Promise<StarCount> {
+		return this._request({
+			...options,
+			'@type': 'getDirectMessagesChatTopicRevenue',
+		});
+	}
+
+	/**
+Allows to send unpaid messages to the given topic of the channel direct messages chat administered by the current user.
+*/
+	async toggleDirectMessagesChatTopicCanSendUnpaidMessages(options: Omit<ToggleDirectMessagesChatTopicCanSendUnpaidMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleDirectMessagesChatTopicCanSendUnpaidMessages',
+		});
+	}
+
+	/**
 Loads more Saved Messages topics. The loaded topics will be sent through updateSavedMessagesTopic. Topics are sorted by
 their topic.order in descending order. Returns a 404 error if all topics have been loaded.
 */
@@ -49542,6 +50091,47 @@ Reports a sponsored chat to Telegram moderators.
 	}
 
 	/**
+Returns advertisements to be shown while a video from a message is watched. Available only if
+messageProperties.can_get_video_advertisements.
+*/
+	async getVideoMessageAdvertisements(options: Omit<GetVideoMessageAdvertisements, '@type'>): Promise<VideoMessageAdvertisements> {
+		return this._request({
+			...options,
+			'@type': 'getVideoMessageAdvertisements',
+		});
+	}
+
+	/**
+Informs TDLib that the user viewed a video message advertisement.
+*/
+	async viewVideoMessageAdvertisement(options: Omit<ViewVideoMessageAdvertisement, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'viewVideoMessageAdvertisement',
+		});
+	}
+
+	/**
+Informs TDLib that the user clicked a video message advertisement.
+*/
+	async clickVideoMessageAdvertisement(options: Omit<ClickVideoMessageAdvertisement, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'clickVideoMessageAdvertisement',
+		});
+	}
+
+	/**
+Reports a video message advertisement to Telegram moderators.
+*/
+	async reportVideoMessageAdvertisement(options: Omit<ReportVideoMessageAdvertisement, '@type'>): Promise<ReportSponsoredResult> {
+		return this._request({
+			...options,
+			'@type': 'reportVideoMessageAdvertisement',
+		});
+	}
+
+	/**
 Removes an active notification from notification list. Needs to be called only if the notification is removed by the
 current user.
 */
@@ -49802,6 +50392,16 @@ location. Returns the edited message after the edit is completed on the server s
 	}
 
 	/**
+Edits the message content of a checklist. Returns the edited message after the edit is completed on the server side.
+*/
+	async editMessageChecklist(options: Omit<EditMessageChecklist, '@type'>): Promise<Message> {
+		return this._request({
+			...options,
+			'@type': 'editMessageChecklist',
+		});
+	}
+
+	/**
 Edits the media content of a message, including message caption. If only the caption needs to be edited, use
 editMessageCaption instead. The type of message content in an album can't be changed with exception of replacing a photo
 with a video or vice versa. Returns the edited message after the edit is completed on the server side.
@@ -49945,6 +50545,16 @@ Edits the content of a live location in a message sent on behalf of a business a
 		return this._request({
 			...options,
 			'@type': 'editBusinessMessageLiveLocation',
+		});
+	}
+
+	/**
+Edits the content of a checklist in a message sent on behalf of a business account; for bots only.
+*/
+	async editBusinessMessageChecklist(options: Omit<EditBusinessMessageChecklist, '@type'>): Promise<BusinessMessage> {
+		return this._request({
+			...options,
+			'@type': 'editBusinessMessageChecklist',
 		});
 	}
 
@@ -50234,8 +50844,9 @@ message.
 
 	/**
 Asynchronously edits the text, media or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
-whether a message can be edited. Media message can be edited only to a media message. The type of message content in an
-album can't be changed with exception of replacing a photo with a video or vice versa.
+whether a message can be edited. Media message can be edited only to a media message. Checklist messages can be edited
+only to a checklist message. The type of message content in an album can't be changed with exception of replacing a
+photo with a video or vice versa.
 */
 	async editQuickReplyMessage(options: Omit<EditQuickReplyMessage, '@type'>): Promise<Ok> {
 		return this._request({
@@ -50708,6 +51319,26 @@ Stops a poll.
 		return this._request({
 			...options,
 			'@type': 'stopPoll',
+		});
+	}
+
+	/**
+Adds tasks to a checklist in a message.
+*/
+	async addChecklistTasks(options: Omit<AddChecklistTasks, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addChecklistTasks',
+		});
+	}
+
+	/**
+Adds tasks of a checklist in a message as done or not done.
+*/
+	async markChecklistTasksAsDone(options: Omit<MarkChecklistTasksAsDone, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'markChecklistTasksAsDone',
 		});
 	}
 
