@@ -7796,11 +7796,11 @@ Text of the advertisement.
 */
 	text: string;
 	/**
-The minimum amount of time the advertisement must be dispalyed before it can be hidden by the user, in seconds.
+The minimum amount of time the advertisement must be displayed before it can be hidden by the user, in seconds.
 */
 	min_display_duration: number;
 	/**
-The maximum amount of time the advertisement must be dispalyed before it must be automatically hidden, in seconds.
+The maximum amount of time the advertisement must be displayed before it must be automatically hidden, in seconds.
 */
 	max_display_duration: number;
 	/**
@@ -38332,7 +38332,7 @@ Source of the message view; pass null to guess the source based on chat open sta
 */
 	source: MessageSource;
 	/**
-Pass true to mark as read the specified messages even the chat is closed.
+Pass true to mark as read the specified messages even if the chat is closed.
 */
 	force_read?: boolean;
 }
