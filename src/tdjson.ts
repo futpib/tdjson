@@ -2629,7 +2629,7 @@ A big (up to 1280x1280) animated variant of the photo in MPEG4 format; may be nu
 */
 	animation: AnimatedChatPhoto;
 	/**
-A small (160x160) animated variant of the photo in MPEG4 format; may be null even the big animation is available.
+A small (160x160) animated variant of the photo in MPEG4 format; may be null even if the big animation is available.
 */
 	small_animation: AnimatedChatPhoto;
 	/**
@@ -2785,7 +2785,7 @@ True, if the administrator can change the chat title, photo, and other settings.
 */
 	can_change_info?: boolean;
 	/**
-True, if the administrator can create channel posts, answer to channel direct messages, or view channel statistics;
+True, if the administrator can create channel posts, approve suggested channel posts, or view channel statistics;
 applicable to channels only.
 */
 	can_post_messages?: boolean;
@@ -2839,10 +2839,135 @@ True, if the administrator can delete stories posted by other users; applicable 
 */
 	can_delete_stories?: boolean;
 	/**
+True, if the administrator can answer to channel direct messages; applicable to channels only.
+*/
+	can_manage_direct_messages?: boolean;
+	/**
 True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups
 only.
 */
 	is_anonymous?: boolean;
+}
+
+/**
+Describes price of a suggested post.
+Subtype of {@link SuggestedPostPrice}.
+*/
+export interface SuggestedPostPriceStar {
+	'@type': 'suggestedPostPriceStar';
+	/**
+The amount of Telegram Stars agreed to pay for the post;
+getOption("suggested_post_star_count_min")-getOption("suggested_post_star_count_max").
+*/
+	star_count: number;
+}
+
+/**
+Describes price of a suggested post in Toncoins.
+Subtype of {@link SuggestedPostPrice}.
+*/
+export interface SuggestedPostPriceTon {
+	'@type': 'suggestedPostPriceTon';
+	/**
+The amount of 1/100 of Toncoin agreed to pay for the post;
+getOption("suggested_post_toncoin_cent_count_min")-getOption("suggested_post_toncoin_cent_count_max").
+*/
+	toncoin_cent_count: number;
+}
+
+/**
+Describes state of a suggested post.
+Subtype of {@link SuggestedPostState}.
+*/
+export interface SuggestedPostStatePending {
+	'@type': 'suggestedPostStatePending';
+
+}
+
+/**
+The post was approved.
+Subtype of {@link SuggestedPostState}.
+*/
+export interface SuggestedPostStateApproved {
+	'@type': 'suggestedPostStateApproved';
+
+}
+
+/**
+The post was declined.
+Subtype of {@link SuggestedPostState}.
+*/
+export interface SuggestedPostStateDeclined {
+	'@type': 'suggestedPostStateDeclined';
+
+}
+
+/**
+Contains information about a suggested post. If the post can be approved or declined, then changes to the post can be
+also suggested. Use sendMessage with reply to the message and suggested post information to suggest message changes. Use
+addOffer to suggest price or time changes.
+*/
+export interface SuggestedPostInfo {
+	'@type': 'suggestedPostInfo';
+	/**
+Price of the suggested post; may be null if the post is non-paid.
+*/
+	price: SuggestedPostPrice;
+	/**
+Point in time (Unix timestamp) when the post is expected to be published; 0 if the specific date isn't set yet.
+*/
+	send_date: number;
+	/**
+State of the post.
+*/
+	state: SuggestedPostState;
+	/**
+True, if the suggested post can be approved by the current user using approveSuggestedPost; updates aren't sent when
+value of this field changes.
+*/
+	can_be_approved?: boolean;
+	/**
+True, if the suggested post can be declined by the current user using declineSuggestedPost; updates aren't sent when
+value of this field changes.
+*/
+	can_be_declined?: boolean;
+}
+
+/**
+Contains information about a post to suggest.
+*/
+export interface InputSuggestedPostInfo {
+	'@type': 'inputSuggestedPostInfo';
+	/**
+Price of the suggested post; pass null to suggest a post without payment. If the current user isn't an administrator of
+the channel direct messages chat and has no enough funds to pay for the post, then the error "BALANCE_TOO_LOW" will be
+returned immediately.
+*/
+	price: SuggestedPostPrice;
+	/**
+Point in time (Unix timestamp) when the post is expected to be published; pass 0 if the date isn't restricted. If
+specified, then the date must be getOption("suggested_post_send_delay_min")-getOption("suggested_post_send_delay_max")
+seconds in the future.
+*/
+	send_date: number;
+}
+
+/**
+Describes reason for refund of the payment for a suggested post.
+Subtype of {@link SuggestedPostRefundReason}.
+*/
+export interface SuggestedPostRefundReasonPostDeleted {
+	'@type': 'suggestedPostRefundReasonPostDeleted';
+
+}
+
+/**
+The post was refunded, because the payment for the post was refunded.
+Subtype of {@link SuggestedPostRefundReason}.
+*/
+export interface SuggestedPostRefundReasonPaymentRefunded {
+	'@type': 'suggestedPostRefundReasonPaymentRefunded';
+
 }
 
 /**
@@ -3528,6 +3653,39 @@ Types of gifts accepted by the user; for Telegram Premium users only.
 }
 
 /**
+Describes origin from which the upgraded gift was obtained.
+Subtype of {@link UpgradedGiftOrigin}.
+*/
+export interface UpgradedGiftOriginUpgrade {
+	'@type': 'upgradedGiftOriginUpgrade';
+	/**
+Identifier of the message with the regular gift that was upgraded; can be 0 or an identifier of a deleted message.
+*/
+	gift_message_id: number;
+}
+
+/**
+The gift was transferred from another owner.
+Subtype of {@link UpgradedGiftOrigin}.
+*/
+export interface UpgradedGiftOriginTransfer {
+	'@type': 'upgradedGiftOriginTransfer';
+
+}
+
+/**
+The gift was bought from another user.
+Subtype of {@link UpgradedGiftOrigin}.
+*/
+export interface UpgradedGiftOriginResale {
+	'@type': 'upgradedGiftOriginResale';
+	/**
+Number of Telegram Stars that were paid by the sender for the gift.
+*/
+	star_count: number;
+}
+
+/**
 Describes a model of an upgraded gift.
 */
 export interface UpgradedGiftModel {
@@ -3644,6 +3802,10 @@ Unique identifier of the gift.
 */
 	id: string;
 	/**
+Identifier of the chat that published the gift; 0 if none.
+*/
+	publisher_chat_id: number;
+	/**
 The sticker representing the gift.
 */
 	sticker: Sticker;
@@ -3691,6 +3853,10 @@ export interface UpgradedGift {
 Unique identifier of the gift.
 */
 	id: string;
+	/**
+Identifier of the chat that published the gift; 0 if none.
+*/
+	publisher_chat_id: number;
 	/**
 The title of the upgraded gift.
 */
@@ -4126,20 +4292,20 @@ Examples of possible backdrops that can be chosen for the gift after upgrade.
 }
 
 /**
-Describes direction of a transaction with Telegram Stars.
-Subtype of {@link StarTransactionDirection}.
+Describes direction of transactions in a transaction list.
+Subtype of {@link TransactionDirection}.
 */
-export interface StarTransactionDirectionIncoming {
-	'@type': 'starTransactionDirectionIncoming';
+export interface TransactionDirectionIncoming {
+	'@type': 'transactionDirectionIncoming';
 
 }
 
 /**
-The transaction is outgoing and decreases the number of owned Telegram Stars.
-Subtype of {@link StarTransactionDirection}.
+The transaction is outgoing and decreases the amount of owned currency.
+Subtype of {@link TransactionDirection}.
 */
-export interface StarTransactionDirectionOutgoing {
-	'@type': 'starTransactionDirectionOutgoing';
+export interface TransactionDirectionOutgoing {
+	'@type': 'transactionDirectionOutgoing';
 
 }
 
@@ -4638,6 +4804,30 @@ The amount of Telegram Stars that were received by Telegram; can be negative for
 }
 
 /**
+The transaction is a payment for a suggested post; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeSuggestedPostPaymentSend {
+	'@type': 'starTransactionTypeSuggestedPostPaymentSend';
+	/**
+Identifier of the channel chat that posted the post.
+*/
+	chat_id: number;
+}
+
+/**
+The transaction is a receiving of a payment for a suggested post by the channel chat; for channel chats only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeSuggestedPostPaymentReceive {
+	'@type': 'starTransactionTypeSuggestedPostPaymentReceive';
+	/**
+Identifier of the user that paid for the suggested post.
+*/
+	user_id: number;
+}
+
+/**
 The transaction is a purchase of Telegram Premium subscription; for regular users and bots only.
 Subtype of {@link StarTransactionType}.
 */
@@ -4730,6 +4920,89 @@ The amount of owned Telegram Stars.
 List of transactions with Telegram Stars.
 */
 	transactions: StarTransaction[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
+Describes type of transaction with Toncoins.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeFragmentDeposit {
+	'@type': 'tonTransactionTypeFragmentDeposit';
+	/**
+True, if the transaction is a gift from another user.
+*/
+	is_gift?: boolean;
+	/**
+The sticker to be shown in the transaction information; may be null if unknown.
+*/
+	sticker: Sticker;
+}
+
+/**
+The transaction is a payment for a suggested post.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeSuggestedPostPayment {
+	'@type': 'tonTransactionTypeSuggestedPostPayment';
+	/**
+Identifier of the channel chat that posted the post.
+*/
+	chat_id: number;
+}
+
+/**
+The transaction is a transaction of an unsupported type.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeUnsupported {
+	'@type': 'tonTransactionTypeUnsupported';
+
+}
+
+/**
+Represents a transaction changing the amount of owned Toncoins.
+*/
+export interface TonTransaction {
+	'@type': 'tonTransaction';
+	/**
+Unique identifier of the transaction.
+*/
+	id: string;
+	/**
+The amount of added owned Toncoins; negative for outgoing transactions.
+*/
+	ton_amount: number;
+	/**
+True, if the transaction is a refund of a previous transaction.
+*/
+	is_refund?: boolean;
+	/**
+Point in time (Unix timestamp) when the transaction was completed.
+*/
+	date: number;
+	/**
+Type of the transaction.
+*/
+	type: TonTransactionType;
+}
+
+/**
+Represents a list of Toncoin transactions.
+*/
+export interface TonTransactions {
+	'@type': 'tonTransactions';
+	/**
+The total amount of owned Toncoins.
+*/
+	ton_amount: number;
+	/**
+List of Toncoin transactions.
+*/
+	transactions: TonTransaction[];
 	/**
 The offset for the next request. If empty, then there are no more results.
 */
@@ -6172,8 +6445,8 @@ True, if messages sent to the channel have information about the sender user. Th
 */
 	show_message_sender?: boolean;
 	/**
-True, if users need to join the supergroup before they can send messages. Always true for channels and non-discussion
-supergroups.
+True, if users need to join the supergroup before they can send messages. May be false only for discussion supergroups
+and channel direct messages groups.
 */
 	join_to_send_messages?: boolean;
 	/**
@@ -7159,6 +7432,10 @@ Chosen quote from the replied message; may be null if none.
 */
 	quote: TextQuote;
 	/**
+Identifier of the checklist task in the original message that was replied; 0 if none.
+*/
+	checklist_task_id: number;
+	/**
 Information about origin of the message if the message was from another chat or topic; may be null for messages from the
 same chat.
 */
@@ -7209,6 +7486,10 @@ and forum topic only if messageProperties.can_be_replied.
 Quote from the message to be replied; pass null if none. Must always be null for replies in secret chats.
 */
 	quote: InputTextQuote;
+	/**
+Identifier of the checklist task in the message to be replied; pass 0 to reply to the whole message.
+*/
+	checklist_task_id: number;
 }
 
 /**
@@ -7230,6 +7511,10 @@ topic only if messageProperties.can_be_replied_in_another_chat.
 Quote from the message to be replied; pass null if none.
 */
 	quote: InputTextQuote;
+	/**
+Identifier of the checklist task in the message to be replied; pass 0 to reply to the whole message.
+*/
+	checklist_task_id: number;
 }
 
 /**
@@ -7316,6 +7601,16 @@ posts.
 */
 	is_channel_post?: boolean;
 	/**
+True, if the message is a suggested channel post which was paid in Telegram Stars; a warning must be shown if the
+message is deleted in less than getOption("suggested_post_lifetime_min") seconds after sending.
+*/
+	is_paid_star_suggested_post?: boolean;
+	/**
+True, if the message is a suggested channel post which was paid in Toncoins; a warning must be shown if the message is
+deleted in less than getOption("suggested_post_lifetime_min") seconds after sending.
+*/
+	is_paid_ton_suggested_post?: boolean;
+	/**
 True, if the message contains an unread mention for the current user.
 */
 	contains_unread_mention?: boolean;
@@ -7348,6 +7643,10 @@ Information about unread reactions added to the message.
 Information about fact-check added to the message; may be null if none.
 */
 	fact_check: FactCheck;
+	/**
+Information about the suggested post; may be null if the message isn't a suggested post.
+*/
+	suggested_post_info: SuggestedPostInfo;
 	/**
 Information about the message or the story this message is replying to; may be null if none.
 */
@@ -7796,11 +8095,11 @@ Text of the advertisement.
 */
 	text: string;
 	/**
-The minimum amount of time the advertisement must be dispalyed before it can be hidden by the user, in seconds.
+The minimum amount of time the advertisement must be displayed before it can be hidden by the user, in seconds.
 */
 	min_display_duration: number;
 	/**
-The maximum amount of time the advertisement must be dispalyed before it must be automatically hidden, in seconds.
+The maximum amount of time the advertisement must be displayed before it must be automatically hidden, in seconds.
 */
 	max_display_duration: number;
 	/**
@@ -8187,6 +8486,10 @@ Content of the message draft; must be of the type inputMessageText, inputMessage
 Identifier of the effect to apply to the message when it is sent; 0 if none.
 */
 	effect_id: string;
+	/**
+Information about the suggested post; may be null if none.
+*/
+	suggested_post_info: InputSuggestedPostInfo;
 }
 
 /**
@@ -8718,8 +9021,8 @@ Positions of the chat in chat lists.
 */
 	positions: ChatPosition[];
 	/**
-Chat lists to which the chat belongs. A chat can have a non-zero position in a chat list even it doesn't belong to the
-chat list and have no position in a chat list even it belongs to the chat list.
+Chat lists to which the chat belongs. A chat can have a non-zero position in a chat list even if it doesn't belong to
+the chat list and have no position in a chat list even if it belongs to the chat list.
 */
 	chat_lists: ChatList[];
 	/**
@@ -9840,7 +10143,8 @@ True, if the topic was created by the current user.
 */
 	is_outgoing?: boolean;
 	/**
-True, if the topic is closed.
+True, if the topic is closed. If the topic is closed, then the user must have can_manage_topics administrator right in
+the supergroup or must be the creator of the topic to send messages there.
 */
 	is_closed?: boolean;
 	/**
@@ -11435,6 +11739,10 @@ Photo of the chat with the video chat; may be null if none.
 True, if the video chat is expected to be a live stream in a channel or a broadcast group.
 */
 	is_live_stream?: boolean;
+	/**
+True, if the user can use the link to join the video chat without being muted by administrators.
+*/
+	joins_as_speaker?: boolean;
 }
 
 /**
@@ -12300,7 +12608,8 @@ export interface GiveawayParameters {
 	/**
 Identifier of the supergroup or channel chat, which will be automatically boosted by the winners of the giveaway for
 duration of the Telegram Premium subscription, or for the specified time. If the chat is a channel, then
-can_post_messages right is required in the channel, otherwise, the user must be an administrator in the supergroup.
+can_post_messages administrator right is required in the channel, otherwise, the user must be an administrator in the
+supergroup.
 */
 	boosted_chat_id: number;
 	/**
@@ -14595,6 +14904,34 @@ A sticker to be shown in the message; may be null if unknown.
 }
 
 /**
+Toncoins were gifted to a user.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageGiftedTon {
+	'@type': 'messageGiftedTon';
+	/**
+The identifier of a user that gifted Toncoins; 0 if the gift was anonymous or is outgoing.
+*/
+	gifter_user_id: number;
+	/**
+The identifier of a user that received Toncoins; 0 if the gift is incoming.
+*/
+	receiver_user_id: number;
+	/**
+The received amount of Toncoins, in the smallest units of the cryptocurrency.
+*/
+	ton_amount: number;
+	/**
+Identifier of the transaction for Toncoin credit; for receiver only.
+*/
+	transaction_id: string;
+	/**
+A sticker to be shown in the message; may be null if unknown.
+*/
+	sticker: Sticker;
+}
+
+/**
 A Telegram Stars were received by the current user from a giveaway.
 Subtype of {@link MessageContent}.
 */
@@ -14711,14 +15048,13 @@ Receiver of the gift.
 */
 	receiver_id: MessageSender;
 	/**
+Origin of the upgraded gift.
+*/
+	origin: UpgradedGiftOrigin;
+	/**
 Unique identifier of the received gift for the current user; only for the receiver of the gift.
 */
 	received_gift_id: string;
-	/**
-True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold
-gift.
-*/
-	is_upgrade?: boolean;
 	/**
 True, if the gift is displayed on the user's or the channel's profile page; only for the receiver of the gift.
 */
@@ -14728,13 +15064,9 @@ True, if the gift can be transferred to another owner; only for the receiver of 
 */
 	can_be_transferred?: boolean;
 	/**
-True, if the gift was transferred to another owner; only for the receiver of the gift.
+True, if the gift has already been transferred to another owner; only for the receiver of the gift.
 */
 	was_transferred?: boolean;
-	/**
-Number of Telegram Stars that were paid by the sender for the gift; 0 if the gift was upgraded or transferred.
-*/
-	last_resale_star_count: number;
 	/**
 Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
 */
@@ -14861,6 +15193,95 @@ Identifier of the message with the checklist; can be 0 if the message was delete
 List of tasks added to the checklist.
 */
 	tasks: ChecklistTask[];
+}
+
+/**
+Approval of suggested post has failed, because the user which proposed the post had no enough funds.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageSuggestedPostApprovalFailed {
+	'@type': 'messageSuggestedPostApprovalFailed';
+	/**
+Identifier of the message with the suggested post; can be 0 if the message was deleted.
+*/
+	suggested_post_message_id: number;
+	/**
+Price of the suggested post.
+*/
+	price: SuggestedPostPrice;
+}
+
+/**
+A suggested post was approved.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageSuggestedPostApproved {
+	'@type': 'messageSuggestedPostApproved';
+	/**
+Identifier of the message with the suggested post; can be 0 if the message was deleted.
+*/
+	suggested_post_message_id: number;
+	/**
+Price of the suggested post; may be null if the post is non-paid.
+*/
+	price: SuggestedPostPrice;
+	/**
+Point in time (Unix timestamp) when the post is expected to be published.
+*/
+	send_date: number;
+}
+
+/**
+A suggested post was declined.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageSuggestedPostDeclined {
+	'@type': 'messageSuggestedPostDeclined';
+	/**
+Identifier of the message with the suggested post; can be 0 if the message was deleted.
+*/
+	suggested_post_message_id: number;
+	/**
+Comment added by administrator of the channel when the post was declined.
+*/
+	comment: string;
+}
+
+/**
+A suggested post was published for getOption("suggested_post_lifetime_min") seconds and payment for the post was
+received.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageSuggestedPostPaid {
+	'@type': 'messageSuggestedPostPaid';
+	/**
+Identifier of the message with the suggested post; can be 0 if the message was deleted.
+*/
+	suggested_post_message_id: number;
+	/**
+The amount of received Telegram Stars.
+*/
+	star_amount: StarAmount;
+	/**
+The amount of received Toncoins; in the smallest units of the cryptocurrency.
+*/
+	ton_amount: number;
+}
+
+/**
+A suggested post was refunded.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageSuggestedPostRefunded {
+	'@type': 'messageSuggestedPostRefunded';
+	/**
+Identifier of the message with the suggested post; can be 0 if the message was deleted.
+*/
+	suggested_post_message_id: number;
+	/**
+Reason of the refund.
+*/
+	reason: SuggestedPostRefundReason;
 }
 
 /**
@@ -15365,6 +15786,11 @@ Unique identifier of the topic in a channel direct messages chat administered by
 isn't a channel direct messages chat administered by the current user.
 */
 	direct_messages_chat_topic_id: number;
+	/**
+Information about the suggested post; pass null if none. For messages to channel direct messages chat only. Applicable
+only to sendMessage and addOffer.
+*/
+	suggested_post_info: InputSuggestedPostInfo;
 	/**
 Pass true to disable notification for the message.
 */
@@ -16037,10 +16463,18 @@ Contains properties of a message and describes actions that can be done with the
 export interface MessageProperties {
 	'@type': 'messageProperties';
 	/**
+True, if an offer can be added to the message using addOffer.
+*/
+	can_add_offer?: boolean;
+	/**
 True, if tasks can be added to the message's checklist using addChecklistTasks if the current user has Telegram Premium
 subscription.
 */
 	can_add_tasks?: boolean;
+	/**
+True, if the message is a suggested post that can be approved by the user using approveSuggestedPost.
+*/
+	can_be_approved?: boolean;
 	/**
 True, if content of the message can be copied using inputMessageForwarded or forwardMessages with copy options.
 */
@@ -16050,6 +16484,10 @@ True, if content of the message can be copied to a secret chat using inputMessag
 options.
 */
 	can_be_copied_to_secret_chat?: boolean;
+	/**
+True, if the message is a suggested post that can be declined by the user using declineSuggestedPost.
+*/
+	can_be_declined?: boolean;
 	/**
 True, if the message can be deleted only for the current user while other users will continue to see it using the method
 deleteMessages with revoke == false.
@@ -16101,6 +16539,10 @@ True, if the message can be edited using the method editMessageMedia.
 True, if scheduling state of the message can be edited.
 */
 	can_edit_scheduling_state?: boolean;
+	/**
+True, if another price or post send time can be suggested using addOffer.
+*/
+	can_edit_suggested_post_info?: boolean;
 	/**
 True, if author of the message sent on behalf of a chat can be received through getMessageAuthor.
 */
@@ -22013,8 +22455,8 @@ export interface PremiumFeatureMessagePrivacy {
 }
 
 /**
-The ability to view last seen and read times of other users even they can't view last seen or read time for the current
-user.
+The ability to view last seen and read times of other users even if they can't view last seen or read time for the
+current user.
 Subtype of {@link PremiumFeature}.
 */
 export interface PremiumFeatureLastSeenTimes {
@@ -25669,6 +26111,15 @@ export interface InternalLinkTypeMyStars {
 }
 
 /**
+The link is a link to the screen with information about Toncoin balance and transactions of the current user.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeMyToncoins {
+	'@type': 'internalLinkTypeMyToncoins';
+
+}
+
+/**
 The link contains a request of Telegram passport data. Call getPassportAuthorizationForm with the given parameters to
 process the link if the link was received from outside of the application; otherwise, ignore it.
 Subtype of {@link InternalLinkType}.
@@ -27744,8 +28195,17 @@ export interface RevenueWithdrawalStateFailed {
 Describes type of transaction for revenue earned from sponsored messages in a chat.
 Subtype of {@link ChatRevenueTransactionType}.
 */
-export interface ChatRevenueTransactionTypeEarnings {
-	'@type': 'chatRevenueTransactionTypeEarnings';
+export interface ChatRevenueTransactionTypeUnsupported {
+	'@type': 'chatRevenueTransactionTypeUnsupported';
+
+}
+
+/**
+Describes earnings from sponsored messages in a chat in some time frame.
+Subtype of {@link ChatRevenueTransactionType}.
+*/
+export interface ChatRevenueTransactionTypeSponsoredMessageEarnings {
+	'@type': 'chatRevenueTransactionTypeSponsoredMessageEarnings';
 	/**
 Point in time (Unix timestamp) when the earnings started.
 */
@@ -27757,19 +28217,27 @@ Point in time (Unix timestamp) when the earnings ended.
 }
 
 /**
-Describes a withdrawal of earnings.
+Describes earnings from a published suggested post.
 Subtype of {@link ChatRevenueTransactionType}.
 */
-export interface ChatRevenueTransactionTypeWithdrawal {
-	'@type': 'chatRevenueTransactionTypeWithdrawal';
+export interface ChatRevenueTransactionTypeSuggestedPostEarnings {
+	'@type': 'chatRevenueTransactionTypeSuggestedPostEarnings';
+	/**
+Identifier of the user that paid for the suggested post.
+*/
+	user_id: number;
+}
+
+/**
+Describes a withdrawal of earnings through Fragment.
+Subtype of {@link ChatRevenueTransactionType}.
+*/
+export interface ChatRevenueTransactionTypeFragmentWithdrawal {
+	'@type': 'chatRevenueTransactionTypeFragmentWithdrawal';
 	/**
 Point in time (Unix timestamp) when the earnings withdrawal started.
 */
 	withdrawal_date: number;
-	/**
-Name of the payment provider.
-*/
-	provider: string;
 	/**
 State of the withdrawal.
 */
@@ -27777,19 +28245,15 @@ State of the withdrawal.
 }
 
 /**
-Describes a refund for failed withdrawal of earnings.
+Describes a refund for failed withdrawal of earnings through Fragment.
 Subtype of {@link ChatRevenueTransactionType}.
 */
-export interface ChatRevenueTransactionTypeRefund {
-	'@type': 'chatRevenueTransactionTypeRefund';
+export interface ChatRevenueTransactionTypeFragmentRefund {
+	'@type': 'chatRevenueTransactionTypeFragmentRefund';
 	/**
 Point in time (Unix timestamp) when the transaction was refunded.
 */
 	refund_date: number;
-	/**
-Name of the payment provider.
-*/
-	provider: string;
 }
 
 /**
@@ -27817,13 +28281,17 @@ Contains a list of chat revenue transactions.
 export interface ChatRevenueTransactions {
 	'@type': 'chatRevenueTransactions';
 	/**
-Total number of transactions.
+The amount of owned Toncoins; in the smallest units of the cryptocurrency.
 */
-	total_count: number;
+	ton_amount: number;
 	/**
 List of transactions.
 */
 	transactions: ChatRevenueTransaction[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
 }
 
 /**
@@ -28269,6 +28737,26 @@ Message identifier.
 The new fact-check.
 */
 	fact_check: FactCheck;
+}
+
+/**
+Information about suggested post of a message was changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateMessageSuggestedPostInfo {
+	'@type': 'updateMessageSuggestedPostInfo';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+The new information about the suggested post.
+*/
+	suggested_post_info: SuggestedPostInfo;
 }
 
 /**
@@ -29581,7 +30069,8 @@ Identifier of the group call.
 	group_call_id: number;
 	/**
 New list of group call participant user identifiers. The identifiers may be invalid or the corresponding users may be
-unknown. The participants must be shown in the list of group call participants even there is no information about them.
+unknown. The participants must be shown in the list of group call participants even if there is no information about
+them.
 */
 	participant_user_ids: string[];
 }
@@ -30180,6 +30669,18 @@ export interface UpdateOwnedStarCount {
 The new amount of owned Telegram Stars.
 */
 	star_amount: StarAmount;
+}
+
+/**
+The number of Toncoins owned by the current user has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateOwnedTonCount {
+	'@type': 'updateOwnedTonCount';
+	/**
+The new amount of owned Toncoins; in the smallest units of the cryptocurrency.
+*/
+	ton_amount: number;
 }
 
 /**
@@ -31109,6 +31610,19 @@ export type InputChatPhoto =
 	| InputChatPhotoAnimation
 	| InputChatPhotoSticker;
 
+export type SuggestedPostPrice =
+	| SuggestedPostPriceStar
+	| SuggestedPostPriceTon;
+
+export type SuggestedPostState =
+	| SuggestedPostStatePending
+	| SuggestedPostStateApproved
+	| SuggestedPostStateDeclined;
+
+export type SuggestedPostRefundReason =
+	| SuggestedPostRefundReasonPostDeleted
+	| SuggestedPostRefundReasonPaymentRefunded;
+
 export type StarSubscriptionType =
 	| StarSubscriptionTypeChannel
 	| StarSubscriptionTypeBot;
@@ -31122,6 +31636,11 @@ export type AffiliateProgramSortOrder =
 	| AffiliateProgramSortOrderProfitability
 	| AffiliateProgramSortOrderCreationDate
 	| AffiliateProgramSortOrderRevenue;
+
+export type UpgradedGiftOrigin =
+	| UpgradedGiftOriginUpgrade
+	| UpgradedGiftOriginTransfer
+	| UpgradedGiftOriginResale;
 
 export type UpgradedGiftAttributeId =
 	| UpgradedGiftAttributeIdModel
@@ -31137,9 +31656,9 @@ export type SentGift =
 	| SentGiftRegular
 	| SentGiftUpgraded;
 
-export type StarTransactionDirection =
-	| StarTransactionDirectionIncoming
-	| StarTransactionDirectionOutgoing;
+export type TransactionDirection =
+	| TransactionDirectionIncoming
+	| TransactionDirectionOutgoing;
 
 export type StarTransactionType =
 	| StarTransactionTypePremiumBotDeposit
@@ -31172,10 +31691,17 @@ export type StarTransactionType =
 	| StarTransactionTypeAffiliateProgramCommission
 	| StarTransactionTypePaidMessageSend
 	| StarTransactionTypePaidMessageReceive
+	| StarTransactionTypeSuggestedPostPaymentSend
+	| StarTransactionTypeSuggestedPostPaymentReceive
 	| StarTransactionTypePremiumPurchase
 	| StarTransactionTypeBusinessBotTransferSend
 	| StarTransactionTypeBusinessBotTransferReceive
 	| StarTransactionTypeUnsupported;
+
+export type TonTransactionType =
+	| TonTransactionTypeFragmentDeposit
+	| TonTransactionTypeSuggestedPostPayment
+	| TonTransactionTypeUnsupported;
 
 export type GiveawayParticipantStatus =
 	| GiveawayParticipantStatusEligible
@@ -31650,6 +32176,7 @@ export type MessageContent =
 	| MessageGiveawayCompleted
 	| MessageGiveawayWinners
 	| MessageGiftedStars
+	| MessageGiftedTon
 	| MessageGiveawayPrizeStars
 	| MessageGift
 	| MessageUpgradedGift
@@ -31659,6 +32186,11 @@ export type MessageContent =
 	| MessageDirectMessagePriceChanged
 	| MessageChecklistTasksDone
 	| MessageChecklistTasksAdded
+	| MessageSuggestedPostApprovalFailed
+	| MessageSuggestedPostApproved
+	| MessageSuggestedPostDeclined
+	| MessageSuggestedPostPaid
+	| MessageSuggestedPostRefunded
 	| MessageContactRegistered
 	| MessageUsersShared
 	| MessageChatShared
@@ -32365,6 +32897,7 @@ export type InternalLinkType =
 	| InternalLinkTypeMessage
 	| InternalLinkTypeMessageDraft
 	| InternalLinkTypeMyStars
+	| InternalLinkTypeMyToncoins
 	| InternalLinkTypePassportDataRequest
 	| InternalLinkTypePhoneNumberConfirmation
 	| InternalLinkTypePremiumFeatures
@@ -32502,9 +33035,11 @@ export type RevenueWithdrawalState =
 	| RevenueWithdrawalStateFailed;
 
 export type ChatRevenueTransactionType =
-	| ChatRevenueTransactionTypeEarnings
-	| ChatRevenueTransactionTypeWithdrawal
-	| ChatRevenueTransactionTypeRefund;
+	| ChatRevenueTransactionTypeUnsupported
+	| ChatRevenueTransactionTypeSponsoredMessageEarnings
+	| ChatRevenueTransactionTypeSuggestedPostEarnings
+	| ChatRevenueTransactionTypeFragmentWithdrawal
+	| ChatRevenueTransactionTypeFragmentRefund;
 
 export type VectorPathCommand =
 	| VectorPathCommandLine
@@ -32538,6 +33073,7 @@ export type Update =
 	| UpdateMessageMentionRead
 	| UpdateMessageUnreadReactions
 	| UpdateMessageFactCheck
+	| UpdateMessageSuggestedPostInfo
 	| UpdateMessageLiveLocationViewed
 	| UpdateVideoPublished
 	| UpdateNewChat
@@ -32653,6 +33189,7 @@ export type Update =
 	| UpdateSavedMessagesTags
 	| UpdateActiveLiveLocationMessages
 	| UpdateOwnedStarCount
+	| UpdateOwnedTonCount
 	| UpdateChatRevenueAmount
 	| UpdateStarRevenueStatus
 	| UpdateSpeechRecognitionTrial
@@ -33455,12 +33992,14 @@ Identifier of the message to get.
 }
 
 /**
-Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message,
-the game message, the invoice message, the message with a previously set same background, the giveaway message, the
-checklist message, and the topic creation message for messages of the types messagePinMessage, messageGameScore,
-messagePaymentSuccessful, messageChatSetBackground, messageGiveawayCompleted, messageChecklistTasksDone and
-messageChecklistTasksAdded, and topic messages without non-bundled replied message respectively. Returns a 404 error if
-the message doesn't exist.
+Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message for
+messagePinMessage, the game message for messageGameScore, the invoice message for messagePaymentSuccessful, the message
+with a previously set same background for messageChatSetBackground, the giveaway message for messageGiveawayCompleted,
+the checklist message for messageChecklistTasksDone, messageChecklistTasksAdded, the message with suggested post
+information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved, messageSuggestedPostDeclined,
+messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
+messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, and the topic creation message for topic messages
+without non-bundled replied message. Returns a 404 error if the message doesn't exist.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
 export interface GetRepliedMessage {
@@ -36458,7 +36997,7 @@ Profile photo to set; pass null to remove the photo.
 */
 	photo: InputChatPhoto;
 	/**
-Pass true to set the public photo, which will be visible even the main photo is hidden by privacy settings.
+Pass true to set the public photo, which will be visible even if the main photo is hidden by privacy settings.
 */
 	is_public?: boolean;
 }
@@ -36771,8 +37310,8 @@ getForumTopicDefaultIcons.
 }
 
 /**
-Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics right in the supergroup unless
-the user is creator of the topic.
+Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics administrator right in the
+supergroup unless the user is creator of the topic.
 Request type for {@link Tdjson#editForumTopic}.
 */
 export interface EditForumTopic {
@@ -36890,8 +37429,8 @@ muted forever.
 }
 
 /**
-Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics right in the supergroup unless
-the user is creator of the topic.
+Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics administrator right in the
+supergroup unless the user is creator of the topic.
 Request type for {@link Tdjson#toggleForumTopicIsClosed}.
 */
 export interface ToggleForumTopicIsClosed {
@@ -36911,8 +37450,8 @@ Pass true to close the topic; pass false to reopen it.
 }
 
 /**
-Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics right in the
-supergroup.
+Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics administrator right in
+the supergroup.
 Request type for {@link Tdjson#toggleGeneralForumTopicIsHidden}.
 */
 export interface ToggleGeneralForumTopicIsHidden {
@@ -36928,8 +37467,8 @@ Pass true to hide and close the General topic; pass false to unhide it.
 }
 
 /**
-Changes the pinned state of a forum topic; requires can_manage_topics right in the supergroup. There can be up to
-getOption("pinned_forum_topic_count_max") pinned forum topics.
+Changes the pinned state of a forum topic; requires can_manage_topics administrator right in the supergroup. There can
+be up to getOption("pinned_forum_topic_count_max") pinned forum topics.
 Request type for {@link Tdjson#toggleForumTopicIsPinned}.
 */
 export interface ToggleForumTopicIsPinned {
@@ -36949,7 +37488,7 @@ Pass true to pin the topic; pass false to unpin it.
 }
 
 /**
-Changes the order of pinned forum topics; requires can_manage_topics right in the supergroup.
+Changes the order of pinned forum topics; requires can_manage_topics administrator right in the supergroup.
 Request type for {@link Tdjson#setPinnedForumTopics}.
 */
 export interface SetPinnedForumTopics {
@@ -38332,7 +38871,7 @@ Source of the message view; pass null to guess the source based on chat open sta
 */
 	source: MessageSource;
 	/**
-Pass true to mark as read the specified messages even the chat is closed.
+Pass true to mark as read the specified messages even if the chat is closed.
 */
 	force_read?: boolean;
 }
@@ -40620,7 +41159,7 @@ export interface GetDefaultChatEmojiStatuses {
 }
 
 /**
-Returns the list of emoji statuses, which can't be used as chat emoji status, even they are from a sticker set with
+Returns the list of emoji statuses, which can't be used as chat emoji status, even if they are from a sticker set with
 is_allowed_as_chat_emoji_status == true.
 Request type for {@link Tdjson#getDisallowedChatEmojiStatuses}.
 */
@@ -41381,6 +41920,71 @@ privileges and can_invite_users right in the chat for own links and owner privil
 Pass true to approve all requests; pass false to decline them.
 */
 	approve?: boolean;
+}
+
+/**
+Approves a suggested post in a channel direct messages chat.
+Request type for {@link Tdjson#approveSuggestedPost}.
+*/
+export interface ApproveSuggestedPost {
+	'@type': 'approveSuggestedPost';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the message with the suggested post. Use messageProperties.can_be_approved to check whether the suggested
+post can be approved.
+*/
+	message_id: number;
+	/**
+Point in time (Unix timestamp) when the post is expected to be published; pass 0 if the date has already been chosen.
+*/
+	send_date: number;
+}
+
+/**
+Declines a suggested post in a channel direct messages chat.
+Request type for {@link Tdjson#declineSuggestedPost}.
+*/
+export interface DeclineSuggestedPost {
+	'@type': 'declineSuggestedPost';
+	/**
+Chat identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the message with the suggested post. Use messageProperties.can_be_declined to check whether the suggested
+post can be declined.
+*/
+	message_id: number;
+	/**
+Comment for the creator of the suggested post; 0-128 characters.
+*/
+	comment: string;
+}
+
+/**
+Sent a suggested post based on a previously sent message in a channel direct messages chat. Can be also used to suggest
+price or time change for an existing suggested post. Returns the sent message.
+Request type for {@link Tdjson#addOffer}.
+*/
+export interface AddOffer {
+	'@type': 'addOffer';
+	/**
+Identifier of the channel direct messages chat.
+*/
+	chat_id: number;
+	/**
+Identifier of the message in the chat which will be sent as suggested post. Use messageProperties.can_add_offer to check
+whether an offer can be added or messageProperties.can_edit_suggested_post_info to check whether price or time of
+sending of the post can be changed.
+*/
+	message_id: number;
+	/**
+Options to be used to send the message. New information about the suggested post must always be specified.
+*/
+	options: MessageSendOptions;
 }
 
 /**
@@ -43131,7 +43735,7 @@ Profile photo to set.
 */
 	photo: InputChatPhoto;
 	/**
-Pass true to set the public photo, which will be visible even the main photo is hidden by privacy settings.
+Pass true to set the public photo, which will be visible even if the main photo is hidden by privacy settings.
 */
 	is_public?: boolean;
 }
@@ -44740,7 +45344,7 @@ Pass true to additionally pay for the gift upgrade and allow the receiver to upg
 }
 
 /**
-Sells a gift for Telegram Stars.
+Sells a gift for Telegram Stars; requires owner privileges for gifts owned by a chat.
 Request type for {@link Tdjson#sellGift}.
 */
 export interface SellGift {
@@ -45002,7 +45606,7 @@ for each 1000 Telegram Stars paid for the gift.
 }
 
 /**
-Returns upgraded gifts that can be bought from other owners.
+Returns upgraded gifts that can be bought from other owners using sendResoldGift.
 Request type for {@link Tdjson#searchGiftsForResale}.
 */
 export interface SearchGiftsForResale {
@@ -45709,11 +46313,33 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Number of transactions to skip.
+Offset of the first transaction to return as received from the previous request; use empty string to get the first chunk
+of results.
 */
-	offset: number;
+	offset: string;
 	/**
-The maximum number of transactions to be returned; up to 200.
+The maximum number of transactions to be returned; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Returns the list of Toncoin transactions of the current user.
+Request type for {@link Tdjson#getTonTransactions}.
+*/
+export interface GetTonTransactions {
+	'@type': 'getTonTransactions';
+	/**
+Direction of the transactions to receive; pass null to get all transactions.
+*/
+	direction: TransactionDirection;
+	/**
+Offset of the first transaction to return as received from the previous request; use empty string to get the first chunk
+of results.
+*/
+	offset: string;
+	/**
+The maximum number of transactions to return.
 */
 	limit: number;
 }
@@ -45747,7 +46373,8 @@ supergroup or channel chat.
 */
 	owner_id: MessageSender;
 	/**
-The number of Telegram Stars to withdraw. Must be at least getOption("star_withdrawal_count_min").
+The number of Telegram Stars to withdraw; must be between getOption("star_withdrawal_count_min") and
+getOption("star_withdrawal_count_max").
 */
 	star_count: number;
 	/**
@@ -46838,7 +47465,7 @@ If non-empty, only transactions related to the Star Subscription will be returne
 	/**
 Direction of the transactions to receive; pass null to get all transactions.
 */
-	direction: StarTransactionDirection;
+	direction: TransactionDirection;
 	/**
 Offset of the first transaction to return as received from the previous request; use empty string to get the first chunk
 of results.
@@ -48170,6 +48797,9 @@ export type Request =
 	| GetChatJoinRequests
 	| ProcessChatJoinRequest
 	| ProcessChatJoinRequests
+	| ApproveSuggestedPost
+	| DeclineSuggestedPost
+	| AddOffer
 	| CreateCall
 	| AcceptCall
 	| SendCallSignalingData
@@ -48445,6 +49075,7 @@ export type Request =
 	| GetChatRevenueStatistics
 	| GetChatRevenueWithdrawalUrl
 	| GetChatRevenueTransactions
+	| GetTonTransactions
 	| GetStarRevenueStatistics
 	| GetStarWithdrawalUrl
 	| GetStarAdAccountUrl
@@ -49136,12 +49767,14 @@ isn't available locally. This is an offline method.
 	}
 
 	/**
-Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message,
-the game message, the invoice message, the message with a previously set same background, the giveaway message, the
-checklist message, and the topic creation message for messages of the types messagePinMessage, messageGameScore,
-messagePaymentSuccessful, messageChatSetBackground, messageGiveawayCompleted, messageChecklistTasksDone and
-messageChecklistTasksAdded, and topic messages without non-bundled replied message respectively. Returns a 404 error if
-the message doesn't exist.
+Returns information about a non-bundled message that is replied by a given message. Also, returns the pinned message for
+messagePinMessage, the game message for messageGameScore, the invoice message for messagePaymentSuccessful, the message
+with a previously set same background for messageChatSetBackground, the giveaway message for messageGiveawayCompleted,
+the checklist message for messageChecklistTasksDone, messageChecklistTasksAdded, the message with suggested post
+information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved, messageSuggestedPostDeclined,
+messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
+messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, and the topic creation message for topic messages
+without non-bundled replied message. Returns a 404 error if the message doesn't exist.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -50876,8 +51509,8 @@ in the supergroup.
 	}
 
 	/**
-Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics right in the supergroup unless
-the user is creator of the topic.
+Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics administrator right in the
+supergroup unless the user is creator of the topic.
 */
 	async editForumTopic(options: Omit<EditForumTopic, '@type'>): Promise<Ok> {
 		return this._request({
@@ -50928,8 +51561,8 @@ Changes the notification settings of a forum topic.
 	}
 
 	/**
-Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics right in the supergroup unless
-the user is creator of the topic.
+Toggles whether a topic is closed in a forum supergroup chat; requires can_manage_topics administrator right in the
+supergroup unless the user is creator of the topic.
 */
 	async toggleForumTopicIsClosed(options: Omit<ToggleForumTopicIsClosed, '@type'>): Promise<Ok> {
 		return this._request({
@@ -50939,8 +51572,8 @@ the user is creator of the topic.
 	}
 
 	/**
-Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics right in the
-supergroup.
+Toggles whether a General topic is hidden in a forum supergroup chat; requires can_manage_topics administrator right in
+the supergroup.
 */
 	async toggleGeneralForumTopicIsHidden(options: Omit<ToggleGeneralForumTopicIsHidden, '@type'>): Promise<Ok> {
 		return this._request({
@@ -50950,8 +51583,8 @@ supergroup.
 	}
 
 	/**
-Changes the pinned state of a forum topic; requires can_manage_topics right in the supergroup. There can be up to
-getOption("pinned_forum_topic_count_max") pinned forum topics.
+Changes the pinned state of a forum topic; requires can_manage_topics administrator right in the supergroup. There can
+be up to getOption("pinned_forum_topic_count_max") pinned forum topics.
 */
 	async toggleForumTopicIsPinned(options: Omit<ToggleForumTopicIsPinned, '@type'>): Promise<Ok> {
 		return this._request({
@@ -50961,7 +51594,7 @@ getOption("pinned_forum_topic_count_max") pinned forum topics.
 	}
 
 	/**
-Changes the order of pinned forum topics; requires can_manage_topics right in the supergroup.
+Changes the order of pinned forum topics; requires can_manage_topics administrator right in the supergroup.
 */
 	async setPinnedForumTopics(options: Omit<SetPinnedForumTopics, '@type'>): Promise<Ok> {
 		return this._request({
@@ -53128,7 +53761,7 @@ Returns default emoji statuses for chats.
 	}
 
 	/**
-Returns the list of emoji statuses, which can't be used as chat emoji status, even they are from a sticker set with
+Returns the list of emoji statuses, which can't be used as chat emoji status, even if they are from a sticker set with
 is_allowed_as_chat_emoji_status == true.
 */
 	async getDisallowedChatEmojiStatuses(): Promise<EmojiStatusCustomEmojis> {
@@ -53535,6 +54168,37 @@ Handles all pending join requests for a given link in a chat.
 		return this._request({
 			...options,
 			'@type': 'processChatJoinRequests',
+		});
+	}
+
+	/**
+Approves a suggested post in a channel direct messages chat.
+*/
+	async approveSuggestedPost(options: Omit<ApproveSuggestedPost, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'approveSuggestedPost',
+		});
+	}
+
+	/**
+Declines a suggested post in a channel direct messages chat.
+*/
+	async declineSuggestedPost(options: Omit<DeclineSuggestedPost, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'declineSuggestedPost',
+		});
+	}
+
+	/**
+Sent a suggested post based on a previously sent message in a channel direct messages chat. Can be also used to suggest
+price or time change for an existing suggested post. Returns the sent message.
+*/
+	async addOffer(options: Omit<AddOffer, '@type'>): Promise<Message> {
+		return this._request({
+			...options,
+			'@type': 'addOffer',
 		});
 	}
 
@@ -55725,7 +56389,7 @@ was sold out.
 	}
 
 	/**
-Sells a gift for Telegram Stars.
+Sells a gift for Telegram Stars; requires owner privileges for gifts owned by a chat.
 */
 	async sellGift(options: Omit<SellGift, '@type'>): Promise<Ok> {
 		return this._request({
@@ -55860,7 +56524,7 @@ Changes resale price of a unique gift owned by the current user.
 	}
 
 	/**
-Returns upgraded gifts that can be bought from other owners.
+Returns upgraded gifts that can be bought from other owners using sendResoldGift.
 */
 	async searchGiftsForResale(options: Omit<SearchGiftsForResale, '@type'>): Promise<GiftsForResale> {
 		return this._request({
@@ -56357,6 +57021,16 @@ true.
 		return this._request({
 			...options,
 			'@type': 'getChatRevenueTransactions',
+		});
+	}
+
+	/**
+Returns the list of Toncoin transactions of the current user.
+*/
+	async getTonTransactions(options: Omit<GetTonTransactions, '@type'>): Promise<TonTransactions> {
+		return this._request({
+			...options,
+			'@type': 'getTonTransactions',
 		});
 	}
 
