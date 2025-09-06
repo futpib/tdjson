@@ -2850,13 +2850,39 @@ only.
 }
 
 /**
+Describes price of a resold gift.
+Subtype of {@link GiftResalePrice}.
+*/
+export interface GiftResalePriceStar {
+	'@type': 'giftResalePriceStar';
+	/**
+The amount of Telegram Stars expected to be paid for the gift. Must be in range
+getOption("gift_resale_star_count_min")-getOption("gift_resale_star_count_max") for gifts put for resale.
+*/
+	star_count: number;
+}
+
+/**
+Describes price of a resold gift in Toncoins.
+Subtype of {@link GiftResalePrice}.
+*/
+export interface GiftResalePriceTon {
+	'@type': 'giftResalePriceTon';
+	/**
+The amount of 1/100 of Toncoin expected to be paid for the gift. Must be in range
+getOption("gift_resale_toncoin_cent_count_min")-getOption("gift_resale_toncoin_cent_count_max").
+*/
+	toncoin_cent_count: number;
+}
+
+/**
 Describes price of a suggested post.
 Subtype of {@link SuggestedPostPrice}.
 */
 export interface SuggestedPostPriceStar {
 	'@type': 'suggestedPostPriceStar';
 	/**
-The amount of Telegram Stars agreed to pay for the post;
+The amount of Telegram Stars expected to be paid for the post;
 getOption("suggested_post_star_count_min")-getOption("suggested_post_star_count_max").
 */
 	star_count: number;
@@ -2869,7 +2895,7 @@ Subtype of {@link SuggestedPostPrice}.
 export interface SuggestedPostPriceTon {
 	'@type': 'suggestedPostPriceTon';
 	/**
-The amount of 1/100 of Toncoin agreed to pay for the post;
+The amount of 1/100 of Toncoin expected to be paid for the post;
 getOption("suggested_post_toncoin_cent_count_min")-getOption("suggested_post_toncoin_cent_count_max").
 */
 	toncoin_cent_count: number;
@@ -3653,6 +3679,74 @@ Types of gifts accepted by the user; for Telegram Premium users only.
 }
 
 /**
+Describes the maximum number of times that a specific gift can be purchased.
+*/
+export interface GiftPurchaseLimits {
+	'@type': 'giftPurchaseLimits';
+	/**
+The maximum number of times the gifts can be purchased.
+*/
+	total_count: number;
+	/**
+Number of remaining times the gift can be purchased.
+*/
+	remaining_count: number;
+}
+
+/**
+Describes parameters of a unique gift available for resale.
+*/
+export interface GiftResaleParameters {
+	'@type': 'giftResaleParameters';
+	/**
+Resale price of the gift in Telegram Stars.
+*/
+	star_count: number;
+	/**
+Resale price of the gift in 1/100 of Toncoin.
+*/
+	toncoin_cent_count: number;
+	/**
+True, if the gift can be bought only using Toncoins.
+*/
+	toncoin_only?: boolean;
+}
+
+/**
+Describes collection of gifts.
+*/
+export interface GiftCollection {
+	'@type': 'giftCollection';
+	/**
+Unique identifier of the collection.
+*/
+	id: number;
+	/**
+Name of the collection.
+*/
+	name: string;
+	/**
+Icon of the collection; may be null if none.
+*/
+	icon: Sticker;
+	/**
+Total number of gifts in the collection.
+*/
+	gift_count: number;
+}
+
+/**
+Contains a list of gift collections.
+*/
+export interface GiftCollections {
+	'@type': 'giftCollections';
+	/**
+List of gift collections.
+*/
+	collections: GiftCollection[];
+}
+
+/**
 Describes origin from which the upgraded gift was obtained.
 Subtype of {@link UpgradedGiftOrigin}.
 */
@@ -3680,9 +3774,9 @@ Subtype of {@link UpgradedGiftOrigin}.
 export interface UpgradedGiftOriginResale {
 	'@type': 'upgradedGiftOriginResale';
 	/**
-Number of Telegram Stars that were paid by the sender for the gift.
+Price paid by the sender for the gift.
 */
-	star_count: number;
+	price: GiftResalePrice;
 }
 
 /**
@@ -3827,13 +3921,17 @@ True, if the gift is a birthday gift.
 */
 	is_for_birthday?: boolean;
 	/**
-Number of remaining times the gift can be purchased; 0 if not limited or the gift was sold out.
+True, if the gift can be bought only by Telegram Premium subscribers.
 */
-	remaining_count: number;
+	is_premium?: boolean;
 	/**
-Number of total times the gift can be purchased; 0 if not limited.
+Number of times the gift can be purchased by the current user; may be null if not limited.
 */
-	total_count: number;
+	user_limits: GiftPurchaseLimits;
+	/**
+Number of times the gift can be purchased all users; may be null if not limited.
+*/
+	overall_limits: GiftPurchaseLimits;
 	/**
 Point in time (Unix timestamp) when the gift was send for the first time; for sold out gifts only.
 */
@@ -3878,6 +3976,10 @@ The maximum number of gifts that can be upgraded from the same gift.
 */
 	max_upgraded_count: number;
 	/**
+True, if the original gift could have been bought only by Telegram Premium subscribers.
+*/
+	is_premium?: boolean;
+	/**
 Identifier of the user or the chat that owns the upgraded gift; may be null if none or unknown.
 */
 	owner_id: MessageSender;
@@ -3912,9 +4014,9 @@ Information about the originally sent gift; may be null if unknown.
 */
 	original_details: UpgradedGiftOriginalDetails;
 	/**
-Number of Telegram Stars that must be paid to buy the gift and send it to someone else; 0 if resale isn't possible.
+Resale parameters of the gift; may be null if resale isn't possible.
 */
-	resale_star_count: number;
+	resale_parameters: GiftResaleParameters;
 }
 
 /**
@@ -3972,7 +4074,7 @@ Number of gifts that are available for resale.
 */
 	resale_count: number;
 	/**
-The minimum price for the gifts available for resale; 0 if there are no such gifts.
+The minimum price for the gifts available for resale in Telegram Star equivalent; 0 if there are no such gifts.
 */
 	min_resale_star_count: number;
 	/**
@@ -4147,6 +4249,27 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
+Describes result of sending a resold gift.
+Subtype of {@link GiftResaleResult}.
+*/
+export interface GiftResaleResultOk {
+	'@type': 'giftResaleResultOk';
+
+}
+
+/**
+Operation has failed, because price has increased. If the price has decreased, then the buying will succeed anyway.
+Subtype of {@link GiftResaleResult}.
+*/
+export interface GiftResaleResultPriceIncreased {
+	'@type': 'giftResaleResultPriceIncreased';
+	/**
+New price for the gift.
+*/
+	price: GiftResalePrice;
+}
+
+/**
 Represents content of a gift received by a user or a channel chat.
 Subtype of {@link SentGift}.
 */
@@ -4219,6 +4342,10 @@ Point in time (Unix timestamp) when the gift was sent.
 The gift.
 */
 	gift: SentGift;
+	/**
+Identifiers of collections to which the gift is added; only for the receiver of the gift.
+*/
+	collection_ids: number[];
 	/**
 Number of Telegram Stars that can be claimed by the receiver instead of the regular gift; 0 if the gift can't be sold by
 the current user.
@@ -4708,9 +4835,13 @@ The gift.
 */
 	gift: UpgradedGift;
 	/**
-Information about commission received by Telegram from the transaction.
+The number of Telegram Stars received by the Telegram for each 1000 Telegram Stars received by the seller of the gift.
 */
-	affiliate: AffiliateInfo;
+	commission_per_mille: number;
+	/**
+The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
+*/
+	commission_star_amount: StarAmount;
 }
 
 /**
@@ -4872,6 +5003,15 @@ Identifier of the user that sent Telegram Stars.
 }
 
 /**
+The transaction is a payment for search of posts in public Telegram channels; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypePublicPostSearch {
+	'@type': 'starTransactionTypePublicPostSearch';
+
+}
+
+/**
 The transaction is a transaction of an unsupported type.
 Subtype of {@link StarTransactionType}.
 */
@@ -4952,6 +5092,46 @@ export interface TonTransactionTypeSuggestedPostPayment {
 Identifier of the channel chat that posted the post.
 */
 	chat_id: number;
+}
+
+/**
+The transaction is a purchase of an upgraded gift for some user or channel; for regular users only.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeUpgradedGiftPurchase {
+	'@type': 'tonTransactionTypeUpgradedGiftPurchase';
+	/**
+Identifier of the user that sold the gift.
+*/
+	user_id: number;
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+}
+
+/**
+The transaction is a sale of an upgraded gift; for regular users only.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeUpgradedGiftSale {
+	'@type': 'tonTransactionTypeUpgradedGiftSale';
+	/**
+Identifier of the user that bought the gift.
+*/
+	user_id: number;
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+	/**
+The number of Toncoins received by the Telegram for each 1000 Toncoins received by the seller of the gift.
+*/
+	commission_per_mille: number;
+	/**
+The amount of Toncoins that were received by the Telegram; in the smallest units of the currency.
+*/
+	commission_toncoin_amount: number;
 }
 
 /**
@@ -5227,6 +5407,53 @@ The minimum chat boost level required to use the color in a channel chat.
 }
 
 /**
+Contains description of user rating.
+*/
+export interface UserRating {
+	'@type': 'userRating';
+	/**
+The level of the user; may be negative.
+*/
+	level: number;
+	/**
+True, if the maximum level is reached.
+*/
+	is_maximum_level_reached?: boolean;
+	/**
+Numerical value of the rating.
+*/
+	rating: number;
+	/**
+The rating required for the current level.
+*/
+	current_level_rating: number;
+	/**
+The rating required for the next level; 0 if the maximum level is reached.
+*/
+	next_level_rating: number;
+}
+
+/**
+Contains information about restrictions that must be applied to a chat or a message.
+*/
+export interface RestrictionInfo {
+	'@type': 'restrictionInfo';
+	/**
+A human-readable description of the reason why access to the content must be restricted. If empty, then the content can
+be accessed, but may be covered by hidden with 18+ spoiler anyway.
+*/
+	restriction_reason: string;
+	/**
+True, if media content of the messages must be hidden with 18+ spoiler. Use value of the option
+"can_ignore_sensitive_content_restrictions" to check whether the current user can ignore the restriction. If age
+verification parameters were received in updateAgeVerificationParameters, then the user must complete age verification
+to ignore the restriction. Set the option "ignore_sensitive_content_restrictions" to true if the user passes age
+verification.
+*/
+	has_sensitive_content?: boolean;
+}
+
+/**
 Describes type of emoji status.
 Subtype of {@link EmojiStatusType}.
 */
@@ -5407,9 +5634,9 @@ True, if the user is Telegram support account.
 */
 	is_support?: boolean;
 	/**
-If non-empty, it contains a human-readable description of the reason why access to this user must be restricted.
+Information about restrictions that must be applied to the corresponding private chat; may be null if none.
 */
-	restriction_reason: string;
+	restriction_info: RestrictionInfo;
 	/**
 True, if the user has non-expired stories available to the current user.
 */
@@ -5645,6 +5872,20 @@ Settings for gift receiving for the user.
 Information about verification status of the user provided by a bot; may be null if none or unknown.
 */
 	bot_verification: BotVerification;
+	/**
+The current rating of the user; may be null if none.
+*/
+	rating: UserRating;
+	/**
+The rating of the user after the next change; may be null if the user isn't the current user or there are no pending
+rating changes.
+*/
+	pending_rating: UserRating;
+	/**
+Unix timestamp when rating of the user will change to pending_rating; 0 if the user isn't the current user or there are
+no pending rating changes.
+*/
+	pending_rating_date: number;
 	/**
 Information about business settings for Telegram Business accounts; may be null if none.
 */
@@ -6492,14 +6733,10 @@ True, if the supergroup is a forum, which topics are shown in the same way as in
 */
 	has_forum_tabs?: boolean;
 	/**
-True, if content of media messages in the supergroup or channel chat must be hidden with 18+ spoiler.
+Information about the restrictions that must be applied to the corresponding supergroup or channel chat; may be null if
+none.
 */
-	has_sensitive_content?: boolean;
-	/**
-If non-empty, contains a human-readable description of the reason why access to this supergroup or channel must be
-restricted.
-*/
-	restriction_reason: string;
+	restriction_info: RestrictionInfo;
 	/**
 Number of Telegram Stars that must be paid by non-administrator users of the supergroup chat for each sent message.
 */
@@ -6750,6 +6987,33 @@ and strikethrough entities are supported if the layer >= 101, files bigger than 
 143, spoiler and custom emoji text entities are supported if the layer >= 144.
 */
 	layer: number;
+}
+
+/**
+Contains information about public post search limits.
+*/
+export interface PublicPostSearchLimits {
+	'@type': 'publicPostSearchLimits';
+	/**
+Number of queries that can be sent daily for free.
+*/
+	daily_free_query_count: number;
+	/**
+Number of remaining free queries today.
+*/
+	remaining_free_query_count: number;
+	/**
+Amount of time till the next free query can be sent; 0 if it can be sent now.
+*/
+	next_free_query_in: number;
+	/**
+Number of Telegram Stars that must be paid for each non-free query.
+*/
+	star_count: string;
+	/**
+True, if the search for the specified query isn't charged.
+*/
+	is_current_query_free?: boolean;
 }
 
 /**
@@ -7704,13 +7968,9 @@ Unique identifier of the effect added to the message; 0 if none.
 */
 	effect_id: string;
 	/**
-True, if media content of the message must be hidden with 18+ spoiler.
+Information about the restrictions that must be applied to the message content; may be null if none.
 */
-	has_sensitive_content?: boolean;
-	/**
-If non-empty, contains a human-readable description of the reason why access to this message must be restricted.
-*/
-	restriction_reason: string;
+	restriction_info: RestrictionInfo;
 	/**
 Content of the message.
 */
@@ -7772,6 +8032,31 @@ List of messages.
 The offset for the next request. If 0, there are no more results.
 */
 	next_from_message_id: number;
+}
+
+/**
+Contains a list of messages found by a public post search.
+*/
+export interface FoundPublicPosts {
+	'@type': 'foundPublicPosts';
+	/**
+List of found public posts.
+*/
+	messages: Message[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+	/**
+Updated public post search limits after the query; repeated requests with the same query will be free; may be null if
+they didn't change.
+*/
+	search_limits: PublicPostSearchLimits;
+	/**
+True, if the query has failed because search limits are exceeded. In this case search_limits.daily_free_query_count will
+be equal to 0.
+*/
+	are_limits_exceeded?: boolean;
 }
 
 /**
@@ -11400,6 +11685,18 @@ True, if the link only creates join request.
 }
 
 /**
+The link is a link to a direct messages chat of a channel.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeDirectMessagesChat {
+	'@type': 'linkPreviewTypeDirectMessagesChat';
+	/**
+Photo of the channel chat; may be null.
+*/
+	photo: ChatPhoto;
+}
+
+/**
 The link is a link to a general file.
 Subtype of {@link LinkPreviewType}.
 */
@@ -11544,6 +11841,18 @@ Duration of the video, in seconds; 0 if unknown.
 }
 
 /**
+The link is a link to a gift collection.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeGiftCollection {
+	'@type': 'linkPreviewTypeGiftCollection';
+	/**
+Icons for some gifts from the collection; may be empty.
+*/
+	icons: Sticker[];
+}
+
+/**
 The link is a link to a group call that isn't bound to a chat.
 Subtype of {@link LinkPreviewType}.
 */
@@ -11638,6 +11947,22 @@ The identifier of the chat that posted the story.
 Story identifier.
 */
 	story_id: number;
+}
+
+/**
+The link is a link to an album of stories.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeStoryAlbum {
+	'@type': 'linkPreviewTypeStoryAlbum';
+	/**
+Icon of the album; may be null if none.
+*/
+	photo_icon: Photo;
+	/**
+Video icon of the album; may be null if none.
+*/
+	video_icon: Video;
 }
 
 /**
@@ -17923,6 +18248,10 @@ True, if the story is visible only for the current user.
 */
 	is_visible_only_for_self?: boolean;
 	/**
+True, if the story can be added to an album.
+*/
+	can_be_added_to_album?: boolean;
+	/**
 True, if the story can be deleted.
 */
 	can_be_deleted?: boolean;
@@ -17984,6 +18313,10 @@ Clickable areas to be shown on the story content.
 Caption of the story.
 */
 	caption: FormattedText;
+	/**
+Identifiers of story albums to which the story is added; only for manageable stories.
+*/
+	album_ids: number[];
 }
 
 /**
@@ -18022,6 +18355,40 @@ List of stories.
 The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Describes album of stories.
+*/
+export interface StoryAlbum {
+	'@type': 'storyAlbum';
+	/**
+Unique identifier of the album.
+*/
+	id: number;
+	/**
+Name of the album.
+*/
+	name: string;
+	/**
+Icon of the album; may be null if none.
+*/
+	photo_icon: Photo;
+	/**
+Video icon of the album; may be null if none.
+*/
+	video_icon: Video;
+}
+
+/**
+Represents a list of story albums.
+*/
+export interface StoryAlbums {
+	'@type': 'storyAlbums';
+	/**
+List of story albums.
+*/
+	albums: StoryAlbum[];
 }
 
 /**
@@ -18076,6 +18443,12 @@ A parameter used to determine order of the stories in the story list; 0 if the s
 story list. Stories must be sorted by the pair (order, story_poster_chat_id) in descending order.
 */
 	order: number;
+	/**
+True, if the stories are shown in the main story list and can be archived; otherwise, the stories can be hidden from the
+main story list only by calling removeTopChat with topChatCategoryUsers and the chat_id. Stories of the current user
+can't be archived nor hidden using removeTopChat.
+*/
+	can_be_archived?: boolean;
 	/**
 Identifier of the last read active story.
 */
@@ -25954,6 +26327,19 @@ export interface InternalLinkTypeDefaultMessageAutoDeleteTimerSettings {
 }
 
 /**
+The link is a link to a channel direct messages chat by username of the channel. Call searchPublicChat with the given
+chat username to process the link. If the chat is found and is channel, open the direct messages chat of the channel.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeDirectMessagesChat {
+	'@type': 'internalLinkTypeDirectMessagesChat';
+	/**
+Username of the channel.
+*/
+	channel_username: string;
+}
+
+/**
 The link is a link to the edit profile section of the application settings.
 Subtype of {@link InternalLinkType}.
 */
@@ -25977,6 +26363,23 @@ Username of the bot that owns the game.
 Short name of the game.
 */
 	game_short_name: string;
+}
+
+/**
+The link is a link to a gift collection. Call searchPublicChat with the given username, then call getReceivedGifts with
+the received gift owner identifier and the given collection identifier, then show the collection if received.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeGiftCollection {
+	'@type': 'internalLinkTypeGiftCollection';
+	/**
+Username of the owner of the gift collection.
+*/
+	gift_owner_username: string;
+	/**
+Gift collection identifier.
+*/
+	collection_id: number;
 }
 
 /**
@@ -26320,6 +26723,23 @@ Username of the poster of the story.
 Story identifier.
 */
 	story_id: number;
+}
+
+/**
+The link is a link to an album of stories. Call searchPublicChat with the given username, then call getStoryAlbumStories
+with the received chat identifier and the given story album identifier, then show the story album if received.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeStoryAlbum {
+	'@type': 'internalLinkTypeStoryAlbum';
+	/**
+Username of the owner of the story album.
+*/
+	story_album_owner_username: string;
+	/**
+Story album identifier.
+*/
+	story_album_id: number;
 }
 
 /**
@@ -27173,6 +27593,26 @@ Subtype of {@link ConnectionState}.
 export interface ConnectionStateReady {
 	'@type': 'connectionStateReady';
 
+}
+
+/**
+Describes parameters for age verification of the current user.
+*/
+export interface AgeVerificationParameters {
+	'@type': 'ageVerificationParameters';
+	/**
+The minimum age required to view restricted content.
+*/
+	min_age: number;
+	/**
+Username of the bot which main Web App may be used to verify age of the user.
+*/
+	verification_bot_username: string;
+	/**
+Unique name for the country or region, which legislation required age verification. May be used to get the corresponding
+localization key.
+*/
+	country: string;
 }
 
 /**
@@ -29436,7 +29876,7 @@ Identifier of the topic.
 */
 	topic_id: MessageTopic;
 	/**
-Approximate number of messages in the topics.
+Approximate number of messages in the topic.
 */
 	message_count: number;
 }
@@ -30526,6 +30966,18 @@ The link to open to send an appeal to unfreeze the account.
 }
 
 /**
+The parameters for age verification of the current user's account has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateAgeVerificationParameters {
+	'@type': 'updateAgeVerificationParameters';
+	/**
+Parameters for the age verification; may be null if age verification isn't needed.
+*/
+	parameters: AgeVerificationParameters;
+}
+
+/**
 New terms of service must be accepted by the user. If the terms of service are declined, then the deleteAccount method
 must be called with the reason "Decline ToS update".
 Subtype of {@link Update}.
@@ -31610,6 +32062,10 @@ export type InputChatPhoto =
 	| InputChatPhotoAnimation
 	| InputChatPhotoSticker;
 
+export type GiftResalePrice =
+	| GiftResalePriceStar
+	| GiftResalePriceTon;
+
 export type SuggestedPostPrice =
 	| SuggestedPostPriceStar
 	| SuggestedPostPriceTon;
@@ -31651,6 +32107,10 @@ export type GiftForResaleOrder =
 	| GiftForResaleOrderPrice
 	| GiftForResaleOrderPriceChangeDate
 	| GiftForResaleOrderNumber;
+
+export type GiftResaleResult =
+	| GiftResaleResultOk
+	| GiftResaleResultPriceIncreased;
 
 export type SentGift =
 	| SentGiftRegular
@@ -31696,11 +32156,14 @@ export type StarTransactionType =
 	| StarTransactionTypePremiumPurchase
 	| StarTransactionTypeBusinessBotTransferSend
 	| StarTransactionTypeBusinessBotTransferReceive
+	| StarTransactionTypePublicPostSearch
 	| StarTransactionTypeUnsupported;
 
 export type TonTransactionType =
 	| TonTransactionTypeFragmentDeposit
 	| TonTransactionTypeSuggestedPostPayment
+	| TonTransactionTypeUpgradedGiftPurchase
+	| TonTransactionTypeUpgradedGiftSale
 	| TonTransactionTypeUnsupported;
 
 export type GiveawayParticipantStatus =
@@ -31983,12 +32446,14 @@ export type LinkPreviewType =
 	| LinkPreviewTypeBackground
 	| LinkPreviewTypeChannelBoost
 	| LinkPreviewTypeChat
+	| LinkPreviewTypeDirectMessagesChat
 	| LinkPreviewTypeDocument
 	| LinkPreviewTypeEmbeddedAnimationPlayer
 	| LinkPreviewTypeEmbeddedAudioPlayer
 	| LinkPreviewTypeEmbeddedVideoPlayer
 	| LinkPreviewTypeExternalAudio
 	| LinkPreviewTypeExternalVideo
+	| LinkPreviewTypeGiftCollection
 	| LinkPreviewTypeGroupCall
 	| LinkPreviewTypeInvoice
 	| LinkPreviewTypeMessage
@@ -31998,6 +32463,7 @@ export type LinkPreviewType =
 	| LinkPreviewTypeSticker
 	| LinkPreviewTypeStickerSet
 	| LinkPreviewTypeStory
+	| LinkPreviewTypeStoryAlbum
 	| LinkPreviewTypeSupergroupBoost
 	| LinkPreviewTypeTheme
 	| LinkPreviewTypeUnsupported
@@ -32886,8 +33352,10 @@ export type InternalLinkType =
 	| InternalLinkTypeChatFolderSettings
 	| InternalLinkTypeChatInvite
 	| InternalLinkTypeDefaultMessageAutoDeleteTimerSettings
+	| InternalLinkTypeDirectMessagesChat
 	| InternalLinkTypeEditProfileSettings
 	| InternalLinkTypeGame
+	| InternalLinkTypeGiftCollection
 	| InternalLinkTypeGroupCall
 	| InternalLinkTypeInstantView
 	| InternalLinkTypeInvoice
@@ -32911,6 +33379,7 @@ export type InternalLinkType =
 	| InternalLinkTypeSettings
 	| InternalLinkTypeStickerSet
 	| InternalLinkTypeStory
+	| InternalLinkTypeStoryAlbum
 	| InternalLinkTypeTheme
 	| InternalLinkTypeThemeSettings
 	| InternalLinkTypeUnknownDeepLink
@@ -33178,6 +33647,7 @@ export type Update =
 	| UpdateLanguagePackStrings
 	| UpdateConnectionState
 	| UpdateFreezeState
+	| UpdateAgeVerificationParameters
 	| UpdateTermsOfService
 	| UpdateUnconfirmedSession
 	| UpdateAttachmentMenuBots
@@ -34596,14 +35066,14 @@ Identifier of the message starting from which messages must be fetched; use 0 to
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the message from_message_id or a negative offset up to 99 to get additionally some
-newer messages.
+Specify 0 to get results from exactly the message from_message_id or a negative number from -99 to -1 to get
+additionally -offset newer messages.
 */
 	offset: number;
 	/**
 The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
-is chosen by TDLib and can be smaller than the specified limit.
+negative, then the limit must be greater than or equal to -offset. For optimal performance, the number of returned
+messages is chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
 }
@@ -34813,14 +35283,14 @@ Identifier of the message starting from which messages must be fetched; use 0 to
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the message from_message_id or a negative offset up to 99 to get additionally some
-newer messages.
+Specify 0 to get results from exactly the message from_message_id or a negative number from -99 to -1 to get
+additionally -offset newer messages.
 */
 	offset: number;
 	/**
 The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
-is chosen by TDLib and can be smaller than the specified limit.
+negative, then the limit must be greater than or equal to -offset. For optimal performance, the number of returned
+messages is chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
 }
@@ -34940,14 +35410,14 @@ Identifier of the message starting from which history must be fetched; use 0 to 
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the message from_message_id or a negative offset up to 99 to get additionally some
-newer messages.
+Specify 0 to get results from exactly the message from_message_id or a negative number from -99 to -1 to get
+additionally -offset newer messages.
 */
 	offset: number;
 	/**
 The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
-is chosen by TDLib and can be smaller than the specified limit.
+negative, then the limit must be greater than or equal to -offset. For optimal performance, the number of returned
+messages is chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
 	/**
@@ -34978,14 +35448,14 @@ Identifier of the message starting from which history must be fetched; use 0 to 
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the message from_message_id or a negative offset up to 99 to get additionally some
-newer messages.
+Specify 0 to get results from exactly the message from_message_id or a negative number from -99 to -1 to get
+additionally -offset newer messages.
 */
 	offset: number;
 	/**
 The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than or equal to -offset. For optimal performance, the number of returned messages
-is chosen by TDLib and can be smaller than the specified limit.
+negative, then the limit must be greater than or equal to -offset. For optimal performance, the number of returned
+messages is chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
 }
@@ -35057,14 +35527,14 @@ Identifier of the message starting from which history must be fetched; use 0 to 
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the message from_message_id or a negative offset to get the specified message and
+Specify 0 to get results from exactly the message from_message_id or a negative number to get the specified message and
 some newer messages.
 */
 	offset: number;
 	/**
 The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than -offset. For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit.
+negative, then the limit must be greater than -offset. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
 	/**
@@ -35176,14 +35646,14 @@ Identifier of the message starting from which messages must be fetched; use 0 to
 */
 	from_message_id: number;
 	/**
-Specify 0 to get results from exactly the message from_message_id or a negative offset to get the specified message and
+Specify 0 to get results from exactly the message from_message_id or a negative number to get the specified message and
 some newer messages.
 */
 	offset: number;
 	/**
 The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
-negative, the limit must be greater than -offset. For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit.
+negative, then the limit must be greater than -offset. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
 }
@@ -35226,6 +35696,45 @@ Query to search for in document file name and message caption.
 The maximum number of messages to be returned; up to 100.
 */
 	limit: number;
+}
+
+/**
+Checks public post search limits without actually performing the search.
+Request type for {@link Tdjson#getPublicPostSearchLimits}.
+*/
+export interface GetPublicPostSearchLimits {
+	'@type': 'getPublicPostSearchLimits';
+	/**
+Query that will be searched for.
+*/
+	query: string;
+}
+
+/**
+Searches for public channel posts using the given query. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
+Request type for {@link Tdjson#searchPublicPosts}.
+*/
+export interface SearchPublicPosts {
+	'@type': 'searchPublicPosts';
+	/**
+Query to search for.
+*/
+	query: string;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of messages to be returned; up to 100. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+	/**
+The amount of Telegram Stars the user agreed to pay for the search; pass 0 for free searches.
+*/
+	star_count: number;
 }
 
 /**
@@ -39937,7 +40446,8 @@ New location for the chat; must be valid and not null.
 }
 
 /**
-Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members right.
+Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members administrator
+right.
 Request type for {@link Tdjson#setChatSlowModeDelay}.
 */
 export interface SetChatSlowModeDelay {
@@ -40443,8 +40953,8 @@ export interface GetChatsToPostStories {
 }
 
 /**
-Checks whether the current user can post a story on behalf of a chat; requires can_post_stories right for supergroup and
-channel chats.
+Checks whether the current user can post a story on behalf of a chat; requires can_post_stories administrator right for
+supergroup and channel chats.
 Request type for {@link Tdjson#canPostStory}.
 */
 export interface CanPostStory {
@@ -40456,8 +40966,8 @@ Chat identifier. Pass Saved Messages chat identifier when posting a story on beh
 }
 
 /**
-Posts a new story on behalf of a chat; requires can_post_stories right for supergroup and channel chats. Returns a
-temporary story.
+Posts a new story on behalf of a chat; requires can_post_stories administrator right for supergroup and channel chats.
+Returns a temporary story.
 Request type for {@link Tdjson#postStory}.
 */
 export interface PostStory {
@@ -40484,6 +40994,11 @@ only if getOption("can_use_text_entities_in_story_caption").
 The privacy settings for the story; ignored for stories posted on behalf of supergroup and channel chats.
 */
 	privacy_settings: StoryPrivacySettings;
+	/**
+Identifiers of story albums to which the story will be added upon posting. An album can have up to
+getOption("story_album_story_count_max").
+*/
+	album_ids: number[];
 	/**
 Period after which the story is moved to archive, in seconds; must be one of 6 * 3600, 12 * 3600, 86400, or 2 * 86400
 for Telegram Premium users, and 86400 otherwise.
@@ -40683,9 +41198,9 @@ and can be smaller than the specified limit.
 }
 
 /**
-Returns the list of all stories posted by the given chat; requires can_edit_stories right in the chat. The stories are
-returned in reverse chronological order (i.e., in order of decreasing story_id). For optimal performance, the number of
-returned stories is chosen by TDLib.
+Returns the list of all stories posted by the given chat; requires can_edit_stories administrator right in the chat. The
+stories are returned in reverse chronological order (i.e., in order of decreasing story_id). For optimal performance,
+the number of returned stories is chosen by TDLib.
 Request type for {@link Tdjson#getChatArchivedStories}.
 */
 export interface GetChatArchivedStories {
@@ -40706,7 +41221,7 @@ and can be smaller than the specified limit.
 }
 
 /**
-Changes the list of pinned stories on a chat page; requires can_edit_stories right in the chat.
+Changes the list of pinned stories on a chat page; requires can_edit_stories administrator right in the chat.
 Request type for {@link Tdjson#setChatPinnedStories}.
 */
 export interface SetChatPinnedStories {
@@ -40927,6 +41442,184 @@ The maximum number of messages and stories to be returned; must be positive and 
 performance, the number of returned objects is chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
+}
+
+/**
+Returns the list of story albums owned by the given chat.
+Request type for {@link Tdjson#getChatStoryAlbums}.
+*/
+export interface GetChatStoryAlbums {
+	'@type': 'getChatStoryAlbums';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Returns the list of stories added to the given story album. For optimal performance, the number of returned stories is
+chosen by TDLib.
+Request type for {@link Tdjson#getStoryAlbumStories}.
+*/
+export interface GetStoryAlbumStories {
+	'@type': 'getStoryAlbumStories';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Story album identifier.
+*/
+	story_album_id: number;
+	/**
+Offset of the first entry to return; use 0 to get results from the first album story.
+*/
+	offset: number;
+	/**
+The maximum number of stories to be returned. For optimal performance, the number of returned stories is chosen by TDLib
+and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Creates an album of stories; requires can_edit_stories administrator right for supergroup and channel chats.
+Request type for {@link Tdjson#createStoryAlbum}.
+*/
+export interface CreateStoryAlbum {
+	'@type': 'createStoryAlbum';
+	/**
+Identifier of the chat that posted the stories.
+*/
+	story_poster_chat_id: number;
+	/**
+Name of the album; 1-12 characters.
+*/
+	name: string;
+	/**
+Identifiers of stories to add to the album; 0-getOption("story_album_story_count_max") identifiers.
+*/
+	story_ids: number[];
+}
+
+/**
+Changes order of story albums. If the albums are owned by a supergroup or a channel chat, then requires can_edit_stories
+administrator right in the chat.
+Request type for {@link Tdjson#reorderStoryAlbums}.
+*/
+export interface ReorderStoryAlbums {
+	'@type': 'reorderStoryAlbums';
+	/**
+Identifier of the chat that owns the stories.
+*/
+	chat_id: number;
+	/**
+New order of story albums.
+*/
+	story_album_ids: number[];
+}
+
+/**
+Deletes a story album. If the album is owned by a supergroup or a channel chat, then requires can_edit_stories
+administrator right in the chat.
+Request type for {@link Tdjson#deleteStoryAlbum}.
+*/
+export interface DeleteStoryAlbum {
+	'@type': 'deleteStoryAlbum';
+	/**
+Identifier of the chat that owns the stories.
+*/
+	chat_id: number;
+	/**
+Identifier of the story album.
+*/
+	story_album_id: number;
+}
+
+/**
+Changes name of an album of stories. If the album is owned by a supergroup or a channel chat, then requires
+can_edit_stories administrator right in the chat. Returns the changed album.
+Request type for {@link Tdjson#setStoryAlbumName}.
+*/
+export interface SetStoryAlbumName {
+	'@type': 'setStoryAlbumName';
+	/**
+Identifier of the chat that owns the stories.
+*/
+	chat_id: number;
+	/**
+Identifier of the story album.
+*/
+	story_album_id: number;
+	/**
+New name of the album; 1-12 characters.
+*/
+	name: string;
+}
+
+/**
+Adds stories to the beginning of a previously created story album. If the album is owned by a supergroup or a channel
+chat, then requires can_edit_stories administrator right in the chat. Returns the changed album.
+Request type for {@link Tdjson#addStoryAlbumStories}.
+*/
+export interface AddStoryAlbumStories {
+	'@type': 'addStoryAlbumStories';
+	/**
+Identifier of the chat that owns the stories.
+*/
+	chat_id: number;
+	/**
+Identifier of the story album.
+*/
+	story_album_id: number;
+	/**
+Identifier of the stories to add to the album; 1-getOption("story_album_story_count_max") identifiers. If after addition
+the album has more than getOption("story_album_story_count_max") stories, then the last one are removed from the album.
+*/
+	story_ids: number[];
+}
+
+/**
+Removes stories from an album. If the album is owned by a supergroup or a channel chat, then requires can_edit_stories
+administrator right in the chat. Returns the changed album.
+Request type for {@link Tdjson#removeStoryAlbumStories}.
+*/
+export interface RemoveStoryAlbumStories {
+	'@type': 'removeStoryAlbumStories';
+	/**
+Identifier of the chat that owns the stories.
+*/
+	chat_id: number;
+	/**
+Identifier of the story album.
+*/
+	story_album_id: number;
+	/**
+Identifier of the stories to remove from the album.
+*/
+	story_ids: number[];
+}
+
+/**
+Changes order of stories in an album. If the album is owned by a supergroup or a channel chat, then requires
+can_edit_stories administrator right in the chat. Returns the changed album.
+Request type for {@link Tdjson#reorderStoryAlbumStories}.
+*/
+export interface ReorderStoryAlbumStories {
+	'@type': 'reorderStoryAlbumStories';
+	/**
+Identifier of the chat that owns the stories.
+*/
+	chat_id: number;
+	/**
+Identifier of the story album.
+*/
+	story_album_id: number;
+	/**
+Identifier of the stories to move to the beginning of the album. All other stories are placed in the current order after
+the specified stories.
+*/
+	story_ids: number[];
 }
 
 /**
@@ -41938,7 +42631,9 @@ post can be approved.
 */
 	message_id: number;
 	/**
-Point in time (Unix timestamp) when the post is expected to be published; pass 0 if the date has already been chosen.
+Point in time (Unix timestamp) when the post is expected to be published; pass 0 if the date has already been chosen. If
+specified, then the date must be in the future, but at most getOption("suggested_post_send_delay_max") seconds in the
+future.
 */
 	send_date: number;
 }
@@ -45489,9 +46184,9 @@ Identifier of the user or the channel chat that will receive the gift.
 */
 	owner_id: MessageSender;
 	/**
-The amount of Telegram Stars required to pay for the gift.
+The price that the user agreed to pay for the gift.
 */
-	star_count: number;
+	price: GiftResalePrice;
 }
 
 /**
@@ -45508,6 +46203,11 @@ Unique identifier of business connection on behalf of which to send the request;
 Identifier of the gift receiver.
 */
 	owner_id: MessageSender;
+	/**
+Pass collection identifier to get gifts only from the specified collection; pass 0 to get gifts regardless of
+collections.
+*/
+	collection_id: number;
 	/**
 Pass true to exclude gifts that aren't saved to the chat's profile page. Always true for gifts received by other users
 and channel chats without can_post_messages administrator right.
@@ -45598,11 +46298,12 @@ Identifier of the unique gift.
 */
 	received_gift_id: string;
 	/**
-The new price for the unique gift; 0 or getOption("gift_resale_star_count_min")-getOption("gift_resale_star_count_max").
-Pass 0 to disallow gift resale. The current user will receive getOption("gift_resale_earnings_per_mille") Telegram Stars
-for each 1000 Telegram Stars paid for the gift.
+The new price for the unique gift; pass null to disallow gift resale. The current user will receive
+getOption("gift_resale_star_earnings_per_mille") Telegram Stars for each 1000 Telegram Stars paid for the gift if the
+gift price is in Telegram Stars or getOption("gift_resale_ton_earnings_per_mille") Toncoins for each 1000 Toncoins paid
+for the gift if the gift price is in Toncoins.
 */
-	resale_star_count: number;
+	price: GiftResalePrice;
 }
 
 /**
@@ -45633,6 +46334,162 @@ string to get the first chunk of results.
 The maximum number of gifts to return.
 */
 	limit: number;
+}
+
+/**
+Returns collections of gifts owned by the given user or chat.
+Request type for {@link Tdjson#getGiftCollections}.
+*/
+export interface GetGiftCollections {
+	'@type': 'getGiftCollections';
+	/**
+Identifier of the user or the channel chat that received the gifts.
+*/
+	owner_id: MessageSender;
+}
+
+/**
+Creates a collection from gifts on the current user's or a channel's profile page; requires can_post_messages
+administrator right in the channel chat. An owner can have up to getOption("gift_collection_count_max") gift
+collections. The new collection will be added to the end of the gift collection list of the owner. Returns the created
+collection.
+Request type for {@link Tdjson#createGiftCollection}.
+*/
+export interface CreateGiftCollection {
+	'@type': 'createGiftCollection';
+	/**
+Identifier of the user or the channel chat that received the gifts.
+*/
+	owner_id: MessageSender;
+	/**
+Name of the collection; 1-12 characters.
+*/
+	name: string;
+	/**
+Identifier of the gifts to add to the collection; 0-getOption("gift_collection_gift_count_max") identifiers.
+*/
+	received_gift_ids: string[];
+}
+
+/**
+Changes order of gift collections. If the collections are owned by a channel chat, then requires can_post_messages
+administrator right in the channel chat.
+Request type for {@link Tdjson#reorderGiftCollections}.
+*/
+export interface ReorderGiftCollections {
+	'@type': 'reorderGiftCollections';
+	/**
+Identifier of the user or the channel chat that owns the collection.
+*/
+	owner_id: MessageSender;
+	/**
+New order of gift collections.
+*/
+	collection_ids: number[];
+}
+
+/**
+Deletes a gift collection. If the collection is owned by a channel chat, then requires can_post_messages administrator
+right in the channel chat.
+Request type for {@link Tdjson#deleteGiftCollection}.
+*/
+export interface DeleteGiftCollection {
+	'@type': 'deleteGiftCollection';
+	/**
+Identifier of the user or the channel chat that owns the collection.
+*/
+	owner_id: MessageSender;
+	/**
+Identifier of the gift collection.
+*/
+	collection_id: number;
+}
+
+/**
+Changes name of a gift collection. If the collection is owned by a channel chat, then requires can_post_messages
+administrator right in the channel chat. Returns the changed collection.
+Request type for {@link Tdjson#setGiftCollectionName}.
+*/
+export interface SetGiftCollectionName {
+	'@type': 'setGiftCollectionName';
+	/**
+Identifier of the user or the channel chat that owns the collection.
+*/
+	owner_id: MessageSender;
+	/**
+Identifier of the gift collection.
+*/
+	collection_id: number;
+	/**
+New name of the collection; 1-12 characters.
+*/
+	name: string;
+}
+
+/**
+Adds gifts to the beginning of a previously created collection. If the collection is owned by a channel chat, then
+requires can_post_messages administrator right in the channel chat. Returns the changed collection.
+Request type for {@link Tdjson#addGiftCollectionGifts}.
+*/
+export interface AddGiftCollectionGifts {
+	'@type': 'addGiftCollectionGifts';
+	/**
+Identifier of the user or the channel chat that owns the collection.
+*/
+	owner_id: MessageSender;
+	/**
+Identifier of the gift collection.
+*/
+	collection_id: number;
+	/**
+Identifier of the gifts to add to the collection; 1-getOption("gift_collection_gift_count_max") identifiers. If after
+addition the collection has more than getOption("gift_collection_gift_count_max") gifts, then the last one are removed
+from the collection.
+*/
+	received_gift_ids: string[];
+}
+
+/**
+Removes gifts from a collection. If the collection is owned by a channel chat, then requires can_post_messages
+administrator right in the channel chat. Returns the changed collection.
+Request type for {@link Tdjson#removeGiftCollectionGifts}.
+*/
+export interface RemoveGiftCollectionGifts {
+	'@type': 'removeGiftCollectionGifts';
+	/**
+Identifier of the user or the channel chat that owns the collection.
+*/
+	owner_id: MessageSender;
+	/**
+Identifier of the gift collection.
+*/
+	collection_id: number;
+	/**
+Identifier of the gifts to remove from the collection.
+*/
+	received_gift_ids: string[];
+}
+
+/**
+Changes order of gifts in a collection. If the collection is owned by a channel chat, then requires can_post_messages
+administrator right in the channel chat. Returns the changed collection.
+Request type for {@link Tdjson#reorderGiftCollectionGifts}.
+*/
+export interface ReorderGiftCollectionGifts {
+	'@type': 'reorderGiftCollectionGifts';
+	/**
+Identifier of the user or the channel chat that owns the collection.
+*/
+	owner_id: MessageSender;
+	/**
+Identifier of the gift collection.
+*/
+	collection_id: number;
+	/**
+Identifier of the gifts to move to the beginning of the collection. All other gifts are placed in the current order
+after the specified gifts.
+*/
+	received_gift_ids: string[];
 }
 
 /**
@@ -48445,6 +49302,8 @@ export type Request =
 	| SearchSavedMessages
 	| SearchCallMessages
 	| SearchOutgoingDocumentMessages
+	| GetPublicPostSearchLimits
+	| SearchPublicPosts
 	| SearchPublicMessagesByTag
 	| SearchPublicStoriesByTag
 	| SearchPublicStoriesByLocation
@@ -48740,6 +49599,15 @@ export type Request =
 	| ReportStory
 	| ActivateStoryStealthMode
 	| GetStoryPublicForwards
+	| GetChatStoryAlbums
+	| GetStoryAlbumStories
+	| CreateStoryAlbum
+	| ReorderStoryAlbums
+	| DeleteStoryAlbum
+	| SetStoryAlbumName
+	| AddStoryAlbumStories
+	| RemoveStoryAlbumStories
+	| ReorderStoryAlbumStories
 	| GetChatBoostLevelFeatures
 	| GetChatBoostFeatures
 	| GetAvailableChatBoostSlots
@@ -49028,6 +49896,14 @@ export type Request =
 	| GetUpgradedGiftWithdrawalUrl
 	| SetGiftResalePrice
 	| SearchGiftsForResale
+	| GetGiftCollections
+	| CreateGiftCollection
+	| ReorderGiftCollections
+	| DeleteGiftCollection
+	| SetGiftCollectionName
+	| AddGiftCollectionGifts
+	| RemoveGiftCollectionGifts
+	| ReorderGiftCollectionGifts
 	| CreateInvoiceLink
 	| RefundStarPayment
 	| GetSupportUser
@@ -50487,6 +51363,27 @@ results in reverse chronological order.
 		return this._request({
 			...options,
 			'@type': 'searchOutgoingDocumentMessages',
+		});
+	}
+
+	/**
+Checks public post search limits without actually performing the search.
+*/
+	async getPublicPostSearchLimits(options: Omit<GetPublicPostSearchLimits, '@type'>): Promise<PublicPostSearchLimits> {
+		return this._request({
+			...options,
+			'@type': 'getPublicPostSearchLimits',
+		});
+	}
+
+	/**
+Searches for public channel posts using the given query. For optimal performance, the number of returned messages is
+chosen by TDLib and can be smaller than the specified limit.
+*/
+	async searchPublicPosts(options: Omit<SearchPublicPosts, '@type'>): Promise<FoundPublicPosts> {
+		return this._request({
+			...options,
+			'@type': 'searchPublicPosts',
 		});
 	}
 
@@ -53008,7 +53905,8 @@ supergroupFullInfo.can_set_location to check whether the method is allowed to us
 	}
 
 	/**
-Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members right.
+Changes the slow mode delay of a chat. Available only for supergroups; requires can_restrict_members administrator
+right.
 */
 	async setChatSlowModeDelay(options: Omit<SetChatSlowModeDelay, '@type'>): Promise<Ok> {
 		return this._request({
@@ -53343,8 +54241,8 @@ rechecked with canPostStory before actually trying to post a story there.
 	}
 
 	/**
-Checks whether the current user can post a story on behalf of a chat; requires can_post_stories right for supergroup and
-channel chats.
+Checks whether the current user can post a story on behalf of a chat; requires can_post_stories administrator right for
+supergroup and channel chats.
 */
 	async canPostStory(options: Omit<CanPostStory, '@type'>): Promise<CanPostStoryResult> {
 		return this._request({
@@ -53354,8 +54252,8 @@ channel chats.
 	}
 
 	/**
-Posts a new story on behalf of a chat; requires can_post_stories right for supergroup and channel chats. Returns a
-temporary story.
+Posts a new story on behalf of a chat; requires can_post_stories administrator right for supergroup and channel chats.
+Returns a temporary story.
 */
 	async postStory(options: Omit<PostStory, '@type'>): Promise<Story> {
 		return this._request({
@@ -53470,9 +54368,9 @@ For optimal performance, the number of returned stories is chosen by TDLib.
 	}
 
 	/**
-Returns the list of all stories posted by the given chat; requires can_edit_stories right in the chat. The stories are
-returned in reverse chronological order (i.e., in order of decreasing story_id). For optimal performance, the number of
-returned stories is chosen by TDLib.
+Returns the list of all stories posted by the given chat; requires can_edit_stories administrator right in the chat. The
+stories are returned in reverse chronological order (i.e., in order of decreasing story_id). For optimal performance,
+the number of returned stories is chosen by TDLib.
 */
 	async getChatArchivedStories(options: Omit<GetChatArchivedStories, '@type'>): Promise<Stories> {
 		return this._request({
@@ -53482,7 +54380,7 @@ returned stories is chosen by TDLib.
 	}
 
 	/**
-Changes the list of pinned stories on a chat page; requires can_edit_stories right in the chat.
+Changes the list of pinned stories on a chat page; requires can_edit_stories administrator right in the chat.
 */
 	async setChatPinnedStories(options: Omit<SetChatPinnedStories, '@type'>): Promise<Ok> {
 		return this._request({
@@ -53582,6 +54480,103 @@ returned messages and stories is chosen by TDLib.
 		return this._request({
 			...options,
 			'@type': 'getStoryPublicForwards',
+		});
+	}
+
+	/**
+Returns the list of story albums owned by the given chat.
+*/
+	async getChatStoryAlbums(options: Omit<GetChatStoryAlbums, '@type'>): Promise<StoryAlbums> {
+		return this._request({
+			...options,
+			'@type': 'getChatStoryAlbums',
+		});
+	}
+
+	/**
+Returns the list of stories added to the given story album. For optimal performance, the number of returned stories is
+chosen by TDLib.
+*/
+	async getStoryAlbumStories(options: Omit<GetStoryAlbumStories, '@type'>): Promise<Stories> {
+		return this._request({
+			...options,
+			'@type': 'getStoryAlbumStories',
+		});
+	}
+
+	/**
+Creates an album of stories; requires can_edit_stories administrator right for supergroup and channel chats.
+*/
+	async createStoryAlbum(options: Omit<CreateStoryAlbum, '@type'>): Promise<StoryAlbum> {
+		return this._request({
+			...options,
+			'@type': 'createStoryAlbum',
+		});
+	}
+
+	/**
+Changes order of story albums. If the albums are owned by a supergroup or a channel chat, then requires can_edit_stories
+administrator right in the chat.
+*/
+	async reorderStoryAlbums(options: Omit<ReorderStoryAlbums, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reorderStoryAlbums',
+		});
+	}
+
+	/**
+Deletes a story album. If the album is owned by a supergroup or a channel chat, then requires can_edit_stories
+administrator right in the chat.
+*/
+	async deleteStoryAlbum(options: Omit<DeleteStoryAlbum, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteStoryAlbum',
+		});
+	}
+
+	/**
+Changes name of an album of stories. If the album is owned by a supergroup or a channel chat, then requires
+can_edit_stories administrator right in the chat. Returns the changed album.
+*/
+	async setStoryAlbumName(options: Omit<SetStoryAlbumName, '@type'>): Promise<StoryAlbum> {
+		return this._request({
+			...options,
+			'@type': 'setStoryAlbumName',
+		});
+	}
+
+	/**
+Adds stories to the beginning of a previously created story album. If the album is owned by a supergroup or a channel
+chat, then requires can_edit_stories administrator right in the chat. Returns the changed album.
+*/
+	async addStoryAlbumStories(options: Omit<AddStoryAlbumStories, '@type'>): Promise<StoryAlbum> {
+		return this._request({
+			...options,
+			'@type': 'addStoryAlbumStories',
+		});
+	}
+
+	/**
+Removes stories from an album. If the album is owned by a supergroup or a channel chat, then requires can_edit_stories
+administrator right in the chat. Returns the changed album.
+*/
+	async removeStoryAlbumStories(options: Omit<RemoveStoryAlbumStories, '@type'>): Promise<StoryAlbum> {
+		return this._request({
+			...options,
+			'@type': 'removeStoryAlbumStories',
+		});
+	}
+
+	/**
+Changes order of stories in an album. If the album is owned by a supergroup or a channel chat, then requires
+can_edit_stories administrator right in the chat. Returns the changed album.
+*/
+	async reorderStoryAlbumStories(options: Omit<ReorderStoryAlbumStories, '@type'>): Promise<StoryAlbum> {
+		return this._request({
+			...options,
+			'@type': 'reorderStoryAlbumStories',
 		});
 	}
 
@@ -56465,7 +57460,7 @@ Sends an upgraded gift to another user or a channel chat.
 Sends an upgraded gift that is available for resale to another user or channel chat; gifts already owned by the current
 user must be transferred using transferGift and can't be passed to the method.
 */
-	async sendResoldGift(options: Omit<SendResoldGift, '@type'>): Promise<Ok> {
+	async sendResoldGift(options: Omit<SendResoldGift, '@type'>): Promise<GiftResaleResult> {
 		return this._request({
 			...options,
 			'@type': 'sendResoldGift',
@@ -56530,6 +57525,95 @@ Returns upgraded gifts that can be bought from other owners using sendResoldGift
 		return this._request({
 			...options,
 			'@type': 'searchGiftsForResale',
+		});
+	}
+
+	/**
+Returns collections of gifts owned by the given user or chat.
+*/
+	async getGiftCollections(options: Omit<GetGiftCollections, '@type'>): Promise<GiftCollections> {
+		return this._request({
+			...options,
+			'@type': 'getGiftCollections',
+		});
+	}
+
+	/**
+Creates a collection from gifts on the current user's or a channel's profile page; requires can_post_messages
+administrator right in the channel chat. An owner can have up to getOption("gift_collection_count_max") gift
+collections. The new collection will be added to the end of the gift collection list of the owner. Returns the created
+collection.
+*/
+	async createGiftCollection(options: Omit<CreateGiftCollection, '@type'>): Promise<GiftCollection> {
+		return this._request({
+			...options,
+			'@type': 'createGiftCollection',
+		});
+	}
+
+	/**
+Changes order of gift collections. If the collections are owned by a channel chat, then requires can_post_messages
+administrator right in the channel chat.
+*/
+	async reorderGiftCollections(options: Omit<ReorderGiftCollections, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reorderGiftCollections',
+		});
+	}
+
+	/**
+Deletes a gift collection. If the collection is owned by a channel chat, then requires can_post_messages administrator
+right in the channel chat.
+*/
+	async deleteGiftCollection(options: Omit<DeleteGiftCollection, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteGiftCollection',
+		});
+	}
+
+	/**
+Changes name of a gift collection. If the collection is owned by a channel chat, then requires can_post_messages
+administrator right in the channel chat. Returns the changed collection.
+*/
+	async setGiftCollectionName(options: Omit<SetGiftCollectionName, '@type'>): Promise<GiftCollection> {
+		return this._request({
+			...options,
+			'@type': 'setGiftCollectionName',
+		});
+	}
+
+	/**
+Adds gifts to the beginning of a previously created collection. If the collection is owned by a channel chat, then
+requires can_post_messages administrator right in the channel chat. Returns the changed collection.
+*/
+	async addGiftCollectionGifts(options: Omit<AddGiftCollectionGifts, '@type'>): Promise<GiftCollection> {
+		return this._request({
+			...options,
+			'@type': 'addGiftCollectionGifts',
+		});
+	}
+
+	/**
+Removes gifts from a collection. If the collection is owned by a channel chat, then requires can_post_messages
+administrator right in the channel chat. Returns the changed collection.
+*/
+	async removeGiftCollectionGifts(options: Omit<RemoveGiftCollectionGifts, '@type'>): Promise<GiftCollection> {
+		return this._request({
+			...options,
+			'@type': 'removeGiftCollectionGifts',
+		});
+	}
+
+	/**
+Changes order of gifts in a collection. If the collection is owned by a channel chat, then requires can_post_messages
+administrator right in the channel chat. Returns the changed collection.
+*/
+	async reorderGiftCollectionGifts(options: Omit<ReorderGiftCollectionGifts, '@type'>): Promise<GiftCollection> {
+		return this._request({
+			...options,
+			'@type': 'reorderGiftCollectionGifts',
 		});
 	}
 

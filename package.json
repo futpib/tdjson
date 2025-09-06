@@ -1,6 +1,6 @@
 {
   "name": "tdjson",
-  "version": "0.0.46",
+  "version": "0.0.47",
   "description": "TypeScript types for libtdjson.so",
   "author": "futpib <futpib@gmail.com>",
   "license": "GPL-3.0",
