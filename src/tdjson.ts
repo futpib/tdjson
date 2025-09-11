@@ -3780,6 +3780,15 @@ Price paid by the sender for the gift.
 }
 
 /**
+The sender or receiver of the message has paid for upgraid of the gift, which has been completed.
+Subtype of {@link UpgradedGiftOrigin}.
+*/
+export interface UpgradedGiftOriginPrepaidUpgrade {
+	'@type': 'upgradedGiftOriginPrepaidUpgrade';
+
+}
+
+/**
 Describes a model of an upgraded gift.
 */
 export interface UpgradedGiftModel {
@@ -3952,6 +3961,11 @@ Unique identifier of the gift.
 */
 	id: string;
 	/**
+Unique identifier of the regular gift from which the gift was upgraded; may be 0 for short period of time for old gifts
+from database.
+*/
+	regular_gift_id: string;
+	/**
 Identifier of the chat that published the gift; 0 if none.
 */
 	publisher_chat_id: number;
@@ -4017,6 +4031,80 @@ Information about the originally sent gift; may be null if unknown.
 Resale parameters of the gift; may be null if resale isn't possible.
 */
 	resale_parameters: GiftResaleParameters;
+	/**
+ISO 4217 currency code of the currency in which value of the gift is represented; may be empty if unavailable.
+*/
+	value_currency: string;
+	/**
+Estimated value of the gift; in the smallest units of the currency; 0 if unavailable.
+*/
+	value_amount: number;
+}
+
+/**
+Contains information about value of an upgraded gift.
+*/
+export interface UpgradedGiftValueInfo {
+	'@type': 'upgradedGiftValueInfo';
+	/**
+ISO 4217 currency code of the currency in which the prices are represented.
+*/
+	currency: string;
+	/**
+Estimated value of the gift; in the smallest units of the currency.
+*/
+	value: number;
+	/**
+True, if the value is calculated as average value of similar sold gifts. Otherwise, it is based on the sale price of the
+gift.
+*/
+	is_value_average?: boolean;
+	/**
+Point in time (Unix timestamp) when the corresponding regular gift was originally purchased.
+*/
+	initial_sale_date: number;
+	/**
+Amount of Telegram Stars that were paid for the gift.
+*/
+	initial_sale_star_count: number;
+	/**
+Initial price of the gift; in the smallest units of the currency.
+*/
+	initial_sale_price: number;
+	/**
+Point in time (Unix timestamp) when the upgraded gift was purchased last time; 0 if never.
+*/
+	last_sale_date: number;
+	/**
+Last purchase price of the gift; in the smallest units of the currency; 0 if the gift has never been resold.
+*/
+	last_sale_price: number;
+	/**
+True, if the last sale was completed on Fragment.
+*/
+	is_last_sale_on_fragment?: boolean;
+	/**
+The current minimum price of gifts upgraded from the same gift; in the smallest units of the currency; 0 if there are no
+such gifts.
+*/
+	minimum_price: number;
+	/**
+The average sale price in the last month of gifts upgraded from the same gift; in the smallest units of the currency; 0
+if there were no such sales.
+*/
+	average_sale_price: number;
+	/**
+Number of gifts upgraded from the same gift being resold on Telegram.
+*/
+	telegram_listed_gift_count: number;
+	/**
+Number of gifts upgraded from the same gift being resold on Fragment.
+*/
+	fragment_listed_gift_count: number;
+	/**
+The HTTPS link to the Fragment for the gift; may be empty if there are no such gifts being sold on Fragment.
+*/
+	fragment_url: string;
 }
 
 /**
@@ -4045,17 +4133,17 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift.
 */
 	transfer_star_count: number;
 	/**
-Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred
-immediately or transfer isn't possible.
+Point in time (Unix timestamp) when the gift can be transferred to another owner; can be in the past; 0 if the gift can
+be transferred immediately or transfer isn't possible.
 */
 	next_transfer_date: number;
 	/**
-Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the
-receiver of the gift.
+Point in time (Unix timestamp) when the gift can be resold to another user; can be in the past; 0 if the gift can't be
+resold; only for the receiver of the gift.
 */
 	next_resale_date: number;
 	/**
-Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT.
+Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT; can be in the past.
 */
 	export_date: number;
 }
@@ -4360,20 +4448,24 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift; only f
 */
 	transfer_star_count: number;
 	/**
-Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred
-immediately or transfer isn't possible; only for the receiver of the gift.
+Point in time (Unix timestamp) when the gift can be transferred to another owner; can be in the past; 0 if the gift can
+be transferred immediately or transfer isn't possible; only for the receiver of the gift.
 */
 	next_transfer_date: number;
 	/**
-Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the
-receiver of the gift.
+Point in time (Unix timestamp) when the gift can be resold to another user; can be in the past; 0 if the gift can't be
+resold; only for the receiver of the gift.
 */
 	next_resale_date: number;
 	/**
-Point in time (Unix timestamp) when the upgraded gift can be transferred to the TON blockchain as an NFT; 0 if NFT
-export isn't possible; only for the receiver of the gift.
+Point in time (Unix timestamp) when the upgraded gift can be transferred to the TON blockchain as an NFT; can be in the
+past; 0 if NFT export isn't possible; only for the receiver of the gift.
 */
 	export_date: number;
+	/**
+If non-empty, then the user can pay for an upgrade of the gift using buyGiftUpgrade.
+*/
+	prepaid_upgrade_hash: string;
 }
 
 /**
@@ -4802,6 +4894,22 @@ Identifier of the user that initially sent the gift.
 The upgraded gift.
 */
 	gift: UpgradedGift;
+}
+
+/**
+The transaction is a purchase of an upgrade of a gift owned by another user or channel; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiftUpgradePurchase {
+	'@type': 'starTransactionTypeGiftUpgradePurchase';
+	/**
+Owner of the upgraded gift.
+*/
+	owner_id: MessageSender;
+	/**
+The gift.
+*/
+	gift: Gift;
 }
 
 /**
@@ -15299,7 +15407,7 @@ The gift.
 */
 	gift: Gift;
 	/**
-Sender of the gift.
+Sender of the gift; may be null for outgoing messages about prepaid upgrade of gifts from unknown users.
 */
 	sender_id: MessageSender;
 	/**
@@ -15332,6 +15440,10 @@ True, if the gift is displayed on the user's or the channel's profile page; only
 */
 	is_saved?: boolean;
 	/**
+True, if the message is about prepaid upgrade of the gift by another user.
+*/
+	is_prepaid_upgrade?: boolean;
+	/**
 True, if the gift can be upgraded to a unique gift; only for the receiver of the gift.
 */
 	can_be_upgraded?: boolean;
@@ -15352,6 +15464,10 @@ Identifier of the corresponding upgraded gift; may be empty if unknown. Use getR
 gift.
 */
 	upgraded_received_gift_id: string;
+	/**
+If non-empty, then the user can pay for an upgrade of the gift using buyGiftUpgrade.
+*/
+	prepaid_upgrade_hash: string;
 }
 
 /**
@@ -15397,18 +15513,18 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift; only f
 */
 	transfer_star_count: number;
 	/**
-Point in time (Unix timestamp) when the gift can be transferred to another owner; 0 if the gift can be transferred
-immediately or transfer isn't possible; only for the receiver of the gift.
+Point in time (Unix timestamp) when the gift can be transferred to another owner; can be in the past; 0 if the gift can
+be transferred immediately or transfer isn't possible; only for the receiver of the gift.
 */
 	next_transfer_date: number;
 	/**
-Point in time (Unix timestamp) when the gift can be resold to another user; 0 if the gift can't be resold; only for the
-receiver of the gift.
+Point in time (Unix timestamp) when the gift can be resold to another user; can be in the past; 0 if the gift can't be
+resold; only for the receiver of the gift.
 */
 	next_resale_date: number;
 	/**
-Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT; 0 if NFT export isn't
-possible; only for the receiver of the gift.
+Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT; can be in the past; 0
+if NFT export isn't possible; only for the receiver of the gift.
 */
 	export_date: number;
 }
@@ -32096,7 +32212,8 @@ export type AffiliateProgramSortOrder =
 export type UpgradedGiftOrigin =
 	| UpgradedGiftOriginUpgrade
 	| UpgradedGiftOriginTransfer
-	| UpgradedGiftOriginResale;
+	| UpgradedGiftOriginResale
+	| UpgradedGiftOriginPrepaidUpgrade;
 
 export type UpgradedGiftAttributeId =
 	| UpgradedGiftAttributeIdModel
@@ -32144,6 +32261,7 @@ export type StarTransactionType =
 	| StarTransactionTypeGiftTransfer
 	| StarTransactionTypeGiftSale
 	| StarTransactionTypeGiftUpgrade
+	| StarTransactionTypeGiftUpgradePurchase
 	| StarTransactionTypeUpgradedGiftPurchase
 	| StarTransactionTypeUpgradedGiftSale
 	| StarTransactionTypeChannelPaidReactionSend
@@ -46020,7 +46138,7 @@ Identifier of the gift to send.
 */
 	gift_id: string;
 	/**
-Identifier of the user or the channel chat that will receive the gift.
+Identifier of the user or the channel chat that will receive the gift; limited gifts can't be sent to channel chats.
 */
 	owner_id: MessageSender;
 	/**
@@ -46145,7 +46263,27 @@ The amount of Telegram Stars required to pay for the upgrade. It the gift has pr
 }
 
 /**
-Sends an upgraded gift to another user or a channel chat.
+Pays for upgrade of a regular gift that is owned by another user or channel chat.
+Request type for {@link Tdjson#buyGiftUpgrade}.
+*/
+export interface BuyGiftUpgrade {
+	'@type': 'buyGiftUpgrade';
+	/**
+Identifier of the user or the channel chat that owns the gift.
+*/
+	owner_id: MessageSender;
+	/**
+Prepaid upgrade hash as received along with the gift.
+*/
+	prepaid_upgrade_hash: string;
+	/**
+The amount of Telegram Stars the user agreed to pay for the upgrade; must be equal to gift.upgrade_star_count.
+*/
+	star_count: number;
+}
+
+/**
+Sends an upgraded gift to another user or channel chat.
 Request type for {@link Tdjson#transferGift}.
 */
 export interface TransferGift {
@@ -46223,9 +46361,13 @@ Pass true to exclude gifts that can be purchased unlimited number of times.
 */
 	exclude_unlimited?: boolean;
 	/**
-Pass true to exclude gifts that can be purchased limited number of times.
+Pass true to exclude gifts that can be purchased limited number of times and can be upgraded.
 */
-	exclude_limited?: boolean;
+	exclude_upgradable?: boolean;
+	/**
+Pass true to exclude gifts that can be purchased limited number of times and can't be upgraded.
+*/
+	exclude_non_upgradable?: boolean;
 	/**
 Pass true to exclude upgraded gifts.
 */
@@ -46264,6 +46406,18 @@ Request type for {@link Tdjson#getUpgradedGift}.
 */
 export interface GetUpgradedGift {
 	'@type': 'getUpgradedGift';
+	/**
+Unique name of the upgraded gift.
+*/
+	name: string;
+}
+
+/**
+Returns information about value of an upgraded gift by its name.
+Request type for {@link Tdjson#getUpgradedGiftValueInfo}.
+*/
+export interface GetUpgradedGiftValueInfo {
+	'@type': 'getUpgradedGiftValueInfo';
 	/**
 Unique name of the upgraded gift.
 */
@@ -49888,11 +50042,13 @@ export type Request =
 	| ToggleChatGiftNotifications
 	| GetGiftUpgradePreview
 	| UpgradeGift
+	| BuyGiftUpgrade
 	| TransferGift
 	| SendResoldGift
 	| GetReceivedGifts
 	| GetReceivedGift
 	| GetUpgradedGift
+	| GetUpgradedGiftValueInfo
 	| GetUpgradedGiftWithdrawalUrl
 	| SetGiftResalePrice
 	| SearchGiftsForResale
@@ -57447,7 +57603,17 @@ Upgrades a regular gift.
 	}
 
 	/**
-Sends an upgraded gift to another user or a channel chat.
+Pays for upgrade of a regular gift that is owned by another user or channel chat.
+*/
+	async buyGiftUpgrade(options: Omit<BuyGiftUpgrade, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'buyGiftUpgrade',
+		});
+	}
+
+	/**
+Sends an upgraded gift to another user or channel chat.
 */
 	async transferGift(options: Omit<TransferGift, '@type'>): Promise<Ok> {
 		return this._request({
@@ -57494,6 +57660,16 @@ Returns information about an upgraded gift by its name.
 		return this._request({
 			...options,
 			'@type': 'getUpgradedGift',
+		});
+	}
+
+	/**
+Returns information about value of an upgraded gift by its name.
+*/
+	async getUpgradedGiftValueInfo(options: Omit<GetUpgradedGiftValueInfo, '@type'>): Promise<UpgradedGiftValueInfo> {
+		return this._request({
+			...options,
+			'@type': 'getUpgradedGiftValueInfo',
 		});
 	}
 
