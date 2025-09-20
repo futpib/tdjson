@@ -368,6 +368,14 @@ export interface AuthorizationStateWaitPremiumPurchase {
 Identifier of the store product that must be bought.
 */
 	store_product_id: string;
+	/**
+Email address to use for support if the user has issues with Telegram Premium purchase.
+*/
+	support_email_address: string;
+	/**
+Subject for the email sent to the support email address.
+*/
+	support_email_subject: string;
 }
 
 /**
@@ -1323,6 +1331,21 @@ File containing the audio.
 }
 
 /**
+Contains a list of audio files.
+*/
+export interface Audios {
+	'@type': 'audios';
+	/**
+Approximate total number of audio files found.
+*/
+	total_count: number;
+	/**
+List of audio files.
+*/
+	audios: Audio[];
+}
+
+/**
 Describes a document of any type.
 */
 export interface Document {
@@ -1908,6 +1931,78 @@ True, if the photo has animated variant.
 True, if the photo is visible only for the current user.
 */
 	is_personal?: boolean;
+}
+
+/**
+Describes a tab shown in a user or a chat profile.
+Subtype of {@link ProfileTab}.
+*/
+export interface ProfileTabPosts {
+	'@type': 'profileTabPosts';
+
+}
+
+/**
+A tab with gifts received by the user or the channel chat.
+Subtype of {@link ProfileTab}.
+*/
+export interface ProfileTabGifts {
+	'@type': 'profileTabGifts';
+
+}
+
+/**
+A tab with photos and videos posted by the channel.
+Subtype of {@link ProfileTab}.
+*/
+export interface ProfileTabMedia {
+	'@type': 'profileTabMedia';
+
+}
+
+/**
+A tab with documents posted by the channel.
+Subtype of {@link ProfileTab}.
+*/
+export interface ProfileTabFiles {
+	'@type': 'profileTabFiles';
+
+}
+
+/**
+A tab with messages posted by the channel and containing links.
+Subtype of {@link ProfileTab}.
+*/
+export interface ProfileTabLinks {
+	'@type': 'profileTabLinks';
+
+}
+
+/**
+A tab with audio messages posted by the channel.
+Subtype of {@link ProfileTab}.
+*/
+export interface ProfileTabMusic {
+	'@type': 'profileTabMusic';
+
+}
+
+/**
+A tab with voice notes posted by the channel.
+Subtype of {@link ProfileTab}.
+*/
+export interface ProfileTabVoice {
+	'@type': 'profileTabVoice';
+
+}
+
+/**
+A tab with animations posted by the channel.
+Subtype of {@link ProfileTab}.
+*/
+export interface ProfileTabGifs {
+	'@type': 'profileTabGifs';
+
 }
 
 /**
@@ -3747,6 +3842,27 @@ List of gift collections.
 }
 
 /**
+Describes whether a gift can be sent now by the current user.
+Subtype of {@link CanSendGiftResult}.
+*/
+export interface CanSendGiftResultOk {
+	'@type': 'canSendGiftResultOk';
+
+}
+
+/**
+The gift can't be sent now by the current user.
+Subtype of {@link CanSendGiftResult}.
+*/
+export interface CanSendGiftResultFail {
+	'@type': 'canSendGiftResultFail';
+	/**
+Reason to be shown to the user.
+*/
+	reason: FormattedText;
+}
+
+/**
 Describes origin from which the upgraded gift was obtained.
 Subtype of {@link UpgradedGiftOrigin}.
 */
@@ -3934,6 +4050,11 @@ True, if the gift can be bought only by Telegram Premium subscribers.
 */
 	is_premium?: boolean;
 	/**
+Point in time (Unix timestamp) when the gift can be sent next time by the current user; can be 0 or a date in the past.
+If the date is in the future, then call canSendGift to get the reason, why the gift can't be sent now.
+*/
+	next_send_date: number;
+	/**
 Number of times the gift can be purchased by the current user; may be null if not limited.
 */
 	user_limits: GiftPurchaseLimits;
@@ -3993,6 +4114,14 @@ The maximum number of gifts that can be upgraded from the same gift.
 True, if the original gift could have been bought only by Telegram Premium subscribers.
 */
 	is_premium?: boolean;
+	/**
+True, if the gift can be used to set a theme in a chat.
+*/
+	is_theme_available?: boolean;
+	/**
+Identifier of the chat for which the gift is used to set a theme; 0 if none or the gift isn't owned by the current user.
+*/
+	used_theme_chat_id: number;
 	/**
 Identifier of the user or the chat that owns the upgraded gift; may be null if none or unknown.
 */
@@ -4443,6 +4572,11 @@ the current user.
 Number of Telegram Stars that were paid by the sender for the ability to upgrade the gift.
 */
 	prepaid_upgrade_star_count: number;
+	/**
+True, if the upgrade was bought after the gift was sent. In this case, prepaid upgrade cost must not be added to the
+gift cost.
+*/
+	is_upgrade_separate?: boolean;
 	/**
 Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
 */
@@ -5981,6 +6115,14 @@ Information about verification status of the user provided by a bot; may be null
 */
 	bot_verification: BotVerification;
 	/**
+The main tab chosen by the user; may be null if not chosen manually.
+*/
+	main_profile_tab: ProfileTab;
+	/**
+The first audio file added to the user's profile; may be null if none.
+*/
+	first_profile_audio: Audio;
+	/**
 The current rating of the user; may be null if none.
 */
 	rating: UserRating;
@@ -7023,6 +7165,10 @@ Information about verification status of the supergroup or the channel provided 
 unknown.
 */
 	bot_verification: BotVerification;
+	/**
+The main tab chosen by the administrators of the channel; may be null if not chosen manually.
+*/
+	main_profile_tab: ProfileTab;
 	/**
 Identifier of the basic group from which supergroup was upgraded; 0 if none.
 */
@@ -9507,9 +9653,9 @@ Background set for the chat; may be null if none.
 */
 	background: ChatBackground;
 	/**
-If non-empty, name of a theme, set for the chat.
+Theme set for the chat; may be null if none.
 */
-	theme_name: string;
+	theme: ChatTheme;
 	/**
 Information about actions which must be possible to do through the chat action bar; may be null if none.
 */
@@ -10704,10 +10850,59 @@ Photo of the chat; for bots only; may be null.
 }
 
 /**
+Describes a built-in theme of an official app.
+Subtype of {@link BuiltInTheme}.
+*/
+export interface BuiltInThemeClassic {
+	'@type': 'builtInThemeClassic';
+
+}
+
+/**
+Regular light theme.
+Subtype of {@link BuiltInTheme}.
+*/
+export interface BuiltInThemeDay {
+	'@type': 'builtInThemeDay';
+
+}
+
+/**
+Regular dark theme.
+Subtype of {@link BuiltInTheme}.
+*/
+export interface BuiltInThemeNight {
+	'@type': 'builtInThemeNight';
+
+}
+
+/**
+Tinted dark theme.
+Subtype of {@link BuiltInTheme}.
+*/
+export interface BuiltInThemeTinted {
+	'@type': 'builtInThemeTinted';
+
+}
+
+/**
+Arctic light theme.
+Subtype of {@link BuiltInTheme}.
+*/
+export interface BuiltInThemeArctic {
+	'@type': 'builtInThemeArctic';
+
+}
+
+/**
 Describes theme settings.
 */
 export interface ThemeSettings {
 	'@type': 'themeSettings';
+	/**
+Base theme for this theme.
+*/
+	base_theme: BuiltInTheme;
 	/**
 Theme accent color in ARGB format.
 */
@@ -10717,7 +10912,8 @@ The background to be used in chats; may be null.
 */
 	background: Background;
 	/**
-The fill to be used as a background for outgoing messages.
+The fill to be used as a background for outgoing messages; may be null if the fill from the base theme must be used
+instead.
 */
 	outgoing_message_fill: BackgroundFill;
 	/**
@@ -14824,9 +15020,9 @@ Subtype of {@link MessageContent}.
 export interface MessageChatSetTheme {
 	'@type': 'messageChatSetTheme';
 	/**
-If non-empty, name of a new theme, set for the chat. Otherwise, chat theme was reset to the default one.
+New theme for the chat; may be null if chat theme was reset to the default one.
 */
-	theme_name: string;
+	theme: ChatTheme;
 }
 
 /**
@@ -15432,6 +15628,11 @@ Number of Telegram Stars that were paid by the sender for the ability to upgrade
 */
 	prepaid_upgrade_star_count: number;
 	/**
+True, if the upgrade was bought after the gift was sent. In this case, prepaid upgrade cost must not be added to the
+gift cost.
+*/
+	is_upgrade_separate?: boolean;
+	/**
 True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them.
 */
 	is_private?: boolean;
@@ -15548,10 +15749,9 @@ Receiver of the gift.
 */
 	receiver_id: MessageSender;
 	/**
-True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold
-gift.
+Origin of the upgraded gift.
 */
-	is_upgrade?: boolean;
+	origin: UpgradedGiftOrigin;
 }
 
 /**
@@ -23452,6 +23652,10 @@ Paid amount, in the smallest units of the currency.
 Number of bought Telegram Stars.
 */
 	star_count: number;
+	/**
+Identifier of the chat that is supposed to receive the Telegram Stars; pass 0 if none.
+*/
+	chat_id: number;
 }
 
 /**
@@ -23619,6 +23823,10 @@ Paid amount, in the smallest units of the currency.
 Number of bought Telegram Stars.
 */
 	star_count: number;
+	/**
+Identifier of the chat that is supposed to receive the Telegram Stars; pass 0 if none.
+*/
+	chat_id: number;
 }
 
 /**
@@ -23972,13 +24180,13 @@ The background fill.
 }
 
 /**
-A background from a chat theme; can be used only as a chat background in channels.
+A background from a chat theme based on an emoji; can be used only as a chat background in channels.
 Subtype of {@link BackgroundType}.
 */
 export interface BackgroundTypeChatTheme {
 	'@type': 'backgroundTypeChatTheme';
 	/**
-Name of the chat theme.
+Name of the emoji chat theme.
 */
 	theme_name: string;
 }
@@ -24021,10 +24229,10 @@ Identifier of the message with the background.
 }
 
 /**
-Describes a chat theme.
+Describes a chat theme based on an emoji.
 */
-export interface ChatTheme {
-	'@type': 'chatTheme';
+export interface EmojiChatTheme {
+	'@type': 'emojiChatTheme';
 	/**
 Theme name.
 */
@@ -24037,6 +24245,89 @@ Theme settings for a light chat theme.
 Theme settings for a dark chat theme.
 */
 	dark_settings: ThemeSettings;
+}
+
+/**
+Describes a chat theme based on an upgraded gift.
+*/
+export interface GiftChatTheme {
+	'@type': 'giftChatTheme';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+	/**
+Theme settings for a light chat theme.
+*/
+	light_settings: ThemeSettings;
+	/**
+Theme settings for a dark chat theme.
+*/
+	dark_settings: ThemeSettings;
+}
+
+/**
+Contains a list of chat themes based on upgraded gifts.
+*/
+export interface GiftChatThemes {
+	'@type': 'giftChatThemes';
+	/**
+A list of chat themes.
+*/
+	themes: GiftChatTheme[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
+Describes a chat theme.
+Subtype of {@link ChatTheme}.
+*/
+export interface ChatThemeEmoji {
+	'@type': 'chatThemeEmoji';
+	/**
+Name of the theme; full theme description is received through updateEmojiChatThemes.
+*/
+	name: string;
+}
+
+/**
+A chat theme based on an upgraded gift.
+Subtype of {@link ChatTheme}.
+*/
+export interface ChatThemeGift {
+	'@type': 'chatThemeGift';
+	/**
+The chat theme.
+*/
+	gift_theme: GiftChatTheme;
+}
+
+/**
+Describes a chat theme to set.
+Subtype of {@link InputChatTheme}.
+*/
+export interface InputChatThemeEmoji {
+	'@type': 'inputChatThemeEmoji';
+	/**
+Name of the theme.
+*/
+	name: string;
+}
+
+/**
+A theme based on an upgraded gift.
+Subtype of {@link InputChatTheme}.
+*/
+export interface InputChatThemeGift {
+	'@type': 'inputChatThemeGift';
+	/**
+Name of the upgraded gift. A gift can be used only in one chat in a time. When the same gift is used in another chat,
+theme in the previous chat is reset to default.
+*/
+	name: string;
 }
 
 /**
@@ -24407,7 +24698,10 @@ Subtype of {@link PushMessageContent}.
 */
 export interface PushMessageContentContactRegistered {
 	'@type': 'pushMessageContentContactRegistered';
-
+	/**
+True, if the user joined Telegram as a Telegram Premium account.
+*/
+	as_premium_account?: boolean;
 }
 
 /**
@@ -24596,6 +24890,10 @@ export interface PushMessageContentGift {
 Number of Telegram Stars that sender paid for the gift.
 */
 	star_count: number;
+	/**
+True, if the message is about prepaid upgrade of the gift by another user instead of actual receiving of a new gift.
+*/
+	is_prepaid_upgrade?: boolean;
 }
 
 /**
@@ -24605,10 +24903,14 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentUpgradedGift {
 	'@type': 'pushMessageContentUpgradedGift';
 	/**
-True, if the gift was obtained by upgrading of a previously received gift; otherwise, this is a transferred or resold
-gift.
+True, if the gift was obtained by upgrading of a previously received gift; otherwise, if is_prepaid_upgrade == false,
+then this is a transferred or resold gift.
 */
 	is_upgrade?: boolean;
+	/**
+True, if the message is about completion of prepaid upgrade of the gift instead of actual receiving of a new gift.
+*/
+	is_prepaid_upgrade?: boolean;
 }
 
 /**
@@ -24843,9 +25145,9 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentChatSetTheme {
 	'@type': 'pushMessageContentChatSetTheme';
 	/**
-If non-empty, name of a new theme, set for the chat. Otherwise, the chat theme was reset to the default one.
+If non-empty, human-readable name of the new theme. Otherwise, the chat theme was reset to the default one.
 */
-	theme_name: string;
+	name: string;
 }
 
 /**
@@ -28851,7 +29153,7 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
-Contains information about Telegram Stars earned by a bot or a chat.
+Contains information about Telegram Stars earned by a user or a chat.
 */
 export interface StarRevenueStatus {
 	'@type': 'starRevenueStatus';
@@ -28878,7 +29180,7 @@ Time left before the next withdrawal can be started, in seconds; 0 if withdrawal
 }
 
 /**
-A detailed statistics about Telegram Stars earned by a bot or a chat.
+A detailed statistics about Telegram Stars earned by a user or a chat.
 */
 export interface StarRevenueStatistics {
 	'@type': 'starRevenueStatistics';
@@ -28892,6 +29194,48 @@ Telegram Star revenue status.
 	status: StarRevenueStatus;
 	/**
 Current conversion rate of a Telegram Star to USD.
+*/
+	usd_rate: number;
+}
+
+/**
+Contains information about Toncoins earned by the current user.
+*/
+export interface TonRevenueStatus {
+	'@type': 'tonRevenueStatus';
+	/**
+Total amount of Toncoins earned; in the smallest units of the cryptocurrency.
+*/
+	total_amount: string;
+	/**
+Amount of Toncoins that aren't withdrawn yet; in the smallest units of the cryptocurrency.
+*/
+	balance_amount: string;
+	/**
+Amount of Toncoins that are available for withdrawal; in the smallest units of the cryptocurrency.
+*/
+	available_amount: string;
+	/**
+True, if Toncoins can be withdrawn.
+*/
+	withdrawal_enabled?: boolean;
+}
+
+/**
+A detailed statistics about Toncoins earned by the current user.
+*/
+export interface TonRevenueStatistics {
+	'@type': 'tonRevenueStatistics';
+	/**
+A graph containing amount of revenue in a given day.
+*/
+	revenue_by_day_graph: StatisticalGraph;
+	/**
+Amount of earned revenue.
+*/
+	status: TonRevenueStatus;
+	/**
+Current conversion rate of nanotoncoin to USD cents.
 */
 	usd_rate: number;
 }
@@ -29737,9 +30081,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-The new name of the chat theme; may be empty if theme was reset to default.
+The new theme of the chat; may be null if theme was reset to default.
 */
-	theme_name: string;
+	theme: ChatTheme;
 }
 
 /**
@@ -30977,15 +31321,15 @@ The new default background; may be null.
 }
 
 /**
-The list of available chat themes has changed.
+The list of available emoji chat themes has changed.
 Subtype of {@link Update}.
 */
-export interface UpdateChatThemes {
-	'@type': 'updateChatThemes';
+export interface UpdateEmojiChatThemes {
+	'@type': 'updateEmojiChatThemes';
 	/**
-The new list of chat themes.
+The new list of emoji chat themes.
 */
-	chat_themes: ChatTheme[];
+	chat_themes: EmojiChatTheme[];
 }
 
 /**
@@ -31269,7 +31613,7 @@ New amount of earned revenue.
 }
 
 /**
-The Telegram Star revenue earned by a bot or a chat has changed. If Telegram Star transaction screen of the chat is
+The Telegram Star revenue earned by a user or a chat has changed. If Telegram Star transaction screen of the chat is
 opened, then getStarTransactions may be called to fetch new transactions.
 Subtype of {@link Update}.
 */
@@ -31283,6 +31627,19 @@ Identifier of the owner of the Telegram Stars.
 New Telegram Star revenue status.
 */
 	status: StarRevenueStatus;
+}
+
+/**
+The Toncoin revenue earned by the current user has changed. If Toncoin transaction screen of the chat is opened, then
+getTonTransactions may be called to fetch new transactions.
+Subtype of {@link Update}.
+*/
+export interface UpdateTonRevenueStatus {
+	'@type': 'updateTonRevenueStatus';
+	/**
+New Toncoin revenue status.
+*/
+	status: TonRevenueStatus;
 }
 
 /**
@@ -32157,6 +32514,16 @@ export type PollType =
 	| PollTypeRegular
 	| PollTypeQuiz;
 
+export type ProfileTab =
+	| ProfileTabPosts
+	| ProfileTabGifts
+	| ProfileTabMedia
+	| ProfileTabFiles
+	| ProfileTabLinks
+	| ProfileTabMusic
+	| ProfileTabVoice
+	| ProfileTabGifs;
+
 export type UserType =
 	| UserTypeRegular
 	| UserTypeDeleted
@@ -32208,6 +32575,10 @@ export type AffiliateProgramSortOrder =
 	| AffiliateProgramSortOrderProfitability
 	| AffiliateProgramSortOrderCreationDate
 	| AffiliateProgramSortOrderRevenue;
+
+export type CanSendGiftResult =
+	| CanSendGiftResultOk
+	| CanSendGiftResultFail;
 
 export type UpgradedGiftOrigin =
 	| UpgradedGiftOriginUpgrade
@@ -32490,6 +32861,13 @@ export type SavedMessagesTopicType =
 	| SavedMessagesTopicTypeMyNotes
 	| SavedMessagesTopicTypeAuthorHidden
 	| SavedMessagesTopicTypeSavedFromChat;
+
+export type BuiltInTheme =
+	| BuiltInThemeClassic
+	| BuiltInThemeDay
+	| BuiltInThemeNight
+	| BuiltInThemeTinted
+	| BuiltInThemeArctic;
 
 export type RichText =
 	| RichTextPlain
@@ -33262,6 +33640,14 @@ export type InputBackground =
 	| InputBackgroundRemote
 	| InputBackgroundPrevious;
 
+export type ChatTheme =
+	| ChatThemeEmoji
+	| ChatThemeGift;
+
+export type InputChatTheme =
+	| InputChatThemeEmoji
+	| InputChatThemeGift;
+
 export type CanPostStoryResult =
 	| CanPostStoryResultOk
 	| CanPostStoryResultPremiumNeeded
@@ -33759,7 +34145,7 @@ export type Update =
 	| UpdateSavedAnimations
 	| UpdateSavedNotificationSounds
 	| UpdateDefaultBackground
-	| UpdateChatThemes
+	| UpdateEmojiChatThemes
 	| UpdateAccentColors
 	| UpdateProfileAccentColors
 	| UpdateLanguagePackStrings
@@ -33780,6 +34166,7 @@ export type Update =
 	| UpdateOwnedTonCount
 	| UpdateChatRevenueAmount
 	| UpdateStarRevenueStatus
+	| UpdateTonRevenueStatus
 	| UpdateSpeechRecognitionTrial
 	| UpdateDiceEmojis
 	| UpdateAnimatedEmojiMessageClicked
@@ -40315,6 +40702,23 @@ set background that was set for both sides by the other user.
 }
 
 /**
+Returns available to the current user gift chat themes.
+Request type for {@link Tdjson#getGiftChatThemes}.
+*/
+export interface GetGiftChatThemes {
+	'@type': 'getGiftChatThemes';
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of chat themes to return.
+*/
+	limit: number;
+}
+
+/**
 Changes the chat theme. Supported only in private and secret chats.
 Request type for {@link Tdjson#setChatTheme}.
 */
@@ -40325,9 +40729,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Name of the new chat theme; pass an empty string to return the default theme.
+New chat theme; pass null to return the default theme.
 */
-	theme_name: string;
+	theme: InputChatTheme;
 }
 
 /**
@@ -43888,6 +44292,79 @@ The maximum number of photos to be returned; up to 100.
 }
 
 /**
+Returns the list of profile audio files of a user.
+Request type for {@link Tdjson#getUserProfileAudios}.
+*/
+export interface GetUserProfileAudios {
+	'@type': 'getUserProfileAudios';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+The number of audio files to skip; must be non-negative.
+*/
+	offset: number;
+	/**
+The maximum number of audio files to be returned; up to 100.
+*/
+	limit: number;
+}
+
+/**
+Checks whether a file is in the profile audio files of the current user. Returns a 404 error if it isn't.
+Request type for {@link Tdjson#isProfileAudio}.
+*/
+export interface IsProfileAudio {
+	'@type': 'isProfileAudio';
+	/**
+Identifier of the audio file to check.
+*/
+	file_id: number;
+}
+
+/**
+Adds an audio file to the beginning of the profile audio files of the current user.
+Request type for {@link Tdjson#addProfileAudio}.
+*/
+export interface AddProfileAudio {
+	'@type': 'addProfileAudio';
+	/**
+Identifier of the audio file to be added. The file must have been uploaded to the server.
+*/
+	file_id: number;
+}
+
+/**
+Changes position of an audio file in the profile audio files of the current user.
+Request type for {@link Tdjson#setProfileAudioPosition}.
+*/
+export interface SetProfileAudioPosition {
+	'@type': 'setProfileAudioPosition';
+	/**
+Identifier of the file from profile audio files, which position will be changed.
+*/
+	file_id: number;
+	/**
+Identifier of the file from profile audio files after which the file will be positioned; pass 0 to move the file to the
+beginning of the list.
+*/
+	after_file_id: number;
+}
+
+/**
+Removes an audio file from the profile audio files of the current user.
+Request type for {@link Tdjson#removeProfileAudio}.
+*/
+export interface RemoveProfileAudio {
+	'@type': 'removeProfileAudio';
+	/**
+Identifier of the audio file to be removed.
+*/
+	file_id: number;
+}
+
+/**
 Returns outline of a sticker. This is an offline method. Returns a 404 error if the outline isn't known.
 Request type for {@link Tdjson#getStickerOutline}.
 */
@@ -44677,6 +45154,18 @@ export interface SetBirthdate {
 The new value of the current user's birthdate; pass null to remove the birthdate.
 */
 	birthdate: Birthdate;
+}
+
+/**
+Changes the main profile tab of the current user.
+Request type for {@link Tdjson#setMainProfileTab}.
+*/
+export interface SetMainProfileTab {
+	'@type': 'setMainProfileTab';
+	/**
+The new value of the main profile tab.
+*/
+	main_profile_tab: ProfileTab;
 }
 
 /**
@@ -45706,6 +46195,22 @@ New value of the unrestrict_boost_count supergroup setting; 0-8. Use 0 to remove
 }
 
 /**
+Changes the main profile tab of the channel; requires can_change_info administrator right.
+Request type for {@link Tdjson#setSupergroupMainProfileTab}.
+*/
+export interface SetSupergroupMainProfileTab {
+	'@type': 'setSupergroupMainProfileTab';
+	/**
+Identifier of the channel.
+*/
+	supergroup_id: number;
+	/**
+The new value of the main profile tab.
+*/
+	main_profile_tab: ProfileTab;
+}
+
+/**
 Toggles whether sender signature or link to the account is added to sent messages in a channel; requires can_change_info
 member right.
 Request type for {@link Tdjson#toggleSupergroupSignMessages}.
@@ -46124,6 +46629,18 @@ Request type for {@link Tdjson#getAvailableGifts}.
 export interface GetAvailableGifts {
 	'@type': 'getAvailableGifts';
 
+}
+
+/**
+Checks whether a gift with next_send_date in the future can be sent already.
+Request type for {@link Tdjson#canSendGift}.
+*/
+export interface CanSendGift {
+	'@type': 'canSendGift';
+	/**
+Identifier of the gift to send.
+*/
+	gift_id: string;
 }
 
 /**
@@ -47406,6 +47923,31 @@ Identifier of the owner of the Telegram Stars; can be identifier of an owned bot
 chat.
 */
 	owner_id: MessageSender;
+}
+
+/**
+Returns detailed Toncoin revenue statistics of the current user.
+Request type for {@link Tdjson#getTonRevenueStatistics}.
+*/
+export interface GetTonRevenueStatistics {
+	'@type': 'getTonRevenueStatistics';
+	/**
+Pass true if a dark theme is used by the application.
+*/
+	is_dark?: boolean;
+}
+
+/**
+Returns a URL for Toncoin withdrawal from the current user's account. The user must have at least 10 toncoins to
+withdraw and can withdraw up to 100000 Toncoins in one transaction.
+Request type for {@link Tdjson#getTonWithdrawalUrl}.
+*/
+export interface GetTonWithdrawalUrl {
+	'@type': 'getTonWithdrawalUrl';
+	/**
+The 2-step verification password of the current user.
+*/
+	password: string;
 }
 
 /**
@@ -49684,6 +50226,7 @@ export type Request =
 	| SetChatPermissions
 	| SetChatBackground
 	| DeleteChatBackground
+	| GetGiftChatThemes
 	| SetChatTheme
 	| SetChatDraftMessage
 	| SetChatNotificationSettings
@@ -49887,6 +50430,11 @@ export type Request =
 	| SearchUserByPhoneNumber
 	| SharePhoneNumber
 	| GetUserProfilePhotos
+	| GetUserProfileAudios
+	| IsProfileAudio
+	| AddProfileAudio
+	| SetProfileAudioPosition
+	| RemoveProfileAudio
 	| GetStickerOutline
 	| GetStickers
 	| GetAllStickerEmojis
@@ -49941,6 +50489,7 @@ export type Request =
 	| ToggleUsernameIsActive
 	| ReorderActiveUsernames
 	| SetBirthdate
+	| SetMainProfileTab
 	| SetPersonalChat
 	| SetEmojiStatus
 	| ToggleHasSponsoredMessagesEnabled
@@ -50010,6 +50559,7 @@ export type Request =
 	| SetSupergroupStickerSet
 	| SetSupergroupCustomEmojiStickerSet
 	| SetSupergroupUnrestrictBoostCount
+	| SetSupergroupMainProfileTab
 	| ToggleSupergroupSignMessages
 	| ToggleSupergroupJoinToSendMessages
 	| ToggleSupergroupJoinByRequest
@@ -50035,6 +50585,7 @@ export type Request =
 	| DeleteSavedCredentials
 	| SetGiftSettings
 	| GetAvailableGifts
+	| CanSendGift
 	| SendGift
 	| SellGift
 	| ToggleGiftIsSaved
@@ -50111,6 +50662,8 @@ export type Request =
 	| GetStarRevenueStatistics
 	| GetStarWithdrawalUrl
 	| GetStarAdAccountUrl
+	| GetTonRevenueStatistics
+	| GetTonWithdrawalUrl
 	| GetChatStatistics
 	| GetMessageStatistics
 	| GetMessagePublicForwards
@@ -53915,6 +54468,16 @@ Deletes background in a specific chat.
 	}
 
 	/**
+Returns available to the current user gift chat themes.
+*/
+	async getGiftChatThemes(options: Omit<GetGiftChatThemes, '@type'>): Promise<GiftChatThemes> {
+		return this._request({
+			...options,
+			'@type': 'getGiftChatThemes',
+		});
+	}
+
+	/**
 Changes the chat theme. Supported only in private and secret chats.
 */
 	async setChatTheme(options: Omit<SetChatTheme, '@type'>): Promise<Ok> {
@@ -56014,6 +56577,56 @@ Returns the profile photos of a user. Personal and public photo aren't returned.
 	}
 
 	/**
+Returns the list of profile audio files of a user.
+*/
+	async getUserProfileAudios(options: Omit<GetUserProfileAudios, '@type'>): Promise<Audios> {
+		return this._request({
+			...options,
+			'@type': 'getUserProfileAudios',
+		});
+	}
+
+	/**
+Checks whether a file is in the profile audio files of the current user. Returns a 404 error if it isn't.
+*/
+	async isProfileAudio(options: Omit<IsProfileAudio, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'isProfileAudio',
+		});
+	}
+
+	/**
+Adds an audio file to the beginning of the profile audio files of the current user.
+*/
+	async addProfileAudio(options: Omit<AddProfileAudio, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addProfileAudio',
+		});
+	}
+
+	/**
+Changes position of an audio file in the profile audio files of the current user.
+*/
+	async setProfileAudioPosition(options: Omit<SetProfileAudioPosition, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setProfileAudioPosition',
+		});
+	}
+
+	/**
+Removes an audio file from the profile audio files of the current user.
+*/
+	async removeProfileAudio(options: Omit<RemoveProfileAudio, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeProfileAudio',
+		});
+	}
+
+	/**
 Returns outline of a sticker. This is an offline method. Returns a 404 error if the outline isn't known.
 */
 	async getStickerOutline(options: Omit<GetStickerOutline, '@type'>): Promise<Outline> {
@@ -56559,6 +57172,16 @@ Changes the birthdate of the current user.
 		return this._request({
 			...options,
 			'@type': 'setBirthdate',
+		});
+	}
+
+	/**
+Changes the main profile tab of the current user.
+*/
+	async setMainProfileTab(options: Omit<SetMainProfileTab, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setMainProfileTab',
 		});
 	}
 
@@ -57269,6 +57892,16 @@ restrictions; requires can_restrict_members administrator right.
 	}
 
 	/**
+Changes the main profile tab of the channel; requires can_change_info administrator right.
+*/
+	async setSupergroupMainProfileTab(options: Omit<SetSupergroupMainProfileTab, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setSupergroupMainProfileTab',
+		});
+	}
+
+	/**
 Toggles whether sender signature or link to the account is added to sent messages in a channel; requires can_change_info
 member right.
 */
@@ -57525,6 +58158,16 @@ Returns gifts that can be sent to other users and channel chats.
 	async getAvailableGifts(): Promise<AvailableGifts> {
 		return this._request({
 			'@type': 'getAvailableGifts',
+		});
+	}
+
+	/**
+Checks whether a gift with next_send_date in the future can be sent already.
+*/
+	async canSendGift(options: Omit<CanSendGift, '@type'>): Promise<CanSendGiftResult> {
+		return this._request({
+			...options,
+			'@type': 'canSendGift',
 		});
 	}
 
@@ -58322,6 +58965,27 @@ owned Telegram Stars.
 		return this._request({
 			...options,
 			'@type': 'getStarAdAccountUrl',
+		});
+	}
+
+	/**
+Returns detailed Toncoin revenue statistics of the current user.
+*/
+	async getTonRevenueStatistics(options: Omit<GetTonRevenueStatistics, '@type'>): Promise<TonRevenueStatistics> {
+		return this._request({
+			...options,
+			'@type': 'getTonRevenueStatistics',
+		});
+	}
+
+	/**
+Returns a URL for Toncoin withdrawal from the current user's account. The user must have at least 10 toncoins to
+withdraw and can withdraw up to 100000 Toncoins in one transaction.
+*/
+	async getTonWithdrawalUrl(options: Omit<GetTonWithdrawalUrl, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getTonWithdrawalUrl',
 		});
 	}
 
