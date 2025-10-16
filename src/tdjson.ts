@@ -1577,7 +1577,7 @@ codec, and stored inside an OGG container.
 }
 
 /**
-Describes a user contact.
+Describes a contact of a user.
 */
 export interface Contact {
 	'@type': 'contact';
@@ -1586,11 +1586,11 @@ Phone number of the user.
 */
 	phone_number: string;
 	/**
-First name of the user; 1-255 characters in length.
+First name of the user; 1-64 characters.
 */
 	first_name: string;
 	/**
-Last name of the user.
+Last name of the user; 0-64 characters.
 */
 	last_name: string;
 	/**
@@ -2048,6 +2048,10 @@ private and channel chats a bot can always read all messages.
 True, if the bot has the main Web App.
 */
 	has_main_web_app?: boolean;
+	/**
+True, if the bot has topics.
+*/
+	has_topics?: boolean;
 	/**
 True, if the bot supports inline queries.
 */
@@ -3896,6 +3900,16 @@ Price paid by the sender for the gift.
 }
 
 /**
+The gift was assigned from blockchain and isn't owned by the current user. The gift can't be transferred, resold or
+withdrawn to blockchain.
+Subtype of {@link UpgradedGiftOrigin}.
+*/
+export interface UpgradedGiftOriginBlockchain {
+	'@type': 'upgradedGiftOriginBlockchain';
+
+}
+
+/**
 The sender or receiver of the message has paid for upgraid of the gift, which has been completed.
 Subtype of {@link UpgradedGiftOrigin}.
 */
@@ -4012,6 +4026,42 @@ Point in time (Unix timestamp) when the gift was sent.
 }
 
 /**
+Contains information about color scheme for user's name, background of empty chat photo, replies to messages and link
+previews.
+*/
+export interface UpgradedGiftColors {
+	'@type': 'upgradedGiftColors';
+	/**
+Unique identifier of the upgraded gift colors.
+*/
+	id: string;
+	/**
+Custom emoji identifier of the model of the upgraded gift.
+*/
+	model_custom_emoji_id: string;
+	/**
+Custom emoji identifier of the symbol of the upgraded gift.
+*/
+	symbol_custom_emoji_id: string;
+	/**
+Accent color to use in light themes in RGB format.
+*/
+	light_theme_accent_color: number;
+	/**
+The list of 1-3 colors in RGB format, describing the accent color, as expected to be shown in light themes.
+*/
+	light_theme_colors: number[];
+	/**
+Accent color to use in dark themes in RGB format.
+*/
+	dark_theme_accent_color: number;
+	/**
+The list of 1-3 colors in RGB format, describing the accent color, as expected to be shown in dark themes.
+*/
+	dark_theme_colors: number[];
+}
+
+/**
 Describes a gift that can be sent to another user or channel chat.
 */
 export interface Gift {
@@ -4041,6 +4091,11 @@ paid with just bought Telegram Stars, then full value can be claimed.
 Number of Telegram Stars that must be paid to upgrade the gift; 0 if upgrade isn't possible.
 */
 	upgrade_star_count: number;
+	/**
+True, if the gift can be used to customize the user's name, and backgrounds of profile photo, reply header, and link
+preview.
+*/
+	has_colors?: boolean;
 	/**
 True, if the gift is a birthday gift.
 */
@@ -4123,6 +4178,11 @@ Identifier of the chat for which the gift is used to set a theme; 0 if none or t
 */
 	used_theme_chat_id: number;
 	/**
+Identifier of the user or the chat to which the upgraded gift was assigned from blockchain; may be null if none or
+unknown.
+*/
+	host_id: MessageSender;
+	/**
 Identifier of the user or the chat that owns the upgraded gift; may be null if none or unknown.
 */
 	owner_id: MessageSender;
@@ -4156,6 +4216,11 @@ Backdrop of the upgraded gift.
 Information about the originally sent gift; may be null if unknown.
 */
 	original_details: UpgradedGiftOriginalDetails;
+	/**
+Colors that can be set for user's name, background of empty chat photo, replies to messages and link previews; may be
+null if none.
+*/
+	colors: UpgradedGiftColors;
 	/**
 Resale parameters of the gift; may be null if resale isn't possible.
 */
@@ -4262,6 +4327,10 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift.
 */
 	transfer_star_count: number;
 	/**
+Number of Telegram Stars that must be paid to drop original details of the upgraded gift; 0 if not available.
+*/
+	drop_original_details_star_count: number;
+	/**
 Point in time (Unix timestamp) when the gift can be transferred to another owner; can be in the past; 0 if the gift can
 be transferred immediately or transfer isn't possible.
 */
@@ -4309,6 +4378,21 @@ export interface AvailableGifts {
 The list of gifts.
 */
 	gifts: AvailableGift[];
+}
+
+/**
+Describes a price required to pay to upgrade a gift.
+*/
+export interface GiftUpgradePrice {
+	'@type': 'giftUpgradePrice';
+	/**
+Point in time (Unix timestamp) when the price will be in effect.
+*/
+	date: number;
+	/**
+The amount of Telegram Stars required to pay to upgrade the gift.
+*/
+	star_count: number;
 }
 
 /**
@@ -4582,6 +4666,11 @@ Number of Telegram Stars that must be paid to transfer the upgraded gift; only f
 */
 	transfer_star_count: number;
 	/**
+Number of Telegram Stars that must be paid to drop original details of the upgraded gift; 0 if not available; only for
+the receiver of the gift.
+*/
+	drop_original_details_star_count: number;
+	/**
 Point in time (Unix timestamp) when the gift can be transferred to another owner; can be in the past; 0 if the gift can
 be transferred immediately or transfer isn't possible; only for the receiver of the gift.
 */
@@ -4642,6 +4731,14 @@ Examples of possible symbols that can be chosen for the gift after upgrade.
 Examples of possible backdrops that can be chosen for the gift after upgrade.
 */
 	backdrops: UpgradedGiftBackdrop[];
+	/**
+Examples of price for gift upgrade from the maximum price to the minimum price.
+*/
+	prices: GiftUpgradePrice[];
+	/**
+Next changes for the price for gift upgrade with more granularity than in prices.
+*/
+	next_prices: GiftUpgradePrice[];
 }
 
 /**
@@ -4990,6 +5087,22 @@ export interface StarTransactionTypeGiftTransfer {
 	'@type': 'starTransactionTypeGiftTransfer';
 	/**
 Identifier of the user or the channel that received the gift.
+*/
+	owner_id: MessageSender;
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+}
+
+/**
+The transaction is a drop of original details of an upgraded gift; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiftOriginalDetailsDrop {
+	'@type': 'starTransactionTypeGiftOriginalDetailsDrop';
+	/**
+Identifier of the user or the channel that owns the gift.
 */
 	owner_id: MessageSender;
 	/**
@@ -5792,8 +5905,8 @@ toggleBotUsernameIsActive, or toggleSupergroupUsernameIsActive.
 */
 	disabled_usernames: string[];
 	/**
-The active username, which can be changed with setUsername or setSupergroupUsername. Information about other active
-usernames can be received using getCollectibleItemInfo.
+Active or disabled username, which may be changed with setUsername or setSupergroupUsername. Information about other
+active usernames can be received using getCollectibleItemInfo.
 */
 	editable_username: string;
 }
@@ -5839,6 +5952,11 @@ Identifier of the accent color for name, and backgrounds of profile photo, reply
 Identifier of a custom emoji to be shown on the reply header and link preview background; 0 if none.
 */
 	background_custom_emoji_id: string;
+	/**
+Color scheme based on an upgraded gift to be used for the user instead of accent_color_id and
+background_custom_emoji_id; may be null if none.
+*/
+	upgraded_gift_colors: UpgradedGiftColors;
 	/**
 Identifier of the accent color for the user's profile; -1 if none.
 */
@@ -6137,6 +6255,10 @@ no pending rating changes.
 */
 	pending_rating_date: number;
 	/**
+Note added to the user's contact; may be null if none.
+*/
+	note: FormattedText;
+	/**
 Information about business settings for Telegram Business accounts; may be null if none.
 */
 	business_info: BusinessInfo;
@@ -6379,9 +6501,9 @@ Subtype of {@link ChatMembersFilter}.
 export interface ChatMembersFilterMention {
 	'@type': 'chatMembersFilterMention';
 	/**
-If non-zero, the identifier of the current message thread.
+Identifier of the topic in which the users will be mentioned; pass null if none.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 }
 
 /**
@@ -6488,9 +6610,9 @@ Query to search for.
 */
 	query: string;
 	/**
-If non-zero, the identifier of the current message thread.
+Identifier of the topic in which the users will be mentioned; pass null if none.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 }
 
 /**
@@ -6941,8 +7063,8 @@ and channel direct messages groups.
 */
 	join_to_send_messages?: boolean;
 	/**
-True, if all users directly joining the supergroup need to be approved by supergroup administrators. Always false for
-channels and supergroups without username, location, or a linked chat.
+True, if all users directly joining the supergroup need to be approved by supergroup administrators. Can be true only
+for non-broadcast supergroups with username, location, or a linked chat.
 */
 	join_by_request?: boolean;
 	/**
@@ -7759,10 +7881,22 @@ True, if the reaction was added with a big animation.
 Describes a topic of messages in a chat.
 Subtype of {@link MessageTopic}.
 */
+export interface MessageTopicThread {
+	'@type': 'messageTopicThread';
+	/**
+Unique identifier of the message thread.
+*/
+	message_thread_id: number;
+}
+
+/**
+A topic in a forum supergroup chat or a chat with a bot.
+Subtype of {@link MessageTopic}.
+*/
 export interface MessageTopicForum {
 	'@type': 'messageTopicForum';
 	/**
-Unique identifier of the forum topic; all messages in a non-forum supergroup chats belongs to the General topic.
+Unique identifier of the forum topic.
 */
 	forum_topic_id: number;
 }
@@ -8169,11 +8303,6 @@ Information about the suggested post; may be null if the message isn't a suggest
 Information about the message or the story this message is replying to; may be null if none.
 */
 	reply_to: MessageReplyTo;
-	/**
-If non-zero, the identifier of the message thread the message belongs to; unique within the chat to which the message
-belongs.
-*/
-	message_thread_id: number;
 	/**
 Identifier of the topic within the chat to which the message belongs; may be null if none.
 */
@@ -9010,7 +9139,7 @@ Contains information about a message draft.
 export interface DraftMessage {
 	'@type': 'draftMessage';
 	/**
-Information about the message to be replied; must be of the type inputMessageReplyToMessage; may be null if none.
+Information about the message to be replied; inputMessageReplyToStory is unsupported; may be null if none.
 */
 	reply_to: InputMessageReplyTo;
 	/**
@@ -9539,6 +9668,11 @@ Identifier of a custom emoji to be shown on the reply header and link preview ba
 0 if none.
 */
 	background_custom_emoji_id: string;
+	/**
+Color scheme based on an upgraded gift to be used for the chat instead of accent_color_id and
+background_custom_emoji_id; may be null if none.
+*/
+	upgraded_gift_colors: UpgradedGiftColors;
 	/**
 Identifier of the profile accent color for the chat's profile; -1 if none.
 */
@@ -10596,7 +10730,7 @@ True, if the other party can send unpaid messages even if the chat has paid mess
 */
 	can_send_unpaid_messages?: boolean;
 	/**
-True, if the forum topic is marked as unread.
+True, if the topic is marked as unread.
 */
 	is_marked_as_unread?: boolean;
 	/**
@@ -10646,17 +10780,13 @@ Contains basic information about a forum topic.
 export interface ForumTopicInfo {
 	'@type': 'forumTopicInfo';
 	/**
-Identifier of the forum chat to which the topic belongs.
+Identifier of a forum supergroup chat or a chat with a bot to which the topic belongs.
 */
 	chat_id: number;
 	/**
 Forum topic identifier of the topic.
 */
 	forum_topic_id: number;
-	/**
-Message thread identifier of the topic.
-*/
-	message_thread_id: number;
 	/**
 Name of the topic.
 */
@@ -10674,7 +10804,7 @@ Identifier of the creator of the topic.
 */
 	creator_id: MessageSender;
 	/**
-True, if the topic is the General topic list.
+True, if the topic is the General topic.
 */
 	is_general?: boolean;
 	/**
@@ -10690,6 +10820,10 @@ the supergroup or must be the creator of the topic to send messages there.
 True, if the topic is hidden above the topic list and closed; for General topic only.
 */
 	is_hidden?: boolean;
+	/**
+True, if the name of the topic wasn't added explicitly.
+*/
+	is_name_implicit?: boolean;
 }
 
 /**
@@ -10766,9 +10900,9 @@ Offset message identifier for the next getForumTopics request.
 */
 	next_offset_message_id: number;
 	/**
-Offset message thread identifier for the next getForumTopics request.
+Offset forum topic identifier for the next getForumTopics request.
 */
-	next_offset_message_thread_id: number;
+	next_offset_forum_topic_id: number;
 }
 
 /**
@@ -15064,6 +15198,10 @@ Name of the topic.
 */
 	name: string;
 	/**
+True, if the name of the topic wasn't added explicitly.
+*/
+	is_name_implicit?: boolean;
+	/**
 Icon of the topic.
 */
 	icon: ForumTopicIcon;
@@ -15124,6 +15262,18 @@ export interface MessageSuggestProfilePhoto {
 The suggested chat photo. Use the method setProfilePhoto with inputChatPhotoPrevious to apply the photo.
 */
 	photo: ChatPhoto;
+}
+
+/**
+A birthdate was suggested to be set.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageSuggestBirthdate {
+	'@type': 'messageSuggestBirthdate';
+	/**
+The suggested birthdate. Use the method setBirthdate to apply the birthdate.
+*/
+	birthdate: Birthdate;
 }
 
 /**
@@ -15713,6 +15863,11 @@ True, if the gift has already been transferred to another owner; only for the re
 Number of Telegram Stars that must be paid to transfer the upgraded gift; only for the receiver of the gift.
 */
 	transfer_star_count: number;
+	/**
+Number of Telegram Stars that must be paid to drop original details of the upgraded gift; 0 if not available; only for
+the receiver of the gift.
+*/
+	drop_original_details_star_count: number;
 	/**
 Point in time (Unix timestamp) when the gift can be transferred to another owner; can be in the past; 0 if the gift can
 be transferred immediately or transfer isn't possible; only for the receiver of the gift.
@@ -16422,11 +16577,6 @@ Options to be used when a message is sent.
 */
 export interface MessageSendOptions {
 	'@type': 'messageSendOptions';
-	/**
-Unique identifier of the topic in a channel direct messages chat administered by the current user; pass 0 if the chat
-isn't a channel direct messages chat administered by the current user.
-*/
-	direct_messages_chat_topic_id: number;
 	/**
 Information about the suggested post; pass null if none. For messages to channel direct messages chat only. Applicable
 only to sendMessage and addOffer.
@@ -18576,8 +18726,8 @@ True, if the story can be edited.
 */
 	can_be_edited?: boolean;
 	/**
-True, if the story can be forwarded as a message. Otherwise, screenshots and saving of the story content must be also
-forbidden.
+True, if the story can be forwarded as a message or reposted as a story. Otherwise, screenshotting and saving of the
+story content must be also forbidden.
 */
 	can_be_forwarded?: boolean;
 	/**
@@ -19866,6 +20016,14 @@ True, if the current user can enable or disable mute_new_participants setting; f
 */
 	can_toggle_mute_new_participants?: boolean;
 	/**
+True, if users can send messages to the group call.
+*/
+	can_send_messages?: boolean;
+	/**
+True, if the current user can enable or disable sending messages in the group call.
+*/
+	can_toggle_can_send_messages?: boolean;
+	/**
 Duration of the ongoing group call recording, in seconds; 0 if none. An updateGroupCall update is not triggered when
 value of this field changes, but the same recording goes on.
 */
@@ -20490,6 +20648,30 @@ The animated sticker with the center reel.
 The animated sticker with the right reel.
 */
 	right_reel: Sticker;
+}
+
+/**
+Describes a contact to import.
+*/
+export interface ImportedContact {
+	'@type': 'importedContact';
+	/**
+Phone number of the user.
+*/
+	phone_number: string;
+	/**
+First name of the user; 1-64 characters.
+*/
+	first_name: string;
+	/**
+Last name of the user; 0-64 characters.
+*/
+	last_name: string;
+	/**
+Note to add about the user; 0-getOption("user_note_text_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities are allowed; pass null to keep the current user's note.
+*/
+	note: FormattedText;
 }
 
 /**
@@ -25210,6 +25392,15 @@ export interface PushMessageContentSuggestProfilePhoto {
 }
 
 /**
+A birthdate was suggested to be set.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentSuggestBirthdate {
+	'@type': 'pushMessageContentSuggestBirthdate';
+
+}
+
+/**
 A user in the chat came within proximity alert range from the current user.
 Subtype of {@link PushMessageContent}.
 */
@@ -27329,10 +27520,10 @@ If found, identifier of the chat to which the link points, 0 otherwise.
 */
 	chat_id: number;
 	/**
-If found, identifier of the message thread in which to open the message, or a forum topic to open if the message is
-missing.
+Identifier of the specific topic in which the message must be opened, or a topic to open if the message is missing; may
+be null if none.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 	/**
 If found, the linked message; may be null.
 */
@@ -29756,6 +29947,11 @@ The new identifier of a custom emoji to be shown on the reply header and link pr
 */
 	background_custom_emoji_id: string;
 	/**
+Color scheme based on an upgraded gift to be used for the chat instead of accent_color_id and
+background_custom_emoji_id; may be null if none.
+*/
+	upgraded_gift_colors: UpgradedGiftColors;
+	/**
 The new chat profile accent color identifier; -1 if none.
 */
 	profile_accent_color_id: number;
@@ -30417,9 +30613,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Message thread identifier of the topic.
+Forum topic identifier of the topic.
 */
-	message_thread_id: number;
+	forum_topic_id: number;
 	/**
 True, if the topic is pinned in the topic list.
 */
@@ -30595,9 +30791,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-If not 0, the message thread identifier in which the action was performed.
+Identifier of the specific topic in which the action was performed; may be null if none.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 	/**
 Identifier of a message sender performing the action.
 */
@@ -30606,6 +30802,32 @@ Identifier of a message sender performing the action.
 The action.
 */
 	action: ChatAction;
+}
+
+/**
+A new pending text message was received in a chat with a bot. The message must be shown in the chat for at most
+getOption("pending_text_message_period") seconds, replace any other pending message with the same draft_id, and be
+deleted whenever any incoming message from the bot in the message thread is received.
+Subtype of {@link Update}.
+*/
+export interface UpdatePendingTextMessage {
+	'@type': 'updatePendingTextMessage';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The forum topic identifier in which the message will be sent; 0 if none.
+*/
+	forum_topic_id: number;
+	/**
+Unique identifier of the message draft within the message thread.
+*/
+	draft_id: string;
+	/**
+Text of the pending message.
+*/
+	text: FormattedText;
 }
 
 /**
@@ -30994,6 +31216,27 @@ be also different.
 Group call state fingerprint represented as 4 emoji; may be empty if the state isn't verified yet.
 */
 	emojis: string[];
+}
+
+/**
+A new message was received in a group call. It must be shown for at most getOption("group_call_message_show_time_max")
+seconds after receiving.
+Subtype of {@link Update}.
+*/
+export interface UpdateGroupCallNewMessage {
+	'@type': 'updateGroupCallNewMessage';
+	/**
+Identifier of the group call.
+*/
+	group_call_id: number;
+	/**
+Identifier of the sender of the message.
+*/
+	sender_id: MessageSender;
+	/**
+Text of the message.
+*/
+	text: FormattedText;
 }
 
 /**
@@ -32584,6 +32827,7 @@ export type UpgradedGiftOrigin =
 	| UpgradedGiftOriginUpgrade
 	| UpgradedGiftOriginTransfer
 	| UpgradedGiftOriginResale
+	| UpgradedGiftOriginBlockchain
 	| UpgradedGiftOriginPrepaidUpgrade;
 
 export type UpgradedGiftAttributeId =
@@ -32630,6 +32874,7 @@ export type StarTransactionType =
 	| StarTransactionTypeChannelSubscriptionSale
 	| StarTransactionTypeGiftPurchase
 	| StarTransactionTypeGiftTransfer
+	| StarTransactionTypeGiftOriginalDetailsDrop
 	| StarTransactionTypeGiftSale
 	| StarTransactionTypeGiftUpgrade
 	| StarTransactionTypeGiftUpgradePurchase
@@ -32739,6 +32984,7 @@ export type PaidReactionType =
 	| PaidReactionTypeChat;
 
 export type MessageTopic =
+	| MessageTopicThread
 	| MessageTopicForum
 	| MessageTopicDirectMessages
 	| MessageTopicSavedMessages;
@@ -33126,6 +33372,7 @@ export type MessageContent =
 	| MessageForumTopicIsClosedToggled
 	| MessageForumTopicIsHiddenToggled
 	| MessageSuggestProfilePhoto
+	| MessageSuggestBirthdate
 	| MessageCustomServiceAction
 	| MessageGameScore
 	| MessagePaymentSuccessful
@@ -33725,6 +33972,7 @@ export type PushMessageContent =
 	| PushMessageContentChatJoinByRequest
 	| PushMessageContentRecurringPayment
 	| PushMessageContentSuggestProfilePhoto
+	| PushMessageContentSuggestBirthdate
 	| PushMessageContentProximityAlertTriggered
 	| PushMessageContentChecklistTasksAdded
 	| PushMessageContentChecklistTasksDone
@@ -34102,6 +34350,7 @@ export type Update =
 	| UpdateHavePendingNotifications
 	| UpdateDeleteMessages
 	| UpdateChatAction
+	| UpdatePendingTextMessage
 	| UpdateUserStatus
 	| UpdateUser
 	| UpdateBasicGroup
@@ -34125,6 +34374,7 @@ export type Update =
 	| UpdateGroupCallParticipant
 	| UpdateGroupCallParticipants
 	| UpdateGroupCallVerificationState
+	| UpdateGroupCallNewMessage
 	| UpdateNewCallSignalingData
 	| UpdateUserPrivacySettingRules
 	| UpdateUnreadMessageCount
@@ -35666,27 +35916,6 @@ New value of is_marked_as_unread.
 }
 
 /**
-Changes the draft message in the topic in a channel direct messages chat administered by the current user.
-Request type for {@link Tdjson#setDirectMessagesChatTopicDraftMessage}.
-*/
-export interface SetDirectMessagesChatTopicDraftMessage {
-	'@type': 'setDirectMessagesChatTopicDraftMessage';
-	/**
-Chat identifier.
-*/
-	chat_id: number;
-	/**
-Topic identifier.
-*/
-	topic_id: number;
-	/**
-New draft message; pass null to remove the draft. All files in draft message content must be of the type inputFileLocal.
-Media thumbnails and captions are ignored.
-*/
-	draft_message: DraftMessage;
-}
-
-/**
 Removes all pinned messages from the topic in a channel direct messages chat administered by the current user.
 Request type for {@link Tdjson#unpinAllDirectMessagesChatTopicMessages}.
 */
@@ -36476,7 +36705,7 @@ Identifier of the chat in which to return information about messages.
 	chat_id: number;
 	/**
 Pass topic identifier to get the result only in specific topic; pass null to get the result in all topics; forum topics
-aren't supported.
+and message threads aren't supported.
 */
 	topic_id: MessageTopic;
 	/**
@@ -36502,7 +36731,7 @@ Identifier of the chat in which to count messages.
 	chat_id: number;
 	/**
 Pass topic identifier to get number of messages only in specific topic; pass null to get number of messages in all
-topics.
+topics; message threads aren't supported.
 */
 	topic_id: MessageTopic;
 	/**
@@ -36529,7 +36758,7 @@ Identifier of the chat in which to find message position.
 	chat_id: number;
 	/**
 Pass topic identifier to get position among messages only in specific topic; pass null to get position among all chat
-messages.
+messages; message threads aren't supported.
 */
 	topic_id: MessageTopic;
 	/**
@@ -36944,9 +37173,9 @@ Target chat.
 */
 	chat_id: number;
 	/**
-If not 0, the message thread identifier in which the message will be sent.
+Topic in which the message will be sent; pass null if none.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 	/**
 Information about the message or story to be replied; pass null if none.
 */
@@ -36978,9 +37207,9 @@ Target chat.
 */
 	chat_id: number;
 	/**
-If not 0, the message thread identifier in which the messages will be sent.
+Topic in which the messages will be sent; pass null if none.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 	/**
 Information about the message or story to be replied; pass null if none.
 */
@@ -37029,9 +37258,9 @@ Target chat.
 */
 	chat_id: number;
 	/**
-If not 0, the message thread identifier in which the message will be sent.
+Topic in which the message will be sent; pass null if none.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 	/**
 Information about the message or story to be replied; pass null if none.
 */
@@ -37068,9 +37297,9 @@ Identifier of the chat to which to forward messages.
 */
 	chat_id: number;
 	/**
-If not 0, the message thread identifier in which the message will be sent; for forum threads only.
+Topic in which the messages will be forwarded; message threads aren't supported; pass null if none.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 	/**
 Identifier of the chat from which to forward messages.
 */
@@ -38301,8 +38530,8 @@ export interface GetForumTopicDefaultIcons {
 }
 
 /**
-Creates a topic in a forum supergroup chat; requires can_manage_topics administrator or can_create_topics member right
-in the supergroup.
+Creates a topic in a forum supergroup chat or a chat with a bot with topics; requires can_manage_topics administrator or
+can_create_topics member right in the supergroup.
 Request type for {@link Tdjson#createForumTopic}.
 */
 export interface CreateForumTopic {
@@ -38316,6 +38545,10 @@ Name of the topic; 1-128 characters.
 */
 	name: string;
 	/**
+Pass true if the name of the topic wasn't entered explicitly; for chats with bots only.
+*/
+	is_name_implicit?: boolean;
+	/**
 Icon of the topic. Icon color must be one of 0x6FB9F0, 0xFFD67E, 0xCB86DB, 0x8EEE98, 0xFF93B2, or 0xFB6F5F. Telegram
 Premium users can use any custom emoji as topic icon, other users can use only a custom emoji returned by
 getForumTopicDefaultIcons.
@@ -38324,8 +38557,8 @@ getForumTopicDefaultIcons.
 }
 
 /**
-Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics administrator right in the
-supergroup unless the user is creator of the topic.
+Edits title and icon of a topic in a forum supergroup chat or a chat with a bot with topics; for supergroup chats
+requires can_manage_topics administrator right unless the user is creator of the topic.
 Request type for {@link Tdjson#editForumTopic}.
 */
 export interface EditForumTopic {
@@ -38335,9 +38568,9 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Message thread identifier of the forum topic.
+Forum topic identifier.
 */
-	message_thread_id: number;
+	forum_topic_id: number;
 	/**
 New name of the topic; 0-128 characters. If empty, the previous topic name is kept.
 */
@@ -38355,7 +38588,7 @@ getForumTopicDefaultIcons.
 }
 
 /**
-Returns information about a forum topic.
+Returns information about a topic in a forum supergroup chat or a chat with a bot with topics.
 Request type for {@link Tdjson#getForumTopic}.
 */
 export interface GetForumTopic {
@@ -38365,13 +38598,46 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Message thread identifier of the forum topic.
+Forum topic identifier.
 */
-	message_thread_id: number;
+	forum_topic_id: number;
 }
 
 /**
-Returns an HTTPS link to a topic in a forum chat. This is an offline method.
+Returns messages in a topic in a forum supergroup chat or a chat with a bot with topics. The messages are returned in
+reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned
+messages is chosen by TDLib.
+Request type for {@link Tdjson#getForumTopicHistory}.
+*/
+export interface GetForumTopicHistory {
+	'@type': 'getForumTopicHistory';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Forum topic identifier.
+*/
+	forum_topic_id: number;
+	/**
+Identifier of the message starting from which history must be fetched; use 0 to get results from the last message.
+*/
+	from_message_id: number;
+	/**
+Specify 0 to get results from exactly the message from_message_id or a negative number from -99 to -1 to get
+additionally -offset newer messages.
+*/
+	offset: number;
+	/**
+The maximum number of messages to be returned; must be positive and can't be greater than 100. If the offset is
+negative, then the limit must be greater than or equal to -offset. For optimal performance, the number of returned
+messages is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
+Returns an HTTPS link to a topic in a forum supergroup chat. This is an offline method.
 Request type for {@link Tdjson#getForumTopicLink}.
 */
 export interface GetForumTopicLink {
@@ -38381,20 +38647,20 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Message thread identifier of the forum topic.
+Forum topic identifier.
 */
-	message_thread_id: number;
+	forum_topic_id: number;
 }
 
 /**
-Returns found forum topics in a forum chat. This is a temporary method for getting information about topic list from the
-server.
+Returns found forum topics in a forum supergroup chat or a chat with a bot with topics. This is a temporary method for
+getting information about topic list from the server.
 Request type for {@link Tdjson#getForumTopics}.
 */
 export interface GetForumTopics {
 	'@type': 'getForumTopics';
 	/**
-Identifier of the forum chat.
+Identifier of the chat.
 */
 	chat_id: number;
 	/**
@@ -38411,9 +38677,9 @@ The message identifier of the last message in the last found topic, or 0 for the
 */
 	offset_message_id: number;
 	/**
-The message thread identifier of the last found topic, or 0 for the first request.
+The forum topic identifier of the last found topic, or 0 for the first request.
 */
-	offset_message_thread_id: number;
+	offset_forum_topic_id: number;
 	/**
 The maximum number of forum topics to be returned; up to 100. For optimal performance, the number of returned forum
 topics is chosen by TDLib and can be smaller than the specified limit.
@@ -38422,7 +38688,7 @@ topics is chosen by TDLib and can be smaller than the specified limit.
 }
 
 /**
-Changes the notification settings of a forum topic.
+Changes the notification settings of a forum topic in a forum supergroup chat or a chat with a bot with topics.
 Request type for {@link Tdjson#setForumTopicNotificationSettings}.
 */
 export interface SetForumTopicNotificationSettings {
@@ -38432,9 +38698,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Message thread identifier of the forum topic.
+Forum topic identifier.
 */
-	message_thread_id: number;
+	forum_topic_id: number;
 	/**
 New notification settings for the forum topic. If the topic is muted for more than 366 days, it is considered to be
 muted forever.
@@ -38454,9 +38720,9 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Message thread identifier of the forum topic.
+Forum topic identifier.
 */
-	message_thread_id: number;
+	forum_topic_id: number;
 	/**
 Pass true to close the topic; pass false to reopen it.
 */
@@ -38481,8 +38747,9 @@ Pass true to hide and close the General topic; pass false to unhide it.
 }
 
 /**
-Changes the pinned state of a forum topic; requires can_manage_topics administrator right in the supergroup. There can
-be up to getOption("pinned_forum_topic_count_max") pinned forum topics.
+Changes the pinned state of a topic in a forum supergroup chat or a chat with a bot with topics; requires
+can_manage_topics administrator right in the supergroup. There can be up to getOption("pinned_forum_topic_count_max")
+pinned forum topics.
 Request type for {@link Tdjson#toggleForumTopicIsPinned}.
 */
 export interface ToggleForumTopicIsPinned {
@@ -38492,9 +38759,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Message thread identifier of the forum topic.
+Forum topic identifier.
 */
-	message_thread_id: number;
+	forum_topic_id: number;
 	/**
 Pass true to pin the topic; pass false to unpin it.
 */
@@ -38502,7 +38769,8 @@ Pass true to pin the topic; pass false to unpin it.
 }
 
 /**
-Changes the order of pinned forum topics; requires can_manage_topics administrator right in the supergroup.
+Changes the order of pinned topics in a forum supergroup chat or a chat with a bot with topics; requires
+can_manage_topics administrator right in the supergroup.
 Request type for {@link Tdjson#setPinnedForumTopics}.
 */
 export interface SetPinnedForumTopics {
@@ -38512,14 +38780,15 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-The new list of pinned forum topics.
+The new list of identifiers of the pinned forum topics.
 */
-	message_thread_ids: number[];
+	forum_topic_ids: number[];
 }
 
 /**
-Deletes all messages in a forum topic; requires can_delete_messages administrator right in the supergroup unless the
-user is creator of the topic, the topic has no messages from other users and has at most 11 messages.
+Deletes all messages from a topic in a forum supergroup chat or a chat with a bot with topics; requires
+can_delete_messages administrator right in the supergroup unless the user is creator of the topic, the topic has no
+messages from other users and has at most 11 messages.
 Request type for {@link Tdjson#deleteForumTopic}.
 */
 export interface DeleteForumTopic {
@@ -38529,9 +38798,58 @@ Identifier of the chat.
 */
 	chat_id: number;
 	/**
-Message thread identifier of the forum topic.
+Forum topic identifier.
 */
-	message_thread_id: number;
+	forum_topic_id: number;
+}
+
+/**
+Marks all mentions in a topic in a forum supergroup chat as read.
+Request type for {@link Tdjson#readAllForumTopicMentions}.
+*/
+export interface ReadAllForumTopicMentions {
+	'@type': 'readAllForumTopicMentions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Forum topic identifier in which mentions are marked as read.
+*/
+	forum_topic_id: number;
+}
+
+/**
+Marks all reactions in a topic in a forum supergroup chat or a chat with a bot with topics as read.
+Request type for {@link Tdjson#readAllForumTopicReactions}.
+*/
+export interface ReadAllForumTopicReactions {
+	'@type': 'readAllForumTopicReactions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Forum topic identifier in which reactions are marked as read.
+*/
+	forum_topic_id: number;
+}
+
+/**
+Removes all pinned messages from a topic in a forum supergroup chat or a chat with a bot with topics; requires
+can_pin_messages member right in the supergroup.
+Request type for {@link Tdjson#unpinAllForumTopicMessages}.
+*/
+export interface UnpinAllForumTopicMessages {
+	'@type': 'unpinAllForumTopicMessages';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+	/**
+Forum topic identifier in which messages will be unpinned.
+*/
+	forum_topic_id: number;
 }
 
 /**
@@ -39547,13 +39865,9 @@ link, or an empty string otherwise.
 */
 	url: string;
 	/**
-If not 0, the message thread identifier to which the message will be sent.
+Topic in which the message will be sent; pass null if none.
 */
-	message_thread_id: number;
-	/**
-If not 0, unique identifier of the topic of channel direct messages chat to which the message will be sent.
-*/
-	direct_messages_chat_topic_id: number;
+	topic_id: MessageTopic;
 	/**
 Information about the message or story to be replied in the message sent by the Web App; pass null if none.
 */
@@ -39799,7 +40113,7 @@ User identifier.
 
 /**
 Deletes the default reply markup from a chat. Must be called after a one-time keyboard or a replyMarkupForceReply reply
-markup has been used. An updateChatReplyMarkup update will be sent if the reply markup is changed.
+markup has been used or dismissed.
 Request type for {@link Tdjson#deleteChatReplyMarkup}.
 */
 export interface DeleteChatReplyMarkup {
@@ -39825,9 +40139,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-If not 0, the message thread identifier in which the action was performed.
+Identifier of the topic in which the action is performed.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 	/**
 Unique identifier of business connection on behalf of which to send the request; for bots only.
 */
@@ -39836,6 +40150,30 @@ Unique identifier of business connection on behalf of which to send the request;
 The action description; pass null to cancel the currently active action.
 */
 	action: ChatAction;
+}
+
+/**
+Sends a draft for a being generated text message; for bots only.
+Request type for {@link Tdjson#sendTextMessageDraft}.
+*/
+export interface SendTextMessageDraft {
+	'@type': 'sendTextMessageDraft';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The forum topic identifier in which the message will be sent; pass 0 if none.
+*/
+	forum_topic_id: number;
+	/**
+Unique identifier of the draft.
+*/
+	draft_id: string;
+	/**
+Draft text of the message.
+*/
+	text: FormattedText;
 }
 
 /**
@@ -39997,23 +40335,7 @@ Chat identifier.
 }
 
 /**
-Marks all mentions in a forum topic as read.
-Request type for {@link Tdjson#readAllMessageThreadMentions}.
-*/
-export interface ReadAllMessageThreadMentions {
-	'@type': 'readAllMessageThreadMentions';
-	/**
-Chat identifier.
-*/
-	chat_id: number;
-	/**
-Message thread identifier in which mentions are marked as read.
-*/
-	message_thread_id: number;
-}
-
-/**
-Marks all reactions in a chat or a forum topic as read.
+Marks all reactions in a chat as read.
 Request type for {@link Tdjson#readAllChatReactions}.
 */
 export interface ReadAllChatReactions {
@@ -40022,22 +40344,6 @@ export interface ReadAllChatReactions {
 Chat identifier.
 */
 	chat_id: number;
-}
-
-/**
-Marks all reactions in a forum topic as read.
-Request type for {@link Tdjson#readAllMessageThreadReactions}.
-*/
-export interface ReadAllMessageThreadReactions {
-	'@type': 'readAllMessageThreadReactions';
-	/**
-Chat identifier.
-*/
-	chat_id: number;
-	/**
-Message thread identifier in which reactions are marked as read.
-*/
-	message_thread_id: number;
 }
 
 /**
@@ -40735,7 +41041,7 @@ New chat theme; pass null to return the default theme.
 }
 
 /**
-Changes the draft message in a chat.
+Changes the draft message in a chat or a topic.
 Request type for {@link Tdjson#setChatDraftMessage}.
 */
 export interface SetChatDraftMessage {
@@ -40745,9 +41051,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-If not 0, the message thread identifier in which the draft was changed.
+Topic in which the draft will be changed; pass null to change the draft for the chat itself.
 */
-	message_thread_id: number;
+	topic_id: MessageTopic;
 	/**
 New draft message; pass null to remove the draft. All files in draft message content must be of the type inputFileLocal.
 Media thumbnails and captions are ignored.
@@ -40979,7 +41285,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-New slow mode delay for the chat, in seconds; must be one of 0, 10, 30, 60, 300, 900, 3600.
+New slow mode delay for the chat, in seconds; must be one of 0, 5, 10, 30, 60, 300, 900, 3600.
 */
 	slow_mode_delay: number;
 }
@@ -41037,22 +41343,6 @@ export interface UnpinAllChatMessages {
 Identifier of the chat.
 */
 	chat_id: number;
-}
-
-/**
-Removes all pinned messages from a forum topic; requires can_pin_messages member right in the supergroup.
-Request type for {@link Tdjson#unpinAllMessageThreadMessages}.
-*/
-export interface UnpinAllMessageThreadMessages {
-	'@type': 'unpinAllMessageThreadMessages';
-	/**
-Identifier of the chat.
-*/
-	chat_id: number;
-	/**
-Message thread identifier in which messages will be unpinned.
-*/
-	message_thread_id: number;
 }
 
 /**
@@ -43597,6 +43887,39 @@ New value of the mute_new_participants setting.
 }
 
 /**
+Toggles whether participants of a group call can send messages there. Requires groupCall.can_toggle_can_send_messages
+right.
+Request type for {@link Tdjson#toggleGroupCallCanSendMessages}.
+*/
+export interface ToggleGroupCallCanSendMessages {
+	'@type': 'toggleGroupCallCanSendMessages';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+New value of the can_send_messages setting.
+*/
+	can_send_messages?: boolean;
+}
+
+/**
+Sends a message to other participants of a group call. Requires groupCall.can_send_messages right.
+Request type for {@link Tdjson#sendGroupCallMessage}.
+*/
+export interface SendGroupCallMessage {
+	'@type': 'sendGroupCallMessage';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Text of the message to send; 1-getOption("group_call_message_text_length_max") characters.
+*/
+	text: FormattedText;
+}
+
+/**
 Invites a user to an active group call; for group calls not bound to a chat only. Sends a service message of the type
 messageGroupCall. The group call can have at most getOption("group_call_participant_count_max") participants.
 Request type for {@link Tdjson#inviteGroupCallParticipant}.
@@ -44064,9 +44387,13 @@ Request type for {@link Tdjson#addContact}.
 export interface AddContact {
 	'@type': 'addContact';
 	/**
-The contact to add or edit; phone number may be empty and needs to be specified only if known, vCard is ignored.
+Identifier of the user.
 */
-	contact: Contact;
+	user_id: number;
+	/**
+The contact to add or edit; phone number may be empty and needs to be specified only if known.
+*/
+	contact: ImportedContact;
 	/**
 Pass true to share the current user's phone number with the new contact. A corresponding rule to
 userPrivacySettingShowPhoneNumber will be added if needed. Use the field
@@ -44083,9 +44410,9 @@ Request type for {@link Tdjson#importContacts}.
 export interface ImportContacts {
 	'@type': 'importContacts';
 	/**
-The list of contacts to import or edit; contacts' vCard are ignored and are not imported.
+The list of contacts to import or edit.
 */
-	contacts: Contact[];
+	contacts: ImportedContact[];
 }
 
 /**
@@ -44143,9 +44470,9 @@ Request type for {@link Tdjson#changeImportedContacts}.
 export interface ChangeImportedContacts {
 	'@type': 'changeImportedContacts';
 	/**
-The new list of contacts, contact's vCard are ignored and are not imported.
+The new list of contacts to import.
 */
-	contacts: Contact[];
+	contacts: ImportedContact[];
 }
 
 /**
@@ -44195,6 +44522,23 @@ Profile photo to set; pass null to delete the photo; inputChatPhotoPrevious isn'
 }
 
 /**
+Changes a note of a contact user.
+Request type for {@link Tdjson#setUserNote}.
+*/
+export interface SetUserNote {
+	'@type': 'setUserNote';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+Note to set for the user; 0-getOption("user_note_text_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+*/
+	note: FormattedText;
+}
+
+/**
 Suggests a profile photo to another regular user with common messages and allowing non-paid messages.
 Request type for {@link Tdjson#suggestUserProfilePhoto}.
 */
@@ -44208,6 +44552,22 @@ User identifier.
 Profile photo to suggest; inputChatPhotoPrevious isn't supported in this function.
 */
 	photo: InputChatPhoto;
+}
+
+/**
+Suggests a birthdate to another regular user with common messages and allowing non-paid messages.
+Request type for {@link Tdjson#suggestUserBirthdate}.
+*/
+export interface SuggestUserBirthdate {
+	'@type': 'suggestUserBirthdate';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+Birthdate to suggest.
+*/
+	birthdate: Birthdate;
 }
 
 /**
@@ -45059,6 +45419,18 @@ Identifier of a custom emoji to be shown on the reply header and link preview ba
 }
 
 /**
+Changes color scheme for the current user based on an owned or a hosted upgraded gift; for Telegram Premium users only.
+Request type for {@link Tdjson#setUpgradedGiftColors}.
+*/
+export interface SetUpgradedGiftColors {
+	'@type': 'setUpgradedGiftColors';
+	/**
+Identifier of the upgradedGiftColors scheme to use.
+*/
+	upgraded_gift_colors_id: string;
+}
+
+/**
 Changes accent color and background custom emoji for profile of the current user; for Telegram Premium users only.
 Request type for {@link Tdjson#setProfileAccentColor}.
 */
@@ -45805,9 +46177,9 @@ Profile photo to set; pass null to delete the chat photo.
 }
 
 /**
-Changes active state for a username of a bot. The editable username can't be disabled. May return an error with a
-message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum number of active usernames has been reached. Can be called only if
-userTypeBot.can_be_edited == true.
+Changes active state for a username of a bot. The editable username can be disabled only if there are other active
+usernames. May return an error with a message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum number of active usernames has
+been reached. Can be called only if userTypeBot.can_be_edited == true.
 Request type for {@link Tdjson#toggleBotUsernameIsActive}.
 */
 export interface ToggleBotUsernameIsActive {
@@ -46256,7 +46628,7 @@ Request type for {@link Tdjson#toggleSupergroupJoinByRequest}.
 export interface ToggleSupergroupJoinByRequest {
 	'@type': 'toggleSupergroupJoinByRequest';
 	/**
-Identifier of the supergroup that isn't a broadcast group.
+Identifier of the supergroup that isn't a broadcast group and isn't a channel direct message group.
 */
 	supergroup_id: number;
 	/**
@@ -46824,6 +47196,22 @@ The amount of Telegram Stars required to pay for the transfer.
 }
 
 /**
+Drops original details for an upgraded gift.
+Request type for {@link Tdjson#dropGiftOriginalDetails}.
+*/
+export interface DropGiftOriginalDetails {
+	'@type': 'dropGiftOriginalDetails';
+	/**
+Identifier of the gift.
+*/
+	received_gift_id: string;
+	/**
+The amount of Telegram Stars required to pay for the operation.
+*/
+	star_count: number;
+}
+
+/**
 Sends an upgraded gift that is available for resale to another user or channel chat; gifts already owned by the current
 user must be transferred using transferGift and can't be passed to the method.
 Request type for {@link Tdjson#sendResoldGift}.
@@ -46889,6 +47277,14 @@ Pass true to exclude gifts that can be purchased limited number of times and can
 Pass true to exclude upgraded gifts.
 */
 	exclude_upgraded?: boolean;
+	/**
+Pass true to exclude gifts that can't be used in setUpgradedGiftColors.
+*/
+	exclude_without_colors?: boolean;
+	/**
+Pass true to exclude gifts that are just hosted and are not owned by the owner.
+*/
+	exclude_hosted?: boolean;
 	/**
 Pass true to sort results by gift price instead of send date.
 */
@@ -49975,7 +50371,6 @@ export type Request =
 	| DeleteDirectMessagesChatTopicHistory
 	| DeleteDirectMessagesChatTopicMessagesByDate
 	| SetDirectMessagesChatTopicIsMarkedAsUnread
-	| SetDirectMessagesChatTopicDraftMessage
 	| UnpinAllDirectMessagesChatTopicMessages
 	| ReadAllDirectMessagesChatTopicReactions
 	| GetDirectMessagesChatTopicRevenue
@@ -50098,6 +50493,7 @@ export type Request =
 	| CreateForumTopic
 	| EditForumTopic
 	| GetForumTopic
+	| GetForumTopicHistory
 	| GetForumTopicLink
 	| GetForumTopics
 	| SetForumTopicNotificationSettings
@@ -50106,6 +50502,9 @@ export type Request =
 	| ToggleForumTopicIsPinned
 	| SetPinnedForumTopics
 	| DeleteForumTopic
+	| ReadAllForumTopicMentions
+	| ReadAllForumTopicReactions
+	| UnpinAllForumTopicMessages
 	| GetEmojiReaction
 	| GetCustomEmojiReactionAnimations
 	| GetMessageAvailableReactions
@@ -50173,6 +50572,7 @@ export type Request =
 	| GetInlineGameHighScores
 	| DeleteChatReplyMarkup
 	| SendChatAction
+	| SendTextMessageDraft
 	| OpenChat
 	| CloseChat
 	| ViewMessages
@@ -50183,9 +50583,7 @@ export type Request =
 	| GetExternalLinkInfo
 	| GetExternalLink
 	| ReadAllChatMentions
-	| ReadAllMessageThreadMentions
 	| ReadAllChatReactions
-	| ReadAllMessageThreadReactions
 	| CreatePrivateChat
 	| CreateBasicGroupChat
 	| CreateSupergroupChat
@@ -50245,7 +50643,6 @@ export type Request =
 	| PinChatMessage
 	| UnpinChatMessage
 	| UnpinAllChatMessages
-	| UnpinAllMessageThreadMessages
 	| JoinChat
 	| LeaveChat
 	| AddChatMember
@@ -50388,6 +50785,8 @@ export type Request =
 	| EndGroupCallScreenSharing
 	| SetVideoChatTitle
 	| ToggleVideoChatMuteNewParticipants
+	| ToggleGroupCallCanSendMessages
+	| SendGroupCallMessage
 	| InviteGroupCallParticipant
 	| DeclineGroupCallInvitation
 	| BanGroupCallParticipants
@@ -50424,7 +50823,9 @@ export type Request =
 	| SetCloseFriends
 	| GetCloseFriends
 	| SetUserPersonalProfilePhoto
+	| SetUserNote
 	| SuggestUserProfilePhoto
+	| SuggestUserBirthdate
 	| ToggleBotCanManageEmojiStatus
 	| SetUserEmojiStatus
 	| SearchUserByPhoneNumber
@@ -50482,6 +50883,7 @@ export type Request =
 	| SetProfilePhoto
 	| DeleteProfilePhoto
 	| SetAccentColor
+	| SetUpgradedGiftColors
 	| SetProfileAccentColor
 	| SetName
 	| SetBio
@@ -50595,6 +50997,7 @@ export type Request =
 	| UpgradeGift
 	| BuyGiftUpgrade
 	| TransferGift
+	| DropGiftOriginalDetails
 	| SendResoldGift
 	| GetReceivedGifts
 	| GetReceivedGift
@@ -51819,16 +52222,6 @@ Changes the marked as unread state of the topic in a channel direct messages cha
 		return this._request({
 			...options,
 			'@type': 'setDirectMessagesChatTopicIsMarkedAsUnread',
-		});
-	}
-
-	/**
-Changes the draft message in the topic in a channel direct messages chat administered by the current user.
-*/
-	async setDirectMessagesChatTopicDraftMessage(options: Omit<SetDirectMessagesChatTopicDraftMessage, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'setDirectMessagesChatTopicDraftMessage',
 		});
 	}
 
@@ -53104,8 +53497,8 @@ Returns the list of custom emoji, which can be used as forum topic icon by all u
 	}
 
 	/**
-Creates a topic in a forum supergroup chat; requires can_manage_topics administrator or can_create_topics member right
-in the supergroup.
+Creates a topic in a forum supergroup chat or a chat with a bot with topics; requires can_manage_topics administrator or
+can_create_topics member right in the supergroup.
 */
 	async createForumTopic(options: Omit<CreateForumTopic, '@type'>): Promise<ForumTopicInfo> {
 		return this._request({
@@ -53115,8 +53508,8 @@ in the supergroup.
 	}
 
 	/**
-Edits title and icon of a topic in a forum supergroup chat; requires can_manage_topics administrator right in the
-supergroup unless the user is creator of the topic.
+Edits title and icon of a topic in a forum supergroup chat or a chat with a bot with topics; for supergroup chats
+requires can_manage_topics administrator right unless the user is creator of the topic.
 */
 	async editForumTopic(options: Omit<EditForumTopic, '@type'>): Promise<Ok> {
 		return this._request({
@@ -53126,7 +53519,7 @@ supergroup unless the user is creator of the topic.
 	}
 
 	/**
-Returns information about a forum topic.
+Returns information about a topic in a forum supergroup chat or a chat with a bot with topics.
 */
 	async getForumTopic(options: Omit<GetForumTopic, '@type'>): Promise<ForumTopic> {
 		return this._request({
@@ -53136,7 +53529,19 @@ Returns information about a forum topic.
 	}
 
 	/**
-Returns an HTTPS link to a topic in a forum chat. This is an offline method.
+Returns messages in a topic in a forum supergroup chat or a chat with a bot with topics. The messages are returned in
+reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned
+messages is chosen by TDLib.
+*/
+	async getForumTopicHistory(options: Omit<GetForumTopicHistory, '@type'>): Promise<Messages> {
+		return this._request({
+			...options,
+			'@type': 'getForumTopicHistory',
+		});
+	}
+
+	/**
+Returns an HTTPS link to a topic in a forum supergroup chat. This is an offline method.
 */
 	async getForumTopicLink(options: Omit<GetForumTopicLink, '@type'>): Promise<MessageLink> {
 		return this._request({
@@ -53146,8 +53551,8 @@ Returns an HTTPS link to a topic in a forum chat. This is an offline method.
 	}
 
 	/**
-Returns found forum topics in a forum chat. This is a temporary method for getting information about topic list from the
-server.
+Returns found forum topics in a forum supergroup chat or a chat with a bot with topics. This is a temporary method for
+getting information about topic list from the server.
 */
 	async getForumTopics(options: Omit<GetForumTopics, '@type'>): Promise<ForumTopics> {
 		return this._request({
@@ -53157,7 +53562,7 @@ server.
 	}
 
 	/**
-Changes the notification settings of a forum topic.
+Changes the notification settings of a forum topic in a forum supergroup chat or a chat with a bot with topics.
 */
 	async setForumTopicNotificationSettings(options: Omit<SetForumTopicNotificationSettings, '@type'>): Promise<Ok> {
 		return this._request({
@@ -53189,8 +53594,9 @@ the supergroup.
 	}
 
 	/**
-Changes the pinned state of a forum topic; requires can_manage_topics administrator right in the supergroup. There can
-be up to getOption("pinned_forum_topic_count_max") pinned forum topics.
+Changes the pinned state of a topic in a forum supergroup chat or a chat with a bot with topics; requires
+can_manage_topics administrator right in the supergroup. There can be up to getOption("pinned_forum_topic_count_max")
+pinned forum topics.
 */
 	async toggleForumTopicIsPinned(options: Omit<ToggleForumTopicIsPinned, '@type'>): Promise<Ok> {
 		return this._request({
@@ -53200,7 +53606,8 @@ be up to getOption("pinned_forum_topic_count_max") pinned forum topics.
 	}
 
 	/**
-Changes the order of pinned forum topics; requires can_manage_topics administrator right in the supergroup.
+Changes the order of pinned topics in a forum supergroup chat or a chat with a bot with topics; requires
+can_manage_topics administrator right in the supergroup.
 */
 	async setPinnedForumTopics(options: Omit<SetPinnedForumTopics, '@type'>): Promise<Ok> {
 		return this._request({
@@ -53210,13 +53617,45 @@ Changes the order of pinned forum topics; requires can_manage_topics administrat
 	}
 
 	/**
-Deletes all messages in a forum topic; requires can_delete_messages administrator right in the supergroup unless the
-user is creator of the topic, the topic has no messages from other users and has at most 11 messages.
+Deletes all messages from a topic in a forum supergroup chat or a chat with a bot with topics; requires
+can_delete_messages administrator right in the supergroup unless the user is creator of the topic, the topic has no
+messages from other users and has at most 11 messages.
 */
 	async deleteForumTopic(options: Omit<DeleteForumTopic, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'deleteForumTopic',
+		});
+	}
+
+	/**
+Marks all mentions in a topic in a forum supergroup chat as read.
+*/
+	async readAllForumTopicMentions(options: Omit<ReadAllForumTopicMentions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readAllForumTopicMentions',
+		});
+	}
+
+	/**
+Marks all reactions in a topic in a forum supergroup chat or a chat with a bot with topics as read.
+*/
+	async readAllForumTopicReactions(options: Omit<ReadAllForumTopicReactions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readAllForumTopicReactions',
+		});
+	}
+
+	/**
+Removes all pinned messages from a topic in a forum supergroup chat or a chat with a bot with topics; requires
+can_pin_messages member right in the supergroup.
+*/
+	async unpinAllForumTopicMessages(options: Omit<UnpinAllForumTopicMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'unpinAllForumTopicMessages',
 		});
 	}
 
@@ -53893,7 +54332,7 @@ Returns game high scores and some part of the high score table in the range of t
 
 	/**
 Deletes the default reply markup from a chat. Must be called after a one-time keyboard or a replyMarkupForceReply reply
-markup has been used. An updateChatReplyMarkup update will be sent if the reply markup is changed.
+markup has been used or dismissed.
 */
 	async deleteChatReplyMarkup(options: Omit<DeleteChatReplyMarkup, '@type'>): Promise<Ok> {
 		return this._request({
@@ -53909,6 +54348,16 @@ Sends a notification about user activity in a chat.
 		return this._request({
 			...options,
 			'@type': 'sendChatAction',
+		});
+	}
+
+	/**
+Sends a draft for a being generated text message; for bots only.
+*/
+	async sendTextMessageDraft(options: Omit<SendTextMessageDraft, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'sendTextMessageDraft',
 		});
 	}
 
@@ -54023,32 +54472,12 @@ Marks all mentions in a chat as read.
 	}
 
 	/**
-Marks all mentions in a forum topic as read.
-*/
-	async readAllMessageThreadMentions(options: Omit<ReadAllMessageThreadMentions, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'readAllMessageThreadMentions',
-		});
-	}
-
-	/**
-Marks all reactions in a chat or a forum topic as read.
+Marks all reactions in a chat as read.
 */
 	async readAllChatReactions(options: Omit<ReadAllChatReactions, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'readAllChatReactions',
-		});
-	}
-
-	/**
-Marks all reactions in a forum topic as read.
-*/
-	async readAllMessageThreadReactions(options: Omit<ReadAllMessageThreadReactions, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'readAllMessageThreadReactions',
 		});
 	}
 
@@ -54488,7 +54917,7 @@ Changes the chat theme. Supported only in private and secret chats.
 	}
 
 	/**
-Changes the draft message in a chat.
+Changes the draft message in a chat or a topic.
 */
 	async setChatDraftMessage(options: Omit<SetChatDraftMessage, '@type'>): Promise<Ok> {
 		return this._request({
@@ -54663,16 +55092,6 @@ supergroup, or can_edit_messages administrator right if the chat is a channel.
 		return this._request({
 			...options,
 			'@type': 'unpinAllChatMessages',
-		});
-	}
-
-	/**
-Removes all pinned messages from a forum topic; requires can_pin_messages member right in the supergroup.
-*/
-	async unpinAllMessageThreadMessages(options: Omit<UnpinAllMessageThreadMessages, '@type'>): Promise<Ok> {
-		return this._request({
-			...options,
-			'@type': 'unpinAllMessageThreadMessages',
 		});
 	}
 
@@ -56149,6 +56568,27 @@ groupCall.can_toggle_mute_new_participants right.
 	}
 
 	/**
+Toggles whether participants of a group call can send messages there. Requires groupCall.can_toggle_can_send_messages
+right.
+*/
+	async toggleGroupCallCanSendMessages(options: Omit<ToggleGroupCallCanSendMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleGroupCallCanSendMessages',
+		});
+	}
+
+	/**
+Sends a message to other participants of a group call. Requires groupCall.can_send_messages right.
+*/
+	async sendGroupCallMessage(options: Omit<SendGroupCallMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'sendGroupCallMessage',
+		});
+	}
+
+	/**
 Invites a user to an active group call; for group calls not bound to a chat only. Sends a service message of the type
 messageGroupCall. The group call can have at most getOption("group_call_participant_count_max") participants.
 */
@@ -56516,12 +56956,32 @@ Changes a personal profile photo of a contact user.
 	}
 
 	/**
+Changes a note of a contact user.
+*/
+	async setUserNote(options: Omit<SetUserNote, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setUserNote',
+		});
+	}
+
+	/**
 Suggests a profile photo to another regular user with common messages and allowing non-paid messages.
 */
 	async suggestUserProfilePhoto(options: Omit<SuggestUserProfilePhoto, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'suggestUserProfilePhoto',
+		});
+	}
+
+	/**
+Suggests a birthdate to another regular user with common messages and allowing non-paid messages.
+*/
+	async suggestUserBirthdate(options: Omit<SuggestUserBirthdate, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'suggestUserBirthdate',
 		});
 	}
 
@@ -57105,6 +57565,16 @@ Changes accent color and background custom emoji for the current user; for Teleg
 	}
 
 	/**
+Changes color scheme for the current user based on an owned or a hosted upgraded gift; for Telegram Premium users only.
+*/
+	async setUpgradedGiftColors(options: Omit<SetUpgradedGiftColors, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setUpgradedGiftColors',
+		});
+	}
+
+	/**
 Changes accent color and background custom emoji for profile of the current user; for Telegram Premium users only.
 */
 	async setProfileAccentColor(options: Omit<SetProfileAccentColor, '@type'>): Promise<Ok> {
@@ -57635,9 +58105,9 @@ Changes a profile photo for a bot.
 	}
 
 	/**
-Changes active state for a username of a bot. The editable username can't be disabled. May return an error with a
-message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum number of active usernames has been reached. Can be called only if
-userTypeBot.can_be_edited == true.
+Changes active state for a username of a bot. The editable username can be disabled only if there are other active
+usernames. May return an error with a message "USERNAMES_ACTIVE_TOO_MUCH" if the maximum number of active usernames has
+been reached. Can be called only if userTypeBot.can_be_edited == true.
 */
 	async toggleBotUsernameIsActive(options: Omit<ToggleBotUsernameIsActive, '@type'>): Promise<Ok> {
 		return this._request({
@@ -58262,6 +58732,16 @@ Sends an upgraded gift to another user or channel chat.
 		return this._request({
 			...options,
 			'@type': 'transferGift',
+		});
+	}
+
+	/**
+Drops original details for an upgraded gift.
+*/
+	async dropGiftOriginalDetails(options: Omit<DropGiftOriginalDetails, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'dropGiftOriginalDetails',
 		});
 	}
 
