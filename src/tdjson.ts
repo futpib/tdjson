@@ -1160,9 +1160,9 @@ Mention, Hashtag, Cashtag and PhoneNumber entities.
 */
 	text: FormattedText;
 	/**
-Identifier of the user that completed the task; 0 if the task isn't completed.
+Identifier of the user or chat that completed the task; may be null if the task isn't completed yet.
 */
-	completed_by_user_id: number;
+	completed_by: MessageSender;
 	/**
 Point in time (Unix timestamp) when the task was completed; 0 if the task isn't completed.
 */
@@ -3407,7 +3407,7 @@ The number of users that used the affiliate program.
 	/**
 The number of Telegram Stars that were earned by the affiliate program.
 */
-	revenue_star_count: string;
+	revenue_star_count: number;
 }
 
 /**
@@ -3618,9 +3618,14 @@ Identifier of the corresponding giveaway message in the creator_id chat; can be 
 */
 	giveaway_message_id: number;
 	/**
-Number of months the Telegram Premium subscription will be active after code activation.
+Number of months the Telegram Premium subscription will be active after code activation; 0 if the number of months isn't
+integer.
 */
 	month_count: number;
+	/**
+Number of days the Telegram Premium subscription will be active after code activation.
+*/
+	day_count: number;
 	/**
 Identifier of a user for which the code was created; 0 if none.
 */
@@ -3756,6 +3761,10 @@ True, if limited regular gifts are accepted.
 True, if upgraded gifts and regular gifts that can be upgraded for free are accepted.
 */
 	upgraded_gifts?: boolean;
+	/**
+True, if gifts from channels are accepted subject to other restrictions.
+*/
+	gifts_from_channels?: boolean;
 	/**
 True, if Telegram Premium subscription is accepted.
 */
@@ -5290,6 +5299,70 @@ The amount of Telegram Stars that were received by Telegram; can be negative for
 }
 
 /**
+The transaction is a sending of a paid group call message; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypePaidGroupCallMessageSend {
+	'@type': 'starTransactionTypePaidGroupCallMessageSend';
+	/**
+Identifier of the chat that received the payment.
+*/
+	chat_id: number;
+}
+
+/**
+The transaction is a receiving of a paid group call message; for regular users and channel chats only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypePaidGroupCallMessageReceive {
+	'@type': 'starTransactionTypePaidGroupCallMessageReceive';
+	/**
+Identifier of the sender of the message.
+*/
+	sender_id: MessageSender;
+	/**
+The number of Telegram Stars received by the Telegram for each 1000 Telegram Stars paid for message sending.
+*/
+	commission_per_mille: number;
+	/**
+The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
+*/
+	commission_star_amount: StarAmount;
+}
+
+/**
+The transaction is a sending of a paid group reaction; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypePaidGroupCallReactionSend {
+	'@type': 'starTransactionTypePaidGroupCallReactionSend';
+	/**
+Identifier of the chat that received the payment.
+*/
+	chat_id: number;
+}
+
+/**
+The transaction is a receiving of a paid group call reaction; for regular users and channel chats only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypePaidGroupCallReactionReceive {
+	'@type': 'starTransactionTypePaidGroupCallReactionReceive';
+	/**
+Identifier of the sender of the reaction.
+*/
+	sender_id: MessageSender;
+	/**
+The number of Telegram Stars received by the Telegram for each 1000 Telegram Stars paid for reaction sending.
+*/
+	commission_per_mille: number;
+	/**
+The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
+*/
+	commission_star_amount: StarAmount;
+}
+
+/**
 The transaction is a payment for a suggested post; for regular users only.
 Subtype of {@link StarTransactionType}.
 */
@@ -5542,6 +5615,36 @@ List of Toncoin transactions.
 The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Describes state of active stories posted by a chat.
+Subtype of {@link ActiveStoryState}.
+*/
+export interface ActiveStoryStateLive {
+	'@type': 'activeStoryStateLive';
+	/**
+Identifier of the active live story.
+*/
+	story_id: number;
+}
+
+/**
+The chat has some unread active stories.
+Subtype of {@link ActiveStoryState}.
+*/
+export interface ActiveStoryStateUnread {
+	'@type': 'activeStoryStateUnread';
+
+}
+
+/**
+The chat has active stories, all of which were read.
+Subtype of {@link ActiveStoryState}.
+*/
+export interface ActiveStoryStateRead {
+	'@type': 'activeStoryStateRead';
+
 }
 
 /**
@@ -5905,10 +6008,14 @@ toggleBotUsernameIsActive, or toggleSupergroupUsernameIsActive.
 */
 	disabled_usernames: string[];
 	/**
-Active or disabled username, which may be changed with setUsername or setSupergroupUsername. Information about other
-active usernames can be received using getCollectibleItemInfo.
+Active or disabled username, which may be changed with setUsername or setSupergroupUsername.
 */
 	editable_username: string;
+	/**
+Collectible usernames that were purchased at https://fragment.com and can be passed to getCollectibleItemInfo for more
+details.
+*/
+	collectible_usernames: string[];
 }
 
 /**
@@ -5998,13 +6105,9 @@ Information about restrictions that must be applied to the corresponding private
 */
 	restriction_info: RestrictionInfo;
 	/**
-True, if the user has non-expired stories available to the current user.
+State of active stories of the user; may be null if the user has no active stories.
 */
-	has_active_stories?: boolean;
-	/**
-True, if the user has unread non-expired stories available to the current user.
-*/
-	has_unread_active_stories?: boolean;
+	active_story_state: ActiveStoryState;
 	/**
 True, if the user may restrict new chats with non-contacts. Use canSendMessageToUser to check whether the current user
 can message the user or try to create a chat with them.
@@ -7063,7 +7166,7 @@ and channel direct messages groups.
 */
 	join_to_send_messages?: boolean;
 	/**
-True, if all users directly joining the supergroup need to be approved by supergroup administrators. Can be true only
+True, if all users directly joining the supergroup need to be approved by supergroup administrators. May be true only
 for non-broadcast supergroups with username, location, or a linked chat.
 */
 	join_by_request?: boolean;
@@ -7114,13 +7217,9 @@ Number of Telegram Stars that must be paid by non-administrator users of the sup
 */
 	paid_message_star_count: number;
 	/**
-True, if the supergroup or channel has non-expired stories available to the current user.
+State of active stories of the supergroup or channel; may be null if there are no active stories.
 */
-	has_active_stories?: boolean;
-	/**
-True, if the supergroup or channel has unread non-expired stories available to the current user.
-*/
-	has_unread_active_stories?: boolean;
+	active_story_state: ActiveStoryState;
 }
 
 /**
@@ -7385,7 +7484,7 @@ Amount of time till the next free query can be sent; 0 if it can be sent now.
 	/**
 Number of Telegram Stars that must be paid for each non-free query.
 */
-	star_count: string;
+	star_count: number;
 	/**
 True, if the search for the specified query isn't charged.
 */
@@ -7712,6 +7811,21 @@ True, if the paid reaction was added by the current user.
 True, if the reactor is anonymous.
 */
 	is_anonymous?: boolean;
+}
+
+/**
+Contains a list of users and chats that spend most money on paid messages and reactions in a live story.
+*/
+export interface LiveStoryDonors {
+	'@type': 'liveStoryDonors';
+	/**
+Total amount of spend Telegram Stars.
+*/
+	total_star_count: number;
+	/**
+List of top donors in the live story.
+*/
+	top_donors: PaidReactor[];
 }
 
 /**
@@ -8304,7 +8418,8 @@ Information about the message or the story this message is replying to; may be n
 */
 	reply_to: MessageReplyTo;
 	/**
-Identifier of the topic within the chat to which the message belongs; may be null if none.
+Identifier of the topic within the chat to which the message belongs; may be null if none; may change when the chat is
+converted to a forum or back.
 */
 	topic_id: MessageTopic;
 	/**
@@ -12309,6 +12424,22 @@ export interface LinkPreviewTypeInvoice {
 }
 
 /**
+The link is a link to a live story group call.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeLiveStory {
+	'@type': 'linkPreviewTypeLiveStory';
+	/**
+The identifier of the chat that posted the story.
+*/
+	story_poster_chat_id: number;
+	/**
+Story identifier.
+*/
+	story_id: number;
+}
+
+/**
 The link is a link to a text or a poll Telegram message.
 Subtype of {@link LinkPreviewType}.
 */
@@ -15463,9 +15594,14 @@ The paid amount, in the smallest units of the cryptocurrency; 0 if none.
 */
 	cryptocurrency_amount: string;
 	/**
-Number of months the Telegram Premium subscription will be active.
+Number of months the Telegram Premium subscription will be active after code activation; 0 if the number of months isn't
+integer.
 */
 	month_count: number;
+	/**
+Number of days the Telegram Premium subscription will be active.
+*/
+	day_count: number;
 	/**
 A sticker to be shown in the message; may be null if unknown.
 */
@@ -15511,9 +15647,14 @@ The paid amount, in the smallest units of the cryptocurrency; 0 if unknown.
 */
 	cryptocurrency_amount: string;
 	/**
-Number of months the Telegram Premium subscription will be active after code activation.
+Number of months the Telegram Premium subscription will be active after code activation; 0 if the number of months isn't
+integer.
 */
 	month_count: number;
+	/**
+Number of days the Telegram Premium subscription will be active after code activation.
+*/
+	day_count: number;
 	/**
 A sticker to be shown in the message; may be null if unknown.
 */
@@ -16527,6 +16668,12 @@ export interface MessageSchedulingStateSendAtDate {
 Point in time (Unix timestamp) when the message will be sent. The date must be within 367 days in the future.
 */
 	send_date: number;
+	/**
+Period after which the message will be sent again; in seconds; 0 if never; for Telegram Premium users only; may be
+non-zero only in sendMessage and forwardMessages with one message requests; must be one of 0, 86400, 7 * 86400, 14 *
+86400, 30 * 86400, 91 * 86400, 182 * 86400, 365 * 86400, or additionally 60, or 300 in the Test DC.
+*/
+	repeat_period: number;
 }
 
 /**
@@ -18534,6 +18681,22 @@ Alternative version of the video in MPEG4 format, encoded with H.264 codec; may 
 }
 
 /**
+A live story.
+Subtype of {@link StoryContent}.
+*/
+export interface StoryContentLive {
+	'@type': 'storyContentLive';
+	/**
+Identifier of the corresponding group call. The group call can be received through the method getGroupCall.
+*/
+	group_call_id: number;
+	/**
+True, if the call is an RTMP stream instead of an ordinary group call.
+*/
+	is_rtmp_stream?: boolean;
+}
+
+/**
 A story content that is not supported in the current TDLib version.
 Subtype of {@link StoryContent}.
 */
@@ -18714,7 +18877,7 @@ True, if the story is visible only for the current user.
 */
 	is_visible_only_for_self?: boolean;
 	/**
-True, if the story can be added to an album.
+True, if the story can be added to an album using createStoryAlbum and addStoryAlbumStories.
 */
 	can_be_added_to_album?: boolean;
 	/**
@@ -18734,6 +18897,10 @@ story content must be also forbidden.
 True, if the story can be replied in the chat with the user that posted the story.
 */
 	can_be_replied?: boolean;
+	/**
+True, if the story privacy settings can be changed.
+*/
+	can_set_privacy_settings?: boolean;
 	/**
 True, if the story's is_posted_to_chat_page value can be changed.
 */
@@ -18889,6 +19056,10 @@ Point in time (Unix timestamp) when the story was published.
 True, if the story is available only to close friends.
 */
 	is_for_close_friends?: boolean;
+	/**
+True, if the story is a live story.
+*/
+	is_live?: boolean;
 }
 
 /**
@@ -19139,7 +19310,7 @@ Point in time (Unix timestamp) when the preview was added or changed last time.
 */
 	date: number;
 	/**
-Content of the preview.
+Content of the preview; may only be of the types storyContentPhoto, storyContentVideo, or storyContentUnsupported.
 */
 	content: StoryContent;
 }
@@ -19863,10 +20034,10 @@ export interface GroupCallVideoQualityFull {
 }
 
 /**
-Describes an available stream in a video chat.
+Describes an available stream in a video chat or a live story.
 */
-export interface VideoChatStream {
-	'@type': 'videoChatStream';
+export interface GroupCallStream {
+	'@type': 'groupCallStream';
 	/**
 Identifier of an audio/video channel.
 */
@@ -19882,14 +20053,14 @@ Point in time when the stream currently ends; Unix timestamp in milliseconds.
 }
 
 /**
-Represents a list of video chat streams.
+Represents a list of group call streams.
 */
-export interface VideoChatStreams {
-	'@type': 'videoChatStreams';
+export interface GroupCallStreams {
+	'@type': 'groupCallStreams';
 	/**
-A list of video chat streams.
+A list of group call streams.
 */
-	streams: VideoChatStream[];
+	streams: GroupCallStream[];
 }
 
 /**
@@ -19937,9 +20108,14 @@ Group call title; for video chats only.
 	title: string;
 	/**
 Invite link for the group call; for group calls that aren't bound to a chat. For video chats call getVideoChatInviteLink
-to get the link.
+to get the link. For live stories in chats with username call getInternalLink with internalLinkTypeLiveStory.
 */
 	invite_link: string;
+	/**
+The minimum number of Telegram Stars that must be paid by general participant for each sent message to the call; for
+live stories only.
+*/
+	paid_message_star_count: number;
 	/**
 Point in time (Unix timestamp) when the group call is expected to be started by an administrator; 0 if it is already
 active or was ended; for video chats only.
@@ -19959,7 +20135,11 @@ True, if the call is bound to a chat.
 */
 	is_video_chat?: boolean;
 	/**
-True, if the call is an RTMP stream instead of an ordinary video chat; for video chats only.
+True, if the call is a live story of a chat.
+*/
+	is_live_story?: boolean;
+	/**
+True, if the call is an RTMP stream instead of an ordinary video chat; for video chats and live stories only.
 */
 	is_rtmp_stream?: boolean;
 	/**
@@ -19976,7 +20156,7 @@ for group calls that aren't bound to a chat.
 */
 	is_owned?: boolean;
 	/**
-True, if the current user can manage the group call; for video chats only.
+True, if the current user can manage the group call; for video chats and live stories only.
 */
 	can_be_managed?: boolean;
 	/**
@@ -19991,6 +20171,11 @@ True, if group call participants, which are muted, aren't returned in participan
 True, if all group call participants are loaded.
 */
 	loaded_all_participants?: boolean;
+	/**
+Message sender chosen to send messages to the group call; for live stories only; may be null if the call isn't a live
+story.
+*/
+	message_sender_id: MessageSender;
 	/**
 At most 3 recently speaking users in the group call.
 */
@@ -20016,13 +20201,21 @@ True, if the current user can enable or disable mute_new_participants setting; f
 */
 	can_toggle_mute_new_participants?: boolean;
 	/**
-True, if users can send messages to the group call.
+True, if the current user can send messages to the group call.
 */
 	can_send_messages?: boolean;
 	/**
-True, if the current user can enable or disable sending messages in the group call.
+True, if sending of messages is allowed in the group call.
 */
-	can_toggle_can_send_messages?: boolean;
+	are_messages_allowed?: boolean;
+	/**
+True, if the current user can enable or disable sending of messages in the group call.
+*/
+	can_toggle_are_messages_allowed?: boolean;
+	/**
+True, if the user can delete messages in the group call.
+*/
+	can_delete_messages?: boolean;
 	/**
 Duration of the ongoing group call recording, in seconds; 0 if none. An updateGroupCall update is not triggered when
 value of this field changes, but the same recording goes on.
@@ -20181,6 +20374,77 @@ Identifier of the group call.
 Join response payload for tgcalls; empty if the call isn't joined.
 */
 	join_payload: string;
+}
+
+/**
+Represents a message sent in a group call.
+*/
+export interface GroupCallMessage {
+	'@type': 'groupCallMessage';
+	/**
+Unique message identifier within the group call.
+*/
+	message_id: number;
+	/**
+Identifier of the sender of the message.
+*/
+	sender_id: MessageSender;
+	/**
+Point in time (Unix timestamp) when the message was sent.
+*/
+	date: number;
+	/**
+Text of the message. If empty, then the message is a paid reaction in a live story.
+*/
+	text: FormattedText;
+	/**
+The number of Telegram Stars that were paid to send the message; for live stories only.
+*/
+	paid_message_star_count: number;
+	/**
+True, if the message is sent by the owner of the call and must be treated as a message of the maximum level; for live
+stories only.
+*/
+	is_from_owner?: boolean;
+	/**
+True, if the message can be deleted by the current user; for live stories only.
+*/
+	can_be_deleted?: boolean;
+}
+
+/**
+Represents a level of features for a message sent in a live story group call.
+*/
+export interface GroupCallMessageLevel {
+	'@type': 'groupCallMessageLevel';
+	/**
+The minimum number of Telegram Stars required to get features of the level.
+*/
+	min_star_count: number;
+	/**
+The amount of time the message of this level will be pinned, in seconds.
+*/
+	pin_duration: number;
+	/**
+The maximum allowed length of the message text.
+*/
+	max_text_length: number;
+	/**
+The maximum allowed number of custom emoji in the message text.
+*/
+	max_custom_emoji_count: number;
+	/**
+The first color used to show the message text in the RGB format.
+*/
+	first_color: number;
+	/**
+The second color used to show the message text in the RGB format.
+*/
+	second_color: number;
+	/**
+Background color for the message the RGB format.
+*/
+	background_color: number;
 }
 
 /**
@@ -24621,6 +24885,42 @@ Time left before the user can post the next story.
 }
 
 /**
+The user or the chat has an active live story. The live story must be deleted first.
+Subtype of {@link CanPostStoryResult}.
+*/
+export interface CanPostStoryResultLiveStoryIsActive {
+	'@type': 'canPostStoryResultLiveStoryIsActive';
+	/**
+Identifier of the active live story.
+*/
+	story_id: number;
+}
+
+/**
+Represents result of starting a live story.
+Subtype of {@link StartLiveStoryResult}.
+*/
+export interface StartLiveStoryResultOk {
+	'@type': 'startLiveStoryResultOk';
+	/**
+The live story.
+*/
+	story: Story;
+}
+
+/**
+The live story failed to post with an error to be handled.
+Subtype of {@link StartLiveStoryResult}.
+*/
+export interface StartLiveStoryResultFail {
+	'@type': 'startLiveStoryResultFail';
+	/**
+Type of the error; other error types may be returned as regular errors.
+*/
+	error_type: CanPostStoryResult;
+}
+
+/**
 Represents result of checking whether the current session can be used to transfer a chat ownership to another user.
 Subtype of {@link CanTransferOwnershipResult}.
 */
@@ -26023,6 +26323,15 @@ export interface UserPrivacySettingShowBirthdate {
 }
 
 /**
+A privacy setting for managing whether the user's profile audio files are visible.
+Subtype of {@link UserPrivacySetting}.
+*/
+export interface UserPrivacySettingShowProfileAudio {
+	'@type': 'userPrivacySettingShowProfileAudio';
+
+}
+
+/**
 A privacy setting for managing whether the user can be invited to chats.
 Subtype of {@link UserPrivacySetting}.
 */
@@ -27058,6 +27367,29 @@ export interface InternalLinkTypeLanguageSettings {
 }
 
 /**
+The link is a link to a live story. Call searchPublicChat with the given chat username, then getChatActiveStories to get
+active stories in the chat, then find a live story among active stories of the chat, and then joinLiveStory to join the
+live story.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeLiveStory {
+	'@type': 'internalLinkTypeLiveStory';
+	/**
+Username of the poster of the story.
+*/
+	story_poster_username: string;
+}
+
+/**
+The link is a link to the login email set up section of the application settings, forcing set up of the login email.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeLoginEmailSettings {
+	'@type': 'internalLinkTypeLoginEmailSettings';
+
+}
+
+/**
 The link is a link to the main Web App of a bot. Call searchPublicChat with the given bot username, check that the user
 is a bot and has the main Web App. If the bot can be added to attachment menu, then use getAttachmentMenuBot to receive
 information about the bot, then if the bot isn't added to side menu, show a disclaimer about Mini Apps being third-party
@@ -27164,6 +27496,15 @@ must be opened otherwise.
 }
 
 /**
+The link is a link to the password section of the application settings.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypePasswordSettings {
+	'@type': 'internalLinkTypePasswordSettings';
+
+}
+
+/**
 The link can be used to confirm ownership of a phone number to prevent account deletion. Call sendPhoneNumberCode with
 the given phone number and with phoneNumberCodeTypeConfirmOwnership with the given hash to process the link. If
 succeeded, call checkPhoneNumberCode to check entered by the user code, or resendPhoneNumberCode to resend it.
@@ -27179,6 +27520,15 @@ Hash value from the link.
 Phone number value from the link.
 */
 	phone_number: string;
+}
+
+/**
+The link is a link to the phone number privacy settings section of the application settings.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypePhoneNumberPrivacySettings {
+	'@type': 'internalLinkTypePhoneNumberPrivacySettings';
+
 }
 
 /**
@@ -28556,6 +28906,20 @@ A custom suggestion to be shown at the top of the chat list.
 The link to open when the suggestion is clicked.
 */
 	url: string;
+}
+
+/**
+Suggests the user to add login email address. Call isLoginEmailAddressRequired, and then setLoginEmailAddress or
+checkLoginEmailAddressCode to change the login email address.
+Subtype of {@link SuggestedAction}.
+*/
+export interface SuggestedActionSetLoginEmailAddress {
+	'@type': 'suggestedActionSetLoginEmailAddress';
+	/**
+True, if the suggested action can be hidden using hideSuggestedAction. Otherwise, the user must not be able to use the
+app without setting up the email address.
+*/
+	can_be_hidden?: boolean;
 }
 
 /**
@@ -30640,6 +31004,10 @@ Number of messages with unread reactions in the topic.
 Notification settings for the topic.
 */
 	notification_settings: ChatNotificationSettings;
+	/**
+A draft of a message in the topic; may be null if none.
+*/
+	draft_message: DraftMessage;
 }
 
 /**
@@ -31219,24 +31587,91 @@ Group call state fingerprint represented as 4 emoji; may be empty if the state i
 }
 
 /**
-A new message was received in a group call. It must be shown for at most getOption("group_call_message_show_time_max")
-seconds after receiving.
+A new message was received in a group call.
 Subtype of {@link Update}.
 */
-export interface UpdateGroupCallNewMessage {
-	'@type': 'updateGroupCallNewMessage';
+export interface UpdateNewGroupCallMessage {
+	'@type': 'updateNewGroupCallMessage';
 	/**
 Identifier of the group call.
 */
 	group_call_id: number;
 	/**
-Identifier of the sender of the message.
+The message.
+*/
+	message: GroupCallMessage;
+}
+
+/**
+A new paid reaction was received in a live story group call.
+Subtype of {@link Update}.
+*/
+export interface UpdateNewGroupCallPaidReaction {
+	'@type': 'updateNewGroupCallPaidReaction';
+	/**
+Identifier of the group call.
+*/
+	group_call_id: number;
+	/**
+Identifier of the sender of the reaction.
 */
 	sender_id: MessageSender;
 	/**
-Text of the message.
+The number of Telegram Stars that were paid to send the reaction.
 */
-	text: FormattedText;
+	star_count: number;
+}
+
+/**
+A group call message failed to send.
+Subtype of {@link Update}.
+*/
+export interface UpdateGroupCallMessageSendFailed {
+	'@type': 'updateGroupCallMessageSendFailed';
+	/**
+Identifier of the group call.
+*/
+	group_call_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+The cause of the message sending failure.
+*/
+	error: Error;
+}
+
+/**
+Some group call messages were deleted.
+Subtype of {@link Update}.
+*/
+export interface UpdateGroupCallMessagesDeleted {
+	'@type': 'updateGroupCallMessagesDeleted';
+	/**
+Identifier of the group call.
+*/
+	group_call_id: number;
+	/**
+Identifiers of the deleted messages.
+*/
+	message_ids: number[];
+}
+
+/**
+The list of top donors in live story group call has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateLiveStoryTopDonors {
+	'@type': 'updateLiveStoryTopDonors';
+	/**
+Identifier of the group call.
+*/
+	group_call_id: number;
+	/**
+New list of live story donors.
+*/
+	donors: LiveStoryDonors;
 }
 
 /**
@@ -31431,6 +31866,19 @@ Point in time (Unix timestamp) until stealth mode is active; 0 if it is disabled
 Point in time (Unix timestamp) when stealth mode can be enabled again; 0 if there is no active cooldown.
 */
 	cooldown_until_date: number;
+}
+
+/**
+Lists of bots which Mini Apps must be allowed to read text from clipboard and must be opened without a warning.
+Subtype of {@link Update}.
+*/
+export interface UpdateTrustedMiniAppBots {
+	'@type': 'updateTrustedMiniAppBots';
+	/**
+List of user identifiers of the bots; the corresponding users may not be sent using updateUser updates and may not be
+accessible.
+*/
+	bot_user_ids: number[];
 }
 
 /**
@@ -31907,6 +32355,18 @@ Number of left speech recognition attempts this week.
 Point in time (Unix timestamp) when the weekly number of tries will reset; 0 if unknown.
 */
 	next_reset_date: number;
+}
+
+/**
+The levels of live story group call messages have changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateGroupCallMessageLevels {
+	'@type': 'updateGroupCallMessageLevels';
+	/**
+New description of the levels in decreasing order of groupCallMessageLevel.min_star_count.
+*/
+	levels: GroupCallMessageLevel[];
 }
 
 /**
@@ -32885,6 +33345,10 @@ export type StarTransactionType =
 	| StarTransactionTypeAffiliateProgramCommission
 	| StarTransactionTypePaidMessageSend
 	| StarTransactionTypePaidMessageReceive
+	| StarTransactionTypePaidGroupCallMessageSend
+	| StarTransactionTypePaidGroupCallMessageReceive
+	| StarTransactionTypePaidGroupCallReactionSend
+	| StarTransactionTypePaidGroupCallReactionReceive
 	| StarTransactionTypeSuggestedPostPaymentSend
 	| StarTransactionTypeSuggestedPostPaymentReceive
 	| StarTransactionTypePremiumPurchase
@@ -32899,6 +33363,11 @@ export type TonTransactionType =
 	| TonTransactionTypeUpgradedGiftPurchase
 	| TonTransactionTypeUpgradedGiftSale
 	| TonTransactionTypeUnsupported;
+
+export type ActiveStoryState =
+	| ActiveStoryStateLive
+	| ActiveStoryStateUnread
+	| ActiveStoryStateRead;
 
 export type GiveawayParticipantStatus =
 	| GiveawayParticipantStatusEligible
@@ -33198,6 +33667,7 @@ export type LinkPreviewType =
 	| LinkPreviewTypeGiftCollection
 	| LinkPreviewTypeGroupCall
 	| LinkPreviewTypeInvoice
+	| LinkPreviewTypeLiveStory
 	| LinkPreviewTypeMessage
 	| LinkPreviewTypePhoto
 	| LinkPreviewTypePremiumGiftCode
@@ -33551,6 +34021,7 @@ export type InputStoryAreaType =
 export type StoryContent =
 	| StoryContentPhoto
 	| StoryContentVideo
+	| StoryContentLive
 	| StoryContentUnsupported;
 
 export type InputStoryContent =
@@ -33901,7 +34372,12 @@ export type CanPostStoryResult =
 	| CanPostStoryResultBoostNeeded
 	| CanPostStoryResultActiveStoryLimitExceeded
 	| CanPostStoryResultWeeklyLimitExceeded
-	| CanPostStoryResultMonthlyLimitExceeded;
+	| CanPostStoryResultMonthlyLimitExceeded
+	| CanPostStoryResultLiveStoryIsActive;
+
+export type StartLiveStoryResult =
+	| StartLiveStoryResultOk
+	| StartLiveStoryResultFail;
 
 export type CanTransferOwnershipResult =
 	| CanTransferOwnershipResultOk
@@ -34031,6 +34507,7 @@ export type UserPrivacySetting =
 	| UserPrivacySettingShowPhoneNumber
 	| UserPrivacySettingShowBio
 	| UserPrivacySettingShowBirthdate
+	| UserPrivacySettingShowProfileAudio
 	| UserPrivacySettingAllowChatInvites
 	| UserPrivacySettingAllowCalls
 	| UserPrivacySettingAllowPeerToPeerCalls
@@ -34113,13 +34590,17 @@ export type InternalLinkType =
 	| InternalLinkTypeInvoice
 	| InternalLinkTypeLanguagePack
 	| InternalLinkTypeLanguageSettings
+	| InternalLinkTypeLiveStory
+	| InternalLinkTypeLoginEmailSettings
 	| InternalLinkTypeMainWebApp
 	| InternalLinkTypeMessage
 	| InternalLinkTypeMessageDraft
 	| InternalLinkTypeMyStars
 	| InternalLinkTypeMyToncoins
 	| InternalLinkTypePassportDataRequest
+	| InternalLinkTypePasswordSettings
 	| InternalLinkTypePhoneNumberConfirmation
+	| InternalLinkTypePhoneNumberPrivacySettings
 	| InternalLinkTypePremiumFeatures
 	| InternalLinkTypePremiumGift
 	| InternalLinkTypePremiumGiftCode
@@ -34226,7 +34707,8 @@ export type SuggestedAction =
 	| SuggestedActionSetProfilePhoto
 	| SuggestedActionExtendPremium
 	| SuggestedActionExtendStarSubscriptions
-	| SuggestedActionCustom;
+	| SuggestedActionCustom
+	| SuggestedActionSetLoginEmailAddress;
 
 export type TextParseMode =
 	| TextParseModeMarkdown
@@ -34374,7 +34856,11 @@ export type Update =
 	| UpdateGroupCallParticipant
 	| UpdateGroupCallParticipants
 	| UpdateGroupCallVerificationState
-	| UpdateGroupCallNewMessage
+	| UpdateNewGroupCallMessage
+	| UpdateNewGroupCallPaidReaction
+	| UpdateGroupCallMessageSendFailed
+	| UpdateGroupCallMessagesDeleted
+	| UpdateLiveStoryTopDonors
 	| UpdateNewCallSignalingData
 	| UpdateUserPrivacySettingRules
 	| UpdateUnreadMessageCount
@@ -34386,6 +34872,7 @@ export type Update =
 	| UpdateChatActiveStories
 	| UpdateStoryListChatCount
 	| UpdateStoryStealthMode
+	| UpdateTrustedMiniAppBots
 	| UpdateOption
 	| UpdateStickerSet
 	| UpdateInstalledStickerSets
@@ -34418,6 +34905,7 @@ export type Update =
 	| UpdateStarRevenueStatus
 	| UpdateTonRevenueStatus
 	| UpdateSpeechRecognitionTrial
+	| UpdateGroupCallMessageLevels
 	| UpdateDiceEmojis
 	| UpdateAnimatedEmojiMessageClicked
 	| UpdateAnimationSearchParameters
@@ -34895,10 +35383,20 @@ New recovery email address; may be empty.
 }
 
 /**
+Checks whether the current user is required to set login email address.
+Request type for {@link Tdjson#isLoginEmailAddressRequired}.
+*/
+export interface IsLoginEmailAddressRequired {
+	'@type': 'isLoginEmailAddressRequired';
+
+}
+
+/**
 Changes the login email address of the user. The email address can be changed only if the current user already has login
-email and passwordState.login_email_address_pattern is non-empty. The change will not be applied until the new login
-email address is confirmed with checkLoginEmailAddressCode. To use Apple ID/Google ID instead of an email address, call
-checkLoginEmailAddressCode directly.
+email and passwordState.login_email_address_pattern is non-empty, or the user received
+suggestedActionSetLoginEmailAddress and isLoginEmailAddressRequired succeeds. The change will not be applied until the
+new login email address is confirmed with checkLoginEmailAddressCode. To use Apple ID/Google ID instead of an email
+address, call checkLoginEmailAddressCode directly.
 Request type for {@link Tdjson#setLoginEmailAddress}.
 */
 export interface SetLoginEmailAddress {
@@ -41808,7 +42306,7 @@ The privacy settings for the story; ignored for stories posted on behalf of supe
 	privacy_settings: StoryPrivacySettings;
 	/**
 Identifiers of story albums to which the story will be added upon posting. An album can have up to
-getOption("story_album_story_count_max").
+getOption("story_album_size_max") stories.
 */
 	album_ids: number[];
 	/**
@@ -41829,6 +42327,40 @@ Pass true to keep the story accessible after expiration.
 Pass true if the content of the story must be protected from forwarding and screenshotting.
 */
 	protect_content?: boolean;
+}
+
+/**
+Starts a new live story on behalf of a chat; requires can_post_stories administrator right for channel chats.
+Request type for {@link Tdjson#startLiveStory}.
+*/
+export interface StartLiveStory {
+	'@type': 'startLiveStory';
+	/**
+Identifier of the chat that will start the live story. Pass Saved Messages chat identifier when starting a live story on
+behalf of the current user, or a channel chat identifier.
+*/
+	chat_id: number;
+	/**
+The privacy settings for the story; ignored for stories posted on behalf of channel chats.
+*/
+	privacy_settings: StoryPrivacySettings;
+	/**
+Pass true if the content of the story must be protected from screenshotting.
+*/
+	protect_content?: boolean;
+	/**
+Pass true to create an RTMP stream instead of an ordinary group call.
+*/
+	is_rtmp_stream?: boolean;
+	/**
+Pass true to allow viewers of the story to send messages.
+*/
+	enable_messages?: boolean;
+	/**
+The minimum number of Telegram Stars that must be paid by viewers for each sent message to the call;
+0-getOption("paid_group_call_message_star_count_max").
+*/
+	paid_message_star_count: number;
 }
 
 /**
@@ -41882,7 +42414,7 @@ New timestamp of the frame, which will be used as video thumbnail.
 
 /**
 Changes privacy settings of a story. The method can be called only for stories posted on behalf of the current user and
-if story.can_be_edited == true.
+if story.can_set_privacy_settings == true.
 Request type for {@link Tdjson#setStoryPrivacySettings}.
 */
 export interface SetStoryPrivacySettings {
@@ -42094,7 +42626,7 @@ Number of reaction per row, 5-25.
 }
 
 /**
-Changes chosen reaction on a story that has already been sent.
+Changes chosen reaction on a story that has already been sent; not supported for live stories.
 Request type for {@link Tdjson#setStoryReaction}.
 */
 export interface SetStoryReaction {
@@ -42309,7 +42841,7 @@ Name of the album; 1-12 characters.
 */
 	name: string;
 	/**
-Identifiers of stories to add to the album; 0-getOption("story_album_story_count_max") identifiers.
+Identifiers of stories to add to the album; 0-getOption("story_album_size_max") identifiers.
 */
 	story_ids: number[];
 }
@@ -42385,8 +42917,8 @@ Identifier of the story album.
 */
 	story_album_id: number;
 	/**
-Identifier of the stories to add to the album; 1-getOption("story_album_story_count_max") identifiers. If after addition
-the album has more than getOption("story_album_story_count_max") stories, then the last one are removed from the album.
+Identifier of the stories to add to the album; 1-getOption("story_album_size_max") identifiers. If after addition the
+album has more than getOption("story_album_size_max") stories, then the last one are removed from the album.
 */
 	story_ids: number[];
 }
@@ -43472,7 +44004,7 @@ Comment for the creator of the suggested post; 0-128 characters.
 }
 
 /**
-Sent a suggested post based on a previously sent message in a channel direct messages chat. Can be also used to suggest
+Sends a suggested post based on a previously sent message in a channel direct messages chat. Can be also used to suggest
 price or time change for an existing suggested post. Returns the sent message.
 Request type for {@link Tdjson#addOffer}.
 */
@@ -43657,7 +44189,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Default group call participant identifier to join the video chats.
+Default group call participant identifier to join the video chats in the chat.
 */
 	default_participant_id: MessageSender;
 }
@@ -43725,6 +44257,30 @@ Chat identifier.
 }
 
 /**
+Returns RTMP URL for streaming to a live story; requires can_post_stories administrator right for channel chats.
+Request type for {@link Tdjson#getLiveStoryRtmpUrl}.
+*/
+export interface GetLiveStoryRtmpUrl {
+	'@type': 'getLiveStoryRtmpUrl';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Replaces the current RTMP URL for streaming to a live story; requires owner privileges for channel chats.
+Request type for {@link Tdjson#replaceLiveStoryRtmpUrl}.
+*/
+export interface ReplaceLiveStoryRtmpUrl {
+	'@type': 'replaceLiveStoryRtmpUrl';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
 Returns information about a group call.
 Request type for {@link Tdjson#getGroupCall}.
 */
@@ -43765,7 +44321,7 @@ New value of the enabled_start_notification setting.
 }
 
 /**
-Joins a group call that is not bound to a chat.
+Joins a regular group call that is not bound to a chat.
 Request type for {@link Tdjson#joinGroupCall}.
 */
 export interface JoinGroupCall {
@@ -43791,8 +44347,7 @@ Group call identifier.
 */
 	group_call_id: number;
 	/**
-Identifier of a group call participant, which will be used to join the call; pass null to join as self; video chats
-only.
+Identifier of a group call participant, which will be used to join the call; pass null to join as self.
 */
 	participant_id: MessageSender;
 	/**
@@ -43806,7 +44361,23 @@ Invite hash as received from internalLinkTypeVideoChat.
 }
 
 /**
-Starts screen sharing in a joined group call. Returns join response payload for tgcalls.
+Joins a group call of an active live story. Returns join response payload for tgcalls.
+Request type for {@link Tdjson#joinLiveStory}.
+*/
+export interface JoinLiveStory {
+	'@type': 'joinLiveStory';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Parameters to join the call.
+*/
+	join_parameters: GroupCallJoinParameters;
+}
+
+/**
+Starts screen sharing in a joined group call; not supported in live stories. Returns join response payload for tgcalls.
 Request type for {@link Tdjson#startGroupCallScreenSharing}.
 */
 export interface StartGroupCallScreenSharing {
@@ -43826,7 +44397,7 @@ Group call join payload; received from tgcalls.
 }
 
 /**
-Pauses or unpauses screen sharing in a joined group call.
+Pauses or unpauses screen sharing in a joined group call; not supported in live stories.
 Request type for {@link Tdjson#toggleGroupCallScreenSharingIsPaused}.
 */
 export interface ToggleGroupCallScreenSharingIsPaused {
@@ -43842,7 +44413,7 @@ Pass true to pause screen sharing; pass false to unpause it.
 }
 
 /**
-Ends screen sharing in a joined group call.
+Ends screen sharing in a joined group call; not supported in live stories.
 Request type for {@link Tdjson#endGroupCallScreenSharing}.
 */
 export interface EndGroupCallScreenSharing {
@@ -43887,20 +44458,61 @@ New value of the mute_new_participants setting.
 }
 
 /**
-Toggles whether participants of a group call can send messages there. Requires groupCall.can_toggle_can_send_messages
+Toggles whether participants of a group call can send messages there. Requires groupCall.can_toggle_are_messages_allowed
 right.
-Request type for {@link Tdjson#toggleGroupCallCanSendMessages}.
+Request type for {@link Tdjson#toggleGroupCallAreMessagesAllowed}.
 */
-export interface ToggleGroupCallCanSendMessages {
-	'@type': 'toggleGroupCallCanSendMessages';
+export interface ToggleGroupCallAreMessagesAllowed {
+	'@type': 'toggleGroupCallAreMessagesAllowed';
 	/**
 Group call identifier.
 */
 	group_call_id: number;
 	/**
-New value of the can_send_messages setting.
+New value of the are_messages_allowed setting.
 */
-	can_send_messages?: boolean;
+	are_messages_allowed?: boolean;
+}
+
+/**
+Returns information about the user or the chat that streams to a live story; for live stories that aren't an RTMP stream
+only.
+Request type for {@link Tdjson#getLiveStoryStreamer}.
+*/
+export interface GetLiveStoryStreamer {
+	'@type': 'getLiveStoryStreamer';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Returns the list of message sender identifiers, on whose behalf messages can be sent to a live story.
+Request type for {@link Tdjson#getLiveStoryAvailableMessageSenders}.
+*/
+export interface GetLiveStoryAvailableMessageSenders {
+	'@type': 'getLiveStoryAvailableMessageSenders';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Selects a message sender to send messages in a live story call.
+Request type for {@link Tdjson#setLiveStoryMessageSender}.
+*/
+export interface SetLiveStoryMessageSender {
+	'@type': 'setLiveStoryMessageSender';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+New message sender for the group call.
+*/
+	message_sender_id: MessageSender;
 }
 
 /**
@@ -43914,9 +44526,113 @@ Group call identifier.
 */
 	group_call_id: number;
 	/**
-Text of the message to send; 1-getOption("group_call_message_text_length_max") characters.
+Text of the message to send; 1-getOption("group_call_message_text_length_max") characters for non-live-stories; see
+updateGroupCallMessageLevels for live story restrictions, which depends on paid_message_star_count. Can't contain line
+feeds for live stories.
 */
 	text: FormattedText;
+	/**
+The number of Telegram Stars the user agreed to pay to send the message; for live stories only;
+0-getOption("paid_group_call_message_star_count_max"). Must be 0 for messages sent to live stories posted by the current
+user.
+*/
+	paid_message_star_count: number;
+}
+
+/**
+Adds pending paid reaction in a live story group call. Can't be used in live stories posted by the current user. Call
+commitPendingLiveStoryReactions or removePendingLiveStoryReactions to actually send all pending reactions when the undo
+timer is over or abort the sending.
+Request type for {@link Tdjson#addPendingLiveStoryReaction}.
+*/
+export interface AddPendingLiveStoryReaction {
+	'@type': 'addPendingLiveStoryReaction';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Number of Telegram Stars to be used for the reaction. The total number of pending paid reactions must not exceed
+getOption("paid_group_call_message_star_count_max").
+*/
+	star_count: number;
+}
+
+/**
+Applies all pending paid reactions in a live story group call.
+Request type for {@link Tdjson#commitPendingLiveStoryReactions}.
+*/
+export interface CommitPendingLiveStoryReactions {
+	'@type': 'commitPendingLiveStoryReactions';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Removes all pending paid reactions in a live story group call.
+Request type for {@link Tdjson#removePendingLiveStoryReactions}.
+*/
+export interface RemovePendingLiveStoryReactions {
+	'@type': 'removePendingLiveStoryReactions';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+}
+
+/**
+Deletes messages in a group call; for live story calls only. Requires groupCallMessage.can_be_deleted right.
+Request type for {@link Tdjson#deleteGroupCallMessages}.
+*/
+export interface DeleteGroupCallMessages {
+	'@type': 'deleteGroupCallMessages';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Identifiers of the messages to be deleted.
+*/
+	message_ids: number[];
+	/**
+Pass true to report the messages as spam.
+*/
+	report_spam?: boolean;
+}
+
+/**
+Deletes all messages sent by the specified message sender in a group call; for live story calls only. Requires
+groupCall.can_delete_messages right.
+Request type for {@link Tdjson#deleteGroupCallMessagesBySender}.
+*/
+export interface DeleteGroupCallMessagesBySender {
+	'@type': 'deleteGroupCallMessagesBySender';
+	/**
+Group call identifier.
+*/
+	group_call_id: number;
+	/**
+Identifier of the sender of messages to delete.
+*/
+	sender_id: MessageSender;
+	/**
+Pass true to report the messages as spam.
+*/
+	report_spam?: boolean;
+}
+
+/**
+Returns the list of top live story donors.
+Request type for {@link Tdjson#getLiveStoryTopDonors}.
+*/
+export interface GetLiveStoryTopDonors {
+	'@type': 'getLiveStoryTopDonors';
+	/**
+Group call identifier of the live story.
+*/
+	group_call_id: number;
 }
 
 /**
@@ -44091,6 +44807,23 @@ Pass true if the current user's video is enabled.
 }
 
 /**
+Changes the minimum number of Telegram Stars that must be paid by general participant for each sent message to a live
+story call. Requires groupCall.can_be_managed right.
+Request type for {@link Tdjson#setGroupCallPaidMessageStarCount}.
+*/
+export interface SetGroupCallPaidMessageStarCount {
+	'@type': 'setGroupCallPaidMessageStarCount';
+	/**
+Group call identifier; must be an identifier of a live story call.
+*/
+	group_call_id: number;
+	/**
+The new minimum number of Telegram Stars; 0-getOption("paid_group_call_message_star_count_max").
+*/
+	paid_message_star_count: number;
+}
+
+/**
 Informs TDLib that speaking state of a participant of an active group call has changed. Returns identifier of the
 participant if it is found.
 Request type for {@link Tdjson#setGroupCallParticipantIsSpeaking}.
@@ -44112,7 +44845,8 @@ Pass true if the user is speaking.
 }
 
 /**
-Toggles whether a participant of an active group call is muted, unmuted, or allowed to unmute themselves.
+Toggles whether a participant of an active group call is muted, unmuted, or allowed to unmute themselves; not supported
+for live stories.
 Request type for {@link Tdjson#toggleGroupCallParticipantIsMuted}.
 */
 export interface ToggleGroupCallParticipantIsMuted {
@@ -44132,9 +44866,9 @@ Pass true to mute the user; pass false to unmute them.
 }
 
 /**
-Changes volume level of a participant of an active group call. If the current user can manage the group call or is the
-owner of the group call, then the participant's volume level will be changed for all users with the default volume
-level.
+Changes volume level of a participant of an active group call; not supported for live stories. If the current user can
+manage the group call or is the owner of the group call, then the participant's volume level will be changed for all
+users with the default volume level.
 Request type for {@link Tdjson#setGroupCallParticipantVolumeLevel}.
 */
 export interface SetGroupCallParticipantVolumeLevel {
@@ -44191,8 +44925,8 @@ The maximum number of participants to return; must be positive.
 }
 
 /**
-Loads more participants of a group call. The loaded participants will be received through updates. Use the field
-groupCall.loaded_all_participants to check whether all participants have already been loaded.
+Loads more participants of a group call; not supported in live stories. The loaded participants will be received through
+updates. Use the field groupCall.loaded_all_participants to check whether all participants have already been loaded.
 Request type for {@link Tdjson#loadGroupCallParticipants}.
 */
 export interface LoadGroupCallParticipants {
@@ -44221,7 +44955,8 @@ Group call identifier.
 }
 
 /**
-Ends a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
+Ends a group call. Requires groupCall.can_be_managed right for video chats and live stories or groupCall.is_owned
+otherwise.
 Request type for {@link Tdjson#endGroupCall}.
 */
 export interface EndGroupCall {
@@ -44233,11 +44968,11 @@ Group call identifier.
 }
 
 /**
-Returns information about available video chat streams.
-Request type for {@link Tdjson#getVideoChatStreams}.
+Returns information about available streams in a video chat or a live story.
+Request type for {@link Tdjson#getGroupCallStreams}.
 */
-export interface GetVideoChatStreams {
-	'@type': 'getVideoChatStreams';
+export interface GetGroupCallStreams {
+	'@type': 'getGroupCallStreams';
 	/**
 Group call identifier.
 */
@@ -44245,11 +44980,12 @@ Group call identifier.
 }
 
 /**
-Returns a file with a segment of a video chat stream in a modified OGG format for audio or MPEG-4 format for video.
-Request type for {@link Tdjson#getVideoChatStreamSegment}.
+Returns a file with a segment of a video chat or live story in a modified OGG format for audio or MPEG-4 format for
+video.
+Request type for {@link Tdjson#getGroupCallStreamSegment}.
 */
-export interface GetVideoChatStreamSegment {
-	'@type': 'getVideoChatStreamSegment';
+export interface GetGroupCallStreamSegment {
+	'@type': 'getGroupCallStreamSegment';
 	/**
 Group call identifier.
 */
@@ -47433,7 +48169,7 @@ Name of the collection; 1-12 characters.
 */
 	name: string;
 	/**
-Identifier of the gifts to add to the collection; 0-getOption("gift_collection_gift_count_max") identifiers.
+Identifier of the gifts to add to the collection; 0-getOption("gift_collection_size_max") identifiers.
 */
 	received_gift_ids: string[];
 }
@@ -47509,9 +48245,9 @@ Identifier of the gift collection.
 */
 	collection_id: number;
 	/**
-Identifier of the gifts to add to the collection; 1-getOption("gift_collection_gift_count_max") identifiers. If after
-addition the collection has more than getOption("gift_collection_gift_count_max") gifts, then the last one are removed
-from the collection.
+Identifier of the gifts to add to the collection; 1-getOption("gift_collection_size_max") identifiers. If after addition
+the collection has more than getOption("gift_collection_size_max") gifts, then the last one are removed from the
+collection.
 */
 	received_gift_ids: string[];
 }
@@ -50301,6 +51037,7 @@ export type Request =
 	| SetDatabaseEncryptionKey
 	| GetPasswordState
 	| SetPassword
+	| IsLoginEmailAddressRequired
 	| SetLoginEmailAddress
 	| ResendLoginEmailAddressCode
 	| CheckLoginEmailAddressCode
@@ -50672,6 +51409,7 @@ export type Request =
 	| GetChatsToPostStories
 	| CanPostStory
 	| PostStory
+	| StartLiveStory
 	| EditStory
 	| EditStoryCover
 	| SetStoryPrivacySettings
@@ -50775,18 +51513,30 @@ export type Request =
 	| CreateGroupCall
 	| GetVideoChatRtmpUrl
 	| ReplaceVideoChatRtmpUrl
+	| GetLiveStoryRtmpUrl
+	| ReplaceLiveStoryRtmpUrl
 	| GetGroupCall
 	| StartScheduledVideoChat
 	| ToggleVideoChatEnabledStartNotification
 	| JoinGroupCall
 	| JoinVideoChat
+	| JoinLiveStory
 	| StartGroupCallScreenSharing
 	| ToggleGroupCallScreenSharingIsPaused
 	| EndGroupCallScreenSharing
 	| SetVideoChatTitle
 	| ToggleVideoChatMuteNewParticipants
-	| ToggleGroupCallCanSendMessages
+	| ToggleGroupCallAreMessagesAllowed
+	| GetLiveStoryStreamer
+	| GetLiveStoryAvailableMessageSenders
+	| SetLiveStoryMessageSender
 	| SendGroupCallMessage
+	| AddPendingLiveStoryReaction
+	| CommitPendingLiveStoryReactions
+	| RemovePendingLiveStoryReactions
+	| DeleteGroupCallMessages
+	| DeleteGroupCallMessagesBySender
+	| GetLiveStoryTopDonors
 	| InviteGroupCallParticipant
 	| DeclineGroupCallInvitation
 	| BanGroupCallParticipants
@@ -50797,6 +51547,7 @@ export type Request =
 	| EndGroupCallRecording
 	| ToggleGroupCallIsMyVideoPaused
 	| ToggleGroupCallIsMyVideoEnabled
+	| SetGroupCallPaidMessageStarCount
 	| SetGroupCallParticipantIsSpeaking
 	| ToggleGroupCallParticipantIsMuted
 	| SetGroupCallParticipantVolumeLevel
@@ -50805,8 +51556,8 @@ export type Request =
 	| LoadGroupCallParticipants
 	| LeaveGroupCall
 	| EndGroupCall
-	| GetVideoChatStreams
-	| GetVideoChatStreamSegment
+	| GetGroupCallStreams
+	| GetGroupCallStreamSegment
 	| EncryptGroupCallData
 	| DecryptGroupCallData
 	| SetMessageSenderBlockList
@@ -51493,10 +52244,20 @@ change will not be applied until the new recovery email address is confirmed.
 	}
 
 	/**
+Checks whether the current user is required to set login email address.
+*/
+	async isLoginEmailAddressRequired(): Promise<Ok> {
+		return this._request({
+			'@type': 'isLoginEmailAddressRequired',
+		});
+	}
+
+	/**
 Changes the login email address of the user. The email address can be changed only if the current user already has login
-email and passwordState.login_email_address_pattern is non-empty. The change will not be applied until the new login
-email address is confirmed with checkLoginEmailAddressCode. To use Apple ID/Google ID instead of an email address, call
-checkLoginEmailAddressCode directly.
+email and passwordState.login_email_address_pattern is non-empty, or the user received
+suggestedActionSetLoginEmailAddress and isLoginEmailAddressRequired succeeds. The change will not be applied until the
+new login email address is confirmed with checkLoginEmailAddressCode. To use Apple ID/Google ID instead of an email
+address, call checkLoginEmailAddressCode directly.
 */
 	async setLoginEmailAddress(options: Omit<SetLoginEmailAddress, '@type'>): Promise<EmailAddressAuthenticationCodeInfo> {
 		return this._request({
@@ -55401,6 +56162,16 @@ Returns a temporary story.
 	}
 
 	/**
+Starts a new live story on behalf of a chat; requires can_post_stories administrator right for channel chats.
+*/
+	async startLiveStory(options: Omit<StartLiveStory, '@type'>): Promise<StartLiveStoryResult> {
+		return this._request({
+			...options,
+			'@type': 'startLiveStory',
+		});
+	}
+
+	/**
 Changes content and caption of a story. Can be called only if story.can_be_edited == true.
 */
 	async editStory(options: Omit<EditStory, '@type'>): Promise<Ok> {
@@ -55422,7 +56193,7 @@ Changes cover of a video story. Can be called only if story.can_be_edited == tru
 
 	/**
 Changes privacy settings of a story. The method can be called only for stories posted on behalf of the current user and
-if story.can_be_edited == true.
+if story.can_set_privacy_settings == true.
 */
 	async setStoryPrivacySettings(options: Omit<SetStoryPrivacySettings, '@type'>): Promise<Ok> {
 		return this._request({
@@ -55558,7 +56329,7 @@ Returns reactions, which can be chosen for a story.
 	}
 
 	/**
-Changes chosen reaction on a story that has already been sent.
+Changes chosen reaction on a story that has already been sent; not supported for live stories.
 */
 	async setStoryReaction(options: Omit<SetStoryReaction, '@type'>): Promise<Ok> {
 		return this._request({
@@ -56325,7 +57096,7 @@ Declines a suggested post in a channel direct messages chat.
 	}
 
 	/**
-Sent a suggested post based on a previously sent message in a channel direct messages chat. Can be also used to suggest
+Sends a suggested post based on a previously sent message in a channel direct messages chat. Can be also used to suggest
 price or time change for an existing suggested post. Returns the sent message.
 */
 	async addOffer(options: Omit<AddOffer, '@type'>): Promise<Message> {
@@ -56467,6 +57238,26 @@ Replaces the current RTMP URL for streaming to the video chat of a chat; require
 	}
 
 	/**
+Returns RTMP URL for streaming to a live story; requires can_post_stories administrator right for channel chats.
+*/
+	async getLiveStoryRtmpUrl(options: Omit<GetLiveStoryRtmpUrl, '@type'>): Promise<RtmpUrl> {
+		return this._request({
+			...options,
+			'@type': 'getLiveStoryRtmpUrl',
+		});
+	}
+
+	/**
+Replaces the current RTMP URL for streaming to a live story; requires owner privileges for channel chats.
+*/
+	async replaceLiveStoryRtmpUrl(options: Omit<ReplaceLiveStoryRtmpUrl, '@type'>): Promise<RtmpUrl> {
+		return this._request({
+			...options,
+			'@type': 'replaceLiveStoryRtmpUrl',
+		});
+	}
+
+	/**
 Returns information about a group call.
 */
 	async getGroupCall(options: Omit<GetGroupCall, '@type'>): Promise<GroupCall> {
@@ -56497,7 +57288,7 @@ Toggles whether the current user will receive a notification when the video chat
 	}
 
 	/**
-Joins a group call that is not bound to a chat.
+Joins a regular group call that is not bound to a chat.
 */
 	async joinGroupCall(options: Omit<JoinGroupCall, '@type'>): Promise<GroupCallInfo> {
 		return this._request({
@@ -56517,7 +57308,17 @@ Joins an active video chat. Returns join response payload for tgcalls.
 	}
 
 	/**
-Starts screen sharing in a joined group call. Returns join response payload for tgcalls.
+Joins a group call of an active live story. Returns join response payload for tgcalls.
+*/
+	async joinLiveStory(options: Omit<JoinLiveStory, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'joinLiveStory',
+		});
+	}
+
+	/**
+Starts screen sharing in a joined group call; not supported in live stories. Returns join response payload for tgcalls.
 */
 	async startGroupCallScreenSharing(options: Omit<StartGroupCallScreenSharing, '@type'>): Promise<Text> {
 		return this._request({
@@ -56527,7 +57328,7 @@ Starts screen sharing in a joined group call. Returns join response payload for 
 	}
 
 	/**
-Pauses or unpauses screen sharing in a joined group call.
+Pauses or unpauses screen sharing in a joined group call; not supported in live stories.
 */
 	async toggleGroupCallScreenSharingIsPaused(options: Omit<ToggleGroupCallScreenSharingIsPaused, '@type'>): Promise<Ok> {
 		return this._request({
@@ -56537,7 +57338,7 @@ Pauses or unpauses screen sharing in a joined group call.
 	}
 
 	/**
-Ends screen sharing in a joined group call.
+Ends screen sharing in a joined group call; not supported in live stories.
 */
 	async endGroupCallScreenSharing(options: Omit<EndGroupCallScreenSharing, '@type'>): Promise<Ok> {
 		return this._request({
@@ -56568,13 +57369,44 @@ groupCall.can_toggle_mute_new_participants right.
 	}
 
 	/**
-Toggles whether participants of a group call can send messages there. Requires groupCall.can_toggle_can_send_messages
+Toggles whether participants of a group call can send messages there. Requires groupCall.can_toggle_are_messages_allowed
 right.
 */
-	async toggleGroupCallCanSendMessages(options: Omit<ToggleGroupCallCanSendMessages, '@type'>): Promise<Ok> {
+	async toggleGroupCallAreMessagesAllowed(options: Omit<ToggleGroupCallAreMessagesAllowed, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'toggleGroupCallCanSendMessages',
+			'@type': 'toggleGroupCallAreMessagesAllowed',
+		});
+	}
+
+	/**
+Returns information about the user or the chat that streams to a live story; for live stories that aren't an RTMP stream
+only.
+*/
+	async getLiveStoryStreamer(options: Omit<GetLiveStoryStreamer, '@type'>): Promise<GroupCallParticipant> {
+		return this._request({
+			...options,
+			'@type': 'getLiveStoryStreamer',
+		});
+	}
+
+	/**
+Returns the list of message sender identifiers, on whose behalf messages can be sent to a live story.
+*/
+	async getLiveStoryAvailableMessageSenders(options: Omit<GetLiveStoryAvailableMessageSenders, '@type'>): Promise<ChatMessageSenders> {
+		return this._request({
+			...options,
+			'@type': 'getLiveStoryAvailableMessageSenders',
+		});
+	}
+
+	/**
+Selects a message sender to send messages in a live story call.
+*/
+	async setLiveStoryMessageSender(options: Omit<SetLiveStoryMessageSender, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setLiveStoryMessageSender',
 		});
 	}
 
@@ -56585,6 +57417,69 @@ Sends a message to other participants of a group call. Requires groupCall.can_se
 		return this._request({
 			...options,
 			'@type': 'sendGroupCallMessage',
+		});
+	}
+
+	/**
+Adds pending paid reaction in a live story group call. Can't be used in live stories posted by the current user. Call
+commitPendingLiveStoryReactions or removePendingLiveStoryReactions to actually send all pending reactions when the undo
+timer is over or abort the sending.
+*/
+	async addPendingLiveStoryReaction(options: Omit<AddPendingLiveStoryReaction, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addPendingLiveStoryReaction',
+		});
+	}
+
+	/**
+Applies all pending paid reactions in a live story group call.
+*/
+	async commitPendingLiveStoryReactions(options: Omit<CommitPendingLiveStoryReactions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'commitPendingLiveStoryReactions',
+		});
+	}
+
+	/**
+Removes all pending paid reactions in a live story group call.
+*/
+	async removePendingLiveStoryReactions(options: Omit<RemovePendingLiveStoryReactions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removePendingLiveStoryReactions',
+		});
+	}
+
+	/**
+Deletes messages in a group call; for live story calls only. Requires groupCallMessage.can_be_deleted right.
+*/
+	async deleteGroupCallMessages(options: Omit<DeleteGroupCallMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteGroupCallMessages',
+		});
+	}
+
+	/**
+Deletes all messages sent by the specified message sender in a group call; for live story calls only. Requires
+groupCall.can_delete_messages right.
+*/
+	async deleteGroupCallMessagesBySender(options: Omit<DeleteGroupCallMessagesBySender, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteGroupCallMessagesBySender',
+		});
+	}
+
+	/**
+Returns the list of top live story donors.
+*/
+	async getLiveStoryTopDonors(options: Omit<GetLiveStoryTopDonors, '@type'>): Promise<LiveStoryDonors> {
+		return this._request({
+			...options,
+			'@type': 'getLiveStoryTopDonors',
 		});
 	}
 
@@ -56694,6 +57589,17 @@ Toggles whether current user's video is enabled.
 	}
 
 	/**
+Changes the minimum number of Telegram Stars that must be paid by general participant for each sent message to a live
+story call. Requires groupCall.can_be_managed right.
+*/
+	async setGroupCallPaidMessageStarCount(options: Omit<SetGroupCallPaidMessageStarCount, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setGroupCallPaidMessageStarCount',
+		});
+	}
+
+	/**
 Informs TDLib that speaking state of a participant of an active group call has changed. Returns identifier of the
 participant if it is found.
 */
@@ -56705,7 +57611,8 @@ participant if it is found.
 	}
 
 	/**
-Toggles whether a participant of an active group call is muted, unmuted, or allowed to unmute themselves.
+Toggles whether a participant of an active group call is muted, unmuted, or allowed to unmute themselves; not supported
+for live stories.
 */
 	async toggleGroupCallParticipantIsMuted(options: Omit<ToggleGroupCallParticipantIsMuted, '@type'>): Promise<Ok> {
 		return this._request({
@@ -56715,9 +57622,9 @@ Toggles whether a participant of an active group call is muted, unmuted, or allo
 	}
 
 	/**
-Changes volume level of a participant of an active group call. If the current user can manage the group call or is the
-owner of the group call, then the participant's volume level will be changed for all users with the default volume
-level.
+Changes volume level of a participant of an active group call; not supported for live stories. If the current user can
+manage the group call or is the owner of the group call, then the participant's volume level will be changed for all
+users with the default volume level.
 */
 	async setGroupCallParticipantVolumeLevel(options: Omit<SetGroupCallParticipantVolumeLevel, '@type'>): Promise<Ok> {
 		return this._request({
@@ -56747,8 +57654,8 @@ Returns information about participants of a non-joined group call that is not bo
 	}
 
 	/**
-Loads more participants of a group call. The loaded participants will be received through updates. Use the field
-groupCall.loaded_all_participants to check whether all participants have already been loaded.
+Loads more participants of a group call; not supported in live stories. The loaded participants will be received through
+updates. Use the field groupCall.loaded_all_participants to check whether all participants have already been loaded.
 */
 	async loadGroupCallParticipants(options: Omit<LoadGroupCallParticipants, '@type'>): Promise<Ok> {
 		return this._request({
@@ -56768,7 +57675,8 @@ Leaves a group call.
 	}
 
 	/**
-Ends a group call. Requires groupCall.can_be_managed right for video chats or groupCall.is_owned otherwise.
+Ends a group call. Requires groupCall.can_be_managed right for video chats and live stories or groupCall.is_owned
+otherwise.
 */
 	async endGroupCall(options: Omit<EndGroupCall, '@type'>): Promise<Ok> {
 		return this._request({
@@ -56778,22 +57686,23 @@ Ends a group call. Requires groupCall.can_be_managed right for video chats or gr
 	}
 
 	/**
-Returns information about available video chat streams.
+Returns information about available streams in a video chat or a live story.
 */
-	async getVideoChatStreams(options: Omit<GetVideoChatStreams, '@type'>): Promise<VideoChatStreams> {
+	async getGroupCallStreams(options: Omit<GetGroupCallStreams, '@type'>): Promise<GroupCallStreams> {
 		return this._request({
 			...options,
-			'@type': 'getVideoChatStreams',
+			'@type': 'getGroupCallStreams',
 		});
 	}
 
 	/**
-Returns a file with a segment of a video chat stream in a modified OGG format for audio or MPEG-4 format for video.
+Returns a file with a segment of a video chat or live story in a modified OGG format for audio or MPEG-4 format for
+video.
 */
-	async getVideoChatStreamSegment(options: Omit<GetVideoChatStreamSegment, '@type'>): Promise<Data> {
+	async getGroupCallStreamSegment(options: Omit<GetGroupCallStreamSegment, '@type'>): Promise<Data> {
 		return this._request({
 			...options,
-			'@type': 'getVideoChatStreamSegment',
+			'@type': 'getGroupCallStreamSegment',
 		});
 	}
 
