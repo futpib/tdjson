@@ -3787,6 +3787,40 @@ Types of gifts accepted by the user; for Telegram Premium users only.
 }
 
 /**
+Describes an auction on which a gift can be purchased.
+*/
+export interface GiftAuction {
+	'@type': 'giftAuction';
+	/**
+Identifier of the auction.
+*/
+	id: string;
+	/**
+Number of gifts distributed in each round.
+*/
+	gifts_per_round: number;
+}
+
+/**
+Describes background of a gift.
+*/
+export interface GiftBackground {
+	'@type': 'giftBackground';
+	/**
+Center color in RGB format.
+*/
+	center_color: number;
+	/**
+Edge color in RGB format.
+*/
+	edge_color: number;
+	/**
+Text color in RGB format.
+*/
+	text_color: number;
+}
+
+/**
 Describes the maximum number of times that a specific gift can be purchased.
 */
 export interface GiftPurchaseLimits {
@@ -4113,6 +4147,10 @@ True, if the gift is a birthday gift.
 True, if the gift can be bought only by Telegram Premium subscribers.
 */
 	is_premium?: boolean;
+	/**
+Information about the auction on which the gift can be purchased; may be null if the gift can be purchased directly.
+*/
+	auction_info: GiftAuction;
 	/**
 Point in time (Unix timestamp) when the gift can be sent next time by the current user; can be 0 or a date in the past.
 If the date is in the future, then call canSendGift to get the reason, why the gift can't be sent now.
@@ -4751,6 +4789,190 @@ Next changes for the price for gift upgrade with more granularity than in prices
 }
 
 /**
+Describes a bid in an auction.
+*/
+export interface AuctionBid {
+	'@type': 'auctionBid';
+	/**
+The number of Telegram Stars that were put in the bid.
+*/
+	star_count: number;
+	/**
+Point in time (Unix timestamp) when the bid was made.
+*/
+	bid_date: number;
+	/**
+Position of the bid in the list of all bids.
+*/
+	position: number;
+}
+
+/**
+Describes a bid of the current user in an auction.
+*/
+export interface UserAuctionBid {
+	'@type': 'userAuctionBid';
+	/**
+The number of Telegram Stars that were put in the bid.
+*/
+	star_count: number;
+	/**
+Point in time (Unix timestamp) when the bid was made.
+*/
+	bid_date: number;
+	/**
+The minimum number of Telegram Stars that can be put for the next bid.
+*/
+	next_bid_star_count: number;
+	/**
+Identifier of the user or the chat that will receive the auctioned item. If the auction is opened in context of another
+user or chat, then a warning is supposed to be shown to the current user.
+*/
+	owner_id: MessageSender;
+	/**
+True, if the bid was returned to the user, because it was outbid and can't win anymore.
+*/
+	was_returned?: boolean;
+}
+
+/**
+Describes state of an auction.
+Subtype of {@link AuctionState}.
+*/
+export interface AuctionStateActive {
+	'@type': 'auctionStateActive';
+	/**
+Point in time (Unix timestamp) when the auction started.
+*/
+	start_date: number;
+	/**
+Point in time (Unix timestamp) when the auction will be ended.
+*/
+	end_date: number;
+	/**
+The minimum possible bid in the auction in Telegram Stars.
+*/
+	min_bid: number;
+	/**
+A sparse list of bids that were made in the auction.
+*/
+	bid_levels: AuctionBid[];
+	/**
+User identifiers of at most 3 users with the biggest bids.
+*/
+	top_bidder_user_ids: number[];
+	/**
+Point in time (Unix timestamp) when the current round will end.
+*/
+	current_round_end_date: number;
+	/**
+1-based number of the current round.
+*/
+	current_round_number: number;
+	/**
+The total number of rounds.
+*/
+	total_round_count: number;
+	/**
+The number of items that have to be distributed on the auciton.
+*/
+	left_item_count: number;
+	/**
+The number of items that were purchased by the current user on the auciton.
+*/
+	acquired_item_count: number;
+	/**
+Bid of the current user in the auction; may be null if none.
+*/
+	user_bid: UserAuctionBid;
+}
+
+/**
+Contains information about a finished auction.
+Subtype of {@link AuctionState}.
+*/
+export interface AuctionStateFinished {
+	'@type': 'auctionStateFinished';
+	/**
+Point in time (Unix timestamp) when the auction started.
+*/
+	start_date: number;
+	/**
+Point in time (Unix timestamp) when the auction will be ended.
+*/
+	end_date: number;
+	/**
+Average price of bought items in Telegram Stars.
+*/
+	average_price: number;
+	/**
+The number of items that were purchased by the current user on the auciton.
+*/
+	acquired_item_count: number;
+}
+
+/**
+Represent auction state of a gift.
+*/
+export interface GiftAuctionState {
+	'@type': 'giftAuctionState';
+	/**
+The gift.
+*/
+	gift: Gift;
+	/**
+Auction state of the gift.
+*/
+	state: AuctionState;
+}
+
+/**
+Represents a gift that was acquired by the current user on an auction.
+*/
+export interface GiftAuctionAcquiredGift {
+	'@type': 'giftAuctionAcquiredGift';
+	/**
+Receiver of the gift.
+*/
+	receiver_id: MessageSender;
+	/**
+Point in time (Unix timestamp) when the gift was acquired.
+*/
+	date: number;
+	/**
+The number of Telegram Stars that were paid for the gift.
+*/
+	star_count: number;
+	/**
+Identifier of the auction round in which the gift was acquired.
+*/
+	auction_round_number: number;
+	/**
+Position of the user in the round among all auction participants.
+*/
+	auction_round_position: number;
+	/**
+Message added to the gift.
+*/
+	text: FormattedText;
+	/**
+True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them.
+*/
+	is_private?: boolean;
+}
+
+/**
+Represents a list of gifts that were acquired by the current user on an auction.
+*/
+export interface GiftAuctionAcquiredGifts {
+	'@type': 'giftAuctionAcquiredGifts';
+	/**
+The list of acquired gifts.
+*/
+	gifts: GiftAuctionAcquiredGift[];
+}
+
+/**
 Describes direction of transactions in a transaction list.
 Subtype of {@link TransactionDirection}.
 */
@@ -5070,6 +5292,22 @@ Identifier of the user that bought the subscription.
 The number of seconds between consecutive Telegram Star debitings.
 */
 	subscription_period: number;
+}
+
+/**
+The transaction is a bid on a gift auction; for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiftAuctionBid {
+	'@type': 'starTransactionTypeGiftAuctionBid';
+	/**
+Identifier of the user that will receive the gift.
+*/
+	owner_id: MessageSender;
+	/**
+The gift.
+*/
+	gift: Gift;
 }
 
 /**
@@ -12394,6 +12632,26 @@ Duration of the video, in seconds; 0 if unknown.
 }
 
 /**
+The link is a link to a gift auction.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeGiftAuction {
+	'@type': 'linkPreviewTypeGiftAuction';
+	/**
+The gift.
+*/
+	gift: Gift;
+	/**
+Background of the gift.
+*/
+	gift_background: GiftBackground;
+	/**
+Point in time (Unix timestamp) when the auction will be ended.
+*/
+	auction_end_date: number;
+}
+
+/**
 The link is a link to a gift collection.
 Subtype of {@link LinkPreviewType}.
 */
@@ -15923,6 +16181,10 @@ True, if the upgrade was bought after the gift was sent. In this case, prepaid u
 gift cost.
 */
 	is_upgrade_separate?: boolean;
+	/**
+True, if the message is a notification about a gift won on an auction.
+*/
+	is_from_auction?: boolean;
 	/**
 True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them.
 */
@@ -27284,6 +27546,18 @@ Short name of the game.
 }
 
 /**
+The link is a link to a gift auction. Call getGiftAuctionState with the given auction identifier to process the link.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeGiftAuction {
+	'@type': 'internalLinkTypeGiftAuction';
+	/**
+Unique identifier of the auction.
+*/
+	auction_id: string;
+}
+
+/**
 The link is a link to a gift collection. Call searchPublicChat with the given username, then call getReceivedGifts with
 the received gift owner identifier and the given collection identifier, then show the collection if received.
 Subtype of {@link InternalLinkType}.
@@ -31691,6 +31965,30 @@ The data.
 }
 
 /**
+State of a gift auction was updated.
+Subtype of {@link Update}.
+*/
+export interface UpdateGiftAuctionState {
+	'@type': 'updateGiftAuctionState';
+	/**
+New state of the auction.
+*/
+	state: GiftAuctionState;
+}
+
+/**
+The list of auctions in which participate the current user has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateActiveGiftAuctions {
+	'@type': 'updateActiveGiftAuctions';
+	/**
+New states of the auctions.
+*/
+	states: GiftAuctionState[];
+}
+
+/**
 Some privacy setting rules have been changed.
 Subtype of {@link Update}.
 */
@@ -33308,6 +33606,10 @@ export type SentGift =
 	| SentGiftRegular
 	| SentGiftUpgraded;
 
+export type AuctionState =
+	| AuctionStateActive
+	| AuctionStateFinished;
+
 export type TransactionDirection =
 	| TransactionDirectionIncoming
 	| TransactionDirectionOutgoing;
@@ -33332,6 +33634,7 @@ export type StarTransactionType =
 	| StarTransactionTypeBotSubscriptionSale
 	| StarTransactionTypeChannelSubscriptionPurchase
 	| StarTransactionTypeChannelSubscriptionSale
+	| StarTransactionTypeGiftAuctionBid
 	| StarTransactionTypeGiftPurchase
 	| StarTransactionTypeGiftTransfer
 	| StarTransactionTypeGiftOriginalDetailsDrop
@@ -33664,6 +33967,7 @@ export type LinkPreviewType =
 	| LinkPreviewTypeEmbeddedVideoPlayer
 	| LinkPreviewTypeExternalAudio
 	| LinkPreviewTypeExternalVideo
+	| LinkPreviewTypeGiftAuction
 	| LinkPreviewTypeGiftCollection
 	| LinkPreviewTypeGroupCall
 	| LinkPreviewTypeInvoice
@@ -34584,6 +34888,7 @@ export type InternalLinkType =
 	| InternalLinkTypeDirectMessagesChat
 	| InternalLinkTypeEditProfileSettings
 	| InternalLinkTypeGame
+	| InternalLinkTypeGiftAuction
 	| InternalLinkTypeGiftCollection
 	| InternalLinkTypeGroupCall
 	| InternalLinkTypeInstantView
@@ -34862,6 +35167,8 @@ export type Update =
 	| UpdateGroupCallMessagesDeleted
 	| UpdateLiveStoryTopDonors
 	| UpdateNewCallSignalingData
+	| UpdateGiftAuctionState
+	| UpdateActiveGiftAuctions
 	| UpdateUserPrivacySettingRules
 	| UpdateUnreadMessageCount
 	| UpdateUnreadChatCount
@@ -47782,6 +48089,99 @@ Pass true to additionally pay for the gift upgrade and allow the receiver to upg
 }
 
 /**
+Returns auction state for a gift.
+Request type for {@link Tdjson#getGiftAuctionState}.
+*/
+export interface GetGiftAuctionState {
+	'@type': 'getGiftAuctionState';
+	/**
+Unique identifier of the auction.
+*/
+	auction_id: string;
+}
+
+/**
+Returns the gifts that were acquired by the current user on a gift auction.
+Request type for {@link Tdjson#getGiftAuctionAcquiredGifts}.
+*/
+export interface GetGiftAuctionAcquiredGifts {
+	'@type': 'getGiftAuctionAcquiredGifts';
+	/**
+Identifier of the auctioned gift.
+*/
+	gift_id: string;
+}
+
+/**
+Informs TDLib that a gift auction was opened by the user.
+Request type for {@link Tdjson#openGiftAuction}.
+*/
+export interface OpenGiftAuction {
+	'@type': 'openGiftAuction';
+	/**
+Identifier of the gift, which auction was opened.
+*/
+	gift_id: string;
+}
+
+/**
+Informs TDLib that a gift auction was closed by the user.
+Request type for {@link Tdjson#closeGiftAuction}.
+*/
+export interface CloseGiftAuction {
+	'@type': 'closeGiftAuction';
+	/**
+Identifier of the gift, which auction was closed.
+*/
+	gift_id: string;
+}
+
+/**
+Places a bid on an auction gift.
+Request type for {@link Tdjson#placeGiftAuctionBid}.
+*/
+export interface PlaceGiftAuctionBid {
+	'@type': 'placeGiftAuctionBid';
+	/**
+Identifier of the gift to place the bid on.
+*/
+	gift_id: string;
+	/**
+The number of Telegram Stars to place in the bid.
+*/
+	star_count: number;
+	/**
+Identifier of the user that will receive the gift.
+*/
+	user_id: number;
+	/**
+Text to show along with the gift; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, and CustomEmoji entities are allowed. Must be empty if the receiver enabled paid messages.
+*/
+	text: FormattedText;
+	/**
+Pass true to show gift text and sender only to the gift receiver; otherwise, everyone will be able to see them.
+*/
+	is_private?: boolean;
+}
+
+/**
+Increases a bid for an auction gift without changing gift text and receiver.
+Request type for {@link Tdjson#increaseGiftAuctionBid}.
+*/
+export interface IncreaseGiftAuctionBid {
+	'@type': 'increaseGiftAuctionBid';
+	/**
+Identifier of the gift to put the bid on.
+*/
+	gift_id: string;
+	/**
+The number of Telegram Stars to put in the bid.
+*/
+	star_count: number;
+}
+
+/**
 Sells a gift for Telegram Stars; requires owner privileges for gifts owned by a chat.
 Request type for {@link Tdjson#sellGift}.
 */
@@ -51740,6 +52140,12 @@ export type Request =
 	| GetAvailableGifts
 	| CanSendGift
 	| SendGift
+	| GetGiftAuctionState
+	| GetGiftAuctionAcquiredGifts
+	| OpenGiftAuction
+	| CloseGiftAuction
+	| PlaceGiftAuctionBid
+	| IncreaseGiftAuctionBid
 	| SellGift
 	| ToggleGiftIsSaved
 	| SetPinnedGifts
@@ -59558,6 +59964,66 @@ was sold out.
 		return this._request({
 			...options,
 			'@type': 'sendGift',
+		});
+	}
+
+	/**
+Returns auction state for a gift.
+*/
+	async getGiftAuctionState(options: Omit<GetGiftAuctionState, '@type'>): Promise<GiftAuctionState> {
+		return this._request({
+			...options,
+			'@type': 'getGiftAuctionState',
+		});
+	}
+
+	/**
+Returns the gifts that were acquired by the current user on a gift auction.
+*/
+	async getGiftAuctionAcquiredGifts(options: Omit<GetGiftAuctionAcquiredGifts, '@type'>): Promise<GiftAuctionAcquiredGifts> {
+		return this._request({
+			...options,
+			'@type': 'getGiftAuctionAcquiredGifts',
+		});
+	}
+
+	/**
+Informs TDLib that a gift auction was opened by the user.
+*/
+	async openGiftAuction(options: Omit<OpenGiftAuction, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'openGiftAuction',
+		});
+	}
+
+	/**
+Informs TDLib that a gift auction was closed by the user.
+*/
+	async closeGiftAuction(options: Omit<CloseGiftAuction, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'closeGiftAuction',
+		});
+	}
+
+	/**
+Places a bid on an auction gift.
+*/
+	async placeGiftAuctionBid(options: Omit<PlaceGiftAuctionBid, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'placeGiftAuctionBid',
+		});
+	}
+
+	/**
+Increases a bid for an auction gift without changing gift text and receiver.
+*/
+	async increaseGiftAuctionBid(options: Omit<IncreaseGiftAuctionBid, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'increaseGiftAuctionBid',
 		});
 	}
 
