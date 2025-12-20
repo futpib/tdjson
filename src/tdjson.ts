@@ -339,6 +339,44 @@ True, if a blocking popup with terms of service must be shown to the user.
 }
 
 /**
+Describes a passkey.
+*/
+export interface Passkey {
+	'@type': 'passkey';
+	/**
+Unique identifier of the passkey.
+*/
+	id: string;
+	/**
+Name of the passkey.
+*/
+	name: string;
+	/**
+Point in time (Unix timestamp) when the passkey was added.
+*/
+	addition_date: number;
+	/**
+Point in time (Unix timestamp) when the passkey was used last time; 0 if never.
+*/
+	last_usage_date: number;
+	/**
+Identifier of the custom emoji that is used as the icon of the software, which created the passkey; 0 if unknown.
+*/
+	software_icon_custom_emoji_id: string;
+}
+
+/**
+Contains a list of passkeys.
+*/
+export interface Passkeys {
+	'@type': 'passkeys';
+	/**
+List of passkeys.
+*/
+	passkeys: Passkey[];
+}
+
+/**
 Represents the current authorization state of the TDLib client.
 Subtype of {@link AuthorizationState}.
 */
@@ -349,7 +387,8 @@ export interface AuthorizationStateWaitTdlibParameters {
 
 /**
 TDLib needs the user's phone number to authorize. Call setAuthenticationPhoneNumber to provide the phone number, or use
-requestQrCodeAuthentication or checkAuthenticationBotToken for other authentication options.
+requestQrCodeAuthentication, getAuthenticationPasskeyParameters, or checkAuthenticationBotToken for other authentication
+options.
 Subtype of {@link AuthorizationState}.
 */
 export interface AuthorizationStateWaitPhoneNumber {
@@ -1781,7 +1820,7 @@ Video height.
 */
 	height: number;
 	/**
-Codec used for video file encoding, for example, "h264", "h265", or "av1".
+Codec used for video file encoding, for example, "h264", "h265", "av1", or "av01".
 */
 	codec: string;
 	/**
@@ -2901,8 +2940,7 @@ True, if the administrator can invite new users to the chat.
 */
 	can_invite_users?: boolean;
 	/**
-True, if the administrator can restrict, ban, or unban chat members or view supergroup statistics; always true for
-channels.
+True, if the administrator can restrict, ban, or unban chat members or view supergroup statistics.
 */
 	can_restrict_members?: boolean;
 	/**
@@ -2972,6 +3010,33 @@ The amount of 1/100 of Toncoin expected to be paid for the gift. Must be in rang
 getOption("gift_resale_toncoin_cent_count_min")-getOption("gift_resale_toncoin_cent_count_max").
 */
 	toncoin_cent_count: number;
+}
+
+/**
+Describes state of a gift purchase offer.
+Subtype of {@link GiftPurchaseOfferState}.
+*/
+export interface GiftPurchaseOfferStatePending {
+	'@type': 'giftPurchaseOfferStatePending';
+
+}
+
+/**
+The offer was accepted.
+Subtype of {@link GiftPurchaseOfferState}.
+*/
+export interface GiftPurchaseOfferStateAccepted {
+	'@type': 'giftPurchaseOfferStateAccepted';
+
+}
+
+/**
+The offer was rejected.
+Subtype of {@link GiftPurchaseOfferState}.
+*/
+export interface GiftPurchaseOfferStateRejected {
+	'@type': 'giftPurchaseOfferStateRejected';
+
 }
 
 /**
@@ -3614,7 +3679,7 @@ True, if the gift code was created for a giveaway.
 */
 	is_from_giveaway?: boolean;
 	/**
-Identifier of the corresponding giveaway message in the creator_id chat; can be 0 or an identifier of a deleted message.
+Identifier of the corresponding giveaway message in the creator_id chat; may be 0 or an identifier of a deleted message.
 */
 	giveaway_message_id: number;
 	/**
@@ -3799,6 +3864,10 @@ Identifier of the auction.
 Number of gifts distributed in each round.
 */
 	gifts_per_round: number;
+	/**
+Point in time (Unix timestamp) when the auction will start.
+*/
+	start_date: number;
 }
 
 /**
@@ -3916,7 +3985,7 @@ Subtype of {@link UpgradedGiftOrigin}.
 export interface UpgradedGiftOriginUpgrade {
 	'@type': 'upgradedGiftOriginUpgrade';
 	/**
-Identifier of the message with the regular gift that was upgraded; can be 0 or an identifier of a deleted message.
+Identifier of the message with the regular gift that was upgraded; may be 0 or an identifier of a deleted message.
 */
 	gift_message_id: number;
 }
@@ -3937,7 +4006,7 @@ Subtype of {@link UpgradedGiftOrigin}.
 export interface UpgradedGiftOriginResale {
 	'@type': 'upgradedGiftOriginResale';
 	/**
-Price paid by the sender for the gift.
+Price paid for the gift.
 */
 	price: GiftResalePrice;
 }
@@ -3959,6 +4028,18 @@ Subtype of {@link UpgradedGiftOrigin}.
 export interface UpgradedGiftOriginPrepaidUpgrade {
 	'@type': 'upgradedGiftOriginPrepaidUpgrade';
 
+}
+
+/**
+The gift was bought through an offer.
+Subtype of {@link UpgradedGiftOrigin}.
+*/
+export interface UpgradedGiftOriginOffer {
+	'@type': 'upgradedGiftOriginOffer';
+	/**
+Price paid for the gift.
+*/
+	price: GiftResalePrice;
 }
 
 /**
@@ -4135,6 +4216,10 @@ Number of Telegram Stars that must be paid to upgrade the gift; 0 if upgrade isn
 */
 	upgrade_star_count: number;
 	/**
+Number of unique gift variants that are available for the upgraded gift; 0 if unknown.
+*/
+	upgrade_variant_count: number;
+	/**
 True, if the gift can be used to customize the user's name, and backgrounds of profile photo, reply header, and link
 preview.
 */
@@ -4152,7 +4237,7 @@ Information about the auction on which the gift can be purchased; may be null if
 */
 	auction_info: GiftAuction;
 	/**
-Point in time (Unix timestamp) when the gift can be sent next time by the current user; can be 0 or a date in the past.
+Point in time (Unix timestamp) when the gift can be sent next time by the current user; may be 0 or a date in the past.
 If the date is in the future, then call canSendGift to get the reason, why the gift can't be sent now.
 */
 	next_send_date: number;
@@ -4164,6 +4249,10 @@ Number of times the gift can be purchased by the current user; may be null if no
 Number of times the gift can be purchased all users; may be null if not limited.
 */
 	overall_limits: GiftPurchaseLimits;
+	/**
+Background of the gift.
+*/
+	background: GiftBackground;
 	/**
 Point in time (Unix timestamp) when the gift was send for the first time; for sold out gifts only.
 */
@@ -4273,6 +4362,10 @@ Resale parameters of the gift; may be null if resale isn't possible.
 */
 	resale_parameters: GiftResaleParameters;
 	/**
+True, if an offer to purchase the gift can be sent using sendGiftPurchaseOffer.
+*/
+	can_send_purchase_offer?: boolean;
+	/**
 ISO 4217 currency code of the currency in which value of the gift is represented; may be empty if unavailable.
 */
 	value_currency: string;
@@ -4280,6 +4373,10 @@ ISO 4217 currency code of the currency in which value of the gift is represented
 Estimated value of the gift; in the smallest units of the currency; 0 if unavailable.
 */
 	value_amount: number;
+	/**
+Estimated value of the gift in USD; in USD cents; 0 if unavailable.
+*/
+	value_usd_amount: number;
 }
 
 /**
@@ -4659,6 +4756,10 @@ Message added to the gift.
 */
 	text: FormattedText;
 	/**
+Unique number of the gift among gifts upgraded from the same gift after upgrade; 0 if yet unassigned.
+*/
+	unique_gift_number: number;
+	/**
 True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone are able to see them.
 */
 	is_private?: boolean;
@@ -4789,6 +4890,25 @@ Next changes for the price for gift upgrade with more granularity than in prices
 }
 
 /**
+Contains all possible variants of upgraded gifts for the given regular gift.
+*/
+export interface GiftUpgradeVariants {
+	'@type': 'giftUpgradeVariants';
+	/**
+Models that can be chosen for the gift after upgrade.
+*/
+	models: UpgradedGiftModel[];
+	/**
+Symbols that can be chosen for the gift after upgrade.
+*/
+	symbols: UpgradedGiftSymbol[];
+	/**
+Backdrops that can be chosen for the gift after upgrade.
+*/
+	backdrops: UpgradedGiftBackdrop[];
+}
+
+/**
 Describes a bid in an auction.
 */
 export interface AuctionBid {
@@ -4836,13 +4956,36 @@ True, if the bid was returned to the user, because it was outbid and can't win a
 }
 
 /**
+Describes a round of an auction.
+*/
+export interface AuctionRound {
+	'@type': 'auctionRound';
+	/**
+1-based number of the round.
+*/
+	number: number;
+	/**
+Duration of the round, in seconds.
+*/
+	duration: number;
+	/**
+The number of seconds for which the round will be extended if there are changes in the top winners.
+*/
+	extend_time: number;
+	/**
+The number of top winners who trigger round extension if changed.
+*/
+	top_winner_count: number;
+}
+
+/**
 Describes state of an auction.
 Subtype of {@link AuctionState}.
 */
 export interface AuctionStateActive {
 	'@type': 'auctionStateActive';
 	/**
-Point in time (Unix timestamp) when the auction started.
+Point in time (Unix timestamp) when the auction started or will start.
 */
 	start_date: number;
 	/**
@@ -4862,6 +5005,10 @@ User identifiers of at most 3 users with the biggest bids.
 */
 	top_bidder_user_ids: number[];
 	/**
+Rounds of the auction in which their duration or extension rules are changed.
+*/
+	rounds: AuctionRound[];
+	/**
 Point in time (Unix timestamp) when the current round will end.
 */
 	current_round_end_date: number;
@@ -4874,11 +5021,15 @@ The total number of rounds.
 */
 	total_round_count: number;
 	/**
-The number of items that have to be distributed on the auciton.
+The number of items that were purchased on the auction by all users.
+*/
+	distributed_item_count: number;
+	/**
+The number of items that have to be distributed on the auction.
 */
 	left_item_count: number;
 	/**
-The number of items that were purchased by the current user on the auciton.
+The number of items that were purchased by the current user on the auction.
 */
 	acquired_item_count: number;
 	/**
@@ -4906,9 +5057,21 @@ Average price of bought items in Telegram Stars.
 */
 	average_price: number;
 	/**
-The number of items that were purchased by the current user on the auciton.
+The number of items that were purchased by the current user on the auction.
 */
 	acquired_item_count: number;
+	/**
+Number of items from the auction being resold on Telegram.
+*/
+	telegram_listed_item_count: number;
+	/**
+Number of items from the auction being resold on Fragment.
+*/
+	fragment_listed_item_count: number;
+	/**
+The HTTPS link to the Fragment for the resold items; may be empty if there are no such items being sold on Fragment.
+*/
+	fragment_url: string;
 }
 
 /**
@@ -4951,6 +5114,10 @@ Identifier of the auction round in which the gift was acquired.
 Position of the user in the round among all auction participants.
 */
 	auction_round_position: number;
+	/**
+Unique number of the gift among gifts upgraded from the same gift after upgrade; 0 if yet unassigned.
+*/
+	unique_gift_number: number;
 	/**
 Message added to the gift.
 */
@@ -5000,7 +5167,7 @@ export interface StarTransactionTypePremiumBotDeposit {
 }
 
 /**
-The transaction is a deposit of Telegram Stars from App Store; for regular users only.
+The transaction is a deposit of Telegram Stars from App Store; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeAppStoreDeposit {
@@ -5009,7 +5176,7 @@ export interface StarTransactionTypeAppStoreDeposit {
 }
 
 /**
-The transaction is a deposit of Telegram Stars from Google Play; for regular users only.
+The transaction is a deposit of Telegram Stars from Google Play; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGooglePlayDeposit {
@@ -5018,7 +5185,7 @@ export interface StarTransactionTypeGooglePlayDeposit {
 }
 
 /**
-The transaction is a deposit of Telegram Stars from Fragment; for regular users and bots only.
+The transaction is a deposit of Telegram Stars from Fragment; relevant for regular users and bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeFragmentDeposit {
@@ -5027,7 +5194,7 @@ export interface StarTransactionTypeFragmentDeposit {
 }
 
 /**
-The transaction is a deposit of Telegram Stars by another user; for regular users only.
+The transaction is a deposit of Telegram Stars by another user; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeUserDeposit {
@@ -5043,7 +5210,7 @@ The sticker to be shown in the transaction information; may be null if unknown.
 }
 
 /**
-The transaction is a deposit of Telegram Stars from a giveaway; for regular users only.
+The transaction is a deposit of Telegram Stars from a giveaway; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiveawayDeposit {
@@ -5053,14 +5220,14 @@ Identifier of a supergroup or a channel chat that created the giveaway.
 */
 	chat_id: number;
 	/**
-Identifier of the message with the giveaway; can be 0 or an identifier of a deleted message.
+Identifier of the message with the giveaway; may be 0 or an identifier of a deleted message.
 */
 	giveaway_message_id: number;
 }
 
 /**
-The transaction is a withdrawal of earned Telegram Stars to Fragment; for regular users, bots, supergroup and channel
-chats only.
+The transaction is a withdrawal of earned Telegram Stars to Fragment; relevant for regular users, bots, supergroup and
+channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeFragmentWithdrawal {
@@ -5072,7 +5239,8 @@ State of the withdrawal; may be null for refunds from Fragment.
 }
 
 /**
-The transaction is a withdrawal of earned Telegram Stars to Telegram Ad platform; for bots and channel chats only.
+The transaction is a withdrawal of earned Telegram Stars to Telegram Ad platform; relevant for bots and channel chats
+only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeTelegramAdsWithdrawal {
@@ -5081,7 +5249,7 @@ export interface StarTransactionTypeTelegramAdsWithdrawal {
 }
 
 /**
-The transaction is a payment for Telegram API usage; for bots only.
+The transaction is a payment for Telegram API usage; relevant for bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeTelegramApiUsage {
@@ -5093,8 +5261,8 @@ The number of billed requests.
 }
 
 /**
-The transaction is a purchase of paid media from a bot or a business account by the current user; for regular users
-only.
+The transaction is a purchase of paid media from a bot or a business account by the current user; relevant for regular
+users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeBotPaidMediaPurchase {
@@ -5110,7 +5278,7 @@ The bought media if the transaction wasn't refunded.
 }
 
 /**
-The transaction is a sale of paid media by the bot or a business account managed by the bot; for bots only.
+The transaction is a sale of paid media by the bot or a business account managed by the bot; relevant for bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeBotPaidMediaSale {
@@ -5134,7 +5302,7 @@ Information about the affiliate which received commission from the transaction; 
 }
 
 /**
-The transaction is a purchase of paid media from a channel by the current user; for regular users only.
+The transaction is a purchase of paid media from a channel by the current user; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeChannelPaidMediaPurchase {
@@ -5144,7 +5312,7 @@ Identifier of the channel chat that sent the paid media.
 */
 	chat_id: number;
 	/**
-Identifier of the corresponding message with paid media; can be 0 or an identifier of a deleted message.
+Identifier of the corresponding message with paid media; may be 0 or an identifier of a deleted message.
 */
 	message_id: number;
 	/**
@@ -5154,7 +5322,7 @@ The bought media if the transaction wasn't refunded.
 }
 
 /**
-The transaction is a sale of paid media by the channel chat; for channel chats only.
+The transaction is a sale of paid media by the channel chat; relevant for channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeChannelPaidMediaSale {
@@ -5164,7 +5332,7 @@ Identifier of the user that bought the media.
 */
 	user_id: number;
 	/**
-Identifier of the corresponding message with paid media; can be 0 or an identifier of a deleted message.
+Identifier of the corresponding message with paid media; may be 0 or an identifier of a deleted message.
 */
 	message_id: number;
 	/**
@@ -5174,7 +5342,8 @@ The bought media.
 }
 
 /**
-The transaction is a purchase of a product from a bot or a business account by the current user; for regular users only.
+The transaction is a purchase of a product from a bot or a business account by the current user; relevant for regular
+users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeBotInvoicePurchase {
@@ -5190,7 +5359,7 @@ Information about the bought product.
 }
 
 /**
-The transaction is a sale of a product by the bot; for bots only.
+The transaction is a sale of a product by the bot; relevant for bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeBotInvoiceSale {
@@ -5214,8 +5383,8 @@ Information about the affiliate which received commission from the transaction; 
 }
 
 /**
-The transaction is a purchase of a subscription from a bot or a business account by the current user; for regular users
-only.
+The transaction is a purchase of a subscription from a bot or a business account by the current user; relevant for
+regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeBotSubscriptionPurchase {
@@ -5235,7 +5404,7 @@ Information about the bought subscription.
 }
 
 /**
-The transaction is a sale of a subscription by the bot; for bots only.
+The transaction is a sale of a subscription by the bot; relevant for bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeBotSubscriptionSale {
@@ -5263,7 +5432,7 @@ Information about the affiliate which received commission from the transaction; 
 }
 
 /**
-The transaction is a purchase of a subscription to a channel chat by the current user; for regular users only.
+The transaction is a purchase of a subscription to a channel chat by the current user; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeChannelSubscriptionPurchase {
@@ -5279,7 +5448,7 @@ The number of seconds between consecutive Telegram Star debitings.
 }
 
 /**
-The transaction is a sale of a subscription by the channel chat; for channel chats only.
+The transaction is a sale of a subscription by the channel chat; relevant for channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeChannelSubscriptionSale {
@@ -5295,7 +5464,7 @@ The number of seconds between consecutive Telegram Star debitings.
 }
 
 /**
-The transaction is a bid on a gift auction; for regular users only.
+The transaction is a bid on a gift auction; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftAuctionBid {
@@ -5311,7 +5480,7 @@ The gift.
 }
 
 /**
-The transaction is a purchase of a regular gift; for regular users and bots only.
+The transaction is a purchase of a regular gift; relevant for regular users and bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftPurchase {
@@ -5327,7 +5496,19 @@ The gift.
 }
 
 /**
-The transaction is a transfer of an upgraded gift; for regular users only.
+The transaction is an offer of gift purchase; relevant for regular users only.
+Subtype of {@link StarTransactionType}.
+*/
+export interface StarTransactionTypeGiftPurchaseOffer {
+	'@type': 'starTransactionTypeGiftPurchaseOffer';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+}
+
+/**
+The transaction is a transfer of an upgraded gift; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftTransfer {
@@ -5343,7 +5524,7 @@ The gift.
 }
 
 /**
-The transaction is a drop of original details of an upgraded gift; for regular users only.
+The transaction is a drop of original details of an upgraded gift; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftOriginalDetailsDrop {
@@ -5359,7 +5540,7 @@ The gift.
 }
 
 /**
-The transaction is a sale of a received gift; for regular users and channel chats only.
+The transaction is a sale of a received gift; relevant for regular users and channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftSale {
@@ -5375,7 +5556,7 @@ The gift.
 }
 
 /**
-The transaction is an upgrade of a gift; for regular users only.
+The transaction is an upgrade of a gift; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftUpgrade {
@@ -5391,7 +5572,7 @@ The upgraded gift.
 }
 
 /**
-The transaction is a purchase of an upgrade of a gift owned by another user or channel; for regular users only.
+The transaction is a purchase of an upgrade of a gift owned by another user or channel; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeGiftUpgradePurchase {
@@ -5407,7 +5588,7 @@ The gift.
 }
 
 /**
-The transaction is a purchase of an upgraded gift for some user or channel; for regular users only.
+The transaction is a purchase of an upgraded gift for some user or channel; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeUpgradedGiftPurchase {
@@ -5423,7 +5604,7 @@ The gift.
 }
 
 /**
-The transaction is a sale of an upgraded gift; for regular users only.
+The transaction is a sale of an upgraded gift; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeUpgradedGiftSale {
@@ -5444,11 +5625,15 @@ The number of Telegram Stars received by the Telegram for each 1000 Telegram Sta
 The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
 */
 	commission_star_amount: StarAmount;
+	/**
+True, if the gift was sold through a purchase offer.
+*/
+	via_offer?: boolean;
 }
 
 /**
-The transaction is a sending of a paid reaction to a message in a channel chat by the current user; for regular users
-only.
+The transaction is a sending of a paid reaction to a message in a channel chat by the current user; relevant for regular
+users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeChannelPaidReactionSend {
@@ -5458,13 +5643,13 @@ Identifier of the channel chat.
 */
 	chat_id: number;
 	/**
-Identifier of the reacted message; can be 0 or an identifier of a deleted message.
+Identifier of the reacted message; may be 0 or an identifier of a deleted message.
 */
 	message_id: number;
 }
 
 /**
-The transaction is a receiving of a paid reaction to a message by the channel chat; for channel chats only.
+The transaction is a receiving of a paid reaction to a message by the channel chat; relevant for channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeChannelPaidReactionReceive {
@@ -5474,14 +5659,14 @@ Identifier of the user that added the paid reaction.
 */
 	user_id: number;
 	/**
-Identifier of the reacted message; can be 0 or an identifier of a deleted message.
+Identifier of the reacted message; may be 0 or an identifier of a deleted message.
 */
 	message_id: number;
 }
 
 /**
-The transaction is a receiving of a commission from an affiliate program; for regular users, bots and channel chats
-only.
+The transaction is a receiving of a commission from an affiliate program; relevant for regular users, bots and channel
+chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeAffiliateProgramCommission {
@@ -5497,7 +5682,7 @@ The number of Telegram Stars received by the affiliate for each 1000 Telegram St
 }
 
 /**
-The transaction is a sending of a paid message; for regular users only.
+The transaction is a sending of a paid message; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePaidMessageSend {
@@ -5513,7 +5698,7 @@ Number of sent paid messages.
 }
 
 /**
-The transaction is a receiving of a paid message; for regular users, supergroup and channel chats only.
+The transaction is a receiving of a paid message; relevant for regular users, supergroup and channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePaidMessageReceive {
@@ -5537,7 +5722,7 @@ The amount of Telegram Stars that were received by Telegram; can be negative for
 }
 
 /**
-The transaction is a sending of a paid group call message; for regular users only.
+The transaction is a sending of a paid group call message; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePaidGroupCallMessageSend {
@@ -5549,7 +5734,7 @@ Identifier of the chat that received the payment.
 }
 
 /**
-The transaction is a receiving of a paid group call message; for regular users and channel chats only.
+The transaction is a receiving of a paid group call message; relevant for regular users and channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePaidGroupCallMessageReceive {
@@ -5569,7 +5754,7 @@ The amount of Telegram Stars that were received by Telegram; can be negative for
 }
 
 /**
-The transaction is a sending of a paid group reaction; for regular users only.
+The transaction is a sending of a paid group reaction; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePaidGroupCallReactionSend {
@@ -5581,7 +5766,7 @@ Identifier of the chat that received the payment.
 }
 
 /**
-The transaction is a receiving of a paid group call reaction; for regular users and channel chats only.
+The transaction is a receiving of a paid group call reaction; relevant for regular users and channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePaidGroupCallReactionReceive {
@@ -5601,7 +5786,7 @@ The amount of Telegram Stars that were received by Telegram; can be negative for
 }
 
 /**
-The transaction is a payment for a suggested post; for regular users only.
+The transaction is a payment for a suggested post; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeSuggestedPostPaymentSend {
@@ -5613,7 +5798,7 @@ Identifier of the channel chat that posted the post.
 }
 
 /**
-The transaction is a receiving of a payment for a suggested post by the channel chat; for channel chats only.
+The transaction is a receiving of a payment for a suggested post by the channel chat; relevant for channel chats only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeSuggestedPostPaymentReceive {
@@ -5625,7 +5810,7 @@ Identifier of the user that paid for the suggested post.
 }
 
 /**
-The transaction is a purchase of Telegram Premium subscription; for regular users and bots only.
+The transaction is a purchase of Telegram Premium subscription; relevant for regular users and bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePremiumPurchase {
@@ -5645,7 +5830,7 @@ A sticker to be shown in the transaction information; may be null if unknown.
 }
 
 /**
-The transaction is a transfer of Telegram Stars to a business bot; for regular users only.
+The transaction is a transfer of Telegram Stars to a business bot; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeBusinessBotTransferSend {
@@ -5657,7 +5842,7 @@ Identifier of the bot that received Telegram Stars.
 }
 
 /**
-The transaction is a transfer of Telegram Stars from a business account; for bots only.
+The transaction is a transfer of Telegram Stars from a business account; relevant for bots only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypeBusinessBotTransferReceive {
@@ -5669,7 +5854,7 @@ Identifier of the user that sent Telegram Stars.
 }
 
 /**
-The transaction is a payment for search of posts in public Telegram channels; for regular users only.
+The transaction is a payment for search of posts in public Telegram channels; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePublicPostSearch {
@@ -5749,6 +5934,18 @@ The sticker to be shown in the transaction information; may be null if unknown.
 }
 
 /**
+The transaction is a withdrawal of earned Toncoins to Fragment.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeFragmentWithdrawal {
+	'@type': 'tonTransactionTypeFragmentWithdrawal';
+	/**
+State of the withdrawal; may be null for refunds from Fragment.
+*/
+	withdrawal_state: RevenueWithdrawalState;
+}
+
+/**
 The transaction is a payment for a suggested post.
 Subtype of {@link TonTransactionType}.
 */
@@ -5761,7 +5958,19 @@ Identifier of the channel chat that posted the post.
 }
 
 /**
-The transaction is a purchase of an upgraded gift for some user or channel; for regular users only.
+The transaction is an offer of gift purchase.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeGiftPurchaseOffer {
+	'@type': 'tonTransactionTypeGiftPurchaseOffer';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+}
+
+/**
+The transaction is a purchase of an upgraded gift for some user or channel.
 Subtype of {@link TonTransactionType}.
 */
 export interface TonTransactionTypeUpgradedGiftPurchase {
@@ -5777,7 +5986,7 @@ The gift.
 }
 
 /**
-The transaction is a sale of an upgraded gift; for regular users only.
+The transaction is a sale of an upgraded gift.
 Subtype of {@link TonTransactionType}.
 */
 export interface TonTransactionTypeUpgradedGiftSale {
@@ -5798,6 +6007,10 @@ The number of Toncoins received by the Telegram for each 1000 Toncoins received 
 The amount of Toncoins that were received by the Telegram; in the smallest units of the currency.
 */
 	commission_toncoin_amount: number;
+	/**
+True, if the gift was sold through a purchase offer.
+*/
+	via_offer?: boolean;
 }
 
 /**
@@ -12642,10 +12855,6 @@ The gift.
 */
 	gift: Gift;
 	/**
-Background of the gift.
-*/
-	gift_background: GiftBackground;
-	/**
 Point in time (Unix timestamp) when the auction will be ended.
 */
 	auction_end_date: number;
@@ -15708,7 +15917,7 @@ Identifier of the chat, containing the corresponding invoice message.
 */
 	invoice_chat_id: number;
 	/**
-Identifier of the message with the corresponding invoice; can be 0 or an identifier of a deleted message.
+Identifier of the message with the corresponding invoice; may be 0 or an identifier of a deleted message.
 */
 	invoice_message_id: number;
 	/**
@@ -15967,7 +16176,7 @@ Subtype of {@link MessageContent}.
 export interface MessageGiveawayCompleted {
 	'@type': 'messageGiveawayCompleted';
 	/**
-Identifier of the message with the giveaway; can be 0 if the message was deleted.
+Identifier of the message with the giveaway; may be 0 or an identifier of a deleted message.
 */
 	giveaway_message_id: number;
 	/**
@@ -16128,7 +16337,7 @@ Identifier of the supergroup or channel chat, which was automatically boosted by
 */
 	boosted_chat_id: number;
 	/**
-Identifier of the message with the giveaway in the boosted chat; can be 0 if the message was deleted.
+Identifier of the message with the giveaway in the boosted chat; may be 0 or an identifier of a deleted message.
 */
 	giveaway_message_id: number;
 	/**
@@ -16167,6 +16376,10 @@ Unique identifier of the received gift for the current user; only for the receiv
 Message added to the gift.
 */
 	text: FormattedText;
+	/**
+Unique number of the gift among gifts upgraded from the same gift after upgrade; 0 if yet unassigned.
+*/
+	unique_gift_number: number;
 	/**
 Number of Telegram Stars that can be claimed by the receiver instead of the regular gift; 0 if the gift can't be sold by
 the receiver.
@@ -16313,6 +16526,55 @@ Origin of the upgraded gift.
 }
 
 /**
+An offer to purchase an upgraded gift was sent or received.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageUpgradedGiftPurchaseOffer {
+	'@type': 'messageUpgradedGiftPurchaseOffer';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+	/**
+State of the offer.
+*/
+	state: GiftPurchaseOfferState;
+	/**
+The proposed price.
+*/
+	price: GiftResalePrice;
+	/**
+Point in time (Unix timestamp) when the offer will expire or has expired.
+*/
+	expiration_date: number;
+}
+
+/**
+An offer to purchase a gift was declined or expired.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageUpgradedGiftPurchaseOfferDeclined {
+	'@type': 'messageUpgradedGiftPurchaseOfferDeclined';
+	/**
+The gift.
+*/
+	gift: UpgradedGift;
+	/**
+The proposed price.
+*/
+	price: GiftResalePrice;
+	/**
+Identifier of the message with purchase offer which was declined or expired; may be 0 or an identifier of a deleted
+message.
+*/
+	offer_message_id: number;
+	/**
+True, if the offer has expired; otherwise, the offer was explicitly declined.
+*/
+	was_expired?: boolean;
+}
+
+/**
 Paid messages were refunded.
 Subtype of {@link MessageContent}.
 */
@@ -16365,7 +16627,7 @@ Subtype of {@link MessageContent}.
 export interface MessageChecklistTasksDone {
 	'@type': 'messageChecklistTasksDone';
 	/**
-Identifier of the message with the checklist; can be 0 if the message was deleted.
+Identifier of the message with the checklist; may be 0 or an identifier of a deleted message.
 */
 	checklist_message_id: number;
 	/**
@@ -16385,7 +16647,7 @@ Subtype of {@link MessageContent}.
 export interface MessageChecklistTasksAdded {
 	'@type': 'messageChecklistTasksAdded';
 	/**
-Identifier of the message with the checklist; can be 0 if the message was deleted.
+Identifier of the message with the checklist; may be 0 or an identifier of a deleted message.
 */
 	checklist_message_id: number;
 	/**
@@ -16401,7 +16663,7 @@ Subtype of {@link MessageContent}.
 export interface MessageSuggestedPostApprovalFailed {
 	'@type': 'messageSuggestedPostApprovalFailed';
 	/**
-Identifier of the message with the suggested post; can be 0 if the message was deleted.
+Identifier of the message with the suggested post; may be 0 or an identifier of a deleted message.
 */
 	suggested_post_message_id: number;
 	/**
@@ -16417,7 +16679,7 @@ Subtype of {@link MessageContent}.
 export interface MessageSuggestedPostApproved {
 	'@type': 'messageSuggestedPostApproved';
 	/**
-Identifier of the message with the suggested post; can be 0 if the message was deleted.
+Identifier of the message with the suggested post; may be 0 or an identifier of a deleted message.
 */
 	suggested_post_message_id: number;
 	/**
@@ -16437,7 +16699,7 @@ Subtype of {@link MessageContent}.
 export interface MessageSuggestedPostDeclined {
 	'@type': 'messageSuggestedPostDeclined';
 	/**
-Identifier of the message with the suggested post; can be 0 if the message was deleted.
+Identifier of the message with the suggested post; may be 0 or an identifier of a deleted message.
 */
 	suggested_post_message_id: number;
 	/**
@@ -16454,7 +16716,7 @@ Subtype of {@link MessageContent}.
 export interface MessageSuggestedPostPaid {
 	'@type': 'messageSuggestedPostPaid';
 	/**
-Identifier of the message with the suggested post; can be 0 if the message was deleted.
+Identifier of the message with the suggested post; may be 0 or an identifier of a deleted message.
 */
 	suggested_post_message_id: number;
 	/**
@@ -16474,7 +16736,7 @@ Subtype of {@link MessageContent}.
 export interface MessageSuggestedPostRefunded {
 	'@type': 'messageSuggestedPostRefunded';
 	/**
-Identifier of the message with the suggested post; can be 0 if the message was deleted.
+Identifier of the message with the suggested post; may be 0 or an identifier of a deleted message.
 */
 	suggested_post_message_id: number;
 	/**
@@ -17022,8 +17284,8 @@ messages, to a channel direct messages chat, live location messages and self-des
 */
 	scheduling_state: MessageSchedulingState;
 	/**
-Identifier of the effect to apply to the message; pass 0 if none; applicable only to sendMessage and sendMessageAlbum in
-private chats.
+Identifier of the effect to apply to the message; pass 0 if none; applicable only to sendMessage, sendMessageAlbum in
+private chats and forwardMessages with one message to private chats.
 */
 	effect_id: string;
 	/**
@@ -23889,6 +24151,15 @@ export interface PremiumFeatureChecklists {
 }
 
 /**
+The ability to require a payment for incoming messages in new chats.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeaturePaidMessages {
+	'@type': 'premiumFeaturePaidMessages';
+
+}
+
+/**
 Describes a feature available to Business user accounts.
 Subtype of {@link BusinessFeature}.
 */
@@ -29197,6 +29468,15 @@ app without setting up the email address.
 }
 
 /**
+Suggests the user to add a passkey for login using addLoginPasskey.
+Subtype of {@link SuggestedAction}.
+*/
+export interface SuggestedActionAddLoginPasskey {
+	'@type': 'suggestedActionAddLoginPasskey';
+
+}
+
+/**
 Contains a counter.
 */
 export interface Count {
@@ -33550,6 +33830,11 @@ export type GiftResalePrice =
 	| GiftResalePriceStar
 	| GiftResalePriceTon;
 
+export type GiftPurchaseOfferState =
+	| GiftPurchaseOfferStatePending
+	| GiftPurchaseOfferStateAccepted
+	| GiftPurchaseOfferStateRejected;
+
 export type SuggestedPostPrice =
 	| SuggestedPostPriceStar
 	| SuggestedPostPriceTon;
@@ -33586,7 +33871,8 @@ export type UpgradedGiftOrigin =
 	| UpgradedGiftOriginTransfer
 	| UpgradedGiftOriginResale
 	| UpgradedGiftOriginBlockchain
-	| UpgradedGiftOriginPrepaidUpgrade;
+	| UpgradedGiftOriginPrepaidUpgrade
+	| UpgradedGiftOriginOffer;
 
 export type UpgradedGiftAttributeId =
 	| UpgradedGiftAttributeIdModel
@@ -33636,6 +33922,7 @@ export type StarTransactionType =
 	| StarTransactionTypeChannelSubscriptionSale
 	| StarTransactionTypeGiftAuctionBid
 	| StarTransactionTypeGiftPurchase
+	| StarTransactionTypeGiftPurchaseOffer
 	| StarTransactionTypeGiftTransfer
 	| StarTransactionTypeGiftOriginalDetailsDrop
 	| StarTransactionTypeGiftSale
@@ -33662,7 +33949,9 @@ export type StarTransactionType =
 
 export type TonTransactionType =
 	| TonTransactionTypeFragmentDeposit
+	| TonTransactionTypeFragmentWithdrawal
 	| TonTransactionTypeSuggestedPostPayment
+	| TonTransactionTypeGiftPurchaseOffer
 	| TonTransactionTypeUpgradedGiftPurchase
 	| TonTransactionTypeUpgradedGiftSale
 	| TonTransactionTypeUnsupported;
@@ -34164,6 +34453,8 @@ export type MessageContent =
 	| MessageGift
 	| MessageUpgradedGift
 	| MessageRefundedUpgradedGift
+	| MessageUpgradedGiftPurchaseOffer
+	| MessageUpgradedGiftPurchaseOfferDeclined
 	| MessagePaidMessagesRefunded
 	| MessagePaidMessagePriceChanged
 	| MessageDirectMessagePriceChanged
@@ -34578,7 +34869,8 @@ export type PremiumFeature =
 	| PremiumFeatureLastSeenTimes
 	| PremiumFeatureBusiness
 	| PremiumFeatureMessageEffects
-	| PremiumFeatureChecklists;
+	| PremiumFeatureChecklists
+	| PremiumFeaturePaidMessages;
 
 export type BusinessFeature =
 	| BusinessFeatureLocation
@@ -35013,7 +35305,8 @@ export type SuggestedAction =
 	| SuggestedActionExtendPremium
 	| SuggestedActionExtendStarSubscriptions
 	| SuggestedActionCustom
-	| SuggestedActionSetLoginEmailAddress;
+	| SuggestedActionSetLoginEmailAddress
+	| SuggestedActionAddLoginPasskey;
 
 export type TextParseMode =
 	| TextParseModeMarkdown
@@ -35452,6 +35745,48 @@ export interface RequestQrCodeAuthentication {
 List of user identifiers of other users currently using the application.
 */
 	other_user_ids: number[];
+}
+
+/**
+Returns parameters for authentication using a passkey as JSON-serialized string.
+Request type for {@link Tdjson#getAuthenticationPasskeyParameters}.
+*/
+export interface GetAuthenticationPasskeyParameters {
+	'@type': 'getAuthenticationPasskeyParameters';
+
+}
+
+/**
+Checks a passkey to log in to the corresponding account. Call getAuthenticationPasskeyParameters to get parameters for
+the passkey. Works only when the current authorization state is authorizationStateWaitPhoneNumber or
+authorizationStateWaitOtherDeviceConfirmation, or if there is no pending authentication query and the current
+authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress,
+authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or
+authorizationStateWaitPassword.
+Request type for {@link Tdjson#checkAuthenticationPasskey}.
+*/
+export interface CheckAuthenticationPasskey {
+	'@type': 'checkAuthenticationPasskey';
+	/**
+Base64url-encoded identifier of the credential.
+*/
+	credential_id: string;
+	/**
+JSON-encoded client data.
+*/
+	client_data: string;
+	/**
+Authenticator data of the application that created the credential.
+*/
+	authenticator_data: string;
+	/**
+Cryptographic signature of the credential.
+*/
+	signature: string;
+	/**
+User handle of the passkey.
+*/
+	user_handle: string;
 }
 
 /**
@@ -36028,8 +36363,9 @@ with a previously set same background for messageChatSetBackground, the giveaway
 the checklist message for messageChecklistTasksDone, messageChecklistTasksAdded, the message with suggested post
 information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved, messageSuggestedPostDeclined,
 messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
-messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, and the topic creation message for topic messages
-without non-bundled replied message. Returns a 404 error if the message doesn't exist.
+messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, the message with gift purchase offer for
+messageUpgradedGiftPurchaseOfferDeclined, and the topic creation message for topic messages without non-bundled replied
+message. Returns a 404 error if the message doesn't exist.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
 export interface GetRepliedMessage {
@@ -39095,7 +39431,7 @@ Unique identifier of business connection.
 }
 
 /**
-Transfer Telegram Stars from the business account to the business bot; for bots only.
+Transfers Telegram Stars from the business account to the business bot; for bots only.
 Request type for {@link Tdjson#transferBusinessAccountStars}.
 */
 export interface TransferBusinessAccountStars {
@@ -39655,6 +39991,53 @@ Identifier of the chat.
 Forum topic identifier in which messages will be unpinned.
 */
 	forum_topic_id: number;
+}
+
+/**
+Returns parameters for creating of a new passkey as JSON-serialized string.
+Request type for {@link Tdjson#getPasskeyParameters}.
+*/
+export interface GetPasskeyParameters {
+	'@type': 'getPasskeyParameters';
+
+}
+
+/**
+Adds a passkey allowed to be used for the login by the current user and returns the added passkey. Call
+getPasskeyParameters to get parameters for creating of the passkey.
+Request type for {@link Tdjson#addLoginPasskey}.
+*/
+export interface AddLoginPasskey {
+	'@type': 'addLoginPasskey';
+	/**
+JSON-encoded client data.
+*/
+	client_data: string;
+	/**
+Passkey attestation object.
+*/
+	attestation_object: string;
+}
+
+/**
+Returns the list of passkeys allowed to be used for the login by the current user.
+Request type for {@link Tdjson#getLoginPasskeys}.
+*/
+export interface GetLoginPasskeys {
+	'@type': 'getLoginPasskeys';
+
+}
+
+/**
+Removes a passkey from the list of passkeys allowed to be used for the login by the current user.
+Request type for {@link Tdjson#removeLoginPasskey}.
+*/
+export interface RemoveLoginPasskey {
+	'@type': 'removeLoginPasskey';
+	/**
+Unique identifier of the passkey to remove.
+*/
+	passkey_id: string;
 }
 
 /**
@@ -42516,7 +42899,7 @@ The new list of pinned chats.
 }
 
 /**
-Traverse all chats in a chat list and marks all messages in the chats as read.
+Traverses all chats in a chat list and marks all messages in the chats as read.
 Request type for {@link Tdjson#readChatList}.
 */
 export interface ReadChatList {
@@ -43594,7 +43977,7 @@ Directory in which the file is expected to be saved.
 }
 
 /**
-Preliminary uploads a file to the cloud before sending it in a message, which can be useful for uploading of being
+Preliminarily uploads a file to the cloud before sending it in a message, which can be useful for uploading of being
 recorded voice and video notes. In all other cases there is no need to preliminary upload a file. Updates updateFile
 will be used to notify about upload progress. The upload will not be completed until the file is sent in a message.
 Request type for {@link Tdjson#preliminaryUploadFile}.
@@ -43841,7 +44224,7 @@ The maximum number of files to be returned.
 }
 
 /**
-Application or reCAPTCHA verification has been completed. Can be called before authorization.
+Informs TDLib that application or reCAPTCHA verification has been completed. Can be called before authorization.
 Request type for {@link Tdjson#setApplicationVerificationToken}.
 */
 export interface SetAppVerificationToken {
@@ -45788,6 +46171,27 @@ Pass true to get the outline scaled for clicked animated emoji message.
 }
 
 /**
+Returns outline of a sticker as an SVG path. This is an offline method. Returns an empty string if the outline isn't
+known.
+Request type for {@link Tdjson#getStickerOutlineSvgPath}.
+*/
+export interface GetStickerOutlineSvgPath {
+	'@type': 'getStickerOutlineSvgPath';
+	/**
+File identifier of the sticker.
+*/
+	sticker_file_id: number;
+	/**
+Pass true to get the outline scaled for animated emoji.
+*/
+	for_animated_emoji?: boolean;
+	/**
+Pass true to get the outline scaled for clicked animated emoji message.
+*/
+	for_clicked_animated_emoji_message?: boolean;
+}
+
+/**
 Returns stickers from the installed sticker sets that correspond to any of the given emoji or can be found by
 sticker-specific keywords. If the query is non-empty, then favorite, recently used or trending stickers may also be
 returned.
@@ -46209,7 +46613,7 @@ List of possible IETF language tags of the user's input language; may be empty i
 }
 
 /**
-Return emojis matching the keyword. Supported only if the file database is enabled. Order of results is unspecified.
+Returns emojis matching the keyword. Supported only if the file database is enabled. Order of results is unspecified.
 Request type for {@link Tdjson#getKeywordEmojis}.
 */
 export interface GetKeywordEmojis {
@@ -46742,7 +47146,7 @@ Reason of code resending; pass null if unknown.
 }
 
 /**
-Check the authentication code and completes the request for which the code was sent if appropriate.
+Checks the authentication code and completes the request for which the code was sent if appropriate.
 Request type for {@link Tdjson#checkPhoneNumberCode}.
 */
 export interface CheckPhoneNumberCode {
@@ -47147,7 +47551,7 @@ File identifiers of the media in the new order.
 }
 
 /**
-Delete media previews from the list of media previews of a bot.
+Deletes media previews from the list of media previews of a bot.
 Request type for {@link Tdjson#deleteBotMediaPreviews}.
 */
 export interface DeleteBotMediaPreviews {
@@ -48263,6 +48667,18 @@ Identifier of the gift.
 }
 
 /**
+Returns all possible variants of upgraded gifts for a regular gift.
+Request type for {@link Tdjson#getGiftUpgradeVariants}.
+*/
+export interface GetGiftUpgradeVariants {
+	'@type': 'getGiftUpgradeVariants';
+	/**
+Identifier of the gift.
+*/
+	gift_id: string;
+}
+
+/**
 Upgrades a regular gift.
 Request type for {@link Tdjson#upgradeGift}.
 */
@@ -48366,6 +48782,52 @@ Identifier of the user or the channel chat that will receive the gift.
 The price that the user agreed to pay for the gift.
 */
 	price: GiftResalePrice;
+}
+
+/**
+Sends an offer to purchase an upgraded gift.
+Request type for {@link Tdjson#sendGiftPurchaseOffer}.
+*/
+export interface SendGiftPurchaseOffer {
+	'@type': 'sendGiftPurchaseOffer';
+	/**
+Identifier of the user or the channel chat that currently owns the gift and will receive the offer.
+*/
+	owner_id: MessageSender;
+	/**
+Name of the upgraded gift.
+*/
+	gift_name: string;
+	/**
+The price that the user agreed to pay for the gift.
+*/
+	price: GiftResalePrice;
+	/**
+Duration of the offer, in seconds; must be one of 21600, 43200, 86400, 129600, 172800, or 259200. Can also be 120 if
+Telegram test environment is used.
+*/
+	duration: number;
+	/**
+The number of Telegram Stars the user agreed to pay additionally for sending of the offer message to the current gift
+owner; pass userFullInfo.outgoing_paid_message_star_count for users and 0 otherwise.
+*/
+	paid_message_star_count: number;
+}
+
+/**
+Handles a pending gift purchase offer.
+Request type for {@link Tdjson#processGiftPurchaseOffer}.
+*/
+export interface ProcessGiftPurchaseOffer {
+	'@type': 'processGiftPurchaseOffer';
+	/**
+Identifier of the message with the gift purchase offer.
+*/
+	message_id: number;
+	/**
+Pass true to approve the request; pass false to decline it.
+*/
+	approve?: boolean;
 }
 
 /**
@@ -48488,6 +48950,15 @@ Identifier of the gift.
 The 2-step verification password of the current user.
 */
 	password: string;
+}
+
+/**
+Returns promotional anumation for upgraded gifts.
+Request type for {@link Tdjson#getUpgradedGiftsPromotionalAnimation}.
+*/
+export interface GetUpgradedGiftsPromotionalAnimation {
+	'@type': 'getUpgradedGiftsPromotionalAnimation';
+
 }
 
 /**
@@ -49133,7 +49604,7 @@ getOption("paid_message_earnings_per_mille") Telegram Stars for each 1000 Telegr
 }
 
 /**
-Check whether the current user can message another user or try to create a chat with them.
+Checks whether the current user can message another user or try to create a chat with them.
 Request type for {@link Tdjson#canSendMessageToUser}.
 */
 export interface CanSendMessageToUser {
@@ -50414,7 +50885,7 @@ which is administered by the user.
 }
 
 /**
-Return information about a Telegram Premium gift code.
+Returns information about a Telegram Premium gift code.
 Request type for {@link Tdjson#checkPremiumGiftCode}.
 */
 export interface CheckPremiumGiftCode {
@@ -51420,6 +51891,8 @@ export type Request =
 	| CheckAuthenticationEmailCode
 	| CheckAuthenticationCode
 	| RequestQrCodeAuthentication
+	| GetAuthenticationPasskeyParameters
+	| CheckAuthenticationPasskey
 	| RegisterUser
 	| ResetAuthenticationEmailAddress
 	| CheckAuthenticationPassword
@@ -51642,6 +52115,10 @@ export type Request =
 	| ReadAllForumTopicMentions
 	| ReadAllForumTopicReactions
 	| UnpinAllForumTopicMessages
+	| GetPasskeyParameters
+	| AddLoginPasskey
+	| GetLoginPasskeys
+	| RemoveLoginPasskey
 	| GetEmojiReaction
 	| GetCustomEmojiReactionAnimations
 	| GetMessageAvailableReactions
@@ -51988,6 +52465,7 @@ export type Request =
 	| SetProfileAudioPosition
 	| RemoveProfileAudio
 	| GetStickerOutline
+	| GetStickerOutlineSvgPath
 	| GetStickers
 	| GetAllStickerEmojis
 	| SearchStickers
@@ -52151,16 +52629,20 @@ export type Request =
 	| SetPinnedGifts
 	| ToggleChatGiftNotifications
 	| GetGiftUpgradePreview
+	| GetGiftUpgradeVariants
 	| UpgradeGift
 	| BuyGiftUpgrade
 	| TransferGift
 	| DropGiftOriginalDetails
 	| SendResoldGift
+	| SendGiftPurchaseOffer
+	| ProcessGiftPurchaseOffer
 	| GetReceivedGifts
 	| GetReceivedGift
 	| GetUpgradedGift
 	| GetUpgradedGiftValueInfo
 	| GetUpgradedGiftWithdrawalUrl
+	| GetUpgradedGiftsPromotionalAnimation
 	| SetGiftResalePrice
 	| SearchGiftsForResale
 	| GetGiftCollections
@@ -52465,6 +52947,30 @@ authorizationStateWaitPassword.
 		return this._request({
 			...options,
 			'@type': 'requestQrCodeAuthentication',
+		});
+	}
+
+	/**
+Returns parameters for authentication using a passkey as JSON-serialized string.
+*/
+	async getAuthenticationPasskeyParameters(): Promise<Text> {
+		return this._request({
+			'@type': 'getAuthenticationPasskeyParameters',
+		});
+	}
+
+	/**
+Checks a passkey to log in to the corresponding account. Call getAuthenticationPasskeyParameters to get parameters for
+the passkey. Works only when the current authorization state is authorizationStateWaitPhoneNumber or
+authorizationStateWaitOtherDeviceConfirmation, or if there is no pending authentication query and the current
+authorization state is authorizationStateWaitPremiumPurchase, authorizationStateWaitEmailAddress,
+authorizationStateWaitEmailCode, authorizationStateWaitCode, authorizationStateWaitRegistration, or
+authorizationStateWaitPassword.
+*/
+	async checkAuthenticationPasskey(options: Omit<CheckAuthenticationPasskey, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'checkAuthenticationPasskey',
 		});
 	}
 
@@ -52928,8 +53434,9 @@ with a previously set same background for messageChatSetBackground, the giveaway
 the checklist message for messageChecklistTasksDone, messageChecklistTasksAdded, the message with suggested post
 information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved, messageSuggestedPostDeclined,
 messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
-messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, and the topic creation message for topic messages
-without non-bundled replied message. Returns a 404 error if the message doesn't exist.
+messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, the message with gift purchase offer for
+messageUpgradedGiftPurchaseOfferDeclined, and the topic creation message for topic messages without non-bundled replied
+message. Returns a 404 error if the message doesn't exist.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -54509,7 +55016,7 @@ Returns the amount of Telegram Stars owned by a business account; for bots only.
 	}
 
 	/**
-Transfer Telegram Stars from the business account to the business bot; for bots only.
+Transfers Telegram Stars from the business account to the business bot; for bots only.
 */
 	async transferBusinessAccountStars(options: Omit<TransferBusinessAccountStars, '@type'>): Promise<Ok> {
 		return this._request({
@@ -54823,6 +55330,45 @@ can_pin_messages member right in the supergroup.
 		return this._request({
 			...options,
 			'@type': 'unpinAllForumTopicMessages',
+		});
+	}
+
+	/**
+Returns parameters for creating of a new passkey as JSON-serialized string.
+*/
+	async getPasskeyParameters(): Promise<Text> {
+		return this._request({
+			'@type': 'getPasskeyParameters',
+		});
+	}
+
+	/**
+Adds a passkey allowed to be used for the login by the current user and returns the added passkey. Call
+getPasskeyParameters to get parameters for creating of the passkey.
+*/
+	async addLoginPasskey(options: Omit<AddLoginPasskey, '@type'>): Promise<Passkey> {
+		return this._request({
+			...options,
+			'@type': 'addLoginPasskey',
+		});
+	}
+
+	/**
+Returns the list of passkeys allowed to be used for the login by the current user.
+*/
+	async getLoginPasskeys(): Promise<Passkeys> {
+		return this._request({
+			'@type': 'getLoginPasskeys',
+		});
+	}
+
+	/**
+Removes a passkey from the list of passkeys allowed to be used for the login by the current user.
+*/
+	async removeLoginPasskey(options: Omit<RemoveLoginPasskey, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeLoginPasskey',
 		});
 	}
 
@@ -56506,7 +57052,7 @@ Changes the order of pinned chats.
 	}
 
 	/**
-Traverse all chats in a chat list and marks all messages in the chats as read.
+Traverses all chats in a chat list and marks all messages in the chats as read.
 */
 	async readChatList(options: Omit<ReadChatList, '@type'>): Promise<Ok> {
 		return this._request({
@@ -57122,7 +57668,7 @@ Returns suggested name for saving a file in a given directory.
 	}
 
 	/**
-Preliminary uploads a file to the cloud before sending it in a message, which can be useful for uploading of being
+Preliminarily uploads a file to the cloud before sending it in a message, which can be useful for uploading of being
 recorded voice and video notes. In all other cases there is no need to preliminary upload a file. Updates updateFile
 will be used to notify about upload progress. The upload will not be completed until the file is sent in a message.
 */
@@ -57259,7 +57805,7 @@ Searches for files in the file download list or recently downloaded files from t
 	}
 
 	/**
-Application or reCAPTCHA verification has been completed. Can be called before authorization.
+Informs TDLib that application or reCAPTCHA verification has been completed. Can be called before authorization.
 */
 	async setApplicationVerificationToken(options: Omit<SetAppVerificationToken, '@type'>): Promise<Ok> {
 		return this._request({
@@ -58412,6 +58958,17 @@ Returns outline of a sticker. This is an offline method. Returns a 404 error if 
 	}
 
 	/**
+Returns outline of a sticker as an SVG path. This is an offline method. Returns an empty string if the outline isn't
+known.
+*/
+	async getStickerOutlineSvgPath(options: Omit<GetStickerOutlineSvgPath, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'getStickerOutlineSvgPath',
+		});
+	}
+
+	/**
 Returns stickers from the installed sticker sets that correspond to any of the given emoji or can be found by
 sticker-specific keywords. If the query is non-empty, then favorite, recently used or trending stickers may also be
 returned.
@@ -58680,7 +59237,7 @@ Searches for emojis by keywords. Supported only if the file database is enabled.
 	}
 
 	/**
-Return emojis matching the keyword. Supported only if the file database is enabled. Order of results is unspecified.
+Returns emojis matching the keyword. Supported only if the file database is enabled. Order of results is unspecified.
 */
 	async getKeywordEmojis(options: Omit<GetKeywordEmojis, '@type'>): Promise<Emojis> {
 		return this._request({
@@ -59096,7 +59653,7 @@ next_code_type was not null and the server-specified timeout has passed.
 	}
 
 	/**
-Check the authentication code and completes the request for which the code was sent if appropriate.
+Checks the authentication code and completes the request for which the code was sent if appropriate.
 */
 	async checkPhoneNumberCode(options: Omit<CheckPhoneNumberCode, '@type'>): Promise<Ok> {
 		return this._request({
@@ -59380,7 +59937,7 @@ Changes order of media previews in the list of media previews of a bot.
 	}
 
 	/**
-Delete media previews from the list of media previews of a bot.
+Deletes media previews from the list of media previews of a bot.
 */
 	async deleteBotMediaPreviews(options: Omit<DeleteBotMediaPreviews, '@type'>): Promise<Ok> {
 		return this._request({
@@ -60081,6 +60638,16 @@ Returns examples of possible upgraded gifts for a regular gift.
 	}
 
 	/**
+Returns all possible variants of upgraded gifts for a regular gift.
+*/
+	async getGiftUpgradeVariants(options: Omit<GetGiftUpgradeVariants, '@type'>): Promise<GiftUpgradeVariants> {
+		return this._request({
+			...options,
+			'@type': 'getGiftUpgradeVariants',
+		});
+	}
+
+	/**
 Upgrades a regular gift.
 */
 	async upgradeGift(options: Omit<UpgradeGift, '@type'>): Promise<UpgradeGiftResult> {
@@ -60132,6 +60699,26 @@ user must be transferred using transferGift and can't be passed to the method.
 	}
 
 	/**
+Sends an offer to purchase an upgraded gift.
+*/
+	async sendGiftPurchaseOffer(options: Omit<SendGiftPurchaseOffer, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'sendGiftPurchaseOffer',
+		});
+	}
+
+	/**
+Handles a pending gift purchase offer.
+*/
+	async processGiftPurchaseOffer(options: Omit<ProcessGiftPurchaseOffer, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'processGiftPurchaseOffer',
+		});
+	}
+
+	/**
 Returns gifts received by the given user or chat.
 */
 	async getReceivedGifts(options: Omit<GetReceivedGifts, '@type'>): Promise<ReceivedGifts> {
@@ -60179,6 +60766,15 @@ a chat.
 		return this._request({
 			...options,
 			'@type': 'getUpgradedGiftWithdrawalUrl',
+		});
+	}
+
+	/**
+Returns promotional anumation for upgraded gifts.
+*/
+	async getUpgradedGiftsPromotionalAnimation(): Promise<Animation> {
+		return this._request({
+			'@type': 'getUpgradedGiftsPromotionalAnimation',
 		});
 	}
 
@@ -60621,7 +61217,7 @@ can_restrict_members administrator right and supergroupFullInfo.can_enable_paid_
 	}
 
 	/**
-Check whether the current user can message another user or try to create a chat with them.
+Checks whether the current user can message another user or try to create a chat with them.
 */
 	async canSendMessageToUser(options: Omit<CanSendMessageToUser, '@type'>): Promise<CanSendMessageToUserResult> {
 		return this._request({
@@ -61435,7 +62031,7 @@ chat members.
 	}
 
 	/**
-Return information about a Telegram Premium gift code.
+Returns information about a Telegram Premium gift code.
 */
 	async checkPremiumGiftCode(options: Omit<CheckPremiumGiftCode, '@type'>): Promise<PremiumGiftCodeInfo> {
 		return this._request({
