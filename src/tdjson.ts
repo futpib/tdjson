@@ -1454,7 +1454,7 @@ Sticker height; as defined by the sender.
 */
 	height: number;
 	/**
-Emoji corresponding to the sticker.
+Emoji corresponding to the sticker; may be empty if unknown.
 */
 	emoji: string;
 	/**
@@ -1726,6 +1726,39 @@ Game photo.
 Game animation; may be null.
 */
 	animation: Animation;
+}
+
+/**
+Describes state of the stake dice.
+*/
+export interface StakeDiceState {
+	'@type': 'stakeDiceState';
+	/**
+Hash of the state to use for sending the next dice; may be empty if the stake dice can't be sent by the current user.
+*/
+	state_hash: string;
+	/**
+The Toncoin amount that was staked in the previous roll; in the smallest units of the currency.
+*/
+	stake_toncoin_amount: number;
+	/**
+The amounts of Toncoins that are suggested to be staked; in the smallest units of the currency.
+*/
+	suggested_stake_toncoin_amounts: number[];
+	/**
+The number of rolled sixes towards the streak; 0-2.
+*/
+	current_streak: number;
+	/**
+The number of Toncoins received by the user for each 1000 Toncoins staked if the dice outcome is 1-6 correspondingly;
+may be empty if the stake dice can't be sent by the current user.
+*/
+	prize_per_mille: number[];
+	/**
+The number of Toncoins received by the user for each 1000 Toncoins staked if the dice outcome is 6 three times in a row
+with the same stake.
+*/
+	streak_prize_per_mille: number;
 }
 
 /**
@@ -2454,7 +2487,7 @@ True, if the bot can edit username of the business account.
 */
 	can_edit_username?: boolean;
 	/**
-True, if the bot can view gifts and amount of Telegram Stars owned by the business account.
+True, if the bot can view gifts and Telegram Star amount owned by the business account.
 */
 	can_view_gifts_and_stars?: boolean;
 	/**
@@ -2993,7 +3026,7 @@ Subtype of {@link GiftResalePrice}.
 export interface GiftResalePriceStar {
 	'@type': 'giftResalePriceStar';
 	/**
-The amount of Telegram Stars expected to be paid for the gift. Must be in range
+The Telegram Star amount expected to be paid for the gift. Must be in the range
 getOption("gift_resale_star_count_min")-getOption("gift_resale_star_count_max") for gifts put for resale.
 */
 	star_count: number;
@@ -3006,7 +3039,7 @@ Subtype of {@link GiftResalePrice}.
 export interface GiftResalePriceTon {
 	'@type': 'giftResalePriceTon';
 	/**
-The amount of 1/100 of Toncoin expected to be paid for the gift. Must be in range
+The amount of 1/100 of Toncoin expected to be paid for the gift. Must be in the range
 getOption("gift_resale_toncoin_cent_count_min")-getOption("gift_resale_toncoin_cent_count_max").
 */
 	toncoin_cent_count: number;
@@ -3046,7 +3079,7 @@ Subtype of {@link SuggestedPostPrice}.
 export interface SuggestedPostPriceStar {
 	'@type': 'suggestedPostPriceStar';
 	/**
-The amount of Telegram Stars expected to be paid for the post;
+The Telegram Star amount expected to be paid for the post;
 getOption("suggested_post_star_count_min")-getOption("suggested_post_star_count_max").
 */
 	star_count: number;
@@ -3161,12 +3194,12 @@ export interface SuggestedPostRefundReasonPaymentRefunded {
 }
 
 /**
-Describes a possibly non-integer amount of Telegram Stars.
+Describes a possibly non-integer Telegram Star amount.
 */
 export interface StarAmount {
 	'@type': 'starAmount';
 	/**
-The integer amount of Telegram Stars rounded to 0.
+The integer Telegram Star amount rounded to 0.
 */
 	star_count: number;
 	/**
@@ -3227,7 +3260,7 @@ The number of seconds between consecutive Telegram Star debiting.
 */
 	period: number;
 	/**
-The amount of Telegram Stars that must be paid for each period.
+The Telegram Star amount that must be paid for each period.
 */
 	star_count: number;
 }
@@ -3401,7 +3434,7 @@ Identifier of the chat which received the commission.
 */
 	affiliate_chat_id: number;
 	/**
-The amount of Telegram Stars that were received by the affiliate; can be negative for refunds.
+The Telegram Star amount that was received by the affiliate; can be negative for refunds.
 */
 	star_amount: StarAmount;
 }
@@ -3584,7 +3617,7 @@ The amount to pay, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-The alternative amount of Telegram Stars to pay; 0 if payment in Telegram Stars is not possible.
+The alternative Telegram Star amount to pay; 0 if payment in Telegram Stars is not possible.
 */
 	star_count: number;
 	/**
@@ -4402,7 +4435,7 @@ Point in time (Unix timestamp) when the corresponding regular gift was originall
 */
 	initial_sale_date: number;
 	/**
-Amount of Telegram Stars that were paid for the gift.
+The Telegram Star amount that was paid for the gift.
 */
 	initial_sale_star_count: number;
 	/**
@@ -4534,7 +4567,7 @@ Point in time (Unix timestamp) when the price will be in effect.
 */
 	date: number;
 	/**
-The amount of Telegram Stars required to pay to upgrade the gift.
+The Telegram Star amount required to pay to upgrade the gift.
 */
 	star_count: number;
 }
@@ -5622,7 +5655,7 @@ The number of Telegram Stars received by the Telegram for each 1000 Telegram Sta
 */
 	commission_per_mille: number;
 	/**
-The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
+The Telegram Star amount that was received by Telegram; can be negative for refunds.
 */
 	commission_star_amount: StarAmount;
 	/**
@@ -5716,7 +5749,7 @@ The number of Telegram Stars received by the Telegram for each 1000 Telegram Sta
 */
 	commission_per_mille: number;
 	/**
-The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
+The Telegram Star amount that was received by Telegram; can be negative for refunds.
 */
 	commission_star_amount: StarAmount;
 }
@@ -5748,7 +5781,7 @@ The number of Telegram Stars received by the Telegram for each 1000 Telegram Sta
 */
 	commission_per_mille: number;
 	/**
-The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
+The Telegram Star amount that was received by Telegram; can be negative for refunds.
 */
 	commission_star_amount: StarAmount;
 }
@@ -5780,7 +5813,7 @@ The number of Telegram Stars received by the Telegram for each 1000 Telegram Sta
 */
 	commission_per_mille: number;
 	/**
-The amount of Telegram Stars that were received by Telegram; can be negative for refunds.
+The Telegram Star amount that was received by Telegram; can be negative for refunds.
 */
 	commission_star_amount: StarAmount;
 }
@@ -6004,7 +6037,7 @@ The number of Toncoins received by the Telegram for each 1000 Toncoins received 
 */
 	commission_per_mille: number;
 	/**
-The amount of Toncoins that were received by the Telegram; in the smallest units of the currency.
+The Toncoin amount that was received by the Telegram; in the smallest units of the currency.
 */
 	commission_toncoin_amount: number;
 	/**
@@ -6210,8 +6243,8 @@ the giveaway isn't a Telegram Premium giveaway.
 */
 	gift_code: string;
 	/**
-The amount of Telegram Stars won by the current user; 0 if the user isn't a winner in the giveaway or the giveaway isn't
-a Telegram Star giveaway.
+The Telegram Star amount won by the current user; 0 if the user isn't a winner in the giveaway or the giveaway isn't a
+Telegram Star giveaway.
 */
 	won_star_count: number;
 }
@@ -8666,8 +8699,8 @@ from the same chat.
 Media content of the message if the message was from another chat or topic; may be null for messages from the same chat
 and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageChecklist,
 messageContact, messageDice, messageDocument, messageGame, messageGiveaway, messageGiveawayWinners, messageInvoice,
-messageLocation, messagePaidMedia, messagePhoto, messagePoll, messageSticker, messageStory, messageText (for link
-preview), messageVenue, messageVideo, messageVideoNote, or messageVoiceNote.
+messageLocation, messagePaidMedia, messagePhoto, messagePoll, messageStakeDice, messageSticker, messageStory,
+messageText (for link preview), messageVenue, messageVideo, messageVideoNote, or messageVoiceNote.
 */
 	content: MessageContent;
 }
@@ -8920,6 +8953,11 @@ Unique identifier of the effect added to the message; 0 if none.
 Information about the restrictions that must be applied to the message content; may be null if none.
 */
 	restriction_info: RestrictionInfo;
+	/**
+IETF language tag of the message language on which it can be summarized; empty if summary isn't available for the
+message.
+*/
+	summary_language_code: string;
 	/**
 Content of the message.
 */
@@ -15355,7 +15393,7 @@ Emoji on which the dice throw animation is based.
 */
 	emoji: string;
 	/**
-The dice value. If the value is 0, the dice don't have final state yet.
+The dice value. If the value is 0, then the dice don't have final state yet.
 */
 	value: number;
 	/**
@@ -15387,6 +15425,37 @@ export interface MessagePoll {
 The poll description.
 */
 	poll: Poll;
+}
+
+/**
+A stake dice message. The dice value is randomly generated by the server.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageStakeDice {
+	'@type': 'messageStakeDice';
+	/**
+The animated stickers with the initial dice animation; may be null if unknown. The update updateMessageContent will be
+sent when the sticker became known.
+*/
+	initial_state: DiceStickers;
+	/**
+The animated stickers with the final dice animation; may be null if unknown. The update updateMessageContent will be
+sent when the sticker became known.
+*/
+	final_state: DiceStickers;
+	/**
+The dice value. If the value is 0, then the dice don't have final state yet.
+*/
+	value: number;
+	/**
+The Toncoin amount that was staked; in the smallest units of the currency.
+*/
+	stake_toncoin_amount: number;
+	/**
+The Toncoin amount that was gained from the roll; in the smallest units of the currency; -1 if the dice don't have final
+state yet.
+*/
+	prize_toncoin_amount: number;
 }
 
 /**
@@ -16305,7 +16374,7 @@ The identifier of a user that received Toncoins; 0 if the gift is incoming.
 */
 	receiver_user_id: number;
 	/**
-The received amount of Toncoins, in the smallest units of the cryptocurrency.
+The received Toncoin amount, in the smallest units of the cryptocurrency.
 */
 	ton_amount: number;
 	/**
@@ -16550,11 +16619,11 @@ Point in time (Unix timestamp) when the offer will expire or has expired.
 }
 
 /**
-An offer to purchase a gift was declined or expired.
+An offer to purchase a gift was rejected or expired.
 Subtype of {@link MessageContent}.
 */
-export interface MessageUpgradedGiftPurchaseOfferDeclined {
-	'@type': 'messageUpgradedGiftPurchaseOfferDeclined';
+export interface MessageUpgradedGiftPurchaseOfferRejected {
+	'@type': 'messageUpgradedGiftPurchaseOfferRejected';
 	/**
 The gift.
 */
@@ -16564,12 +16633,12 @@ The proposed price.
 */
 	price: GiftResalePrice;
 	/**
-Identifier of the message with purchase offer which was declined or expired; may be 0 or an identifier of a deleted
+Identifier of the message with purchase offer which was rejected or expired; may be 0 or an identifier of a deleted
 message.
 */
 	offer_message_id: number;
 	/**
-True, if the offer has expired; otherwise, the offer was explicitly declined.
+True, if the offer has expired; otherwise, the offer was explicitly rejected.
 */
 	was_expired?: boolean;
 }
@@ -17343,7 +17412,7 @@ Options to be used for generation of a link preview; may be null if none; pass n
 */
 	link_preview_options: LinkPreviewOptions;
 	/**
-True, if a chat message draft must be deleted.
+True, if the chat message draft must be deleted.
 */
 	clear_draft?: boolean;
 }
@@ -17854,6 +17923,28 @@ Point in time (Unix timestamp) when the poll will automatically be closed; for b
 True, if the poll needs to be sent already closed; for bots only.
 */
 	is_closed?: boolean;
+}
+
+/**
+A stake dice message.
+Subtype of {@link InputMessageContent}.
+*/
+export interface InputMessageStakeDice {
+	'@type': 'inputMessageStakeDice';
+	/**
+Hash of the stake dice state. The state hash can be used only if it was received recently enough. Otherwise, a new state
+must be requested using getStakeDiceState.
+*/
+	state_hash: string;
+	/**
+The Toncoin amount that will be staked; in the smallest units of the currency. Must be in the range
+getOption("stake_dice_stake_amount_min")-getOption("stake_dice_stake_amount_max").
+*/
+	stake_toncoin_amount: number;
+	/**
+True, if the chat message draft must be deleted.
+*/
+	clear_draft?: boolean;
 }
 
 /**
@@ -30267,15 +30358,15 @@ Contains information about Telegram Stars earned by a user or a chat.
 export interface StarRevenueStatus {
 	'@type': 'starRevenueStatus';
 	/**
-Total amount of Telegram Stars earned.
+Total Telegram Star amount earned.
 */
 	total_amount: StarAmount;
 	/**
-The amount of Telegram Stars that aren't withdrawn yet.
+The Telegram Star amount that isn't withdrawn yet.
 */
 	current_amount: StarAmount;
 	/**
-The amount of Telegram Stars that are available for withdrawal.
+The Telegram Star amount that is available for withdrawal.
 */
 	available_amount: StarAmount;
 	/**
@@ -30313,15 +30404,15 @@ Contains information about Toncoins earned by the current user.
 export interface TonRevenueStatus {
 	'@type': 'tonRevenueStatus';
 	/**
-Total amount of Toncoins earned; in the smallest units of the cryptocurrency.
+Total Toncoin amount earned; in the smallest units of the cryptocurrency.
 */
 	total_amount: string;
 	/**
-Amount of Toncoins that aren't withdrawn yet; in the smallest units of the cryptocurrency.
+The Toncoin amount that isn't withdrawn yet; in the smallest units of the cryptocurrency.
 */
 	balance_amount: string;
 	/**
-Amount of Toncoins that are available for withdrawal; in the smallest units of the cryptocurrency.
+The Toncoin amount that is available for withdrawal; in the smallest units of the cryptocurrency.
 */
 	available_amount: string;
 	/**
@@ -32960,6 +33051,19 @@ The new list of supported dice emojis.
 }
 
 /**
+The stake dice state has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateStakeDiceState {
+	'@type': 'updateStakeDiceState';
+	/**
+The new state. The state can be used only if it was received recently enough. Otherwise, a new state must be requested
+using getStakeDiceState.
+*/
+	state: StakeDiceState;
+}
+
+/**
 Some animated emoji message was clicked and a big animated sticker must be played if the message is visible on the
 screen. chatActionWatchingAnimations with the text of the message needs to be sent if the sticker is played.
 Subtype of {@link Update}.
@@ -34404,6 +34508,7 @@ export type MessageContent =
 	| MessageDice
 	| MessageGame
 	| MessagePoll
+	| MessageStakeDice
 	| MessageStory
 	| MessageChecklist
 	| MessageInvoice
@@ -34454,7 +34559,7 @@ export type MessageContent =
 	| MessageUpgradedGift
 	| MessageRefundedUpgradedGift
 	| MessageUpgradedGiftPurchaseOffer
-	| MessageUpgradedGiftPurchaseOfferDeclined
+	| MessageUpgradedGiftPurchaseOfferRejected
 	| MessagePaidMessagesRefunded
 	| MessagePaidMessagePriceChanged
 	| MessageDirectMessagePriceChanged
@@ -34531,6 +34636,7 @@ export type InputMessageContent =
 	| InputMessageGame
 	| InputMessageInvoice
 	| InputMessagePoll
+	| InputMessageStakeDice
 	| InputMessageStory
 	| InputMessageChecklist
 	| InputMessageForwarded;
@@ -35507,6 +35613,7 @@ export type Update =
 	| UpdateSpeechRecognitionTrial
 	| UpdateGroupCallMessageLevels
 	| UpdateDiceEmojis
+	| UpdateStakeDiceState
 	| UpdateAnimatedEmojiMessageClicked
 	| UpdateAnimationSearchParameters
 	| UpdateSuggestedActions
@@ -36364,7 +36471,7 @@ the checklist message for messageChecklistTasksDone, messageChecklistTasksAdded,
 information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved, messageSuggestedPostDeclined,
 messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
 messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, the message with gift purchase offer for
-messageUpgradedGiftPurchaseOfferDeclined, and the topic creation message for topic messages without non-bundled replied
+messageUpgradedGiftPurchaseOfferRejected, and the topic creation message for topic messages without non-bundled replied
 message. Returns a 404 error if the message doesn't exist.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
@@ -37607,7 +37714,7 @@ chosen by TDLib and can be smaller than the specified limit.
 */
 	limit: number;
 	/**
-The amount of Telegram Stars the user agreed to pay for the search; pass 0 for free searches.
+The Telegram Star amount the user agreed to pay for the search; pass 0 for free searches.
 */
 	star_count: number;
 }
@@ -38228,15 +38335,31 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Language code of the language to which the message is translated. Must be one of "af", "sq", "am", "ar", "hy", "az",
-"eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh", "zh-Hans", "zh-TW", "zh-Hant", "co", "hr", "cs", "da", "nl",
-"en", "eo", "et", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "iw", "hi", "hmn", "hu",
-"is", "ig", "id", "in", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb",
-"mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "or", "ps", "fa", "pl", "pt", "pa", "ro", "ru",
-"sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tl", "tg", "ta", "tt", "te", "th",
-"tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "ji", "yo", "zu".
+Language code of the language to which the message is translated. See translateText.to_language_code for the list of
+supported values.
 */
 	to_language_code: string;
+}
+
+/**
+Summarizes content of the message with non-empty summary_language_code.
+Request type for {@link Tdjson#summarizeMessage}.
+*/
+export interface SummarizeMessage {
+	'@type': 'summarizeMessage';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Pass a language code to which the summary will be translated; may be empty if translation isn't needed. See
+translateText.to_language_code for the list of supported values.
+*/
+	translate_to_language_code: string;
 }
 
 /**
@@ -39419,7 +39542,7 @@ The new settings.
 }
 
 /**
-Returns the amount of Telegram Stars owned by a business account; for bots only.
+Returns the Telegram Star amount owned by a business account; for bots only.
 Request type for {@link Tdjson#getBusinessAccountStarAmount}.
 */
 export interface GetBusinessAccountStarAmount {
@@ -42745,6 +42868,15 @@ export interface ClearAllDraftMessages {
 Pass true to keep local message drafts in secret chats.
 */
 	exclude_secret_chats?: boolean;
+}
+
+/**
+Returns the current state of stake dice.
+Request type for {@link Tdjson#getStakeDiceState}.
+*/
+export interface GetStakeDiceState {
+	'@type': 'getStakeDiceState';
+
 }
 
 /**
@@ -48697,8 +48829,8 @@ Pass true to keep the original gift text, sender and receiver in the upgraded gi
 */
 	keep_original_details?: boolean;
 	/**
-The amount of Telegram Stars required to pay for the upgrade. It the gift has prepaid_upgrade_star_count > 0, then pass
-0, otherwise, pass gift.upgrade_star_count.
+The Telegram Star amount required to pay for the upgrade. It the gift has prepaid_upgrade_star_count > 0, then pass 0,
+otherwise, pass gift.upgrade_star_count.
 */
 	star_count: number;
 }
@@ -48718,7 +48850,7 @@ Prepaid upgrade hash as received along with the gift.
 */
 	prepaid_upgrade_hash: string;
 	/**
-The amount of Telegram Stars the user agreed to pay for the upgrade; must be equal to gift.upgrade_star_count.
+The Telegram Star amount the user agreed to pay for the upgrade; must be equal to gift.upgrade_star_count.
 */
 	star_count: number;
 }
@@ -48742,7 +48874,7 @@ Identifier of the user or the channel chat that will receive the gift.
 */
 	new_owner_id: MessageSender;
 	/**
-The amount of Telegram Stars required to pay for the transfer.
+The Telegram Star amount required to pay for the transfer.
 */
 	star_count: number;
 }
@@ -48758,7 +48890,7 @@ Identifier of the gift.
 */
 	received_gift_id: string;
 	/**
-The amount of Telegram Stars required to pay for the operation.
+The Telegram Star amount required to pay for the operation.
 */
 	star_count: number;
 }
@@ -48825,9 +48957,9 @@ Identifier of the message with the gift purchase offer.
 */
 	message_id: number;
 	/**
-Pass true to approve the request; pass false to decline it.
+Pass true to accept the request; pass false to reject it.
 */
-	approve?: boolean;
+	accept?: boolean;
 }
 
 /**
@@ -49585,8 +49717,8 @@ Pass true to refund the user previously paid messages.
 }
 
 /**
-Changes the amount of Telegram Stars that must be paid to send a message to a supergroup chat; requires
-can_restrict_members administrator right and supergroupFullInfo.can_enable_paid_messages.
+Changes the Telegram Star amount that must be paid to send a message to a supergroup chat; requires can_restrict_members
+administrator right and supergroupFullInfo.can_enable_paid_messages.
 Request type for {@link Tdjson#setChatPaidMessageStarCount}.
 */
 export interface SetChatPaidMessageStarCount {
@@ -51220,7 +51352,7 @@ The referral link of the affiliate program.
 }
 
 /**
-Returns an affiliate program that were connected to the given affiliate by identifier of the bot that created the
+Returns an affiliate program that was connected to the given affiliate by identifier of the bot that created the
 program.
 Request type for {@link Tdjson#getConnectedAffiliateProgram}.
 */
@@ -52038,6 +52170,7 @@ export type Request =
 	| GetMessageLinkInfo
 	| TranslateText
 	| TranslateMessageText
+	| SummarizeMessage
 	| RecognizeSpeech
 	| RateSpeechRecognition
 	| GetChatAvailableMessageSenders
@@ -52269,6 +52402,7 @@ export type Request =
 	| SearchChatMembers
 	| GetChatAdministrators
 	| ClearAllDraftMessages
+	| GetStakeDiceState
 	| GetSavedNotificationSound
 	| GetSavedNotificationSounds
 	| AddSavedNotificationSound
@@ -53435,7 +53569,7 @@ the checklist message for messageChecklistTasksDone, messageChecklistTasksAdded,
 information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved, messageSuggestedPostDeclined,
 messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
 messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, the message with gift purchase offer for
-messageUpgradedGiftPurchaseOfferDeclined, and the topic creation message for topic messages without non-bundled replied
+messageUpgradedGiftPurchaseOfferRejected, and the topic creation message for topic messages without non-bundled replied
 message. Returns a 404 error if the message doesn't exist.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
@@ -54514,6 +54648,16 @@ Premium user, then text formatting is preserved.
 	}
 
 	/**
+Summarizes content of the message with non-empty summary_language_code.
+*/
+	async summarizeMessage(options: Omit<SummarizeMessage, '@type'>): Promise<FormattedText> {
+		return this._request({
+			...options,
+			'@type': 'summarizeMessage',
+		});
+	}
+
+	/**
 Recognizes speech in a video note or a voice note message.
 */
 	async recognizeSpeech(options: Omit<RecognizeSpeech, '@type'>): Promise<Ok> {
@@ -55006,7 +55150,7 @@ Changes settings for gift receiving of a business account; for bots only.
 	}
 
 	/**
-Returns the amount of Telegram Stars owned by a business account; for bots only.
+Returns the Telegram Star amount owned by a business account; for bots only.
 */
 	async getBusinessAccountStarAmount(options: Omit<GetBusinessAccountStarAmount, '@type'>): Promise<StarAmount> {
 		return this._request({
@@ -56935,6 +57079,15 @@ Clears message drafts in all chats.
 		return this._request({
 			...options,
 			'@type': 'clearAllDraftMessages',
+		});
+	}
+
+	/**
+Returns the current state of stake dice.
+*/
+	async getStakeDiceState(): Promise<StakeDiceState> {
+		return this._request({
+			'@type': 'getStakeDiceState',
 		});
 	}
 
@@ -61206,8 +61359,8 @@ userPrivacySettingAllowUnpaidMessages.
 	}
 
 	/**
-Changes the amount of Telegram Stars that must be paid to send a message to a supergroup chat; requires
-can_restrict_members administrator right and supergroupFullInfo.can_enable_paid_messages.
+Changes the Telegram Star amount that must be paid to send a message to a supergroup chat; requires can_restrict_members
+administrator right and supergroupFullInfo.can_enable_paid_messages.
 */
 	async setChatPaidMessageStarCount(options: Omit<SetChatPaidMessageStarCount, '@type'>): Promise<Ok> {
 		return this._request({
@@ -62231,7 +62384,7 @@ information about the disconnected affiliate program.
 	}
 
 	/**
-Returns an affiliate program that were connected to the given affiliate by identifier of the bot that created the
+Returns an affiliate program that was connected to the given affiliate by identifier of the bot that created the
 program.
 */
 	async getConnectedAffiliateProgram(options: Omit<GetConnectedAffiliateProgram, '@type'>): Promise<ConnectedAffiliateProgram> {
