@@ -12,6 +12,7 @@ jobs:
       - run: |
           tee ~/.yarnrc.yml << EOF
           npmAuthToken: ${{ secrets.NPM_AUTH_TOKEN }}
+          npmPublishRegistry: "https://registry.npmjs.org"
           EOF
           yarn install --immutable
           yarn prepare
