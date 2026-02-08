@@ -2125,6 +2125,10 @@ True, if the bot has topics.
 */
 	has_topics?: boolean;
 	/**
+True, if users can create and delete topics in the chat with the bot.
+*/
+	allows_users_to_create_topics?: boolean;
+	/**
 True, if the bot supports inline queries.
 */
 	is_inline?: boolean;
@@ -2308,7 +2312,7 @@ Birth year; 0 if unknown.
 }
 
 /**
-Describes a user that had or will have a birthday soon.
+Describes a user who had or will have a birthday soon.
 */
 export interface CloseBirthdayUser {
 	'@type': 'closeBirthdayUser';
@@ -3699,7 +3703,7 @@ Contains information about a Telegram Premium gift code.
 export interface PremiumGiftCodeInfo {
 	'@type': 'premiumGiftCodeInfo';
 	/**
-Identifier of a chat or a user that created the gift code; may be null if unknown. If null and the code is from
+Identifier of a chat or a user who created the gift code; may be null if unknown. If null and the code is from
 messagePremiumGiftCode message, then creator_id from the message can be used.
 */
 	creator_id: MessageSender;
@@ -4076,6 +4080,64 @@ Price paid for the gift.
 }
 
 /**
+The gift was crafted from other gifts.
+Subtype of {@link UpgradedGiftOrigin}.
+*/
+export interface UpgradedGiftOriginCraft {
+	'@type': 'upgradedGiftOriginCraft';
+
+}
+
+/**
+Describes rarity of an upgraded gift attribute.
+Subtype of {@link UpgradedGiftAttributeRarity}.
+*/
+export interface UpgradedGiftAttributeRarityPerMille {
+	'@type': 'upgradedGiftAttributeRarityPerMille';
+	/**
+The number of upgraded gifts that receive this attribute for each 1000 gifts upgraded; if 0, then it can be shown as
+"<0.1%".
+*/
+	per_mille: number;
+}
+
+/**
+The attribute is uncommon.
+Subtype of {@link UpgradedGiftAttributeRarity}.
+*/
+export interface UpgradedGiftAttributeRarityUncommon {
+	'@type': 'upgradedGiftAttributeRarityUncommon';
+
+}
+
+/**
+The attribute is rare.
+Subtype of {@link UpgradedGiftAttributeRarity}.
+*/
+export interface UpgradedGiftAttributeRarityRare {
+	'@type': 'upgradedGiftAttributeRarityRare';
+
+}
+
+/**
+The attribute is epic.
+Subtype of {@link UpgradedGiftAttributeRarity}.
+*/
+export interface UpgradedGiftAttributeRarityEpic {
+	'@type': 'upgradedGiftAttributeRarityEpic';
+
+}
+
+/**
+The attribute is legendary.
+Subtype of {@link UpgradedGiftAttributeRarity}.
+*/
+export interface UpgradedGiftAttributeRarityLegendary {
+	'@type': 'upgradedGiftAttributeRarityLegendary';
+
+}
+
+/**
 Describes a model of an upgraded gift.
 */
 export interface UpgradedGiftModel {
@@ -4089,9 +4151,13 @@ The sticker representing the upgraded gift.
 */
 	sticker: Sticker;
 	/**
-The number of upgraded gifts that receive this model for each 1000 gifts upgraded.
+The rarity of the model.
 */
-	rarity_per_mille: number;
+	rarity: UpgradedGiftAttributeRarity;
+	/**
+True, if the model can be obtained only through gift crafting.
+*/
+	is_crafted?: boolean;
 }
 
 /**
@@ -4108,9 +4174,9 @@ The sticker representing the symbol.
 */
 	sticker: Sticker;
 	/**
-The number of upgraded gifts that receive this symbol for each 1000 gifts upgraded.
+The rarity of the symbol.
 */
-	rarity_per_mille: number;
+	rarity: UpgradedGiftAttributeRarity;
 }
 
 /**
@@ -4154,9 +4220,9 @@ Colors of the backdrop.
 */
 	colors: UpgradedGiftBackdropColors;
 	/**
-The number of upgraded gifts that receive this backdrop for each 1000 gifts upgraded.
+The rarity of the backdrop.
 */
-	rarity_per_mille: number;
+	rarity: UpgradedGiftAttributeRarity;
 }
 
 /**
@@ -4335,6 +4401,14 @@ The maximum number of gifts that can be upgraded from the same gift.
 */
 	max_upgraded_count: number;
 	/**
+True, if the gift was used to craft another gift.
+*/
+	is_burned?: boolean;
+	/**
+True, if the gift was craft from another gifts.
+*/
+	is_crafted?: boolean;
+	/**
 True, if the original gift could have been bought only by Telegram Premium subscribers.
 */
 	is_premium?: boolean;
@@ -4387,7 +4461,7 @@ Information about the originally sent gift; may be null if unknown.
 	original_details: UpgradedGiftOriginalDetails;
 	/**
 Colors that can be set for user's name, background of empty chat photo, replies to messages and link previews; may be
-null if none.
+null if none or unknown.
 */
 	colors: UpgradedGiftColors;
 	/**
@@ -4398,6 +4472,11 @@ Resale parameters of the gift; may be null if resale isn't possible.
 True, if an offer to purchase the gift can be sent using sendGiftPurchaseOffer.
 */
 	can_send_purchase_offer?: boolean;
+	/**
+Probability that the gift adds to the chance of successful crafting of a new gift; 0 if the gift can't be used for
+crafting.
+*/
+	craft_probability_per_mille: number;
 	/**
 ISO 4217 currency code of the currency in which value of the gift is represented; may be empty if unavailable.
 */
@@ -4521,6 +4600,52 @@ resold; only for the receiver of the gift.
 Point in time (Unix timestamp) when the gift can be transferred to the TON blockchain as an NFT; can be in the past.
 */
 	export_date: number;
+}
+
+/**
+Contains result of gift crafting.
+Subtype of {@link CraftGiftResult}.
+*/
+export interface CraftGiftResultSuccess {
+	'@type': 'craftGiftResultSuccess';
+	/**
+The created gift.
+*/
+	gift: UpgradedGift;
+	/**
+Unique identifier of the received gift for the current user.
+*/
+	received_gift_id: string;
+}
+
+/**
+Crafting isn't possible because one of the gifts can't be used for crafting yet.
+Subtype of {@link CraftGiftResult}.
+*/
+export interface CraftGiftResultTooEarly {
+	'@type': 'craftGiftResultTooEarly';
+	/**
+Time left before the gift can be used for crafting.
+*/
+	retry_after: number;
+}
+
+/**
+Crafting isn't possible because one of the gifts isn't suitable for crafting.
+Subtype of {@link CraftGiftResult}.
+*/
+export interface CraftGiftResultInvalidGift {
+	'@type': 'craftGiftResultInvalidGift';
+
+}
+
+/**
+Crafting has failed.
+Subtype of {@link CraftGiftResult}.
+*/
+export interface CraftGiftResultFail {
+	'@type': 'craftGiftResultFail';
+
 }
 
 /**
@@ -4732,7 +4857,10 @@ Subtype of {@link GiftResaleResult}.
 */
 export interface GiftResaleResultOk {
 	'@type': 'giftResaleResultOk';
-
+	/**
+Unique identifier of the received gift; only for the gifts sent to the current user.
+*/
+	received_gift_id: string;
 }
 
 /**
@@ -4870,6 +4998,11 @@ past; 0 if NFT export isn't possible; only for the receiver of the gift.
 If non-empty, then the user can pay for an upgrade of the gift using buyGiftUpgrade.
 */
 	prepaid_upgrade_hash: string;
+	/**
+Point in time (Unix timestamp) when the gift can be used to craft another gift can be in the past; only for the receiver
+of the gift.
+*/
+	craft_date: number;
 }
 
 /**
@@ -4889,6 +5022,43 @@ The list of gifts.
 True, if notifications about new gifts of the owner are enabled.
 */
 	are_notifications_enabled?: boolean;
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
+Describes chance of the crafted gift to have the backdrop or symbol of one of the original gifts.
+*/
+export interface AttributeCraftPersistenceProbability {
+	'@type': 'attributeCraftPersistenceProbability';
+	/**
+The 4 numbers that describe probability of the craft result to have the same attribute as one of the original gifts if
+1, 2, 3, or 4 gifts with the attribute are used in the craft. Each number represents the number of crafted gifts with
+the original attribute per 1000 successful craftings.
+*/
+	persistence_chance_per_mille: number[];
+}
+
+/**
+Represents a list of gifts received by a user or a chat.
+*/
+export interface GiftsForCrafting {
+	'@type': 'giftsForCrafting';
+	/**
+The total number of received gifts.
+*/
+	total_count: number;
+	/**
+The list of gifts.
+*/
+	gifts: ReceivedGift[];
+	/**
+The 4 objects that describe probabilities of the crafted gift to have the backdrop or symbol of one of the original
+gifts for the cases when 1, 2, 3 or 4 gifts are used in the craft correspondingly.
+*/
+	attribute_persistence_probabilities: AttributeCraftPersistenceProbability[];
 	/**
 The offset for the next request. If empty, then there are no more results.
 */
@@ -5233,7 +5403,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeUserDeposit {
 	'@type': 'starTransactionTypeUserDeposit';
 	/**
-Identifier of the user that gifted Telegram Stars; 0 if the user was anonymous.
+Identifier of the user who gifted Telegram Stars; 0 if the user was anonymous.
 */
 	user_id: number;
 	/**
@@ -5301,7 +5471,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeBotPaidMediaPurchase {
 	'@type': 'starTransactionTypeBotPaidMediaPurchase';
 	/**
-Identifier of the bot or the business account user that sent the paid media.
+Identifier of the bot or the business account user who sent the paid media.
 */
 	user_id: number;
 	/**
@@ -5317,7 +5487,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeBotPaidMediaSale {
 	'@type': 'starTransactionTypeBotPaidMediaSale';
 	/**
-Identifier of the user that bought the media.
+Identifier of the user who bought the media.
 */
 	user_id: number;
 	/**
@@ -5361,7 +5531,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeChannelPaidMediaSale {
 	'@type': 'starTransactionTypeChannelPaidMediaSale';
 	/**
-Identifier of the user that bought the media.
+Identifier of the user who bought the media.
 */
 	user_id: number;
 	/**
@@ -5382,7 +5552,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeBotInvoicePurchase {
 	'@type': 'starTransactionTypeBotInvoicePurchase';
 	/**
-Identifier of the bot or the business account user that created the invoice.
+Identifier of the bot or the business account user who created the invoice.
 */
 	user_id: number;
 	/**
@@ -5398,7 +5568,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeBotInvoiceSale {
 	'@type': 'starTransactionTypeBotInvoiceSale';
 	/**
-Identifier of the user that bought the product.
+Identifier of the user who bought the product.
 */
 	user_id: number;
 	/**
@@ -5423,7 +5593,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeBotSubscriptionPurchase {
 	'@type': 'starTransactionTypeBotSubscriptionPurchase';
 	/**
-Identifier of the bot or the business account user that created the subscription link.
+Identifier of the bot or the business account user who created the subscription link.
 */
 	user_id: number;
 	/**
@@ -5443,7 +5613,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeBotSubscriptionSale {
 	'@type': 'starTransactionTypeBotSubscriptionSale';
 	/**
-Identifier of the user that bought the subscription.
+Identifier of the user who bought the subscription.
 */
 	user_id: number;
 	/**
@@ -5487,7 +5657,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeChannelSubscriptionSale {
 	'@type': 'starTransactionTypeChannelSubscriptionSale';
 	/**
-Identifier of the user that bought the subscription.
+Identifier of the user who bought the subscription.
 */
 	user_id: number;
 	/**
@@ -5503,7 +5673,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeGiftAuctionBid {
 	'@type': 'starTransactionTypeGiftAuctionBid';
 	/**
-Identifier of the user that will receive the gift.
+Identifier of the user who will receive the gift.
 */
 	owner_id: MessageSender;
 	/**
@@ -5579,7 +5749,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeGiftSale {
 	'@type': 'starTransactionTypeGiftSale';
 	/**
-Identifier of the user that sent the gift.
+Identifier of the user who sent the gift.
 */
 	user_id: number;
 	/**
@@ -5595,7 +5765,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeGiftUpgrade {
 	'@type': 'starTransactionTypeGiftUpgrade';
 	/**
-Identifier of the user that initially sent the gift.
+Identifier of the user who initially sent the gift.
 */
 	user_id: number;
 	/**
@@ -5627,7 +5797,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeUpgradedGiftPurchase {
 	'@type': 'starTransactionTypeUpgradedGiftPurchase';
 	/**
-Identifier of the user that sold the gift.
+Identifier of the user who sold the gift.
 */
 	user_id: number;
 	/**
@@ -5643,7 +5813,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeUpgradedGiftSale {
 	'@type': 'starTransactionTypeUpgradedGiftSale';
 	/**
-Identifier of the user that bought the gift.
+Identifier of the user who bought the gift.
 */
 	user_id: number;
 	/**
@@ -5688,7 +5858,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeChannelPaidReactionReceive {
 	'@type': 'starTransactionTypeChannelPaidReactionReceive';
 	/**
-Identifier of the user that added the paid reaction.
+Identifier of the user who added the paid reaction.
 */
 	user_id: number;
 	/**
@@ -5837,7 +6007,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeSuggestedPostPaymentReceive {
 	'@type': 'starTransactionTypeSuggestedPostPaymentReceive';
 	/**
-Identifier of the user that paid for the suggested post.
+Identifier of the user who paid for the suggested post.
 */
 	user_id: number;
 }
@@ -5849,7 +6019,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypePremiumPurchase {
 	'@type': 'starTransactionTypePremiumPurchase';
 	/**
-Identifier of the user that received the Telegram Premium subscription.
+Identifier of the user who received the Telegram Premium subscription.
 */
 	user_id: number;
 	/**
@@ -5881,7 +6051,7 @@ Subtype of {@link StarTransactionType}.
 export interface StarTransactionTypeBusinessBotTransferReceive {
 	'@type': 'starTransactionTypeBusinessBotTransferReceive';
 	/**
-Identifier of the user that sent Telegram Stars.
+Identifier of the user who sent Telegram Stars.
 */
 	user_id: number;
 }
@@ -6009,7 +6179,7 @@ Subtype of {@link TonTransactionType}.
 export interface TonTransactionTypeUpgradedGiftPurchase {
 	'@type': 'tonTransactionTypeUpgradedGiftPurchase';
 	/**
-Identifier of the user that sold the gift.
+Identifier of the user who sold the gift.
 */
 	user_id: number;
 	/**
@@ -6025,7 +6195,7 @@ Subtype of {@link TonTransactionType}.
 export interface TonTransactionTypeUpgradedGiftSale {
 	'@type': 'tonTransactionTypeUpgradedGiftSale';
 	/**
-Identifier of the user that bought the gift.
+Identifier of the user who bought the gift.
 */
 	user_id: number;
 	/**
@@ -6044,6 +6214,24 @@ The Toncoin amount that was received by the Telegram; in the smallest units of t
 True, if the gift was sold through a purchase offer.
 */
 	via_offer?: boolean;
+}
+
+/**
+The transaction is a payment for stake dice throw.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeStakeDiceStake {
+	'@type': 'tonTransactionTypeStakeDiceStake';
+
+}
+
+/**
+The transaction is a payment for successful stake dice throw.
+Subtype of {@link TonTransactionType}.
+*/
+export interface TonTransactionTypeStakeDicePayout {
+	'@type': 'tonTransactionTypeStakeDicePayout';
+
 }
 
 /**
@@ -7026,7 +7214,7 @@ other chats as Left or Banned members and these chats must be supergroups or cha
 */
 	member_id: MessageSender;
 	/**
-Identifier of a user that invited/promoted/banned this member in the chat; 0 if unknown.
+Identifier of a user who invited/promoted/banned this member in the chat; 0 if unknown.
 */
 	inviter_user_id: number;
 	/**
@@ -7469,7 +7657,7 @@ Information about verification status of the chat; may be null if none.
 }
 
 /**
-Describes a user that sent a join request and waits for administrator approval.
+Describes a user who sent a join request and waits for administrator approval.
 */
 export interface ChatJoinRequest {
 	'@type': 'chatJoinRequest';
@@ -7982,7 +8170,7 @@ Subtype of {@link MessageSender}.
 export interface MessageSenderUser {
 	'@type': 'messageSenderUser';
 	/**
-Identifier of the user that sent the message.
+Identifier of the user who sent the message.
 */
 	user_id: number;
 }
@@ -8122,7 +8310,7 @@ Subtype of {@link MessageOrigin}.
 export interface MessageOriginUser {
 	'@type': 'messageOriginUser';
 	/**
-Identifier of the user that originally sent the message.
+Identifier of the user who originally sent the message.
 */
 	sender_user_id: number;
 }
@@ -8270,7 +8458,7 @@ Identifier of the chat.
 }
 
 /**
-Contains information about a user that added paid reactions.
+Contains information about a user who added paid reactions.
 */
 export interface PaidReactor {
 	'@type': 'paidReactor';
@@ -10442,7 +10630,7 @@ List of chat identifiers.
 }
 
 /**
-Contains information about a user that has failed to be added to a chat.
+Contains information about a user who has failed to be added to a chat.
 */
 export interface FailedToAddMember {
 	'@type': 'failedToAddMember';
@@ -10505,7 +10693,7 @@ export interface PublicChatTypeIsLocationBased {
 }
 
 /**
-Contains basic information about another user that started a chat with the current user.
+Contains basic information about another user who started a chat with the current user.
 */
 export interface AccountInfo {
 	'@type': 'accountInfo';
@@ -10610,6 +10798,42 @@ True, if the join request was sent to a channel chat.
 Point in time (Unix timestamp) when the join request was sent.
 */
 	request_date: number;
+}
+
+/**
+Describes style of a button.
+Subtype of {@link ButtonStyle}.
+*/
+export interface ButtonStyleDefault {
+	'@type': 'buttonStyleDefault';
+
+}
+
+/**
+The button has dark blue color.
+Subtype of {@link ButtonStyle}.
+*/
+export interface ButtonStylePrimary {
+	'@type': 'buttonStylePrimary';
+
+}
+
+/**
+The button has red color.
+Subtype of {@link ButtonStyle}.
+*/
+export interface ButtonStyleDanger {
+	'@type': 'buttonStyleDanger';
+
+}
+
+/**
+The button has green color.
+Subtype of {@link ButtonStyle}.
+*/
+export interface ButtonStyleSuccess {
+	'@type': 'buttonStyleSuccess';
+
 }
 
 /**
@@ -10787,6 +11011,14 @@ Text of the button.
 */
 	text: string;
 	/**
+Identifier of the custom emoji that must be shown on the button; 0 if none.
+*/
+	icon_custom_emoji_id: string;
+	/**
+Style of the button.
+*/
+	style: ButtonStyle;
+	/**
 Type of the button.
 */
 	type: KeyboardButtonType;
@@ -10931,6 +11163,14 @@ Text of the button.
 */
 	text: string;
 	/**
+Identifier of the custom emoji that must be shown on the button; 0 if none.
+*/
+	icon_custom_emoji_id: string;
+	/**
+Style of the button.
+*/
+	style: ButtonStyle;
+	/**
 Type of the button.
 */
 	type: InlineKeyboardButtonType;
@@ -11048,6 +11288,27 @@ User identifier of a bot linked with the website.
 True, if the user must be asked for the permission to the bot to send them messages.
 */
 	request_write_access?: boolean;
+	/**
+True, if the user must be asked for the permission to share their phone number.
+*/
+	request_phone_number_access?: boolean;
+	/**
+The version of a browser used for the authorization; may be empty if irrelevant.
+*/
+	browser: string;
+	/**
+Operating system the browser is running on; may be empty if irrelevant.
+*/
+	platform: string;
+	/**
+IP address from which the authorization is performed, in human-readable format; may be empty if irrelevant.
+*/
+	ip_address: string;
+	/**
+Human-readable description of a country and a region from which the authorization is performed, based on the IP address;
+may be empty if irrelevant.
+*/
+	location: string;
 }
 
 /**
@@ -15565,6 +15826,10 @@ Subtype of {@link MessageContent}.
 export interface MessageGroupCall {
 	'@type': 'messageGroupCall';
 	/**
+Persistent unique group call identifier.
+*/
+	unique_id: string;
+	/**
 True, if the call is active, i.e. the called user joined the call.
 */
 	is_active?: boolean;
@@ -15701,6 +15966,30 @@ Subtype of {@link MessageContent}.
 export interface MessageChatDeletePhoto {
 	'@type': 'messageChatDeletePhoto';
 
+}
+
+/**
+The owner of the chat has left.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatOwnerLeft {
+	'@type': 'messageChatOwnerLeft';
+	/**
+Identifier of the user who will become the new owner of the chat if the previous owner isn't return; 0 if none.
+*/
+	new_owner_user_id: number;
+}
+
+/**
+The owner of the chat has changed.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatOwnerChanged {
+	'@type': 'messageChatOwnerChanged';
+	/**
+Identifier of the user who is the new owner of the chat.
+*/
+	new_owner_user_id: number;
 }
 
 /**
@@ -16102,11 +16391,11 @@ Subtype of {@link MessageContent}.
 export interface MessageGiftedPremium {
 	'@type': 'messageGiftedPremium';
 	/**
-The identifier of a user that gifted Telegram Premium; 0 if the gift was anonymous or is outgoing.
+The identifier of a user who gifted Telegram Premium; 0 if the gift was anonymous or is outgoing.
 */
 	gifter_user_id: number;
 	/**
-The identifier of a user that received Telegram Premium; 0 if the gift is incoming.
+The identifier of a user who received Telegram Premium; 0 if the gift is incoming.
 */
 	receiver_user_id: number;
 	/**
@@ -16151,7 +16440,7 @@ Subtype of {@link MessageContent}.
 export interface MessagePremiumGiftCode {
 	'@type': 'messagePremiumGiftCode';
 	/**
-Identifier of a chat or a user that created the gift code; may be null if unknown.
+Identifier of a chat or a user who created the gift code; may be null if unknown.
 */
 	creator_id: MessageSender;
 	/**
@@ -16322,11 +16611,11 @@ Subtype of {@link MessageContent}.
 export interface MessageGiftedStars {
 	'@type': 'messageGiftedStars';
 	/**
-The identifier of a user that gifted Telegram Stars; 0 if the gift was anonymous or is outgoing.
+The identifier of a user who gifted Telegram Stars; 0 if the gift was anonymous or is outgoing.
 */
 	gifter_user_id: number;
 	/**
-The identifier of a user that received Telegram Stars; 0 if the gift is incoming.
+The identifier of a user who received Telegram Stars; 0 if the gift is incoming.
 */
 	receiver_user_id: number;
 	/**
@@ -16366,11 +16655,11 @@ Subtype of {@link MessageContent}.
 export interface MessageGiftedTon {
 	'@type': 'messageGiftedTon';
 	/**
-The identifier of a user that gifted Toncoins; 0 if the gift was anonymous or is outgoing.
+The identifier of a user who gifted Toncoins; 0 if the gift was anonymous or is outgoing.
 */
 	gifter_user_id: number;
 	/**
-The identifier of a user that received Toncoins; 0 if the gift is incoming.
+The identifier of a user who received Toncoins; 0 if the gift is incoming.
 */
 	receiver_user_id: number;
 	/**
@@ -16568,6 +16857,11 @@ Point in time (Unix timestamp) when the gift can be transferred to the TON block
 if NFT export isn't possible; only for the receiver of the gift.
 */
 	export_date: number;
+	/**
+Point in time (Unix timestamp) when the gift can be used to craft another gift can be in the past; only for the receiver
+of the gift.
+*/
+	craft_date: number;
 }
 
 /**
@@ -19268,6 +19562,42 @@ File containing the video.
 }
 
 /**
+Contains the type of the content of a story.
+Subtype of {@link StoryContentType}.
+*/
+export interface StoryContentTypePhoto {
+	'@type': 'storyContentTypePhoto';
+
+}
+
+/**
+A video story.
+Subtype of {@link StoryContentType}.
+*/
+export interface StoryContentTypeVideo {
+	'@type': 'storyContentTypeVideo';
+
+}
+
+/**
+A live story.
+Subtype of {@link StoryContentType}.
+*/
+export interface StoryContentTypeLive {
+	'@type': 'storyContentTypeLive';
+
+}
+
+/**
+A story of unknown content type.
+Subtype of {@link StoryContentType}.
+*/
+export interface StoryContentTypeUnsupported {
+	'@type': 'storyContentTypeUnsupported';
+
+}
+
+/**
 Contains the content of a story.
 Subtype of {@link StoryContent}.
 */
@@ -19509,7 +19839,7 @@ story content must be also forbidden.
 */
 	can_be_forwarded?: boolean;
 	/**
-True, if the story can be replied in the chat with the user that posted the story.
+True, if the story can be replied in the chat with the user who posted the story.
 */
 	can_be_replied?: boolean;
 	/**
@@ -20098,7 +20428,7 @@ Subtype of {@link ChatBoostSource}.
 export interface ChatBoostSourceGiveaway {
 	'@type': 'chatBoostSourceGiveaway';
 	/**
-Identifier of a user that won in the giveaway; 0 if none.
+Identifier of a user who won in the giveaway; 0 if none.
 */
 	user_id: number;
 	/**
@@ -20718,6 +21048,10 @@ Group call identifier.
 */
 	id: number;
 	/**
+Persistent unique group call identifier.
+*/
+	unique_id: string;
+	/**
 Group call title; for video chats only.
 */
 	title: string;
@@ -21244,6 +21578,10 @@ Call identifier, not persistent.
 */
 	id: number;
 	/**
+Persistent unique call identifier; 0 if isn't assigned yet by the server.
+*/
+	unique_id: string;
+	/**
 User identifier of the other call participant.
 */
 	user_id: number;
@@ -21616,7 +21954,7 @@ Unique identifier of the connection.
 */
 	id: string;
 	/**
-Identifier of the business user that created the connection.
+Identifier of the business user who created the connection.
 */
 	user_id: number;
 	/**
@@ -24511,7 +24849,7 @@ The used feature.
 }
 
 /**
-A user opened an internal link of the type internalLinkTypePremiumFeatures.
+A user opened an internal link of the type internalLinkTypePremiumFeaturesPage.
 Subtype of {@link PremiumSource}.
 */
 export interface PremiumSourceLink {
@@ -25490,7 +25828,7 @@ Subtype of {@link CanPostStoryResult}.
 export interface CanPostStoryResultWeeklyLimitExceeded {
 	'@type': 'canPostStoryResultWeeklyLimitExceeded';
 	/**
-Time left before the user can post the next story.
+Time left before the user can post the next story, in seconds.
 */
 	retry_after: number;
 }
@@ -25503,7 +25841,7 @@ Subtype of {@link CanPostStoryResult}.
 export interface CanPostStoryResultMonthlyLimitExceeded {
 	'@type': 'canPostStoryResultMonthlyLimitExceeded';
 	/**
-Time left before the user can post the next story.
+Time left before the user can post the next story, in seconds.
 */
 	retry_after: number;
 }
@@ -26596,6 +26934,25 @@ The list of active notifications.
 }
 
 /**
+Describes a proxy server.
+*/
+export interface Proxy {
+	'@type': 'proxy';
+	/**
+Proxy server domain or IP address.
+*/
+	server: string;
+	/**
+Proxy server port.
+*/
+	port: number;
+	/**
+Type of the proxy.
+*/
+	type: ProxyType;
+}
+
+/**
 Represents the value of an option.
 Subtype of {@link OptionValue}.
 */
@@ -27621,23 +27978,293 @@ True, if the user can skip text adding.
 }
 
 /**
-Describes an internal https://t.me or tg: link, which must be processed by the application in a special way.
-Subtype of {@link InternalLinkType}.
+Describes a section of the application settings.
+Subtype of {@link SettingsSection}.
 */
-export interface InternalLinkTypeActiveSessions {
-	'@type': 'internalLinkTypeActiveSessions';
+export interface SettingsSectionAppearance {
+	'@type': 'settingsSectionAppearance';
+	/**
+Subsection of the section; may be one of "", "themes", "themes/edit", "themes/create", "wallpapers", "wallpapers/edit",
+"wallpapers/set", "wallpapers/choose-photo", "your-color/profile", "your-color/profile/add-icons",
+"your-color/profile/use-gift", "your-color/profile/reset", "your-color/name", "your-color/name/add-icons",
+"your-color/name/use-gift", "night-mode", "auto-night-mode", "text-size", "text-size/use-system", "message-corners",
+"animations", "stickers-and-emoji", "stickers-and-emoji/edit", "stickers-and-emoji/trending",
+"stickers-and-emoji/archived", "stickers-and-emoji/archived/edit", "stickers-and-emoji/emoji",
+"stickers-and-emoji/emoji/edit", "stickers-and-emoji/emoji/archived", "stickers-and-emoji/emoji/archived/edit",
+"stickers-and-emoji/emoji/suggest", "stickers-and-emoji/emoji/quick-reaction",
+"stickers-and-emoji/emoji/quick-reaction/choose", "stickers-and-emoji/suggest-by-emoji",
+"stickers-and-emoji/large-emoji", "stickers-and-emoji/dynamic-order", "stickers-and-emoji/emoji/show-more", "app-icon",
+"tap-for-next-media".
+*/
+	subsection: string;
+}
+
+/**
+The "Ask a question" section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionAskQuestion {
+	'@type': 'settingsSectionAskQuestion';
 
 }
 
 /**
-The link is a link to an attachment menu bot to be opened in the specified or a chosen chat. Process given target_chat
-to open the chat. Then, call searchPublicChat with the given bot username, check that the user is a bot and can be added
-to attachment menu. Then, use getAttachmentMenuBot to receive information about the bot. If the bot isn't added to
-attachment menu, then show a disclaimer about Mini Apps being third-party applications, ask the user to accept their
-Terms of service and confirm adding the bot to side and attachment menu. If the user accept the terms and confirms
-adding, then use toggleBotIsAddedToAttachmentMenu to add the bot. If the attachment menu bot can't be used in the opened
-chat, show an error to the user. If the bot is added to attachment menu and can be used in the chat, then use openWebApp
-with the given URL.
+The "Telegram Business" section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionBusiness {
+	'@type': 'settingsSectionBusiness';
+	/**
+Subsection of the section; may be one of "", "do-not-hide-ads".
+*/
+	subsection: string;
+}
+
+/**
+The chat folder settings section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionChatFolders {
+	'@type': 'settingsSectionChatFolders';
+	/**
+Subsection of the section; may be one of "", "edit", "create", "add-recommended", "show-tags", "tab-view".
+*/
+	subsection: string;
+}
+
+/**
+The data and storage settings section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionDataAndStorage {
+	'@type': 'settingsSectionDataAndStorage';
+	/**
+Subsection of the section; may be one of "", "storage", "storage/edit", "storage/auto-remove", "storage/clear-cache",
+"storage/max-cache", "usage", "usage/mobile", "usage/wifi", "usage/reset", "usage/roaming", "auto-download/mobile",
+"auto-download/mobile/enable", "auto-download/mobile/usage", "auto-download/mobile/photos",
+"auto-download/mobile/stories", "auto-download/mobile/videos", "auto-download/mobile/files", "auto-download/wifi",
+"auto-download/wifi/enable", "auto-download/wifi/usage", "auto-download/wifi/photos", "auto-download/wifi/stories",
+"auto-download/wifi/videos", "auto-download/wifi/files", "auto-download/roaming", "auto-download/roaming/enable",
+"auto-download/roaming/usage", "auto-download/roaming/photos", "auto-download/roaming/stories",
+"auto-download/roaming/videos", "auto-download/roaming/files", "auto-download/reset", "save-to-photos/chats",
+"save-to-photos/chats/max-video-size", "save-to-photos/chats/add-exception", "save-to-photos/chats/delete-all",
+"save-to-photos/groups", "save-to-photos/groups/max-video-size", "save-to-photos/groups/add-exception",
+"save-to-photos/groups/delete-all", "save-to-photos/channels", "save-to-photos/channels/max-video-size",
+"save-to-photos/channels/add-exception", "save-to-photos/channels/delete-all", "less-data-calls", "open-links",
+"share-sheet", "share-sheet/suggested-chats", "share-sheet/suggest-by", "share-sheet/reset", "saved-edited-photos",
+"pause-music", "raise-to-listen", "raise-to-speak", "show-18-content", "proxy", "proxy/edit", "proxy/use-proxy",
+"proxy/add-proxy", "proxy/share-list", "proxy/use-for-calls".
+*/
+	subsection: string;
+}
+
+/**
+The Devices section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionDevices {
+	'@type': 'settingsSectionDevices';
+	/**
+Subsection of the section; may be one of "", "edit", "link-desktop", "terminate-sessions", "auto-terminate".
+*/
+	subsection: string;
+}
+
+/**
+The profile edit section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionEditProfile {
+	'@type': 'settingsSectionEditProfile';
+	/**
+Subsection of the section; may be one of "", "set-photo", "first-name", "last-name", "emoji-status", "bio", "birthday",
+"change-number", "username", "your-color", "channel", "add-account", "log-out", "profile-color/profile",
+"profile-color/profile/add-icons", "profile-color/profile/use-gift", "profile-color/name",
+"profile-color/name/add-icons", "profile-color/name/use-gift", "profile-photo/use-emoji".
+*/
+	subsection: string;
+}
+
+/**
+The FAQ section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionFaq {
+	'@type': 'settingsSectionFaq';
+
+}
+
+/**
+The "Telegram Features" section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionFeatures {
+	'@type': 'settingsSectionFeatures';
+
+}
+
+/**
+The in-app browser settings section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionInAppBrowser {
+	'@type': 'settingsSectionInAppBrowser';
+	/**
+Subsection of the section; may be one of "", "enable-browser", "clear-cookies", "clear-cache", "history",
+"clear-history", "never-open", "clear-list", "search".
+*/
+	subsection: string;
+}
+
+/**
+The application language section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionLanguage {
+	'@type': 'settingsSectionLanguage';
+	/**
+Subsection of the section; may be one of "", "show-button" for Show Translate Button toggle, "translate-chats" for
+Translate Entire Chats toggle, "do-not-translate" - for Do Not Translate language list.
+*/
+	subsection: string;
+}
+
+/**
+The Telegram Star balance and transaction section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionMyStars {
+	'@type': 'settingsSectionMyStars';
+	/**
+Subsection of the section; may be one of "", "top-up", "stats", "gift", "earn".
+*/
+	subsection: string;
+}
+
+/**
+The Toncoin balance and transaction section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionMyToncoins {
+	'@type': 'settingsSectionMyToncoins';
+
+}
+
+/**
+The notification settings section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionNotifications {
+	'@type': 'settingsSectionNotifications';
+	/**
+Subsection of the section; may be one of "", "accounts", "private-chats", "private-chats/edit", "private-chats/show",
+"private-chats/preview", "private-chats/sound", "private-chats/add-exception", "private-chats/delete-exceptions",
+"private-chats/light-color", "private-chats/vibrate", "private-chats/priority", "groups", "groups/edit", "groups/show",
+"groups/preview", "groups/sound", "groups/add-exception", "groups/delete-exceptions", "groups/light-color",
+"groups/vibrate", "groups/priority", "channels", "channels/edit", "channels/show", "channels/preview", "channels/sound",
+"channels/add-exception", "channels/delete-exceptions", "channels/light-color", "channels/vibrate", "channels/priority",
+"stories", "stories/new", "stories/important", "stories/show-sender", "stories/sound", "stories/add-exception",
+"stories/delete-exceptions", "stories/light-color", "stories/vibrate", "stories/priority", "reactions",
+"reactions/messages", "reactions/stories", "reactions/show-sender", "reactions/sound", "reactions/light-color",
+"reactions/vibrate", "reactions/priority", "in-app-sounds", "in-app-vibrate", "in-app-preview", "in-chat-sounds",
+"in-app-popup", "lock-screen-names", "include-channels", "include-muted-chats", "count-unread-messages", "new-contacts",
+"pinned-messages", "reset", "web".
+*/
+	subsection: string;
+}
+
+/**
+The power saving settings section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionPowerSaving {
+	'@type': 'settingsSectionPowerSaving';
+	/**
+Subsection of the section; may be one of "", "videos", "gifs", "stickers", "emoji", "effects", "preload", "background",
+"call-animations", "particles", "transitions".
+*/
+	subsection: string;
+}
+
+/**
+The "Telegram Premium" section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionPremium {
+	'@type': 'settingsSectionPremium';
+
+}
+
+/**
+The privacy and security section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionPrivacyAndSecurity {
+	'@type': 'settingsSectionPrivacyAndSecurity';
+	/**
+Subsection of the section; may be one of "", "blocked", "blocked/edit", "blocked/block-user",
+"blocked/block-user/chats", "blocked/block-user/contacts", "active-websites", "active-websites/edit",
+"active-websites/disconnect-all", "passcode", "passcode/disable", "passcode/change", "passcode/auto-lock",
+"passcode/face-id", "passcode/fingerprint", "2sv", "2sv/change", "2sv/disable", "2sv/change-email", "passkey",
+"passkey/create", "auto-delete", "auto-delete/set-custom", "login-email", "phone-number", "phone-number/never",
+"phone-number/always", "last-seen", "last-seen/never", "last-seen/always", "last-seen/hide-read-time", "profile-photos",
+"profile-photos/never", "profile-photos/always", "profile-photos/set-public", "profile-photos/update-public",
+"profile-photos/remove-public", "bio", "bio/never", "bio/always", "gifts", "gifts/show-icon", "gifts/never",
+"gifts/always", "gifts/accepted-types", "birthday", "birthday/add", "birthday/never", "birthday/always", "saved-music",
+"saved-music/never", "saved-music/always", "forwards", "forwards/never", "forwards/always", "calls", "calls/never",
+"calls/always", "calls/p2p", "calls/p2p/never", "calls/p2p/always", "calls/ios-integration", "voice", "voice/never",
+"voice/always", "messages", "messages/set-price", "messages/exceptions", "invites", "invites/never", "invites/always",
+"self-destruct", "data-settings", "data-settings/sync-contacts", "data-settings/delete-synced",
+"data-settings/suggest-contacts", "data-settings/delete-cloud-drafts", "data-settings/clear-payment-info",
+"data-settings/link-previews", "data-settings/bot-settings", "data-settings/map-provider", "archive-and-mute".
+*/
+	subsection: string;
+}
+
+/**
+The "Privacy Policy" section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionPrivacyPolicy {
+	'@type': 'settingsSectionPrivacyPolicy';
+
+}
+
+/**
+The current user's QR code section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionQrCode {
+	'@type': 'settingsSectionQrCode';
+	/**
+Subsection of the section; may be one of "", "share", "scan".
+*/
+	subsection: string;
+}
+
+/**
+Search in Settings.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionSearch {
+	'@type': 'settingsSectionSearch';
+
+}
+
+/**
+The "Send a gift" section.
+Subtype of {@link SettingsSection}.
+*/
+export interface SettingsSectionSendGift {
+	'@type': 'settingsSectionSendGift';
+	/**
+Subsection of the section; may be one of "", "self".
+*/
+	subsection: string;
+}
+
+/**
+Describes an internal https://t.me or tg: link, which must be processed by the application in a special way.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeAttachmentMenuBot {
@@ -27768,29 +28395,15 @@ Name of the link.
 }
 
 /**
-The link is a link to the Telegram Star purchase section of the application.
+The link is a link to the Call tab or page.
 Subtype of {@link InternalLinkType}.
 */
-export interface InternalLinkTypeBuyStars {
-	'@type': 'internalLinkTypeBuyStars';
+export interface InternalLinkTypeCallsPage {
+	'@type': 'internalLinkTypeCallsPage';
 	/**
-The number of Telegram Stars that must be owned by the user.
+Section of the page; may be one of "", "all", "missed", "edit", "show-tab", "start-call".
 */
-	star_count: number;
-	/**
-Purpose of Telegram Star purchase. Arbitrary string specified by the server, for example, "subs" if the Telegram Stars
-are required to extend channel subscriptions.
-*/
-	purpose: string;
-}
-
-/**
-The link is a link to the change phone number section of the application.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeChangePhoneNumber {
-	'@type': 'internalLinkTypeChangePhoneNumber';
-
+	section: string;
 }
 
 /**
@@ -27838,15 +28451,6 @@ Internal representation of the invite link.
 }
 
 /**
-The link is a link to the folder section of the application settings.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeChatFolderSettings {
-	'@type': 'internalLinkTypeChatFolderSettings';
-
-}
-
-/**
 The link is a chat invite link. Call checkChatInviteLink with the given invite link to process the link. If the link is
 valid and the user wants to join the chat, then call joinChatByInviteLink.
 Subtype of {@link InternalLinkType}.
@@ -27860,12 +28464,24 @@ Internal representation of the invite link.
 }
 
 /**
-The link is a link to the default message auto-delete timer settings section of the application settings.
+The link is a link that allows to select some chats.
 Subtype of {@link InternalLinkType}.
 */
-export interface InternalLinkTypeDefaultMessageAutoDeleteTimerSettings {
-	'@type': 'internalLinkTypeDefaultMessageAutoDeleteTimerSettings';
+export interface InternalLinkTypeChatSelection {
+	'@type': 'internalLinkTypeChatSelection';
 
+}
+
+/**
+The link is a link to the Contacts tab or page.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeContactsPage {
+	'@type': 'internalLinkTypeContactsPage';
+	/**
+Section of the page; may be one of "", "search", "sort", "new", "invite", "manage".
+*/
+	section: string;
 }
 
 /**
@@ -27879,15 +28495,6 @@ export interface InternalLinkTypeDirectMessagesChat {
 Username of the channel.
 */
 	channel_username: string;
-}
-
-/**
-The link is a link to the edit profile section of the application settings.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeEditProfileSettings {
-	'@type': 'internalLinkTypeEditProfileSettings';
-
 }
 
 /**
@@ -27994,15 +28601,6 @@ Language pack identifier.
 }
 
 /**
-The link is a link to the language section of the application settings.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeLanguageSettings {
-	'@type': 'internalLinkTypeLanguageSettings';
-
-}
-
-/**
 The link is a link to a live story. Call searchPublicChat with the given chat username, then getChatActiveStories to get
 active stories in the chat, then find a live story among active stories of the chat, and then joinLiveStory to join the
 live story.
@@ -28014,15 +28612,6 @@ export interface InternalLinkTypeLiveStory {
 Username of the poster of the story.
 */
 	story_poster_username: string;
-}
-
-/**
-The link is a link to the login email set up section of the application settings, forcing set up of the login email.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeLoginEmailSettings {
-	'@type': 'internalLinkTypeLoginEmailSettings';
-
 }
 
 /**
@@ -28082,21 +28671,54 @@ link must be selected.
 }
 
 /**
-The link is a link to the screen with information about Telegram Star balance and transactions of the current user.
+The link is a link to the My Profile application page.
 Subtype of {@link InternalLinkType}.
 */
-export interface InternalLinkTypeMyStars {
-	'@type': 'internalLinkTypeMyStars';
+export interface InternalLinkTypeMyProfilePage {
+	'@type': 'internalLinkTypeMyProfilePage';
+	/**
+Section of the page; may be one of "", "posts", "posts/all-stories", "posts/add-album", "gifts", "archived-posts".
+*/
+	section: string;
+}
+
+/**
+The link is a link to the screen for creating a new channel chat.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeNewChannelChat {
+	'@type': 'internalLinkTypeNewChannelChat';
 
 }
 
 /**
-The link is a link to the screen with information about Toncoin balance and transactions of the current user.
+The link is a link to the screen for creating a new group chat.
 Subtype of {@link InternalLinkType}.
 */
-export interface InternalLinkTypeMyToncoins {
-	'@type': 'internalLinkTypeMyToncoins';
+export interface InternalLinkTypeNewGroupChat {
+	'@type': 'internalLinkTypeNewGroupChat';
 
+}
+
+/**
+The link is a link to the screen for creating a new private chat with a contact.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeNewPrivateChat {
+	'@type': 'internalLinkTypeNewPrivateChat';
+
+}
+
+/**
+The link is a link to open the story posting interface.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeNewStory {
+	'@type': 'internalLinkTypeNewStory';
+	/**
+The type of the content of the story to post; may be null if unspecified.
+*/
+	content_type: StoryContentType;
 }
 
 /**
@@ -28132,15 +28754,6 @@ must be opened otherwise.
 }
 
 /**
-The link is a link to the password section of the application settings.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypePasswordSettings {
-	'@type': 'internalLinkTypePasswordSettings';
-
-}
-
-/**
 The link can be used to confirm ownership of a phone number to prevent account deletion. Call sendPhoneNumberCode with
 the given phone number and with phoneNumberCodeTypeConfirmOwnership with the given hash to process the link. If
 succeeded, call checkPhoneNumberCode to check entered by the user code, or resendPhoneNumberCode to resend it.
@@ -28159,34 +28772,12 @@ Phone number value from the link.
 }
 
 /**
-The link is a link to the phone number privacy settings section of the application settings.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypePhoneNumberPrivacySettings {
-	'@type': 'internalLinkTypePhoneNumberPrivacySettings';
-
-}
-
-/**
 The link is a link to the Premium features screen of the application from which the user can subscribe to Telegram
 Premium. Call getPremiumFeatures with the given referrer to process the link.
 Subtype of {@link InternalLinkType}.
 */
-export interface InternalLinkTypePremiumFeatures {
-	'@type': 'internalLinkTypePremiumFeatures';
-	/**
-Referrer specified in the link.
-*/
-	referrer: string;
-}
-
-/**
-The link is a link to the screen for gifting Telegram Premium subscriptions to friends via inputInvoiceTelegram with
-telegramPaymentPurposePremiumGift payments or in-store purchases.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypePremiumGift {
-	'@type': 'internalLinkTypePremiumGift';
+export interface InternalLinkTypePremiumFeaturesPage {
+	'@type': 'internalLinkTypePremiumFeaturesPage';
 	/**
 Referrer specified in the link.
 */
@@ -28207,12 +28798,16 @@ The Telegram Premium gift code.
 }
 
 /**
-The link is a link to the privacy and security section of the application settings.
+The link is a link to the screen for gifting Telegram Premium subscriptions to friends via inputInvoiceTelegram with
+telegramPaymentPurposePremiumGift payments or in-store purchases.
 Subtype of {@link InternalLinkType}.
 */
-export interface InternalLinkTypePrivacyAndSecuritySettings {
-	'@type': 'internalLinkTypePrivacyAndSecuritySettings';
-
+export interface InternalLinkTypePremiumGiftPurchase {
+	'@type': 'internalLinkTypePremiumGiftPurchase';
+	/**
+Referrer specified in the link.
+*/
+	referrer: string;
 }
 
 /**
@@ -28222,17 +28817,9 @@ Subtype of {@link InternalLinkType}.
 export interface InternalLinkTypeProxy {
 	'@type': 'internalLinkTypeProxy';
 	/**
-Proxy server domain or IP address.
+The proxy; may be null if the proxy is unsupported, in which case an alert can be shown to the user.
 */
-	server: string;
-	/**
-Proxy server port.
-*/
-	port: number;
-	/**
-Type of the proxy.
-*/
-	type: ProxyType;
+	proxy: Proxy;
 }
 
 /**
@@ -28278,12 +28865,50 @@ export interface InternalLinkTypeRestorePurchases {
 }
 
 /**
+The link is a link to the Saved Messages chat. Call createPrivateChat with getOption("my_id") and open the chat.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeSavedMessages {
+	'@type': 'internalLinkTypeSavedMessages';
+
+}
+
+/**
+The link is a link to the global chat and messages search field.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeSearch {
+	'@type': 'internalLinkTypeSearch';
+
+}
+
+/**
 The link is a link to application settings.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeSettings {
 	'@type': 'internalLinkTypeSettings';
+	/**
+Section of the application settings to open; may be null if none.
+*/
+	section: SettingsSection;
+}
 
+/**
+The link is a link to the Telegram Star purchase section of the application.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeStarPurchase {
+	'@type': 'internalLinkTypeStarPurchase';
+	/**
+The number of Telegram Stars that must be owned by the user.
+*/
+	star_count: number;
+	/**
+Purpose of Telegram Star purchase. Arbitrary string specified by the server, for example, "subs" if the Telegram Stars
+are required to extend channel subscriptions.
+*/
+	purpose: string;
 }
 
 /**
@@ -28350,15 +28975,6 @@ Name of the theme.
 }
 
 /**
-The link is a link to the theme section of the application settings.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeThemeSettings {
-	'@type': 'internalLinkTypeThemeSettings';
-
-}
-
-/**
 The link is an unknown tg: link. Call getDeepLinkInfo to process the link.
 Subtype of {@link InternalLinkType}.
 */
@@ -28368,15 +28984,6 @@ export interface InternalLinkTypeUnknownDeepLink {
 Link to be passed to getDeepLinkInfo.
 */
 	link: string;
-}
-
-/**
-The link is a link to an unsupported proxy. An alert can be shown to the user.
-Subtype of {@link InternalLinkType}.
-*/
-export interface InternalLinkTypeUnsupportedProxy {
-	'@type': 'internalLinkTypeUnsupportedProxy';
-
 }
 
 /**
@@ -29719,22 +30326,14 @@ The proxy's secret in hexadecimal encoding.
 }
 
 /**
-Contains information about a proxy server.
+Contains information about a proxy server added to the list of proxies.
 */
-export interface Proxy {
-	'@type': 'proxy';
+export interface AddedProxy {
+	'@type': 'addedProxy';
 	/**
 Unique identifier of the proxy.
 */
 	id: number;
-	/**
-Proxy server domain or IP address.
-*/
-	server: string;
-	/**
-Proxy server port.
-*/
-	port: number;
 	/**
 Point in time (Unix timestamp) when the proxy was last used; 0 if never.
 */
@@ -29744,20 +30343,20 @@ True, if the proxy is enabled now.
 */
 	is_enabled?: boolean;
 	/**
-Type of the proxy.
+The proxy.
 */
-	type: ProxyType;
+	proxy: Proxy;
 }
 
 /**
-Represents a list of proxy servers.
+Represents a list of added proxy servers.
 */
-export interface Proxies {
-	'@type': 'proxies';
+export interface AddedProxies {
+	'@type': 'addedProxies';
 	/**
 List of proxy servers.
 */
-	proxies: Proxy[];
+	proxies: AddedProxy[];
 }
 
 /**
@@ -30281,7 +30880,7 @@ Subtype of {@link ChatRevenueTransactionType}.
 export interface ChatRevenueTransactionTypeSuggestedPostEarnings {
 	'@type': 'chatRevenueTransactionTypeSuggestedPostEarnings';
 	/**
-Identifier of the user that paid for the suggested post.
+Identifier of the user who paid for the suggested post.
 */
 	user_id: number;
 }
@@ -33976,7 +34575,21 @@ export type UpgradedGiftOrigin =
 	| UpgradedGiftOriginResale
 	| UpgradedGiftOriginBlockchain
 	| UpgradedGiftOriginPrepaidUpgrade
-	| UpgradedGiftOriginOffer;
+	| UpgradedGiftOriginOffer
+	| UpgradedGiftOriginCraft;
+
+export type UpgradedGiftAttributeRarity =
+	| UpgradedGiftAttributeRarityPerMille
+	| UpgradedGiftAttributeRarityUncommon
+	| UpgradedGiftAttributeRarityRare
+	| UpgradedGiftAttributeRarityEpic
+	| UpgradedGiftAttributeRarityLegendary;
+
+export type CraftGiftResult =
+	| CraftGiftResultSuccess
+	| CraftGiftResultTooEarly
+	| CraftGiftResultInvalidGift
+	| CraftGiftResultFail;
 
 export type UpgradedGiftAttributeId =
 	| UpgradedGiftAttributeIdModel
@@ -34058,6 +34671,8 @@ export type TonTransactionType =
 	| TonTransactionTypeGiftPurchaseOffer
 	| TonTransactionTypeUpgradedGiftPurchase
 	| TonTransactionTypeUpgradedGiftSale
+	| TonTransactionTypeStakeDiceStake
+	| TonTransactionTypeStakeDicePayout
 	| TonTransactionTypeUnsupported;
 
 export type ActiveStoryState =
@@ -34231,6 +34846,12 @@ export type ChatActionBar =
 	| ChatActionBarAddContact
 	| ChatActionBarSharePhoneNumber
 	| ChatActionBarJoinRequest;
+
+export type ButtonStyle =
+	| ButtonStyleDefault
+	| ButtonStylePrimary
+	| ButtonStyleDanger
+	| ButtonStyleSuccess;
 
 export type KeyboardButtonType =
 	| KeyboardButtonTypeText
@@ -34523,6 +35144,8 @@ export type MessageContent =
 	| MessageChatChangeTitle
 	| MessageChatChangePhoto
 	| MessageChatDeletePhoto
+	| MessageChatOwnerLeft
+	| MessageChatOwnerChanged
 	| MessageChatAddMembers
 	| MessageChatJoinByLink
 	| MessageChatJoinByRequest
@@ -34718,6 +35341,12 @@ export type InputStoryAreaType =
 	| InputStoryAreaTypeLink
 	| InputStoryAreaTypeWeather
 	| InputStoryAreaTypeUpgradedGift;
+
+export type StoryContentType =
+	| StoryContentTypePhoto
+	| StoryContentTypeVideo
+	| StoryContentTypeLive
+	| StoryContentTypeUnsupported;
 
 export type StoryContent =
 	| StoryContentPhoto
@@ -35266,8 +35895,30 @@ export type ReportStoryResult =
 	| ReportStoryResultOptionRequired
 	| ReportStoryResultTextRequired;
 
+export type SettingsSection =
+	| SettingsSectionAppearance
+	| SettingsSectionAskQuestion
+	| SettingsSectionBusiness
+	| SettingsSectionChatFolders
+	| SettingsSectionDataAndStorage
+	| SettingsSectionDevices
+	| SettingsSectionEditProfile
+	| SettingsSectionFaq
+	| SettingsSectionFeatures
+	| SettingsSectionInAppBrowser
+	| SettingsSectionLanguage
+	| SettingsSectionMyStars
+	| SettingsSectionMyToncoins
+	| SettingsSectionNotifications
+	| SettingsSectionPowerSaving
+	| SettingsSectionPremium
+	| SettingsSectionPrivacyAndSecurity
+	| SettingsSectionPrivacyPolicy
+	| SettingsSectionQrCode
+	| SettingsSectionSearch
+	| SettingsSectionSendGift;
+
 export type InternalLinkType =
-	| InternalLinkTypeActiveSessions
 	| InternalLinkTypeAttachmentMenuBot
 	| InternalLinkTypeAuthenticationCode
 	| InternalLinkTypeBackground
@@ -35275,16 +35926,14 @@ export type InternalLinkType =
 	| InternalLinkTypeBotStart
 	| InternalLinkTypeBotStartInGroup
 	| InternalLinkTypeBusinessChat
-	| InternalLinkTypeBuyStars
-	| InternalLinkTypeChangePhoneNumber
+	| InternalLinkTypeCallsPage
 	| InternalLinkTypeChatAffiliateProgram
 	| InternalLinkTypeChatBoost
 	| InternalLinkTypeChatFolderInvite
-	| InternalLinkTypeChatFolderSettings
 	| InternalLinkTypeChatInvite
-	| InternalLinkTypeDefaultMessageAutoDeleteTimerSettings
+	| InternalLinkTypeChatSelection
+	| InternalLinkTypeContactsPage
 	| InternalLinkTypeDirectMessagesChat
-	| InternalLinkTypeEditProfileSettings
 	| InternalLinkTypeGame
 	| InternalLinkTypeGiftAuction
 	| InternalLinkTypeGiftCollection
@@ -35292,34 +35941,33 @@ export type InternalLinkType =
 	| InternalLinkTypeInstantView
 	| InternalLinkTypeInvoice
 	| InternalLinkTypeLanguagePack
-	| InternalLinkTypeLanguageSettings
 	| InternalLinkTypeLiveStory
-	| InternalLinkTypeLoginEmailSettings
 	| InternalLinkTypeMainWebApp
 	| InternalLinkTypeMessage
 	| InternalLinkTypeMessageDraft
-	| InternalLinkTypeMyStars
-	| InternalLinkTypeMyToncoins
+	| InternalLinkTypeMyProfilePage
+	| InternalLinkTypeNewChannelChat
+	| InternalLinkTypeNewGroupChat
+	| InternalLinkTypeNewPrivateChat
+	| InternalLinkTypeNewStory
 	| InternalLinkTypePassportDataRequest
-	| InternalLinkTypePasswordSettings
 	| InternalLinkTypePhoneNumberConfirmation
-	| InternalLinkTypePhoneNumberPrivacySettings
-	| InternalLinkTypePremiumFeatures
-	| InternalLinkTypePremiumGift
+	| InternalLinkTypePremiumFeaturesPage
 	| InternalLinkTypePremiumGiftCode
-	| InternalLinkTypePrivacyAndSecuritySettings
+	| InternalLinkTypePremiumGiftPurchase
 	| InternalLinkTypeProxy
 	| InternalLinkTypePublicChat
 	| InternalLinkTypeQrCodeAuthentication
 	| InternalLinkTypeRestorePurchases
+	| InternalLinkTypeSavedMessages
+	| InternalLinkTypeSearch
 	| InternalLinkTypeSettings
+	| InternalLinkTypeStarPurchase
 	| InternalLinkTypeStickerSet
 	| InternalLinkTypeStory
 	| InternalLinkTypeStoryAlbum
 	| InternalLinkTypeTheme
-	| InternalLinkTypeThemeSettings
 	| InternalLinkTypeUnknownDeepLink
-	| InternalLinkTypeUnsupportedProxy
 	| InternalLinkTypeUpgradedGift
 	| InternalLinkTypeUserPhoneNumber
 	| InternalLinkTypeUserToken
@@ -40844,7 +41492,8 @@ Button identifier.
 */
 	button_id: number;
 	/**
-Pass true to allow the bot to send messages to the current user.
+Pass true to allow the bot to send messages to the current user. Phone number access can't be requested using the
+button.
 */
 	allow_write_access?: boolean;
 }
@@ -40949,7 +41598,7 @@ Identifier of the inline query.
 */
 	inline_query_id: string;
 	/**
-Pass true if results may be cached and returned only for the user that sent the query. By default, results may be
+Pass true if results may be cached and returned only for the user who sent the query. By default, results may be
 returned to any user who sends the same query.
 */
 	is_personal?: boolean;
@@ -41450,7 +42099,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Identifier of the topic in which the action is performed.
+Identifier of the topic in which the action is performed; pass null if none.
 */
 	topic_id: MessageTopic;
 	/**
@@ -41618,7 +42267,8 @@ The link.
 
 /**
 Returns an HTTP URL which can be used to automatically authorize the current user on a website after clicking an HTTP
-link. Use the method getExternalLinkInfo to find whether a prior user confirmation is needed.
+link. Use the method getExternalLinkInfo to find whether a prior user confirmation is needed. May return an empty link
+if just a toast about successful login has to be shown.
 Request type for {@link Tdjson#getExternalLink}.
 */
 export interface GetExternalLink {
@@ -41628,9 +42278,13 @@ The HTTP link.
 */
 	link: string;
 	/**
-Pass true if the current user allowed the bot, returned in getExternalLinkInfo, to send them messages.
+Pass true if the current user allowed the bot that was returned in getExternalLinkInfo, to send them messages.
 */
 	allow_write_access?: boolean;
+	/**
+Pass true if the current user allowed the bot that was returned in getExternalLinkInfo, to access their phone number.
+*/
+	allow_phone_number_access?: boolean;
 }
 
 /**
@@ -42768,7 +43422,7 @@ and if a chat is banned.
 */
 	banned_until_date: number;
 	/**
-Pass true to delete all messages in the chat for the user that is being removed. Always true for supergroups and
+Pass true to delete all messages in the chat for the user who is being removed. Always true for supergroups and
 channels.
 */
 	revoke_messages?: boolean;
@@ -42803,6 +43457,19 @@ user.
 The 2-step verification password of the current user.
 */
 	password: string;
+}
+
+/**
+Returns the user who will become the owner of the chat after 7 days if the current user does not return to the chat
+during that period; requires owner privileges in the chat. Available only for supergroups and channel chats.
+Request type for {@link Tdjson#getChatOwnerAfterLeaving}.
+*/
+export interface GetChatOwnerAfterLeaving {
+	'@type': 'getChatOwnerAfterLeaving';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
 }
 
 /**
@@ -44751,7 +45418,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Identifier of the user that sent the request.
+Identifier of the user who sent the request.
 */
 	user_id: number;
 	/**
@@ -48687,7 +49354,7 @@ The number of Telegram Stars to place in the bid.
 */
 	star_count: number;
 	/**
-Identifier of the user that will receive the gift.
+Identifier of the user who will receive the gift.
 */
 	user_id: number;
 	/**
@@ -48793,21 +49460,29 @@ Request type for {@link Tdjson#getGiftUpgradePreview}.
 export interface GetGiftUpgradePreview {
 	'@type': 'getGiftUpgradePreview';
 	/**
-Identifier of the gift.
+Identifier of the regular gift.
 */
-	gift_id: string;
+	regular_gift_id: string;
 }
 
 /**
 Returns all possible variants of upgraded gifts for a regular gift.
-Request type for {@link Tdjson#getGiftUpgradeVariants}.
+Request type for {@link Tdjson#getUpgradedGiftVariants}.
 */
-export interface GetGiftUpgradeVariants {
-	'@type': 'getGiftUpgradeVariants';
+export interface GetUpgradedGiftVariants {
+	'@type': 'getUpgradedGiftVariants';
 	/**
-Identifier of the gift.
+Identifier of the regular gift.
 */
-	gift_id: string;
+	regular_gift_id: string;
+	/**
+Pass true to get models that can be obtained by upgrading a regular gift.
+*/
+	return_upgrade_models?: boolean;
+	/**
+Pass true to get models that can be obtained by crafting a gift from upgraded gifts.
+*/
+	return_craft_models?: boolean;
 }
 
 /**
@@ -48853,6 +49528,18 @@ Prepaid upgrade hash as received along with the gift.
 The Telegram Star amount the user agreed to pay for the upgrade; must be equal to gift.upgrade_star_count.
 */
 	star_count: number;
+}
+
+/**
+Crafts a new gift from other gifts that will be permanently lost.
+Request type for {@link Tdjson#craftGift}.
+*/
+export interface CraftGift {
+	'@type': 'craftGift';
+	/**
+Identifier of the gifts to use for crafting.
+*/
+	received_gift_ids: string[];
 }
 
 /**
@@ -49044,6 +49731,28 @@ Identifier of the gift.
 }
 
 /**
+Returns upgraded gifts of the current user who can be used to craft another gifts.
+Request type for {@link Tdjson#getGiftsForCrafting}.
+*/
+export interface GetGiftsForCrafting {
+	'@type': 'getGiftsForCrafting';
+	/**
+Identifier of the regular gift that will be used for crafting.
+*/
+	regular_gift_id: string;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of gifts to be returned; must be positive and can't be greater than 100. For optimal performance, the
+number of returned objects is chosen by TDLib and can be smaller than the specified limit.
+*/
+	limit: number;
+}
+
+/**
 Returns information about an upgraded gift by its name.
 Request type for {@link Tdjson#getUpgradedGift}.
 */
@@ -49126,6 +49835,10 @@ Identifier of the regular gift that was upgraded to a unique gift.
 Order in which the results will be sorted.
 */
 	order: GiftForResaleOrder;
+	/**
+Pass true to get only gifts suitable for crafting.
+*/
+	for_crafting?: boolean;
 	/**
 Attributes used to filter received gifts. If multiple attributes of the same type are specified, then all of them are
 allowed. If none attributes of specific type are specified, then all values for this attribute type are allowed.
@@ -49321,7 +50034,7 @@ Request type for {@link Tdjson#refundStarPayment}.
 export interface RefundStarPayment {
 	'@type': 'refundStarPayment';
 	/**
-Identifier of the user that did the payment.
+Identifier of the user who did the payment.
 */
 	user_id: number;
 	/**
@@ -49331,7 +50044,7 @@ Telegram payment identifier.
 }
 
 /**
-Returns a user that can be contacted to get support.
+Returns a user who can be contacted to get support.
 Request type for {@link Tdjson#getSupportUser}.
 */
 export interface GetSupportUser {
@@ -50452,8 +51165,8 @@ Element type.
 }
 
 /**
-Informs the user that some of the elements in their Telegram Passport contain errors; for bots only. The user will not
-be able to resend the elements, until the errors are fixed.
+Informs the user who some of the elements in their Telegram Passport contain errors; for bots only. The user will not be
+able to resend the elements, until the errors are fixed.
 Request type for {@link Tdjson#setPassportElementErrors}.
 */
 export interface SetPassportElementErrors {
@@ -51121,7 +51834,7 @@ Request type for {@link Tdjson#getStarGiftPaymentOptions}.
 export interface GetStarGiftPaymentOptions {
 	'@type': 'getStarGiftPaymentOptions';
 	/**
-Identifier of the user that will receive Telegram Stars; pass 0 to get options for an unspecified user.
+Identifier of the user who will receive Telegram Stars; pass 0 to get options for an unspecified user.
 */
 	user_id: number;
 }
@@ -51602,21 +52315,13 @@ Request type for {@link Tdjson#addProxy}.
 export interface AddProxy {
 	'@type': 'addProxy';
 	/**
-Proxy server domain or IP address.
+The proxy to add.
 */
-	server: string;
-	/**
-Proxy server port.
-*/
-	port: number;
+	proxy: Proxy;
 	/**
 Pass true to immediately enable the proxy.
 */
 	enable?: boolean;
-	/**
-Proxy type.
-*/
-	type: ProxyType;
 }
 
 /**
@@ -51630,21 +52335,13 @@ Proxy identifier.
 */
 	proxy_id: number;
 	/**
-Proxy server domain or IP address.
+The new information about the proxy.
 */
-	server: string;
-	/**
-Proxy server port.
-*/
-	port: number;
+	proxy: Proxy;
 	/**
 Pass true to immediately enable the proxy.
 */
 	enable?: boolean;
-	/**
-Proxy type.
-*/
-	type: ProxyType;
 }
 
 /**
@@ -51690,28 +52387,15 @@ export interface GetProxies {
 }
 
 /**
-Returns an HTTPS link, which can be used to add a proxy. Available only for SOCKS5 and MTProto proxies. Can be called
-before authorization.
-Request type for {@link Tdjson#getProxyLink}.
-*/
-export interface GetProxyLink {
-	'@type': 'getProxyLink';
-	/**
-Proxy identifier.
-*/
-	proxy_id: number;
-}
-
-/**
 Computes time needed to receive a response from a Telegram server through a proxy. Can be called before authorization.
 Request type for {@link Tdjson#pingProxy}.
 */
 export interface PingProxy {
 	'@type': 'pingProxy';
 	/**
-Proxy identifier. Use 0 to ping a Telegram server without a proxy.
+The proxy to test; pass null to ping a Telegram server without a proxy.
 */
-	proxy_id: number;
+	proxy: Proxy;
 }
 
 /**
@@ -51960,17 +52644,9 @@ Request type for {@link Tdjson#testProxy}.
 export interface TestProxy {
 	'@type': 'testProxy';
 	/**
-Proxy server domain or IP address.
+The proxy to test.
 */
-	server: string;
-	/**
-Proxy server port.
-*/
-	port: number;
-	/**
-Proxy type.
-*/
-	type: ProxyType;
+	proxy: Proxy;
 	/**
 Identifier of a datacenter with which to test connection.
 */
@@ -52398,6 +53074,7 @@ export type Request =
 	| BanChatMember
 	| CanTransferOwnership
 	| TransferChatOwnership
+	| GetChatOwnerAfterLeaving
 	| GetChatMember
 	| SearchChatMembers
 	| GetChatAdministrators
@@ -52763,9 +53440,10 @@ export type Request =
 	| SetPinnedGifts
 	| ToggleChatGiftNotifications
 	| GetGiftUpgradePreview
-	| GetGiftUpgradeVariants
+	| GetUpgradedGiftVariants
 	| UpgradeGift
 	| BuyGiftUpgrade
+	| CraftGift
 	| TransferGift
 	| DropGiftOriginalDetails
 	| SendResoldGift
@@ -52773,6 +53451,7 @@ export type Request =
 	| ProcessGiftPurchaseOffer
 	| GetReceivedGifts
 	| GetReceivedGift
+	| GetGiftsForCrafting
 	| GetUpgradedGift
 	| GetUpgradedGiftValueInfo
 	| GetUpgradedGiftWithdrawalUrl
@@ -52941,7 +53620,6 @@ export type Request =
 	| DisableProxy
 	| RemoveProxy
 	| GetProxies
-	| GetProxyLink
 	| PingProxy
 	| SetLogStream
 	| GetLogStream
@@ -56309,7 +56987,8 @@ links from secret chats if link preview is disabled in secret chats.
 
 	/**
 Returns an HTTP URL which can be used to automatically authorize the current user on a website after clicking an HTTP
-link. Use the method getExternalLinkInfo to find whether a prior user confirmation is needed.
+link. Use the method getExternalLinkInfo to find whether a prior user confirmation is needed. May return an empty link
+if just a toast about successful login has to be shown.
 */
 	async getExternalLink(options: Omit<GetExternalLink, '@type'>): Promise<HttpUrl> {
 		return this._request({
@@ -57038,6 +57717,17 @@ the ownership can be transferred from the current session. Available only for su
 		return this._request({
 			...options,
 			'@type': 'transferChatOwnership',
+		});
+	}
+
+	/**
+Returns the user who will become the owner of the chat after 7 days if the current user does not return to the chat
+during that period; requires owner privileges in the chat. Available only for supergroups and channel chats.
+*/
+	async getChatOwnerAfterLeaving(options: Omit<GetChatOwnerAfterLeaving, '@type'>): Promise<User> {
+		return this._request({
+			...options,
+			'@type': 'getChatOwnerAfterLeaving',
 		});
 	}
 
@@ -60793,10 +61483,10 @@ Returns examples of possible upgraded gifts for a regular gift.
 	/**
 Returns all possible variants of upgraded gifts for a regular gift.
 */
-	async getGiftUpgradeVariants(options: Omit<GetGiftUpgradeVariants, '@type'>): Promise<GiftUpgradeVariants> {
+	async getUpgradedGiftVariants(options: Omit<GetUpgradedGiftVariants, '@type'>): Promise<GiftUpgradeVariants> {
 		return this._request({
 			...options,
-			'@type': 'getGiftUpgradeVariants',
+			'@type': 'getUpgradedGiftVariants',
 		});
 	}
 
@@ -60817,6 +61507,16 @@ Pays for upgrade of a regular gift that is owned by another user or channel chat
 		return this._request({
 			...options,
 			'@type': 'buyGiftUpgrade',
+		});
+	}
+
+	/**
+Crafts a new gift from other gifts that will be permanently lost.
+*/
+	async craftGift(options: Omit<CraftGift, '@type'>): Promise<CraftGiftResult> {
+		return this._request({
+			...options,
+			'@type': 'craftGift',
 		});
 	}
 
@@ -60888,6 +61588,16 @@ Returns information about a received gift.
 		return this._request({
 			...options,
 			'@type': 'getReceivedGift',
+		});
+	}
+
+	/**
+Returns upgraded gifts of the current user who can be used to craft another gifts.
+*/
+	async getGiftsForCrafting(options: Omit<GetGiftsForCrafting, '@type'>): Promise<GiftsForCrafting> {
+		return this._request({
+			...options,
+			'@type': 'getGiftsForCrafting',
 		});
 	}
 
@@ -61061,7 +61771,7 @@ Refunds a previously done payment in Telegram Stars; for bots only.
 	}
 
 	/**
-Returns a user that can be contacted to get support.
+Returns a user who can be contacted to get support.
 */
 	async getSupportUser(): Promise<User> {
 		return this._request({
@@ -61828,8 +62538,8 @@ Deletes a Telegram Passport element.
 	}
 
 	/**
-Informs the user that some of the elements in their Telegram Passport contain errors; for bots only. The user will not
-be able to resend the elements, until the errors are fixed.
+Informs the user who some of the elements in their Telegram Passport contain errors; for bots only. The user will not be
+able to resend the elements, until the errors are fixed.
 */
 	async setPassportElementErrors(options: Omit<SetPassportElementErrors, '@type'>): Promise<Ok> {
 		return this._request({
@@ -62559,7 +63269,7 @@ Telegram.
 	/**
 Adds a proxy server for network requests. Can be called before authorization.
 */
-	async addProxy(options: Omit<AddProxy, '@type'>): Promise<Proxy> {
+	async addProxy(options: Omit<AddProxy, '@type'>): Promise<AddedProxy> {
 		return this._request({
 			...options,
 			'@type': 'addProxy',
@@ -62569,7 +63279,7 @@ Adds a proxy server for network requests. Can be called before authorization.
 	/**
 Edits an existing proxy server for network requests. Can be called before authorization.
 */
-	async editProxy(options: Omit<EditProxy, '@type'>): Promise<Proxy> {
+	async editProxy(options: Omit<EditProxy, '@type'>): Promise<AddedProxy> {
 		return this._request({
 			...options,
 			'@type': 'editProxy',
@@ -62608,20 +63318,9 @@ Removes a proxy server. Can be called before authorization.
 	/**
 Returns the list of proxies that are currently set up. Can be called before authorization.
 */
-	async getProxies(): Promise<Proxies> {
+	async getProxies(): Promise<AddedProxies> {
 		return this._request({
 			'@type': 'getProxies',
-		});
-	}
-
-	/**
-Returns an HTTPS link, which can be used to add a proxy. Available only for SOCKS5 and MTProto proxies. Can be called
-before authorization.
-*/
-	async getProxyLink(options: Omit<GetProxyLink, '@type'>): Promise<HttpUrl> {
-		return this._request({
-			...options,
-			'@type': 'getProxyLink',
 		});
 	}
 
