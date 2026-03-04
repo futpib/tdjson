@@ -2927,6 +2927,10 @@ True, if the user may add a link preview to their messages.
 */
 	can_add_link_previews?: boolean;
 	/**
+True, if the user may change the tag of self.
+*/
+	can_edit_tag?: boolean;
+	/**
 True, if the user can change the chat title, photo, and other settings.
 */
 	can_change_info?: boolean;
@@ -3016,6 +3020,10 @@ True, if the administrator can delete stories posted by other users; applicable 
 True, if the administrator can answer to channel direct messages; applicable to channels only.
 */
 	can_manage_direct_messages?: boolean;
+	/**
+True, if the administrator can change tags of other users; applicable to basic groups and supergroups only.
+*/
+	can_manage_tags?: boolean;
 	/**
 True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups
 only.
@@ -7110,10 +7118,6 @@ Subtype of {@link ChatMemberStatus}.
 export interface ChatMemberStatusCreator {
 	'@type': 'chatMemberStatusCreator';
 	/**
-A custom title of the owner; 0-16 characters without emoji; applicable to supergroups only.
-*/
-	custom_title: string;
-	/**
 True, if the creator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups only.
 */
 	is_anonymous?: boolean;
@@ -7131,10 +7135,6 @@ Subtype of {@link ChatMemberStatus}.
 */
 export interface ChatMemberStatusAdministrator {
 	'@type': 'chatMemberStatusAdministrator';
-	/**
-A custom title of the administrator; 0-16 characters without emoji; applicable to supergroups only.
-*/
-	custom_title: string;
 	/**
 True, if the current user can edit the administrator privileges for the called user.
 */
@@ -7213,6 +7213,11 @@ Identifier of the chat member. Currently, other chats can be only Left or Banned
 other chats as Left or Banned members and these chats must be supergroups or channels.
 */
 	member_id: MessageSender;
+	/**
+Tag of the chat member or its custom title if the member is an administrator of the chat; 0-16 characters without emoji;
+applicable to basic groups and supergroups only.
+*/
+	tag: string;
 	/**
 Identifier of a user who invited/promoted/banned this member in the chat; 0 if unknown.
 */
@@ -7796,7 +7801,7 @@ created, in case the user is not a member.
 */
 	date: number;
 	/**
-Status of the current user in the supergroup or channel; custom title will always be empty.
+Status of the current user in the supergroup or channel.
 */
 	status: ChatMemberStatus;
 	/**
@@ -8193,7 +8198,7 @@ Represents a list of message senders.
 export interface MessageSenders {
 	'@type': 'messageSenders';
 	/**
-Approximate total number of messages senders found.
+Approximate total number of message senders found.
 */
 	total_count: number;
 	/**
@@ -8226,6 +8231,36 @@ export interface ChatMessageSenders {
 List of available message senders.
 */
 	senders: ChatMessageSender[];
+}
+
+/**
+Represents a poll voter.
+*/
+export interface PollVoter {
+	'@type': 'pollVoter';
+	/**
+The voter identifier.
+*/
+	voter_id: MessageSender;
+	/**
+Point in time (Unix timestamp) when the vote was added.
+*/
+	date: number;
+}
+
+/**
+Represents a list of poll voters.
+*/
+export interface PollVoters {
+	'@type': 'pollVoters';
+	/**
+Approximate total number of poll voters found.
+*/
+	total_count: number;
+	/**
+List of poll voters.
+*/
+	voters: PollVoter[];
 }
 
 /**
@@ -9120,6 +9155,11 @@ Number of times the sender of the message boosted the supergroup at the time the
 For messages sent by the current user, supergroupFullInfo.my_boost_count must be used instead.
 */
 	sender_boost_count: number;
+	/**
+Tag of the sender of the message in the supergroup at the time the message was sent; may be empty if none or unknown.
+For messages sent in basic groups or supergroup administrators, the current custom title or tag must be used instead.
+*/
+	sender_tag: string;
 	/**
 The number of Telegram Stars the sender paid to send the message.
 */
@@ -10599,8 +10639,7 @@ Information about pending join requests; may be null if none.
 */
 	pending_join_requests: ChatJoinRequestsInfo;
 	/**
-Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the
-chat.
+Identifier of the message from which reply markup needs to be used; 0 if there is no reply markup in the chat.
 */
 	reply_markup_message_id: number;
 	/**
@@ -11251,7 +11290,7 @@ A list of rows of inline keyboard buttons.
 }
 
 /**
-Contains information about an inline button of type inlineKeyboardButtonTypeLoginUrl.
+Contains information about an inline button of type inlineKeyboardButtonTypeLoginUrl or an external link.
 Subtype of {@link LoginUrlInfo}.
 */
 export interface LoginUrlInfoOpen {
@@ -11288,27 +11327,63 @@ User identifier of a bot linked with the website.
 True, if the user must be asked for the permission to the bot to send them messages.
 */
 	request_write_access?: boolean;
+}
+
+/**
+Information about the OAuth authorization.
+*/
+export interface OauthLinkInfo {
+	'@type': 'oauthLinkInfo';
+	/**
+Identifier of the user for which the link was generated; may be 0 if unknown. The corresponding user may be unknown. If
+the user is logged in the app, then they must be chosen for authorization by default.
+*/
+	user_id: number;
+	/**
+An HTTP URL where the user authorizes.
+*/
+	url: string;
+	/**
+A domain of the URL.
+*/
+	domain: string;
+	/**
+User identifier of a bot linked with the website.
+*/
+	bot_user_id: number;
+	/**
+True, if the user must be asked for the permission to the bot to send them messages.
+*/
+	request_write_access?: boolean;
 	/**
 True, if the user must be asked for the permission to share their phone number.
 */
 	request_phone_number_access?: boolean;
 	/**
-The version of a browser used for the authorization; may be empty if irrelevant.
+The version of a browser used for the authorization.
 */
 	browser: string;
 	/**
-Operating system the browser is running on; may be empty if irrelevant.
+Operating system the browser is running on.
 */
 	platform: string;
 	/**
-IP address from which the authorization is performed, in human-readable format; may be empty if irrelevant.
+IP address from which the authorization is performed, in human-readable format.
 */
 	ip_address: string;
 	/**
-Human-readable description of a country and a region from which the authorization is performed, based on the IP address;
-may be empty if irrelevant.
+Human-readable description of a country and a region from which the authorization is performed, based on the IP address.
 */
 	location: string;
+	/**
+True, if code matching dialog must be shown first and checkOauthRequestMatchCode must be called before
+acceptOauthRequest. Otherwise, checkOauthRequestMatchCode must not be called.
+*/
+	match_code_first?: boolean;
+	/**
+The list of codes to match; may be empty if irrelevant.
+*/
+	match_codes: string[];
 }
 
 /**
@@ -13022,6 +13097,10 @@ URL of the external animation player.
 */
 	url: string;
 	/**
+The cached animation; may be null if unknown.
+*/
+	animation: Animation;
+	/**
 Thumbnail of the animation; may be null if unknown.
 */
 	thumbnail: Photo;
@@ -13050,6 +13129,10 @@ URL of the external audio player.
 */
 	url: string;
 	/**
+The cached audio; may be null if unknown.
+*/
+	audio: Audio;
+	/**
 Thumbnail of the audio; may be null if unknown.
 */
 	thumbnail: Photo;
@@ -13077,6 +13160,10 @@ export interface LinkPreviewTypeEmbeddedVideoPlayer {
 URL of the external video player.
 */
 	url: string;
+	/**
+The cached video; may be null if unknown.
+*/
+	video: Video;
 	/**
 Thumbnail of the video; may be null if unknown.
 */
@@ -15802,6 +15889,10 @@ Subtype of {@link MessageContent}.
 export interface MessageCall {
 	'@type': 'messageCall';
 	/**
+Persistent unique call identifier; 0 for calls from other devices, which can't be passed as inputCallFromMessage.
+*/
+	unique_id: string;
+	/**
 True, if the call was a video call.
 */
 	is_video?: boolean;
@@ -15990,6 +16081,38 @@ export interface MessageChatOwnerChanged {
 Identifier of the user who is the new owner of the chat.
 */
 	new_owner_user_id: number;
+}
+
+/**
+Chat has_protected_content setting was changed or request to change it was rejected.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatHasProtectedContentToggled {
+	'@type': 'messageChatHasProtectedContentToggled';
+	/**
+Identifier of the message with the request to change the setting; can be an identifier of a deleted message or 0.
+*/
+	request_message_id: number;
+	/**
+Previous value of the setting.
+*/
+	old_has_protected_content?: boolean;
+	/**
+New value of the setting.
+*/
+	new_has_protected_content?: boolean;
+}
+
+/**
+Chat has_protected_content setting was requested to be disabled.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatHasProtectedContentDisableRequested {
+	'@type': 'messageChatHasProtectedContentDisableRequested';
+	/**
+True, if the request has expired.
+*/
+	is_expired?: boolean;
 }
 
 /**
@@ -17247,6 +17370,62 @@ export interface MessageUnsupported {
 }
 
 /**
+Describes precision with which to show a date or a time.
+Subtype of {@link DateTimePartPrecision}.
+*/
+export interface DateTimePartPrecisionNone {
+	'@type': 'dateTimePartPrecisionNone';
+
+}
+
+/**
+Show the date or time in a short way (17.03.22 or 22:45).
+Subtype of {@link DateTimePartPrecision}.
+*/
+export interface DateTimePartPrecisionShort {
+	'@type': 'dateTimePartPrecisionShort';
+
+}
+
+/**
+Show the date or time in a long way (March 17, 2022 or 22:45:00).
+Subtype of {@link DateTimePartPrecision}.
+*/
+export interface DateTimePartPrecisionLong {
+	'@type': 'dateTimePartPrecisionLong';
+
+}
+
+/**
+Describes date and time formatting.
+Subtype of {@link DateTimeFormattingType}.
+*/
+export interface DateTimeFormattingTypeRelative {
+	'@type': 'dateTimeFormattingTypeRelative';
+
+}
+
+/**
+The date and time must be shown as absolute timestamps.
+Subtype of {@link DateTimeFormattingType}.
+*/
+export interface DateTimeFormattingTypeAbsolute {
+	'@type': 'dateTimeFormattingTypeAbsolute';
+	/**
+The precision with which hours, minutes and seconds are shown.
+*/
+	time_precision: DateTimePartPrecision;
+	/**
+The precision with which the date is shown.
+*/
+	date_precision: DateTimePartPrecision;
+	/**
+True, if the day of week must be shown.
+*/
+	show_day_of_week?: boolean;
+}
+
+/**
 Represents a part of the text which must be formatted differently.
 Subtype of {@link TextEntityType}.
 */
@@ -17460,6 +17639,22 @@ Timestamp from which a video/audio/video note/voice note/story playing must star
 content or the link preview of the current message, or in the same places in the replied message.
 */
 	media_timestamp: number;
+}
+
+/**
+A date and time.
+Subtype of {@link TextEntityType}.
+*/
+export interface TextEntityTypeDateTime {
+	'@type': 'textEntityTypeDateTime';
+	/**
+Point in time (Unix timestamp) representing the date and time.
+*/
+	unix_time: number;
+	/**
+Date and time formatting type; may be null if none and the original text must not be changed.
+*/
+	formatting_type: DateTimeFormattingType;
 }
 
 /**
@@ -18453,6 +18648,16 @@ True, if the message can be reported using reportSupergroupSpam.
 True, if fact check for the message can be changed through setMessageFactCheck.
 */
 	can_set_fact_check?: boolean;
+	/**
+True, if content of the message can't be saved locally, because it is protected by the current user; if true, then
+can_be_saved is false.
+*/
+	has_protected_content_by_current_user?: boolean;
+	/**
+True, if content of the message can't be saved locally, because it is protected by the other user; if true, then
+can_be_saved is false.
+*/
+	has_protected_content_by_other_user?: boolean;
 	/**
 True, if message statistics must be available from context menu of the message.
 */
@@ -20816,6 +21021,34 @@ export interface GroupCallId {
 Group call identifier.
 */
 	id: number;
+}
+
+/**
+Describes a call.
+Subtype of {@link InputCall}.
+*/
+export interface InputCallDiscarded {
+	'@type': 'inputCallDiscarded';
+	/**
+Identifier of the call.
+*/
+	call_id: number;
+}
+
+/**
+A call from a message of the type messageCall with non-zero messageCall.unique_id.
+Subtype of {@link InputCall}.
+*/
+export interface InputCallFromMessage {
+	'@type': 'inputCallFromMessage';
+	/**
+Chat identifier of the message.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
 }
 
 /**
@@ -23339,6 +23572,26 @@ New status of the chat member.
 }
 
 /**
+A chat member tag has been changed.
+Subtype of {@link ChatEventAction}.
+*/
+export interface ChatEventMemberTagChanged {
+	'@type': 'chatEventMemberTagChanged';
+	/**
+Affected chat member user identifier.
+*/
+	user_id: number;
+	/**
+Previous tag of the chat member.
+*/
+	old_tag: string;
+	/**
+New tag of the chat member.
+*/
+	new_tag: string;
+}
+
+/**
 A chat member extended their subscription to the chat.
 Subtype of {@link ChatEventAction}.
 */
@@ -24002,6 +24255,10 @@ True, if member restricted/unrestricted/banned/unbanned events need to be return
 */
 	member_restrictions?: boolean;
 	/**
+True, if member tag and custom title change events need to be returned.
+*/
+	member_tag_changes?: boolean;
+	/**
 True, if changes in chat information need to be returned.
 */
 	info_changes?: boolean;
@@ -24585,6 +24842,15 @@ Subtype of {@link PremiumFeature}.
 */
 export interface PremiumFeaturePaidMessages {
 	'@type': 'premiumFeaturePaidMessages';
+
+}
+
+/**
+The ability to enable content protection in private chats.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureProtectPrivateChatContent {
+	'@type': 'premiumFeatureProtectPrivateChatContent';
 
 }
 
@@ -28722,6 +28988,20 @@ The type of the content of the story to post; may be null if unspecified.
 }
 
 /**
+The link is an OAuth link. Call getOauthLinkInfo with the given URL to process the link if the link was received from
+outside of the application; otherwise, ignore it. After getOauthLinkInfo, show the user confirmation dialog and process
+it with checkOauthRequestMatchCode, acceptOauthRequest or declineOauthRequest.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeOauth {
+	'@type': 'internalLinkTypeOauth';
+	/**
+URL to be passed to getOauthLinkInfo.
+*/
+	url: string;
+}
+
+/**
 The link contains a request of Telegram passport data. Call getPassportAuthorizationForm with the given parameters to
 process the link if the link was received from outside of the application; otherwise, ignore it.
 Subtype of {@link InternalLinkType}.
@@ -31841,8 +32121,7 @@ The new data about pending join requests; may be null.
 }
 
 /**
-The default chat reply markup was changed. Can occur because new messages with reply markup were received or because an
-old reply markup was hidden by the user.
+The chat reply markup was changed.
 Subtype of {@link Update}.
 */
 export interface UpdateChatReplyMarkup {
@@ -31852,10 +32131,9 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Identifier of the message from which reply markup needs to be used; 0 if there is no default custom reply markup in the
-chat.
+The message from which the reply markup must be used; may be null if there is no default reply markup in the chat.
 */
-	reply_markup_message_id: number;
+	reply_markup_message: Message;
 }
 
 /**
@@ -32574,6 +32852,26 @@ notification; if user presses the second, all local data must be destroyed using
 Notification content.
 */
 	content: MessageContent;
+}
+
+/**
+An OAuth authorization request was received.
+Subtype of {@link Update}.
+*/
+export interface UpdateNewOauthRequest {
+	'@type': 'updateNewOauthRequest';
+	/**
+A domain of the URL where the user authorizes.
+*/
+	domain: string;
+	/**
+Human-readable description of a country and a region from which the authorization is performed, based on the IP address.
+*/
+	location: string;
+	/**
+The URL to pass to getOauthLinkInfo; the link is valid for 60 seconds.
+*/
+	url: string;
 }
 
 /**
@@ -35146,6 +35444,8 @@ export type MessageContent =
 	| MessageChatDeletePhoto
 	| MessageChatOwnerLeft
 	| MessageChatOwnerChanged
+	| MessageChatHasProtectedContentToggled
+	| MessageChatHasProtectedContentDisableRequested
 	| MessageChatAddMembers
 	| MessageChatJoinByLink
 	| MessageChatJoinByRequest
@@ -35204,6 +35504,15 @@ export type MessageContent =
 	| MessageProximityAlertTriggered
 	| MessageUnsupported;
 
+export type DateTimePartPrecision =
+	| DateTimePartPrecisionNone
+	| DateTimePartPrecisionShort
+	| DateTimePartPrecisionLong;
+
+export type DateTimeFormattingType =
+	| DateTimeFormattingTypeRelative
+	| DateTimeFormattingTypeAbsolute;
+
 export type TextEntityType =
 	| TextEntityTypeMention
 	| TextEntityTypeHashtag
@@ -35226,7 +35535,8 @@ export type TextEntityType =
 	| TextEntityTypeTextUrl
 	| TextEntityTypeMentionName
 	| TextEntityTypeCustomEmoji
-	| TextEntityTypeMediaTimestamp;
+	| TextEntityTypeMediaTimestamp
+	| TextEntityTypeDateTime;
 
 export type InputPaidMediaType =
 	| InputPaidMediaTypePhoto
@@ -35396,6 +35706,10 @@ export type CallServerType =
 	| CallServerTypeTelegramReflector
 	| CallServerTypeWebrtc;
 
+export type InputCall =
+	| InputCallDiscarded
+	| InputCallFromMessage;
+
 export type CallState =
 	| CallStatePending
 	| CallStateExchangingKeys
@@ -35512,6 +35826,7 @@ export type ChatEventAction =
 	| ChatEventMemberLeft
 	| ChatEventMemberPromoted
 	| ChatEventMemberRestricted
+	| ChatEventMemberTagChanged
 	| ChatEventMemberSubscriptionExtended
 	| ChatEventAvailableReactionsChanged
 	| ChatEventBackgroundChanged
@@ -35605,7 +35920,8 @@ export type PremiumFeature =
 	| PremiumFeatureBusiness
 	| PremiumFeatureMessageEffects
 	| PremiumFeatureChecklists
-	| PremiumFeaturePaidMessages;
+	| PremiumFeaturePaidMessages
+	| PremiumFeatureProtectPrivateChatContent;
 
 export type BusinessFeature =
 	| BusinessFeatureLocation
@@ -35950,6 +36266,7 @@ export type InternalLinkType =
 	| InternalLinkTypeNewGroupChat
 	| InternalLinkTypeNewPrivateChat
 	| InternalLinkTypeNewStory
+	| InternalLinkTypeOauth
 	| InternalLinkTypePassportDataRequest
 	| InternalLinkTypePhoneNumberConfirmation
 	| InternalLinkTypePremiumFeaturesPage
@@ -36194,6 +36511,7 @@ export type Update =
 	| UpdateBasicGroupFullInfo
 	| UpdateSupergroupFullInfo
 	| UpdateServiceNotification
+	| UpdateNewOauthRequest
 	| UpdateFile
 	| UpdateFileGenerationStart
 	| UpdateFileGenerationStop
@@ -37119,7 +37437,8 @@ the checklist message for messageChecklistTasksDone, messageChecklistTasksAdded,
 information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved, messageSuggestedPostDeclined,
 messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
 messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, the message with gift purchase offer for
-messageUpgradedGiftPurchaseOfferRejected, and the topic creation message for topic messages without non-bundled replied
+messageUpgradedGiftPurchaseOfferRejected, the message with the request to disable content protection for
+messageChatHasProtectedContentToggled, and the topic creation message for topic messages without non-bundled replied
 message. Returns a 404 error if the message doesn't exist.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
@@ -42281,10 +42600,78 @@ The HTTP link.
 Pass true if the current user allowed the bot that was returned in getExternalLinkInfo, to send them messages.
 */
 	allow_write_access?: boolean;
+}
+
+/**
+Returns information about an OAuth deep link. Use checkOauthRequestMatchCode, acceptOauthRequest or declineOauthRequest
+to process the link.
+Request type for {@link Tdjson#getOauthLinkInfo}.
+*/
+export interface GetOauthLinkInfo {
+	'@type': 'getOauthLinkInfo';
 	/**
-Pass true if the current user allowed the bot that was returned in getExternalLinkInfo, to access their phone number.
+URL of the link.
+*/
+	url: string;
+	/**
+Origin of the OAuth request if the request was received from the in-app browser; pass an empty string otherwise.
+*/
+	in_app_origin: string;
+}
+
+/**
+Checks a match-code for an OAuth authorization request. If fails, then the authorization request has failed. Otherwise,
+authorization confirmation dialog must be shown and the link must be processed using acceptOauthRequest or
+declineOauthRequest.
+Request type for {@link Tdjson#checkOauthRequestMatchCode}.
+*/
+export interface CheckOauthRequestMatchCode {
+	'@type': 'checkOauthRequestMatchCode';
+	/**
+URL of the OAuth deep link.
+*/
+	url: string;
+	/**
+The matching code chosen by the user.
+*/
+	match_code: string;
+}
+
+/**
+Accepts an OAuth authorization request. Returns an HTTP URL to open after successful authorization. May return an empty
+link if just a toast about successful login has to be shown.
+Request type for {@link Tdjson#acceptOauthRequest}.
+*/
+export interface AcceptOauthRequest {
+	'@type': 'acceptOauthRequest';
+	/**
+URL of the OAuth deep link.
+*/
+	url: string;
+	/**
+The matching code chosen by the user.
+*/
+	match_code: string;
+	/**
+Pass true if the current user allowed the bot that was returned in getOauthLinkInfo, to send them messages.
+*/
+	allow_write_access?: boolean;
+	/**
+Pass true if the current user allowed the bot that was returned in getOauthLinkInfo, to access their phone number.
 */
 	allow_phone_number_access?: boolean;
+}
+
+/**
+Declines an OAuth authorization request.
+Request type for {@link Tdjson#declineOauthRequest}.
+*/
+export interface DeclineOauthRequest {
+	'@type': 'declineOauthRequest';
+	/**
+URL of the OAuth deep link.
+*/
+	url: string;
 }
 
 /**
@@ -43045,8 +43432,9 @@ forever.
 }
 
 /**
-Changes the ability of users to save, forward, or copy chat content. Supported only for basic groups, supergroups and
-channels. Requires owner privileges.
+Changes the ability of users to save, forward, or copy chat content. Requires owner privileges in basic groups,
+supergroups and channels. Requires Telegram Premium to enable protected content in private chats. Not available in Saved
+Messages and private chats with bots or support accounts.
 Request type for {@link Tdjson#toggleChatHasProtectedContent}.
 */
 export interface ToggleChatHasProtectedContent {
@@ -43059,6 +43447,27 @@ Chat identifier.
 New value of has_protected_content.
 */
 	has_protected_content?: boolean;
+}
+
+/**
+Processes request to disable has_protected_content in a chat.
+Request type for {@link Tdjson#processChatHasProtectedContentDisableRequest}.
+*/
+export interface ProcessChatHasProtectedContentDisableRequest {
+	'@type': 'processChatHasProtectedContentDisableRequest';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message with the request. The message must be incoming and has content of the type
+messageChatHasProtectedContentDisableRequested.
+*/
+	request_message_id: number;
+	/**
+Pass true to approve the request; pass false to reject the request.
+*/
+	approve?: boolean;
 }
 
 /**
@@ -43400,6 +43809,27 @@ The new status of the member in the chat.
 }
 
 /**
+Changes the tag or custom title of a chat member; requires can_manage_tags administrator right to change tag of other
+users; for basic groups and supergroups only.
+Request type for {@link Tdjson#setChatMemberTag}.
+*/
+export interface SetChatMemberTag {
+	'@type': 'setChatMemberTag';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the user, which tag is changed. Chats can't have member tags.
+*/
+	user_id: number;
+	/**
+The new tag of the member in the chat; 0-16 characters without emoji.
+*/
+	tag: string;
+}
+
+/**
 Bans a member in a chat; requires can_restrict_members administrator right. Members can't be banned in private or secret
 chats. In supergroups and channels, the user will not be able to return to the group on their own using invite links,
 etc., unless unbanned first.
@@ -43438,8 +43868,8 @@ export interface CanTransferOwnership {
 }
 
 /**
-Changes the owner of a chat; requires owner privileges in the chat. Use the method canTransferOwnership to check whether
-the ownership can be transferred from the current session. Available only for supergroups and channel chats.
+Changes the owner of a chat; for basic groups, supergroups and channel chats only; requires owner privileges in the
+chat. Use the method canTransferOwnership to check whether the ownership can be transferred from the current session.
 Request type for {@link Tdjson#transferChatOwnership}.
 */
 export interface TransferChatOwnership {
@@ -43460,8 +43890,9 @@ The 2-step verification password of the current user.
 }
 
 /**
-Returns the user who will become the owner of the chat after 7 days if the current user does not return to the chat
-during that period; requires owner privileges in the chat. Available only for supergroups and channel chats.
+Returns the user who will become the owner of the chat after 7 days if the current user does not return to the
+supergroup or channel during that period or immediately for basic groups; requires owner privileges in the chat.
+Available only for supergroups and channel chats.
 Request type for {@link Tdjson#getChatOwnerAfterLeaving}.
 */
 export interface GetChatOwnerAfterLeaving {
@@ -45608,7 +46039,7 @@ export interface SendCallRating {
 	/**
 Call identifier.
 */
-	call_id: number;
+	call_id: InputCall;
 	/**
 Call rating; 1-5.
 */
@@ -45632,7 +46063,7 @@ export interface SendCallDebugInformation {
 	/**
 Call identifier.
 */
-	call_id: number;
+	call_id: InputCall;
 	/**
 Debug information in application-specific format.
 */
@@ -45648,7 +46079,7 @@ export interface SendCallLog {
 	/**
 Call identifier.
 */
-	call_id: number;
+	call_id: InputCall;
 	/**
 Call log file. Only inputFileLocal and inputFileGenerated are supported.
 */
@@ -45684,7 +46115,7 @@ Default group call participant identifier to join the video chats in the chat.
 }
 
 /**
-Creates a video chat (a group call bound to a chat). Available only for basic groups, supergroups and channels; requires
+Creates a video chat (a group call bound to a chat); for basic groups, supergroups and channels only; requires
 can_manage_video_chats administrator right.
 Request type for {@link Tdjson#createVideoChat}.
 */
@@ -49537,7 +49968,9 @@ Request type for {@link Tdjson#craftGift}.
 export interface CraftGift {
 	'@type': 'craftGift';
 	/**
-Identifier of the gifts to use for crafting.
+Identifier of the gifts to use for crafting. In the case of a successful craft, the resulting gift will have the number
+of the first gift. Consequently, the first gift must not have been withdrawn to the TON blockchain as an NFT and must
+have an empty gift_address.
 */
 	received_gift_ids: string[];
 }
@@ -53005,6 +53438,10 @@ export type Request =
 	| GetInternalLinkType
 	| GetExternalLinkInfo
 	| GetExternalLink
+	| GetOauthLinkInfo
+	| CheckOauthRequestMatchCode
+	| AcceptOauthRequest
+	| DeclineOauthRequest
 	| ReadAllChatMentions
 	| ReadAllChatReactions
 	| CreatePrivateChat
@@ -53052,6 +53489,7 @@ export type Request =
 	| SetChatDraftMessage
 	| SetChatNotificationSettings
 	| ToggleChatHasProtectedContent
+	| ProcessChatHasProtectedContentDisableRequest
 	| ToggleChatViewAsTopics
 	| ToggleChatIsTranslatable
 	| ToggleChatIsMarkedAsUnread
@@ -53071,6 +53509,7 @@ export type Request =
 	| AddChatMember
 	| AddChatMembers
 	| SetChatMemberStatus
+	| SetChatMemberTag
 	| BanChatMember
 	| CanTransferOwnership
 	| TransferChatOwnership
@@ -54247,7 +54686,8 @@ the checklist message for messageChecklistTasksDone, messageChecklistTasksAdded,
 information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved, messageSuggestedPostDeclined,
 messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
 messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, the message with gift purchase offer for
-messageUpgradedGiftPurchaseOfferRejected, and the topic creation message for topic messages without non-bundled replied
+messageUpgradedGiftPurchaseOfferRejected, the message with the request to disable content protection for
+messageChatHasProtectedContentToggled, and the topic creation message for topic messages without non-bundled replied
 message. Returns a 404 error if the message doesn't exist.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
@@ -56518,7 +56958,7 @@ Changes the user answer to a poll. A poll in quiz mode can be answered only once
 Returns message senders voted for the specified option in a non-anonymous polls. For optimal performance, the number of
 returned users is chosen by TDLib.
 */
-	async getPollVoters(options: Omit<GetPollVoters, '@type'>): Promise<MessageSenders> {
+	async getPollVoters(options: Omit<GetPollVoters, '@type'>): Promise<PollVoters> {
 		return this._request({
 			...options,
 			'@type': 'getPollVoters',
@@ -56994,6 +57434,50 @@ if just a toast about successful login has to be shown.
 		return this._request({
 			...options,
 			'@type': 'getExternalLink',
+		});
+	}
+
+	/**
+Returns information about an OAuth deep link. Use checkOauthRequestMatchCode, acceptOauthRequest or declineOauthRequest
+to process the link.
+*/
+	async getOauthLinkInfo(options: Omit<GetOauthLinkInfo, '@type'>): Promise<OauthLinkInfo> {
+		return this._request({
+			...options,
+			'@type': 'getOauthLinkInfo',
+		});
+	}
+
+	/**
+Checks a match-code for an OAuth authorization request. If fails, then the authorization request has failed. Otherwise,
+authorization confirmation dialog must be shown and the link must be processed using acceptOauthRequest or
+declineOauthRequest.
+*/
+	async checkOauthRequestMatchCode(options: Omit<CheckOauthRequestMatchCode, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'checkOauthRequestMatchCode',
+		});
+	}
+
+	/**
+Accepts an OAuth authorization request. Returns an HTTP URL to open after successful authorization. May return an empty
+link if just a toast about successful login has to be shown.
+*/
+	async acceptOauthRequest(options: Omit<AcceptOauthRequest, '@type'>): Promise<HttpUrl> {
+		return this._request({
+			...options,
+			'@type': 'acceptOauthRequest',
+		});
+	}
+
+	/**
+Declines an OAuth authorization request.
+*/
+	async declineOauthRequest(options: Omit<DeclineOauthRequest, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'declineOauthRequest',
 		});
 	}
 
@@ -57474,13 +57958,24 @@ can't be changed.
 	}
 
 	/**
-Changes the ability of users to save, forward, or copy chat content. Supported only for basic groups, supergroups and
-channels. Requires owner privileges.
+Changes the ability of users to save, forward, or copy chat content. Requires owner privileges in basic groups,
+supergroups and channels. Requires Telegram Premium to enable protected content in private chats. Not available in Saved
+Messages and private chats with bots or support accounts.
 */
 	async toggleChatHasProtectedContent(options: Omit<ToggleChatHasProtectedContent, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'toggleChatHasProtectedContent',
+		});
+	}
+
+	/**
+Processes request to disable has_protected_content in a chat.
+*/
+	async processChatHasProtectedContentDisableRequest(options: Omit<ProcessChatHasProtectedContentDisableRequest, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'processChatHasProtectedContentDisableRequest',
 		});
 	}
 
@@ -57689,6 +58184,17 @@ transferChatOwnership instead. Use addChatMember or banChatMember if some additi
 	}
 
 	/**
+Changes the tag or custom title of a chat member; requires can_manage_tags administrator right to change tag of other
+users; for basic groups and supergroups only.
+*/
+	async setChatMemberTag(options: Omit<SetChatMemberTag, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setChatMemberTag',
+		});
+	}
+
+	/**
 Bans a member in a chat; requires can_restrict_members administrator right. Members can't be banned in private or secret
 chats. In supergroups and channels, the user will not be able to return to the group on their own using invite links,
 etc., unless unbanned first.
@@ -57710,8 +58216,8 @@ Checks whether the current session can be used to transfer a chat ownership to a
 	}
 
 	/**
-Changes the owner of a chat; requires owner privileges in the chat. Use the method canTransferOwnership to check whether
-the ownership can be transferred from the current session. Available only for supergroups and channel chats.
+Changes the owner of a chat; for basic groups, supergroups and channel chats only; requires owner privileges in the
+chat. Use the method canTransferOwnership to check whether the ownership can be transferred from the current session.
 */
 	async transferChatOwnership(options: Omit<TransferChatOwnership, '@type'>): Promise<Ok> {
 		return this._request({
@@ -57721,8 +58227,9 @@ the ownership can be transferred from the current session. Available only for su
 	}
 
 	/**
-Returns the user who will become the owner of the chat after 7 days if the current user does not return to the chat
-during that period; requires owner privileges in the chat. Available only for supergroups and channel chats.
+Returns the user who will become the owner of the chat after 7 days if the current user does not return to the
+supergroup or channel during that period or immediately for basic groups; requires owner privileges in the chat.
+Available only for supergroups and channel chats.
 */
 	async getChatOwnerAfterLeaving(options: Omit<GetChatOwnerAfterLeaving, '@type'>): Promise<User> {
 		return this._request({
@@ -58992,7 +59499,7 @@ Changes default participant identifier, on whose behalf a video chat in the chat
 	}
 
 	/**
-Creates a video chat (a group call bound to a chat). Available only for basic groups, supergroups and channels; requires
+Creates a video chat (a group call bound to a chat); for basic groups, supergroups and channels only; requires
 can_manage_video_chats administrator right.
 */
 	async createVideoChat(options: Omit<CreateVideoChat, '@type'>): Promise<GroupCallId> {
