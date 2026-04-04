@@ -311,12 +311,80 @@ The text.
 */
 	text: string;
 	/**
-Entities contained in the text. Entities can be nested, but must not mutually intersect with each other. Pre, Code and
-PreCode entities can't contain other entities. BlockQuote entities can't contain other BlockQuote entities. Bold,
-Italic, Underline, Strikethrough, and Spoiler entities can contain and can be part of any other entities. All other
-entities can't contain each other.
+Entities contained in the text. Entities can be nested, but must not mutually intersect with each other. Pre, Code,
+PreCode, and DateTime entities can't contain other entities. BlockQuote entities can't contain other BlockQuote
+entities. Bold, Italic, Underline, Strikethrough, and Spoiler entities can contain and can be part of any other
+entities. All other entities can't contain each other.
 */
 	entities: TextEntity[];
+}
+
+/**
+Represents a change of a text.
+*/
+export interface DiffEntity {
+	'@type': 'diffEntity';
+	/**
+Offset of the entity, in UTF-16 code units.
+*/
+	offset: number;
+	/**
+Length of the entity, in UTF-16 code units.
+*/
+	length: number;
+	/**
+Type of the entity.
+*/
+	type: DiffEntityType;
+}
+
+/**
+A text with some changes highlighted.
+*/
+export interface DiffText {
+	'@type': 'diffText';
+	/**
+The text.
+*/
+	text: string;
+	/**
+Entities describing changes in the text. Entities doesn't mutually intersect with each other.
+*/
+	entities: DiffEntity[];
+}
+
+/**
+A text fixed using fixTextWithAi.
+*/
+export interface FixedText {
+	'@type': 'fixedText';
+	/**
+The resulting text.
+*/
+	text: FormattedText;
+	/**
+Changes made to the original text.
+*/
+	diff_text: DiffText;
+}
+
+/**
+Describes a style that can be used to compose a text.
+*/
+export interface TextCompositionStyle {
+	'@type': 'textCompositionStyle';
+	/**
+Name of the style.
+*/
+	name: string;
+	/**
+Identifier of the custom emoji corresponding to the style.
+*/
+	custom_emoji_id: string;
+	/**
+Title of the style in the user application's language.
+*/
+	title: string;
 }
 
 /**
@@ -1134,17 +1202,31 @@ Describes one answer option of a poll.
 export interface PollOption {
 	'@type': 'pollOption';
 	/**
-Option text; 1-100 characters. Only custom emoji entities are allowed.
+Unique identifier of the option in the poll.
+*/
+	id: string;
+	/**
+Option text; 1-100 characters; may contain only custom emoji entities.
 */
 	text: FormattedText;
 	/**
-Number of voters for this option, available only for closed or voted polls.
+Option media. Currently, can be only of the types messageAnimation, messageLocation, messagePhoto, messageSticker,
+messageVenue, or messageVideo without caption.
+*/
+	media: MessageContent;
+	/**
+Number of voters for this option, available only for closed or voted polls, or if the current user is the creator of the
+poll.
 */
 	voter_count: number;
 	/**
 The percentage of votes for this option; 0-100.
 */
 	vote_percentage: number;
+	/**
+Identifiers of recent voters for the option, if the poll is non-anonymous and poll results are available.
+*/
+	recent_voter_ids: MessageSender[];
 	/**
 True, if the option was chosen by the user.
 */
@@ -1153,6 +1235,25 @@ True, if the option was chosen by the user.
 True, if the option is being chosen by a pending setPollAnswer request.
 */
 	is_being_chosen?: boolean;
+	/**
+Identifier of the user or chat who added the option; may be null if the option existed from creation of the poll.
+*/
+	author: MessageSender;
+	/**
+Point in time (Unix timestamp) when the option was added; 0 if the option existed from creation of the poll.
+*/
+	addition_date: number;
+}
+
+/**
+Describes one answer option of a poll to be created.
+*/
+export interface InputPollOption {
+	'@type': 'inputPollOption';
+	/**
+Option text; 1-100 characters. Only custom emoji entities are allowed to be added and only by Premium users.
+*/
+	text: FormattedText;
 }
 
 /**
@@ -1161,25 +1262,56 @@ Subtype of {@link PollType}.
 */
 export interface PollTypeRegular {
 	'@type': 'pollTypeRegular';
-	/**
-True, if multiple answer options can be chosen simultaneously.
-*/
-	allow_multiple_answers?: boolean;
+
 }
 
 /**
-A poll in quiz mode, which has exactly one correct answer option and can be answered only once.
+A poll in quiz mode, which has predefined correct answers.
 Subtype of {@link PollType}.
 */
 export interface PollTypeQuiz {
 	'@type': 'pollTypeQuiz';
 	/**
-0-based identifier of the correct answer option; -1 for a yet unanswered poll.
+Increasing list of 0-based identifiers of the correct answer options; empty for a yet unanswered poll.
 */
-	correct_option_id: number;
+	correct_option_ids: number[];
+	/**
+Text that is shown when the user chooses an incorrect answer or taps on the lamp icon; empty for a yet unanswered poll.
+*/
+	explanation: FormattedText;
+	/**
+Media that is shown when the user chooses an incorrect answer or taps on the lamp icon; may be null if none or the poll
+is unanswered yet. Currently, can be only of the types messageAnimation, messageAudio, messageDocument, messageLocation,
+messagePhoto, messageVenue, or messageVideo without caption.
+*/
+	explanation_media: MessageContent;
+}
+
+/**
+Describes the type of poll to send.
+Subtype of {@link InputPollType}.
+*/
+export interface InputPollTypeRegular {
+	'@type': 'inputPollTypeRegular';
+	/**
+True, if answer options can be added to the poll after creation; not supported in channel chats and for anonymous polls.
+*/
+	allow_adding_options?: boolean;
+}
+
+/**
+A poll in quiz mode, which has predefined correct answers.
+Subtype of {@link InputPollType}.
+*/
+export interface InputPollTypeQuiz {
+	'@type': 'inputPollTypeQuiz';
+	/**
+Increasing list of 0-based identifiers of the correct answer options; must be non-empty.
+*/
+	correct_option_ids: number[];
 	/**
 Text that is shown when the user chooses an incorrect answer or taps on the lamp icon; 0-200 characters with at most 2
-line feeds; empty for a yet unanswered poll.
+line feeds.
 */
 	explanation: FormattedText;
 }
@@ -1194,8 +1326,8 @@ Unique identifier of the task.
 */
 	id: number;
 	/**
-Text of the task; may contain only Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, Url, EmailAddress,
-Mention, Hashtag, Cashtag and PhoneNumber entities.
+Text of the task; may contain only Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, DateTime and
+automatically found entities.
 */
 	text: FormattedText;
 	/**
@@ -1219,7 +1351,7 @@ Unique identifier of the task; must be positive.
 	id: number;
 	/**
 Text of the task; 1-getOption("checklist_task_text_length_max") characters without line feeds. May contain only Bold,
-Italic, Underline, Strikethrough, Spoiler, and CustomEmoji entities.
+Italic, Underline, Strikethrough, Spoiler, CustomEmoji, and DateTime entities.
 */
 	text: FormattedText;
 }
@@ -1230,7 +1362,8 @@ Describes a checklist.
 export interface Checklist {
 	'@type': 'checklist';
 	/**
-Title of the checklist; may contain only Bold, Italic, Underline, Strikethrough, Spoiler, and CustomEmoji entities.
+Title of the checklist; may contain only Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, and DateTime
+entities.
 */
 	title: FormattedText;
 	/**
@@ -1263,7 +1396,7 @@ export interface InputChecklist {
 	'@type': 'inputChecklist';
 	/**
 Title of the checklist; 1-getOption("checklist_title_length_max") characters. May contain only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities.
 */
 	title: FormattedText;
 	/**
@@ -1798,7 +1931,7 @@ Unique poll identifier.
 */
 	id: string;
 	/**
-Poll question; 1-300 characters. Only custom emoji entities are allowed.
+Poll question; 1-300 characters; may contain only custom emoji entities.
 */
 	question: FormattedText;
 	/**
@@ -1810,13 +1943,30 @@ Total number of voters, participating in the poll.
 */
 	total_voter_count: number;
 	/**
-Identifiers of recent voters, if the poll is non-anonymous.
+Identifiers of recent voters, if the poll is non-anonymous and poll results are available.
 */
 	recent_voter_ids: MessageSender[];
+	/**
+True, if the current user can get voters in the poll.
+*/
+	can_get_voters?: boolean;
 	/**
 True, if the poll is anonymous.
 */
 	is_anonymous?: boolean;
+	/**
+True, if multiple answer options can be chosen simultaneously.
+*/
+	allows_multiple_answers?: boolean;
+	/**
+True, if the poll can be answered multiple times.
+*/
+	allows_revoting?: boolean;
+	/**
+The list of 0-based poll identifiers in which the options of the poll must be shown; empty if the order of options must
+not be changed.
+*/
+	option_order: number[];
 	/**
 Type of the poll.
 */
@@ -2128,6 +2278,10 @@ True, if the bot has topics.
 True, if users can create and delete topics in the chat with the bot.
 */
 	allows_users_to_create_topics?: boolean;
+	/**
+True, if the bot can manage other bots.
+*/
+	can_manage_bots?: boolean;
 	/**
 True, if the bot supports inline queries.
 */
@@ -6839,6 +6993,10 @@ Animation shown in the chat with the bot if the chat is empty; may be null.
 */
 	animation: Animation;
 	/**
+Identifier of the bot, which manages the bot; 0 if none or unknown; for owner of the bot only.
+*/
+	manager_bot_user_id: number;
+	/**
 Information about a button to show instead of the bot commands menu button; may be null if ordinary bot commands menu
 must be shown.
 */
@@ -6980,6 +7138,10 @@ True, if the user set chat background for both chat users and it wasn't reverted
 */
 	set_chat_background?: boolean;
 	/**
+True, if the user uses an unofficial application that poses a security risk.
+*/
+	uses_unofficial_app?: boolean;
+	/**
 A short user bio; may be null for bots.
 */
 	bio: FormattedText;
@@ -7098,6 +7260,10 @@ Custom title of the administrator.
 True, if the user is the owner of the chat.
 */
 	is_owner?: boolean;
+	/**
+True, if the current user can edit the administrator privileges for the administrator.
+*/
+	can_be_edited?: boolean;
 }
 
 /**
@@ -8856,8 +9022,8 @@ Describes manually or automatically chosen quote from another message.
 export interface TextQuote {
 	'@type': 'textQuote';
 	/**
-Text of the quote. Only Bold, Italic, Underline, Strikethrough, Spoiler, and CustomEmoji entities can be present in the
-text.
+Text of the quote. Only Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, and DateTime entities can be
+present in the text.
 */
 	text: FormattedText;
 	/**
@@ -8877,7 +9043,7 @@ export interface InputTextQuote {
 	'@type': 'inputTextQuote';
 	/**
 Text of the quote; 0-getOption("message_reply_quote_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed to be kept and must be kept in the quote.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed to be kept and must be kept in the quote.
 */
 	text: FormattedText;
 	/**
@@ -8908,6 +9074,10 @@ Chosen quote from the replied message; may be null if none.
 Identifier of the checklist task in the original message that was replied; 0 if none.
 */
 	checklist_task_id: number;
+	/**
+Identifier of the poll option in the original message that was replied; empty if none.
+*/
+	poll_option_id: string;
 	/**
 Information about origin of the message if the message was from another chat or topic; may be null for messages from the
 same chat.
@@ -8963,6 +9133,10 @@ Quote from the message to be replied; pass null if none. Must always be null for
 Identifier of the checklist task in the message to be replied; pass 0 to reply to the whole message.
 */
 	checklist_task_id: number;
+	/**
+Identifier of the poll option in the message to be replied; pass an empty string if none.
+*/
+	poll_option_id: string;
 }
 
 /**
@@ -8988,6 +9162,10 @@ Quote from the message to be replied; pass null if none.
 Identifier of the checklist task in the message to be replied; pass 0 to reply to the whole message.
 */
 	checklist_task_id: number;
+	/**
+Identifier of the poll option in the message to be replied; pass an empty string if none.
+*/
+	poll_option_id: string;
 }
 
 /**
@@ -9502,7 +9680,7 @@ True, if the message can be reported to Telegram moderators through reportChatSp
 	can_be_reported?: boolean;
 	/**
 Content of the message. Currently, can be only of the types messageText, messageAnimation, messagePhoto, or
-messageVideo. Video messages can be viewed fullscreen.
+messageVideo. Video messages can be viewed fullscreen. The content must be fully downloaded before the message is shown.
 */
 	content: MessageContent;
 	/**
@@ -9943,7 +10121,7 @@ export interface ReactionNotificationSourceAll {
 }
 
 /**
-Contains information about notification settings for reactions.
+Contains information about notification settings for reactions and poll votes.
 */
 export interface ReactionNotificationSettings {
 	'@type': 'reactionNotificationSettings';
@@ -9955,6 +10133,10 @@ Source of message reactions for which notifications are shown.
 Source of story reactions for which notifications are shown.
 */
 	story_reaction_source: ReactionNotificationSource;
+	/**
+Source of poll votes for which notifications are shown.
+*/
+	poll_vote_source: ReactionNotificationSource;
 	/**
 Identifier of the notification sound to be played; 0 if sound is disabled.
 */
@@ -10597,6 +10779,10 @@ Number of messages with unread reactions in the chat.
 */
 	unread_reaction_count: number;
 	/**
+Number of messages with unread poll votes in the chat.
+*/
+	unread_poll_vote_count: number;
+	/**
 Notification settings for the chat.
 */
 	notification_settings: ChatNotificationSettings;
@@ -11029,6 +11215,27 @@ Pass true to request photo of the chat; bots only.
 }
 
 /**
+A button that requests creation of a managed bot by the current user; available only in private chats. Use the method
+createBot to complete the request.
+Subtype of {@link KeyboardButtonType}.
+*/
+export interface KeyboardButtonTypeRequestManagedBot {
+	'@type': 'keyboardButtonTypeRequestManagedBot';
+	/**
+Unique button identifier.
+*/
+	id: number;
+	/**
+Suggested name for the bot; may be empty if not specified.
+*/
+	suggested_name: string;
+	/**
+Suggested username for the bot; may be empty if not specified.
+*/
+	suggested_username: string;
+}
+
+/**
 A button that opens a Web App by calling getWebAppUrl.
 Subtype of {@link KeyboardButtonType}.
 */
@@ -11193,6 +11400,38 @@ The text to copy to clipboard.
 }
 
 /**
+Describes source of a keyboard button.
+Subtype of {@link KeyboardButtonSource}.
+*/
+export interface KeyboardButtonSourceMessage {
+	'@type': 'keyboardButtonSourceMessage';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the message with the button.
+*/
+	message_id: number;
+}
+
+/**
+The button is a prepared keyboard button from a Mini App received via getPreparedKeyboardButton.
+Subtype of {@link KeyboardButtonSource}.
+*/
+export interface KeyboardButtonSourceWebApp {
+	'@type': 'keyboardButtonSourceWebApp';
+	/**
+Identifier of the bot that created the button.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the prepared button.
+*/
+	prepared_button_id: string;
+}
+
+/**
 Represents a single button in an inline keyboard.
 */
 export interface InlineKeyboardButton {
@@ -11336,7 +11575,7 @@ export interface OauthLinkInfo {
 	'@type': 'oauthLinkInfo';
 	/**
 Identifier of the user for which the link was generated; may be 0 if unknown. The corresponding user may be unknown. If
-the user is logged in the app, then they must be chosen for authorization by default.
+the user is logged in the application, then they must be chosen for authorization by default.
 */
 	user_id: number;
 	/**
@@ -11347,6 +11586,14 @@ An HTTP URL where the user authorizes.
 A domain of the URL.
 */
 	domain: string;
+	/**
+True, if the authorization originates from an application.
+*/
+	from_app?: boolean;
+	/**
+Verified name of the application; if empty, then "Unverified App" must be shown instead.
+*/
+	verified_app_name: string;
 	/**
 User identifier of a bot linked with the website.
 */
@@ -11809,6 +12056,10 @@ Number of messages with unread reactions in the topic.
 */
 	unread_reaction_count: number;
 	/**
+Number of messages with unread poll votes in the topic.
+*/
+	unread_poll_vote_count: number;
+	/**
 Notification settings for the topic.
 */
 	notification_settings: ChatNotificationSettings;
@@ -11924,7 +12175,7 @@ Photo of the chat; for bots only; may be null.
 }
 
 /**
-Describes a built-in theme of an official app.
+Describes a built-in theme of an official application.
 Subtype of {@link BuiltInTheme}.
 */
 export interface BuiltInThemeClassic {
@@ -13323,6 +13574,15 @@ export interface LinkPreviewTypePremiumGiftCode {
 }
 
 /**
+The link is a link to a dialog for creating of a managed bot.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeRequestManagedBot {
+	'@type': 'linkPreviewTypeRequestManagedBot';
+
+}
+
+/**
 The link is a link to a shareable chat folder.
 Subtype of {@link LinkPreviewType}.
 */
@@ -14316,6 +14576,10 @@ export interface PaidMediaPhoto {
 The photo.
 */
 	photo: Photo;
+	/**
+The video representing the live photo; may be null if the photo is static.
+*/
+	video: Video;
 }
 
 /**
@@ -15496,6 +15760,10 @@ The photo.
 */
 	photo: Photo;
 	/**
+The video representing the live photo; may be null if the photo is static.
+*/
+	video: Video;
+	/**
 Photo caption.
 */
 	caption: FormattedText;
@@ -15770,9 +16038,22 @@ Subtype of {@link MessageContent}.
 export interface MessagePoll {
 	'@type': 'messagePoll';
 	/**
-The poll description.
+Information about the poll.
 */
 	poll: Poll;
+	/**
+A message with a poll.
+*/
+	description: FormattedText;
+	/**
+Media attached to the poll. Currently, can be only of the types messageAnimation, messageAudio, messageDocument,
+messageLocation, messagePhoto, messageVenue, or messageVideo without caption.
+*/
+	media: MessageContent;
+	/**
+True, if an option can be added to the poll using addPollOption.
+*/
+	can_add_option?: boolean;
 }
 
 /**
@@ -15996,6 +16277,46 @@ Identifier of the video chat. The video chat can be received through the method 
 Invited user identifiers.
 */
 	user_ids: number[];
+}
+
+/**
+A message with information about an added poll option.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePollOptionAdded {
+	'@type': 'messagePollOptionAdded';
+	/**
+Identifier of the message with the poll; can be an identifier of a deleted message or 0.
+*/
+	poll_message_id: number;
+	/**
+Identifier of the added option in the poll.
+*/
+	option_id: string;
+	/**
+Text of the option; 1-100 characters; may contain only custom emoji entities.
+*/
+	text: FormattedText;
+}
+
+/**
+A message with information about a deleted poll option.
+Subtype of {@link MessageContent}.
+*/
+export interface MessagePollOptionDeleted {
+	'@type': 'messagePollOptionDeleted';
+	/**
+Identifier of the message with the poll; can be an identifier of a deleted message or 0.
+*/
+	poll_message_id: number;
+	/**
+Identifier of the deleted option in the poll.
+*/
+	option_id: string;
+	/**
+Text of the option; 1-100 characters; may contain only custom emoji entities.
+*/
+	text: FormattedText;
 }
 
 /**
@@ -16385,6 +16706,18 @@ Identifier of the game; may be different from the games presented in the message
 New score.
 */
 	score: number;
+}
+
+/**
+A bot managed by another bot was created by the user.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageManagedBotCreated {
+	'@type': 'messageManagedBotCreated';
+	/**
+User identifier of the created bot.
+*/
+	bot_user_id: number;
 }
 
 /**
@@ -17658,6 +17991,36 @@ Date and time formatting type; may be null if none and the original text must no
 }
 
 /**
+Represents a change of a text.
+Subtype of {@link DiffEntityType}.
+*/
+export interface DiffEntityTypeInsert {
+	'@type': 'diffEntityTypeInsert';
+
+}
+
+/**
+Change of some text.
+Subtype of {@link DiffEntityType}.
+*/
+export interface DiffEntityTypeReplace {
+	'@type': 'diffEntityTypeReplace';
+	/**
+The old text.
+*/
+	old_text: string;
+}
+
+/**
+Removal of some text.
+Subtype of {@link DiffEntityType}.
+*/
+export interface DiffEntityTypeDelete {
+	'@type': 'diffEntityTypeDelete';
+
+}
+
+/**
 A thumbnail to be sent along with a file; must be in JPEG or WEBP format for stickers, and less than 200 KB in size.
 */
 export interface InputThumbnail {
@@ -17682,7 +18045,10 @@ Subtype of {@link InputPaidMediaType}.
 */
 export interface InputPaidMediaTypePhoto {
 	'@type': 'inputPaidMediaTypePhoto';
-
+	/**
+Video of the live photo; pass null if the photo isn't a live photo.
+*/
+	video: InputFile;
 }
 
 /**
@@ -17892,8 +18258,8 @@ export interface InputMessageText {
 	'@type': 'inputMessageText';
 	/**
 Formatted text to be sent; 0-getOption("message_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, CustomEmoji, BlockQuote, ExpandableBlockQuote, Code, Pre, PreCode, TextUrl and MentionName
-entities are allowed to be specified manually.
+Strikethrough, Spoiler, CustomEmoji, BlockQuote, ExpandableBlockQuote, Code, Pre, PreCode, TextUrl, MentionName, and
+DateTime entities are allowed to be specified manually.
 */
 	text: FormattedText;
 	/**
@@ -18053,6 +18419,10 @@ Photo thumbnail to be sent; pass null to skip thumbnail uploading. The thumbnail
 secret chats.
 */
 	thumbnail: InputThumbnail;
+	/**
+Video of the live photo; not supported in secret chats; pass null if the photo isn't a live photo.
+*/
+	video: InputFile;
 	/**
 File identifiers of the stickers added to the photo, if applicable.
 */
@@ -18388,24 +18758,46 @@ only by Premium users.
 */
 	question: FormattedText;
 	/**
-List of poll answer options, 2-getOption("poll_answer_count_max") strings 1-100 characters each. Only custom emoji
-entities are allowed to be added and only by Premium users.
+List of poll answer options; 2-getOption("poll_answer_count_max") options.
 */
-	options: FormattedText[];
+	options: InputPollOption[];
+	/**
+A message with a poll. Polls can't be sent to secret chats and channel direct messages chats. Polls can be sent to a
+private chat only if the chat is a chat with a bot or the Saved Messages chat.
+*/
+	description: FormattedText;
 	/**
 True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels.
 */
 	is_anonymous?: boolean;
 	/**
+True, if multiple answer options can be chosen simultaneously.
+*/
+	allows_multiple_answers?: boolean;
+	/**
+True, if the poll can be answered multiple times.
+*/
+	allows_revoting?: boolean;
+	/**
+True, if poll options must be shown in a fixed random order.
+*/
+	shuffle_options?: boolean;
+	/**
+True, if the poll results will appear only after the poll closes.
+*/
+	hide_results_until_closes?: boolean;
+	/**
 Type of the poll.
 */
-	type: PollType;
+	type: InputPollType;
 	/**
-Amount of time the poll will be active after creation, in seconds; for bots only.
+Amount of time the poll will be active after creation, in seconds; 0-getOption("poll_open_period_max"); pass 0 if not
+specified.
 */
 	open_period: number;
 	/**
-Point in time (Unix timestamp) when the poll will automatically be closed; for bots only.
+Point in time (Unix timestamp) when the poll will automatically be closed; must be 0-getOption("poll_open_period_max")
+seconds in the future; pass 0 if not specified.
 */
 	close_date: number;
 	/**
@@ -18665,6 +19057,29 @@ True, if message statistics must be available from context menu of the message.
 }
 
 /**
+Contains properties of a poll option and describes actions that can be done with the option right now.
+*/
+export interface PollOptionProperties {
+	'@type': 'pollOptionProperties';
+	/**
+True, if the option can be deleted using deletePollOption.
+*/
+	can_be_deleted?: boolean;
+	/**
+True, if the poll option can be replied in the same chat and forum topic using inputMessageReplyToMessage.
+*/
+	can_be_replied?: boolean;
+	/**
+True, if the poll option can be replied in another chat or forum topic using inputMessageReplyToExternalMessage.
+*/
+	can_be_replied_in_another_chat?: boolean;
+	/**
+True, if a link can be generated for the poll option using getMessageLink.
+*/
+	can_get_link?: boolean;
+}
+
+/**
 Represents a filter for message search results.
 Subtype of {@link SearchMessagesFilter}.
 */
@@ -18706,6 +19121,15 @@ Subtype of {@link SearchMessagesFilter}.
 */
 export interface SearchMessagesFilterPhoto {
 	'@type': 'searchMessagesFilterPhoto';
+
+}
+
+/**
+Returns only poll messages.
+Subtype of {@link SearchMessagesFilter}.
+*/
+export interface SearchMessagesFilterPoll {
+	'@type': 'searchMessagesFilterPoll';
 
 }
 
@@ -18783,7 +19207,7 @@ export interface SearchMessagesFilterMention {
 
 /**
 Returns only messages with unread mentions of the current user, or messages that are replies to their messages. When
-using this filter the results can't be additionally filtered by a query, a message thread or by the sending user.
+using this filter the results can't be additionally filtered by a query or by the sending user.
 Subtype of {@link SearchMessagesFilter}.
 */
 export interface SearchMessagesFilterUnreadMention {
@@ -18793,11 +19217,21 @@ export interface SearchMessagesFilterUnreadMention {
 
 /**
 Returns only messages with unread reactions for the current user. When using this filter the results can't be
-additionally filtered by a query, a message thread or by the sending user.
+additionally filtered by a query or by the sending user.
 Subtype of {@link SearchMessagesFilter}.
 */
 export interface SearchMessagesFilterUnreadReaction {
 	'@type': 'searchMessagesFilterUnreadReaction';
+
+}
+
+/**
+Returns only messages with unread poll votes for the current user. When using this filter the results can't be
+additionally filtered by a query or by the sending user.
+Subtype of {@link SearchMessagesFilter}.
+*/
+export interface SearchMessagesFilterUnreadPollVote {
+	'@type': 'searchMessagesFilterUnreadPollVote';
 
 }
 
@@ -22119,7 +22553,7 @@ Last name of the user; 0-64 characters.
 	last_name: string;
 	/**
 Note to add about the user; 0-getOption("user_note_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed; pass null to keep the current user's note.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed; pass null to keep the current user's note.
 */
 	note: FormattedText;
 }
@@ -24608,6 +25042,15 @@ export interface PremiumLimitTypeSimilarChatCount {
 }
 
 /**
+The maximum number of owned bots.
+Subtype of {@link PremiumLimitType}.
+*/
+export interface PremiumLimitTypeOwnedBotCount {
+	'@type': 'premiumLimitTypeOwnedBotCount';
+
+}
+
+/**
 Describes a feature available to Premium users.
 Subtype of {@link PremiumFeature}.
 */
@@ -24851,6 +25294,15 @@ Subtype of {@link PremiumFeature}.
 */
 export interface PremiumFeatureProtectPrivateChatContent {
 	'@type': 'premiumFeatureProtectPrivateChatContent';
+
+}
+
+/**
+The ability to compose text with AI.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureTextComposition {
+	'@type': 'premiumFeatureTextComposition';
 
 }
 
@@ -25225,7 +25677,7 @@ Identifiers of the user which will receive Telegram Premium.
 	user_id: number;
 	/**
 Text to show along with the gift codes; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed.
 */
 	text: FormattedText;
 }
@@ -25255,7 +25707,7 @@ Identifiers of the users which can activate the gift codes.
 	user_ids: number[];
 	/**
 Text to show along with the gift codes; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed.
 */
 	text: FormattedText;
 }
@@ -25412,7 +25864,7 @@ Number of months the Telegram Premium subscription will be active for the user.
 	month_count: number;
 	/**
 Text to show to the user receiving Telegram Premium; 0-getOption("gift_text_length_max") characters. Only Bold, Italic,
-Underline, Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+Underline, Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed.
 */
 	text: FormattedText;
 }
@@ -25446,7 +25898,7 @@ Number of months the Telegram Premium subscription will be active for the users.
 	month_count: number;
 	/**
 Text to show along with the gift codes; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed.
 */
 	text: FormattedText;
 }
@@ -26962,6 +27414,18 @@ export interface PushMessageContentChecklistTasksDone {
 Number of changed tasks.
 */
 	task_count: number;
+}
+
+/**
+An option was added to a poll.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentPollOptionAdded {
+	'@type': 'pushMessageContentPollOptionAdded';
+	/**
+Text of the option.
+*/
+	text: string;
 }
 
 /**
@@ -29136,6 +29600,29 @@ export interface InternalLinkTypeQrCodeAuthentication {
 }
 
 /**
+The link is a link to a dialog for creating of a managed bot. Call searchPublicChat with the given manager bot username.
+If the chat is found, the chat is a chat with a bot and the bot has can_manage_bots == true, then show bot creation
+confirmation dialog with the given suggested_bot_username and suggested_bot_name. If user agrees, call createBot with
+via_link == true to create the bot.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeRequestManagedBot {
+	'@type': 'internalLinkTypeRequestManagedBot';
+	/**
+Username of the bot which will manage the new bot.
+*/
+	manager_bot_username: string;
+	/**
+Suggested username for the bot.
+*/
+	suggested_bot_username: string;
+	/**
+Suggested name for the bot; may be empty if not specified.
+*/
+	suggested_bot_name: string;
+}
+
+/**
 The link forces restore of App Store purchases when opened. For official iOS application only.
 Subtype of {@link InternalLinkType}.
 */
@@ -29407,6 +29894,14 @@ media can be in the message content or in its link preview.
 */
 	media_timestamp: number;
 	/**
+Identifier of the checklist task that is linked; 0 if none.
+*/
+	checklist_task_id: number;
+	/**
+Identifier of the poll option that is linked; empty if none.
+*/
+	poll_option_id: string;
+	/**
 True, if the whole media album to which the message belongs is linked.
 */
 	for_album?: boolean;
@@ -29497,6 +29992,15 @@ export interface FileTypeDocument {
 }
 
 /**
+The file is a video for a live photo.
+Subtype of {@link FileType}.
+*/
+export interface FileTypeLivePhotoVideo {
+	'@type': 'fileTypeLivePhotoVideo';
+
+}
+
+/**
 The file is a notification sound.
 Subtype of {@link FileType}.
 */
@@ -29556,6 +30060,15 @@ Subtype of {@link FileType}.
 */
 export interface FileTypeSecure {
 	'@type': 'fileTypeSecure';
+
+}
+
+/**
+The file is a seld-destructing video for a live photo in a private chat.
+Subtype of {@link FileType}.
+*/
+export interface FileTypeSelfDestructingLivePhotoVideo {
+	'@type': 'fileTypeSelfDestructingLivePhotoVideo';
 
 }
 
@@ -30440,7 +30953,7 @@ export interface SuggestedActionSetLoginEmailAddress {
 	'@type': 'suggestedActionSetLoginEmailAddress';
 	/**
 True, if the suggested action can be hidden using hideSuggestedAction. Otherwise, the user must not be able to use the
-app without setting up the email address.
+application without setting up the email address.
 */
 	can_be_hidden?: boolean;
 }
@@ -32201,6 +32714,22 @@ The number of messages with unread reactions left in the chat.
 }
 
 /**
+The chat unread_poll_vote_count has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatUnreadPollVoteCount {
+	'@type': 'updateChatUnreadPollVoteCount';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The number of messages with unread poll votes left in the chat.
+*/
+	unread_poll_vote_count: number;
+}
+
+/**
 A chat video chat state has changed.
 Subtype of {@link Update}.
 */
@@ -32522,6 +33051,10 @@ Number of unread messages with a mention/reply in the topic.
 Number of messages with unread reactions in the topic.
 */
 	unread_reaction_count: number;
+	/**
+Number of messages with unread poll votes in the topic.
+*/
+	unread_poll_vote_count: number;
 	/**
 Notification settings for the topic.
 */
@@ -33598,7 +34131,7 @@ export interface UpdateAccentColors {
 	/**
 Information about supported colors; colors with identifiers 0 (red), 1 (orange), 2 (purple/violet), 3 (green), 4 (cyan),
 5 (blue), 6 (pink) must always be supported and aren't included in the list. The exact colors for the accent colors with
-identifiers 0-6 must be taken from the app theme.
+identifiers 0-6 must be taken from the application theme.
 */
 	colors: AccentColor[];
 	/**
@@ -33998,6 +34531,18 @@ The new list of emojis suggested for searching.
 }
 
 /**
+The styles supported for text composition have changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateTextCompositionStyles {
+	'@type': 'updateTextCompositionStyles';
+	/**
+The new list of supported styles.
+*/
+	styles: TextCompositionStyle[];
+}
+
+/**
 The list of suggested to the user actions has changed.
 Subtype of {@link Update}.
 */
@@ -34391,9 +34936,29 @@ Identifier of the message sender that changed the answer to the poll.
 */
 	voter_id: MessageSender;
 	/**
-0-based identifiers of answer options, chosen by the user.
+Unique identifiers of answer options, that were chosen by the user.
 */
-	option_ids: number[];
+	option_ids: string[];
+	/**
+0-based identifiers of answer options, that were chosen by the user.
+*/
+	option_positions: number[];
+}
+
+/**
+A bot that can be managed by the current bot was created or updated; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdateManagedBot {
+	'@type': 'updateManagedBot';
+	/**
+Identifier of the user who created the bot.
+*/
+	user_id: number;
+	/**
+Identifier of the created managed bot.
+*/
+	bot_user_id: number;
 }
 
 /**
@@ -34796,6 +35361,10 @@ export type PollType =
 	| PollTypeRegular
 	| PollTypeQuiz;
 
+export type InputPollType =
+	| InputPollTypeRegular
+	| InputPollTypeQuiz;
+
 export type ProfileTab =
 	| ProfileTabPosts
 	| ProfileTabGifts
@@ -35158,6 +35727,7 @@ export type KeyboardButtonType =
 	| KeyboardButtonTypeRequestPoll
 	| KeyboardButtonTypeRequestUsers
 	| KeyboardButtonTypeRequestChat
+	| KeyboardButtonTypeRequestManagedBot
 	| KeyboardButtonTypeWebApp;
 
 export type InlineKeyboardButtonType =
@@ -35171,6 +35741,10 @@ export type InlineKeyboardButtonType =
 	| InlineKeyboardButtonTypeBuy
 	| InlineKeyboardButtonTypeUser
 	| InlineKeyboardButtonTypeCopyText;
+
+export type KeyboardButtonSource =
+	| KeyboardButtonSourceMessage
+	| KeyboardButtonSourceWebApp;
 
 export type ReplyMarkup =
 	| ReplyMarkupRemoveKeyboard
@@ -35287,6 +35861,7 @@ export type LinkPreviewType =
 	| LinkPreviewTypeMessage
 	| LinkPreviewTypePhoto
 	| LinkPreviewTypePremiumGiftCode
+	| LinkPreviewTypeRequestManagedBot
 	| LinkPreviewTypeShareableChatFolder
 	| LinkPreviewTypeSticker
 	| LinkPreviewTypeStickerSet
@@ -35437,6 +36012,8 @@ export type MessageContent =
 	| MessageVideoChatStarted
 	| MessageVideoChatEnded
 	| MessageInviteVideoChatParticipants
+	| MessagePollOptionAdded
+	| MessagePollOptionDeleted
 	| MessageBasicGroupChatCreate
 	| MessageSupergroupChatCreate
 	| MessageChatChangeTitle
@@ -35466,6 +36043,7 @@ export type MessageContent =
 	| MessageSuggestBirthdate
 	| MessageCustomServiceAction
 	| MessageGameScore
+	| MessageManagedBotCreated
 	| MessagePaymentSuccessful
 	| MessagePaymentSuccessfulBot
 	| MessagePaymentRefunded
@@ -35538,6 +36116,11 @@ export type TextEntityType =
 	| TextEntityTypeMediaTimestamp
 	| TextEntityTypeDateTime;
 
+export type DiffEntityType =
+	| DiffEntityTypeInsert
+	| DiffEntityTypeReplace
+	| DiffEntityTypeDelete;
+
 export type InputPaidMediaType =
 	| InputPaidMediaTypePhoto
 	| InputPaidMediaTypeVideo;
@@ -35580,6 +36163,7 @@ export type SearchMessagesFilter =
 	| SearchMessagesFilterAudio
 	| SearchMessagesFilterDocument
 	| SearchMessagesFilterPhoto
+	| SearchMessagesFilterPoll
 	| SearchMessagesFilterVideo
 	| SearchMessagesFilterVoiceNote
 	| SearchMessagesFilterPhotoAndVideo
@@ -35590,6 +36174,7 @@ export type SearchMessagesFilter =
 	| SearchMessagesFilterMention
 	| SearchMessagesFilterUnreadMention
 	| SearchMessagesFilterUnreadReaction
+	| SearchMessagesFilterUnreadPollVote
 	| SearchMessagesFilterFailedToSend
 	| SearchMessagesFilterPinned;
 
@@ -35892,7 +36477,8 @@ export type PremiumLimitType =
 	| PremiumLimitTypeMonthlyPostedStoryCount
 	| PremiumLimitTypeStoryCaptionLength
 	| PremiumLimitTypeStorySuggestedReactionAreaCount
-	| PremiumLimitTypeSimilarChatCount;
+	| PremiumLimitTypeSimilarChatCount
+	| PremiumLimitTypeOwnedBotCount;
 
 export type PremiumFeature =
 	| PremiumFeatureIncreasedLimits
@@ -35921,7 +36507,8 @@ export type PremiumFeature =
 	| PremiumFeatureMessageEffects
 	| PremiumFeatureChecklists
 	| PremiumFeaturePaidMessages
-	| PremiumFeatureProtectPrivateChatContent;
+	| PremiumFeatureProtectPrivateChatContent
+	| PremiumFeatureTextComposition;
 
 export type BusinessFeature =
 	| BusinessFeatureLocation
@@ -36099,6 +36686,7 @@ export type PushMessageContent =
 	| PushMessageContentProximityAlertTriggered
 	| PushMessageContentChecklistTasksAdded
 	| PushMessageContentChecklistTasksDone
+	| PushMessageContentPollOptionAdded
 	| PushMessageContentMessageForwards
 	| PushMessageContentMediaAlbum;
 
@@ -36275,6 +36863,7 @@ export type InternalLinkType =
 	| InternalLinkTypeProxy
 	| InternalLinkTypePublicChat
 	| InternalLinkTypeQrCodeAuthentication
+	| InternalLinkTypeRequestManagedBot
 	| InternalLinkTypeRestorePurchases
 	| InternalLinkTypeSavedMessages
 	| InternalLinkTypeSearch
@@ -36300,6 +36889,7 @@ export type FileType =
 	| FileTypeAnimation
 	| FileTypeAudio
 	| FileTypeDocument
+	| FileTypeLivePhotoVideo
 	| FileTypeNotificationSound
 	| FileTypePhoto
 	| FileTypePhotoStory
@@ -36307,6 +36897,7 @@ export type FileType =
 	| FileTypeSecret
 	| FileTypeSecretThumbnail
 	| FileTypeSecure
+	| FileTypeSelfDestructingLivePhotoVideo
 	| FileTypeSelfDestructingPhoto
 	| FileTypeSelfDestructingVideo
 	| FileTypeSelfDestructingVideoNote
@@ -36473,6 +37064,7 @@ export type Update =
 	| UpdateChatTheme
 	| UpdateChatUnreadMentionCount
 	| UpdateChatUnreadReactionCount
+	| UpdateChatUnreadPollVoteCount
 	| UpdateChatVideoChat
 	| UpdateChatDefaultDisableNotification
 	| UpdateChatHasProtectedContent
@@ -36582,6 +37174,7 @@ export type Update =
 	| UpdateStakeDiceState
 	| UpdateAnimatedEmojiMessageClicked
 	| UpdateAnimationSearchParameters
+	| UpdateTextCompositionStyles
 	| UpdateSuggestedActions
 	| UpdateSpeedLimitNotification
 	| UpdateContactCloseBirthdays
@@ -36601,6 +37194,7 @@ export type Update =
 	| UpdateNewCustomQuery
 	| UpdatePoll
 	| UpdatePollAnswer
+	| UpdateManagedBot
 	| UpdateChatMember
 	| UpdateNewChatJoinRequest
 	| UpdateChatBoost
@@ -37438,8 +38032,9 @@ information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved
 messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
 messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, the message with gift purchase offer for
 messageUpgradedGiftPurchaseOfferRejected, the message with the request to disable content protection for
-messageChatHasProtectedContentToggled, and the topic creation message for topic messages without non-bundled replied
-message. Returns a 404 error if the message doesn't exist.
+messageChatHasProtectedContentToggled, the message with the poll for messagePollOptionAdded and
+messagePollOptionDeleted, and the topic creation message for topic messages without non-bundled replied message. Returns
+a 404 error if the message doesn't exist.
 Request type for {@link Tdjson#getRepliedMessage}.
 */
 export interface GetRepliedMessage {
@@ -37516,6 +38111,26 @@ Chat identifier.
 Identifier of the message.
 */
 	message_id: number;
+}
+
+/**
+Returns properties of a poll option. This is an offline method.
+Request type for {@link Tdjson#getPollOptionProperties}.
+*/
+export interface GetPollOptionProperties {
+	'@type': 'getPollOptionProperties';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Unique identifier of the answer option, which properties will be returned.
+*/
+	poll_option_id: string;
 }
 
 /**
@@ -38521,8 +39136,8 @@ chosen by TDLib and can be smaller than the specified limit.
 	limit: number;
 	/**
 Additional filter for messages to search; pass null to search for all messages. Filters searchMessagesFilterMention,
-searchMessagesFilterUnreadMention, searchMessagesFilterUnreadReaction, searchMessagesFilterFailedToSend, and
-searchMessagesFilterPinned are unsupported in this function.
+searchMessagesFilterUnreadMention, searchMessagesFilterUnreadReaction, searchMessagesFilterUnreadPollVote,
+searchMessagesFilterFailedToSend, and searchMessagesFilterPinned are unsupported in this function.
 */
 	filter: SearchMessagesFilter;
 	/**
@@ -38887,7 +39502,8 @@ Identifier of the chat in which to return information about message positions.
 	chat_id: number;
 	/**
 Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterMention,
-searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are unsupported in this function.
+searchMessagesFilterUnreadMention, searchMessagesFilterUnreadReaction, and searchMessagesFilterUnreadPollVote are
+unsupported in this function.
 */
 	filter: SearchMessagesFilter;
 	/**
@@ -38925,7 +39541,8 @@ and message threads aren't supported.
 	topic_id: MessageTopic;
 	/**
 Filter for message content. Filters searchMessagesFilterEmpty, searchMessagesFilterMention,
-searchMessagesFilterUnreadMention, and searchMessagesFilterUnreadReaction are unsupported in this function.
+searchMessagesFilterUnreadMention, searchMessagesFilterUnreadReaction, and searchMessagesFilterUnreadPollVote are
+unsupported in this function.
 */
 	filter: SearchMessagesFilter;
 	/**
@@ -38978,7 +39595,8 @@ messages; message threads aren't supported.
 	topic_id: MessageTopic;
 	/**
 Filter for message content; searchMessagesFilterEmpty, searchMessagesFilterUnreadMention,
-searchMessagesFilterUnreadReaction, and searchMessagesFilterFailedToSend are unsupported in this function.
+searchMessagesFilterUnreadReaction, searchMessagesFilterUnreadPollVote, and searchMessagesFilterFailedToSend are
+unsupported in this function.
 */
 	filter: SearchMessagesFilter;
 	/**
@@ -39221,6 +39839,14 @@ be in the message content or in its link preview.
 */
 	media_timestamp: number;
 	/**
+If not 0, identifier of the checklist task in the message to be linked.
+*/
+	checklist_task_id: number;
+	/**
+If not empty, identifier of the poll option in the message to be linked.
+*/
+	poll_option_id: string;
+	/**
 Pass true to create a link for the whole media album.
 */
 	for_album?: boolean;
@@ -39264,8 +39890,8 @@ The message link.
 }
 
 /**
-Translates a text to the given language. If the current user is a Telegram Premium user, then text formatting is
-preserved.
+Translates a text to the given language; must not be used in secret chats. If the current user is a Telegram Premium
+user, then text formatting is preserved.
 Request type for {@link Tdjson#translateText}.
 */
 export interface TranslateText {
@@ -39284,11 +39910,15 @@ Language code of the language to which the message is translated. Must be one of
 "tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "ji", "yo", "zu".
 */
 	to_language_code: string;
+	/**
+Tone of the translation; must be one of "", "formal", "neutral", "casual"; defaults to "neutral".
+*/
+	tone: string;
 }
 
 /**
-Extracts text or caption of the given message and translates it to the given language. If the current user is a Telegram
-Premium user, then text formatting is preserved.
+Extracts text or caption of the given message and translates it to the given language; must not be used in secret chats.
+If the current user is a Telegram Premium user, then text formatting is preserved.
 Request type for {@link Tdjson#translateMessageText}.
 */
 export interface TranslateMessageText {
@@ -39306,6 +39936,10 @@ Language code of the language to which the message is translated. See translateT
 supported values.
 */
 	to_language_code: string;
+	/**
+Tone of the translation; see translateText.tone for the list of supported values.
+*/
+	tone: string;
 }
 
 /**
@@ -39323,10 +39957,54 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Pass a language code to which the summary will be translated; may be empty if translation isn't needed. See
+Pass a language code to which the summary will be translated; pass an empty string if translation isn't needed. See
 translateText.to_language_code for the list of supported values.
 */
 	translate_to_language_code: string;
+	/**
+Tone of the summarization; see translateText.tone for the list of supported values.
+*/
+	tone: string;
+}
+
+/**
+Changes text using an AI model; must not be used in secret chats. May return an error with a message
+"AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium is required to send further requests.
+Request type for {@link Tdjson#composeTextWithAi}.
+*/
+export interface ComposeTextWithAi {
+	'@type': 'composeTextWithAi';
+	/**
+The original text.
+*/
+	text: FormattedText;
+	/**
+Pass a language code to which the text will be translated; pass an empty string if translation isn't needed. See
+translateText.to_language_code for the list of supported values.
+*/
+	translate_to_language_code: string;
+	/**
+Name of the style of the resulted text; handle updateTextCompositionStyles to get the list of supported styles; pass an
+empty string to keep the current style of the text.
+*/
+	style_name: string;
+	/**
+Pass true to add emoji to the text.
+*/
+	add_emojis?: boolean;
+}
+
+/**
+Fixes text using an AI model; must not be used in secret chats. May return an error with a message
+"AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium is required to send further requests.
+Request type for {@link Tdjson#fixTextWithAi}.
+*/
+export interface FixTextWithAi {
+	'@type': 'fixTextWithAi';
+	/**
+The original text.
+*/
+	text: FormattedText;
 }
 
 /**
@@ -41067,6 +41745,22 @@ Forum topic identifier in which reactions are marked as read.
 }
 
 /**
+Marks all poll votes in a topic in a forum supergroup chat as read.
+Request type for {@link Tdjson#readAllForumTopicPollVotes}.
+*/
+export interface ReadAllForumTopicPollVotes {
+	'@type': 'readAllForumTopicPollVotes';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Forum topic identifier in which poll votes are marked as read.
+*/
+	forum_topic_id: number;
+}
+
+/**
 Removes all pinned messages from a topic in a forum supergroup chat or a chat with a bot with topics; requires
 can_pin_messages member right in the supergroup.
 Request type for {@link Tdjson#unpinAllForumTopicMessages}.
@@ -41464,7 +42158,7 @@ The text in which to look for entities.
 
 /**
 Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, BlockQuote, ExpandableBlockQuote, Code, Pre,
-PreCode, TextUrl and MentionName entities from a marked-up text. Can be called synchronously.
+PreCode, TextUrl, MentionName, and DateTime entities from a marked-up text. Can be called synchronously.
 Request type for {@link Tdjson#parseTextEntities}.
 */
 export interface ParseTextEntities {
@@ -41618,7 +42312,48 @@ Theme parameters to convert to JSON.
 }
 
 /**
-Changes the user answer to a poll. A poll in quiz mode can be answered only once.
+Adds an option to a poll.
+Request type for {@link Tdjson#addPollOption}.
+*/
+export interface AddPollOption {
+	'@type': 'addPollOption';
+	/**
+Identifier of the chat to which the poll belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the poll. Use messagePoll.can_add_option to check whether an option can be added.
+*/
+	message_id: number;
+	/**
+The new option.
+*/
+	option: InputPollOption;
+}
+
+/**
+Adds an option to a poll.
+Request type for {@link Tdjson#deletePollOption}.
+*/
+export interface DeletePollOption {
+	'@type': 'deletePollOption';
+	/**
+Identifier of the chat to which the poll belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the poll.
+*/
+	message_id: number;
+	/**
+Unique identifier of the option. Use pollOptionProperties.can_be_deleted to check whether the option can be deleted by
+the user.
+*/
+	option_id: string;
+}
+
+/**
+Changes the user answer to a poll.
 Request type for {@link Tdjson#setPollAnswer}.
 */
 export interface SetPollAnswer {
@@ -41639,8 +42374,8 @@ allows multiple answers.
 }
 
 /**
-Returns message senders voted for the specified option in a non-anonymous polls. For optimal performance, the number of
-returned users is chosen by TDLib.
+Returns message senders voted for the specified option in a poll; use poll.can_get_voters to check whether the method
+can be used. For optimal performance, the number of returned users is chosen by TDLib.
 Request type for {@link Tdjson#getPollVoters}.
 */
 export interface GetPollVoters {
@@ -41824,13 +42559,9 @@ Request type for {@link Tdjson#shareUsersWithBot}.
 export interface ShareUsersWithBot {
 	'@type': 'shareUsersWithBot';
 	/**
-Identifier of the chat with the bot.
+Source of the button.
 */
-	chat_id: number;
-	/**
-Identifier of the message with the button.
-*/
-	message_id: number;
+	source: KeyboardButtonSource;
 	/**
 Identifier of the button.
 */
@@ -41852,13 +42583,9 @@ Request type for {@link Tdjson#shareChatWithBot}.
 export interface ShareChatWithBot {
 	'@type': 'shareChatWithBot';
 	/**
-Identifier of the chat with the bot.
+Source of the button.
 */
-	chat_id: number;
-	/**
-Identifier of the message with the button.
-*/
-	message_id: number;
+	source: KeyboardButtonSource;
 	/**
 Identifier of the button.
 */
@@ -41973,6 +42700,40 @@ Identifier of the bot that created the message.
 Identifier of the prepared message.
 */
 	prepared_message_id: string;
+}
+
+/**
+Saves a keyboard button to be shown to the given user; for bots only.
+Request type for {@link Tdjson#savePreparedKeyboardButton}.
+*/
+export interface SavePreparedKeyboardButton {
+	'@type': 'savePreparedKeyboardButton';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+	/**
+The button; must be of the type keyboardButtonTypeRequestUsers, keyboardButtonTypeRequestChat, or
+keyboardButtonTypeRequestManagedBot.
+*/
+	button: KeyboardButton;
+}
+
+/**
+Returns a keyboard button prepared by the bot for the user. The button will be of the type
+keyboardButtonTypeRequestUsers, keyboardButtonTypeRequestChat, or keyboardButtonTypeRequestManagedBot.
+Request type for {@link Tdjson#getPreparedKeyboardButton}.
+*/
+export interface GetPreparedKeyboardButton {
+	'@type': 'getPreparedKeyboardButton';
+	/**
+Identifier of the bot that created the button.
+*/
+	bot_user_id: number;
+	/**
+Identifier of the prepared button.
+*/
+	prepared_button_id: string;
 }
 
 /**
@@ -42543,6 +43304,57 @@ Identifier of the clicked message.
 }
 
 /**
+Informs TDLib that an audio was listened by the user.
+Request type for {@link Tdjson#listenToAudio}.
+*/
+export interface ListenToAudio {
+	'@type': 'listenToAudio';
+	/**
+Identifier of the file with an audio.
+*/
+	audio_file_id: number;
+	/**
+Duration of the listening to the audio, in seconds.
+*/
+	duration: number;
+}
+
+/**
+Informs TDLib about details of a message view by the user from a chat, a message thread or a forum topic history. The
+method must be called if the message wasn't seen for more than 300 milliseconds, the viewport was destroyed, or the
+total view duration exceeded 5 minutes.
+Request type for {@link Tdjson#sendMessageViewMetrics}.
+*/
+export interface SendMessageViewMetrics {
+	'@type': 'sendMessageViewMetrics';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The identifier of the message being viewed.
+*/
+	message_id: number;
+	/**
+The amount of time the message was seen by at least 1 pixel; in milliseconds.
+*/
+	time_in_view_ms: number;
+	/**
+The amount of time the message was seen by at least 1 pixel within 15 seconds after any action from the user; in
+milliseconds.
+*/
+	active_time_in_view_ms: number;
+	/**
+The ratio of the post height to the viewport height in 1/1000 fractions.
+*/
+	height_to_viewport_ratio_per_mille: number;
+	/**
+The ratio of the viewed post height to the full post height in 1/1000 fractions; 0-1000.
+*/
+	seen_range_ratio_per_mille: number;
+}
+
+/**
 Returns an HTTPS or a tg: link with the given type. Can be called before authorization.
 Request type for {@link Tdjson#getInternalLink}.
 */
@@ -42692,6 +43504,18 @@ Request type for {@link Tdjson#readAllChatReactions}.
 */
 export interface ReadAllChatReactions {
 	'@type': 'readAllChatReactions';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+}
+
+/**
+Marks all poll votes in a chat as read.
+Request type for {@link Tdjson#readAllChatPollVotes}.
+*/
+export interface ReadAllChatPollVotes {
+	'@type': 'readAllChatPollVotes';
 	/**
 Chat identifier.
 */
@@ -45498,7 +46322,7 @@ contact or an identifier of a supergroup chat with can_change_info member right.
 }
 
 /**
-Imports messages exported from another app.
+Imports messages exported from another application.
 Request type for {@link Tdjson#importMessages}.
 */
 export interface ImportMessages {
@@ -46448,7 +47272,8 @@ Group call identifier.
 	/**
 Text of the message to send; 1-getOption("group_call_message_text_length_max") characters for non-live-stories; see
 updateGroupCallMessageLevels for live story restrictions, which depends on paid_message_star_count. Can't contain line
-feeds for live stories.
+feeds for live stories. Can contain only Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, and DateTime
+entities for live stories.
 */
 	text: FormattedText;
 	/**
@@ -47189,7 +48014,7 @@ User identifier.
 	user_id: number;
 	/**
 Note to set for the user; 0-getOption("user_note_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed.
 */
 	note: FormattedText;
 }
@@ -48801,6 +49626,61 @@ File identifiers of the media to delete.
 }
 
 /**
+Checks whether a username can be set for a new bot. Use checkChatUsername to check username for other chat types.
+Request type for {@link Tdjson#checkBotUsername}.
+*/
+export interface CheckBotUsername {
+	'@type': 'checkBotUsername';
+	/**
+Username to be checked.
+*/
+	username: string;
+}
+
+/**
+Creates a bot which will be managed by another bot. Returns the created bot. May return an error with a message
+"BOT_CREATE_LIMIT_EXCEEDED" if the user already owns the maximum allowed number of bots as per
+premiumLimitTypeOwnedBotCount. An internal link "https://t.me/BotFather?start=deletebot" can be processed to handle the
+error.
+Request type for {@link Tdjson#createBot}.
+*/
+export interface CreateBot {
+	'@type': 'createBot';
+	/**
+Identifier of the bot that will manage the created bot.
+*/
+	manager_bot_user_id: number;
+	/**
+Name of the bot; 1-64 characters.
+*/
+	name: string;
+	/**
+Username of the bot. The username must end with "bot". Use checkBotUsername to find whether the name is suitable.
+*/
+	username: string;
+	/**
+Pass true if the bot is created from an internalLinkTypeRequestManagedBot link.
+*/
+	via_link?: boolean;
+}
+
+/**
+Returns token of a created bot; for bots only.
+Request type for {@link Tdjson#getBotToken}.
+*/
+export interface GetBotToken {
+	'@type': 'getBotToken';
+	/**
+Identifier of the created bot.
+*/
+	bot_user_id: number;
+	/**
+Pass true to revoke the current token and create a new one.
+*/
+	revoke?: boolean;
+}
+
+/**
 Sets the name of a bot. Can be called only if userTypeBot.can_be_edited == true.
 Request type for {@link Tdjson#setBotName}.
 */
@@ -49709,7 +50589,8 @@ Identifier of the user or the channel chat that will receive the gift; limited g
 	owner_id: MessageSender;
 	/**
 Text to show along with the gift; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed. Must be empty if the receiver enabled paid messages.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed. Must be empty if the receiver enabled paid
+messages.
 */
 	text: FormattedText;
 	/**
@@ -49790,7 +50671,8 @@ Identifier of the user who will receive the gift.
 	user_id: number;
 	/**
 Text to show along with the gift; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, and CustomEmoji entities are allowed. Must be empty if the receiver enabled paid messages.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed. Must be empty if the receiver enabled paid
+messages.
 */
 	text: FormattedText;
 	/**
@@ -50272,6 +51154,10 @@ Order in which the results will be sorted.
 Pass true to get only gifts suitable for crafting.
 */
 	for_crafting?: boolean;
+	/**
+Pass true to get only gifts that can be bought using Telegram Stars.
+*/
+	for_stars?: boolean;
 	/**
 Attributes used to filter received gifts. If multiple attributes of the same type are specified, then all of them are
 allowed. If none attributes of specific type are specified, then all values for this attribute type are allowed.
@@ -52206,7 +53092,7 @@ Number of months the Telegram Premium subscription will be active for the user.
 	month_count: number;
 	/**
 Text to show to the user receiving Telegram Premium; 0-getOption("gift_text_length_max") characters. Only Bold, Italic,
-Underline, Strikethrough, Spoiler, and CustomEmoji entities are allowed.
+Underline, Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed.
 */
 	text: FormattedText;
 }
@@ -53183,6 +54069,7 @@ export type Request =
 	| GetCallbackQueryMessage
 	| GetMessages
 	| GetMessageProperties
+	| GetPollOptionProperties
 	| GetMessageThread
 	| GetMessageReadDate
 	| GetMessageViewers
@@ -53280,6 +54167,8 @@ export type Request =
 	| TranslateText
 	| TranslateMessageText
 	| SummarizeMessage
+	| ComposeTextWithAi
+	| FixTextWithAi
 	| RecognizeSpeech
 	| RateSpeechRecognition
 	| GetChatAvailableMessageSenders
@@ -53356,6 +54245,7 @@ export type Request =
 	| DeleteForumTopic
 	| ReadAllForumTopicMentions
 	| ReadAllForumTopicReactions
+	| ReadAllForumTopicPollVotes
 	| UnpinAllForumTopicMessages
 	| GetPasskeyParameters
 	| AddLoginPasskey
@@ -53391,6 +54281,8 @@ export type Request =
 	| GetJsonValue
 	| GetJsonString
 	| GetThemeParametersJsonString
+	| AddPollOption
+	| DeletePollOption
 	| SetPollAnswer
 	| GetPollVoters
 	| StopPoll
@@ -53407,6 +54299,8 @@ export type Request =
 	| AnswerInlineQuery
 	| SavePreparedInlineMessage
 	| GetPreparedInlineMessage
+	| SavePreparedKeyboardButton
+	| GetPreparedKeyboardButton
 	| GetGrossingWebAppBots
 	| SearchWebApp
 	| GetWebAppPlaceholder
@@ -53434,6 +54328,8 @@ export type Request =
 	| ViewMessages
 	| OpenMessageContent
 	| ClickAnimatedEmojiMessage
+	| ListenToAudio
+	| SendMessageViewMetrics
 	| GetInternalLink
 	| GetInternalLinkType
 	| GetExternalLinkInfo
@@ -53444,6 +54340,7 @@ export type Request =
 	| DeclineOauthRequest
 	| ReadAllChatMentions
 	| ReadAllChatReactions
+	| ReadAllChatPollVotes
 	| CreatePrivateChat
 	| CreateBasicGroupChat
 	| CreateSupergroupChat
@@ -53812,6 +54709,9 @@ export type Request =
 	| EditBotMediaPreview
 	| ReorderBotMediaPreviews
 	| DeleteBotMediaPreviews
+	| CheckBotUsername
+	| CreateBot
+	| GetBotToken
 	| SetBotName
 	| GetBotName
 	| SetBotProfilePhoto
@@ -54687,8 +55587,9 @@ information for messageSuggestedPostApprovalFailed, messageSuggestedPostApproved
 messageSuggestedPostPaid, messageSuggestedPostRefunded, the message with the regular gift that was upgraded for
 messageUpgradedGift with origin of the type upgradedGiftOriginUpgrade, the message with gift purchase offer for
 messageUpgradedGiftPurchaseOfferRejected, the message with the request to disable content protection for
-messageChatHasProtectedContentToggled, and the topic creation message for topic messages without non-bundled replied
-message. Returns a 404 error if the message doesn't exist.
+messageChatHasProtectedContentToggled, the message with the poll for messagePollOptionAdded and
+messagePollOptionDeleted, and the topic creation message for topic messages without non-bundled replied message. Returns
+a 404 error if the message doesn't exist.
 */
 	async getRepliedMessage(options: Omit<GetRepliedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -54734,6 +55635,16 @@ Returns properties of a message. This is an offline method.
 		return this._request({
 			...options,
 			'@type': 'getMessageProperties',
+		});
+	}
+
+	/**
+Returns properties of a poll option. This is an offline method.
+*/
+	async getPollOptionProperties(options: Omit<GetPollOptionProperties, '@type'>): Promise<PollOptionProperties> {
+		return this._request({
+			...options,
+			'@type': 'getPollOptionProperties',
 		});
 	}
 
@@ -55744,8 +56655,8 @@ internalLinkTypeMessage.
 	}
 
 	/**
-Translates a text to the given language. If the current user is a Telegram Premium user, then text formatting is
-preserved.
+Translates a text to the given language; must not be used in secret chats. If the current user is a Telegram Premium
+user, then text formatting is preserved.
 */
 	async translateText(options: Omit<TranslateText, '@type'>): Promise<FormattedText> {
 		return this._request({
@@ -55755,8 +56666,8 @@ preserved.
 	}
 
 	/**
-Extracts text or caption of the given message and translates it to the given language. If the current user is a Telegram
-Premium user, then text formatting is preserved.
+Extracts text or caption of the given message and translates it to the given language; must not be used in secret chats.
+If the current user is a Telegram Premium user, then text formatting is preserved.
 */
 	async translateMessageText(options: Omit<TranslateMessageText, '@type'>): Promise<FormattedText> {
 		return this._request({
@@ -55772,6 +56683,28 @@ Summarizes content of the message with non-empty summary_language_code.
 		return this._request({
 			...options,
 			'@type': 'summarizeMessage',
+		});
+	}
+
+	/**
+Changes text using an AI model; must not be used in secret chats. May return an error with a message
+"AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium is required to send further requests.
+*/
+	async composeTextWithAi(options: Omit<ComposeTextWithAi, '@type'>): Promise<FormattedText> {
+		return this._request({
+			...options,
+			'@type': 'composeTextWithAi',
+		});
+	}
+
+	/**
+Fixes text using an AI model; must not be used in secret chats. May return an error with a message
+"AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium is required to send further requests.
+*/
+	async fixTextWithAi(options: Omit<FixTextWithAi, '@type'>): Promise<FixedText> {
+		return this._request({
+			...options,
+			'@type': 'fixTextWithAi',
 		});
 	}
 
@@ -56585,6 +57518,16 @@ Marks all reactions in a topic in a forum supergroup chat or a chat with a bot w
 	}
 
 	/**
+Marks all poll votes in a topic in a forum supergroup chat as read.
+*/
+	async readAllForumTopicPollVotes(options: Omit<ReadAllForumTopicPollVotes, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readAllForumTopicPollVotes',
+		});
+	}
+
+	/**
 Removes all pinned messages from a topic in a forum supergroup chat or a chat with a bot with topics; requires
 can_pin_messages member right in the supergroup.
 */
@@ -56830,7 +57773,7 @@ the text. Can be called synchronously.
 
 	/**
 Parses Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, BlockQuote, ExpandableBlockQuote, Code, Pre,
-PreCode, TextUrl and MentionName entities from a marked-up text. Can be called synchronously.
+PreCode, TextUrl, MentionName, and DateTime entities from a marked-up text. Can be called synchronously.
 */
 	async parseTextEntities(options: Omit<ParseTextEntities, '@type'>): Promise<FormattedText> {
 		return this._request({
@@ -56945,7 +57888,27 @@ Converts a themeParameters object to corresponding JSON-serialized string. Can b
 	}
 
 	/**
-Changes the user answer to a poll. A poll in quiz mode can be answered only once.
+Adds an option to a poll.
+*/
+	async addPollOption(options: Omit<AddPollOption, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addPollOption',
+		});
+	}
+
+	/**
+Adds an option to a poll.
+*/
+	async deletePollOption(options: Omit<DeletePollOption, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deletePollOption',
+		});
+	}
+
+	/**
+Changes the user answer to a poll.
 */
 	async setPollAnswer(options: Omit<SetPollAnswer, '@type'>): Promise<Ok> {
 		return this._request({
@@ -56955,8 +57918,8 @@ Changes the user answer to a poll. A poll in quiz mode can be answered only once
 	}
 
 	/**
-Returns message senders voted for the specified option in a non-anonymous polls. For optimal performance, the number of
-returned users is chosen by TDLib.
+Returns message senders voted for the specified option in a poll; use poll.can_get_voters to check whether the method
+can be used. For optimal performance, the number of returned users is chosen by TDLib.
 */
 	async getPollVoters(options: Omit<GetPollVoters, '@type'>): Promise<PollVoters> {
 		return this._request({
@@ -57105,6 +58068,27 @@ Saves an inline message to be sent by the given user.
 		return this._request({
 			...options,
 			'@type': 'getPreparedInlineMessage',
+		});
+	}
+
+	/**
+Saves a keyboard button to be shown to the given user; for bots only.
+*/
+	async savePreparedKeyboardButton(options: Omit<SavePreparedKeyboardButton, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'savePreparedKeyboardButton',
+		});
+	}
+
+	/**
+Returns a keyboard button prepared by the bot for the user. The button will be of the type
+keyboardButtonTypeRequestUsers, keyboardButtonTypeRequestChat, or keyboardButtonTypeRequestManagedBot.
+*/
+	async getPreparedKeyboardButton(options: Omit<GetPreparedKeyboardButton, '@type'>): Promise<KeyboardButton> {
+		return this._request({
+			...options,
+			'@type': 'getPreparedKeyboardButton',
 		});
 	}
 
@@ -57394,6 +58378,28 @@ or a 404 error if usual animation needs to be played.
 	}
 
 	/**
+Informs TDLib that an audio was listened by the user.
+*/
+	async listenToAudio(options: Omit<ListenToAudio, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'listenToAudio',
+		});
+	}
+
+	/**
+Informs TDLib about details of a message view by the user from a chat, a message thread or a forum topic history. The
+method must be called if the message wasn't seen for more than 300 milliseconds, the viewport was destroyed, or the
+total view duration exceeded 5 minutes.
+*/
+	async sendMessageViewMetrics(options: Omit<SendMessageViewMetrics, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'sendMessageViewMetrics',
+		});
+	}
+
+	/**
 Returns an HTTPS or a tg: link with the given type. Can be called before authorization.
 */
 	async getInternalLink(options: Omit<GetInternalLink, '@type'>): Promise<HttpUrl> {
@@ -57498,6 +58504,16 @@ Marks all reactions in a chat as read.
 		return this._request({
 			...options,
 			'@type': 'readAllChatReactions',
+		});
+	}
+
+	/**
+Marks all poll votes in a chat as read.
+*/
+	async readAllChatPollVotes(options: Omit<ReadAllChatPollVotes, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'readAllChatPollVotes',
 		});
 	}
 
@@ -59185,7 +60201,7 @@ Returns a confirmation text to be shown to the user before starting message impo
 	}
 
 	/**
-Imports messages exported from another app.
+Imports messages exported from another application.
 */
 	async importMessages(options: Omit<ImportMessages, '@type'>): Promise<Ok> {
 		return this._request({
@@ -61293,6 +62309,39 @@ Deletes media previews from the list of media previews of a bot.
 		return this._request({
 			...options,
 			'@type': 'deleteBotMediaPreviews',
+		});
+	}
+
+	/**
+Checks whether a username can be set for a new bot. Use checkChatUsername to check username for other chat types.
+*/
+	async checkBotUsername(options: Omit<CheckBotUsername, '@type'>): Promise<CheckChatUsernameResult> {
+		return this._request({
+			...options,
+			'@type': 'checkBotUsername',
+		});
+	}
+
+	/**
+Creates a bot which will be managed by another bot. Returns the created bot. May return an error with a message
+"BOT_CREATE_LIMIT_EXCEEDED" if the user already owns the maximum allowed number of bots as per
+premiumLimitTypeOwnedBotCount. An internal link "https://t.me/BotFather?start=deletebot" can be processed to handle the
+error.
+*/
+	async createBot(options: Omit<CreateBot, '@type'>): Promise<User> {
+		return this._request({
+			...options,
+			'@type': 'createBot',
+		});
+	}
+
+	/**
+Returns token of a created bot; for bots only.
+*/
+	async getBotToken(options: Omit<GetBotToken, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'getBotToken',
 		});
 	}
 
