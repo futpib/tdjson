@@ -348,7 +348,7 @@ The text.
 */
 	text: string;
 	/**
-Entities describing changes in the text. Entities doesn't mutually intersect with each other.
+Entities describing changes in the text. Entities don't mutually intersect with each other.
 */
 	entities: DiffEntity[];
 }
@@ -552,7 +552,7 @@ A tg:// URL for the QR code. The link will be updated frequently.
 }
 
 /**
-The user is unregistered and need to accept terms of service and enter their first name and last name to finish
+The user is unregistered and needs to accept terms of service and enter their first name and last name to finish
 registration. Call registerUser to accept the terms of service and provide the data.
 Subtype of {@link AuthorizationState}.
 */
@@ -9760,7 +9760,7 @@ List of sponsored chats.
 }
 
 /**
-Describes an advertisent to be shown while a video from a message is watched.
+Describes an advertisement to be shown while a video from a message is watched.
 */
 export interface VideoMessageAdvertisement {
 	'@type': 'videoMessageAdvertisement';
@@ -19008,7 +19008,7 @@ getMessagePublicForwards.
 */
 	can_get_statistics?: boolean;
 	/**
-True, if advertisements for video of the message can be received though getVideoMessageAdvertisements.
+True, if advertisements for video of the message can be received through getVideoMessageAdvertisements.
 */
 	can_get_video_advertisements?: boolean;
 	/**
@@ -30064,7 +30064,7 @@ export interface FileTypeSecure {
 }
 
 /**
-The file is a seld-destructing video for a live photo in a private chat.
+The file is a self-destructing video for a live photo in a private chat.
 Subtype of {@link FileType}.
 */
 export interface FileTypeSelfDestructingLivePhotoVideo {
@@ -42332,7 +42332,7 @@ The new option.
 }
 
 /**
-Adds an option to a poll.
+Deletes an option from a poll.
 Request type for {@link Tdjson#deletePollOption}.
 */
 export interface DeletePollOption {
@@ -51109,7 +51109,7 @@ The 2-step verification password of the current user.
 }
 
 /**
-Returns promotional anumation for upgraded gifts.
+Returns promotional animation for upgraded gifts.
 Request type for {@link Tdjson#getUpgradedGiftsPromotionalAnimation}.
 */
 export interface GetUpgradedGiftsPromotionalAnimation {
@@ -57898,7 +57898,7 @@ Adds an option to a poll.
 	}
 
 	/**
-Adds an option to a poll.
+Deletes an option from a poll.
 */
 	async deletePollOption(options: Omit<DeletePollOption, '@type'>): Promise<Ok> {
 		return this._request({
@@ -63189,7 +63189,7 @@ a chat.
 	}
 
 	/**
-Returns promotional anumation for upgraded gifts.
+Returns promotional animation for upgraded gifts.
 */
 	async getUpgradedGiftsPromotionalAnimation(): Promise<Animation> {
 		return this._request({
