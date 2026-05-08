@@ -348,7 +348,7 @@ The text.
 */
 	text: string;
 	/**
-Entities describing changes in the text. Entities doesn't mutually intersect with each other.
+Entities describing changes in the text. Entities don't mutually intersect with each other.
 */
 	entities: DiffEntity[];
 }
@@ -369,6 +369,21 @@ Changes made to the original text.
 }
 
 /**
+Contains an example of text composition style usage.
+*/
+export interface TextCompositionStyleExample {
+	'@type': 'textCompositionStyleExample';
+	/**
+Source text.
+*/
+	source_text: FormattedText;
+	/**
+The text after the style was applied to the source text.
+*/
+	result_text: FormattedText;
+}
+
+/**
 Describes a style that can be used to compose a text.
 */
 export interface TextCompositionStyle {
@@ -378,13 +393,37 @@ Name of the style.
 */
 	name: string;
 	/**
-Identifier of the custom emoji corresponding to the style.
+Identifier of the custom emoji corresponding to the style; 0 if none.
 */
 	custom_emoji_id: string;
 	/**
 Title of the style in the user application's language.
 */
 	title: string;
+	/**
+True, if the style is created by a user.
+*/
+	is_custom?: boolean;
+	/**
+True, if the user is creator of the style.
+*/
+	is_creator?: boolean;
+	/**
+Number of users that installed the style; for created custom styles only; 0 if unknown.
+*/
+	install_count: number;
+	/**
+Prompt of the style; for created custom styles only.
+*/
+	prompt: string;
+	/**
+User identifier of the creator of the style; 0 if none of unknown.
+*/
+	creator_user_id: number;
+	/**
+Example of the style usage in English; may be null if unknown.
+*/
+	english_example: TextCompositionStyleExample;
 }
 
 /**
@@ -476,6 +515,11 @@ Identifier of the store product that must be bought.
 */
 	store_product_id: string;
 	/**
+Duration of the Telegram Premium subscription after the purchase; may be 0 if Telegram Premium subscription will not be
+granted.
+*/
+	premium_day_count: number;
+	/**
 Email address to use for support if the user has issues with Telegram Premium purchase.
 */
 	support_email_address: string;
@@ -552,7 +596,7 @@ A tg:// URL for the QR code. The link will be updated frequently.
 }
 
 /**
-The user is unregistered and need to accept terms of service and enter their first name and last name to finish
+The user is unregistered and needs to accept terms of service and enter their first name and last name to finish
 registration. Call registerUser to accept the terms of service and provide the data.
 Subtype of {@link AuthorizationState}.
 */
@@ -1202,7 +1246,7 @@ Describes one answer option of a poll.
 export interface PollOption {
 	'@type': 'pollOption';
 	/**
-Unique identifier of the option in the poll.
+Unique identifier of the option in the poll; may be empty if yet unassigned.
 */
 	id: string;
 	/**
@@ -1210,8 +1254,8 @@ Option text; 1-100 characters; may contain only custom emoji entities.
 */
 	text: FormattedText;
 	/**
-Option media. Currently, can be only of the types messageAnimation, messageLocation, messagePhoto, messageSticker,
-messageVenue, or messageVideo without caption.
+Option media; may be null if none. If present, currently, can be only of the types messageAnimation, messageLocation,
+messagePhoto, messageSticker, messageVenue, or messageVideo without caption.
 */
 	media: MessageContent;
 	/**
@@ -1254,6 +1298,12 @@ export interface InputPollOption {
 Option text; 1-100 characters. Only custom emoji entities are allowed to be added and only by Premium users.
 */
 	text: FormattedText;
+	/**
+Option media; pass null if none; ignored in addPollOption. Must be one of the following types: inputMessageAnimation,
+non-live inputMessageLocation, inputMessagePhoto, inputMessageSticker, inputMessageVenue, or inputMessageVideo without
+caption.
+*/
+	media: InputMessageContent;
 }
 
 /**
@@ -1281,8 +1331,8 @@ Text that is shown when the user chooses an incorrect answer or taps on the lamp
 	explanation: FormattedText;
 	/**
 Media that is shown when the user chooses an incorrect answer or taps on the lamp icon; may be null if none or the poll
-is unanswered yet. Currently, can be only of the types messageAnimation, messageAudio, messageDocument, messageLocation,
-messagePhoto, messageVenue, or messageVideo without caption.
+is unanswered yet. If present, currently, can be only of the types messageAnimation, messageAudio, messageDocument,
+messageLocation, messagePhoto, messageVenue, or messageVideo without caption.
 */
 	explanation_media: MessageContent;
 }
@@ -1314,6 +1364,72 @@ Text that is shown when the user chooses an incorrect answer or taps on the lamp
 line feeds.
 */
 	explanation: FormattedText;
+	/**
+Media that is shown when the user chooses an incorrect answer or taps on the lamp icon; pass null if none. Must be one
+of the following types: inputMessageAnimation, inputMessageAudio, inputMessageDocument, non-live inputMessageLocation,
+inputMessagePhoto, inputMessageVenue, or inputMessageVideo without caption.
+*/
+	explanation_media: InputMessageContent;
+}
+
+/**
+Reason of vote restriction in the poll for the current user.
+Subtype of {@link PollVoteRestrictionReason}.
+*/
+export interface PollVoteRestrictionReasonClosed {
+	'@type': 'pollVoteRestrictionReasonClosed';
+
+}
+
+/**
+The poll isn't sent yet.
+Subtype of {@link PollVoteRestrictionReason}.
+*/
+export interface PollVoteRestrictionReasonYetUnsent {
+	'@type': 'pollVoteRestrictionReasonYetUnsent';
+
+}
+
+/**
+The poll is from a scheduled message.
+Subtype of {@link PollVoteRestrictionReason}.
+*/
+export interface PollVoteRestrictionReasonScheduled {
+	'@type': 'pollVoteRestrictionReasonScheduled';
+
+}
+
+/**
+The user is from a country, users from which aren't allowed to vote.
+Subtype of {@link PollVoteRestrictionReason}.
+*/
+export interface PollVoteRestrictionReasonCountryRestricted {
+	'@type': 'pollVoteRestrictionReasonCountryRestricted';
+	/**
+Two-letter ISO 3166-1 alpha-2 code of the current user's country.
+*/
+	country_code: string;
+}
+
+/**
+The user must be a member of the chat for at least a day to vote.
+Subtype of {@link PollVoteRestrictionReason}.
+*/
+export interface PollVoteRestrictionReasonMembershipRequired {
+	'@type': 'pollVoteRestrictionReasonMembershipRequired';
+	/**
+Identifier of the chat which must be joined for at least a day before the user can vote.
+*/
+	chat_id: number;
+}
+
+/**
+The poll can't be voted by the user due to some other reason.
+Subtype of {@link PollVoteRestrictionReason}.
+*/
+export interface PollVoteRestrictionReasonOther {
+	'@type': 'pollVoteRestrictionReasonOther';
+
 }
 
 /**
@@ -1947,7 +2063,7 @@ Identifiers of recent voters, if the poll is non-anonymous and poll results are 
 */
 	recent_voter_ids: MessageSender[];
 	/**
-True, if the current user can get voters in the poll.
+True, if the current user can get voters in the poll using getPollVoters.
 */
 	can_get_voters?: boolean;
 	/**
@@ -1962,6 +2078,15 @@ True, if multiple answer options can be chosen simultaneously.
 True, if the poll can be answered multiple times.
 */
 	allows_revoting?: boolean;
+	/**
+True, if only the users that are members of the chat for more than a day will be able to vote.
+*/
+	members_only?: boolean;
+	/**
+The list of two-letter ISO 3166-1 alpha-2 codes of countries, users from which will be able to vote. If empty, then all
+users can participate in the poll.
+*/
+	country_codes: string[];
 	/**
 The list of 0-based poll identifiers in which the options of the poll must be shown; empty if the order of options must
 not be changed.
@@ -1983,6 +2108,10 @@ Point in time (Unix timestamp) when the poll will automatically be closed.
 True, if the poll is closed.
 */
 	is_closed?: boolean;
+	/**
+The reason describing, why the current user can't vote in the poll; may be null if the user can vote in the poll.
+*/
+	vote_restriction_reason: PollVoteRestrictionReason;
 }
 
 /**
@@ -2291,11 +2420,15 @@ Placeholder for inline queries (displayed on the application input field).
 */
 	inline_query_placeholder: string;
 	/**
+True, if the bot can be queried by username from any non-secret chat.
+*/
+	supports_guest_queries?: boolean;
+	/**
 True, if the location of the user is expected to be sent with every inline query to this bot.
 */
 	need_location?: boolean;
 	/**
-True, if the bot supports connection to Telegram Business accounts.
+True, if the bot supports connection to user accounts for chat automation.
 */
 	can_connect_to_business?: boolean;
 	/**
@@ -2362,6 +2495,21 @@ URL of a Web App to open when the button is pressed. If the link is of the type 
 processed accordingly. Otherwise, the link must be passed to openWebApp.
 */
 	url: string;
+}
+
+/**
+Describes users that have access to a bot.
+*/
+export interface BotAccessSettings {
+	'@type': 'botAccessSettings';
+	/**
+True, if access to the bot is restricted to its owner and selected users.
+*/
+	is_restricted?: boolean;
+	/**
+Identifiers of the users who can use the bot additionally to the owner of the bot.
+*/
+	added_user_ids: number[];
 }
 
 /**
@@ -3080,6 +3228,10 @@ True, if the user can send animations, games, stickers, and dice and use inline 
 True, if the user may add a link preview to their messages.
 */
 	can_add_link_previews?: boolean;
+	/**
+True, if the user can react to messages.
+*/
+	can_react_to_messages?: boolean;
 	/**
 True, if the user may change the tag of self.
 */
@@ -9266,6 +9418,10 @@ True, if the message contains an unread mention for the current user.
 */
 	contains_unread_mention?: boolean;
 	/**
+True, if the message is a poll message with unread votes.
+*/
+	contains_unread_poll_votes?: boolean;
+	/**
 Point in time (Unix timestamp) when the message was sent; 0 for scheduled messages.
 */
 	date: number;
@@ -9324,6 +9480,10 @@ Time left before the message will be automatically deleted by message_auto_delet
 If non-zero, the user identifier of the inline bot through which this message was sent.
 */
 	via_bot_user_id: number;
+	/**
+The identifier of the user or chat which used a guest bot to send the message; may be null if none.
+*/
+	guest_bot_caller_id: MessageSender;
 	/**
 If non-zero, the user identifier of the business bot that sent this message.
 */
@@ -9760,7 +9920,7 @@ List of sponsored chats.
 }
 
 /**
-Describes an advertisent to be shown while a video from a message is watched.
+Describes an advertisement to be shown while a video from a message is watched.
 */
 export interface VideoMessageAdvertisement {
 	'@type': 'videoMessageAdvertisement';
@@ -10059,7 +10219,8 @@ Time left before notifications will be unmuted, in seconds.
 */
 	mute_for: number;
 	/**
-Identifier of the notification sound to be played; 0 if sound is disabled.
+Identifier of the notification sound to be played; 0 if sound is disabled; pass -1 to use the app-dependent default
+sound.
 */
 	sound_id: string;
 	/**
@@ -10076,7 +10237,8 @@ True, if story notifications are disabled.
 */
 	mute_stories?: boolean;
 	/**
-Identifier of the notification sound to be played for stories; 0 if sound is disabled.
+Identifier of the notification sound to be played for stories; 0 if sound is disabled; pass -1 to use the app-dependent
+default sound.
 */
 	story_sound_id: string;
 	/**
@@ -10138,7 +10300,8 @@ Source of poll votes for which notifications are shown.
 */
 	poll_vote_source: ReactionNotificationSource;
 	/**
-Identifier of the notification sound to be played; 0 if sound is disabled.
+Identifier of the notification sound to be played; 0 if sound is disabled; pass -1 to use the app-dependent default
+sound.
 */
 	sound_id: string;
 	/**
@@ -13660,6 +13823,18 @@ Photo of the chat; may be null.
 }
 
 /**
+The link is a link to a text composition style.
+Subtype of {@link LinkPreviewType}.
+*/
+export interface LinkPreviewTypeTextCompositionStyle {
+	'@type': 'linkPreviewTypeTextCompositionStyle';
+	/**
+Identifier of the custom emoji corresponding to the style; 0 if none.
+*/
+	custom_emoji_id: string;
+}
+
+/**
 The link is a link to a cloud theme. TDLib has no theme support yet.
 Subtype of {@link LinkPreviewType}.
 */
@@ -16046,8 +16221,8 @@ A message with a poll.
 */
 	description: FormattedText;
 	/**
-Media attached to the poll. Currently, can be only of the types messageAnimation, messageAudio, messageDocument,
-messageLocation, messagePhoto, messageVenue, or messageVideo without caption.
+Media attached to the poll; may be null if none. If present, currently, can be only of the types messageAnimation,
+messageAudio, messageDocument, messageLocation, messagePhoto, messageVenue, or messageVideo without caption.
 */
 	media: MessageContent;
 	/**
@@ -18758,7 +18933,7 @@ only by Premium users.
 */
 	question: FormattedText;
 	/**
-List of poll answer options; 2-getOption("poll_answer_count_max") options.
+List of poll answer options; 1-getOption("poll_answer_count_max") options.
 */
 	options: InputPollOption[];
 	/**
@@ -18766,6 +18941,12 @@ A message with a poll. Polls can't be sent to secret chats and channel direct me
 private chat only if the chat is a chat with a bot or the Saved Messages chat.
 */
 	description: FormattedText;
+	/**
+Media attached to the poll; pass null if none. Must be one of the following types: inputMessageAnimation,
+inputMessageAudio, inputMessageDocument, non-live inputMessageLocation, inputMessagePhoto, inputMessageVenue, or
+inputMessageVideo without caption.
+*/
+	media: InputMessageContent;
 	/**
 True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels.
 */
@@ -18778,6 +18959,16 @@ True, if multiple answer options can be chosen simultaneously.
 True, if the poll can be answered multiple times.
 */
 	allows_revoting?: boolean;
+	/**
+True, if only the users that are members of the chat for more than a day will be able to vote; for channel chats only.
+*/
+	members_only?: boolean;
+	/**
+The list of two-letter ISO 3166-1 alpha-2 codes of countries, users from which will be able to vote; for channel chats
+only. If empty, then all users can participate in the poll. There can be up to getOption("poll_country_count_max")
+chosen countries.
+*/
+	country_codes: string[];
 	/**
 True, if poll options must be shown in a fixed random order.
 */
@@ -18966,6 +19157,10 @@ True, if the message can be shared in a story using inputStoryAreaTypeMessage.
 */
 	can_be_shared_in_story?: boolean;
 	/**
+True, if the user can delete reactions of other users in the message using the method deleteMessageReactionsFromSender.
+*/
+	can_delete_reactions?: boolean;
+	/**
 True, if the message can be edited using the method editMessageMedia.
 */
 	can_edit_media?: boolean;
@@ -18999,6 +19194,10 @@ True, if information about the message thread is available through getMessageThr
 */
 	can_get_message_thread?: boolean;
 	/**
+True, if the message is a poll and vote statistics are available through getPollVoteStatistics.
+*/
+	can_get_poll_vote_statistics?: boolean;
+	/**
 True, if read date of the message can be received through getMessageReadDate.
 */
 	can_get_read_date?: boolean;
@@ -19008,7 +19207,7 @@ getMessagePublicForwards.
 */
 	can_get_statistics?: boolean;
 	/**
-True, if advertisements for video of the message can be received though getVideoMessageAdvertisements.
+True, if advertisements for video of the message can be received through getVideoMessageAdvertisements.
 */
 	can_get_video_advertisements?: boolean;
 	/**
@@ -20660,7 +20859,7 @@ Identifier of the story list in which the stories are shown; may be null if the 
 */
 	list: StoryList;
 	/**
-A parameter used to determine order of the stories in the story list; 0 if the stories doesn't need to be shown in the
+A parameter used to determine order of the stories in the story list; 0 if the stories don't need to be shown in the
 story list. Stories must be sorted by the pair (order, story_poster_chat_id) in descending order.
 */
 	order: number;
@@ -22483,6 +22682,15 @@ export interface ReactionUnavailabilityReasonGuest {
 }
 
 /**
+The user is restricted in the chat.
+Subtype of {@link ReactionUnavailabilityReason}.
+*/
+export interface ReactionUnavailabilityReasonRestricted {
+	'@type': 'reactionUnavailabilityReasonRestricted';
+
+}
+
+/**
 Represents a list of animations.
 */
 export interface Animations {
@@ -22755,17 +22963,6 @@ Color to highlight selected icon of the bot if appropriate; may be null.
 Default placeholder for opened Web Apps in SVG format; may be null.
 */
 	web_app_placeholder: File;
-}
-
-/**
-Information about the message sent by answerWebAppQuery.
-*/
-export interface SentWebAppMessage {
-	'@type': 'sentWebAppMessage';
-	/**
-Identifier of the sent inline message, if known.
-*/
-	inline_message_id: string;
 }
 
 /**
@@ -23695,6 +23892,17 @@ Results of the query.
 The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Contains identifier of a sent guest message.
+*/
+export interface InlineMessageId {
+	'@type': 'inlineMessageId';
+	/**
+Unique identifier for the message.
+*/
+	id: string;
 }
 
 /**
@@ -25047,6 +25255,15 @@ Subtype of {@link PremiumLimitType}.
 */
 export interface PremiumLimitTypeOwnedBotCount {
 	'@type': 'premiumLimitTypeOwnedBotCount';
+
+}
+
+/**
+The maximum number of added text composition styles.
+Subtype of {@link PremiumLimitType}.
+*/
+export interface PremiumLimitTypeCustomTextCompositionStyleCount {
+	'@type': 'premiumLimitTypeCustomTextCompositionStyleCount';
 
 }
 
@@ -29613,7 +29830,7 @@ Username of the bot which will manage the new bot.
 */
 	manager_bot_username: string;
 	/**
-Suggested username for the bot.
+Suggested username for the bot; always ends with "bot" case-insensitive.
 */
 	suggested_bot_username: string;
 	/**
@@ -29727,6 +29944,19 @@ Username of the owner of the story album.
 Story album identifier.
 */
 	story_album_id: number;
+}
+
+/**
+The link is a link to a text composition style. Call searchTextCompositionStyle with the given style name to get
+information about the style. If the style is found and the user wants to add it, then call addTextCompositionStyle.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeTextCompositionStyle {
+	'@type': 'internalLinkTypeTextCompositionStyle';
+	/**
+Name of the style.
+*/
+	style_name: string;
 }
 
 /**
@@ -30064,7 +30294,7 @@ export interface FileTypeSecure {
 }
 
 /**
-The file is a seld-destructing video for a live photo in a private chat.
+The file is a self-destructing video for a live photo in a private chat.
 Subtype of {@link FileType}.
 */
 export interface FileTypeSelfDestructingLivePhotoVideo {
@@ -30656,6 +30886,15 @@ export interface TopChatCategoryInlineBots {
 }
 
 /**
+A category containing frequently used chats with bots, which were used as guest bots.
+Subtype of {@link TopChatCategory}.
+*/
+export interface TopChatCategoryGuestBots {
+	'@type': 'topChatCategoryGuestBots';
+
+}
+
+/**
 A category containing frequently used chats with bots, which Web Apps were opened.
 Subtype of {@link TopChatCategory}.
 */
@@ -31136,6 +31375,10 @@ True, if the proxy is enabled now.
 */
 	is_enabled?: boolean;
 	/**
+Comment for the proxy added by the user.
+*/
+	comment: string;
+	/**
 The proxy.
 */
 	proxy: Proxy;
@@ -31605,6 +31848,17 @@ A graph containing number of story views and shares.
 A graph containing number of story reactions.
 */
 	story_reaction_graph: StatisticalGraph;
+}
+
+/**
+A detailed statistics about poll votes.
+*/
+export interface PollVoteStatistics {
+	'@type': 'pollVoteStatistics';
+	/**
+A graph containing distribution of votes in the poll.
+*/
+	vote_graph: StatisticalGraph;
 }
 
 /**
@@ -32206,9 +32460,33 @@ The new list of unread reactions.
 */
 	unread_reactions: UnreadReaction[];
 	/**
-The new number of messages with unread reactions left in the chat.
+The new number of messages with unread reactions in the chat.
 */
 	unread_reaction_count: number;
+}
+
+/**
+Unread votes were added or removed from a poll message.
+Subtype of {@link Update}.
+*/
+export interface UpdateMessageContainsUnreadPollVotes {
+	'@type': 'updateMessageContainsUnreadPollVotes';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+True, if the message is a poll message with unread votes.
+*/
+	contains_unread_poll_votes?: boolean;
+	/**
+The new number of messages with unread poll votes in the chat.
+*/
+	unread_poll_vote_count: number;
 }
 
 /**
@@ -34726,6 +35004,26 @@ Identifier of the sent inline message, if known.
 }
 
 /**
+A new incoming guest query; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdateNewGuestQuery {
+	'@type': 'updateNewGuestQuery';
+	/**
+Unique query identifier.
+*/
+	id: string;
+	/**
+The message with the query.
+*/
+	message: Message;
+	/**
+The list of reference messages.
+*/
+	reference_messages: Message[];
+}
+
+/**
 A new incoming callback query; for bots only.
 Subtype of {@link Update}.
 */
@@ -35365,6 +35663,14 @@ export type InputPollType =
 	| InputPollTypeRegular
 	| InputPollTypeQuiz;
 
+export type PollVoteRestrictionReason =
+	| PollVoteRestrictionReasonClosed
+	| PollVoteRestrictionReasonYetUnsent
+	| PollVoteRestrictionReasonScheduled
+	| PollVoteRestrictionReasonCountryRestricted
+	| PollVoteRestrictionReasonMembershipRequired
+	| PollVoteRestrictionReasonOther;
+
 export type ProfileTab =
 	| ProfileTabPosts
 	| ProfileTabGifts
@@ -35868,6 +36174,7 @@ export type LinkPreviewType =
 	| LinkPreviewTypeStory
 	| LinkPreviewTypeStoryAlbum
 	| LinkPreviewTypeSupergroupBoost
+	| LinkPreviewTypeTextCompositionStyle
 	| LinkPreviewTypeTheme
 	| LinkPreviewTypeUnsupported
 	| LinkPreviewTypeUpgradedGift
@@ -36339,7 +36646,8 @@ export type FirebaseAuthenticationSettings =
 
 export type ReactionUnavailabilityReason =
 	| ReactionUnavailabilityReasonAnonymousAdministrator
-	| ReactionUnavailabilityReasonGuest;
+	| ReactionUnavailabilityReasonGuest
+	| ReactionUnavailabilityReasonRestricted;
 
 export type DiceStickers =
 	| DiceStickersRegular
@@ -36478,7 +36786,8 @@ export type PremiumLimitType =
 	| PremiumLimitTypeStoryCaptionLength
 	| PremiumLimitTypeStorySuggestedReactionAreaCount
 	| PremiumLimitTypeSimilarChatCount
-	| PremiumLimitTypeOwnedBotCount;
+	| PremiumLimitTypeOwnedBotCount
+	| PremiumLimitTypeCustomTextCompositionStyleCount;
 
 export type PremiumFeature =
 	| PremiumFeatureIncreasedLimits
@@ -36872,6 +37181,7 @@ export type InternalLinkType =
 	| InternalLinkTypeStickerSet
 	| InternalLinkTypeStory
 	| InternalLinkTypeStoryAlbum
+	| InternalLinkTypeTextCompositionStyle
 	| InternalLinkTypeTheme
 	| InternalLinkTypeUnknownDeepLink
 	| InternalLinkTypeUpgradedGift
@@ -36941,6 +37251,7 @@ export type TopChatCategory =
 	| TopChatCategoryGroups
 	| TopChatCategoryChannels
 	| TopChatCategoryInlineBots
+	| TopChatCategoryGuestBots
 	| TopChatCategoryWebAppBots
 	| TopChatCategoryCalls
 	| TopChatCategoryForwardChats;
@@ -37035,6 +37346,7 @@ export type Update =
 	| UpdateMessageContentOpened
 	| UpdateMessageMentionRead
 	| UpdateMessageUnreadReactions
+	| UpdateMessageContainsUnreadPollVotes
 	| UpdateMessageFactCheck
 	| UpdateMessageSuggestedPostInfo
 	| UpdateMessageLiveLocationViewed
@@ -37185,6 +37497,7 @@ export type Update =
 	| UpdateBusinessMessagesDeleted
 	| UpdateNewInlineQuery
 	| UpdateNewChosenInlineResult
+	| UpdateNewGuestQuery
 	| UpdateNewCallbackQuery
 	| UpdateNewInlineCallbackQuery
 	| UpdateNewBusinessCallbackQuery
@@ -37312,6 +37625,10 @@ Request type for {@link Tdjson#checkAuthenticationPremiumPurchase}.
 export interface CheckAuthenticationPremiumPurchase {
 	'@type': 'checkAuthenticationPremiumPurchase';
 	/**
+The number of days for which the Telegram Premium subscription will be granted.
+*/
+	premium_day_count: number;
+	/**
 ISO 4217 currency code of the payment currency.
 */
 	currency: string;
@@ -37336,6 +37653,10 @@ Information about the transaction.
 Pass true if this is a restore of a Telegram Premium purchase; only for App Store.
 */
 	is_restore?: boolean;
+	/**
+The number of days for which the Telegram Premium subscription will be granted.
+*/
+	premium_day_count: number;
 	/**
 ISO 4217 currency code of the payment currency.
 */
@@ -39890,6 +40211,126 @@ The message link.
 }
 
 /**
+Creates a custom text composition style. May return an error with a message "TONES_SAVED_TOO_MANY" if the maximum number
+of added custom styles has been reached.
+Request type for {@link Tdjson#createTextCompositionStyle}.
+*/
+export interface CreateTextCompositionStyle {
+	'@type': 'createTextCompositionStyle';
+	/**
+Title of the style; 1-getOption("text_composition_style_title_length_max") characters.
+*/
+	title: string;
+	/**
+Identifier of the custom emoji corresponding to the style.
+*/
+	custom_emoji_id: string;
+	/**
+Prompt that will be used for text composition; 1-getOption("text_composition_style_prompt_length_max") characters.
+*/
+	prompt: string;
+	/**
+Pass true if the current user must be shown as the creator of the style.
+*/
+	show_creator?: boolean;
+}
+
+/**
+Edits a custom text composition style that was created by the current user.
+Request type for {@link Tdjson#editTextCompositionStyle}.
+*/
+export interface EditTextCompositionStyle {
+	'@type': 'editTextCompositionStyle';
+	/**
+Name of the style.
+*/
+	name: string;
+	/**
+Title of the style; 1-getOption("text_composition_style_title_length_max") characters.
+*/
+	title: string;
+	/**
+Identifier of the custom emoji corresponding to the style.
+*/
+	custom_emoji_id: string;
+	/**
+Prompt that will be used for text composition; 1-getOption("text_composition_style_prompt_length_max") characters.
+*/
+	prompt: string;
+	/**
+Pass true if the current user must be shown as the creator of the style.
+*/
+	show_creator?: boolean;
+}
+
+/**
+Deletes a custom text composition style that was created by the current user.
+Request type for {@link Tdjson#deleteTextCompositionStyle}.
+*/
+export interface DeleteTextCompositionStyle {
+	'@type': 'deleteTextCompositionStyle';
+	/**
+Name of the style.
+*/
+	name: string;
+}
+
+/**
+Searches a custom text composition style by its name.
+Request type for {@link Tdjson#searchTextCompositionStyle}.
+*/
+export interface SearchTextCompositionStyle {
+	'@type': 'searchTextCompositionStyle';
+	/**
+Name of the style.
+*/
+	name: string;
+}
+
+/**
+Returns an example of usage of a custom text composition style.
+Request type for {@link Tdjson#getTextCompositionStyleExample}.
+*/
+export interface GetTextCompositionStyleExample {
+	'@type': 'getTextCompositionStyleExample';
+	/**
+Name of the style.
+*/
+	name: string;
+	/**
+0-based unique number of the requested example; must be non-negative and less than
+getOption("text_composition_style_example_count").
+*/
+	example_number: number;
+}
+
+/**
+Adds a custom text composition style to the list of used by the user styles. May return an error with a message
+"TONES_SAVED_TOO_MANY" if the maximum number of added custom styles has been reached.
+Request type for {@link Tdjson#addTextCompositionStyle}.
+*/
+export interface AddTextCompositionStyle {
+	'@type': 'addTextCompositionStyle';
+	/**
+Name of the style.
+*/
+	name: string;
+}
+
+/**
+Removes a custom text composition style from the list of used by the user styles. If the style was created by the
+current user, then it can only be deleted.
+Request type for {@link Tdjson#removeTextCompositionStyle}.
+*/
+export interface RemoveTextCompositionStyle {
+	'@type': 'removeTextCompositionStyle';
+	/**
+Name of the style.
+*/
+	name: string;
+}
+
+/**
 Translates a text to the given language; must not be used in secret chats. If the current user is a Telegram Premium
 user, then text formatting is preserved.
 Request type for {@link Tdjson#translateText}.
@@ -41925,6 +42366,44 @@ Type of the reaction to remove. The paid reaction can't be removed.
 }
 
 /**
+Deletes all recent reactions added by the specified sender in a chat. Supported only for basic groups and supergroups;
+requires can_delete_messages administrator right.
+Request type for {@link Tdjson#deleteAllRecentMessageReactionsFromSender}.
+*/
+export interface DeleteAllRecentMessageReactionsFromSender {
+	'@type': 'deleteAllRecentMessageReactionsFromSender';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the sender of reactions to delete.
+*/
+	sender_id: MessageSender;
+}
+
+/**
+Deletes all reactions added by the specified sender on a message.
+Request type for {@link Tdjson#deleteMessageReactionsFromSender}.
+*/
+export interface DeleteMessageReactionsFromSender {
+	'@type': 'deleteMessageReactionsFromSender';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the reactions. Use messageProperties.can_delete_reactions to check whether the
+method can be used for a message.
+*/
+	message_id: number;
+	/**
+Identifier of the sender of reactions to delete.
+*/
+	sender_id: MessageSender;
+}
+
+/**
 Returns the list of message sender identifiers, which can be used to send a paid reaction in a chat.
 Request type for {@link Tdjson#getChatAvailablePaidMessageReactionSenders}.
 */
@@ -42332,7 +42811,7 @@ The new option.
 }
 
 /**
-Adds an option to a poll.
+Deletes an option from a poll.
 Request type for {@link Tdjson#deletePollOption}.
 */
 export interface DeletePollOption {
@@ -42402,6 +42881,27 @@ number of returned voters is chosen by TDLib and can be smaller than the specifi
 list has not been reached.
 */
 	limit: number;
+}
+
+/**
+Returns statistics of poll votes in a poll.
+Request type for {@link Tdjson#getPollVoteStatistics}.
+*/
+export interface GetPollVoteStatistics {
+	'@type': 'getPollVoteStatistics';
+	/**
+Identifier of the chat to which the poll belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message containing the poll. Use messageProperties.can_get_poll_vote_statistics to check whether the
+method can be used for a message.
+*/
+	message_id: number;
+	/**
+Pass true if a dark theme is used by the application.
+*/
+	is_dark?: boolean;
 }
 
 /**
@@ -42664,6 +43164,22 @@ Allowed time to cache the results of the query, in seconds.
 Offset for the next inline query; pass an empty string if there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Sets the result of a guest query; for bots only.
+Request type for {@link Tdjson#answerGuestQuery}.
+*/
+export interface AnswerGuestQuery {
+	'@type': 'answerGuestQuery';
+	/**
+Identifier of the guest query.
+*/
+	guest_query_id: string;
+	/**
+The result of the query.
+*/
+	result: InputInlineQueryResult;
 }
 
 /**
@@ -43211,7 +43727,7 @@ Unique identifier of the draft.
 */
 	draft_id: string;
 	/**
-Draft text of the message.
+Draft text of the message; pass null to show a "Thinking..." placeholder.
 */
 	text: FormattedText;
 }
@@ -48084,6 +48600,22 @@ New emoji status; pass null to switch to the default badge.
 }
 
 /**
+Returns messages in the personal chat of a given user; for bots only.
+Request type for {@link Tdjson#getPersonalChatHistory}.
+*/
+export interface GetPersonalChatHistory {
+	'@type': 'getPersonalChatHistory';
+	/**
+User identifier.
+*/
+	user_id: number;
+	/**
+The maximum number of messages to be returned; 1-20.
+*/
+	limit: number;
+}
+
+/**
 Searches a user by their phone number. Returns a 404 error if the user can't be found.
 Request type for {@link Tdjson#searchUserByPhoneNumber}.
 */
@@ -48171,9 +48703,21 @@ Request type for {@link Tdjson#addProfileAudio}.
 export interface AddProfileAudio {
 	'@type': 'addProfileAudio';
 	/**
-Identifier of the audio file to be added. The file must have been uploaded to the server.
+The audio file to be added.
 */
-	file_id: number;
+	audio: InputFile;
+	/**
+Duration of the audio, in seconds; may be replaced by the server; ignored for already uploaded files.
+*/
+	duration: number;
+	/**
+Title of the audio; 0-64 characters; may be replaced by the server; ignored for already uploaded files.
+*/
+	title: string;
+	/**
+Performer of the audio; 0-64 characters, may be replaced by the server; ignored for already uploaded files.
+*/
+	performer: string;
 }
 
 /**
@@ -49665,19 +50209,47 @@ Pass true if the bot is created from an internalLinkTypeRequestManagedBot link.
 }
 
 /**
-Returns token of a created bot; for bots only.
-Request type for {@link Tdjson#getBotToken}.
+Returns token of a managed bot; for bots only.
+Request type for {@link Tdjson#getManagedBotToken}.
 */
-export interface GetBotToken {
-	'@type': 'getBotToken';
+export interface GetManagedBotToken {
+	'@type': 'getManagedBotToken';
 	/**
-Identifier of the created bot.
+Identifier of the managed bot.
 */
 	bot_user_id: number;
 	/**
 Pass true to revoke the current token and create a new one.
 */
 	revoke?: boolean;
+}
+
+/**
+Returns access settings of a managed bot; for bots only.
+Request type for {@link Tdjson#getManagedBotAccessSettings}.
+*/
+export interface GetManagedBotAccessSettings {
+	'@type': 'getManagedBotAccessSettings';
+	/**
+Identifier of the managed bot.
+*/
+	bot_user_id: number;
+}
+
+/**
+Sets access settings of a managed bot; for bots only.
+Request type for {@link Tdjson#setManagedBotAccessSettings}.
+*/
+export interface SetManagedBotAccessSettings {
+	'@type': 'setManagedBotAccessSettings';
+	/**
+Identifier of the managed bot.
+*/
+	bot_user_id: number;
+	/**
+New access settings.
+*/
+	settings: BotAccessSettings;
 }
 
 /**
@@ -51109,7 +51681,7 @@ The 2-step verification password of the current user.
 }
 
 /**
-Returns promotional anumation for upgraded gifts.
+Returns promotional animation for upgraded gifts.
 Request type for {@link Tdjson#getUpgradedGiftsPromotionalAnimation}.
 */
 export interface GetUpgradedGiftsPromotionalAnimation {
@@ -53641,6 +54213,10 @@ The proxy to add.
 Pass true to immediately enable the proxy.
 */
 	enable?: boolean;
+	/**
+Comment to set for the proxy.
+*/
+	comment: string;
 }
 
 /**
@@ -53661,6 +54237,10 @@ The new information about the proxy.
 Pass true to immediately enable the proxy.
 */
 	enable?: boolean;
+	/**
+New comment for the proxy.
+*/
+	comment: string;
 }
 
 /**
@@ -54164,6 +54744,13 @@ export type Request =
 	| GetMessageLink
 	| GetMessageEmbeddingCode
 	| GetMessageLinkInfo
+	| CreateTextCompositionStyle
+	| EditTextCompositionStyle
+	| DeleteTextCompositionStyle
+	| SearchTextCompositionStyle
+	| GetTextCompositionStyleExample
+	| AddTextCompositionStyle
+	| RemoveTextCompositionStyle
 	| TranslateText
 	| TranslateMessageText
 	| SummarizeMessage
@@ -54257,6 +54844,8 @@ export type Request =
 	| ClearRecentReactions
 	| AddMessageReaction
 	| RemoveMessageReaction
+	| DeleteAllRecentMessageReactionsFromSender
+	| DeleteMessageReactionsFromSender
 	| GetChatAvailablePaidMessageReactionSenders
 	| AddPendingPaidMessageReaction
 	| CommitPendingPaidMessageReactions
@@ -54285,6 +54874,7 @@ export type Request =
 	| DeletePollOption
 	| SetPollAnswer
 	| GetPollVoters
+	| GetPollVoteStatistics
 	| StopPoll
 	| AddChecklistTasks
 	| MarkChecklistTasksAsDone
@@ -54297,6 +54887,7 @@ export type Request =
 	| ShareChatWithBot
 	| GetInlineQueryResults
 	| AnswerInlineQuery
+	| AnswerGuestQuery
 	| SavePreparedInlineMessage
 	| GetPreparedInlineMessage
 	| SavePreparedKeyboardButton
@@ -54603,6 +55194,7 @@ export type Request =
 	| SuggestUserBirthdate
 	| ToggleBotCanManageEmojiStatus
 	| SetUserEmojiStatus
+	| GetPersonalChatHistory
 	| SearchUserByPhoneNumber
 	| SharePhoneNumber
 	| GetUserProfilePhotos
@@ -54711,7 +55303,9 @@ export type Request =
 	| DeleteBotMediaPreviews
 	| CheckBotUsername
 	| CreateBot
-	| GetBotToken
+	| GetManagedBotToken
+	| GetManagedBotAccessSettings
+	| SetManagedBotAccessSettings
 	| SetBotName
 	| GetBotName
 	| SetBotProfilePhoto
@@ -56655,6 +57249,79 @@ internalLinkTypeMessage.
 	}
 
 	/**
+Creates a custom text composition style. May return an error with a message "TONES_SAVED_TOO_MANY" if the maximum number
+of added custom styles has been reached.
+*/
+	async createTextCompositionStyle(options: Omit<CreateTextCompositionStyle, '@type'>): Promise<TextCompositionStyle> {
+		return this._request({
+			...options,
+			'@type': 'createTextCompositionStyle',
+		});
+	}
+
+	/**
+Edits a custom text composition style that was created by the current user.
+*/
+	async editTextCompositionStyle(options: Omit<EditTextCompositionStyle, '@type'>): Promise<TextCompositionStyle> {
+		return this._request({
+			...options,
+			'@type': 'editTextCompositionStyle',
+		});
+	}
+
+	/**
+Deletes a custom text composition style that was created by the current user.
+*/
+	async deleteTextCompositionStyle(options: Omit<DeleteTextCompositionStyle, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteTextCompositionStyle',
+		});
+	}
+
+	/**
+Searches a custom text composition style by its name.
+*/
+	async searchTextCompositionStyle(options: Omit<SearchTextCompositionStyle, '@type'>): Promise<TextCompositionStyle> {
+		return this._request({
+			...options,
+			'@type': 'searchTextCompositionStyle',
+		});
+	}
+
+	/**
+Returns an example of usage of a custom text composition style.
+*/
+	async getTextCompositionStyleExample(options: Omit<GetTextCompositionStyleExample, '@type'>): Promise<TextCompositionStyleExample> {
+		return this._request({
+			...options,
+			'@type': 'getTextCompositionStyleExample',
+		});
+	}
+
+	/**
+Adds a custom text composition style to the list of used by the user styles. May return an error with a message
+"TONES_SAVED_TOO_MANY" if the maximum number of added custom styles has been reached.
+*/
+	async addTextCompositionStyle(options: Omit<AddTextCompositionStyle, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addTextCompositionStyle',
+		});
+	}
+
+	/**
+Removes a custom text composition style from the list of used by the user styles. If the style was created by the
+current user, then it can only be deleted.
+*/
+	async removeTextCompositionStyle(options: Omit<RemoveTextCompositionStyle, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeTextCompositionStyle',
+		});
+	}
+
+	/**
 Translates a text to the given language; must not be used in secret chats. If the current user is a Telegram Premium
 user, then text formatting is preserved.
 */
@@ -57638,6 +58305,27 @@ Removes a reaction from a message. A chosen reaction can always be removed.
 	}
 
 	/**
+Deletes all recent reactions added by the specified sender in a chat. Supported only for basic groups and supergroups;
+requires can_delete_messages administrator right.
+*/
+	async deleteAllRecentMessageReactionsFromSender(options: Omit<DeleteAllRecentMessageReactionsFromSender, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteAllRecentMessageReactionsFromSender',
+		});
+	}
+
+	/**
+Deletes all reactions added by the specified sender on a message.
+*/
+	async deleteMessageReactionsFromSender(options: Omit<DeleteMessageReactionsFromSender, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteMessageReactionsFromSender',
+		});
+	}
+
+	/**
 Returns the list of message sender identifiers, which can be used to send a paid reaction in a chat.
 */
 	async getChatAvailablePaidMessageReactionSenders(options: Omit<GetChatAvailablePaidMessageReactionSenders, '@type'>): Promise<MessageSenders> {
@@ -57898,7 +58586,7 @@ Adds an option to a poll.
 	}
 
 	/**
-Adds an option to a poll.
+Deletes an option from a poll.
 */
 	async deletePollOption(options: Omit<DeletePollOption, '@type'>): Promise<Ok> {
 		return this._request({
@@ -57925,6 +58613,16 @@ can be used. For optimal performance, the number of returned users is chosen by 
 		return this._request({
 			...options,
 			'@type': 'getPollVoters',
+		});
+	}
+
+	/**
+Returns statistics of poll votes in a poll.
+*/
+	async getPollVoteStatistics(options: Omit<GetPollVoteStatistics, '@type'>): Promise<PollVoteStatistics> {
+		return this._request({
+			...options,
+			'@type': 'getPollVoteStatistics',
 		});
 	}
 
@@ -58048,6 +58746,16 @@ Sets the result of an inline query; for bots only.
 		return this._request({
 			...options,
 			'@type': 'answerInlineQuery',
+		});
+	}
+
+	/**
+Sets the result of a guest query; for bots only.
+*/
+	async answerGuestQuery(options: Omit<AnswerGuestQuery, '@type'>): Promise<InlineMessageId> {
+		return this._request({
+			...options,
+			'@type': 'answerGuestQuery',
 		});
 	}
 
@@ -58190,7 +58898,7 @@ Informs TDLib that a previously opened Web App was closed.
 Sets the result of interaction with a Web App and sends corresponding message on behalf of the user to the chat from
 which the query originated; for bots only.
 */
-	async answerWebAppQuery(options: Omit<AnswerWebAppQuery, '@type'>): Promise<SentWebAppMessage> {
+	async answerWebAppQuery(options: Omit<AnswerWebAppQuery, '@type'>): Promise<InlineMessageId> {
 		return this._request({
 			...options,
 			'@type': 'answerWebAppQuery',
@@ -59308,7 +60016,7 @@ Returns the current state of stake dice.
 Returns saved notification sound by its identifier. Returns a 404 error if there is no saved notification sound with the
 specified identifier.
 */
-	async getSavedNotificationSound(options: Omit<GetSavedNotificationSound, '@type'>): Promise<NotificationSounds> {
+	async getSavedNotificationSound(options: Omit<GetSavedNotificationSound, '@type'>): Promise<NotificationSound> {
 		return this._request({
 			...options,
 			'@type': 'getSavedNotificationSound',
@@ -61233,6 +61941,16 @@ Changes the emoji status of a user; for bots only.
 	}
 
 	/**
+Returns messages in the personal chat of a given user; for bots only.
+*/
+	async getPersonalChatHistory(options: Omit<GetPersonalChatHistory, '@type'>): Promise<Messages> {
+		return this._request({
+			...options,
+			'@type': 'getPersonalChatHistory',
+		});
+	}
+
+	/**
 Searches a user by their phone number. Returns a 404 error if the user can't be found.
 */
 	async searchUserByPhoneNumber(options: Omit<SearchUserByPhoneNumber, '@type'>): Promise<User> {
@@ -62336,12 +63054,32 @@ error.
 	}
 
 	/**
-Returns token of a created bot; for bots only.
+Returns token of a managed bot; for bots only.
 */
-	async getBotToken(options: Omit<GetBotToken, '@type'>): Promise<Text> {
+	async getManagedBotToken(options: Omit<GetManagedBotToken, '@type'>): Promise<Text> {
 		return this._request({
 			...options,
-			'@type': 'getBotToken',
+			'@type': 'getManagedBotToken',
+		});
+	}
+
+	/**
+Returns access settings of a managed bot; for bots only.
+*/
+	async getManagedBotAccessSettings(options: Omit<GetManagedBotAccessSettings, '@type'>): Promise<BotAccessSettings> {
+		return this._request({
+			...options,
+			'@type': 'getManagedBotAccessSettings',
+		});
+	}
+
+	/**
+Sets access settings of a managed bot; for bots only.
+*/
+	async setManagedBotAccessSettings(options: Omit<SetManagedBotAccessSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setManagedBotAccessSettings',
 		});
 	}
 
@@ -63189,7 +63927,7 @@ a chat.
 	}
 
 	/**
-Returns promotional anumation for upgraded gifts.
+Returns promotional animation for upgraded gifts.
 */
 	async getUpgradedGiftsPromotionalAnimation(): Promise<Animation> {
 		return this._request({
