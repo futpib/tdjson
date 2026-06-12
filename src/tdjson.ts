@@ -320,6 +320,68 @@ entities. All other entities can't contain each other.
 }
 
 /**
+Describes a message with rich formatting.
+*/
+export interface RichMessage {
+	'@type': 'richMessage';
+	/**
+Content of the message.
+*/
+	blocks: PageBlock[];
+	/**
+True, if the message must be shown from right to left.
+*/
+	is_rtl?: boolean;
+	/**
+True, if the object contains the full message. Otherwise, getFullRichMessage must be used to get the full message.
+*/
+	is_full?: boolean;
+}
+
+/**
+Describes source of a rich message.
+Subtype of {@link RichMessageSource}.
+*/
+export interface RichMessageSourceMarkdown {
+	'@type': 'richMessageSourceMarkdown';
+	/**
+Markdown-formatted text of the message.
+*/
+	text: string;
+}
+
+/**
+An HTML-formatted rich message; for bots only.
+Subtype of {@link RichMessageSource}.
+*/
+export interface RichMessageSourceHtml {
+	'@type': 'richMessageSourceHtml';
+	/**
+HTML-formatted text of the message.
+*/
+	text: string;
+}
+
+/**
+A rich message to send.
+*/
+export interface InputRichMessage {
+	'@type': 'inputRichMessage';
+	/**
+Source of the rich message.
+*/
+	source: RichMessageSource;
+	/**
+Pass true if the message must be shown from right to left.
+*/
+	is_rtl?: boolean;
+	/**
+Pass true to enable detection of URLs, email addresses and other automatic blocks.
+*/
+	detect_automatic_blocks?: boolean;
+}
+
+/**
 Represents a change of a text.
 */
 export interface DiffEntity {
@@ -417,7 +479,7 @@ Prompt of the style; for created custom styles only.
 */
 	prompt: string;
 	/**
-User identifier of the creator of the style; 0 if none of unknown.
+User identifier of the creator of the style; 0 if none or unknown.
 */
 	creator_user_id: number;
 	/**
@@ -494,8 +556,8 @@ export interface AuthorizationStateWaitTdlibParameters {
 
 /**
 TDLib needs the user's phone number to authorize. Call setAuthenticationPhoneNumber to provide the phone number, or use
-requestQrCodeAuthentication, getAuthenticationPasskeyParameters, or checkAuthenticationBotToken for other authentication
-options.
+requestQrCodeAuthentication, getAuthenticationPasskeyParameters, checkAuthenticationWebToken, or
+checkAuthenticationBotToken for other authentication options.
 Subtype of {@link AuthorizationState}.
 */
 export interface AuthorizationStateWaitPhoneNumber {
@@ -1254,10 +1316,10 @@ Option text; 1-100 characters; may contain only custom emoji entities.
 */
 	text: FormattedText;
 	/**
-Option media; may be null if none. If present, currently, can be only of the types messageAnimation, messageLocation,
-messagePhoto, messageSticker, messageVenue, or messageVideo without caption.
+Option media; may be null if none. If present, currently, can be only of the types pollMediaAnimation, pollMediaLink,
+pollMediaLocation, pollMediaPhoto, pollMediaSticker, pollMediaVenue, or pollMediaVideo.
 */
-	media: MessageContent;
+	media: PollMedia;
 	/**
 Number of voters for this option, available only for closed or voted polls, or if the current user is the creator of the
 poll.
@@ -1299,11 +1361,11 @@ Option text; 1-100 characters. Only custom emoji entities are allowed to be adde
 */
 	text: FormattedText;
 	/**
-Option media; pass null if none; ignored in addPollOption. Must be one of the following types: inputMessageAnimation,
-non-live inputMessageLocation, inputMessagePhoto, inputMessageSticker, inputMessageVenue, or inputMessageVideo without
-caption.
+Option media; pass null if none; ignored in addPollOption. Must be one of the following types: inputPollMediaAnimation,
+inputPollMediaLink, inputPollMediaLocation, inputPollMediaPhoto, inputPollMediaSticker, inputPollMediaVenue, or
+inputPollMediaVideo without caption.
 */
-	media: InputMessageContent;
+	media: InputPollMedia;
 }
 
 /**
@@ -1331,10 +1393,10 @@ Text that is shown when the user chooses an incorrect answer or taps on the lamp
 	explanation: FormattedText;
 	/**
 Media that is shown when the user chooses an incorrect answer or taps on the lamp icon; may be null if none or the poll
-is unanswered yet. If present, currently, can be only of the types messageAnimation, messageAudio, messageDocument,
-messageLocation, messagePhoto, messageVenue, or messageVideo without caption.
+is unanswered yet. If present, currently, can be only of the types pollMediaAnimation, pollMediaAudio,
+pollMediaDocument, pollMediaLocation, pollMediaPhoto, pollMediaVenue, or pollMediaVideo.
 */
-	explanation_media: MessageContent;
+	explanation_media: PollMedia;
 }
 
 /**
@@ -1366,10 +1428,10 @@ line feeds.
 	explanation: FormattedText;
 	/**
 Media that is shown when the user chooses an incorrect answer or taps on the lamp icon; pass null if none. Must be one
-of the following types: inputMessageAnimation, inputMessageAudio, inputMessageDocument, non-live inputMessageLocation,
-inputMessagePhoto, inputMessageVenue, or inputMessageVideo without caption.
+of the following types: inputPollMediaAnimation, inputPollMediaAudio, inputPollMediaDocument, inputPollMediaLocation,
+inputPollMediaPhoto, inputPollMediaVenue, or inputPollMediaVideo without caption.
 */
-	explanation_media: InputMessageContent;
+	explanation_media: InputPollMedia;
 }
 
 /**
@@ -1911,6 +1973,31 @@ The estimated horizontal accuracy of the location, in meters; as defined by the 
 }
 
 /**
+A live location.
+*/
+export interface LiveLocation {
+	'@type': 'liveLocation';
+	/**
+The current location.
+*/
+	location: Location;
+	/**
+Time relative to the message send date, for which the location can be updated, in seconds; if 0x7FFFFFFF, then location
+can be updated forever.
+*/
+	live_period: number;
+	/**
+The direction in which the location moves, in degrees; 1-360; 0 if unknown.
+*/
+	heading: number;
+	/**
+The maximum distance to another chat member for proximity alerts, in meters (0-100000). 0 if the notification is
+disabled. Can't be enabled in direct messages chats, channels and Saved Messages. Available only to the message sender.
+*/
+	proximity_alert_radius: number;
+}
+
+/**
 Describes a venue.
 */
 export interface Venue {
@@ -2066,6 +2153,10 @@ Identifiers of recent voters, if the poll is non-anonymous and poll results are 
 True, if the current user can get voters in the poll using getPollVoters.
 */
 	can_get_voters?: boolean;
+	/**
+True, if the current user can see results of the poll.
+*/
+	can_see_results?: boolean;
 	/**
 True, if the poll is anonymous.
 */
@@ -2423,6 +2514,10 @@ Placeholder for inline queries (displayed on the application input field).
 True, if the bot can be queried by username from any non-secret chat.
 */
 	supports_guest_queries?: boolean;
+	/**
+True, if the bot can be set as a guard bot in supergroup chats.
+*/
+	is_guard?: boolean;
 	/**
 True, if the location of the user is expected to be sent with every inline query to this bot.
 */
@@ -2820,7 +2915,7 @@ True, if the bot can post, edit and delete stories.
 }
 
 /**
-Describes a bot connected to a business account.
+Describes a business bot connected to an account.
 */
 export interface BusinessConnectedBot {
 	'@type': 'businessConnectedBot';
@@ -2836,6 +2931,30 @@ Private chats that will be accessible to the bot.
 Rights of the bot.
 */
 	rights: BusinessBotRights;
+}
+
+/**
+Describes a connection of a bot to an account.
+*/
+export interface BusinessConnectedBotInfo {
+	'@type': 'businessConnectedBotInfo';
+	/**
+Information about the bot.
+*/
+	bot: BusinessConnectedBot;
+	/**
+Point in time (Unix timestamp) when the bot was added; may be 0 if unknown.
+*/
+	connection_date: number;
+	/**
+Model of the device that was used for the bot connection, as provided by the application; may be empty if unknown.
+*/
+	device_model: string;
+	/**
+A human-readable description of the location from which the bot was connected, based on the IP address; may be empty if
+unknown.
+*/
+	location: string;
 }
 
 /**
@@ -3189,7 +3308,8 @@ Describes actions that a user is allowed to take in a chat.
 export interface ChatPermissions {
 	'@type': 'chatPermissions';
 	/**
-True, if the user can send text messages, contacts, giveaways, giveaway winners, invoices, locations, and venues.
+True, if the user can send text messages, rich messages, contacts, giveaways, giveaway winners, invoices, locations, and
+venues.
 */
 	can_send_basic_messages?: boolean;
 	/**
@@ -3335,6 +3455,184 @@ True, if the administrator isn't shown in the chat member list and sends message
 only.
 */
 	is_anonymous?: boolean;
+}
+
+/**
+Contains parameters of the application theme.
+*/
+export interface ThemeParameters {
+	'@type': 'themeParameters';
+	/**
+A color of the background in the RGB format.
+*/
+	background_color: number;
+	/**
+A secondary color for the background in the RGB format.
+*/
+	secondary_background_color: number;
+	/**
+A color of the header background in the RGB format.
+*/
+	header_background_color: number;
+	/**
+A color of the bottom bar background in the RGB format.
+*/
+	bottom_bar_background_color: number;
+	/**
+A color of the section background in the RGB format.
+*/
+	section_background_color: number;
+	/**
+A color of the section separator in the RGB format.
+*/
+	section_separator_color: number;
+	/**
+A color of text in the RGB format.
+*/
+	text_color: number;
+	/**
+An accent color of the text in the RGB format.
+*/
+	accent_text_color: number;
+	/**
+A color of text on the section headers in the RGB format.
+*/
+	section_header_text_color: number;
+	/**
+A color of the subtitle text in the RGB format.
+*/
+	subtitle_text_color: number;
+	/**
+A color of the text for destructive actions in the RGB format.
+*/
+	destructive_text_color: number;
+	/**
+A color of hints in the RGB format.
+*/
+	hint_color: number;
+	/**
+A color of links in the RGB format.
+*/
+	link_color: number;
+	/**
+A color of the buttons in the RGB format.
+*/
+	button_color: number;
+	/**
+A color of text on the buttons in the RGB format.
+*/
+	button_text_color: number;
+}
+
+/**
+Describes mode in which a Web App is opened.
+Subtype of {@link WebAppOpenMode}.
+*/
+export interface WebAppOpenModeCompact {
+	'@type': 'webAppOpenModeCompact';
+
+}
+
+/**
+The Web App is opened in the full-size mode.
+Subtype of {@link WebAppOpenMode}.
+*/
+export interface WebAppOpenModeFullSize {
+	'@type': 'webAppOpenModeFullSize';
+
+}
+
+/**
+The Web App is opened in the full-screen mode.
+Subtype of {@link WebAppOpenMode}.
+*/
+export interface WebAppOpenModeFullScreen {
+	'@type': 'webAppOpenModeFullScreen';
+
+}
+
+/**
+Contains information about a Web App found by its short name.
+*/
+export interface FoundWebApp {
+	'@type': 'foundWebApp';
+	/**
+The Web App.
+*/
+	web_app: WebApp;
+	/**
+True, if the user must be asked for the permission to the bot to send them messages.
+*/
+	request_write_access?: boolean;
+	/**
+True, if there is no need to show an ordinary open URL confirmation before opening the Web App. The field must be
+ignored and confirmation must be shown anyway if the Web App link was hidden.
+*/
+	skip_confirmation?: boolean;
+}
+
+/**
+Contains information about a Web App URL.
+*/
+export interface WebAppUrl {
+	'@type': 'webAppUrl';
+	/**
+The Web App URL to open in a web view.
+*/
+	url: string;
+	/**
+True, if events from the Web App must be accepted only from the same origin as the URL.
+*/
+	require_same_origin?: boolean;
+}
+
+/**
+Contains information about a Web App.
+*/
+export interface WebAppInfo {
+	'@type': 'webAppInfo';
+	/**
+Unique identifier for the Web App launch.
+*/
+	launch_id: string;
+	/**
+The Web App URL to open in a web view.
+*/
+	url: WebAppUrl;
+}
+
+/**
+Contains information about the main Web App of a bot.
+*/
+export interface MainWebApp {
+	'@type': 'mainWebApp';
+	/**
+URL of the Web App to open.
+*/
+	url: WebAppUrl;
+	/**
+The mode in which the Web App must be opened.
+*/
+	mode: WebAppOpenMode;
+}
+
+/**
+Options to be used when a Web App is opened.
+*/
+export interface WebAppOpenParameters {
+	'@type': 'webAppOpenParameters';
+	/**
+Preferred Web App theme; pass null to use the default theme.
+*/
+	theme: ThemeParameters;
+	/**
+Short name of the current application; 0-64 English letters, digits, and underscores.
+*/
+	application_name: string;
+	/**
+The mode in which the Web App is opened; pass null to open in webAppOpenModeFullSize.
+*/
+	mode: WebAppOpenMode;
 }
 
 /**
@@ -6776,6 +7074,34 @@ Number of Telegram Stars that will be shared by all winners.
 }
 
 /**
+Options to be used for generation of a link preview.
+*/
+export interface LinkPreviewOptions {
+	'@type': 'linkPreviewOptions';
+	/**
+True, if link preview must be disabled.
+*/
+	is_disabled?: boolean;
+	/**
+URL to use for link preview. If empty, then the first URL found in the message text will be used.
+*/
+	url: string;
+	/**
+True, if shown media preview must be small; ignored in secret chats or if the URL isn't explicitly specified.
+*/
+	force_small_media?: boolean;
+	/**
+True, if shown media preview must be large; ignored in secret chats or if the URL isn't explicitly specified.
+*/
+	force_large_media?: boolean;
+	/**
+True, if link preview must be shown above message text; otherwise, the link preview will be shown below the message
+text; ignored in secret chats.
+*/
+	show_above_text?: boolean;
+}
+
+/**
 Contains information about supported accent color for user/chat name, background of empty chat photo, replies to
 messages and link previews.
 */
@@ -7723,6 +8049,83 @@ export interface SupergroupMembersFilterBots {
 }
 
 /**
+Describes result of join of a chat by the current user.
+Subtype of {@link ChatJoinResult}.
+*/
+export interface ChatJoinResultSuccess {
+	'@type': 'chatJoinResultSuccess';
+	/**
+Identifier of the chat.
+*/
+	chat_id: number;
+}
+
+/**
+The join request was sent and have to be approved by administrators of the chat.
+Subtype of {@link ChatJoinResult}.
+*/
+export interface ChatJoinResultRequestSent {
+	'@type': 'chatJoinResultRequestSent';
+
+}
+
+/**
+An approval from a guard bot through a Web App is required to join the chat.
+Subtype of {@link ChatJoinResult}.
+*/
+export interface ChatJoinResultGuardBotApprovalRequired {
+	'@type': 'chatJoinResultGuardBotApprovalRequired';
+	/**
+Identifier of the guard bot.
+*/
+	bot_user_id: number;
+	/**
+The URL of the Web App to open.
+*/
+	url: WebAppUrl;
+	/**
+Unique identifier of the join request, which will be used in updateChatJoinResult.
+*/
+	query_id: number;
+}
+
+/**
+The join was declined by the guard bot.
+Subtype of {@link ChatJoinResult}.
+*/
+export interface ChatJoinResultDeclined {
+	'@type': 'chatJoinResultDeclined';
+
+}
+
+/**
+Describes result of a chat join request.
+Subtype of {@link ChatJoinRequestResult}.
+*/
+export interface ChatJoinRequestResultApproved {
+	'@type': 'chatJoinRequestResultApproved';
+
+}
+
+/**
+The request was decline.
+Subtype of {@link ChatJoinRequestResult}.
+*/
+export interface ChatJoinRequestResultDeclined {
+	'@type': 'chatJoinRequestResultDeclined';
+
+}
+
+/**
+The request was postponed without a decision.
+Subtype of {@link ChatJoinRequestResult}.
+*/
+export interface ChatJoinRequestResultQueued {
+	'@type': 'chatJoinRequestResultQueued';
+
+}
+
+/**
 Contains a chat invite link.
 */
 export interface ChatInviteLink {
@@ -8161,8 +8564,7 @@ and channel direct messages groups.
 */
 	join_to_send_messages?: boolean;
 	/**
-True, if all users directly joining the supergroup need to be approved by supergroup administrators. May be true only
-for non-broadcast supergroups with username, location, or a linked chat.
+True, if all users directly joining the supergroup need to be approved by supergroup administrators.
 */
 	join_by_request?: boolean;
 	/**
@@ -8372,6 +8774,10 @@ Location to which the supergroup is connected; may be null if none.
 Primary invite link for the chat; may be null. For chat administrators with can_invite_users right only.
 */
 	invite_link: ChatInviteLink;
+	/**
+User identifier of the guard bot in the group; for chat administrators only.
+*/
+	guard_bot_user_id: number;
 	/**
 List of commands of bots in the group.
 */
@@ -10311,6 +10717,82 @@ True, if reaction sender and emoji must be displayed in notifications.
 }
 
 /**
+Content of the message draft.
+Subtype of {@link DraftMessageContent}.
+*/
+export interface DraftMessageContentText {
+	'@type': 'draftMessageContentText';
+	/**
+Formatted text to be saved as a draft; 0-getOption("message_text_length_max") characters.
+*/
+	text: FormattedText;
+	/**
+Options to be used for generation of a link preview; may be null if none; pass null to use default link preview options.
+*/
+	link_preview_options: LinkPreviewOptions;
+}
+
+/**
+A rich message draft; not supported in setChatDraftMessage.
+Subtype of {@link DraftMessageContent}.
+*/
+export interface DraftMessageContentRichMessage {
+	'@type': 'draftMessageContentRichMessage';
+	/**
+The rich message; the message must not have not yet uploaded media.
+*/
+	message: RichMessage;
+}
+
+/**
+A video note message draft.
+Subtype of {@link DraftMessageContent}.
+*/
+export interface DraftMessageContentVideoNote {
+	'@type': 'draftMessageContentVideoNote';
+	/**
+Path to the file with the video note.
+*/
+	file_path: string;
+	/**
+Duration of the video, in seconds; 0-60.
+*/
+	duration: number;
+	/**
+Video width and height; must be positive and not greater than 640.
+*/
+	length: number;
+	/**
+Video note self-destruct type; may be null if none; pass null if none; private chats only.
+*/
+	self_destruct_type: MessageSelfDestructType;
+}
+
+/**
+A voice note message draft.
+Subtype of {@link DraftMessageContent}.
+*/
+export interface DraftMessageContentVoiceNote {
+	'@type': 'draftMessageContentVoiceNote';
+	/**
+Path to the file with the voice note.
+*/
+	file_path: string;
+	/**
+Duration of the voice note, in seconds.
+*/
+	duration: number;
+	/**
+Waveform representation of the voice note in 5-bit format.
+*/
+	waveform: string;
+	/**
+Voice note self-destruct type; may be null if none; pass null if none; private chats only.
+*/
+	self_destruct_type: MessageSelfDestructType;
+}
+
+/**
 Contains information about a message draft.
 */
 export interface DraftMessage {
@@ -10324,9 +10806,9 @@ Point in time (Unix timestamp) when the draft was created.
 */
 	date: number;
 	/**
-Content of the message draft; must be of the type inputMessageText, inputMessageVideoNote, or inputMessageVoiceNote.
+Content of the message draft.
 */
-	input_message_text: InputMessageContent;
+	content: DraftMessageContent;
 	/**
 Identifier of the effect to apply to the message when it is sent; 0 if none.
 */
@@ -11797,169 +12279,6 @@ The list of codes to match; may be empty if irrelevant.
 }
 
 /**
-Contains parameters of the application theme.
-*/
-export interface ThemeParameters {
-	'@type': 'themeParameters';
-	/**
-A color of the background in the RGB format.
-*/
-	background_color: number;
-	/**
-A secondary color for the background in the RGB format.
-*/
-	secondary_background_color: number;
-	/**
-A color of the header background in the RGB format.
-*/
-	header_background_color: number;
-	/**
-A color of the bottom bar background in the RGB format.
-*/
-	bottom_bar_background_color: number;
-	/**
-A color of the section background in the RGB format.
-*/
-	section_background_color: number;
-	/**
-A color of the section separator in the RGB format.
-*/
-	section_separator_color: number;
-	/**
-A color of text in the RGB format.
-*/
-	text_color: number;
-	/**
-An accent color of the text in the RGB format.
-*/
-	accent_text_color: number;
-	/**
-A color of text on the section headers in the RGB format.
-*/
-	section_header_text_color: number;
-	/**
-A color of the subtitle text in the RGB format.
-*/
-	subtitle_text_color: number;
-	/**
-A color of the text for destructive actions in the RGB format.
-*/
-	destructive_text_color: number;
-	/**
-A color of hints in the RGB format.
-*/
-	hint_color: number;
-	/**
-A color of links in the RGB format.
-*/
-	link_color: number;
-	/**
-A color of the buttons in the RGB format.
-*/
-	button_color: number;
-	/**
-A color of text on the buttons in the RGB format.
-*/
-	button_text_color: number;
-}
-
-/**
-Describes mode in which a Web App is opened.
-Subtype of {@link WebAppOpenMode}.
-*/
-export interface WebAppOpenModeCompact {
-	'@type': 'webAppOpenModeCompact';
-
-}
-
-/**
-The Web App is opened in the full-size mode.
-Subtype of {@link WebAppOpenMode}.
-*/
-export interface WebAppOpenModeFullSize {
-	'@type': 'webAppOpenModeFullSize';
-
-}
-
-/**
-The Web App is opened in the full-screen mode.
-Subtype of {@link WebAppOpenMode}.
-*/
-export interface WebAppOpenModeFullScreen {
-	'@type': 'webAppOpenModeFullScreen';
-
-}
-
-/**
-Contains information about a Web App found by its short name.
-*/
-export interface FoundWebApp {
-	'@type': 'foundWebApp';
-	/**
-The Web App.
-*/
-	web_app: WebApp;
-	/**
-True, if the user must be asked for the permission to the bot to send them messages.
-*/
-	request_write_access?: boolean;
-	/**
-True, if there is no need to show an ordinary open URL confirmation before opening the Web App. The field must be
-ignored and confirmation must be shown anyway if the Web App link was hidden.
-*/
-	skip_confirmation?: boolean;
-}
-
-/**
-Contains information about a Web App.
-*/
-export interface WebAppInfo {
-	'@type': 'webAppInfo';
-	/**
-Unique identifier for the Web App launch.
-*/
-	launch_id: string;
-	/**
-A Web App URL to open in a web view.
-*/
-	url: string;
-}
-
-/**
-Contains information about the main Web App of a bot.
-*/
-export interface MainWebApp {
-	'@type': 'mainWebApp';
-	/**
-URL of the Web App to open.
-*/
-	url: string;
-	/**
-The mode in which the Web App must be opened.
-*/
-	mode: WebAppOpenMode;
-}
-
-/**
-Options to be used when a Web App is opened.
-*/
-export interface WebAppOpenParameters {
-	'@type': 'webAppOpenParameters';
-	/**
-Preferred Web App theme; pass null to use the default theme.
-*/
-	theme: ThemeParameters;
-	/**
-Short name of the current application; 0-64 English letters, digits, and underscores.
-*/
-	application_name: string;
-	/**
-The mode in which the Web App is opened; pass null to open in webAppOpenModeFullSize.
-*/
-	mode: WebAppOpenMode;
-}
-
-/**
 Contains information about a message thread.
 */
 export interface MessageThreadInfo {
@@ -12260,34 +12579,6 @@ Offset forum topic identifier for the next getForumTopics request.
 }
 
 /**
-Options to be used for generation of a link preview.
-*/
-export interface LinkPreviewOptions {
-	'@type': 'linkPreviewOptions';
-	/**
-True, if link preview must be disabled.
-*/
-	is_disabled?: boolean;
-	/**
-URL to use for link preview. If empty, then the first URL found in the message text will be used.
-*/
-	url: string;
-	/**
-True, if shown media preview must be small; ignored in secret chats or if the URL isn't explicitly specified.
-*/
-	force_small_media?: boolean;
-	/**
-True, if shown media preview must be large; ignored in secret chats or if the URL isn't explicitly specified.
-*/
-	force_large_media?: boolean;
-	/**
-True, if link preview must be shown above message text; otherwise, the link preview will be shown below the message
-text; ignored in secret chats.
-*/
-	show_above_text?: boolean;
-}
-
-/**
 Contains information about a user shared with a bot.
 */
 export interface SharedUser {
@@ -12475,6 +12766,102 @@ Text.
 }
 
 /**
+A spoilered rich text.
+Subtype of {@link RichText}.
+*/
+export interface RichTextSpoiler {
+	'@type': 'richTextSpoiler';
+	/**
+Text.
+*/
+	text: RichText;
+}
+
+/**
+A date and time.
+Subtype of {@link RichText}.
+*/
+export interface RichTextDateTime {
+	'@type': 'richTextDateTime';
+	/**
+Original text.
+*/
+	text: RichText;
+	/**
+Point in time (Unix timestamp) representing the date and time.
+*/
+	unix_time: number;
+	/**
+Date and time formatting type; may be null if none and the original text must not be changed.
+*/
+	formatting_type: DateTimeFormattingType;
+}
+
+/**
+A mention of a Telegram user or chat by a username.
+Subtype of {@link RichText}.
+*/
+export interface RichTextMention {
+	'@type': 'richTextMention';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+The username.
+*/
+	username: string;
+}
+
+/**
+A hashtag.
+Subtype of {@link RichText}.
+*/
+export interface RichTextHashtag {
+	'@type': 'richTextHashtag';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+The hashtag.
+*/
+	hashtag: string;
+}
+
+/**
+A cashtag.
+Subtype of {@link RichText}.
+*/
+export interface RichTextCashtag {
+	'@type': 'richTextCashtag';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+The cashtag.
+*/
+	cashtag: string;
+}
+
+/**
+A bot command.
+Subtype of {@link RichText}.
+*/
+export interface RichTextBotCommand {
+	'@type': 'richTextBotCommand';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+The bot command.
+*/
+	bot_command: string;
+}
+
+/**
 A fixed-width rich text.
 Subtype of {@link RichText}.
 */
@@ -12484,6 +12871,22 @@ export interface RichTextFixed {
 Text.
 */
 	text: RichText;
+}
+
+/**
+A rich text that serves as a mention of a user.
+Subtype of {@link RichText}.
+*/
+export interface RichTextMentionName {
+	'@type': 'richTextMentionName';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+Identifier of the mentioned user.
+*/
+	user_id: number;
 }
 
 /**
@@ -12501,13 +12904,13 @@ URL.
 */
 	url: string;
 	/**
-True, if the URL has cached instant view server-side.
+True, if the URL has cached instant view server-side; instant view only.
 */
 	is_cached?: boolean;
 }
 
 /**
-A rich text email link.
+A rich text email address.
 Subtype of {@link RichText}.
 */
 export interface RichTextEmailAddress {
@@ -12520,6 +12923,22 @@ Text.
 Email address.
 */
 	email_address: string;
+}
+
+/**
+A bank card number.
+Subtype of {@link RichText}.
+*/
+export interface RichTextBankCardNumber {
+	'@type': 'richTextBankCardNumber';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+The number of the bank card.
+*/
+	bank_card_number: string;
 }
 
 /**
@@ -12575,7 +12994,23 @@ Phone number.
 }
 
 /**
-A small image inside the text.
+A custom emoji.
+Subtype of {@link RichText}.
+*/
+export interface RichTextCustomEmoji {
+	'@type': 'richTextCustomEmoji';
+	/**
+Unique identifier of the custom emoji.
+*/
+	custom_emoji_id: string;
+	/**
+Alternative text for the custom emoji.
+*/
+	alternative_text: string;
+}
+
+/**
+A small image inside the text; instant view only.
 Subtype of {@link RichText}.
 */
 export interface RichTextIcon {
@@ -12595,21 +13030,49 @@ Height of a bounding box in which the image must be shown; 0 if unknown.
 }
 
 /**
-A reference to a richTexts object on the same page.
+A mathematical expression.
+Subtype of {@link RichText}.
+*/
+export interface RichTextMathematicalExpression {
+	'@type': 'richTextMathematicalExpression';
+	/**
+The expression in LaTeX format.
+*/
+	expression: string;
+}
+
+/**
+A reference.
 Subtype of {@link RichText}.
 */
 export interface RichTextReference {
 	'@type': 'richTextReference';
 	/**
-The text.
+Reference name.
+*/
+	name: string;
+	/**
+Text of the reference.
+*/
+	text: RichText;
+}
+
+/**
+A link to a reference on the same page.
+Subtype of {@link RichText}.
+*/
+export interface RichTextReferenceLink {
+	'@type': 'richTextReferenceLink';
+	/**
+The link text.
 */
 	text: RichText;
 	/**
-The name of a richTextAnchor object, which is the first element of the target richTexts object.
+The reference name.
 */
-	anchor_name: string;
+	reference_name: string;
 	/**
-An HTTP URL, opening the reference.
+An HTTP URL that opens the reference.
 */
 	url: string;
 }
@@ -12641,7 +13104,7 @@ The anchor name. If the name is empty, the link must bring back to top.
 */
 	anchor_name: string;
 	/**
-An HTTP URL, opening the anchor.
+An HTTP URL that opens the anchor.
 */
 	url: string;
 }
@@ -12668,7 +13131,7 @@ Content of the caption.
 */
 	text: RichText;
 	/**
-Block credit (like HTML tag <cite>).
+Block credit (like HTML tag <cite>); may be null if none.
 */
 	credit: RichText;
 }
@@ -12685,7 +13148,24 @@ Item label.
 	/**
 Item blocks.
 */
-	page_blocks: PageBlock[];
+	blocks: PageBlock[];
+	/**
+True, if the item has a checkbox.
+*/
+	has_checkbox?: boolean;
+	/**
+True, if the item is checked.
+*/
+	is_checked?: boolean;
+	/**
+Value of the item; 0 for unordered lists.
+*/
+	value: number;
+	/**
+Type of the item numbering type; must be one of "a" for a lowercase letters, "A" for an uppercase letters, "i" for
+lowercase Roman numerals, "I" for uppercase Roman numerals, "1" for decimal numbers, or empty for unordered lists.
+*/
+	type: string;
 }
 
 /**
@@ -12817,7 +13297,7 @@ Title.
 }
 
 /**
-The subtitle of a page.
+The subtitle of a page; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockSubtitle {
@@ -12829,7 +13309,7 @@ Subtitle.
 }
 
 /**
-The author and publishing date of a page.
+The author and publishing date of a page; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockAuthorDate {
@@ -12845,7 +13325,7 @@ Point in time (Unix timestamp) when the article was published; 0 if unknown.
 }
 
 /**
-A header.
+A header; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockHeader {
@@ -12857,7 +13337,7 @@ Header.
 }
 
 /**
-A subheader.
+A subheader; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockSubheader {
@@ -12869,7 +13349,23 @@ Subheader.
 }
 
 /**
-A kicker.
+A section heading.
+Subtype of {@link PageBlock}.
+*/
+export interface PageBlockSectionHeading {
+	'@type': 'pageBlockSectionHeading';
+	/**
+Text of the section heading.
+*/
+	text: RichText;
+	/**
+Relative size of the text font; 1-6, 1 is the largest, 6 is the smallest.
+*/
+	size: number;
+}
+
+/**
+A kicker; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockKicker {
@@ -12921,12 +13417,36 @@ Footer.
 }
 
 /**
+A "Thinking..." placeholder; for pending rich messages only.
+Subtype of {@link PageBlock}.
+*/
+export interface PageBlockThinking {
+	'@type': 'pageBlockThinking';
+	/**
+Text of the placeholder.
+*/
+	text: RichText;
+}
+
+/**
 An empty block separating a page.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockDivider {
 	'@type': 'pageBlockDivider';
 
+}
+
+/**
+A mathematical expression.
+Subtype of {@link PageBlock}.
+*/
+export interface PageBlockMathematicalExpression {
+	'@type': 'pageBlockMathematicalExpression';
+	/**
+The expression in LaTeX format.
+*/
+	expression: string;
 }
 
 /**
@@ -12960,11 +13480,11 @@ Subtype of {@link PageBlock}.
 export interface PageBlockBlockQuote {
 	'@type': 'pageBlockBlockQuote';
 	/**
-Quote text.
+Quote blocks.
 */
-	text: RichText;
+	blocks: PageBlock[];
 	/**
-Quote credit.
+Quote credit; may be null if none.
 */
 	credit: RichText;
 }
@@ -12980,7 +13500,7 @@ Quote text.
 */
 	text: RichText;
 	/**
-Quote credit.
+Quote credit; may be null if none.
 */
 	credit: RichText;
 }
@@ -12996,13 +13516,17 @@ Animation file; may be null.
 */
 	animation: Animation;
 	/**
-Animation caption.
+Animation caption; may be null if none.
 */
 	caption: PageBlockCaption;
 	/**
 True, if the animation must be played automatically.
 */
 	need_autoplay?: boolean;
+	/**
+True, if the animation preview must be covered by a spoiler animation.
+*/
+	has_spoiler?: boolean;
 }
 
 /**
@@ -13016,7 +13540,7 @@ Audio file; may be null.
 */
 	audio: Audio;
 	/**
-Audio file caption.
+Audio file caption; may be null if none.
 */
 	caption: PageBlockCaption;
 }
@@ -13032,13 +13556,17 @@ Photo file; may be null.
 */
 	photo: Photo;
 	/**
-Photo caption.
+Photo caption; may be null if none.
 */
 	caption: PageBlockCaption;
 	/**
-URL that needs to be opened when the photo is clicked.
+URL that needs to be opened when the photo is clicked; instant view only.
 */
 	url: string;
+	/**
+True, if the photo preview must be covered by a spoiler animation.
+*/
+	has_spoiler?: boolean;
 }
 
 /**
@@ -13052,7 +13580,7 @@ Video file; may be null.
 */
 	video: Video;
 	/**
-Video caption.
+Video caption; may be null if none.
 */
 	caption: PageBlockCaption;
 	/**
@@ -13063,6 +13591,10 @@ True, if the video must be played automatically.
 True, if the video must be looped.
 */
 	is_looped?: boolean;
+	/**
+True, if the video preview must be covered by a spoiler animation.
+*/
+	has_spoiler?: boolean;
 }
 
 /**
@@ -13076,13 +13608,13 @@ Voice note; may be null.
 */
 	voice_note: VoiceNote;
 	/**
-Voice note caption.
+Voice note caption; may be null if none.
 */
 	caption: PageBlockCaption;
 }
 
 /**
-A page cover.
+A page cover; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockCover {
@@ -13094,7 +13626,7 @@ Cover.
 }
 
 /**
-An embedded web page.
+An embedded web page; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockEmbedded {
@@ -13120,7 +13652,7 @@ Block height; 0 if unknown.
 */
 	height: number;
 	/**
-Block caption.
+Block caption; may be null if none.
 */
 	caption: PageBlockCaption;
 	/**
@@ -13134,7 +13666,7 @@ True, if scrolling needs to be allowed.
 }
 
 /**
-An embedded post.
+An embedded post; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockEmbeddedPost {
@@ -13158,9 +13690,9 @@ Point in time (Unix timestamp) when the post was created; 0 if unknown.
 	/**
 Post content.
 */
-	page_blocks: PageBlock[];
+	blocks: PageBlock[];
 	/**
-Post caption.
+Post caption; may be null if none.
 */
 	caption: PageBlockCaption;
 }
@@ -13174,9 +13706,9 @@ export interface PageBlockCollage {
 	/**
 Collage item contents.
 */
-	page_blocks: PageBlock[];
+	blocks: PageBlock[];
 	/**
-Block caption.
+Block caption; may be null if none.
 */
 	caption: PageBlockCaption;
 }
@@ -13190,15 +13722,15 @@ export interface PageBlockSlideshow {
 	/**
 Slideshow item contents.
 */
-	page_blocks: PageBlock[];
+	blocks: PageBlock[];
 	/**
-Block caption.
+Block caption; may be null if none.
 */
 	caption: PageBlockCaption;
 }
 
 /**
-A link to a chat.
+A link to a chat; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockChatLink {
@@ -13228,7 +13760,7 @@ Subtype of {@link PageBlock}.
 export interface PageBlockTable {
 	'@type': 'pageBlockTable';
 	/**
-Table caption.
+Table caption; may be null if none.
 */
 	caption: RichText;
 	/**
@@ -13258,7 +13790,7 @@ Always visible heading for the block.
 	/**
 Block contents.
 */
-	page_blocks: PageBlock[];
+	blocks: PageBlock[];
 	/**
 True, if the block is open by default.
 */
@@ -13266,7 +13798,7 @@ True, if the block is open by default.
 }
 
 /**
-Related articles.
+Related articles; instant view only.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockRelatedArticles {
@@ -13304,7 +13836,7 @@ Map height.
 */
 	height: number;
 	/**
-Block caption.
+Block caption; may be null if none.
 */
 	caption: PageBlockCaption;
 }
@@ -13317,7 +13849,7 @@ export interface WebPageInstantView {
 	/**
 Content of the instant view page.
 */
-	page_blocks: PageBlock[];
+	blocks: PageBlock[];
 	/**
 Number of the instant view views; 0 if unknown.
 */
@@ -13405,7 +13937,7 @@ Photo for the app.
 }
 
 /**
-The link is a link to a web site.
+The link is a link to a website.
 Subtype of {@link LinkPreviewType}.
 */
 export interface LinkPreviewTypeArticle {
@@ -13977,7 +14509,7 @@ URL to display.
 */
 	display_url: string;
 	/**
-Short name of the site (e.g., Google Docs, App Store).
+Short name of the website (e.g., Google Docs, App Store).
 */
 	site_name: string;
 	/**
@@ -15821,6 +16353,138 @@ Error source.
 }
 
 /**
+Contains the media in a poll.
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaAnimation {
+	'@type': 'pollMediaAnimation';
+	/**
+The animation.
+*/
+	animation: Animation;
+}
+
+/**
+An audio.
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaAudio {
+	'@type': 'pollMediaAudio';
+	/**
+The audio.
+*/
+	audio: Audio;
+}
+
+/**
+A document (general file).
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaDocument {
+	'@type': 'pollMediaDocument';
+	/**
+The document.
+*/
+	document: Document;
+}
+
+/**
+A link.
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaLink {
+	'@type': 'pollMediaLink';
+	/**
+URL of the link.
+*/
+	url: string;
+	/**
+Preview of the link; may be null if unknown.
+*/
+	link_preview: LinkPreview;
+}
+
+/**
+A location.
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaLocation {
+	'@type': 'pollMediaLocation';
+	/**
+The location.
+*/
+	location: Location;
+}
+
+/**
+A photo.
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaPhoto {
+	'@type': 'pollMediaPhoto';
+	/**
+The photo.
+*/
+	photo: Photo;
+	/**
+The video representing the live photo; may be null if the photo is static.
+*/
+	video: Video;
+}
+
+/**
+A sticker.
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaSticker {
+	'@type': 'pollMediaSticker';
+	/**
+The sticker.
+*/
+	sticker: Sticker;
+}
+
+/**
+A venue.
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaVenue {
+	'@type': 'pollMediaVenue';
+	/**
+The venue.
+*/
+	venue: Venue;
+}
+
+/**
+A video.
+Subtype of {@link PollMedia}.
+*/
+export interface PollMediaVideo {
+	'@type': 'pollMediaVideo';
+	/**
+The video description.
+*/
+	video: Video;
+	/**
+Alternative qualities of the video.
+*/
+	alternative_videos: AlternativeVideo[];
+	/**
+Available storyboards for the video.
+*/
+	storyboards: VideoStoryboard[];
+	/**
+Cover of the video; may be null if none.
+*/
+	cover: Photo;
+	/**
+Timestamp from which the video playing must start, in seconds.
+*/
+	start_timestamp: number;
+}
+
+/**
 Contains the content of a message.
 Subtype of {@link MessageContent}.
 */
@@ -15838,6 +16502,19 @@ A link preview attached to the message; may be null.
 Options which were used for generation of the link preview; may be null if default options were used.
 */
 	link_preview_options: LinkPreviewOptions;
+}
+
+/**
+A rich message; the message can have multiple media of the same type, all of which must be shown in the corresponding
+profile tab.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageRichMessage {
+	'@type': 'messageRichMessage';
+	/**
+The rich message.
+*/
+	message: RichMessage;
 }
 
 /**
@@ -16093,34 +16770,32 @@ export interface MessageExpiredVoiceNote {
 }
 
 /**
+A message with a live location.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageLiveLocation {
+	'@type': 'messageLiveLocation';
+	/**
+The current location.
+*/
+	location: LiveLocation;
+	/**
+Left time for which the location can be updated, in seconds. If 0, then the location can't be updated anymore. The
+update updateMessageContent is not sent when this field changes.
+*/
+	expires_in: number;
+}
+
+/**
 A message with a location.
 Subtype of {@link MessageContent}.
 */
 export interface MessageLocation {
 	'@type': 'messageLocation';
 	/**
-The location description.
+The location.
 */
 	location: Location;
-	/**
-Time relative to the message send date, for which the location can be updated, in seconds; if 0x7FFFFFFF, then location
-can be updated forever.
-*/
-	live_period: number;
-	/**
-Left time for which the location can be updated, in seconds. If 0, then the location can't be updated anymore. The
-update updateMessageContent is not sent when this field changes.
-*/
-	expires_in: number;
-	/**
-For live locations, a direction in which the location moves, in degrees; 1-360. If 0 the direction is unknown.
-*/
-	heading: number;
-	/**
-For live locations, a maximum distance to another chat member for proximity alerts, in meters (0-100000). 0 if the
-notification is disabled. Available only to the message sender.
-*/
-	proximity_alert_radius: number;
 }
 
 /**
@@ -16221,10 +16896,10 @@ A message with a poll.
 */
 	description: FormattedText;
 	/**
-Media attached to the poll; may be null if none. If present, currently, can be only of the types messageAnimation,
-messageAudio, messageDocument, messageLocation, messagePhoto, messageVenue, or messageVideo without caption.
+Media attached to the poll; may be null if none. If present, currently, can be only of the types pollMediaAnimation,
+pollMediaAudio, pollMediaDocument, pollMediaLocation, pollMediaPhoto, pollMediaVenue, or pollMediaVideo.
 */
-	media: MessageContent;
+	media: PollMedia;
 	/**
 True, if an option can be added to the poll using addPollOption.
 */
@@ -18215,6 +18890,159 @@ Thumbnail height, usually shouldn't exceed 320. Use 0 if unknown.
 }
 
 /**
+An animation to be sent.
+*/
+export interface InputAnimation {
+	'@type': 'inputAnimation';
+	/**
+Animation file to be sent.
+*/
+	animation: InputFile;
+	/**
+Animation thumbnail; pass null to skip thumbnail uploading.
+*/
+	thumbnail: InputThumbnail;
+	/**
+File identifiers of the stickers added to the animation, if applicable.
+*/
+	added_sticker_file_ids: number[];
+	/**
+Duration of the animation, in seconds; may be replaced by the server.
+*/
+	duration: number;
+	/**
+Width of the animation; may be replaced by the server.
+*/
+	width: number;
+	/**
+Height of the animation; may be replaced by the server.
+*/
+	height: number;
+}
+
+/**
+An audio to be sent.
+*/
+export interface InputAudio {
+	'@type': 'inputAudio';
+	/**
+Audio file to be sent.
+*/
+	audio: InputFile;
+	/**
+Thumbnail of the cover for the album; pass null to skip thumbnail uploading.
+*/
+	album_cover_thumbnail: InputThumbnail;
+	/**
+Duration of the audio, in seconds; may be replaced by the server.
+*/
+	duration: number;
+	/**
+Title of the audio; 0-64 characters; may be replaced by the server.
+*/
+	title: string;
+	/**
+Performer of the audio; 0-64 characters, may be replaced by the server.
+*/
+	performer: string;
+}
+
+/**
+A document (general file) to be sent.
+*/
+export interface InputDocument {
+	'@type': 'inputDocument';
+	/**
+File to be sent.
+*/
+	document: InputFile;
+	/**
+Document thumbnail; pass null to skip thumbnail uploading.
+*/
+	thumbnail: InputThumbnail;
+	/**
+Pass true to disable automatic file type detection and send the document as a file. Always true for files sent to secret
+chats.
+*/
+	disable_content_type_detection?: boolean;
+}
+
+/**
+A photo to be sent.
+*/
+export interface InputPhoto {
+	'@type': 'inputPhoto';
+	/**
+Photo to be sent. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total.
+Width and height ratio must be at most 20.
+*/
+	photo: InputFile;
+	/**
+Photo thumbnail; pass null to skip thumbnail uploading. The thumbnail is sent to the other party only in secret chats.
+*/
+	thumbnail: InputThumbnail;
+	/**
+Video of the live photo; not supported in secret chats; pass null if the photo isn't a live photo.
+*/
+	video: InputFile;
+	/**
+File identifiers of the stickers added to the photo, if applicable.
+*/
+	added_sticker_file_ids: number[];
+	/**
+Photo width; may be replaced by the server.
+*/
+	width: number;
+	/**
+Photo height; may be replaced by the server.
+*/
+	height: number;
+}
+
+/**
+A video to be sent.
+*/
+export interface InputVideo {
+	'@type': 'inputVideo';
+	/**
+Video file to be sent. The video is expected to be re-encoded to MPEG4 format with H.264 codec by the sender.
+*/
+	video: InputFile;
+	/**
+Video thumbnail; pass null to skip thumbnail uploading.
+*/
+	thumbnail: InputThumbnail;
+	/**
+Cover of the video; pass null to skip cover uploading; not supported in secret chats and for self-destructing messages.
+*/
+	cover: InputFile;
+	/**
+Timestamp from which the video playing must start, in seconds.
+*/
+	start_timestamp: number;
+	/**
+File identifiers of the stickers added to the video, if applicable.
+*/
+	added_sticker_file_ids: number[];
+	/**
+Duration of the video, in seconds.
+*/
+	duration: number;
+	/**
+Video width.
+*/
+	width: number;
+	/**
+Video height.
+*/
+	height: number;
+	/**
+True, if the video is expected to be streamed.
+*/
+	supports_streaming?: boolean;
+}
+
+/**
 Describes type of paid media to sent.
 Subtype of {@link InputPaidMediaType}.
 */
@@ -18426,6 +19254,126 @@ in secret chats. Ignored if replace_caption is false.
 }
 
 /**
+The content of a poll media to send.
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaAnimation {
+	'@type': 'inputPollMediaAnimation';
+	/**
+The animation to be sent.
+*/
+	animation: InputAnimation;
+}
+
+/**
+An audio.
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaAudio {
+	'@type': 'inputPollMediaAudio';
+	/**
+The audio to be sent.
+*/
+	audio: InputAudio;
+}
+
+/**
+A document (general file).
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaDocument {
+	'@type': 'inputPollMediaDocument';
+	/**
+The document to be sent.
+*/
+	document: InputDocument;
+}
+
+/**
+A link.
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaLink {
+	'@type': 'inputPollMediaLink';
+	/**
+URL of the link.
+*/
+	url: string;
+}
+
+/**
+A location.
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaLocation {
+	'@type': 'inputPollMediaLocation';
+	/**
+Location to be sent.
+*/
+	location: Location;
+}
+
+/**
+A photo.
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaPhoto {
+	'@type': 'inputPollMediaPhoto';
+	/**
+Photo to be sent.
+*/
+	photo: InputPhoto;
+}
+
+/**
+A sticker.
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaSticker {
+	'@type': 'inputPollMediaSticker';
+	/**
+Sticker to be sent.
+*/
+	sticker: InputFile;
+	/**
+Sticker thumbnail; pass null to skip thumbnail uploading.
+*/
+	thumbnail: InputThumbnail;
+	/**
+Sticker width.
+*/
+	width: number;
+	/**
+Sticker height.
+*/
+	height: number;
+}
+
+/**
+A venue.
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaVenue {
+	'@type': 'inputPollMediaVenue';
+	/**
+Venue to send.
+*/
+	venue: Venue;
+}
+
+/**
+A video.
+Subtype of {@link InputPollMedia}.
+*/
+export interface InputPollMediaVideo {
+	'@type': 'inputPollMediaVideo';
+	/**
+The video to be sent.
+*/
+	video: InputVideo;
+}
+
+/**
 The content of a message to send.
 Subtype of {@link InputMessageContent}.
 */
@@ -18442,7 +19390,23 @@ Options to be used for generation of a link preview; may be null if none; pass n
 */
 	link_preview_options: LinkPreviewOptions;
 	/**
-True, if the chat message draft must be deleted.
+Pass true to delete message draft in the chat.
+*/
+	clear_draft?: boolean;
+}
+
+/**
+A rich message.
+Subtype of {@link InputMessageContent}.
+*/
+export interface InputMessageRichMessage {
+	'@type': 'inputMessageRichMessage';
+	/**
+The rich message to send.
+*/
+	message: InputRichMessage;
+	/**
+Pass true to delete message draft in the chat.
 */
 	clear_draft?: boolean;
 }
@@ -18454,29 +19418,9 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageAnimation {
 	'@type': 'inputMessageAnimation';
 	/**
-Animation file to be sent.
+The animation to be sent.
 */
-	animation: InputFile;
-	/**
-Animation thumbnail; pass null to skip thumbnail uploading.
-*/
-	thumbnail: InputThumbnail;
-	/**
-File identifiers of the stickers added to the animation, if applicable.
-*/
-	added_sticker_file_ids: number[];
-	/**
-Duration of the animation, in seconds.
-*/
-	duration: number;
-	/**
-Width of the animation; may be replaced by the server.
-*/
-	width: number;
-	/**
-Height of the animation; may be replaced by the server.
-*/
-	height: number;
+	animation: InputAnimation;
 	/**
 Animation caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
@@ -18499,25 +19443,9 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageAudio {
 	'@type': 'inputMessageAudio';
 	/**
-Audio file to be sent.
+Audio to be sent.
 */
-	audio: InputFile;
-	/**
-Thumbnail of the cover for the album; pass null to skip thumbnail uploading.
-*/
-	album_cover_thumbnail: InputThumbnail;
-	/**
-Duration of the audio, in seconds; may be replaced by the server.
-*/
-	duration: number;
-	/**
-Title of the audio; 0-64 characters; may be replaced by the server.
-*/
-	title: string;
-	/**
-Performer of the audio; 0-64 characters, may be replaced by the server.
-*/
-	performer: string;
+	audio: InputAudio;
 	/**
 Audio caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
@@ -18533,16 +19461,7 @@ export interface InputMessageDocument {
 	/**
 Document to be sent.
 */
-	document: InputFile;
-	/**
-Document thumbnail; pass null to skip thumbnail uploading.
-*/
-	thumbnail: InputThumbnail;
-	/**
-Pass true to disable automatic file type detection and send the document as a file. Always true for files sent to secret
-chats.
-*/
-	disable_content_type_detection?: boolean;
+	document: InputDocument;
 	/**
 Document caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
@@ -18585,31 +19504,9 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessagePhoto {
 	'@type': 'inputMessagePhoto';
 	/**
-Photo to send. The photo must be at most 10 MB in size. The photo's width and height must not exceed 10000 in total.
-Width and height ratio must be at most 20.
+Photo to be sent.
 */
-	photo: InputFile;
-	/**
-Photo thumbnail to be sent; pass null to skip thumbnail uploading. The thumbnail is sent to the other party only in
-secret chats.
-*/
-	thumbnail: InputThumbnail;
-	/**
-Video of the live photo; not supported in secret chats; pass null if the photo isn't a live photo.
-*/
-	video: InputFile;
-	/**
-File identifiers of the stickers added to the photo, if applicable.
-*/
-	added_sticker_file_ids: number[];
-	/**
-Photo width.
-*/
-	width: number;
-	/**
-Photo height.
-*/
-	height: number;
+	photo: InputPhoto;
 	/**
 Photo caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
@@ -18664,41 +19561,9 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageVideo {
 	'@type': 'inputMessageVideo';
 	/**
-Video to be sent. The video is expected to be re-encoded to MPEG4 format with H.264 codec by the sender.
+Video to be sent.
 */
-	video: InputFile;
-	/**
-Video thumbnail; pass null to skip thumbnail uploading.
-*/
-	thumbnail: InputThumbnail;
-	/**
-Cover of the video; pass null to skip cover uploading; not supported in secret chats and for self-destructing messages.
-*/
-	cover: InputFile;
-	/**
-Timestamp from which the video playing must start, in seconds.
-*/
-	start_timestamp: number;
-	/**
-File identifiers of the stickers added to the video, if applicable.
-*/
-	added_sticker_file_ids: number[];
-	/**
-Duration of the video, in seconds.
-*/
-	duration: number;
-	/**
-Video width.
-*/
-	width: number;
-	/**
-Video height.
-*/
-	height: number;
-	/**
-True, if the video is expected to be streamed.
-*/
-	supports_streaming?: boolean;
+	video: InputVideo;
 	/**
 Video caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
@@ -18767,14 +19632,26 @@ Waveform representation of the voice note in 5-bit format.
 */
 	waveform: string;
 	/**
-Voice note caption; may be null if empty; pass null to use an empty caption; 0-getOption("message_caption_length_max")
-characters.
+Voice note caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
 	caption: FormattedText;
 	/**
 Voice note self-destruct type; may be null if none; pass null if none; private chats only.
 */
 	self_destruct_type: MessageSelfDestructType;
+}
+
+/**
+A message with a live location.
+Subtype of {@link InputMessageContent}.
+*/
+export interface InputMessageLiveLocation {
+	'@type': 'inputMessageLiveLocation';
+	/**
+Initial state of the live location to be sent. Live period must be equal to 0x7FFFFFFF for permanent live locations, or
+between 60 and 86400.
+*/
+	location: LiveLocation;
 }
 
 /**
@@ -18787,20 +19664,6 @@ export interface InputMessageLocation {
 Location to be sent.
 */
 	location: Location;
-	/**
-Period for which the location can be updated, in seconds; must be between 60 and 86400 for a temporary live location,
-0x7FFFFFFF for permanent live location, and 0 otherwise.
-*/
-	live_period: number;
-	/**
-For live locations, a direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
-*/
-	heading: number;
-	/**
-For live locations, a maximum distance to another chat member for proximity alerts, in meters (0-100000). Pass 0 if the
-notification is disabled. Can't be enabled in channels and Saved Messages.
-*/
-	proximity_alert_radius: number;
 }
 
 /**
@@ -18838,7 +19701,7 @@ Emoji on which the dice throw animation is based.
 */
 	emoji: string;
 	/**
-True, if the chat message draft must be deleted.
+Pass true to delete message draft in the chat.
 */
 	clear_draft?: boolean;
 }
@@ -18942,11 +19805,11 @@ private chat only if the chat is a chat with a bot or the Saved Messages chat.
 */
 	description: FormattedText;
 	/**
-Media attached to the poll; pass null if none. Must be one of the following types: inputMessageAnimation,
-inputMessageAudio, inputMessageDocument, non-live inputMessageLocation, inputMessagePhoto, inputMessageVenue, or
-inputMessageVideo without caption.
+Media attached to the poll; pass null if none. Must be one of the following types: inputPollMediaAnimation,
+inputPollMediaAudio, inputPollMediaDocument, inputPollMediaLocation, inputPollMediaPhoto, inputPollMediaVenue, or
+inputPollMediaVideo without caption.
 */
-	media: InputMessageContent;
+	media: InputPollMedia;
 	/**
 True, if the poll voters are anonymous. Non-anonymous polls can't be sent or forwarded to channels.
 */
@@ -19014,7 +19877,7 @@ getOption("stake_dice_stake_amount_min")-getOption("stake_dice_stake_amount_max"
 */
 	stake_toncoin_amount: number;
 	/**
-True, if the chat message draft must be deleted.
+Pass true to delete message draft in the chat.
 */
 	clear_draft?: boolean;
 }
@@ -19453,7 +20316,7 @@ export interface SearchMessagesFilterPinned {
 }
 
 /**
-Represents a filter for type of the chats in which to search messages.
+Represents a filter for type of the chats in which to search for messages.
 Subtype of {@link SearchMessagesChatTypeFilter}.
 */
 export interface SearchMessagesChatTypeFilterPrivate {
@@ -19476,6 +20339,24 @@ Subtype of {@link SearchMessagesChatTypeFilter}.
 */
 export interface SearchMessagesChatTypeFilterChannel {
 	'@type': 'searchMessagesChatTypeFilterChannel';
+
+}
+
+/**
+Represents a filter for type of the chats to search for.
+Subtype of {@link SearchChatTypeFilter}.
+*/
+export interface SearchChatTypeFilterBot {
+	'@type': 'searchChatTypeFilterBot';
+
+}
+
+/**
+Returns only channel chats.
+Subtype of {@link SearchChatTypeFilter}.
+*/
+export interface SearchChatTypeFilterChannel {
+	'@type': 'searchChatTypeFilterChannel';
 
 }
 
@@ -23136,8 +24017,9 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageAnimation,
-inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageAnimation, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23181,8 +24063,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageInvoice,
-inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23218,8 +24100,9 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageAudio,
-inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageAudio, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23255,8 +24138,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageInvoice,
-inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23304,8 +24187,9 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageDocument,
-inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageDocument, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23369,8 +24253,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageInvoice,
-inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23414,8 +24298,9 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessagePhoto,
-inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessagePhoto, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23451,8 +24336,9 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageSticker,
-inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageSticker, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23488,8 +24374,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageInvoice,
-inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23541,8 +24427,9 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageVideo,
-inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageVideo, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -23574,8 +24461,9 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 */
 	reply_markup: ReplyMarkup;
 	/**
-The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageVoiceNote,
-inputMessageInvoice, inputMessageLocation, inputMessageVenue or inputMessageContact.
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
+inputMessageVoiceNote, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -25156,6 +26044,15 @@ Subtype of {@link PremiumLimitType}.
 */
 export interface PremiumLimitTypePinnedSavedMessagesTopicCount {
 	'@type': 'premiumLimitTypePinnedSavedMessagesTopicCount';
+
+}
+
+/**
+The maximum length of text of sent messages.
+Subtype of {@link PremiumLimitType}.
+*/
+export interface PremiumLimitTypeMessageTextLength {
+	'@type': 'premiumLimitTypeMessageTextLength';
 
 }
 
@@ -28419,155 +29316,181 @@ Message auto-delete time, in seconds. If 0, then messages aren't deleted automat
 }
 
 /**
-Represents the type of session.
+Describes type of user session.
 Subtype of {@link SessionType}.
 */
-export interface SessionTypeAndroid {
-	'@type': 'sessionTypeAndroid';
+export interface SessionTypeDevice {
+	'@type': 'sessionTypeDevice';
+	/**
+Unique identifier of the session. Use terminateSession to terminate it or confirmSession to confirm it if it isn't
+confirmed yet.
+*/
+	session_id: string;
+}
+
+/**
+A business bot connected to the current user's account.
+Subtype of {@link SessionType}.
+*/
+export interface SessionTypeConnectedBot {
+	'@type': 'sessionTypeConnectedBot';
+	/**
+User identifier of the bot. Use deleteBusinessConnectedBot to remove it or confirmBusinessConnectedBot to confirm it if
+it isn't confirmed yet.
+*/
+	bot_user_id: number;
+}
+
+/**
+Represents the type of device from which session was created.
+Subtype of {@link SessionDeviceType}.
+*/
+export interface SessionDeviceTypeAndroid {
+	'@type': 'sessionDeviceTypeAndroid';
 
 }
 
 /**
 The session is running on a generic Apple device.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeApple {
-	'@type': 'sessionTypeApple';
+export interface SessionDeviceTypeApple {
+	'@type': 'sessionDeviceTypeApple';
 
 }
 
 /**
 The session is running on the Brave browser.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeBrave {
-	'@type': 'sessionTypeBrave';
+export interface SessionDeviceTypeBrave {
+	'@type': 'sessionDeviceTypeBrave';
 
 }
 
 /**
 The session is running on the Chrome browser.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeChrome {
-	'@type': 'sessionTypeChrome';
+export interface SessionDeviceTypeChrome {
+	'@type': 'sessionDeviceTypeChrome';
 
 }
 
 /**
 The session is running on the Edge browser.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeEdge {
-	'@type': 'sessionTypeEdge';
+export interface SessionDeviceTypeEdge {
+	'@type': 'sessionDeviceTypeEdge';
 
 }
 
 /**
 The session is running on the Firefox browser.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeFirefox {
-	'@type': 'sessionTypeFirefox';
+export interface SessionDeviceTypeFirefox {
+	'@type': 'sessionDeviceTypeFirefox';
 
 }
 
 /**
 The session is running on an iPad device.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeIpad {
-	'@type': 'sessionTypeIpad';
+export interface SessionDeviceTypeIpad {
+	'@type': 'sessionDeviceTypeIpad';
 
 }
 
 /**
 The session is running on an iPhone device.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeIphone {
-	'@type': 'sessionTypeIphone';
+export interface SessionDeviceTypeIphone {
+	'@type': 'sessionDeviceTypeIphone';
 
 }
 
 /**
 The session is running on a Linux device.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeLinux {
-	'@type': 'sessionTypeLinux';
+export interface SessionDeviceTypeLinux {
+	'@type': 'sessionDeviceTypeLinux';
 
 }
 
 /**
 The session is running on a Mac device.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeMac {
-	'@type': 'sessionTypeMac';
+export interface SessionDeviceTypeMac {
+	'@type': 'sessionDeviceTypeMac';
 
 }
 
 /**
 The session is running on the Opera browser.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeOpera {
-	'@type': 'sessionTypeOpera';
+export interface SessionDeviceTypeOpera {
+	'@type': 'sessionDeviceTypeOpera';
 
 }
 
 /**
 The session is running on the Safari browser.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeSafari {
-	'@type': 'sessionTypeSafari';
+export interface SessionDeviceTypeSafari {
+	'@type': 'sessionDeviceTypeSafari';
 
 }
 
 /**
 The session is running on an Ubuntu device.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeUbuntu {
-	'@type': 'sessionTypeUbuntu';
+export interface SessionDeviceTypeUbuntu {
+	'@type': 'sessionDeviceTypeUbuntu';
 
 }
 
 /**
 The session is running on an unknown type of device.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeUnknown {
-	'@type': 'sessionTypeUnknown';
+export interface SessionDeviceTypeUnknown {
+	'@type': 'sessionDeviceTypeUnknown';
 
 }
 
 /**
 The session is running on the Vivaldi browser.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeVivaldi {
-	'@type': 'sessionTypeVivaldi';
+export interface SessionDeviceTypeVivaldi {
+	'@type': 'sessionDeviceTypeVivaldi';
 
 }
 
 /**
 The session is running on a Windows device.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeWindows {
-	'@type': 'sessionTypeWindows';
+export interface SessionDeviceTypeWindows {
+	'@type': 'sessionDeviceTypeWindows';
 
 }
 
 /**
 The session is running on an Xbox console.
-Subtype of {@link SessionType}.
+Subtype of {@link SessionDeviceType}.
 */
-export interface SessionTypeXbox {
-	'@type': 'sessionTypeXbox';
+export interface SessionDeviceTypeXbox {
+	'@type': 'sessionDeviceTypeXbox';
 
 }
 
@@ -28602,9 +29525,9 @@ True, if incoming calls can be accepted by the session.
 */
 	can_accept_calls?: boolean;
 	/**
-Session type based on the system and application version, which can be used to display a corresponding icon.
+Session device type based on the system and application version, which can be used to display a corresponding icon.
 */
-	type: SessionType;
+	device_type: SessionDeviceType;
 	/**
 Telegram API identifier, as provided by the application.
 */
@@ -28672,13 +29595,13 @@ Contains information about an unconfirmed session.
 export interface UnconfirmedSession {
 	'@type': 'unconfirmedSession';
 	/**
-Session identifier.
+Session type.
 */
-	id: string;
+	type: SessionType;
 	/**
-Point in time (Unix timestamp) when the user has logged in.
+Point in time (Unix timestamp) when the user has logged in or the business bot was connected.
 */
-	log_in_date: number;
+	date: number;
 	/**
 Model of the device that was used for the session creation, as provided by the application.
 */
@@ -30773,6 +31696,71 @@ Default autosave settings for channel chats.
 Autosave settings for specific chats.
 */
 	exceptions: AutosaveSettingsException[];
+}
+
+/**
+Describes an exception for built-in browser usage.
+*/
+export interface WebDomainException {
+	'@type': 'webDomainException';
+	/**
+URL for which the exception is done.
+*/
+	url: string;
+	/**
+Domain of the URL. All URLs on the domain and subdomains of the domain are subject to the exception.
+*/
+	domain: string;
+	/**
+Title of the website.
+*/
+	title: string;
+	/**
+Identifier of the custom emoji with favicon of the website; may be 0 if unknown, in which case the first letter of the
+domain must be used.
+*/
+	favicon_custom_emoji_id: string;
+}
+
+/**
+Describes web browser settings.
+*/
+export interface WebBrowserSettings {
+	'@type': 'webBrowserSettings';
+	/**
+True, if links are opened in an external browser by default.
+*/
+	open_external_browser?: boolean;
+	/**
+The list of websites which must always be opened in an external browser.
+*/
+	external_exceptions: WebDomainException[];
+	/**
+The list of websites which must always be opened in the in-app browser.
+*/
+	in_app_exceptions: WebDomainException[];
+	/**
+True, if a close button must be shown in the in-app browser; for Android app only.
+*/
+	display_close_button?: boolean;
+}
+
+/**
+Describes the type of web browser.
+Subtype of {@link WebBrowserType}.
+*/
+export interface WebBrowserTypeExternal {
+	'@type': 'webBrowserTypeExternal';
+
+}
+
+/**
+The in-app browser.
+Subtype of {@link WebBrowserType}.
+*/
+export interface WebBrowserTypeInApp {
+	'@type': 'webBrowserTypeInApp';
+
 }
 
 /**
@@ -33506,13 +34494,13 @@ The action.
 }
 
 /**
-A new pending text message was received in a chat with a bot. The message must be shown in the chat for at most
+A new pending text or rich message was received in a chat with a bot. The message must be shown in the chat for at most
 getOption("pending_text_message_period") seconds, replace any other pending message with the same draft_id, and be
 deleted whenever any incoming message from the bot in the message thread is received.
 Subtype of {@link Update}.
 */
-export interface UpdatePendingTextMessage {
-	'@type': 'updatePendingTextMessage';
+export interface UpdatePendingMessage {
+	'@type': 'updatePendingMessage';
 	/**
 Chat identifier.
 */
@@ -33526,9 +34514,9 @@ Unique identifier of the message draft within the message thread.
 */
 	draft_id: string;
 	/**
-Text of the pending message.
+Content of the message; always of the type messageText or messageRichMessage.
 */
-	text: FormattedText;
+	content: MessageContent;
 }
 
 /**
@@ -34137,6 +35125,27 @@ Total number of unmuted chats marked as unread.
 }
 
 /**
+A join request from the user was completed.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatJoinResult {
+	'@type': 'updateChatJoinResult';
+	/**
+Identifier of the join request query as received in chatJoinResultGuardBotApprovalRequired. If the corresponding Web App
+is stiil open, then it must be closed.
+*/
+	query_id: string;
+	/**
+Identifier of the joined chat, or 0 if the request wasn't approved.
+*/
+	chat_id: number;
+	/**
+Result of the join.
+*/
+	result: ChatJoinRequestResult;
+}
+
+/**
 A story was changed.
 Subtype of {@link Update}.
 */
@@ -34437,6 +35446,18 @@ colors must be shown in the specified order.
 }
 
 /**
+Web browser settings have been updated.
+Subtype of {@link Update}.
+*/
+export interface UpdateWebBrowserSettings {
+	'@type': 'updateWebBrowserSettings';
+	/**
+New settings.
+*/
+	settings: WebBrowserSettings;
+}
+
+/**
 Some language pack strings have been updated.
 Subtype of {@link Update}.
 */
@@ -34532,6 +35553,10 @@ export interface UpdateUnconfirmedSession {
 The unconfirmed session; may be null if none.
 */
 	session: UnconfirmedSession;
+	/**
+The total number of unconfirmed sessions.
+*/
+	unconfirmed_session_count: number;
 }
 
 /**
@@ -35321,6 +36346,10 @@ Chat identifier of the private chat with the user.
 The invite link, which was used to send join request; may be null.
 */
 	invite_link: ChatInviteLink;
+	/**
+Identifier of the join request query, which can be used in answerChatJoinRequestQuery; 0 if none.
+*/
+	query_id: string;
 }
 
 /**
@@ -35600,6 +36629,10 @@ export type EmailAddressResetState =
 	| EmailAddressResetStateAvailable
 	| EmailAddressResetStatePending;
 
+export type RichMessageSource =
+	| RichMessageSourceMarkdown
+	| RichMessageSourceHtml;
+
 export type AuthorizationState =
 	| AuthorizationStateWaitTdlibParameters
 	| AuthorizationStateWaitPhoneNumber
@@ -35701,6 +36734,11 @@ export type InputChatPhoto =
 	| InputChatPhotoStatic
 	| InputChatPhotoAnimation
 	| InputChatPhotoSticker;
+
+export type WebAppOpenMode =
+	| WebAppOpenModeCompact
+	| WebAppOpenModeFullSize
+	| WebAppOpenModeFullScreen;
 
 export type GiftResalePrice =
 	| GiftResalePriceStar
@@ -35899,6 +36937,17 @@ export type SupergroupMembersFilter =
 	| SupergroupMembersFilterMention
 	| SupergroupMembersFilterBots;
 
+export type ChatJoinResult =
+	| ChatJoinResultSuccess
+	| ChatJoinResultRequestSent
+	| ChatJoinResultGuardBotApprovalRequired
+	| ChatJoinResultDeclined;
+
+export type ChatJoinRequestResult =
+	| ChatJoinRequestResultApproved
+	| ChatJoinRequestResultDeclined
+	| ChatJoinRequestResultQueued;
+
 export type InviteLinkChatType =
 	| InviteLinkChatTypeBasicGroup
 	| InviteLinkChatTypeSupergroup
@@ -35989,6 +37038,12 @@ export type ReactionNotificationSource =
 	| ReactionNotificationSourceContacts
 	| ReactionNotificationSourceAll;
 
+export type DraftMessageContent =
+	| DraftMessageContentText
+	| DraftMessageContentRichMessage
+	| DraftMessageContentVideoNote
+	| DraftMessageContentVoiceNote;
+
 export type ChatType =
 	| ChatTypePrivate
 	| ChatTypeBasicGroup
@@ -36062,11 +37117,6 @@ export type LoginUrlInfo =
 	| LoginUrlInfoOpen
 	| LoginUrlInfoRequestConfirmation;
 
-export type WebAppOpenMode =
-	| WebAppOpenModeCompact
-	| WebAppOpenModeFullSize
-	| WebAppOpenModeFullScreen;
-
 export type SavedMessagesTopicType =
 	| SavedMessagesTopicTypeMyNotes
 	| SavedMessagesTopicTypeAuthorHidden
@@ -36085,15 +37135,26 @@ export type RichText =
 	| RichTextItalic
 	| RichTextUnderline
 	| RichTextStrikethrough
+	| RichTextSpoiler
+	| RichTextDateTime
+	| RichTextMention
+	| RichTextHashtag
+	| RichTextCashtag
+	| RichTextBotCommand
 	| RichTextFixed
+	| RichTextMentionName
 	| RichTextUrl
 	| RichTextEmailAddress
+	| RichTextBankCardNumber
 	| RichTextSubscript
 	| RichTextSuperscript
 	| RichTextMarked
 	| RichTextPhoneNumber
+	| RichTextCustomEmoji
 	| RichTextIcon
+	| RichTextMathematicalExpression
 	| RichTextReference
+	| RichTextReferenceLink
 	| RichTextAnchor
 	| RichTextAnchorLink
 	| RichTexts;
@@ -36114,11 +37175,14 @@ export type PageBlock =
 	| PageBlockAuthorDate
 	| PageBlockHeader
 	| PageBlockSubheader
+	| PageBlockSectionHeading
 	| PageBlockKicker
 	| PageBlockParagraph
 	| PageBlockPreformatted
 	| PageBlockFooter
+	| PageBlockThinking
 	| PageBlockDivider
+	| PageBlockMathematicalExpression
 	| PageBlockAnchor
 	| PageBlockList
 	| PageBlockBlockQuote
@@ -36287,8 +37351,20 @@ export type InputPassportElementErrorSource =
 	| InputPassportElementErrorSourceFile
 	| InputPassportElementErrorSourceFiles;
 
+export type PollMedia =
+	| PollMediaAnimation
+	| PollMediaAudio
+	| PollMediaDocument
+	| PollMediaLink
+	| PollMediaLocation
+	| PollMediaPhoto
+	| PollMediaSticker
+	| PollMediaVenue
+	| PollMediaVideo;
+
 export type MessageContent =
 	| MessageText
+	| MessageRichMessage
 	| MessageAnimation
 	| MessageAudio
 	| MessageDocument
@@ -36302,6 +37378,7 @@ export type MessageContent =
 	| MessageExpiredVideo
 	| MessageExpiredVideoNote
 	| MessageExpiredVoiceNote
+	| MessageLiveLocation
 	| MessageLocation
 	| MessageVenue
 	| MessageContact
@@ -36441,8 +37518,20 @@ export type MessageSelfDestructType =
 	| MessageSelfDestructTypeTimer
 	| MessageSelfDestructTypeImmediately;
 
+export type InputPollMedia =
+	| InputPollMediaAnimation
+	| InputPollMediaAudio
+	| InputPollMediaDocument
+	| InputPollMediaLink
+	| InputPollMediaLocation
+	| InputPollMediaPhoto
+	| InputPollMediaSticker
+	| InputPollMediaVenue
+	| InputPollMediaVideo;
+
 export type InputMessageContent =
 	| InputMessageText
+	| InputMessageRichMessage
 	| InputMessageAnimation
 	| InputMessageAudio
 	| InputMessageDocument
@@ -36452,6 +37541,7 @@ export type InputMessageContent =
 	| InputMessageVideo
 	| InputMessageVideoNote
 	| InputMessageVoiceNote
+	| InputMessageLiveLocation
 	| InputMessageLocation
 	| InputMessageVenue
 	| InputMessageContact
@@ -36489,6 +37579,10 @@ export type SearchMessagesChatTypeFilter =
 	| SearchMessagesChatTypeFilterPrivate
 	| SearchMessagesChatTypeFilterGroup
 	| SearchMessagesChatTypeFilterChannel;
+
+export type SearchChatTypeFilter =
+	| SearchChatTypeFilterBot
+	| SearchChatTypeFilterChannel;
 
 export type ChatAction =
 	| ChatActionTyping
@@ -36776,6 +37870,7 @@ export type PremiumLimitType =
 	| PremiumLimitTypeChatFolderChosenChatCount
 	| PremiumLimitTypePinnedArchivedChatCount
 	| PremiumLimitTypePinnedSavedMessagesTopicCount
+	| PremiumLimitTypeMessageTextLength
 	| PremiumLimitTypeCaptionLength
 	| PremiumLimitTypeBioLength
 	| PremiumLimitTypeChatFolderInviteLinkCount
@@ -37067,23 +38162,27 @@ export type CanSendMessageToUserResult =
 	| CanSendMessageToUserResultUserRestrictsNewChats;
 
 export type SessionType =
-	| SessionTypeAndroid
-	| SessionTypeApple
-	| SessionTypeBrave
-	| SessionTypeChrome
-	| SessionTypeEdge
-	| SessionTypeFirefox
-	| SessionTypeIpad
-	| SessionTypeIphone
-	| SessionTypeLinux
-	| SessionTypeMac
-	| SessionTypeOpera
-	| SessionTypeSafari
-	| SessionTypeUbuntu
-	| SessionTypeUnknown
-	| SessionTypeVivaldi
-	| SessionTypeWindows
-	| SessionTypeXbox;
+	| SessionTypeDevice
+	| SessionTypeConnectedBot;
+
+export type SessionDeviceType =
+	| SessionDeviceTypeAndroid
+	| SessionDeviceTypeApple
+	| SessionDeviceTypeBrave
+	| SessionDeviceTypeChrome
+	| SessionDeviceTypeEdge
+	| SessionDeviceTypeFirefox
+	| SessionDeviceTypeIpad
+	| SessionDeviceTypeIphone
+	| SessionDeviceTypeLinux
+	| SessionDeviceTypeMac
+	| SessionDeviceTypeOpera
+	| SessionDeviceTypeSafari
+	| SessionDeviceTypeUbuntu
+	| SessionDeviceTypeUnknown
+	| SessionDeviceTypeVivaldi
+	| SessionDeviceTypeWindows
+	| SessionDeviceTypeXbox;
 
 export type ReportReason =
 	| ReportReasonSpam
@@ -37237,6 +38336,10 @@ export type AutosaveSettingsScope =
 	| AutosaveSettingsScopeGroupChats
 	| AutosaveSettingsScopeChannelChats
 	| AutosaveSettingsScopeChat;
+
+export type WebBrowserType =
+	| WebBrowserTypeExternal
+	| WebBrowserTypeInApp;
 
 export type ConnectionState =
 	| ConnectionStateWaitingForNetwork
@@ -37405,7 +38508,7 @@ export type Update =
 	| UpdateHavePendingNotifications
 	| UpdateDeleteMessages
 	| UpdateChatAction
-	| UpdatePendingTextMessage
+	| UpdatePendingMessage
 	| UpdateUserStatus
 	| UpdateUser
 	| UpdateBasicGroup
@@ -37441,6 +38544,7 @@ export type Update =
 	| UpdateUserPrivacySettingRules
 	| UpdateUnreadMessageCount
 	| UpdateUnreadChatCount
+	| UpdateChatJoinResult
 	| UpdateStory
 	| UpdateStoryDeleted
 	| UpdateStoryPostSucceeded
@@ -37461,6 +38565,7 @@ export type Update =
 	| UpdateEmojiChatThemes
 	| UpdateAccentColors
 	| UpdateProfileAccentColors
+	| UpdateWebBrowserSettings
 	| UpdateLanguagePackStrings
 	| UpdateConnectionState
 	| UpdateFreezeState
@@ -37775,6 +38880,23 @@ Cryptographic signature of the credential.
 User handle of the passkey.
 */
 	user_handle: string;
+}
+
+/**
+Checks a web token to log in to the corresponding account; for official Telegram apps only. Works only when the current
+authorization state is authorizationStateWaitPhoneNumber or authorizationStateWaitOtherDeviceConfirmation.
+Request type for {@link Tdjson#checkAuthenticationWebToken}.
+*/
+export interface CheckAuthenticationWebToken {
+	'@type': 'checkAuthenticationWebToken';
+	/**
+The token to check.
+*/
+	token: string;
+	/**
+Identifier of the datacenter of the user.
+*/
+	dc_id: number;
 }
 
 /**
@@ -38419,6 +39541,22 @@ Identifiers of the messages to get.
 }
 
 /**
+Returns the full version of a rich message.
+Request type for {@link Tdjson#getFullRichMessage}.
+*/
+export interface GetFullRichMessage {
+	'@type': 'getFullRichMessage';
+	/**
+Identifier of the chat the messages belong to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+}
+
+/**
 Returns properties of a message. This is an offline method.
 Request type for {@link Tdjson#getMessageProperties}.
 */
@@ -38536,10 +39674,10 @@ Identifier of the file to get.
 
 /**
 Returns information about a file by its remote identifier. This is an offline method. Can be used to register a URL as a
-file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is still
-accessible to the user. For example, if the file is from a message, then the message must be not deleted and accessible
-to the user. If the file database is disabled, then the corresponding object with the file must be preloaded by the
-application.
+file for further uploading, or sending as a message. Even if the request succeeds, the file can be used only if it is
+still accessible to the user. For example, if the file is from a message, then the message must be not deleted and
+accessible to the user. If the file database is disabled, then the corresponding object with the file must be preloaded
+by the application.
 Request type for {@link Tdjson#getRemoteFile}.
 */
 export interface GetRemoteFile {
@@ -38615,6 +39753,10 @@ export interface SearchPublicChats {
 Query to search for.
 */
 	query: string;
+	/**
+Additional filter for type of the chats to be returned; pass null to search for chats of all types.
+*/
+	type_filter: SearchChatTypeFilter;
 }
 
 /**
@@ -38628,6 +39770,10 @@ export interface SearchChats {
 Query to search for. If the query is empty, returns up to 50 recently found chats.
 */
 	query: string;
+	/**
+Additional filter for type of the chats to be returned; pass null to search for chats of all types.
+*/
+	type_filter: SearchChatTypeFilter;
 	/**
 The maximum number of chats to be returned.
 */
@@ -38645,6 +39791,10 @@ export interface SearchChatsOnServer {
 Query to search for.
 */
 	query: string;
+	/**
+Additional filter for type of the chats to be returned; pass null to search for chats of all types.
+*/
+	type_filter: SearchChatTypeFilter;
 	/**
 The maximum number of chats to be returned.
 */
@@ -38791,6 +39941,10 @@ export interface SearchRecentlyFoundChats {
 Query to search for.
 */
 	query: string;
+	/**
+Additional filter for type of the chats to be returned; pass null to search for chats of all types.
+*/
+	type_filter: SearchChatTypeFilter;
 	/**
 The maximum number of chats to be returned.
 */
@@ -39776,8 +40930,8 @@ Pass true to delete the messages for all users.
 }
 
 /**
-Returns information about the recent locations of chat members that were sent to the chat. Returns up to 1 location
-message per user.
+Returns information about the recent live locations of chat members that were sent to the chat. Returns at most one live
+location message per user.
 Request type for {@link Tdjson#searchChatRecentLocationMessages}.
 */
 export interface SearchChatRecentLocationMessages {
@@ -39810,7 +40964,7 @@ Point in time (Unix timestamp) relative to which to search for messages.
 }
 
 /**
-Returns sparse positions of messages of the specified type in the chat to be used for shared media scroll
+Returns sparse positions of messages of the specified type in the chat to be used for Shared Media scroll
 implementation. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). Cannot be
 used in secret chats or with searchMessagesFilterFailedToSend filter without an enabled message database.
 Request type for {@link Tdjson#getChatSparseMessagePositions}.
@@ -40346,9 +41500,9 @@ Language code of the language to which the message is translated. Must be one of
 "eu", "be", "bn", "bs", "bg", "ca", "ceb", "zh-CN", "zh", "zh-Hans", "zh-TW", "zh-Hant", "co", "hr", "cs", "da", "nl",
 "en", "eo", "et", "fi", "fr", "fy", "gl", "ka", "de", "el", "gu", "ht", "ha", "haw", "he", "iw", "hi", "hmn", "hu",
 "is", "ig", "id", "in", "ga", "it", "ja", "jv", "kn", "kk", "km", "rw", "ko", "ku", "ky", "lo", "la", "lv", "lt", "lb",
-"mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "or", "ps", "fa", "pl", "pt", "pa", "ro", "ru",
-"sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tl", "tg", "ta", "tt", "te", "th",
-"tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "ji", "yo", "zu".
+"mk", "mg", "ms", "ml", "mt", "mi", "mr", "mn", "my", "ne", "no", "ny", "or", "ps", "fa", "pl", "pt", "pt-BR", "pa",
+"ro", "ru", "sm", "gd", "sr", "st", "sn", "sd", "si", "sk", "sl", "so", "es", "su", "sw", "sv", "tl", "tg", "ta", "tt",
+"te", "th", "tr", "tk", "uk", "ur", "ug", "uz", "vi", "cy", "xh", "yi", "ji", "yo", "zu".
 */
 	to_language_code: string;
 	/**
@@ -40838,7 +41992,7 @@ The new message reply markup; pass null if none; for bots only.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New text content of the message. Must be of type inputMessageText.
+New text content of the message. Must be of type inputMessageText or inputMessageRichMessage.
 */
 	input_message_content: InputMessageContent;
 }
@@ -40863,23 +42017,11 @@ The new message reply markup; pass null if none; for bots only.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New location content of the message; pass null to stop sharing the live location.
+New live location of the message; pass null to stop sharing the live location. If the new live_period isn't set to
+0x7FFFFFFF, then it must not exceed the current live_period by more than a day, and the live location expiration date
+must remain in the next 90 days.
 */
-	location: Location;
-	/**
-New time relative to the message send date, for which the location can be updated, in seconds. If 0x7FFFFFFF specified,
-then the location can be updated forever. Otherwise, must not exceed the current live_period by more than a day, and the
-live location expiration date must remain in the next 90 days. Pass 0 to keep the current live_period.
-*/
-	live_period: number;
-	/**
-The new direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
-*/
-	heading: number;
-	/**
-The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
-*/
-	proximity_alert_radius: number;
+	location: LiveLocation;
 }
 
 /**
@@ -40998,7 +42140,7 @@ The new message reply markup; pass null if none.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New text content of the message. Must be of type inputMessageText.
+New text content of the message. Must be of type inputMessageText or inputMessageRichMessage.
 */
 	input_message_content: InputMessageContent;
 }
@@ -41018,23 +42160,11 @@ The new message reply markup; pass null if none.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New location content of the message; pass null to stop sharing the live location.
+New live location of the message; pass null to stop sharing the live location. If the new live_period isn't set to
+0x7FFFFFFF, then it must not exceed the current live_period by more than a day, and the live location expiration date
+must remain in the next 90 days.
 */
-	location: Location;
-	/**
-New time relative to the message send date, for which the location can be updated, in seconds. If 0x7FFFFFFF specified,
-then the location can be updated forever. Otherwise, must not exceed the current live_period by more than a day, and the
-live location expiration date must remain in the next 90 days. Pass 0 to keep the current live_period.
-*/
-	live_period: number;
-	/**
-The new direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
-*/
-	heading: number;
-	/**
-The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
-*/
-	proximity_alert_radius: number;
+	location: LiveLocation;
 }
 
 /**
@@ -41245,7 +42375,7 @@ The new message reply markup; pass null if none.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New text content of the message. Must be of type inputMessageText.
+New text content of the message. Must be of type inputMessageText or inputMessageRichMessage.
 */
 	input_message_content: InputMessageContent;
 }
@@ -41273,23 +42403,11 @@ The new message reply markup; pass null if none.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New location content of the message; pass null to stop sharing the live location.
+New live location of the message; pass null to stop sharing the live location. If the new live_period isn't set to
+0x7FFFFFFF, then it must not exceed the current live_period by more than a day, and the live location expiration date
+must remain in the next 90 days.
 */
-	location: Location;
-	/**
-New time relative to the message send date, for which the location can be updated, in seconds. If 0x7FFFFFFF specified,
-then the location can be updated forever. Otherwise, must not exceed the current live_period by more than a day, and the
-live location expiration date must remain in the next 90 days. Pass 0 to keep the current live_period.
-*/
-	live_period: number;
-	/**
-The new direction in which the location moves, in degrees; 1-360. Pass 0 if unknown.
-*/
-	heading: number;
-	/**
-The new maximum distance for proximity alerts, in meters (0-100000). Pass 0 if the notification is disabled.
-*/
-	proximity_alert_radius: number;
+	location: LiveLocation;
 }
 
 /**
@@ -41764,8 +42882,7 @@ Identifier of a quick reply message in the same shortcut to be replied; pass 0 i
 */
 	reply_to_message_id: number;
 	/**
-The content of the message to be added; inputMessagePaidMedia, inputMessageForwarded and inputMessageLocation with
-live_period aren't supported.
+The content of the message to be added; inputMessagePaidMedia, inputMessageForwarded and inputMessageLiveLocation.
 */
 	input_message_content: InputMessageContent;
 }
@@ -41865,7 +42982,8 @@ Identifier of the message.
 	message_id: number;
 	/**
 New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
-inputMessageChecklist, inputMessageDocument, inputMessagePhoto, inputMessageText, or inputMessageVideo.
+inputMessageChecklist, inputMessageDocument, inputMessagePhoto, inputMessageRichMessage, inputMessageText, or
+inputMessageVideo.
 */
 	input_message_content: InputMessageContent;
 }
@@ -43484,6 +44602,26 @@ URL of the file.
 }
 
 /**
+Sets the result of a chat join query; for bots only.
+Request type for {@link Tdjson#answerChatJoinRequestQuery}.
+*/
+export interface AnswerChatJoinRequestQuery {
+	'@type': 'answerChatJoinRequestQuery';
+	/**
+Identifier of the query.
+*/
+	query_id: string;
+	/**
+The result.
+*/
+	result: ChatJoinRequestResult;
+	/**
+URL of the Web App to open.
+*/
+	url: string;
+}
+
+/**
 Sends a callback query to a bot and returns an answer. Returns an error with code 502 if the bot fails to answer the
 query before the query timeout expires.
 Request type for {@link Tdjson#getCallbackQueryAnswer}.
@@ -43733,6 +44871,30 @@ Draft text of the message; pass null to show a "Thinking..." placeholder.
 }
 
 /**
+Sends a draft for a being generated rich message; for bots only.
+Request type for {@link Tdjson#sendRichMessageDraft}.
+*/
+export interface SendRichMessageDraft {
+	'@type': 'sendRichMessageDraft';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The forum topic identifier in which the message will be sent; pass 0 if none.
+*/
+	forum_topic_id: number;
+	/**
+Unique identifier of the draft.
+*/
+	draft_id: string;
+	/**
+Draft of the message.
+*/
+	message: InputRichMessage;
+}
+
+/**
 Informs TDLib that the chat is opened by the user. Many useful activities depend on the chat being opened or closed
 (e.g., in supergroups and channels all updates are received only for opened chats).
 Request type for {@link Tdjson#openChat}.
@@ -43901,7 +45063,7 @@ The link.
 
 /**
 Returns information about an action to be done when the current user clicks an external link. Don't use this method for
-links from secret chats if link preview is disabled in secret chats.
+links from secret chats if link preview is disabled in secret chats, and use directly getLinkWebBrowserType.
 Request type for {@link Tdjson#getExternalLinkInfo}.
 */
 export interface GetExternalLinkInfo {
@@ -43928,6 +45090,18 @@ The HTTP link.
 Pass true if the current user allowed the bot that was returned in getExternalLinkInfo, to send them messages.
 */
 	allow_write_access?: boolean;
+}
+
+/**
+Returns a type of the web browser which must be used to open the link.
+Request type for {@link Tdjson#getLinkWebBrowserType}.
+*/
+export interface GetLinkWebBrowserType {
+	'@type': 'getLinkWebBrowserType';
+	/**
+The HTTP link.
+*/
+	link: string;
 }
 
 /**
@@ -45060,8 +46234,7 @@ Identifier of the chat.
 }
 
 /**
-Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method. May return
-an error with a message "INVITE_REQUEST_SENT" if only a join request was created.
+Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method.
 Request type for {@link Tdjson#joinChat}.
 */
 export interface JoinChat {
@@ -45232,7 +46405,7 @@ The 2-step verification password of the current user.
 /**
 Returns the user who will become the owner of the chat after 7 days if the current user does not return to the
 supergroup or channel during that period or immediately for basic groups; requires owner privileges in the chat.
-Available only for supergroups and channel chats.
+Available only for basic groups, supergroups, and channel chats.
 Request type for {@link Tdjson#getChatOwnerAfterLeaving}.
 */
 export interface GetChatOwnerAfterLeaving {
@@ -47137,8 +48310,7 @@ Invite link to be checked.
 }
 
 /**
-Uses an invite link to add the current user to the chat if possible. May return an error with a message
-"INVITE_REQUEST_SENT" if only a join request was created.
+Uses an invite link to add the current user to the chat if possible.
 Request type for {@link Tdjson#joinChatByInviteLink}.
 */
 export interface JoinChatByInviteLink {
@@ -49757,8 +50929,8 @@ Authentication code to check.
 }
 
 /**
-Returns the business bot that is connected to the current user account. Returns a 404 error if there is no connected
-bot.
+Returns information about the business bot that is connected to the current user account. Returns a 404 error if there
+is no connected bot.
 Request type for {@link Tdjson#getBusinessConnectedBot}.
 */
 export interface GetBusinessConnectedBot {
@@ -49776,6 +50948,18 @@ export interface SetBusinessConnectedBot {
 Connection settings for the bot.
 */
 	bot: BusinessConnectedBot;
+}
+
+/**
+Confirms an unconfirmed business connection of the current user from another device.
+Request type for {@link Tdjson#confirmBusinessConnectedBot}.
+*/
+export interface ConfirmBusinessConnectedBot {
+	'@type': 'confirmBusinessConnectedBot';
+	/**
+User identifier of the bot.
+*/
+	bot_user_id: number;
 }
 
 /**
@@ -50461,7 +51645,8 @@ Identifier of the user or the supergroup or channel chat, which verification is 
 }
 
 /**
-Returns all active sessions of the current user.
+Returns all active sessions of the current user. Additionally, getBusinessConnectedBot must be used to show the bot on
+top of active sessions.
 Request type for {@link Tdjson#getActiveSessions}.
 */
 export interface GetActiveSessions {
@@ -50482,7 +51667,8 @@ Session identifier.
 }
 
 /**
-Terminates all other sessions of the current user.
+Terminates all other sessions of the current user. Additionally, the user must be suggested to delete the connected
+business bot using deleteBusinessConnectedBot if there is any.
 Request type for {@link Tdjson#terminateAllOtherSessions}.
 */
 export interface TerminateAllOtherSessions {
@@ -50764,6 +51950,16 @@ Identifier of the supergroup that isn't a broadcast group and isn't a channel di
 New value of join_by_request.
 */
 	join_by_request?: boolean;
+	/**
+Identifier of the bot which will be the guard bot in the group; pass 0 if none; ignored if join_by_request == false. The
+bot must have administrator privileges and can_invite_users right in the supergroup chat, and must have
+userTypeBot.is_guard == true.
+*/
+	guard_bot_user_id: number;
+	/**
+Pass true to apply the change to the existing invite links, including primary links.
+*/
+	apply_to_invite_links?: boolean;
 }
 
 /**
@@ -51389,7 +52585,7 @@ Pass true to keep the original gift text, sender and receiver in the upgraded gi
 */
 	keep_original_details?: boolean;
 	/**
-The Telegram Star amount required to pay for the upgrade. It the gift has prepaid_upgrade_star_count > 0, then pass 0,
+The Telegram Star amount required to pay for the upgrade. If the gift has prepaid_upgrade_star_count > 0, then pass 0,
 otherwise, pass gift.upgrade_star_count.
 */
 	star_count: number;
@@ -52987,6 +54183,60 @@ export interface ClearAutosaveSettingsExceptions {
 }
 
 /**
+Changes web browser settings.
+Request type for {@link Tdjson#changeWebBrowserSettings}.
+*/
+export interface ChangeWebBrowserSettings {
+	'@type': 'changeWebBrowserSettings';
+	/**
+Pass true if links must be opened in an external browser by default.
+*/
+	open_external_browser?: boolean;
+	/**
+Pass true if a close button must be shown in the in-app browser; for Android app only.
+*/
+	display_close_button?: boolean;
+}
+
+/**
+Adds a special handling for the opening of the specified URL.
+Request type for {@link Tdjson#addWebBrowserSettingsException}.
+*/
+export interface AddWebBrowserSettingsException {
+	'@type': 'addWebBrowserSettingsException';
+	/**
+Pass true if the specified website must be opened in an external browser; pass false to open it in the in-app browser.
+There can be at most 100 exceptions in each list of the exceptions.
+*/
+	open_external_browser?: boolean;
+	/**
+URL of the website.
+*/
+	url: string;
+}
+
+/**
+Removes a special handling for the opening of the specified URL.
+Request type for {@link Tdjson#removeWebBrowserSettingsException}.
+*/
+export interface RemoveWebBrowserSettingsException {
+	'@type': 'removeWebBrowserSettingsException';
+	/**
+URL of the website.
+*/
+	url: string;
+}
+
+/**
+Removes special handling for the opening of all links.
+Request type for {@link Tdjson#removeAllWebBrowserSettingsExceptions}.
+*/
+export interface RemoveAllWebBrowserSettingsExceptions {
+	'@type': 'removeAllWebBrowserSettingsExceptions';
+
+}
+
+/**
 Returns information about a bank card.
 Request type for {@link Tdjson#getBankCardInfo}.
 */
@@ -54096,6 +55346,18 @@ export interface GetCountries {
 }
 
 /**
+Returns information about an existing country. Can be called before authorization.
+Request type for {@link Tdjson#getCountry}.
+*/
+export interface GetCountry {
+	'@type': 'getCountry';
+	/**
+A two-letter ISO 3166-1 alpha-2 country code.
+*/
+	country_code: string;
+}
+
+/**
 Uses the current IP address to find the current country. Returns two-letter ISO 3166-1 alpha-2 country code. Can be
 called before authorization.
 Request type for {@link Tdjson#getCountryCode}.
@@ -54600,6 +55862,7 @@ export type Request =
 	| RequestQrCodeAuthentication
 	| GetAuthenticationPasskeyParameters
 	| CheckAuthenticationPasskey
+	| CheckAuthenticationWebToken
 	| RegisterUser
 	| ResetAuthenticationEmailAddress
 	| CheckAuthenticationPassword
@@ -54648,6 +55911,7 @@ export type Request =
 	| GetChatPinnedMessage
 	| GetCallbackQueryMessage
 	| GetMessages
+	| GetFullRichMessage
 	| GetMessageProperties
 	| GetPollOptionProperties
 	| GetMessageThread
@@ -54903,6 +56167,7 @@ export type Request =
 	| CloseWebApp
 	| AnswerWebAppQuery
 	| CheckWebAppFileDownload
+	| AnswerChatJoinRequestQuery
 	| GetCallbackQueryAnswer
 	| AnswerCallbackQuery
 	| AnswerShippingQuery
@@ -54914,6 +56179,7 @@ export type Request =
 	| DeleteChatReplyMarkup
 	| SendChatAction
 	| SendTextMessageDraft
+	| SendRichMessageDraft
 	| OpenChat
 	| CloseChat
 	| ViewMessages
@@ -54925,6 +56191,7 @@ export type Request =
 	| GetInternalLinkType
 	| GetExternalLinkInfo
 	| GetExternalLink
+	| GetLinkWebBrowserType
 	| GetOauthLinkInfo
 	| CheckOauthRequestMatchCode
 	| AcceptOauthRequest
@@ -55275,6 +56542,7 @@ export type Request =
 	| CheckPhoneNumberCode
 	| GetBusinessConnectedBot
 	| SetBusinessConnectedBot
+	| ConfirmBusinessConnectedBot
 	| DeleteBusinessConnectedBot
 	| ToggleBusinessConnectedBotChatIsPaused
 	| RemoveBusinessConnectedBotFromChat
@@ -55470,6 +56738,10 @@ export type Request =
 	| GetAutosaveSettings
 	| SetAutosaveSettings
 	| ClearAutosaveSettingsExceptions
+	| ChangeWebBrowserSettings
+	| AddWebBrowserSettingsException
+	| RemoveWebBrowserSettingsException
+	| RemoveAllWebBrowserSettingsExceptions
 	| GetBankCardInfo
 	| GetPassportElement
 	| GetAllPassportElements
@@ -55539,6 +56811,7 @@ export type Request =
 	| AnswerCustomQuery
 	| SetAlarm
 	| GetCountries
+	| GetCountry
 	| GetCountryCode
 	| GetPhoneNumberInfo
 	| GetPhoneNumberInfoSync
@@ -55716,6 +56989,17 @@ authorizationStateWaitPassword.
 		return this._request({
 			...options,
 			'@type': 'checkAuthenticationPasskey',
+		});
+	}
+
+	/**
+Checks a web token to log in to the corresponding account; for official Telegram apps only. Works only when the current
+authorization state is authorizationStateWaitPhoneNumber or authorizationStateWaitOtherDeviceConfirmation.
+*/
+	async checkAuthenticationWebToken(options: Omit<CheckAuthenticationWebToken, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'checkAuthenticationWebToken',
 		});
 	}
 
@@ -56223,6 +57507,16 @@ Returns information about messages. If a message is not found, returns null on t
 	}
 
 	/**
+Returns the full version of a rich message.
+*/
+	async getFullRichMessage(options: Omit<GetFullRichMessage, '@type'>): Promise<RichMessage> {
+		return this._request({
+			...options,
+			'@type': 'getFullRichMessage',
+		});
+	}
+
+	/**
 Returns properties of a message. This is an offline method.
 */
 	async getMessageProperties(options: Omit<GetMessageProperties, '@type'>): Promise<MessageProperties> {
@@ -56298,10 +57592,10 @@ Returns information about a file. This is an offline method.
 
 	/**
 Returns information about a file by its remote identifier. This is an offline method. Can be used to register a URL as a
-file for further uploading, or sending as a message. Even the request succeeds, the file can be used only if it is still
-accessible to the user. For example, if the file is from a message, then the message must be not deleted and accessible
-to the user. If the file database is disabled, then the corresponding object with the file must be preloaded by the
-application.
+file for further uploading, or sending as a message. Even if the request succeeds, the file can be used only if it is
+still accessible to the user. For example, if the file is from a message, then the message must be not deleted and
+accessible to the user. If the file database is disabled, then the corresponding object with the file must be preloaded
+by the application.
 */
 	async getRemoteFile(options: Omit<GetRemoteFile, '@type'>): Promise<File> {
 		return this._request({
@@ -57005,8 +58299,8 @@ Deletes all call messages.
 	}
 
 	/**
-Returns information about the recent locations of chat members that were sent to the chat. Returns up to 1 location
-message per user.
+Returns information about the recent live locations of chat members that were sent to the chat. Returns at most one live
+location message per user.
 */
 	async searchChatRecentLocationMessages(options: Omit<SearchChatRecentLocationMessages, '@type'>): Promise<Messages> {
 		return this._request({
@@ -57027,7 +58321,7 @@ exist.
 	}
 
 	/**
-Returns sparse positions of messages of the specified type in the chat to be used for shared media scroll
+Returns sparse positions of messages of the specified type in the chat to be used for Shared Media scroll
 implementation. Returns the results in reverse chronological order (i.e., in order of decreasing message_id). Cannot be
 used in secret chats or with searchMessagesFilterFailedToSend filter without an enabled message database.
 */
@@ -58834,7 +60128,7 @@ isn't known.
 	/**
 Returns an HTTPS URL of a Web App to open after a link of the type internalLinkTypeWebApp is clicked.
 */
-	async getWebAppLinkUrl(options: Omit<GetWebAppLinkUrl, '@type'>): Promise<HttpUrl> {
+	async getWebAppLinkUrl(options: Omit<GetWebAppLinkUrl, '@type'>): Promise<WebAppUrl> {
 		return this._request({
 			...options,
 			'@type': 'getWebAppLinkUrl',
@@ -58855,7 +60149,7 @@ Returns information needed to open the main Web App of a bot.
 Returns an HTTPS URL of a Web App to open from the side menu, a keyboardButtonTypeWebApp button, or an
 inlineQueryResultsButtonTypeWebApp button.
 */
-	async getWebAppUrl(options: Omit<GetWebAppUrl, '@type'>): Promise<HttpUrl> {
+	async getWebAppUrl(options: Omit<GetWebAppUrl, '@type'>): Promise<WebAppUrl> {
 		return this._request({
 			...options,
 			'@type': 'getWebAppUrl',
@@ -58912,6 +60206,16 @@ Checks whether a file can be downloaded and saved locally by Web App request.
 		return this._request({
 			...options,
 			'@type': 'checkWebAppFileDownload',
+		});
+	}
+
+	/**
+Sets the result of a chat join query; for bots only.
+*/
+	async answerChatJoinRequestQuery(options: Omit<AnswerChatJoinRequestQuery, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'answerChatJoinRequestQuery',
 		});
 	}
 
@@ -59029,6 +60333,16 @@ Sends a draft for a being generated text message; for bots only.
 	}
 
 	/**
+Sends a draft for a being generated rich message; for bots only.
+*/
+	async sendRichMessageDraft(options: Omit<SendRichMessageDraft, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'sendRichMessageDraft',
+		});
+	}
+
+	/**
 Informs TDLib that the chat is opened by the user. Many useful activities depend on the chat being opened or closed
 (e.g., in supergroups and channels all updates are received only for opened chats).
 */
@@ -59130,7 +60444,7 @@ before authorization.
 
 	/**
 Returns information about an action to be done when the current user clicks an external link. Don't use this method for
-links from secret chats if link preview is disabled in secret chats.
+links from secret chats if link preview is disabled in secret chats, and use directly getLinkWebBrowserType.
 */
 	async getExternalLinkInfo(options: Omit<GetExternalLinkInfo, '@type'>): Promise<LoginUrlInfo> {
 		return this._request({
@@ -59148,6 +60462,16 @@ if just a toast about successful login has to be shown.
 		return this._request({
 			...options,
 			'@type': 'getExternalLink',
+		});
+	}
+
+	/**
+Returns a type of the web browser which must be used to open the link.
+*/
+	async getLinkWebBrowserType(options: Omit<GetLinkWebBrowserType, '@type'>): Promise<WebBrowserType> {
+		return this._request({
+			...options,
+			'@type': 'getLinkWebBrowserType',
 		});
 	}
 
@@ -59851,10 +61175,9 @@ supergroup, or can_edit_messages administrator right if the chat is a channel.
 	}
 
 	/**
-Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method. May return
-an error with a message "INVITE_REQUEST_SENT" if only a join request was created.
+Adds the current user as a new member to a chat. Private and secret chats can't be joined using this method.
 */
-	async joinChat(options: Omit<JoinChat, '@type'>): Promise<Ok> {
+	async joinChat(options: Omit<JoinChat, '@type'>): Promise<ChatJoinResult> {
 		return this._request({
 			...options,
 			'@type': 'joinChat',
@@ -59953,7 +61276,7 @@ chat. Use the method canTransferOwnership to check whether the ownership can be 
 	/**
 Returns the user who will become the owner of the chat after 7 days if the current user does not return to the
 supergroup or channel during that period or immediately for basic groups; requires owner privileges in the chat.
-Available only for supergroups and channel chats.
+Available only for basic groups, supergroups, and channel chats.
 */
 	async getChatOwnerAfterLeaving(options: Omit<GetChatOwnerAfterLeaving, '@type'>): Promise<User> {
 		return this._request({
@@ -61061,10 +62384,9 @@ Checks the validity of an invite link for a chat and returns information about t
 	}
 
 	/**
-Uses an invite link to add the current user to the chat if possible. May return an error with a message
-"INVITE_REQUEST_SENT" if only a join request was created.
+Uses an invite link to add the current user to the chat if possible.
 */
-	async joinChatByInviteLink(options: Omit<JoinChatByInviteLink, '@type'>): Promise<Chat> {
+	async joinChatByInviteLink(options: Omit<JoinChatByInviteLink, '@type'>): Promise<ChatJoinResult> {
 		return this._request({
 			...options,
 			'@type': 'joinChatByInviteLink',
@@ -62747,10 +64069,10 @@ Checks the authentication code and completes the request for which the code was 
 	}
 
 	/**
-Returns the business bot that is connected to the current user account. Returns a 404 error if there is no connected
-bot.
+Returns information about the business bot that is connected to the current user account. Returns a 404 error if there
+is no connected bot.
 */
-	async getBusinessConnectedBot(): Promise<BusinessConnectedBot> {
+	async getBusinessConnectedBot(): Promise<BusinessConnectedBotInfo> {
 		return this._request({
 			'@type': 'getBusinessConnectedBot',
 		});
@@ -62763,6 +64085,16 @@ Adds or changes business bot that is connected to the current user account.
 		return this._request({
 			...options,
 			'@type': 'setBusinessConnectedBot',
+		});
+	}
+
+	/**
+Confirms an unconfirmed business connection of the current user from another device.
+*/
+	async confirmBusinessConnectedBot(options: Omit<ConfirmBusinessConnectedBot, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'confirmBusinessConnectedBot',
 		});
 	}
 
@@ -63200,7 +64532,8 @@ Removes the verification status of a user or a chat by an owned bot.
 	}
 
 	/**
-Returns all active sessions of the current user.
+Returns all active sessions of the current user. Additionally, getBusinessConnectedBot must be used to show the bot on
+top of active sessions.
 */
 	async getActiveSessions(): Promise<Sessions> {
 		return this._request({
@@ -63219,7 +64552,8 @@ Terminates a session of the current user.
 	}
 
 	/**
-Terminates all other sessions of the current user.
+Terminates all other sessions of the current user. Additionally, the user must be suggested to delete the connected
+business bot using deleteBusinessConnectedBot if there is any.
 */
 	async terminateAllOtherSessions(): Promise<Ok> {
 		return this._request({
@@ -64781,6 +66115,45 @@ getAutosaveSettings.
 	}
 
 	/**
+Changes web browser settings.
+*/
+	async changeWebBrowserSettings(options: Omit<ChangeWebBrowserSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'changeWebBrowserSettings',
+		});
+	}
+
+	/**
+Adds a special handling for the opening of the specified URL.
+*/
+	async addWebBrowserSettingsException(options: Omit<AddWebBrowserSettingsException, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addWebBrowserSettingsException',
+		});
+	}
+
+	/**
+Removes a special handling for the opening of the specified URL.
+*/
+	async removeWebBrowserSettingsException(options: Omit<RemoveWebBrowserSettingsException, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeWebBrowserSettingsException',
+		});
+	}
+
+	/**
+Removes special handling for the opening of all links.
+*/
+	async removeAllWebBrowserSettingsExceptions(): Promise<Ok> {
+		return this._request({
+			'@type': 'removeAllWebBrowserSettingsExceptions',
+		});
+	}
+
+	/**
 Returns information about a bank card.
 */
 	async getBankCardInfo(options: Omit<GetBankCardInfo, '@type'>): Promise<BankCardInfo> {
@@ -65475,6 +66848,16 @@ Returns information about existing countries. Can be called before authorization
 	async getCountries(): Promise<Countries> {
 		return this._request({
 			'@type': 'getCountries',
+		});
+	}
+
+	/**
+Returns information about an existing country. Can be called before authorization.
+*/
+	async getCountry(options: Omit<GetCountry, '@type'>): Promise<CountryInfo> {
+		return this._request({
+			...options,
+			'@type': 'getCountry',
 		});
 	}
 
