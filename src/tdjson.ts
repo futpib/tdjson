@@ -339,7 +339,35 @@ True, if the object contains the full message. Otherwise, getFullRichMessage mus
 }
 
 /**
+Describes a media to be used in a sent rich message.
+*/
+export interface InputRichMessageMedia {
+	'@type': 'inputRichMessageMedia';
+	/**
+Unique identifier of the media; 1-64 base64url characters.
+*/
+	id: string;
+	/**
+The media to send. Must be one of the following types: inputMessageAnimation, inputMessageAudio, inputMessagePhoto,
+inputMessageVideo, or inputMessageVoiceNote.
+*/
+	media: InputMessageContent;
+}
+
+/**
 Describes source of a rich message.
+Subtype of {@link RichMessageSource}.
+*/
+export interface RichMessageSourceBlocks {
+	'@type': 'richMessageSourceBlocks';
+	/**
+Content of the message.
+*/
+	blocks: InputPageBlock[];
+}
+
+/**
+A Markdown-formatted rich message; for bots only.
 Subtype of {@link RichMessageSource}.
 */
 export interface RichMessageSourceMarkdown {
@@ -348,6 +376,10 @@ export interface RichMessageSourceMarkdown {
 Markdown-formatted text of the message.
 */
 	text: string;
+	/**
+Media used in the message.
+*/
+	media: InputRichMessageMedia[];
 }
 
 /**
@@ -360,10 +392,19 @@ export interface RichMessageSourceHtml {
 HTML-formatted text of the message.
 */
 	text: string;
+	/**
+Media used in the message.
+*/
+	media: InputRichMessageMedia[];
 }
 
 /**
-A rich message to send.
+A rich message to send. Total length of all texts, including custom emoji alternative text and formula source, must not
+exceed getOption("rich_message_text_length_max"). The total number of all blocks, list items and table rows must not
+exceed getOption("rich_message_block_count_max"). The maximum allowed depth of nested blocks and rich texts is
+getOption("rich_message_depth_max"). The total number of media in all blocks must not exceed
+getOption("rich_message_media_count_max"). The maximum allowed number of table columns is
+getOption("rich_message_table_column_count_max").
 */
 export interface InputRichMessage {
 	'@type': 'inputRichMessage';
@@ -1617,7 +1658,7 @@ MIME type of the file, usually "image/gif" or "video/mp4".
 */
 	mime_type: string;
 	/**
-True, if stickers were added to the animation. The list of corresponding sticker set can be received using
+True, if stickers were added to the animation. The list of corresponding sticker sets can be received using
 getAttachedStickerSets.
 */
 	has_stickers?: boolean;
@@ -2074,25 +2115,25 @@ Hash of the state to use for sending the next dice; may be empty if the stake di
 */
 	state_hash: string;
 	/**
-The Toncoin amount that was staked in the previous roll; in the smallest units of the currency.
+The amount of TON Grams staked in the previous roll; in the smallest units of the currency.
 */
-	stake_toncoin_amount: number;
+	stake_gram_amount: number;
 	/**
-The amounts of Toncoins that are suggested to be staked; in the smallest units of the currency.
+The amounts of Grams that are suggested to be staked; in the smallest units of the currency.
 */
-	suggested_stake_toncoin_amounts: number[];
+	suggested_stake_gram_amounts: number[];
 	/**
 The number of rolled sixes towards the streak; 0-2.
 */
 	current_streak: number;
 	/**
-The number of Toncoins received by the user for each 1000 Toncoins staked if the dice outcome is 1-6 correspondingly;
-may be empty if the stake dice can't be sent by the current user.
+The number of Grams received by the user for each 1000 Grams staked if the dice outcome is 1-6 correspondingly; may be
+empty if the stake dice can't be sent by the current user.
 */
 	prize_per_mille: number[];
 	/**
-The number of Toncoins received by the user for each 1000 Toncoins staked if the dice outcome is 6 three times in a row
-with the same stake.
+The number of Grams received by the user for each 1000 Grams staked if the dice outcome is 6 three times in a row with
+the same stake.
 */
 	streak_prize_per_mille: number;
 }
@@ -2559,6 +2600,10 @@ Text of the bot command.
 Represents a command supported by a bot.
 */
 	description: string;
+	/**
+True, if the command must send an ephemeral message instead of a regular one.
+*/
+	is_ephemeral?: boolean;
 }
 
 /**
@@ -2845,7 +2890,7 @@ Chosen recipients of the greeting messages.
 */
 	recipients: BusinessRecipients;
 	/**
-The number of days after which a chat will be considered as inactive; currently, must be on of 7, 14, 21, or 28.
+The number of days after which a chat will be considered as inactive; currently, must be one of 7, 14, 21, or 28.
 */
 	inactivity_days: number;
 }
@@ -3038,12 +3083,12 @@ Location of the business; may be null if none.
 */
 	location: BusinessLocation;
 	/**
-Opening hours of the business; may be null if none. The hours are guaranteed to be valid and has already been split by
+Opening hours of the business; may be null if none. The hours are guaranteed to be valid and have already been split by
 week days.
 */
 	opening_hours: BusinessOpeningHours;
 	/**
-Opening hours of the business in the local time; may be null if none. The hours are guaranteed to be valid and has
+Opening hours of the business in the local time; may be null if none. The hours are guaranteed to be valid and have
 already been split by week days. Local time zone identifier will be empty. An updateUserFullInfo update is not triggered
 when value of this field changes.
 */
@@ -3421,7 +3466,7 @@ supergroups only.
 	can_manage_topics?: boolean;
 	/**
 True, if the administrator can add new administrators with a subset of their own privileges or demote administrators
-that were directly or indirectly promoted by them.
+that were directly or indirectly promoted by them; applicable to supergroups and channels only.
 */
 	can_promote_members?: boolean;
 	/**
@@ -3649,16 +3694,16 @@ getOption("gift_resale_star_count_min")-getOption("gift_resale_star_count_max") 
 }
 
 /**
-Describes price of a resold gift in Toncoins.
+Describes price of a resold gift in TON Grams.
 Subtype of {@link GiftResalePrice}.
 */
-export interface GiftResalePriceTon {
-	'@type': 'giftResalePriceTon';
+export interface GiftResalePriceGram {
+	'@type': 'giftResalePriceGram';
 	/**
-The amount of 1/100 of Toncoin expected to be paid for the gift. Must be in the range
-getOption("gift_resale_toncoin_cent_count_min")-getOption("gift_resale_toncoin_cent_count_max").
+The amount of 1/100 of Gram expected to be paid for the gift. Must be in the range
+getOption("gift_resale_gram_cent_count_min")-getOption("gift_resale_gram_cent_count_max").
 */
-	toncoin_cent_count: number;
+	gram_cent_count: number;
 }
 
 /**
@@ -3702,16 +3747,16 @@ getOption("suggested_post_star_count_min")-getOption("suggested_post_star_count_
 }
 
 /**
-Describes price of a suggested post in Toncoins.
+Describes price of a suggested post in TON Grams.
 Subtype of {@link SuggestedPostPrice}.
 */
-export interface SuggestedPostPriceTon {
-	'@type': 'suggestedPostPriceTon';
+export interface SuggestedPostPriceGram {
+	'@type': 'suggestedPostPriceGram';
 	/**
-The amount of 1/100 of Toncoin expected to be paid for the post;
-getOption("suggested_post_toncoin_cent_count_min")-getOption("suggested_post_toncoin_cent_count_max").
+The amount of 1/100 of Gram expected to be paid for the post;
+getOption("suggested_post_gram_cent_count_min")-getOption("suggested_post_gram_cent_count_max").
 */
-	toncoin_cent_count: number;
+	gram_cent_count: number;
 }
 
 /**
@@ -3779,8 +3824,8 @@ export interface InputSuggestedPostInfo {
 	'@type': 'inputSuggestedPostInfo';
 	/**
 Price of the suggested post; pass null to suggest a post without payment. If the current user isn't an administrator of
-the channel direct messages chat and has no enough funds to pay for the post, then the error "BALANCE_TOO_LOW" will be
-returned immediately.
+the channel direct messages chat and doesn't have enough funds to pay for the post, then the error "BALANCE_TOO_LOW"
+will be returned immediately.
 */
 	price: SuggestedPostPrice;
 	/**
@@ -3836,8 +3881,8 @@ again.
 */
 	can_reuse?: boolean;
 	/**
-The invite link that can be used to renew the subscription if it has been expired; may be empty, if the link isn't
-available anymore.
+The invite link that can be used to renew the subscription if it has expired; may be empty if the link isn't available
+anymore.
 */
 	invite_link: string;
 }
@@ -3903,7 +3948,7 @@ True, if the subscription was canceled.
 */
 	is_canceled?: boolean;
 	/**
-True, if the subscription expires soon and there are no enough Telegram Stars on the user's balance to extend it.
+True, if the subscription expires soon and there aren't enough Telegram Stars on the user's balance to extend it.
 */
 	is_expiring?: boolean;
 	/**
@@ -4563,13 +4608,13 @@ Resale price of the gift in Telegram Stars.
 */
 	star_count: number;
 	/**
-Resale price of the gift in 1/100 of Toncoin.
+Resale price of the gift in 1/100 of TON Gram.
 */
-	toncoin_cent_count: number;
+	gram_cent_count: number;
 	/**
-True, if the gift can be bought only using Toncoins.
+True, if the gift can be bought only using Grams.
 */
-	toncoin_only?: boolean;
+	gram_only?: boolean;
 }
 
 /**
@@ -4671,7 +4716,7 @@ export interface UpgradedGiftOriginBlockchain {
 }
 
 /**
-The sender or receiver of the message has paid for upgraid of the gift, which has been completed.
+The sender or receiver of the message has paid for upgrade of the gift, which has been completed.
 Subtype of {@link UpgradedGiftOrigin}.
 */
 export interface UpgradedGiftOriginPrepaidUpgrade {
@@ -4957,7 +5002,7 @@ Number of times the gift can be purchased by the current user; may be null if no
 */
 	user_limits: GiftPurchaseLimits;
 	/**
-Number of times the gift can be purchased all users; may be null if not limited.
+Number of times the gift can be purchased by all users; may be null if not limited.
 */
 	overall_limits: GiftPurchaseLimits;
 	/**
@@ -4965,11 +5010,11 @@ Background of the gift.
 */
 	background: GiftBackground;
 	/**
-Point in time (Unix timestamp) when the gift was send for the first time; for sold out gifts only.
+Point in time (Unix timestamp) when the gift was sent for the first time; for sold out gifts only.
 */
 	first_send_date: number;
 	/**
-Point in time (Unix timestamp) when the gift was send for the last time; for sold out gifts only.
+Point in time (Unix timestamp) when the gift was sent for the last time; for sold out gifts only.
 */
 	last_send_date: number;
 }
@@ -5017,7 +5062,7 @@ True, if the gift was used to craft another gift.
 */
 	is_burned?: boolean;
 	/**
-True, if the gift was craft from another gifts.
+True, if the gift was crafted from other gifts.
 */
 	is_crafted?: boolean;
 	/**
@@ -5611,8 +5656,8 @@ If non-empty, then the user can pay for an upgrade of the gift using buyGiftUpgr
 */
 	prepaid_upgrade_hash: string;
 	/**
-Point in time (Unix timestamp) when the gift can be used to craft another gift can be in the past; only for the receiver
-of the gift.
+Point in time (Unix timestamp) when the gift can be used to craft another gift; can be in the past; only for the
+receiver of the gift.
 */
 	craft_date: number;
 }
@@ -6733,7 +6778,7 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
-Describes type of transaction with Toncoins.
+Describes type of transaction with TON Grams.
 Subtype of {@link TonTransactionType}.
 */
 export interface TonTransactionTypeFragmentDeposit {
@@ -6749,7 +6794,7 @@ The sticker to be shown in the transaction information; may be null if unknown.
 }
 
 /**
-The transaction is a withdrawal of earned Toncoins to Fragment.
+The transaction is a withdrawal of earned Grams to Fragment.
 Subtype of {@link TonTransactionType}.
 */
 export interface TonTransactionTypeFragmentWithdrawal {
@@ -6815,13 +6860,13 @@ The gift.
 */
 	gift: UpgradedGift;
 	/**
-The number of Toncoins received by the Telegram for each 1000 Toncoins received by the seller of the gift.
+The number of Grams received by the Telegram for each 1000 Grams received by the seller of the gift.
 */
 	commission_per_mille: number;
 	/**
-The Toncoin amount that was received by the Telegram; in the smallest units of the currency.
+The Gram amount that was received by the Telegram; in the smallest units of the currency.
 */
-	commission_toncoin_amount: number;
+	commission_gram_amount: number;
 	/**
 True, if the gift was sold through a purchase offer.
 */
@@ -6856,7 +6901,7 @@ export interface TonTransactionTypeUnsupported {
 }
 
 /**
-Represents a transaction changing the amount of owned Toncoins.
+Represents a transaction changing the amount of owned TON Grams.
 */
 export interface TonTransaction {
 	'@type': 'tonTransaction';
@@ -6865,9 +6910,9 @@ Unique identifier of the transaction.
 */
 	id: string;
 	/**
-The amount of added owned Toncoins; negative for outgoing transactions.
+The amount of added owned Grams, in the smallest units of the cryptocurrency; negative for outgoing transactions.
 */
-	ton_amount: number;
+	gram_amount: number;
 	/**
 True, if the transaction is a refund of a previous transaction.
 */
@@ -6883,16 +6928,16 @@ Type of the transaction.
 }
 
 /**
-Represents a list of Toncoin transactions.
+Represents a list of TON Gram transactions.
 */
 export interface TonTransactions {
 	'@type': 'tonTransactions';
 	/**
-The total amount of owned Toncoins.
+The total amount of owned Grams, in the smallest units of the cryptocurrency.
 */
-	ton_amount: number;
+	gram_amount: number;
 	/**
-List of Toncoin transactions.
+List of Gram transactions.
 */
 	transactions: TonTransaction[];
 	/**
@@ -6975,7 +7020,7 @@ Identifier of the chat administered by the user.
 }
 
 /**
-The user can't participate in the giveaway, because they phone number is from a disallowed country.
+The user can't participate in the giveaway, because their phone number is from a disallowed country.
 Subtype of {@link GiveawayParticipantStatus}.
 */
 export interface GiveawayParticipantStatusDisallowedCountry {
@@ -7174,6 +7219,134 @@ The minimum chat boost level required to use the color in a supergroup chat.
 The minimum chat boost level required to use the color in a channel chat.
 */
 	min_channel_chat_boost_level: number;
+}
+
+/**
+Describes actions that a user is allowed to take in a community.
+*/
+export interface CommunityPermissions {
+	'@type': 'communityPermissions';
+	/**
+True, if the user can change the chats added to the community.
+*/
+	can_edit_chat_list?: boolean;
+}
+
+/**
+Describes rights of the administrator in a community.
+*/
+export interface CommunityAdministratorRights {
+	'@type': 'communityAdministratorRights';
+	/**
+True, if the user is an administrator. Implied by any other privilege.
+*/
+	can_manage_community?: boolean;
+	/**
+True, if the administrator can change the community name, photo, and other settings.
+*/
+	can_change_info?: boolean;
+	/**
+True, if the user can change the chats added to the community.
+*/
+	can_edit_chat_list?: boolean;
+	/**
+True, if the administrator can add new administrators with a subset of their own privileges or demote administrators
+that were directly or indirectly promoted by them.
+*/
+	can_promote_members?: boolean;
+	/**
+True, if the administrator can ban, or unban community members.
+*/
+	can_ban_members?: boolean;
+}
+
+/**
+Provides information about the status of a member in a community.
+Subtype of {@link CommunityMemberStatus}.
+*/
+export interface CommunityMemberStatusCreator {
+	'@type': 'communityMemberStatusCreator';
+
+}
+
+/**
+The user is a member of the community and has some additional privileges.
+Subtype of {@link CommunityMemberStatus}.
+*/
+export interface CommunityMemberStatusAdministrator {
+	'@type': 'communityMemberStatusAdministrator';
+	/**
+True, if the current user can edit the administrator privileges for the called user.
+*/
+	can_be_edited?: boolean;
+	/**
+Rights of the administrator.
+*/
+	rights: CommunityAdministratorRights;
+}
+
+/**
+The user is a member of the community, without any additional privileges or restrictions.
+Subtype of {@link CommunityMemberStatus}.
+*/
+export interface CommunityMemberStatusMember {
+	'@type': 'communityMemberStatusMember';
+
+}
+
+/**
+The user or the chat is not a community member.
+Subtype of {@link CommunityMemberStatus}.
+*/
+export interface CommunityMemberStatusLeft {
+	'@type': 'communityMemberStatusLeft';
+
+}
+
+/**
+The user or the chat was banned in the community; implies ban in all chats in the community.
+Subtype of {@link CommunityMemberStatus}.
+*/
+export interface CommunityMemberStatusBanned {
+	'@type': 'communityMemberStatusBanned';
+
+}
+
+/**
+Represents a community consisting of supergroup chats, channel chats and chats with bots.
+*/
+export interface Community {
+	'@type': 'community';
+	/**
+Community identifier.
+*/
+	id: number;
+	/**
+If false, the community is inaccessible, and the only information known about the community is inside this class.
+Identifier of the community can't be passed to any method.
+*/
+	have_access?: boolean;
+	/**
+Community name.
+*/
+	name: string;
+	/**
+Community photo; may be null.
+*/
+	photo: ChatPhotoInfo;
+	/**
+Point in time (Unix timestamp) when the community was joined, or the point in time when the community was created, in
+case the user is not a member of any chat in the community.
+*/
+	date: number;
+	/**
+Status of the current user in the community.
+*/
+	status: CommunityMemberStatus;
+	/**
+Actions that non-administrator community members are allowed to take in the community.
+*/
+	permissions: CommunityPermissions;
 }
 
 /**
@@ -7575,6 +7748,10 @@ it is the same photo as in user.profile_photo and chat.photo. This photo isn't r
 */
 	public_photo: ChatPhoto;
 	/**
+Identifier of the community to which chat with the bot was added; for bots only.
+*/
+	community_id: number;
+	/**
 Block list to which the user is added; may be null if none.
 */
 	block_list: BlockList;
@@ -7772,9 +7949,8 @@ True, if the user is a member of the chat.
 }
 
 /**
-The user is a member of the chat and has some additional privileges. In basic groups, administrators can edit and delete
-messages sent by others, add new members, ban unprivileged members, and manage video chats. In supergroups and channels,
-there are more detailed options for administrator privileges.
+The user is a member of the chat and has some additional privileges. In basic groups, administrators have all applicable
+rights. In supergroups and channels, any subset of the rights can be chosen for an administrator.
 Subtype of {@link ChatMemberStatus}.
 */
 export interface ChatMemberStatusAdministrator {
@@ -8080,13 +8256,9 @@ Identifier of the guard bot.
 */
 	bot_user_id: number;
 	/**
-The URL of the Web App to open.
+Unique identifier of the join request, which will be used in getGuardBotWebAppUrl and updateChatJoinResult.
 */
-	url: WebAppUrl;
-	/**
-Unique identifier of the join request, which will be used in updateChatJoinResult.
-*/
-	query_id: number;
+	query_id: string;
 }
 
 /**
@@ -8108,7 +8280,7 @@ export interface ChatJoinRequestResultApproved {
 }
 
 /**
-The request was decline.
+The request was declined.
 Subtype of {@link ChatJoinRequestResult}.
 */
 export interface ChatJoinRequestResultDeclined {
@@ -8501,10 +8673,7 @@ List of commands of bots in the group.
 }
 
 /**
-Represents a supergroup or channel with zero or more members (subscribers in the case of channels). From the point of
-view of the system, a channel is a special kind of a supergroup: only administrators can post and see the list of
-members, and posts from all administrators use the name and photo of the channel instead of individual names and profile
-photos. Unlike supergroups, channels can have an unlimited number of subscribers.
+Represents a supergroup or channel with zero or more members (subscribers in the case of channels).
 */
 export interface Supergroup {
 	'@type': 'supergroup';
@@ -8572,7 +8741,8 @@ True, if the slow mode is enabled in the supergroup.
 */
 	is_slow_mode_enabled?: boolean;
 	/**
-True, if the supergroup is a channel.
+True, if the supergroup is a channel, which can have an unlimited number of subscribers, but only administrators can
+post there and see the list of subscribers.
 */
 	is_channel?: boolean;
 	/**
@@ -8628,6 +8798,10 @@ export interface SupergroupFullInfo {
 Chat photo; may be null if empty or unknown. If non-null, then it is the same photo as in chat.photo.
 */
 	photo: ChatPhoto;
+	/**
+Identifier of the community to which the corresponding chat was added.
+*/
+	community_id: number;
 	/**
 Contains full information about a supergroup or channel.
 */
@@ -9744,6 +9918,18 @@ The identifier of the story.
 }
 
 /**
+Describes an ephemeral message to be replied; for bots only.
+Subtype of {@link InputMessageReplyTo}.
+*/
+export interface InputMessageReplyToEphemeralMessage {
+	'@type': 'inputMessageReplyToEphemeralMessage';
+	/**
+The identifier of the ephemeral message to be replied.
+*/
+	ephemeral_message_id: number;
+}
+
+/**
 Describes a fact-check added to the message by an independent checker.
 */
 export interface FactCheck {
@@ -9771,6 +9957,11 @@ Message identifier; unique for the chat to which the message belongs.
 Identifier of the sender of the message.
 */
 	sender_id: MessageSender;
+	/**
+Identifier of the user or the chat which received the ephemeral message; may be null. Always null for non-ephemeral
+messages.
+*/
+	receiver_id: MessageSender;
 	/**
 Chat identifier.
 */
@@ -9815,10 +10006,10 @@ message is deleted in less than getOption("suggested_post_lifetime_min") seconds
 */
 	is_paid_star_suggested_post?: boolean;
 	/**
-True, if the message is a suggested channel post which was paid in Toncoins; a warning must be shown if the message is
+True, if the message is a suggested channel post which was paid in TON Grams; a warning must be shown if the message is
 deleted in less than getOption("suggested_post_lifetime_min") seconds after sending.
 */
-	is_paid_ton_suggested_post?: boolean;
+	is_paid_gram_suggested_post?: boolean;
 	/**
 True, if the message contains an unread mention for the current user.
 */
@@ -9832,7 +10023,9 @@ Point in time (Unix timestamp) when the message was sent; 0 for scheduled messag
 */
 	date: number;
 	/**
-Point in time (Unix timestamp) when the message was last edited; 0 for scheduled messages.
+Point in time (Unix timestamp) when the message was last edited; 0 for scheduled messages. If
+getOption("show_message_edit_date_by_default") is true, then the date must be shown along with the message instead of
+the date when the message was sent.
 */
 	edit_date: number;
 	/**
@@ -9938,6 +10131,10 @@ Content of the message.
 Reply markup for the message; may be null if none.
 */
 	reply_markup: ReplyMarkup;
+	/**
+Unique identifier of the ephemeral message if the message is ephemeral; for bots only.
+*/
+	ephemeral_message_id: number;
 }
 
 /**
@@ -12778,6 +12975,42 @@ Text.
 }
 
 /**
+A subscript rich text.
+Subtype of {@link RichText}.
+*/
+export interface RichTextSubscript {
+	'@type': 'richTextSubscript';
+	/**
+Text.
+*/
+	text: RichText;
+}
+
+/**
+A superscript rich text.
+Subtype of {@link RichText}.
+*/
+export interface RichTextSuperscript {
+	'@type': 'richTextSuperscript';
+	/**
+Text.
+*/
+	text: RichText;
+}
+
+/**
+A marked rich text.
+Subtype of {@link RichText}.
+*/
+export interface RichTextMarked {
+	'@type': 'richTextMarked';
+	/**
+Text.
+*/
+	text: RichText;
+}
+
+/**
 A date and time.
 Subtype of {@link RichText}.
 */
@@ -12843,6 +13076,22 @@ Text.
 The cashtag.
 */
 	cashtag: string;
+}
+
+/**
+A bank card number.
+Subtype of {@link RichText}.
+*/
+export interface RichTextBankCardNumber {
+	'@type': 'richTextBankCardNumber';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+The number of the bank card.
+*/
+	bank_card_number: string;
 }
 
 /**
@@ -12926,58 +13175,6 @@ Email address.
 }
 
 /**
-A bank card number.
-Subtype of {@link RichText}.
-*/
-export interface RichTextBankCardNumber {
-	'@type': 'richTextBankCardNumber';
-	/**
-Text.
-*/
-	text: RichText;
-	/**
-The number of the bank card.
-*/
-	bank_card_number: string;
-}
-
-/**
-A subscript rich text.
-Subtype of {@link RichText}.
-*/
-export interface RichTextSubscript {
-	'@type': 'richTextSubscript';
-	/**
-Text.
-*/
-	text: RichText;
-}
-
-/**
-A superscript rich text.
-Subtype of {@link RichText}.
-*/
-export interface RichTextSuperscript {
-	'@type': 'richTextSuperscript';
-	/**
-Text.
-*/
-	text: RichText;
-}
-
-/**
-A marked rich text.
-Subtype of {@link RichText}.
-*/
-export interface RichTextMarked {
-	'@type': 'richTextMarked';
-	/**
-Text.
-*/
-	text: RichText;
-}
-
-/**
 A rich text phone number.
 Subtype of {@link RichText}.
 */
@@ -13039,6 +13236,22 @@ export interface RichTextMathematicalExpression {
 The expression in LaTeX format.
 */
 	expression: string;
+}
+
+/**
+A rich text replacing another rich text; not supported in inputRichMessage.
+Subtype of {@link RichText}.
+*/
+export interface RichTextDiff {
+	'@type': 'richTextDiff';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+The old text.
+*/
+	old_text: RichText;
 }
 
 /**
@@ -13162,7 +13375,35 @@ Value of the item; 0 for unordered lists.
 */
 	value: number;
 	/**
-Type of the item numbering type; must be one of "a" for a lowercase letters, "A" for an uppercase letters, "i" for
+Type of the item numbering type; must be one of "a" for lowercase letters, "A" for uppercase letters, "i" for lowercase
+Roman numerals, "I" for uppercase Roman numerals, "1" for decimal numbers, or empty for unordered lists.
+*/
+	type: string;
+}
+
+/**
+Describes an item of a list page block to be sent.
+*/
+export interface InputPageBlockListItem {
+	'@type': 'inputPageBlockListItem';
+	/**
+Item blocks.
+*/
+	blocks: InputPageBlock[];
+	/**
+True, if the item has a checkbox.
+*/
+	has_checkbox?: boolean;
+	/**
+True, if the item is checked.
+*/
+	is_checked?: boolean;
+	/**
+Value of the item; pass 0 for unordered lists.
+*/
+	value: number;
+	/**
+Type of the item numbering type; must be one of "a" for a lowercase letter, "A" for an uppercase letter, "i" for
 lowercase Roman numerals, "I" for uppercase Roman numerals, "1" for decimal numbers, or empty for unordered lists.
 */
 	type: string;
@@ -13285,7 +13526,7 @@ Point in time (Unix timestamp) when the article was published; 0 if unknown.
 }
 
 /**
-Describes a block of an instant view for a web page.
+Describes a block of an instant view for a web page or a block of a rich message.
 Subtype of {@link PageBlock}.
 */
 export interface PageBlockTitle {
@@ -14574,6 +14815,10 @@ Native name of the country.
 English name of the country.
 */
 	english_name: string;
+	/**
+An emoji for the flag of the country; may be empty if unknown.
+*/
+	flag_emoji: string;
 	/**
 True, if the country must be hidden from the list of all countries.
 */
@@ -16927,14 +17172,14 @@ The dice value. If the value is 0, then the dice don't have final state yet.
 */
 	value: number;
 	/**
-The Toncoin amount that was staked; in the smallest units of the currency.
+The TON Gram amount that was staked; in the smallest units of the currency.
 */
-	stake_toncoin_amount: number;
+	stake_gram_amount: number;
 	/**
-The Toncoin amount that was gained from the roll; in the smallest units of the currency; -1 if the dice don't have final
-state yet.
+The TON Gram amount that was gained from the roll; in the smallest units of the currency; -1 if the dice don't have
+final state yet.
 */
-	prize_toncoin_amount: number;
+	prize_gram_amount: number;
 }
 
 /**
@@ -17326,6 +17571,27 @@ export interface MessageChatDeleteMember {
 User identifier of the deleted chat member.
 */
 	user_id: number;
+}
+
+/**
+The chat was added to a community.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatAddedToCommunity {
+	'@type': 'messageChatAddedToCommunity';
+	/**
+Identifier of the community to which the chat was added.
+*/
+	community_id: number;
+}
+
+/**
+The chat was removed from a community.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatRemovedFromCommunity {
+	'@type': 'messageChatRemovedFromCommunity';
+
 }
 
 /**
@@ -17955,25 +18221,25 @@ A sticker to be shown in the message; may be null if unknown.
 }
 
 /**
-Toncoins were gifted to a user.
+TON Grams were gifted to a user.
 Subtype of {@link MessageContent}.
 */
 export interface MessageGiftedTon {
 	'@type': 'messageGiftedTon';
 	/**
-The identifier of a user who gifted Toncoins; 0 if the gift was anonymous or is outgoing.
+The identifier of a user who gifted Grams; 0 if the gift was anonymous or is outgoing.
 */
 	gifter_user_id: number;
 	/**
-The identifier of a user who received Toncoins; 0 if the gift is incoming.
+The identifier of a user who received Grams; 0 if the gift is incoming.
 */
 	receiver_user_id: number;
 	/**
-The received Toncoin amount, in the smallest units of the cryptocurrency.
+The received Gram amount, in the smallest units of the cryptocurrency.
 */
-	ton_amount: number;
+	gram_amount: number;
 	/**
-Identifier of the transaction for Toncoin credit; for receiver only.
+Identifier of the transaction for Gram credit; for receiver only.
 */
 	transaction_id: string;
 	/**
@@ -17983,7 +18249,7 @@ A sticker to be shown in the message; may be null if unknown.
 }
 
 /**
-A Telegram Stars were received by the current user from a giveaway.
+Telegram Stars were received by the current user from a giveaway.
 Subtype of {@link MessageContent}.
 */
 export interface MessageGiveawayPrizeStars {
@@ -18164,8 +18430,8 @@ if NFT export isn't possible; only for the receiver of the gift.
 */
 	export_date: number;
 	/**
-Point in time (Unix timestamp) when the gift can be used to craft another gift can be in the past; only for the receiver
-of the gift.
+Point in time (Unix timestamp) when the gift can be used to craft another gift; can be in the past; only for the
+receiver of the gift.
 */
 	craft_date: number;
 }
@@ -18326,7 +18592,7 @@ List of tasks added to the checklist.
 }
 
 /**
-Approval of suggested post has failed, because the user which proposed the post had no enough funds.
+Approval of suggested post has failed, because the user who proposed the post didn't have enough funds.
 Subtype of {@link MessageContent}.
 */
 export interface MessageSuggestedPostApprovalFailed {
@@ -18393,9 +18659,9 @@ The amount of received Telegram Stars.
 */
 	star_amount: StarAmount;
 	/**
-The amount of received Toncoins; in the smallest units of the cryptocurrency.
+The amount of received TON Grams; in the smallest units of the cryptocurrency.
 */
-	ton_amount: number;
+	gram_amount: number;
 }
 
 /**
@@ -19000,6 +19266,29 @@ Photo height; may be replaced by the server.
 }
 
 /**
+A sticker to be sent.
+*/
+export interface InputSticker {
+	'@type': 'inputSticker';
+	/**
+Sticker to be sent.
+*/
+	sticker: InputFile;
+	/**
+Sticker thumbnail; pass null to skip thumbnail uploading.
+*/
+	thumbnail: InputThumbnail;
+	/**
+Sticker width.
+*/
+	width: number;
+	/**
+Sticker height.
+*/
+	height: number;
+}
+
+/**
 A video to be sent.
 */
 export interface InputVideo {
@@ -19043,7 +19332,51 @@ True, if the video is expected to be streamed.
 }
 
 /**
-Describes type of paid media to sent.
+A video note to be sent.
+*/
+export interface InputVideoNote {
+	'@type': 'inputVideoNote';
+	/**
+Video note file to be sent. The video is expected to be encoded to MPEG4 format with H.264 codec and have no data
+outside of the visible circle.
+*/
+	video_note: InputFile;
+	/**
+Video thumbnail; may be null if empty; pass null to skip thumbnail uploading.
+*/
+	thumbnail: InputThumbnail;
+	/**
+Duration of the video, in seconds; 0-60.
+*/
+	duration: number;
+	/**
+Video width and height; must be positive and not greater than 640.
+*/
+	length: number;
+}
+
+/**
+A video note to be sent.
+*/
+export interface InputVoiceNote {
+	'@type': 'inputVoiceNote';
+	/**
+Voice note file to be sent. The voice note must be encoded with the Opus codec and stored inside an OGG container with a
+single audio channel, or be in MP3 or M4A format as regular audio.
+*/
+	voice_note: InputFile;
+	/**
+Duration of the voice note, in seconds.
+*/
+	duration: number;
+	/**
+Waveform representation of the voice note in 5-bit format.
+*/
+	waveform: string;
+}
+
+/**
+Describes type of paid media to send.
 Subtype of {@link InputPaidMediaType}.
 */
 export interface InputPaidMediaTypePhoto {
@@ -19334,19 +19667,7 @@ export interface InputPollMediaSticker {
 	/**
 Sticker to be sent.
 */
-	sticker: InputFile;
-	/**
-Sticker thumbnail; pass null to skip thumbnail uploading.
-*/
-	thumbnail: InputThumbnail;
-	/**
-Sticker width.
-*/
-	width: number;
-	/**
-Sticker height.
-*/
-	height: number;
+	sticker: InputSticker;
 }
 
 /**
@@ -19371,6 +19692,347 @@ export interface InputPollMediaVideo {
 The video to be sent.
 */
 	video: InputVideo;
+}
+
+/**
+Describes a block of a rich message to send.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockSectionHeading {
+	'@type': 'inputPageBlockSectionHeading';
+	/**
+Text of the section heading.
+*/
+	text: RichText;
+	/**
+Relative size of the text font; 1-6, 1 is the largest, 6 is the smallest.
+*/
+	size: number;
+}
+
+/**
+A text paragraph.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockParagraph {
+	'@type': 'inputPageBlockParagraph';
+	/**
+Paragraph text.
+*/
+	text: RichText;
+}
+
+/**
+A preformatted text paragraph.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockPreformatted {
+	'@type': 'inputPageBlockPreformatted';
+	/**
+Paragraph text.
+*/
+	text: RichText;
+	/**
+Programming language for which the text needs to be formatted.
+*/
+	language: string;
+}
+
+/**
+The footer of the page.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockFooter {
+	'@type': 'inputPageBlockFooter';
+	/**
+Footer.
+*/
+	footer: RichText;
+}
+
+/**
+A "Thinking..." placeholder; for pending rich messages only; for bots only.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockThinking {
+	'@type': 'inputPageBlockThinking';
+	/**
+Text of the placeholder.
+*/
+	text: RichText;
+}
+
+/**
+An empty block separating the page.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockDivider {
+	'@type': 'inputPageBlockDivider';
+
+}
+
+/**
+A mathematical expression.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockMathematicalExpression {
+	'@type': 'inputPageBlockMathematicalExpression';
+	/**
+The expression in LaTeX format.
+*/
+	expression: string;
+}
+
+/**
+An invisible anchor.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockAnchor {
+	'@type': 'inputPageBlockAnchor';
+	/**
+Name of the anchor.
+*/
+	name: string;
+}
+
+/**
+A list of data blocks.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockList {
+	'@type': 'inputPageBlockList';
+	/**
+The items of the list.
+*/
+	items: InputPageBlockListItem[];
+}
+
+/**
+A block quote.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockBlockQuote {
+	'@type': 'inputPageBlockBlockQuote';
+	/**
+Quote blocks.
+*/
+	blocks: InputPageBlock[];
+	/**
+Quote credit; pass null if none.
+*/
+	credit: RichText;
+}
+
+/**
+A pull quote.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockPullQuote {
+	'@type': 'inputPageBlockPullQuote';
+	/**
+Quote text.
+*/
+	text: RichText;
+	/**
+Quote credit; pass null if none.
+*/
+	credit: RichText;
+}
+
+/**
+An animation.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockAnimation {
+	'@type': 'inputPageBlockAnimation';
+	/**
+The animation to be sent.
+*/
+	animation: InputAnimation;
+	/**
+Animation caption; pass null if none.
+*/
+	caption: PageBlockCaption;
+	/**
+True, if the animation preview must be covered by a spoiler animation.
+*/
+	has_spoiler?: boolean;
+}
+
+/**
+An audio file.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockAudio {
+	'@type': 'inputPageBlockAudio';
+	/**
+The audio to be sent.
+*/
+	audio: InputAudio;
+	/**
+Audio file caption; pass null if none.
+*/
+	caption: PageBlockCaption;
+}
+
+/**
+A photo.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockPhoto {
+	'@type': 'inputPageBlockPhoto';
+	/**
+The photo to be sent.
+*/
+	photo: InputPhoto;
+	/**
+Photo caption; pass null if none.
+*/
+	caption: PageBlockCaption;
+	/**
+True, if the photo preview must be covered by a spoiler animation.
+*/
+	has_spoiler?: boolean;
+}
+
+/**
+A video.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockVideo {
+	'@type': 'inputPageBlockVideo';
+	/**
+The video to be sent.
+*/
+	video: InputVideo;
+	/**
+Video caption; pass null if none.
+*/
+	caption: PageBlockCaption;
+	/**
+True, if the video preview must be covered by a spoiler animation.
+*/
+	has_spoiler?: boolean;
+}
+
+/**
+A voice note.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockVoiceNote {
+	'@type': 'inputPageBlockVoiceNote';
+	/**
+The voice note to be sent.
+*/
+	voice_note: InputVoiceNote;
+	/**
+Voice note caption; pass null if none.
+*/
+	caption: PageBlockCaption;
+}
+
+/**
+A collage.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockCollage {
+	'@type': 'inputPageBlockCollage';
+	/**
+Collage item contents.
+*/
+	blocks: InputPageBlock[];
+	/**
+Block caption; pass null if none.
+*/
+	caption: PageBlockCaption;
+}
+
+/**
+A slideshow.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockSlideshow {
+	'@type': 'inputPageBlockSlideshow';
+	/**
+Slideshow item contents.
+*/
+	blocks: InputPageBlock[];
+	/**
+Block caption; pass null if none.
+*/
+	caption: PageBlockCaption;
+}
+
+/**
+A table.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockTable {
+	'@type': 'inputPageBlockTable';
+	/**
+Table caption.
+*/
+	caption: RichText;
+	/**
+Table cells.
+*/
+	cells: PageBlockTableCell[][];
+	/**
+True, if the table is bordered.
+*/
+	is_bordered?: boolean;
+	/**
+True, if the table is striped.
+*/
+	is_striped?: boolean;
+}
+
+/**
+A collapsible block.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockDetails {
+	'@type': 'inputPageBlockDetails';
+	/**
+Always visible heading for the block.
+*/
+	header: RichText;
+	/**
+Block contents.
+*/
+	blocks: InputPageBlock[];
+	/**
+True, if the block is open by default.
+*/
+	is_open?: boolean;
+}
+
+/**
+A map. The map's width and height must not exceed 10000 in total. Width and height ratio must be at most 20.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockMap {
+	'@type': 'inputPageBlockMap';
+	/**
+Location of the map center.
+*/
+	location: Location;
+	/**
+Map zoom level; 0-24.
+*/
+	zoom: number;
+	/**
+Map width; 0-10000.
+*/
+	width: number;
+	/**
+Map height; 0-10000.
+*/
+	height: number;
+	/**
+Block caption; pass null if none.
+*/
+	caption: PageBlockCaption;
 }
 
 /**
@@ -19535,19 +20197,7 @@ export interface InputMessageSticker {
 	/**
 Sticker to be sent.
 */
-	sticker: InputFile;
-	/**
-Sticker thumbnail; pass null to skip thumbnail uploading.
-*/
-	thumbnail: InputThumbnail;
-	/**
-Sticker width.
-*/
-	width: number;
-	/**
-Sticker height.
-*/
-	height: number;
+	sticker: InputSticker;
 	/**
 Emoji used to choose the sticker.
 */
@@ -19590,22 +20240,9 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageVideoNote {
 	'@type': 'inputMessageVideoNote';
 	/**
-Video note to be sent. The video is expected to be encoded to MPEG4 format with H.264 codec and have no data outside of
-the visible circle.
+Video note to be sent.
 */
-	video_note: InputFile;
-	/**
-Video thumbnail; may be null if empty; pass null to skip thumbnail uploading.
-*/
-	thumbnail: InputThumbnail;
-	/**
-Duration of the video, in seconds; 0-60.
-*/
-	duration: number;
-	/**
-Video width and height; must be positive and not greater than 640.
-*/
-	length: number;
+	video_note: InputVideoNote;
 	/**
 Video note self-destruct type; may be null if none; pass null if none; private chats only.
 */
@@ -19619,18 +20256,9 @@ Subtype of {@link InputMessageContent}.
 export interface InputMessageVoiceNote {
 	'@type': 'inputMessageVoiceNote';
 	/**
-Voice note to be sent. The voice note must be encoded with the Opus codec and stored inside an OGG container with a
-single audio channel, or be in MP3 or M4A format as regular audio.
+Voice note to be sent.
 */
-	voice_note: InputFile;
-	/**
-Duration of the voice note, in seconds.
-*/
-	duration: number;
-	/**
-Waveform representation of the voice note in 5-bit format.
-*/
-	waveform: string;
+	voice_note: InputVoiceNote;
 	/**
 Voice note caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
 */
@@ -19872,10 +20500,10 @@ must be requested using getStakeDiceState.
 */
 	state_hash: string;
 	/**
-The Toncoin amount that will be staked; in the smallest units of the currency. Must be in the range
+The TON Gram amount that will be staked; in the smallest units of the currency. Must be in the range
 getOption("stake_dice_stake_amount_min")-getOption("stake_dice_stake_amount_max").
 */
-	stake_toncoin_amount: number;
+	stake_gram_amount: number;
 	/**
 Pass true to delete message draft in the chat.
 */
@@ -20004,7 +20632,8 @@ True, if the message can be pinned or unpinned in the chat using pinChatMessage 
 */
 	can_be_pinned?: boolean;
 	/**
-True, if the message can be replied in the same chat and forum topic using inputMessageReplyToMessage.
+True, if the message can be replied in the same chat and forum topic using inputMessageReplyToMessage. Ephemeral
+messages can be replied only by other ephemeral messages.
 */
 	can_be_replied?: boolean;
 	/**
@@ -20975,7 +21604,7 @@ Information about the venue.
 
 /**
 An area pointing to a suggested reaction. App needs to show a clickable reaction on the area and call setStoryReaction
-when the are is clicked.
+when the area is clicked.
 Subtype of {@link StoryAreaType}.
 */
 export interface StoryAreaTypeSuggestedReaction {
@@ -21424,7 +22053,7 @@ export interface StoryListMain {
 }
 
 /**
-The list of stories, shown in the Arvhive chat list.
+The list of stories, shown in the Archive chat list.
 Subtype of {@link StoryList}.
 */
 export interface StoryListArchive {
@@ -21578,7 +22207,7 @@ True, if interactions with the story can be received through getStoryInteraction
 */
 	can_get_interactions?: boolean;
 	/**
-True, if users viewed the story can't be received, because the story has expired more than
+True, if users who viewed the story can't be received, because the story has expired more than
 getOption("story_viewers_expiration_delay") seconds ago.
 */
 	has_expired_viewers?: boolean;
@@ -26421,6 +27050,15 @@ export interface PremiumFeatureTextComposition {
 }
 
 /**
+The ability to send rich messages.
+Subtype of {@link PremiumFeature}.
+*/
+export interface PremiumFeatureRichMessages {
+	'@type': 'premiumFeatureRichMessages';
+
+}
+
+/**
 Describes a feature available to Business user accounts.
 Subtype of {@link BusinessFeature}.
 */
@@ -30012,11 +30650,11 @@ Subsection of the section; may be one of "", "top-up", "stats", "gift", "earn".
 }
 
 /**
-The Toncoin balance and transaction section.
+The TON Gram balance and transaction section.
 Subtype of {@link SettingsSection}.
 */
-export interface SettingsSectionMyToncoins {
-	'@type': 'settingsSectionMyToncoins';
+export interface SettingsSectionMyGrams {
+	'@type': 'settingsSectionMyGrams';
 
 }
 
@@ -31574,7 +32212,7 @@ True, if the next audio track needs to be preloaded while the user is listening 
 */
 	preload_next_audio?: boolean;
 	/**
-True, if stories needs to be preloaded.
+True, if stories need to be preloaded.
 */
 	preload_stories?: boolean;
 	/**
@@ -32386,8 +33024,8 @@ List of proxy servers.
 /**
 A sticker to be added to a sticker set.
 */
-export interface InputSticker {
-	'@type': 'inputSticker';
+export interface NewSticker {
+	'@type': 'newSticker';
 	/**
 File with the sticker; must fit in a 512x512 square. For WEBP stickers the file must be in WEBP or PNG format, which
 will be converted to WEBP server-side. See https://core.telegram.org/animated_stickers#technical-requirements for
@@ -32973,9 +33611,9 @@ Contains a list of chat revenue transactions.
 export interface ChatRevenueTransactions {
 	'@type': 'chatRevenueTransactions';
 	/**
-The amount of owned Toncoins; in the smallest units of the cryptocurrency.
+The amount of owned TON Grams; in the smallest units of the cryptocurrency.
 */
-	ton_amount: number;
+	gram_amount: number;
 	/**
 List of transactions.
 */
@@ -33033,33 +33671,33 @@ Current conversion rate of a Telegram Star to USD.
 }
 
 /**
-Contains information about Toncoins earned by the current user.
+Contains information about TON Grams earned by the current user.
 */
-export interface TonRevenueStatus {
-	'@type': 'tonRevenueStatus';
+export interface GramRevenueStatus {
+	'@type': 'gramRevenueStatus';
 	/**
-Total Toncoin amount earned; in the smallest units of the cryptocurrency.
+Total Gram amount earned; in the smallest units of the cryptocurrency.
 */
 	total_amount: string;
 	/**
-The Toncoin amount that isn't withdrawn yet; in the smallest units of the cryptocurrency.
+The Gram amount that isn't withdrawn yet; in the smallest units of the cryptocurrency.
 */
 	balance_amount: string;
 	/**
-The Toncoin amount that is available for withdrawal; in the smallest units of the cryptocurrency.
+The Gram amount that is available for withdrawal; in the smallest units of the cryptocurrency.
 */
 	available_amount: string;
 	/**
-True, if Toncoins can be withdrawn.
+True, if Grams can be withdrawn.
 */
 	withdrawal_enabled?: boolean;
 }
 
 /**
-A detailed statistics about Toncoins earned by the current user.
+A detailed statistics about TON Grams earned by the current user.
 */
-export interface TonRevenueStatistics {
-	'@type': 'tonRevenueStatistics';
+export interface GramRevenueStatistics {
+	'@type': 'gramRevenueStatistics';
 	/**
 A graph containing amount of revenue in a given day.
 */
@@ -33067,9 +33705,9 @@ A graph containing amount of revenue in a given day.
 	/**
 Amount of earned revenue.
 */
-	status: TonRevenueStatus;
+	status: GramRevenueStatus;
 	/**
-Current conversion rate of nanotoncoin to USD cents.
+Current conversion rate of nanogram to USD cents.
 */
 	usd_rate: number;
 }
@@ -34520,6 +35158,19 @@ Content of the message; always of the type messageText or messageRichMessage.
 }
 
 /**
+Some data of a community has changed. This update is guaranteed to come before the community identifier is returned to
+the application.
+Subtype of {@link Update}.
+*/
+export interface UpdateCommunity {
+	'@type': 'updateCommunity';
+	/**
+New data about the community.
+*/
+	community: Community;
+}
+
+/**
 The user went online or offline.
 Subtype of {@link Update}.
 */
@@ -35044,7 +35695,7 @@ New state of the auction.
 }
 
 /**
-The list of auctions in which participate the current user has changed.
+The list of auctions in which the current user participates has changed.
 Subtype of {@link Update}.
 */
 export interface UpdateActiveGiftAuctions {
@@ -35132,7 +35783,7 @@ export interface UpdateChatJoinResult {
 	'@type': 'updateChatJoinResult';
 	/**
 Identifier of the join request query as received in chatJoinResultGuardBotApprovalRequired. If the corresponding Web App
-is stiil open, then it must be closed.
+is still open, then it must be closed.
 */
 	query_id: string;
 	/**
@@ -35515,7 +36166,7 @@ The link to open to send an appeal to unfreeze the account.
 }
 
 /**
-The parameters for age verification of the current user's account has changed.
+The parameters for age verification of the current user's account have changed.
 Subtype of {@link Update}.
 */
 export interface UpdateAgeVerificationParameters {
@@ -35677,15 +36328,15 @@ The new amount of owned Telegram Stars.
 }
 
 /**
-The number of Toncoins owned by the current user has changed.
+The number of TON Grams owned by the current user has changed.
 Subtype of {@link Update}.
 */
-export interface UpdateOwnedTonCount {
-	'@type': 'updateOwnedTonCount';
+export interface UpdateOwnedGramCount {
+	'@type': 'updateOwnedGramCount';
 	/**
-The new amount of owned Toncoins; in the smallest units of the cryptocurrency.
+The new amount of owned Grams; in the smallest units of the cryptocurrency.
 */
-	ton_amount: number;
+	gram_amount: number;
 }
 
 /**
@@ -35723,20 +36374,20 @@ New Telegram Star revenue status.
 }
 
 /**
-The Toncoin revenue earned by the current user has changed. If Toncoin transaction screen of the chat is opened, then
+The TON Gram revenue earned by the current user has changed. If Gram transaction screen of the chat is opened, then
 getTonTransactions may be called to fetch new transactions.
 Subtype of {@link Update}.
 */
-export interface UpdateTonRevenueStatus {
-	'@type': 'updateTonRevenueStatus';
+export interface UpdateGramRevenueStatus {
+	'@type': 'updateGramRevenueStatus';
 	/**
-New Toncoin revenue status.
+New Gram revenue status.
 */
-	status: TonRevenueStatus;
+	status: GramRevenueStatus;
 }
 
 /**
-The parameters of speech recognition without Telegram Premium subscription has changed.
+The parameters of speech recognition without Telegram Premium subscription have changed.
 Subtype of {@link Update}.
 */
 export interface UpdateSpeechRecognitionTrial {
@@ -35818,7 +36469,7 @@ The animated sticker to be played.
 }
 
 /**
-The parameters of animation search through getOption("animation_search_bot_username") bot has changed.
+The parameters of animation search through getOption("animation_search_bot_username") bot have changed.
 Subtype of {@link Update}.
 */
 export interface UpdateAnimationSearchParameters {
@@ -35863,7 +36514,7 @@ Removed suggested actions.
 
 /**
 Download or upload file speed for the user was limited, but it can be restored by subscription to Telegram Premium. The
-notification can be postponed until a being downloaded or uploaded file is visible to the user. Use
+notification can be postponed until a file being downloaded or uploaded is visible to the user. Use
 getOption("premium_download_speedup") or getOption("premium_upload_speedup") to get expected speedup after subscription
 to Telegram Premium.
 Subtype of {@link Update}.
@@ -36230,6 +36881,34 @@ JSON-serialized query data.
 Query timeout.
 */
 	timeout: number;
+}
+
+/**
+Subscription of a user to the bot was changed; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdateUserSubscription {
+	'@type': 'updateUserSubscription';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+	/**
+Bot-specified subscription invoice payload.
+*/
+	payload: string;
+	/**
+True, if the subscription was canceled.
+*/
+	is_canceled?: boolean;
+	/**
+True, if the subscription was restored.
+*/
+	is_restored?: boolean;
+	/**
+True, if the payment for the subscription has failed.
+*/
+	is_payment_failed?: boolean;
 }
 
 /**
@@ -36630,6 +37309,7 @@ export type EmailAddressResetState =
 	| EmailAddressResetStatePending;
 
 export type RichMessageSource =
+	| RichMessageSourceBlocks
 	| RichMessageSourceMarkdown
 	| RichMessageSourceHtml;
 
@@ -36742,7 +37422,7 @@ export type WebAppOpenMode =
 
 export type GiftResalePrice =
 	| GiftResalePriceStar
-	| GiftResalePriceTon;
+	| GiftResalePriceGram;
 
 export type GiftPurchaseOfferState =
 	| GiftPurchaseOfferStatePending
@@ -36751,7 +37431,7 @@ export type GiftPurchaseOfferState =
 
 export type SuggestedPostPrice =
 	| SuggestedPostPriceStar
-	| SuggestedPostPriceTon;
+	| SuggestedPostPriceGram;
 
 export type SuggestedPostState =
 	| SuggestedPostStatePending
@@ -36906,6 +37586,13 @@ export type GiveawayPrize =
 	| GiveawayPrizePremium
 	| GiveawayPrizeStars;
 
+export type CommunityMemberStatus =
+	| CommunityMemberStatusCreator
+	| CommunityMemberStatusAdministrator
+	| CommunityMemberStatusMember
+	| CommunityMemberStatusLeft
+	| CommunityMemberStatusBanned;
+
 export type EmojiStatusType =
 	| EmojiStatusTypeCustomEmoji
 	| EmojiStatusTypeUpgradedGift;
@@ -37006,7 +37693,8 @@ export type MessageReplyTo =
 export type InputMessageReplyTo =
 	| InputMessageReplyToMessage
 	| InputMessageReplyToExternalMessage
-	| InputMessageReplyToStory;
+	| InputMessageReplyToStory
+	| InputMessageReplyToEphemeralMessage;
 
 export type MessageSource =
 	| MessageSourceChatHistory
@@ -37136,23 +37824,24 @@ export type RichText =
 	| RichTextUnderline
 	| RichTextStrikethrough
 	| RichTextSpoiler
+	| RichTextSubscript
+	| RichTextSuperscript
+	| RichTextMarked
 	| RichTextDateTime
 	| RichTextMention
 	| RichTextHashtag
 	| RichTextCashtag
+	| RichTextBankCardNumber
 	| RichTextBotCommand
 	| RichTextFixed
 	| RichTextMentionName
 	| RichTextUrl
 	| RichTextEmailAddress
-	| RichTextBankCardNumber
-	| RichTextSubscript
-	| RichTextSuperscript
-	| RichTextMarked
 	| RichTextPhoneNumber
 	| RichTextCustomEmoji
 	| RichTextIcon
 	| RichTextMathematicalExpression
+	| RichTextDiff
 	| RichTextReference
 	| RichTextReferenceLink
 	| RichTextAnchor
@@ -37411,6 +38100,8 @@ export type MessageContent =
 	| MessageChatJoinByLink
 	| MessageChatJoinByRequest
 	| MessageChatDeleteMember
+	| MessageChatAddedToCommunity
+	| MessageChatRemovedFromCommunity
 	| MessageChatUpgradeTo
 	| MessageChatUpgradeFrom
 	| MessagePinMessage
@@ -37528,6 +38219,29 @@ export type InputPollMedia =
 	| InputPollMediaSticker
 	| InputPollMediaVenue
 	| InputPollMediaVideo;
+
+export type InputPageBlock =
+	| InputPageBlockSectionHeading
+	| InputPageBlockParagraph
+	| InputPageBlockPreformatted
+	| InputPageBlockFooter
+	| InputPageBlockThinking
+	| InputPageBlockDivider
+	| InputPageBlockMathematicalExpression
+	| InputPageBlockAnchor
+	| InputPageBlockList
+	| InputPageBlockBlockQuote
+	| InputPageBlockPullQuote
+	| InputPageBlockAnimation
+	| InputPageBlockAudio
+	| InputPageBlockPhoto
+	| InputPageBlockVideo
+	| InputPageBlockVoiceNote
+	| InputPageBlockCollage
+	| InputPageBlockSlideshow
+	| InputPageBlockTable
+	| InputPageBlockDetails
+	| InputPageBlockMap;
 
 export type InputMessageContent =
 	| InputMessageText
@@ -37912,7 +38626,8 @@ export type PremiumFeature =
 	| PremiumFeatureChecklists
 	| PremiumFeaturePaidMessages
 	| PremiumFeatureProtectPrivateChatContent
-	| PremiumFeatureTextComposition;
+	| PremiumFeatureTextComposition
+	| PremiumFeatureRichMessages;
 
 export type BusinessFeature =
 	| BusinessFeatureLocation
@@ -38220,7 +38935,7 @@ export type SettingsSection =
 	| SettingsSectionInAppBrowser
 	| SettingsSectionLanguage
 	| SettingsSectionMyStars
-	| SettingsSectionMyToncoins
+	| SettingsSectionMyGrams
 	| SettingsSectionNotifications
 	| SettingsSectionPowerSaving
 	| SettingsSectionPremium
@@ -38509,6 +39224,7 @@ export type Update =
 	| UpdateDeleteMessages
 	| UpdateChatAction
 	| UpdatePendingMessage
+	| UpdateCommunity
 	| UpdateUserStatus
 	| UpdateUser
 	| UpdateBasicGroup
@@ -38581,10 +39297,10 @@ export type Update =
 	| UpdateSavedMessagesTags
 	| UpdateActiveLiveLocationMessages
 	| UpdateOwnedStarCount
-	| UpdateOwnedTonCount
+	| UpdateOwnedGramCount
 	| UpdateChatRevenueAmount
 	| UpdateStarRevenueStatus
-	| UpdateTonRevenueStatus
+	| UpdateGramRevenueStatus
 	| UpdateSpeechRecognitionTrial
 	| UpdateGroupCallMessageLevels
 	| UpdateDiceEmojis
@@ -38610,6 +39326,7 @@ export type Update =
 	| UpdateNewPreCheckoutQuery
 	| UpdateNewCustomEvent
 	| UpdateNewCustomQuery
+	| UpdateUserSubscription
 	| UpdatePoll
 	| UpdatePollAnswer
 	| UpdateManagedBot
@@ -41460,7 +42177,8 @@ getOption("text_composition_style_example_count").
 
 /**
 Adds a custom text composition style to the list of used by the user styles. May return an error with a message
-"TONES_SAVED_TOO_MANY" if the maximum number of added custom styles has been reached.
+"TONES_SAVED_TOO_MANY" if the maximum number of added custom styles getOption("added_text_composition_style_count_max")
+has been reached.
 Request type for {@link Tdjson#addTextCompositionStyle}.
 */
 export interface AddTextCompositionStyle {
@@ -41512,12 +42230,58 @@ Tone of the translation; must be one of "", "formal", "neutral", "casual"; defau
 }
 
 /**
+Translates a rich message to the given language.
+Request type for {@link Tdjson#translateRichMessage}.
+*/
+export interface TranslateRichMessage {
+	'@type': 'translateRichMessage';
+	/**
+Rich message to translate.
+*/
+	message: InputRichMessage;
+	/**
+Language code of the language to which the message is translated. See translateText.to_language_code for the list of
+supported values.
+*/
+	to_language_code: string;
+	/**
+Tone of the translation; see translateText.tone for the list of supported values.
+*/
+	tone: string;
+}
+
+/**
 Extracts text or caption of the given message and translates it to the given language; must not be used in secret chats.
 If the current user is a Telegram Premium user, then text formatting is preserved.
 Request type for {@link Tdjson#translateMessageText}.
 */
 export interface TranslateMessageText {
 	'@type': 'translateMessageText';
+	/**
+Identifier of the chat to which the message belongs.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
+	/**
+Language code of the language to which the message is translated. See translateText.to_language_code for the list of
+supported values.
+*/
+	to_language_code: string;
+	/**
+Tone of the translation; see translateText.tone for the list of supported values.
+*/
+	tone: string;
+}
+
+/**
+Extracts rich message of the given message and translates it to the given language.
+Request type for {@link Tdjson#translateMessageRichMessage}.
+*/
+export interface TranslateMessageRichMessage {
+	'@type': 'translateMessageRichMessage';
 	/**
 Identifier of the chat to which the message belongs.
 */
@@ -41590,6 +42354,59 @@ Pass true to add emoji to the text.
 }
 
 /**
+Changes a rich message using an AI model. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram
+Premium is required to send further requests.
+Request type for {@link Tdjson#composeRichMessageWithAi}.
+*/
+export interface ComposeRichMessageWithAi {
+	'@type': 'composeRichMessageWithAi';
+	/**
+The original message.
+*/
+	message: InputRichMessage;
+	/**
+Pass a language code to which the text will be translated; pass an empty string if translation isn't needed. See
+translateText.to_language_code for the list of supported values.
+*/
+	translate_to_language_code: string;
+	/**
+Name of the style of the resulted text; handle updateTextCompositionStyles to get the list of supported styles; pass an
+empty string to keep the current style of the text or if a custom prompt is used.
+*/
+	style_name: string;
+	/**
+Custom prompt that will be used instead of style_name; 0-getOption("text_composition_style_prompt_length_max")
+characters.
+*/
+	custom_prompt: string;
+	/**
+Pass true to add emoji to the text.
+*/
+	add_emojis?: boolean;
+}
+
+/**
+Creates a new rich message using an AI model. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram
+Premium is required to send further requests.
+Request type for {@link Tdjson#createRichMessageWithAi}.
+*/
+export interface CreateRichMessageWithAi {
+	'@type': 'createRichMessageWithAi';
+	/**
+Prompt that will be used to create the message; 0-getOption("text_composition_style_prompt_length_max") characters.
+*/
+	prompt: string;
+	/**
+Pass a language code in which the text will be created.
+*/
+	language_code: string;
+	/**
+Pass true to add emoji to the text.
+*/
+	add_emojis?: boolean;
+}
+
+/**
 Fixes text using an AI model; must not be used in secret chats. May return an error with a message
 "AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium is required to send further requests.
 Request type for {@link Tdjson#fixTextWithAi}.
@@ -41600,6 +42417,19 @@ export interface FixTextWithAi {
 The original text.
 */
 	text: FormattedText;
+}
+
+/**
+Fixes a rich message using an AI model. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium
+is required to send further requests.
+Request type for {@link Tdjson#fixRichMessageWithAi}.
+*/
+export interface FixRichMessageWithAi {
+	'@type': 'fixRichMessageWithAi';
+	/**
+The original message.
+*/
+	message: InputRichMessage;
 }
 
 /**
@@ -41881,6 +42711,55 @@ messageSendingStateFailed.required_paid_message_star_count == 0.
 }
 
 /**
+Sends an ephemeral message which will be received only by one bot in a chat. Currently, only ephemeral bot commands and
+replies to bot ephemeral messages can be sent using the method. The message is persistent across application restarts
+only if the message database is used. Returns the sent message.
+Request type for {@link Tdjson#sendEphemeralMessage}.
+*/
+export interface SendEphemeralMessage {
+	'@type': 'sendEphemeralMessage';
+	/**
+Target chat.
+*/
+	chat_id: number;
+	/**
+Topic in which the message will be sent; pass null if none.
+*/
+	topic_id: MessageTopic;
+	/**
+Identifier of the user who will receive the message.
+*/
+	receiver_user_id: number;
+	/**
+Identifier of the callback query which triggered the message; for bots only.
+*/
+	callback_query_id: string;
+	/**
+Information about the message to be replied; pass null if none. The message can be an incoming ephemeral message.
+*/
+	reply_to: InputMessageReplyTo;
+	/**
+Non-persistent identifier, which will be returned back in messageSendingStatePending object and can be used to match
+sent messages and corresponding updateNewMessage updates.
+*/
+	sending_id: number;
+	/**
+Pass true to get a fake message instead of actually sending them.
+*/
+	only_preview?: boolean;
+	/**
+Markup for replying to the message; pass null if none; for bots only.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageAnimation,
+inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageSticker, inputMessageVideo,
+inputMessageVideoNote, inputMessageVoiceNote, inputMessageLocation, inputMessageVenue, inputMessageContact.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
 Adds a local message to a chat. The message is persistent across application restarts only if the message database is
 used. Returns the added message.
 Request type for {@link Tdjson#addLocalMessage}.
@@ -41928,6 +42807,26 @@ messageProperties.can_be_deleted_for_all_users to get suitable messages.
 Pass true to delete messages for all chat members. Always true for supergroups, channels and secret chats.
 */
 	revoke?: boolean;
+}
+
+/**
+Deletes an ephemeral message; for bots only.
+Request type for {@link Tdjson#deleteEphemeralMessage}.
+*/
+export interface DeleteEphemeralMessage {
+	'@type': 'deleteEphemeralMessage';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Identifier of the user who received the message.
+*/
+	receiver_user_id: number;
+	/**
+Identifiers of the message to be deleted.
+*/
+	ephemeral_message_id: number;
 }
 
 /**
@@ -42126,7 +43025,7 @@ The new message reply markup; pass null if none.
 }
 
 /**
-Edits the text of an inline text or game message sent via a bot; for bots only.
+Edits the text of an inline text or game message sent via the bot; for bots only.
 Request type for {@link Tdjson#editInlineMessageText}.
 */
 export interface EditInlineMessageText {
@@ -42140,7 +43039,8 @@ The new message reply markup; pass null if none.
 */
 	reply_markup: ReplyMarkup;
 	/**
-New text content of the message. Must be of type inputMessageText or inputMessageRichMessage.
+New text content of the message. Must be of type inputMessageText or inputMessageRichMessage; file upload isn't
+supported.
 */
 	input_message_content: InputMessageContent;
 }
@@ -42228,6 +43128,36 @@ Inline message identifier.
 The new message reply markup; pass null if none.
 */
 	reply_markup: ReplyMarkup;
+}
+
+/**
+Edits the text, caption or reply markup of an ephemeral message sent by the bot; for bots only.
+Request type for {@link Tdjson#editEphemeralMessage}.
+*/
+export interface EditEphemeralMessage {
+	'@type': 'editEphemeralMessage';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the user who received the message.
+*/
+	receiver_user_id: number;
+	/**
+Identifier of the ephemeral message.
+*/
+	ephemeral_message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New content of the message; pass null to edit only reply markup. Must be one of the following types: inputMessageText,
+inputMessageAnimation, inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageSticker,
+inputMessageVideo, inputMessageVideoNote, inputMessageVoiceNote.
+*/
+	input_message_content: InputMessageContent;
 }
 
 /**
@@ -43797,7 +44727,7 @@ The text.
 }
 
 /**
-Returns an emoji for the given country. Returns an empty string on failure. Can be called synchronously.
+Returns an emoji for the flag of the given country. Returns an empty string on failure. Can be called synchronously.
 Request type for {@link Tdjson#getCountryFlagEmoji}.
 */
 export interface GetCountryFlagEmoji {
@@ -44497,6 +45427,22 @@ Parameters to use to open the Web App.
 }
 
 /**
+Returns an HTTPS URL of a Web App of a guard bot to open after receiving chatJoinResultGuardBotApprovalRequired.
+Request type for {@link Tdjson#getGuardBotWebAppUrl}.
+*/
+export interface GetGuardBotWebAppUrl {
+	'@type': 'getGuardBotWebAppUrl';
+	/**
+Unique identifier of the join request as received in chatJoinResultGuardBotApprovalRequired.
+*/
+	query_id: string;
+	/**
+Parameters to use to open the Web App.
+*/
+	parameters: WebAppOpenParameters;
+}
+
+/**
 Sends data received from a keyboardButtonTypeWebApp Web App to a bot.
 Request type for {@link Tdjson#sendWebAppData}.
 */
@@ -44889,7 +45835,7 @@ Unique identifier of the draft.
 */
 	draft_id: string;
 	/**
-Draft of the message.
+Draft of the message; file upload isn't supported.
 */
 	message: InputRichMessage;
 }
@@ -46302,7 +47248,7 @@ channels.
 Changes the status of a chat member; requires can_invite_users member right to add a chat member, can_promote_members
 administrator right to change administrator rights of the member, and can_restrict_members administrator right to change
 restrictions of a user. This function is currently not suitable for transferring chat ownership; use
-transferChatOwnership instead. Use addChatMember or banChatMember if some additional parameters needs to be passed.
+transferChatOwnership instead. Use addChatMember or banChatMember if some additional parameters need to be passed.
 Request type for {@link Tdjson#setChatMemberStatus}.
 */
 export interface SetChatMemberStatus {
@@ -48198,7 +49144,7 @@ User identifier of a chat administrator. Must be an identifier of the current us
 */
 	creator_user_id: number;
 	/**
-Pass true if revoked links needs to be returned instead of active or expired.
+Pass true if revoked links need to be returned instead of active or expired.
 */
 	is_revoked?: boolean;
 	/**
@@ -49875,21 +50821,9 @@ Request type for {@link Tdjson#addProfileAudio}.
 export interface AddProfileAudio {
 	'@type': 'addProfileAudio';
 	/**
-The audio file to be added.
+The audio to add.
 */
-	audio: InputFile;
-	/**
-Duration of the audio, in seconds; may be replaced by the server; ignored for already uploaded files.
-*/
-	duration: number;
-	/**
-Title of the audio; 0-64 characters; may be replaced by the server; ignored for already uploaded files.
-*/
-	title: string;
-	/**
-Performer of the audio; 0-64 characters, may be replaced by the server; ignored for already uploaded files.
-*/
-	performer: string;
+	audio: InputAudio;
 }
 
 /**
@@ -51368,8 +52302,8 @@ Username to be checked.
 /**
 Creates a bot which will be managed by another bot. Returns the created bot. May return an error with a message
 "BOT_CREATE_LIMIT_EXCEEDED" if the user already owns the maximum allowed number of bots as per
-premiumLimitTypeOwnedBotCount. An internal link "https://t.me/BotFather?start=deletebot" can be processed to handle the
-error.
+getOption("owned_bot_count_max"). An internal link "https://t.me/BotFather?start=deletebot" can be processed to handle
+the error.
 Request type for {@link Tdjson#createBot}.
 */
 export interface CreateBot {
@@ -52898,8 +53832,8 @@ Identifier of the unique gift.
 	/**
 The new price for the unique gift; pass null to disallow gift resale. The current user will receive
 getOption("gift_resale_star_earnings_per_mille") Telegram Stars for each 1000 Telegram Stars paid for the gift if the
-gift price is in Telegram Stars or getOption("gift_resale_ton_earnings_per_mille") Toncoins for each 1000 Toncoins paid
-for the gift if the gift price is in Toncoins.
+gift price is in Telegram Stars or getOption("gift_resale_ton_earnings_per_mille") TON Grams for each 1000 Grams paid
+for the gift if the gift price is in Grams.
 */
 	price: GiftResalePrice;
 }
@@ -53787,7 +54721,7 @@ The maximum number of transactions to be returned; up to 100.
 }
 
 /**
-Returns the list of Toncoin transactions of the current user.
+Returns the list of TON blockchain transactions of the current user.
 Request type for {@link Tdjson#getTonTransactions}.
 */
 export interface GetTonTransactions {
@@ -53861,11 +54795,11 @@ chat.
 }
 
 /**
-Returns detailed Toncoin revenue statistics of the current user.
-Request type for {@link Tdjson#getTonRevenueStatistics}.
+Returns detailed TON Gram revenue statistics of the current user.
+Request type for {@link Tdjson#getGramRevenueStatistics}.
 */
-export interface GetTonRevenueStatistics {
-	'@type': 'getTonRevenueStatistics';
+export interface GetGramRevenueStatistics {
+	'@type': 'getGramRevenueStatistics';
 	/**
 Pass true if a dark theme is used by the application.
 */
@@ -53873,12 +54807,12 @@ Pass true if a dark theme is used by the application.
 }
 
 /**
-Returns a URL for Toncoin withdrawal from the current user's account. The user must have at least 10 toncoins to
-withdraw and can withdraw up to 100000 Toncoins in one transaction.
-Request type for {@link Tdjson#getTonWithdrawalUrl}.
+Returns a URL for TON Gram withdrawal from the current user's account. The user must have at least 10 Grams to withdraw
+and can withdraw up to 100000 Grams in one transaction.
+Request type for {@link Tdjson#getGramWithdrawalUrl}.
 */
-export interface GetTonWithdrawalUrl {
-	'@type': 'getTonWithdrawalUrl';
+export interface GetGramWithdrawalUrl {
+	'@type': 'getGramWithdrawalUrl';
 	/**
 The 2-step verification password of the current user.
 */
@@ -54306,8 +55240,8 @@ Element type.
 }
 
 /**
-Informs the user who some of the elements in their Telegram Passport contain errors; for bots only. The user will not be
-able to resend the elements, until the errors are fixed.
+Informs the user that some of the elements in their Telegram Passport contain errors; for bots only. The user will not
+be able to resend the elements, until the errors are fixed.
 Request type for {@link Tdjson#setPassportElementErrors}.
 */
 export interface SetPassportElementErrors {
@@ -54458,8 +55392,8 @@ Sticker format.
 */
 	sticker_format: StickerFormat;
 	/**
-File file to upload; must fit in a 512x512 square. For WEBP stickers the file must be in WEBP or PNG format, which will
-be converted to WEBP server-side. See https://core.telegram.org/animated_stickers#technical-requirements for technical
+File to upload; must fit in a 512x512 square. For WEBP stickers the file must be in WEBP or PNG format, which will be
+converted to WEBP server-side. See https://core.telegram.org/animated_stickers#technical-requirements for technical
 requirements.
 */
 	sticker: InputFile;
@@ -54521,7 +55455,7 @@ Pass true if stickers in the sticker set must be repainted; for custom emoji sti
 List of stickers to be added to the set; 1-200 stickers for custom emoji sticker sets, and 1-120 stickers otherwise. For
 TGS stickers, uploadStickerFile must be used before the sticker is shown.
 */
-	stickers: InputSticker[];
+	stickers: NewSticker[];
 	/**
 Source of the sticker set; may be empty if unknown.
 */
@@ -54546,7 +55480,7 @@ sticker sets and less than 120 otherwise.
 	/**
 Sticker to add to the set.
 */
-	sticker: InputSticker;
+	sticker: NewSticker;
 }
 
 /**
@@ -54571,7 +55505,7 @@ Sticker to remove from the set.
 	/**
 Sticker to add to the set.
 */
-	new_sticker: InputSticker;
+	new_sticker: NewSticker;
 }
 
 /**
@@ -55026,7 +55960,7 @@ Request type for {@link Tdjson#getStarSubscriptions}.
 export interface GetStarSubscriptions {
 	'@type': 'getStarSubscriptions';
 	/**
-Pass true to receive only expiring subscriptions for which there are no enough Telegram Stars to extend.
+Pass true to receive only expiring subscriptions for which there aren't enough Telegram Stars to extend.
 */
 	only_expiring?: boolean;
 	/**
@@ -55229,7 +56163,7 @@ Request type for {@link Tdjson#getConnectedAffiliatePrograms}.
 export interface GetConnectedAffiliatePrograms {
 	'@type': 'getConnectedAffiliatePrograms';
 	/**
-The affiliate to which the affiliate program were connected.
+The affiliate to which the affiliate programs were connected.
 */
 	affiliate: AffiliateType;
 	/**
@@ -55256,7 +56190,7 @@ Source of the request; pass null if the method is called from settings or some n
 }
 
 /**
-Accepts Telegram terms of services.
+Accepts Telegram terms of service.
 Request type for {@link Tdjson#acceptTermsOfService}.
 */
 export interface AcceptTermsOfService {
@@ -56016,10 +56950,15 @@ export type Request =
 	| AddTextCompositionStyle
 	| RemoveTextCompositionStyle
 	| TranslateText
+	| TranslateRichMessage
 	| TranslateMessageText
+	| TranslateMessageRichMessage
 	| SummarizeMessage
 	| ComposeTextWithAi
+	| ComposeRichMessageWithAi
+	| CreateRichMessageWithAi
 	| FixTextWithAi
+	| FixRichMessageWithAi
 	| RecognizeSpeech
 	| RateSpeechRecognition
 	| GetChatAvailableMessageSenders
@@ -56031,8 +56970,10 @@ export type Request =
 	| ForwardMessages
 	| SendQuickReplyShortcutMessages
 	| ResendMessages
+	| SendEphemeralMessage
 	| AddLocalMessage
 	| DeleteMessages
+	| DeleteEphemeralMessage
 	| DeleteChatMessagesBySender
 	| DeleteChatMessagesByDate
 	| EditMessageText
@@ -56046,6 +56987,7 @@ export type Request =
 	| EditInlineMessageMedia
 	| EditInlineMessageCaption
 	| EditInlineMessageReplyMarkup
+	| EditEphemeralMessage
 	| EditMessageSchedulingState
 	| SetMessageFactCheck
 	| SendBusinessMessage
@@ -56162,6 +57104,7 @@ export type Request =
 	| GetWebAppLinkUrl
 	| GetMainWebApp
 	| GetWebAppUrl
+	| GetGuardBotWebAppUrl
 	| SendWebAppData
 	| OpenWebApp
 	| CloseWebApp
@@ -56718,8 +57661,8 @@ export type Request =
 	| GetStarRevenueStatistics
 	| GetStarWithdrawalUrl
 	| GetStarAdAccountUrl
-	| GetTonRevenueStatistics
-	| GetTonWithdrawalUrl
+	| GetGramRevenueStatistics
+	| GetGramWithdrawalUrl
 	| GetChatStatistics
 	| GetMessageStatistics
 	| GetMessagePublicForwards
@@ -58595,7 +59538,8 @@ Returns an example of usage of a custom text composition style.
 
 	/**
 Adds a custom text composition style to the list of used by the user styles. May return an error with a message
-"TONES_SAVED_TOO_MANY" if the maximum number of added custom styles has been reached.
+"TONES_SAVED_TOO_MANY" if the maximum number of added custom styles getOption("added_text_composition_style_count_max")
+has been reached.
 */
 	async addTextCompositionStyle(options: Omit<AddTextCompositionStyle, '@type'>): Promise<Ok> {
 		return this._request({
@@ -58627,6 +59571,16 @@ user, then text formatting is preserved.
 	}
 
 	/**
+Translates a rich message to the given language.
+*/
+	async translateRichMessage(options: Omit<TranslateRichMessage, '@type'>): Promise<RichMessage> {
+		return this._request({
+			...options,
+			'@type': 'translateRichMessage',
+		});
+	}
+
+	/**
 Extracts text or caption of the given message and translates it to the given language; must not be used in secret chats.
 If the current user is a Telegram Premium user, then text formatting is preserved.
 */
@@ -58634,6 +59588,16 @@ If the current user is a Telegram Premium user, then text formatting is preserve
 		return this._request({
 			...options,
 			'@type': 'translateMessageText',
+		});
+	}
+
+	/**
+Extracts rich message of the given message and translates it to the given language.
+*/
+	async translateMessageRichMessage(options: Omit<TranslateMessageRichMessage, '@type'>): Promise<RichMessage> {
+		return this._request({
+			...options,
+			'@type': 'translateMessageRichMessage',
 		});
 	}
 
@@ -58659,6 +59623,28 @@ Changes text using an AI model; must not be used in secret chats. May return an 
 	}
 
 	/**
+Changes a rich message using an AI model. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram
+Premium is required to send further requests.
+*/
+	async composeRichMessageWithAi(options: Omit<ComposeRichMessageWithAi, '@type'>): Promise<RichMessage> {
+		return this._request({
+			...options,
+			'@type': 'composeRichMessageWithAi',
+		});
+	}
+
+	/**
+Creates a new rich message using an AI model. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram
+Premium is required to send further requests.
+*/
+	async createRichMessageWithAi(options: Omit<CreateRichMessageWithAi, '@type'>): Promise<RichMessage> {
+		return this._request({
+			...options,
+			'@type': 'createRichMessageWithAi',
+		});
+	}
+
+	/**
 Fixes text using an AI model; must not be used in secret chats. May return an error with a message
 "AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium is required to send further requests.
 */
@@ -58666,6 +59652,17 @@ Fixes text using an AI model; must not be used in secret chats. May return an er
 		return this._request({
 			...options,
 			'@type': 'fixTextWithAi',
+		});
+	}
+
+	/**
+Fixes a rich message using an AI model. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium
+is required to send further requests.
+*/
+	async fixRichMessageWithAi(options: Omit<FixRichMessageWithAi, '@type'>): Promise<RichMessage> {
+		return this._request({
+			...options,
+			'@type': 'fixRichMessageWithAi',
 		});
 	}
 
@@ -58789,6 +59786,18 @@ passed in message_ids. If a message can't be re-sent, null will be returned inst
 	}
 
 	/**
+Sends an ephemeral message which will be received only by one bot in a chat. Currently, only ephemeral bot commands and
+replies to bot ephemeral messages can be sent using the method. The message is persistent across application restarts
+only if the message database is used. Returns the sent message.
+*/
+	async sendEphemeralMessage(options: Omit<SendEphemeralMessage, '@type'>): Promise<Message> {
+		return this._request({
+			...options,
+			'@type': 'sendEphemeralMessage',
+		});
+	}
+
+	/**
 Adds a local message to a chat. The message is persistent across application restarts only if the message database is
 used. Returns the added message.
 */
@@ -58806,6 +59815,16 @@ Deletes messages.
 		return this._request({
 			...options,
 			'@type': 'deleteMessages',
+		});
+	}
+
+	/**
+Deletes an ephemeral message; for bots only.
+*/
+	async deleteEphemeralMessage(options: Omit<DeleteEphemeralMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteEphemeralMessage',
 		});
 	}
 
@@ -58897,7 +59916,7 @@ side.
 	}
 
 	/**
-Edits the text of an inline text or game message sent via a bot; for bots only.
+Edits the text of an inline text or game message sent via the bot; for bots only.
 */
 	async editInlineMessageText(options: Omit<EditInlineMessageText, '@type'>): Promise<Ok> {
 		return this._request({
@@ -58944,6 +59963,16 @@ Edits the reply markup of an inline message sent via a bot; for bots only.
 		return this._request({
 			...options,
 			'@type': 'editInlineMessageReplyMarkup',
+		});
+	}
+
+	/**
+Edits the text, caption or reply markup of an ephemeral message sent by the bot; for bots only.
+*/
+	async editEphemeralMessage(options: Omit<EditEphemeralMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editEphemeralMessage',
 		});
 	}
 
@@ -59786,7 +60815,7 @@ Markdown unambiguously are kept as is. Can be called synchronously.
 	}
 
 	/**
-Returns an emoji for the given country. Returns an empty string on failure. Can be called synchronously.
+Returns an emoji for the flag of the given country. Returns an empty string on failure. Can be called synchronously.
 */
 	async getCountryFlagEmoji(options: Omit<GetCountryFlagEmoji, '@type'>): Promise<Text> {
 		return this._request({
@@ -60153,6 +61182,16 @@ inlineQueryResultsButtonTypeWebApp button.
 		return this._request({
 			...options,
 			'@type': 'getWebAppUrl',
+		});
+	}
+
+	/**
+Returns an HTTPS URL of a Web App of a guard bot to open after receiving chatJoinResultGuardBotApprovalRequired.
+*/
+	async getGuardBotWebAppUrl(options: Omit<GetGuardBotWebAppUrl, '@type'>): Promise<WebAppUrl> {
+		return this._request({
+			...options,
+			'@type': 'getGuardBotWebAppUrl',
 		});
 	}
 
@@ -61221,7 +62260,7 @@ more than 200 members. Returns information about members that weren't added.
 Changes the status of a chat member; requires can_invite_users member right to add a chat member, can_promote_members
 administrator right to change administrator rights of the member, and can_restrict_members administrator right to change
 restrictions of a user. This function is currently not suitable for transferring chat ownership; use
-transferChatOwnership instead. Use addChatMember or banChatMember if some additional parameters needs to be passed.
+transferChatOwnership instead. Use addChatMember or banChatMember if some additional parameters need to be passed.
 */
 	async setChatMemberStatus(options: Omit<SetChatMemberStatus, '@type'>): Promise<Ok> {
 		return this._request({
@@ -64375,8 +65414,8 @@ Checks whether a username can be set for a new bot. Use checkChatUsername to che
 	/**
 Creates a bot which will be managed by another bot. Returns the created bot. May return an error with a message
 "BOT_CREATE_LIMIT_EXCEEDED" if the user already owns the maximum allowed number of bots as per
-premiumLimitTypeOwnedBotCount. An internal link "https://t.me/BotFather?start=deletebot" can be processed to handle the
-error.
+getOption("owned_bot_count_max"). An internal link "https://t.me/BotFather?start=deletebot" can be processed to handle
+the error.
 */
 	async createBot(options: Omit<CreateBot, '@type'>): Promise<User> {
 		return this._request({
@@ -65870,7 +66909,7 @@ true.
 	}
 
 	/**
-Returns the list of Toncoin transactions of the current user.
+Returns the list of TON blockchain transactions of the current user.
 */
 	async getTonTransactions(options: Omit<GetTonTransactions, '@type'>): Promise<TonTransactions> {
 		return this._request({
@@ -65911,23 +66950,23 @@ owned Telegram Stars.
 	}
 
 	/**
-Returns detailed Toncoin revenue statistics of the current user.
+Returns detailed TON Gram revenue statistics of the current user.
 */
-	async getTonRevenueStatistics(options: Omit<GetTonRevenueStatistics, '@type'>): Promise<TonRevenueStatistics> {
+	async getGramRevenueStatistics(options: Omit<GetGramRevenueStatistics, '@type'>): Promise<GramRevenueStatistics> {
 		return this._request({
 			...options,
-			'@type': 'getTonRevenueStatistics',
+			'@type': 'getGramRevenueStatistics',
 		});
 	}
 
 	/**
-Returns a URL for Toncoin withdrawal from the current user's account. The user must have at least 10 toncoins to
-withdraw and can withdraw up to 100000 Toncoins in one transaction.
+Returns a URL for TON Gram withdrawal from the current user's account. The user must have at least 10 Grams to withdraw
+and can withdraw up to 100000 Grams in one transaction.
 */
-	async getTonWithdrawalUrl(options: Omit<GetTonWithdrawalUrl, '@type'>): Promise<HttpUrl> {
+	async getGramWithdrawalUrl(options: Omit<GetGramWithdrawalUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
-			'@type': 'getTonWithdrawalUrl',
+			'@type': 'getGramWithdrawalUrl',
 		});
 	}
 
@@ -66205,8 +67244,8 @@ Deletes a Telegram Passport element.
 	}
 
 	/**
-Informs the user who some of the elements in their Telegram Passport contain errors; for bots only. The user will not be
-able to resend the elements, until the errors are fixed.
+Informs the user that some of the elements in their Telegram Passport contain errors; for bots only. The user will not
+be able to resend the elements, until the errors are fixed.
 */
 	async setPassportElementErrors(options: Omit<SetPassportElementErrors, '@type'>): Promise<Ok> {
 		return this._request({
@@ -66792,7 +67831,7 @@ Returns information about features, available to Business users.
 	}
 
 	/**
-Accepts Telegram terms of services.
+Accepts Telegram terms of service.
 */
 	async acceptTermsOfService(options: Omit<AcceptTermsOfService, '@type'>): Promise<Ok> {
 		return this._request({
