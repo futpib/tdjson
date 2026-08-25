@@ -570,7 +570,7 @@ Point in time (Unix timestamp) when the passkey was used last time; 0 if never.
 */
 	last_usage_date: number;
 	/**
-Identifier of the custom emoji that is used as the icon of the software, which created the passkey; 0 if unknown.
+Identifier of the custom emoji that is used as the icon of the software that created the passkey; 0 if unknown.
 */
 	software_icon_custom_emoji_id: string;
 }
@@ -1402,9 +1402,9 @@ Option text; 1-100 characters. Only custom emoji entities are allowed to be adde
 */
 	text: FormattedText;
 	/**
-Option media; pass null if none; ignored in addPollOption. Must be one of the following types: inputPollMediaAnimation,
-inputPollMediaLink, inputPollMediaLocation, inputPollMediaPhoto, inputPollMediaSticker, inputPollMediaVenue, or
-inputPollMediaVideo without caption.
+Option media; pass null if none. Must be one of the following types: inputPollMediaAnimation, inputPollMediaLink,
+inputPollMediaLocation, inputPollMediaPhoto, inputPollMediaSticker, inputPollMediaVenue, or inputPollMediaVideo without
+caption.
 */
 	media: InputPollMedia;
 }
@@ -3496,6 +3496,10 @@ True, if the administrator can change tags of other users; applicable to basic g
 */
 	can_manage_tags?: boolean;
 	/**
+True, if the administrator can manage and send welcome messages.
+*/
+	can_send_welcome_messages?: boolean;
+	/**
 True, if the administrator isn't shown in the chat member list and sends messages anonymously; applicable to supergroups
 only.
 */
@@ -4325,7 +4329,7 @@ The amount to pay, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Number of users which will be able to activate the gift codes.
+Number of users who will be able to activate the gift codes.
 */
 	winner_count: number;
 	/**
@@ -7222,6 +7226,17 @@ The minimum chat boost level required to use the color in a channel chat.
 }
 
 /**
+Contains identifier of a community.
+*/
+export interface CommunityId {
+	'@type': 'communityId';
+	/**
+Community identifier.
+*/
+	id: number;
+}
+
+/**
 Describes actions that a user is allowed to take in a community.
 */
 export interface CommunityPermissions {
@@ -7347,6 +7362,53 @@ Status of the current user in the community.
 Actions that non-administrator community members are allowed to take in the community.
 */
 	permissions: CommunityPermissions;
+}
+
+/**
+Describes a chat in a community.
+*/
+export interface CommunityChat {
+	'@type': 'communityChat';
+	/**
+Identifier of the chat in the community.
+*/
+	chat_id: number;
+	/**
+True, if message history of the chat can be viewed.
+*/
+	can_view_history?: boolean;
+	/**
+True, if the chat is hidden in the list of community chats; for community administrators only.
+*/
+	is_hidden?: boolean;
+}
+
+/**
+Contains full information about a community.
+*/
+export interface CommunityFullInfo {
+	'@type': 'communityFullInfo';
+	/**
+Photo of the community.
+*/
+	photo: ChatPhoto;
+	/**
+Chats belonging to the community.
+*/
+	chats: CommunityChat[];
+	/**
+Number of privileged users in the community; 0 if the current user isn't an administrator of the community.
+*/
+	administrator_count: number;
+	/**
+Number of users banned from the community; 0 if the current user isn't an administrator of the community.
+*/
+	banned_count: number;
+	/**
+Number of pending requests for addition of chats to the community; 0 if the current user isn't an administrator of the
+community.
+*/
+	add_chat_request_count: number;
 }
 
 /**
@@ -8095,7 +8157,7 @@ export interface ChatMembersFilterMembers {
 }
 
 /**
-Returns users which can be mentioned in the chat.
+Returns users who can be mentioned in the chat.
 Subtype of {@link ChatMembersFilter}.
 */
 export interface ChatMembersFilterMention {
@@ -8143,7 +8205,7 @@ export interface SupergroupMembersFilterRecent {
 }
 
 /**
-Returns contacts of the user, which are members of the supergroup or channel.
+Returns contacts of the current user who are members of the supergroup or channel.
 Subtype of {@link SupergroupMembersFilter}.
 */
 export interface SupergroupMembersFilterContacts {
@@ -8200,7 +8262,7 @@ Query to search for.
 }
 
 /**
-Returns users which can be mentioned in the supergroup.
+Returns users who can be mentioned in the supergroup.
 Subtype of {@link SupergroupMembersFilter}.
 */
 export interface SupergroupMembersFilterMention {
@@ -9249,7 +9311,7 @@ Identifier of the user who originally sent the message.
 }
 
 /**
-The message was originally sent by a user, which is hidden by their privacy settings.
+The message was originally sent by a user who is hidden by their privacy settings.
 Subtype of {@link MessageOrigin}.
 */
 export interface MessageOriginHiddenUser {
@@ -9945,6 +10007,29 @@ A two-letter ISO 3166-1 alpha-2 country code of the country for which the fact-c
 }
 
 /**
+Describes an ephemeral content of a regular message, which must be shown instead of the regular content.
+*/
+export interface EphemeralMessageContent {
+	'@type': 'ephemeralMessageContent';
+	/**
+True, if content of the message can be saved locally.
+*/
+	can_be_saved?: boolean;
+	/**
+True, if media timestamp entities refers to a media in this message as opposed to a media in the replied message.
+*/
+	has_timestamped_media?: boolean;
+	/**
+Content of the message.
+*/
+	content: MessageContent;
+	/**
+Reply markup for the message; may be null if none.
+*/
+	reply_markup: ReplyMarkup;
+}
+
+/**
 Describes a message.
 */
 export interface Message {
@@ -10128,6 +10213,11 @@ Content of the message.
 */
 	content: MessageContent;
 	/**
+Content of the message, which is visible only to the current user and must be shown instead of the regular content; may
+be null if none.
+*/
+	ephemeral_content: EphemeralMessageContent;
+	/**
 Reply markup for the message; may be null if none.
 */
 	reply_markup: ReplyMarkup;
@@ -10135,6 +10225,10 @@ Reply markup for the message; may be null if none.
 Unique identifier of the ephemeral message if the message is ephemeral; for bots only.
 */
 	ephemeral_message_id: number;
+	/**
+Identifier that uniquely corresponds to the chat to which the message was sent; for bots only.
+*/
+	chat_instance: string;
 }
 
 /**
@@ -10936,9 +11030,21 @@ Subtype of {@link DraftMessageContent}.
 export interface DraftMessageContentRichMessage {
 	'@type': 'draftMessageContentRichMessage';
 	/**
-The rich message; the message must not have not yet uploaded media.
+The rich message.
 */
 	message: RichMessage;
+}
+
+/**
+A rich message draft; only for setChatDraftMessage.
+Subtype of {@link DraftMessageContent}.
+*/
+export interface DraftMessageContentInputRichMessage {
+	'@type': 'draftMessageContentInputRichMessage';
+	/**
+The rich message.
+*/
+	message: InputRichMessage;
 }
 
 /**
@@ -11585,6 +11691,10 @@ True, if the chat has scheduled messages.
 */
 	has_scheduled_messages?: boolean;
 	/**
+True, if the chat has welcome messages; for chat administrators with can_change_info administrator right only.
+*/
+	has_welcome_messages?: boolean;
+	/**
 True, if the chat messages can be deleted only for the current user while other users will continue to see the messages.
 */
 	can_be_deleted_only_for_self?: boolean;
@@ -11904,6 +12014,15 @@ export interface ButtonStyleSuccess {
 }
 
 /**
+The button must be shown as a link. The style is allowed only for callback buttons in inlineButton.
+Subtype of {@link ButtonStyle}.
+*/
+export interface ButtonStyleLink {
+	'@type': 'buttonStyleLink';
+
+}
+
+/**
 Describes a keyboard button type.
 Subtype of {@link KeyboardButtonType}.
 */
@@ -12126,7 +12245,8 @@ App button.
 }
 
 /**
-A button that opens a specified URL and automatically authorize the current user by calling getLoginUrlInfo.
+A button that opens a specified URL and automatically authorize the current user by calling getLoginUrlInfo; not
+supported in ephemeral messages.
 Subtype of {@link InlineKeyboardButtonType}.
 */
 export interface InlineKeyboardButtonTypeLoginUrl {
@@ -12242,6 +12362,15 @@ The text to copy to clipboard.
 }
 
 /**
+A disabled button.
+Subtype of {@link InlineKeyboardButtonType}.
+*/
+export interface InlineKeyboardButtonTypeDisabled {
+	'@type': 'inlineKeyboardButtonTypeDisabled';
+
+}
+
+/**
 Describes source of a keyboard button.
 Subtype of {@link KeyboardButtonSource}.
 */
@@ -12353,6 +12482,10 @@ keyboard only for the mentioned users and for the target user of a reply.
 */
 	is_personal?: boolean;
 	/**
+True, if the keyboard must force reply to the message with the keyboard.
+*/
+	force_reply?: boolean;
+	/**
 If non-empty, the placeholder to be shown in the input field when the keyboard is active; 0-64 characters.
 */
 	input_field_placeholder: string;
@@ -12368,6 +12501,10 @@ export interface ReplyMarkupInlineKeyboard {
 A list of rows of inline keyboard buttons.
 */
 	rows: InlineKeyboardButton[][];
+	/**
+True, if a reply to the message must be forced when the message is received.
+*/
+	force_reply?: boolean;
 }
 
 /**
@@ -12903,6 +13040,30 @@ Accent color of outgoing messages in ARGB format.
 }
 
 /**
+Represents a button inside a rich message.
+*/
+export interface InlineButton {
+	'@type': 'inlineButton';
+	/**
+Text of the button; only richTexts, richTextPlain, and richTextCustomEmoji are allowed.
+*/
+	text: RichText;
+	/**
+Style of the button.
+*/
+	style: ButtonStyle;
+	/**
+Type of the button; must be one of inlineKeyboardButtonTypeUrl, inlineKeyboardButtonTypeLoginUrl,
+inlineKeyboardButtonTypeWebApp, inlineKeyboardButtonTypeCallback, inlineKeyboardButtonTypeSwitchInline,
+inlineKeyboardButtonTypeUser, inlineKeyboardButtonTypeCopyText. Additionally,
+inlineKeyboardButtonTypeCallbackWithPassword and inlineKeyboardButtonTypeDisabled may be received in incoming messages.
+Regular users may use only inlineKeyboardButtonTypeUrl, inlineKeyboardButtonTypeUser and
+inlineKeyboardButtonTypeCopyText.
+*/
+	type: InlineKeyboardButtonType;
+}
+
+/**
 Describes a formatted text object.
 Subtype of {@link RichText}.
 */
@@ -13236,6 +13397,18 @@ export interface RichTextMathematicalExpression {
 The expression in LaTeX format.
 */
 	expression: string;
+}
+
+/**
+A button.
+Subtype of {@link RichText}.
+*/
+export interface RichTextButton {
+	'@type': 'richTextButton';
+	/**
+The button.
+*/
+	button: InlineButton;
 }
 
 /**
@@ -13731,6 +13904,22 @@ Quote credit; may be null if none.
 }
 
 /**
+An expandable block quote.
+Subtype of {@link PageBlock}.
+*/
+export interface PageBlockExpandableBlockQuote {
+	'@type': 'pageBlockExpandableBlockQuote';
+	/**
+Text of the quote.
+*/
+	text: RichText;
+	/**
+Quote credit; may be null if none.
+*/
+	credit: RichText;
+}
+
+/**
 A pull quote.
 Subtype of {@link PageBlock}.
 */
@@ -13777,11 +13966,27 @@ Subtype of {@link PageBlock}.
 export interface PageBlockAudio {
 	'@type': 'pageBlockAudio';
 	/**
-Audio file; may be null.
+Audio file.
 */
 	audio: Audio;
 	/**
 Audio file caption; may be null if none.
+*/
+	caption: PageBlockCaption;
+}
+
+/**
+A general file.
+Subtype of {@link PageBlock}.
+*/
+export interface PageBlockDocument {
+	'@type': 'pageBlockDocument';
+	/**
+The file.
+*/
+	document: Document;
+	/**
+File caption; may be null if none.
 */
 	caption: PageBlockCaption;
 }
@@ -13845,7 +14050,7 @@ Subtype of {@link PageBlock}.
 export interface PageBlockVoiceNote {
 	'@type': 'pageBlockVoiceNote';
 	/**
-Voice note; may be null.
+Voice note.
 */
 	voice_note: VoiceNote;
 	/**
@@ -14016,6 +14221,10 @@ True, if the table is bordered.
 True, if the table is striped.
 */
 	is_striped?: boolean;
+	/**
+True, if table cells must have smaller indents.
+*/
+	is_compact?: boolean;
 }
 
 /**
@@ -14080,6 +14289,31 @@ Map height.
 Block caption; may be null if none.
 */
 	caption: PageBlockCaption;
+}
+
+/**
+A list of buttons shown in a row.
+Subtype of {@link PageBlock}.
+*/
+export interface PageBlockButtonRow {
+	'@type': 'pageBlockButtonRow';
+	/**
+The buttons.
+*/
+	buttons: InlineButton[];
+	/**
+Horizontal alignment of the buttons; may be null if the buttons must be shown full-width.
+*/
+	align: PageBlockHorizontalAlignment;
+}
+
+/**
+Represents a block unsupported by the current application version.
+Subtype of {@link PageBlock}.
+*/
+export interface PageBlockUnsupported {
+	'@type': 'pageBlockUnsupported';
+
 }
 
 /**
@@ -17562,6 +17796,18 @@ export interface MessageChatJoinByRequest {
 }
 
 /**
+A new member joined the chat from a community.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageChatJoinFromCommunity {
+	'@type': 'messageChatJoinFromCommunity';
+	/**
+Identifier of the community from which the user joined the chat.
+*/
+	community_id: number;
+}
+
+/**
 A chat member was deleted.
 Subtype of {@link MessageContent}.
 */
@@ -17834,6 +18080,10 @@ export interface MessageManagedBotCreated {
 User identifier of the created bot.
 */
 	bot_user_id: number;
+	/**
+Identifier of the bot which will manage the new bot.
+*/
+	manager_bot_user_id: number;
 }
 
 /**
@@ -18086,7 +18336,7 @@ Giveaway parameters.
 */
 	parameters: GiveawayParameters;
 	/**
-Number of users which will receive Telegram Premium subscription gift codes.
+Number of users who will receive Telegram Premium subscription gift codes.
 */
 	winner_count: number;
 	/**
@@ -18224,8 +18474,8 @@ A sticker to be shown in the message; may be null if unknown.
 TON Grams were gifted to a user.
 Subtype of {@link MessageContent}.
 */
-export interface MessageGiftedTon {
-	'@type': 'messageGiftedTon';
+export interface MessageGiftedGrams {
+	'@type': 'messageGiftedGrams';
 	/**
 The identifier of a user who gifted Grams; 0 if the gift was anonymous or is outgoing.
 */
@@ -18393,6 +18643,14 @@ Origin of the upgraded gift.
 Unique identifier of the received gift for the current user; only for the receiver of the gift.
 */
 	received_gift_id: string;
+	/**
+Message added to the gift.
+*/
+	text: FormattedText;
+	/**
+True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone will be able to see them.
+*/
+	is_private?: boolean;
 	/**
 True, if the gift is displayed on the user's or the channel's profile page; only for the receiver of the gift.
 */
@@ -18690,7 +18948,7 @@ export interface MessageContactRegistered {
 }
 
 /**
-The current user shared users, which were requested by the bot.
+The current user shared users who were requested by the bot.
 Subtype of {@link MessageContent}.
 */
 export interface MessageUsersShared {
@@ -19824,6 +20082,22 @@ Quote credit; pass null if none.
 }
 
 /**
+An expandable block quote.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockExpandableBlockQuote {
+	'@type': 'inputPageBlockExpandableBlockQuote';
+	/**
+Quote text.
+*/
+	text: RichText;
+	/**
+Quote credit; pass null if none.
+*/
+	credit: RichText;
+}
+
+/**
 A pull quote.
 Subtype of {@link InputPageBlock}.
 */
@@ -19871,6 +20145,22 @@ The audio to be sent.
 	audio: InputAudio;
 	/**
 Audio file caption; pass null if none.
+*/
+	caption: PageBlockCaption;
+}
+
+/**
+A general file.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockDocument {
+	'@type': 'inputPageBlockDocument';
+	/**
+The file to be sent.
+*/
+	document: InputDocument;
+	/**
+File caption; pass null if none.
 */
 	caption: PageBlockCaption;
 }
@@ -19978,13 +20268,17 @@ Table cells.
 */
 	cells: PageBlockTableCell[][];
 	/**
-True, if the table is bordered.
+Pass true if the table is bordered.
 */
 	is_bordered?: boolean;
 	/**
-True, if the table is striped.
+Pass true if the table is striped.
 */
 	is_striped?: boolean;
+	/**
+Pass true if table cells must have smaller indents.
+*/
+	is_compact?: boolean;
 }
 
 /**
@@ -20033,6 +20327,22 @@ Map height; 0-10000.
 Block caption; pass null if none.
 */
 	caption: PageBlockCaption;
+}
+
+/**
+A list of buttons shown in a row.
+Subtype of {@link InputPageBlock}.
+*/
+export interface InputPageBlockButtonRow {
+	'@type': 'inputPageBlockButtonRow';
+	/**
+The buttons.
+*/
+	buttons: InlineButton[];
+	/**
+Horizontal alignment of the buttons; pass null if the buttons must be shown full-width.
+*/
+	align: PageBlockHorizontalAlignment;
 }
 
 /**
@@ -20969,6 +21279,18 @@ Subtype of {@link SearchMessagesChatTypeFilter}.
 export interface SearchMessagesChatTypeFilterChannel {
 	'@type': 'searchMessagesChatTypeFilterChannel';
 
+}
+
+/**
+Returns only messages in the specified community.
+Subtype of {@link SearchMessagesChatTypeFilter}.
+*/
+export interface SearchMessagesChatTypeFilterCommunity {
+	'@type': 'searchMessagesChatTypeFilterCommunity';
+	/**
+Identifier of the community to search in.
+*/
+	community_id: number;
 }
 
 /**
@@ -22551,6 +22873,21 @@ The total number of messages in the shortcut.
 }
 
 /**
+Describes a set up welcome message.
+*/
+export interface WelcomeMessage {
+	'@type': 'welcomeMessage';
+	/**
+Welcome message identifier; unique for the chat to which the welcome message belongs.
+*/
+	id: number;
+	/**
+Content of the welcome message.
+*/
+	content: MessageContent;
+}
+
+/**
 Describes a public forward or repost of a story.
 Subtype of {@link PublicForward}.
 */
@@ -22820,7 +23157,7 @@ Unique identifier of the prepaid giveaway.
 */
 	id: string;
 	/**
-Number of users which will receive giveaway prize.
+Number of users who will receive giveaway prize.
 */
 	winner_count: number;
 	/**
@@ -27424,7 +27761,7 @@ Paid amount, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Identifiers of the user which will receive Telegram Premium.
+Identifier of the user who will receive Telegram Premium.
 */
 	user_id: number;
 	/**
@@ -27454,7 +27791,7 @@ Paid amount, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Identifiers of the users which can activate the gift codes.
+Identifiers of the users who can activate the gift codes.
 */
 	user_ids: number[];
 	/**
@@ -27607,7 +27944,7 @@ Paid amount, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Identifier of the user which will receive Telegram Premium.
+Identifier of the user who will receive Telegram Premium.
 */
 	user_id: number;
 	/**
@@ -27641,7 +27978,7 @@ Paid amount, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Identifiers of the users which can activate the gift codes.
+Identifiers of the users who can activate the gift codes.
 */
 	user_ids: number[];
 	/**
@@ -27674,7 +28011,7 @@ Paid amount, in the smallest units of the currency.
 */
 	amount: number;
 	/**
-Number of users which will be able to activate the gift codes.
+Number of users who will be able to activate the gift codes.
 */
 	winner_count: number;
 	/**
@@ -28781,7 +29118,7 @@ Subtype of {@link PushMessageContent}.
 export interface PushMessageContentGiveaway {
 	'@type': 'pushMessageContentGiveaway';
 	/**
-Number of users which will receive giveaway prizes; 0 for pinned message.
+Number of users who will receive giveaway prizes; 0 for pinned message.
 */
 	winner_count: number;
 	/**
@@ -33967,6 +34304,26 @@ New message content.
 }
 
 /**
+The message ephemeral content has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateMessageEphemeralContent {
+	'@type': 'updateMessageEphemeralContent';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+Message identifier.
+*/
+	message_id: number;
+	/**
+New ephemeral content of the message; may be null if none.
+*/
+	ephemeral_content: EphemeralMessageContent;
+}
+
+/**
 A message was edited. Changes in the message content will come in a separate updateMessageContent.
 Subtype of {@link Update}.
 */
@@ -34762,6 +35119,22 @@ New value of has_scheduled_messages.
 }
 
 /**
+A chat's has_welcome_messages field has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatHasWelcomeMessages {
+	'@type': 'updateChatHasWelcomeMessages';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+New value of has_welcome_messages.
+*/
+	has_welcome_messages?: boolean;
+}
+
+/**
 The list of chat folders or a chat folder has changed.
 Subtype of {@link Update}.
 */
@@ -34907,6 +35280,22 @@ The identifier of the shortcut.
 The new list of quick reply messages for the shortcut in order from the first to the last sent.
 */
 	messages: QuickReplyMessage[];
+}
+
+/**
+The list of welcome messages of a chat has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateChatWelcomeMessages {
+	'@type': 'updateChatWelcomeMessages';
+	/**
+The identifier of the chat.
+*/
+	chat_id: number;
+	/**
+The new list of welcome messages of the chat in the order from the first to the last sent.
+*/
+	messages: WelcomeMessage[];
 }
 
 /**
@@ -35133,8 +35522,9 @@ The action.
 
 /**
 A new pending text or rich message was received in a chat with a bot. The message must be shown in the chat for at most
-getOption("pending_text_message_period") seconds, replace any other pending message with the same draft_id, and be
-deleted whenever any incoming message from the bot in the message thread is received.
+getOption("pending_text_message_period") seconds, replace any other pending message with the same draft_id with
+animation, and be deleted whenever any incoming message or a pending message with another draft_id is received in the
+message thread.
 Subtype of {@link Update}.
 */
 export interface UpdatePendingMessage {
@@ -35152,9 +35542,37 @@ Unique identifier of the message draft within the message thread.
 */
 	draft_id: string;
 	/**
+True, if a button that calls stopPendingMessage to stop further message generation must be shown.
+*/
+	can_stop?: boolean;
+	/**
+True, if the pending message must not be automatically deleted when the user presses the Stop button.
+*/
+	keep_on_stop?: boolean;
+	/**
 Content of the message; always of the type messageText or messageRichMessage.
 */
 	content: MessageContent;
+}
+
+/**
+A message draft generation was stopped by the user.
+Subtype of {@link Update}.
+*/
+export interface UpdateStopMessageDraft {
+	'@type': 'updateStopMessageDraft';
+	/**
+Chat identifier.
+*/
+	chat_id: number;
+	/**
+The forum topic identifier of the message draft.
+*/
+	forum_topic_id: number;
+	/**
+Identifier of the message draft within the message thread.
+*/
+	draft_id: string;
 }
 
 /**
@@ -35287,6 +35705,22 @@ New full information about the supergroup.
 }
 
 /**
+Some data in communityFullInfo has been changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateCommunityFullInfo {
+	'@type': 'updateCommunityFullInfo';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+New full information about the community.
+*/
+	community_full_info: CommunityFullInfo;
+}
+
+/**
 A service notification from the server was received. Upon receiving this the application must show a popup with the
 content of the notification.
 Subtype of {@link Update}.
@@ -35357,7 +35791,7 @@ has no access to the path, it can use writeGeneratedFilePart to generate the fil
 */
 	destination_path: string;
 	/**
-If the conversion is "#url#" than original_path contains an HTTP/HTTPS URL of a file that must be downloaded by the
+If the conversion is "#url#", then original_path contains an HTTP/HTTPS URL of a file that must be downloaded by the
 application. Otherwise, this is the conversion specified by the application in inputFileGenerated.
 */
 	conversion: string;
@@ -37729,6 +38163,7 @@ export type ReactionNotificationSource =
 export type DraftMessageContent =
 	| DraftMessageContentText
 	| DraftMessageContentRichMessage
+	| DraftMessageContentInputRichMessage
 	| DraftMessageContentVideoNote
 	| DraftMessageContentVoiceNote;
 
@@ -37767,7 +38202,8 @@ export type ButtonStyle =
 	| ButtonStyleDefault
 	| ButtonStylePrimary
 	| ButtonStyleDanger
-	| ButtonStyleSuccess;
+	| ButtonStyleSuccess
+	| ButtonStyleLink;
 
 export type KeyboardButtonType =
 	| KeyboardButtonTypeText
@@ -37789,7 +38225,8 @@ export type InlineKeyboardButtonType =
 	| InlineKeyboardButtonTypeSwitchInline
 	| InlineKeyboardButtonTypeBuy
 	| InlineKeyboardButtonTypeUser
-	| InlineKeyboardButtonTypeCopyText;
+	| InlineKeyboardButtonTypeCopyText
+	| InlineKeyboardButtonTypeDisabled;
 
 export type KeyboardButtonSource =
 	| KeyboardButtonSourceMessage
@@ -37841,6 +38278,7 @@ export type RichText =
 	| RichTextCustomEmoji
 	| RichTextIcon
 	| RichTextMathematicalExpression
+	| RichTextButton
 	| RichTextDiff
 	| RichTextReference
 	| RichTextReferenceLink
@@ -37875,9 +38313,11 @@ export type PageBlock =
 	| PageBlockAnchor
 	| PageBlockList
 	| PageBlockBlockQuote
+	| PageBlockExpandableBlockQuote
 	| PageBlockPullQuote
 	| PageBlockAnimation
 	| PageBlockAudio
+	| PageBlockDocument
 	| PageBlockPhoto
 	| PageBlockVideo
 	| PageBlockVoiceNote
@@ -37890,7 +38330,9 @@ export type PageBlock =
 	| PageBlockTable
 	| PageBlockDetails
 	| PageBlockRelatedArticles
-	| PageBlockMap;
+	| PageBlockMap
+	| PageBlockButtonRow
+	| PageBlockUnsupported;
 
 export type LinkPreviewAlbumMedia =
 	| LinkPreviewAlbumMediaPhoto
@@ -38099,6 +38541,7 @@ export type MessageContent =
 	| MessageChatAddMembers
 	| MessageChatJoinByLink
 	| MessageChatJoinByRequest
+	| MessageChatJoinFromCommunity
 	| MessageChatDeleteMember
 	| MessageChatAddedToCommunity
 	| MessageChatRemovedFromCommunity
@@ -38129,7 +38572,7 @@ export type MessageContent =
 	| MessageGiveawayCompleted
 	| MessageGiveawayWinners
 	| MessageGiftedStars
-	| MessageGiftedTon
+	| MessageGiftedGrams
 	| MessageGiveawayPrizeStars
 	| MessageGift
 	| MessageUpgradedGift
@@ -38231,9 +38674,11 @@ export type InputPageBlock =
 	| InputPageBlockAnchor
 	| InputPageBlockList
 	| InputPageBlockBlockQuote
+	| InputPageBlockExpandableBlockQuote
 	| InputPageBlockPullQuote
 	| InputPageBlockAnimation
 	| InputPageBlockAudio
+	| InputPageBlockDocument
 	| InputPageBlockPhoto
 	| InputPageBlockVideo
 	| InputPageBlockVoiceNote
@@ -38241,7 +38686,8 @@ export type InputPageBlock =
 	| InputPageBlockSlideshow
 	| InputPageBlockTable
 	| InputPageBlockDetails
-	| InputPageBlockMap;
+	| InputPageBlockMap
+	| InputPageBlockButtonRow;
 
 export type InputMessageContent =
 	| InputMessageText
@@ -38292,7 +38738,8 @@ export type SearchMessagesFilter =
 export type SearchMessagesChatTypeFilter =
 	| SearchMessagesChatTypeFilterPrivate
 	| SearchMessagesChatTypeFilterGroup
-	| SearchMessagesChatTypeFilterChannel;
+	| SearchMessagesChatTypeFilterChannel
+	| SearchMessagesChatTypeFilterCommunity;
 
 export type SearchChatTypeFilter =
 	| SearchChatTypeFilterBot
@@ -39158,6 +39605,7 @@ export type Update =
 	| UpdateMessageSendSucceeded
 	| UpdateMessageSendFailed
 	| UpdateMessageContent
+	| UpdateMessageEphemeralContent
 	| UpdateMessageEdited
 	| UpdateMessageIsPinned
 	| UpdateMessageInteractionInfo
@@ -39203,6 +39651,7 @@ export type Update =
 	| UpdateChatViewAsTopics
 	| UpdateChatBlockList
 	| UpdateChatHasScheduledMessages
+	| UpdateChatHasWelcomeMessages
 	| UpdateChatFolders
 	| UpdateChatOnlineMemberCount
 	| UpdateSavedMessagesTopic
@@ -39213,6 +39662,7 @@ export type Update =
 	| UpdateQuickReplyShortcutDeleted
 	| UpdateQuickReplyShortcuts
 	| UpdateQuickReplyShortcutMessages
+	| UpdateChatWelcomeMessages
 	| UpdateForumTopicInfo
 	| UpdateForumTopic
 	| UpdateScopeNotificationSettings
@@ -39224,6 +39674,7 @@ export type Update =
 	| UpdateDeleteMessages
 	| UpdateChatAction
 	| UpdatePendingMessage
+	| UpdateStopMessageDraft
 	| UpdateCommunity
 	| UpdateUserStatus
 	| UpdateUser
@@ -39233,6 +39684,7 @@ export type Update =
 	| UpdateUserFullInfo
 	| UpdateBasicGroupFullInfo
 	| UpdateSupergroupFullInfo
+	| UpdateCommunityFullInfo
 	| UpdateServiceNotification
 	| UpdateNewOauthRequest
 	| UpdateFile
@@ -41130,6 +41582,55 @@ Identifiers of the new pinned Saved Messages topics.
 }
 
 /**
+Returns full information about a community. The data will be sent through update.
+Request type for {@link Tdjson#loadCommunityFullInfo}.
+*/
+export interface LoadCommunityFullInfo {
+	'@type': 'loadCommunityFullInfo';
+	/**
+Community identifier.
+*/
+	community_id: number;
+}
+
+/**
+Creates a new community for the given chat. Returns identifier of the created community.
+Request type for {@link Tdjson#createCommunity}.
+*/
+export interface CreateCommunity {
+	'@type': 'createCommunity';
+	/**
+Name of the new community.
+*/
+	name: string;
+	/**
+Identifier of the chat in the community; only chats with owned bots and owned basic group, supergroup and channel chats
+are allowed; basic group chats will be automatically upgraded to supergroup chats.
+*/
+	chat_id: number;
+	/**
+Pass true if the chat will be visible only to administrators of the community.
+*/
+	is_chat_hidden?: boolean;
+}
+
+/**
+Changes name of the given community; requires can_change_info administrator right in the community.
+Request type for {@link Tdjson#setCommunityName}.
+*/
+export interface SetCommunityName {
+	'@type': 'setCommunityName';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+New name of the community.
+*/
+	name: string;
+}
+
+/**
 Returns a list of common group chats with a given user. Chats are sorted by their type and creation date.
 Request type for {@link Tdjson#getGroupsInCommon}.
 */
@@ -42735,9 +43236,17 @@ Identifier of the callback query which triggered the message; for bots only.
 */
 	callback_query_id: string;
 	/**
+Pass true if the ephemeral message must replace the message from which the callback query originated; for bots only.
+*/
+	replace_callback_query_message?: boolean;
+	/**
 Information about the message to be replied; pass null if none. The message can be an incoming ephemeral message.
 */
 	reply_to: InputMessageReplyTo;
+	/**
+Pass true if the content of the message must be protected from forwarding and saving; for bots only.
+*/
+	protect_content?: boolean;
 	/**
 Non-persistent identifier, which will be returned back in messageSendingStatePending object and can be used to match
 sent messages and corresponding updateNewMessage updates.
@@ -42753,8 +43262,9 @@ Markup for replying to the message; pass null if none; for bots only.
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageAnimation,
-inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageSticker, inputMessageVideo,
-inputMessageVideoNote, inputMessageVoiceNote, inputMessageLocation, inputMessageVenue, inputMessageContact.
+inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageRichMessage, inputMessageSticker,
+inputMessageVideo, inputMessageVideoNote, inputMessageVoiceNote, inputMessageLocation, inputMessageVenue,
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -42824,7 +43334,7 @@ Identifier of the user who received the message.
 */
 	receiver_user_id: number;
 	/**
-Identifiers of the message to be deleted.
+Identifier of the message to be deleted.
 */
 	ephemeral_message_id: number;
 }
@@ -43131,7 +43641,7 @@ The new message reply markup; pass null if none.
 }
 
 /**
-Edits the text, caption or reply markup of an ephemeral message sent by the bot; for bots only.
+Edits the text, media, or reply markup of an ephemeral message sent by the bot; for bots only.
 Request type for {@link Tdjson#editEphemeralMessage}.
 */
 export interface EditEphemeralMessage {
@@ -43154,7 +43664,66 @@ The new message reply markup; pass null if none.
 	reply_markup: ReplyMarkup;
 	/**
 New content of the message; pass null to edit only reply markup. Must be one of the following types: inputMessageText,
-inputMessageAnimation, inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageSticker,
+inputMessageAnimation, inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageRichMessage,
+inputMessageSticker, inputMessageVideo, inputMessageVideoNote, inputMessageVoiceNote.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Edits the caption and reply markup of an ephemeral message sent by the bot; for bots only.
+Request type for {@link Tdjson#editEphemeralMessageCaption}.
+*/
+export interface EditEphemeralMessageCaption {
+	'@type': 'editEphemeralMessageCaption';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the user who received the message.
+*/
+	receiver_user_id: number;
+	/**
+Identifier of the ephemeral message.
+*/
+	ephemeral_message_id: number;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New message content caption; pass null to remove caption; 0-getOption("message_caption_length_max") characters.
+*/
+	caption: FormattedText;
+	/**
+Pass true to show the caption above the media; otherwise, the caption will be shown below the media. May be true only
+for animation, photo, and video messages.
+*/
+	show_caption_above_media?: boolean;
+}
+
+/**
+Edits the message from which a callback query has originated with an ephemeral message; for bots only.
+Request type for {@link Tdjson#editCallbackQueryMessage}.
+*/
+export interface EditCallbackQueryMessage {
+	'@type': 'editCallbackQueryMessage';
+	/**
+Identifier of the callback query.
+*/
+	callback_query_id: string;
+	/**
+Pass true if the content of the message must be protected from forwarding and saving.
+*/
+	protect_content?: boolean;
+	/**
+The new message reply markup; pass null if none.
+*/
+	reply_markup: ReplyMarkup;
+	/**
+New content of the message. Must be one of the following types: inputMessageText, inputMessageAnimation,
+inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageRichMessage, inputMessageSticker,
 inputMessageVideo, inputMessageVideoNote, inputMessageVoiceNote.
 */
 	input_message_content: InputMessageContent;
@@ -43180,6 +43749,22 @@ The new message scheduling state; pass null to send the message immediately. Mus
 messageSchedulingStateSendWhenVideoProcessed.
 */
 	scheduling_state: MessageSchedulingState;
+}
+
+/**
+Removes message ephemeral content and reverts message state to the original.
+Request type for {@link Tdjson#deleteMessageEphemeralContent}.
+*/
+export interface DeleteMessageEphemeralContent {
+	'@type': 'deleteMessageEphemeralContent';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the message.
+*/
+	message_id: number;
 }
 
 /**
@@ -43874,10 +44459,10 @@ show_caption_above_media.
 }
 
 /**
-Readds quick reply messages which failed to add. Can be called only for messages for which
+Re-adds quick reply messages which failed to add. Can be called only for messages for which
 messageSendingStateFailed.can_retry is true and after specified in messageSendingStateFailed.retry_after time passed. If
-a message is readded, the corresponding failed to send message is deleted. Returns the sent messages in the same order
-as the message identifiers passed in message_ids. If a message can't be readded, null will be returned instead of the
+a message is re-added, the corresponding failed to send message is deleted. Returns the sent messages in the same order
+as the message identifiers passed in message_ids. If a message can't be re-added, null will be returned instead of the
 message.
 Request type for {@link Tdjson#readdQuickReplyShortcutMessages}.
 */
@@ -43888,7 +44473,7 @@ Name of the target shortcut.
 */
 	shortcut_name: string;
 	/**
-Identifiers of the quick reply messages to readd. Message identifiers must be in a strictly increasing order.
+Identifiers of the quick reply messages to re-add. Message identifiers must be in a strictly increasing order.
 */
 	message_ids: number[];
 }
@@ -43916,6 +44501,89 @@ inputMessageChecklist, inputMessageDocument, inputMessagePhoto, inputMessageRich
 inputMessageVideo.
 */
 	input_message_content: InputMessageContent;
+}
+
+/**
+Loads welcome messages of a chat; requires can_send_welcome_messages administrator right in the chat. The loaded
+messages will be sent through updateChatWelcomeMessages.
+Request type for {@link Tdjson#loadChatWelcomeMessages}.
+*/
+export interface LoadChatWelcomeMessages {
+	'@type': 'loadChatWelcomeMessages';
+	/**
+The identifier of the chat.
+*/
+	chat_id: number;
+}
+
+/**
+Adds a message to the list of welcome messages of a chat; requires can_send_welcome_messages administrator right in the
+chat. There can be up to getOption("welcome_message_count_max") welcome messages in a chat.
+Request type for {@link Tdjson#addChatWelcomeMessage}.
+*/
+export interface AddChatWelcomeMessage {
+	'@type': 'addChatWelcomeMessage';
+	/**
+The identifier of the chat.
+*/
+	chat_id: number;
+	/**
+The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageAnimation,
+inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageRichMessage, inputMessageSticker,
+inputMessageVideo, inputMessageVideoNote, inputMessageVoiceNote, inputMessageLocation, inputMessageVenue,
+inputMessageContact.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Edits a welcome message of a chat; requires can_send_welcome_messages administrator right in the chat.
+Request type for {@link Tdjson#editChatWelcomeMessage}.
+*/
+export interface EditChatWelcomeMessage {
+	'@type': 'editChatWelcomeMessage';
+	/**
+The identifier of the chat.
+*/
+	chat_id: number;
+	/**
+The identifier of the welcome message.
+*/
+	welcome_message_id: number;
+	/**
+New content of the message. Must be one of the following types: inputMessageText, inputMessageAnimation,
+inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageRichMessage, inputMessageSticker,
+inputMessageVideo, inputMessageVideoNote, inputMessageVoiceNote.
+*/
+	input_message_content: InputMessageContent;
+}
+
+/**
+Deletes a welcome message of a chat; requires can_send_welcome_messages administrator right in the chat.
+Request type for {@link Tdjson#deleteChatWelcomeMessage}.
+*/
+export interface DeleteChatWelcomeMessage {
+	'@type': 'deleteChatWelcomeMessage';
+	/**
+The identifier of the chat.
+*/
+	chat_id: number;
+	/**
+The identifier of the welcome message.
+*/
+	welcome_message_id: number;
+}
+
+/**
+Deletes all welcome messages of a chat; requires can_send_welcome_messages administrator right in the chat.
+Request type for {@link Tdjson#deleteAllChatWelcomeMessages}.
+*/
+export interface DeleteAllChatWelcomeMessages {
+	'@type': 'deleteAllChatWelcomeMessages';
+	/**
+The identifier of the chat.
+*/
+	chat_id: number;
 }
 
 /**
@@ -45811,6 +46479,14 @@ Unique identifier of the draft.
 */
 	draft_id: string;
 	/**
+Pass true to show the user a button to stop further drafts.
+*/
+	can_stop?: boolean;
+	/**
+Pass true to keep the current draft when the user stops further generation.
+*/
+	keep_on_stop?: boolean;
+	/**
 Draft text of the message; pass null to show a "Thinking..." placeholder.
 */
 	text: FormattedText;
@@ -45835,9 +46511,37 @@ Unique identifier of the draft.
 */
 	draft_id: string;
 	/**
+Pass true to show the user a button to stop further drafts.
+*/
+	can_stop?: boolean;
+	/**
+Pass true to keep the current draft when the user stops further generation.
+*/
+	keep_on_stop?: boolean;
+	/**
 Draft of the message; file upload isn't supported.
 */
 	message: InputRichMessage;
+}
+
+/**
+Stops a pending message generation by a bot.
+Request type for {@link Tdjson#stopPendingMessage}.
+*/
+export interface StopPendingMessage {
+	'@type': 'stopPendingMessage';
+	/**
+Identifier of the chat with the bot.
+*/
+	chat_id: number;
+	/**
+Identifier of the topic in which the action is performed; pass null if none.
+*/
+	topic_id: MessageTopic;
+	/**
+Unique identifier of the message draft within the message thread.
+*/
+	draft_id: string;
 }
 
 /**
@@ -46867,8 +47571,7 @@ Topic in which the draft will be changed; pass null to change the draft for the 
 */
 	topic_id: MessageTopic;
 	/**
-New draft message; pass null to remove the draft. All files in draft message content must be of the type inputFileLocal.
-Media thumbnails and captions are ignored.
+New draft message; pass null to remove the draft.
 */
 	draft_message: DraftMessage;
 }
@@ -47226,9 +47929,9 @@ channels, or if the added user is a bot.
 }
 
 /**
-Adds multiple new members to a chat; requires can_invite_users member right. Currently, this method is only available
-for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has
-more than 200 members. Returns information about members that weren't added.
+Adds multiple new members to a chat; requires can_invite_users member right. Currently, this method is available only in
+supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has more
+than 200 members. Returns information about members that weren't added.
 Request type for {@link Tdjson#addChatMembers}.
 */
 export interface AddChatMembers {
@@ -47279,7 +47982,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Identifier of the user, which tag is changed. Chats can't have member tags.
+Identifier of the user whose tag is changed. Chats can't have member tags.
 */
 	user_id: number;
 	/**
@@ -49044,7 +49747,7 @@ must be 2592000 in production environment, and 60 or 300 if Telegram test enviro
 }
 
 /**
-Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. If the link creates a
+Edits a non-primary invite link for a chat. Available in basic groups, supergroups, and channels. If the link creates a
 subscription, then expiration_date, member_limit and creates_join_request must not be used. Requires administrator
 privileges and can_invite_users right in the chat for own links and owner privileges for other links.
 Request type for {@link Tdjson#editChatInviteLink}.
@@ -49191,7 +49894,7 @@ The maximum number of chat members to return; up to 100.
 }
 
 /**
-Revokes invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges
+Revokes invite link for a chat. Available in basic groups, supergroups, and channels. Requires administrator privileges
 and can_invite_users right in the chat for own links and owner privileges for other links. If a primary link is revoked,
 then additionally to the revoked link returns new primary link.
 Request type for {@link Tdjson#revokeChatInviteLink}.
@@ -53087,7 +53790,7 @@ Secret chat identifier.
 }
 
 /**
-Returns a list of service actions taken by chat members and administrators in the last 48 hours. Available only for
+Returns a list of service actions taken by chat members and administrators in the last 48 hours. Available only in
 supergroups and channels. Requires administrator rights. Returns results in reverse chronological order (i.e., in order
 of decreasing event_id).
 Request type for {@link Tdjson#getChatEventLog}.
@@ -53618,6 +54321,16 @@ Identifier of the user or the channel chat that will receive the gift.
 The price that the user agreed to pay for the gift.
 */
 	price: GiftResalePrice;
+	/**
+Text to show along with the gift; 0-getOption("gift_text_length_max") characters. Only Bold, Italic, Underline,
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed. Must be empty if the receiver enabled paid
+messages and the price of the gift is less than the price of a paid message to the user.
+*/
+	text: FormattedText;
+	/**
+Pass true to show gift text and sender only to the gift receiver; otherwise, everyone will be able to see them.
+*/
+	is_private?: boolean;
 }
 
 /**
@@ -53832,7 +54545,7 @@ Identifier of the unique gift.
 	/**
 The new price for the unique gift; pass null to disallow gift resale. The current user will receive
 getOption("gift_resale_star_earnings_per_mille") Telegram Stars for each 1000 Telegram Stars paid for the gift if the
-gift price is in Telegram Stars or getOption("gift_resale_ton_earnings_per_mille") TON Grams for each 1000 Grams paid
+gift price is in Telegram Stars or getOption("gift_resale_gram_earnings_per_mille") TON Grams for each 1000 Grams paid
 for the gift if the gift price is in Grams.
 */
 	price: GiftResalePrice;
@@ -55835,7 +56548,7 @@ Request type for {@link Tdjson#giftPremiumWithStars}.
 export interface GiftPremiumWithStars {
 	'@type': 'giftPremiumWithStars';
 	/**
-Identifier of the user which will receive Telegram Premium.
+Identifier of the user who will receive Telegram Premium.
 */
 	user_id: number;
 	/**
@@ -56898,6 +57611,9 @@ export type Request =
 	| DeleteSavedMessagesTopicMessagesByDate
 	| ToggleSavedMessagesTopicIsPinned
 	| SetPinnedSavedMessagesTopics
+	| LoadCommunityFullInfo
+	| CreateCommunity
+	| SetCommunityName
 	| GetGroupsInCommon
 	| GetChatHistory
 	| GetMessageThreadHistory
@@ -56988,7 +57704,10 @@ export type Request =
 	| EditInlineMessageCaption
 	| EditInlineMessageReplyMarkup
 	| EditEphemeralMessage
+	| EditEphemeralMessageCaption
+	| EditCallbackQueryMessage
 	| EditMessageSchedulingState
+	| DeleteMessageEphemeralContent
 	| SetMessageFactCheck
 	| SendBusinessMessage
 	| SendBusinessMessageAlbum
@@ -57023,6 +57742,11 @@ export type Request =
 	| AddQuickReplyShortcutMessageAlbum
 	| ReaddQuickReplyShortcutMessages
 	| EditQuickReplyMessage
+	| LoadChatWelcomeMessages
+	| AddChatWelcomeMessage
+	| EditChatWelcomeMessage
+	| DeleteChatWelcomeMessage
+	| DeleteAllChatWelcomeMessages
 	| GetForumTopicDefaultIcons
 	| CreateForumTopic
 	| EditForumTopic
@@ -57123,6 +57847,7 @@ export type Request =
 	| SendChatAction
 	| SendTextMessageDraft
 	| SendRichMessageDraft
+	| StopPendingMessage
 	| OpenChat
 	| CloseChat
 	| ViewMessages
@@ -59008,6 +59733,36 @@ Changes the order of pinned Saved Messages topics.
 	}
 
 	/**
+Returns full information about a community. The data will be sent through update.
+*/
+	async loadCommunityFullInfo(options: Omit<LoadCommunityFullInfo, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'loadCommunityFullInfo',
+		});
+	}
+
+	/**
+Creates a new community for the given chat. Returns identifier of the created community.
+*/
+	async createCommunity(options: Omit<CreateCommunity, '@type'>): Promise<CommunityId> {
+		return this._request({
+			...options,
+			'@type': 'createCommunity',
+		});
+	}
+
+	/**
+Changes name of the given community; requires can_change_info administrator right in the community.
+*/
+	async setCommunityName(options: Omit<SetCommunityName, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setCommunityName',
+		});
+	}
+
+	/**
 Returns a list of common group chats with a given user. Chats are sorted by their type and creation date.
 */
 	async getGroupsInCommon(options: Omit<GetGroupsInCommon, '@type'>): Promise<Chats> {
@@ -59967,12 +60722,32 @@ Edits the reply markup of an inline message sent via a bot; for bots only.
 	}
 
 	/**
-Edits the text, caption or reply markup of an ephemeral message sent by the bot; for bots only.
+Edits the text, media, or reply markup of an ephemeral message sent by the bot; for bots only.
 */
 	async editEphemeralMessage(options: Omit<EditEphemeralMessage, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
 			'@type': 'editEphemeralMessage',
+		});
+	}
+
+	/**
+Edits the caption and reply markup of an ephemeral message sent by the bot; for bots only.
+*/
+	async editEphemeralMessageCaption(options: Omit<EditEphemeralMessageCaption, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editEphemeralMessageCaption',
+		});
+	}
+
+	/**
+Edits the message from which a callback query has originated with an ephemeral message; for bots only.
+*/
+	async editCallbackQueryMessage(options: Omit<EditCallbackQueryMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editCallbackQueryMessage',
 		});
 	}
 
@@ -59984,6 +60759,16 @@ together with the message will be also changed.
 		return this._request({
 			...options,
 			'@type': 'editMessageSchedulingState',
+		});
+	}
+
+	/**
+Removes message ephemeral content and reverts message state to the original.
+*/
+	async deleteMessageEphemeralContent(options: Omit<DeleteMessageEphemeralContent, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteMessageEphemeralContent',
 		});
 	}
 
@@ -60320,10 +61105,10 @@ the same type. Returns sent messages.
 	}
 
 	/**
-Readds quick reply messages which failed to add. Can be called only for messages for which
+Re-adds quick reply messages which failed to add. Can be called only for messages for which
 messageSendingStateFailed.can_retry is true and after specified in messageSendingStateFailed.retry_after time passed. If
-a message is readded, the corresponding failed to send message is deleted. Returns the sent messages in the same order
-as the message identifiers passed in message_ids. If a message can't be readded, null will be returned instead of the
+a message is re-added, the corresponding failed to send message is deleted. Returns the sent messages in the same order
+as the message identifiers passed in message_ids. If a message can't be re-added, null will be returned instead of the
 message.
 */
 	async readdQuickReplyShortcutMessages(options: Omit<ReaddQuickReplyShortcutMessages, '@type'>): Promise<QuickReplyMessages> {
@@ -60343,6 +61128,58 @@ photo with a video or vice versa.
 		return this._request({
 			...options,
 			'@type': 'editQuickReplyMessage',
+		});
+	}
+
+	/**
+Loads welcome messages of a chat; requires can_send_welcome_messages administrator right in the chat. The loaded
+messages will be sent through updateChatWelcomeMessages.
+*/
+	async loadChatWelcomeMessages(options: Omit<LoadChatWelcomeMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'loadChatWelcomeMessages',
+		});
+	}
+
+	/**
+Adds a message to the list of welcome messages of a chat; requires can_send_welcome_messages administrator right in the
+chat. There can be up to getOption("welcome_message_count_max") welcome messages in a chat.
+*/
+	async addChatWelcomeMessage(options: Omit<AddChatWelcomeMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addChatWelcomeMessage',
+		});
+	}
+
+	/**
+Edits a welcome message of a chat; requires can_send_welcome_messages administrator right in the chat.
+*/
+	async editChatWelcomeMessage(options: Omit<EditChatWelcomeMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editChatWelcomeMessage',
+		});
+	}
+
+	/**
+Deletes a welcome message of a chat; requires can_send_welcome_messages administrator right in the chat.
+*/
+	async deleteChatWelcomeMessage(options: Omit<DeleteChatWelcomeMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteChatWelcomeMessage',
+		});
+	}
+
+	/**
+Deletes all welcome messages of a chat; requires can_send_welcome_messages administrator right in the chat.
+*/
+	async deleteAllChatWelcomeMessages(options: Omit<DeleteAllChatWelcomeMessages, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteAllChatWelcomeMessages',
 		});
 	}
 
@@ -61382,6 +62219,16 @@ Sends a draft for a being generated rich message; for bots only.
 	}
 
 	/**
+Stops a pending message generation by a bot.
+*/
+	async stopPendingMessage(options: Omit<StopPendingMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'stopPendingMessage',
+		});
+	}
+
+	/**
 Informs TDLib that the chat is opened by the user. Many useful activities depend on the chat being opened or closed
 (e.g., in supergroups and channels all updates are received only for opened chats).
 */
@@ -62245,9 +63092,9 @@ Returns information about members that weren't added.
 	}
 
 	/**
-Adds multiple new members to a chat; requires can_invite_users member right. Currently, this method is only available
-for supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has
-more than 200 members. Returns information about members that weren't added.
+Adds multiple new members to a chat; requires can_invite_users member right. Currently, this method is available only in
+supergroups and channels. This method can't be used to join a chat. Members can't be added to a channel if it has more
+than 200 members. Returns information about members that weren't added.
 */
 	async addChatMembers(options: Omit<AddChatMembers, '@type'>): Promise<FailedToAddMembers> {
 		return this._request({
@@ -63313,7 +64160,7 @@ Creates a new subscription invite link for a channel chat. Requires can_invite_u
 	}
 
 	/**
-Edits a non-primary invite link for a chat. Available for basic groups, supergroups, and channels. If the link creates a
+Edits a non-primary invite link for a chat. Available in basic groups, supergroups, and channels. If the link creates a
 subscription, then expiration_date, member_limit and creates_join_request must not be used. Requires administrator
 privileges and can_invite_users right in the chat for own links and owner privileges for other links.
 */
@@ -63379,7 +64226,7 @@ the chat for own links and owner privileges for other links.
 	}
 
 	/**
-Revokes invite link for a chat. Available for basic groups, supergroups, and channels. Requires administrator privileges
+Revokes invite link for a chat. Available in basic groups, supergroups, and channels. Requires administrator privileges
 and can_invite_users right in the chat for own links and owner privileges for other links. If a primary link is revoked,
 then additionally to the revoked link returns new primary link.
 */
@@ -65906,7 +66753,7 @@ Closes a secret chat, effectively transferring its state to secretChatStateClose
 	}
 
 	/**
-Returns a list of service actions taken by chat members and administrators in the last 48 hours. Available only for
+Returns a list of service actions taken by chat members and administrators in the last 48 hours. Available only in
 supergroups and channels. Requires administrator rights. Returns results in reverse chronological order (i.e., in order
 of decreasing event_id).
 */
