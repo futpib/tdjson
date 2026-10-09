@@ -1965,6 +1965,10 @@ File containing the sound to be played when the sticker is clicked; may be null.
 codec, and stored inside an OGG container.
 */
 	sound: File;
+	/**
+True, if the emoji is a regular emoji.
+*/
+	is_regular_emoji?: boolean;
 }
 
 /**
@@ -2691,7 +2695,7 @@ Identifier of the custom emoji that is used as the verification sign.
 	icon_custom_emoji_id: string;
 	/**
 Custom description of verification reason set by the bot. Can contain only Mention, Hashtag, Cashtag, PhoneNumber,
-BankCardNumber, Url, and EmailAddress entities.
+BankCardNumber, TonAddress, Url, and EmailAddress entities.
 */
 	custom_description: FormattedText;
 }
@@ -6952,6 +6956,941 @@ The offset for the next request. If empty, then there are no more results.
 
 /**
 Describes state of active stories posted by a chat.
+Subtype of {@link TonCenterApiRequestType}.
+*/
+export interface TonCenterApiRequestTypeGet {
+	'@type': 'tonCenterApiRequestTypeGet';
+	/**
+URL-encoded query of the request.
+*/
+	query: string;
+}
+
+/**
+A POST request.
+Subtype of {@link TonCenterApiRequestType}.
+*/
+export interface TonCenterApiRequestTypePost {
+	'@type': 'tonCenterApiRequestTypePost';
+	/**
+Payload of the request.
+*/
+	payload: string;
+}
+
+/**
+Represents expected receiver of a TON wallet transfer.
+Subtype of {@link TonWalletTransferReceiver}.
+*/
+export interface TonWalletTransferReceiverUser {
+	'@type': 'tonWalletTransferReceiverUser';
+	/**
+Username of the user. Use searchPublicChat to find the user, check that it is a regular user, and then use
+createUserTonWallet to get information about the user's TON wallet.
+*/
+	username: string;
+}
+
+/**
+The receiver is specified by its address.
+Subtype of {@link TonWalletTransferReceiver}.
+*/
+export interface TonWalletTransferReceiverAddress {
+	'@type': 'tonWalletTransferReceiverAddress';
+	/**
+Address of the receiver. Use getAddressTonWallet to get information about the user's TON wallet.
+*/
+	address: string;
+}
+
+/**
+Contains an HTTP URL for TON Center Streaming API.
+*/
+export interface TonCenterStreamingApiUrl {
+	'@type': 'tonCenterStreamingApiUrl';
+	/**
+The URL.
+*/
+	url: string;
+	/**
+Time after which the URL expires.
+*/
+	expires_in: number;
+}
+
+/**
+Describes balance of the current user in the bot https://t.me/walt.
+*/
+export interface WalletBotBalance {
+	'@type': 'walletBotBalance';
+	/**
+True, if the user has positive TON Gram balance.
+*/
+	has_balance?: boolean;
+	/**
+The URL to open to launch the bot; may be empty if none.
+*/
+	url: string;
+}
+
+/**
+Contains TON wallet address of a user.
+*/
+export interface UserTonWalletAddress {
+	'@type': 'userTonWalletAddress';
+	/**
+Identifier of the user; 0 if unknown.
+*/
+	user_id: number;
+	/**
+Address of the user's wallet in the TON blockchain.
+*/
+	wallet_address: string;
+	/**
+Public key of the user.
+*/
+	public_key: string;
+}
+
+/**
+Represents a list of TON wallet addresses of users.
+*/
+export interface UserTonWalletAddresses {
+	'@type': 'userTonWalletAddresses';
+	/**
+A list of TON wallet addresses.
+*/
+	addresses: UserTonWalletAddress[];
+}
+
+/**
+Represents a challenge for TON wallet ownership proof.
+*/
+export interface TonWalletOwnershipProofChallenge {
+	'@type': 'tonWalletOwnershipProofChallenge';
+	/**
+Payload of the challenge.
+*/
+	payload: string;
+	/**
+Domain of the proof requester.
+*/
+	domain: string;
+}
+
+/**
+Represents a proof of TON wallet ownership.
+*/
+export interface TonWalletOwnershipProof {
+	'@type': 'tonWalletOwnershipProof';
+	/**
+Public key of the wallet.
+*/
+	public_key: string;
+	/**
+The current UNIX timestamp which was used to create the proof.
+*/
+	timestamp: number;
+	/**
+The signature prooving the ownership.
+*/
+	signature: string;
+}
+
+/**
+Represents state of gasless transfers for the current user.
+*/
+export interface TonWalletGaslessTransfersInfo {
+	'@type': 'tonWalletGaslessTransfersInfo';
+	/**
+Number of left gasless transfers. The daily available number of gasless transfers is available as
+getOption("ton_wallet_gasless_transfer_daily_count_max").
+*/
+	left_count: number;
+	/**
+Point in time (Unix timestamp) when the number of left transfers will be reset; 0 if never.
+*/
+	reset_date: number;
+	/**
+Address of the relayer for gasless transfers; may be empty if unavailable.
+*/
+	relayer_address: string;
+}
+
+/**
+Describes exchange rate of a currency to USD.
+*/
+export interface CurrencyExchangeRate {
+	'@type': 'currencyExchangeRate';
+	/**
+ISO 4217 currency code of the payment currency.
+*/
+	currency: string;
+	/**
+Exchange rate of the currency to USD.
+*/
+	rate: number;
+}
+
+/**
+Represents a list of currency exchange rates.
+*/
+export interface CurrencyExchangeRates {
+	'@type': 'currencyExchangeRates';
+	/**
+A list of currency exchange rates.
+*/
+	rates: CurrencyExchangeRate[];
+}
+
+/**
+Describes an on-ramp provider.
+*/
+export interface OnRampProvider {
+	'@type': 'onRampProvider';
+	/**
+Unique identifier of the provider.
+*/
+	id: string;
+	/**
+Name of the provider.
+*/
+	name: string;
+	/**
+List of cryptocurrencies supported by the provider.
+*/
+	cryptocurrencies: string[];
+	/**
+True, if the provider supports base currencies and can be used in the method getOnRampProviderBaseCurrencies.
+*/
+	supports_base_currencies?: boolean;
+	/**
+True, if the provider supports limits retrieval using the method getOnRampPaymentLimits.
+*/
+	supports_limits?: boolean;
+	/**
+True, if the provider supports quote retrieval using the method getOnRampPaymentQuote.
+*/
+	supports_quote?: boolean;
+}
+
+/**
+Represents a list of on-ramp providers.
+*/
+export interface OnRampProviders {
+	'@type': 'onRampProviders';
+	/**
+A list of providers.
+*/
+	providers: OnRampProvider[];
+}
+
+/**
+Represents a list of currencies.
+*/
+export interface Currencies {
+	'@type': 'currencies';
+	/**
+A list of ISO 4217 currency codes.
+*/
+	currencies: string[];
+}
+
+/**
+Describes a payment method of an on-ramp provider.
+*/
+export interface OnRampPaymentMethod {
+	'@type': 'onRampPaymentMethod';
+	/**
+Name of the method.
+*/
+	name: string;
+	/**
+True, if the method is available to the user.
+*/
+	is_available?: boolean;
+}
+
+/**
+Describes availability of cryptocurrency purchase through an on-ramp provider.
+*/
+export interface OnRampPaymentAvailability {
+	'@type': 'onRampPaymentAvailability';
+	/**
+True, if the current user can use the provider.
+*/
+	is_allowed?: boolean;
+	/**
+True, if the current user can purchase through the provider.
+*/
+	is_purchase_allowed?: boolean;
+	/**
+The list of available payment methods.
+*/
+	methods: OnRampPaymentMethod[];
+	/**
+A two-letter ISO 3166-1 alpha-2 country code of the current user's country.
+*/
+	country_code: string;
+	/**
+Code of the state of the current user; may be empty if unknown.
+*/
+	state: string;
+}
+
+/**
+Describes limits for an on-ramp purchase.
+*/
+export interface OnRampPaymentLimits {
+	'@type': 'onRampPaymentLimits';
+	/**
+The payment method to be used.
+*/
+	payment_method: string;
+	/**
+The minimum allowed amount of the base currency.
+*/
+	base_currency_min_amount: string;
+	/**
+The maximum allowed amount of the base currency.
+*/
+	base_currency_max_amount: string;
+	/**
+The minimum allowed amount of the bought cryptocurrency.
+*/
+	cryptocurrency_min_amount: string;
+	/**
+The maximum allowed amount of the bought cryptocurrency.
+*/
+	cryptocurrency_max_amount: string;
+}
+
+/**
+Describes a quote for an on-ramp purchase.
+*/
+export interface OnRampPaymentQuote {
+	'@type': 'onRampPaymentQuote';
+	/**
+The payment method to be used.
+*/
+	payment_method: string;
+	/**
+Point in time (Unix timestamp) when the quote will expire.
+*/
+	expiration_date: number;
+	/**
+Paid amount of the base currency.
+*/
+	base_currency_amount: string;
+	/**
+Purchased amount of the cryptocurrency.
+*/
+	cryptocurrency_amount: string;
+	/**
+The price of the cryptocurrency.
+*/
+	cryptocurrency_price: string;
+	/**
+Fee amount.
+*/
+	fee_amount: string;
+	/**
+Extra fee amount.
+*/
+	extra_fee_amount: string;
+	/**
+Network fee amount.
+*/
+	network_fee_amount: string;
+	/**
+Total paid amount.
+*/
+	total_amount: string;
+}
+
+/**
+Describes a session for an on-ramp purchase.
+*/
+export interface OnRampPaymentSession {
+	'@type': 'onRampPaymentSession';
+	/**
+Identifier of the session.
+*/
+	session_id: string;
+	/**
+Point in time (Unix timestamp) when the session will expire.
+*/
+	expiration_date: number;
+	/**
+HTTPS URL to be opened in a WebView to complete the purchase.
+*/
+	url: string;
+}
+
+/**
+Describes state of the wallet of the current user in the TON blockchain.
+*/
+export interface TonWalletState {
+	'@type': 'tonWalletState';
+	/**
+Address of the wallet; may be empty if none.
+*/
+	address: string;
+	/**
+Public key of the wallet; may be empty if none.
+*/
+	public_key: string;
+	/**
+The total amount of owned TON Grams, in the smallest units of the cryptocurrency.
+*/
+	gram_amount: number;
+	/**
+True, if the wallet is being created.
+*/
+	is_being_created?: boolean;
+	/**
+True, if backup for the wallet key is enabled.
+*/
+	is_backup_enabled?: boolean;
+	/**
+True, if the user can enable backup for the wallet key.
+*/
+	can_enable_backup?: boolean;
+	/**
+True, if the wallet key can be exported using getTonWalletSecretPhrase.
+*/
+	can_export_phrase?: boolean;
+}
+
+/**
+Represents an attribute of an NFT in the TON blockchain.
+*/
+export interface TonNftAttribute {
+	'@type': 'tonNftAttribute';
+	/**
+Trait type.
+*/
+	trait_type: string;
+	/**
+Value of the attribute.
+*/
+	value: string;
+}
+
+/**
+Represents an NFT in the TON blockchain.
+*/
+export interface TonNft {
+	'@type': 'tonNft';
+	/**
+Address of the collection to which the NFT belongs; may be empty if unknown.
+*/
+	collection_address: string;
+	/**
+Address of the NFT.
+*/
+	address: string;
+	/**
+Address of the owner of the NFT.
+*/
+	owner_address: string;
+	/**
+Index of the NFT among all NFTs from the collection as a decimal number.
+*/
+	index: string;
+	/**
+Name of the NFT.
+*/
+	name: string;
+	/**
+Represents an NFT in the TON blockchain.
+*/
+	description: string;
+	/**
+Image of the NFT; may be null if none.
+*/
+	image: PhotoSize;
+	/**
+Thumbnail of the NFT; may be null if none.
+*/
+	thumbnail: PhotoSize;
+	/**
+Content of the NFT; may be null if none.
+*/
+	content: Document;
+	/**
+Sticker of the NFT; may be null if none.
+*/
+	sticker: Sticker;
+	/**
+Attributes of the NFT.
+*/
+	attributes: TonNftAttribute[];
+	/**
+Additional data about the NFT; may be null if none.
+*/
+	extra: JsonValue;
+}
+
+/**
+Represents a list of TON NFTs.
+*/
+export interface TonNfts {
+	'@type': 'tonNfts';
+	/**
+List of NFTs.
+*/
+	nfts: TonNft[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
+Describes state of a transaction with a TON wallet.
+Subtype of {@link TonWalletTransactionState}.
+*/
+export interface TonWalletTransactionStateSucceeded {
+	'@type': 'tonWalletTransactionStateSucceeded';
+	/**
+Hash of the transaction.
+*/
+	tx_hash: string;
+}
+
+/**
+The transaction failed.
+Subtype of {@link TonWalletTransactionState}.
+*/
+export interface TonWalletTransactionStateFailed {
+	'@type': 'tonWalletTransactionStateFailed';
+
+}
+
+/**
+Describes type of transaction with a TON wallet.
+Subtype of {@link TonWalletTransactionType}.
+*/
+export interface TonWalletTransactionTypeOnRampDeposit {
+	'@type': 'tonWalletTransactionTypeOnRampDeposit';
+	/**
+The amount of received cryptocurrency, in the smallest units of the cryptocurrency.
+*/
+	amount: number;
+	/**
+Name of the on-ramp provider.
+*/
+	provider_name: string;
+}
+
+/**
+A transfer of TON Grams to or from the wallet.
+Subtype of {@link TonWalletTransactionType}.
+*/
+export interface TonWalletTransactionTypeTransfer {
+	'@type': 'tonWalletTransactionTypeTransfer';
+	/**
+The amount of received cryptocurrency, in the smallest units of the cryptocurrency; negative for outgoing transactions.
+*/
+	amount: number;
+	/**
+True, if the fee was paid by Telegram.
+*/
+	is_gasless?: boolean;
+	/**
+Comment added to the transaction.
+*/
+	comment: string;
+	/**
+True, if the comment is encrypted and must be decrypted using the user's private key.
+*/
+	is_comment_encrypted?: boolean;
+}
+
+/**
+A transfer of a TON NFT to or from the wallet.
+Subtype of {@link TonWalletTransactionType}.
+*/
+export interface TonWalletTransactionTypeNftTransfer {
+	'@type': 'tonWalletTransactionTypeNftTransfer';
+	/**
+The transferred NFT.
+*/
+	nft: TonNft;
+	/**
+True, if the transfer is outgoing.
+*/
+	is_outgoing?: boolean;
+	/**
+Comment added to the transaction.
+*/
+	comment: string;
+	/**
+True, if the comment is encrypted and must be decrypted using the user's private key.
+*/
+	is_comment_encrypted?: boolean;
+}
+
+/**
+Change of the wallet key.
+Subtype of {@link TonWalletTransactionType}.
+*/
+export interface TonWalletTransactionTypeKeyChange {
+	'@type': 'tonWalletTransactionTypeKeyChange';
+
+}
+
+/**
+Represents a transaction with the TON wallet of the current user.
+*/
+export interface TonWalletTransaction {
+	'@type': 'tonWalletTransaction';
+	/**
+Unique identifier of the transaction.
+*/
+	id: string;
+	/**
+Address in the TON blockchain of the transaction peer; may be empty if the transaction isn't a wallet transfer.
+*/
+	peer_address: string;
+	/**
+Identifier of the other user who participated in the transaction; 0 if unknown.
+*/
+	peer_user_id: number;
+	/**
+Identifier of the domain assigned to the peer address; may be empty if none.
+*/
+	peer_domain: string;
+	/**
+Point in time (Unix timestamp) when the transaction was completed.
+*/
+	date: number;
+	/**
+The fee amount paid for the transaction in TON Grams, in the smallest units of the cryptocurrency.
+*/
+	fee_amount: number;
+	/**
+State of the transaction.
+*/
+	state: TonWalletTransactionState;
+	/**
+Type of the transaction.
+*/
+	type: TonWalletTransactionType;
+}
+
+/**
+Represents a list of TON Gram transactions.
+*/
+export interface TonWalletTransactions {
+	'@type': 'tonWalletTransactions';
+	/**
+The total amount of owned TON Grams, in the smallest units of the cryptocurrency.
+*/
+	gram_amount: number;
+	/**
+List of transactions.
+*/
+	transactions: TonWalletTransaction[];
+	/**
+The offset for the next request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
+Describes state of a request received from a dApp through TON Connect.
+Subtype of {@link TonConnectRequestState}.
+*/
+export interface TonConnectRequestStatePending {
+	'@type': 'tonConnectRequestStatePending';
+	/**
+Point in time (Unix timestamp) when the request will expire or has expired.
+*/
+	expiration_date: number;
+}
+
+/**
+The request was accepted.
+Subtype of {@link TonConnectRequestState}.
+*/
+export interface TonConnectRequestStateAccepted {
+	'@type': 'tonConnectRequestStateAccepted';
+
+}
+
+/**
+The request was rejected.
+Subtype of {@link TonConnectRequestState}.
+*/
+export interface TonConnectRequestStateRejected {
+	'@type': 'tonConnectRequestStateRejected';
+
+}
+
+/**
+Describes manifest of the dApp that is being connected using TON Connect.
+Subtype of {@link TonConnectManifest}.
+*/
+export interface TonConnectManifestPending {
+	'@type': 'tonConnectManifestPending';
+
+}
+
+/**
+The manifest is available.
+Subtype of {@link TonConnectManifest}.
+*/
+export interface TonConnectManifestInfo {
+	'@type': 'tonConnectManifestInfo';
+	/**
+URL of the dApp.
+*/
+	url: string;
+	/**
+Name of the dApp.
+*/
+	name: string;
+	/**
+App icon in PNG or ICO format.
+*/
+	icon: Document;
+}
+
+/**
+The manifest has failed to download.
+Subtype of {@link TonConnectManifest}.
+*/
+export interface TonConnectManifestFailed {
+	'@type': 'tonConnectManifestFailed';
+
+}
+
+/**
+The manifest is invalid.
+Subtype of {@link TonConnectManifest}.
+*/
+export interface TonConnectManifestInvalid {
+	'@type': 'tonConnectManifestInvalid';
+
+}
+
+/**
+Describes state of a TON Connect session.
+Subtype of {@link TonConnectSessionState}.
+*/
+export interface TonConnectSessionStatePending {
+	'@type': 'tonConnectSessionStatePending';
+
+}
+
+/**
+The session is ready.
+Subtype of {@link TonConnectSessionState}.
+*/
+export interface TonConnectSessionStateReady {
+	'@type': 'tonConnectSessionStateReady';
+
+}
+
+/**
+The session is being closed.
+Subtype of {@link TonConnectSessionState}.
+*/
+export interface TonConnectSessionStateClosing {
+	'@type': 'tonConnectSessionStateClosing';
+
+}
+
+/**
+The session is closed.
+Subtype of {@link TonConnectSessionState}.
+*/
+export interface TonConnectSessionStateClosed {
+	'@type': 'tonConnectSessionStateClosed';
+
+}
+
+/**
+Represents a data item to share with a dApp.
+Subtype of {@link TonConnectConnectItem}.
+*/
+export interface TonConnectConnectItemAddress {
+	'@type': 'tonConnectConnectItemAddress';
+	/**
+Stringified TON network global_id (e.g. "-239" for mainnet); may be empty.
+*/
+	network: string;
+}
+
+/**
+Proof of the wallet ownership.
+Subtype of {@link TonConnectConnectItem}.
+*/
+export interface TonConnectConnectItemProof {
+	'@type': 'tonConnectConnectItemProof';
+	/**
+Payload to be used for the proof (e.g. nonce + expiration timestamp).
+*/
+	payload: string;
+}
+
+/**
+Contains information about a request to connect the user's TON wallet to a dApp using TON Connect.
+*/
+export interface TonConnectConnectRequest {
+	'@type': 'tonConnectConnectRequest';
+	/**
+URL of the manifest of the dApp.
+*/
+	manifest_url: string;
+	/**
+Items requested from the wallet.
+*/
+	items: TonConnectConnectItem[];
+}
+
+/**
+Represents a TON Connect session. See https://github.com/ton-blockchain/ton-connect/tree/main/spec for full TON Connect
+protocol documentation.
+*/
+export interface TonConnectSession {
+	'@type': 'tonConnectSession';
+	/**
+Unique identifier of the session.
+*/
+	id: string;
+	/**
+Hex-encoded public X25519 key of the dApp.
+*/
+	dapp_client_id: string;
+	/**
+Hex-encoded public X25519 key of the current user's application; may be empty if none.
+*/
+	wallet_client_id: string;
+	/**
+Point in time (Unix timestamp) when the session was created.
+*/
+	creation_date: number;
+	/**
+Manifest of the dApp.
+*/
+	manifest: TonConnectManifest;
+	/**
+Nonce used for the session.
+*/
+	nonce: string;
+	/**
+Session state.
+*/
+	state: TonConnectSessionState;
+}
+
+/**
+Contains a list of TON Connect sessions.
+*/
+export interface TonConnectSessions {
+	'@type': 'tonConnectSessions';
+	/**
+The list of sessions.
+*/
+	sessions: TonConnectSession[];
+}
+
+/**
+Represents a pending TON Connect request.
+*/
+export interface TonConnectRequest {
+	'@type': 'tonConnectRequest';
+	/**
+Unique identifier of the session.
+*/
+	session_id: string;
+	/**
+Unique identifier of the service message in the chat 777000 with the request.
+*/
+	message_id: number;
+	/**
+Body of the request.
+*/
+	body: string;
+	/**
+Point in time (Unix timestamp) when the request will expire; 0 if never.
+*/
+	expiration_date: number;
+	/**
+Topic of the request; may be empty if none.
+*/
+	topic: string;
+	/**
+Identifier to trace the request; may be empty if none.
+*/
+	trace_id: string;
+}
+
+/**
+Represents a session with its pending TON Connect requests.
+*/
+export interface TonConnectRequests {
+	'@type': 'tonConnectRequests';
+	/**
+The session.
+*/
+	session: TonConnectSession;
+	/**
+The requests.
+*/
+	requests: TonConnectRequest[];
+}
+
+/**
+Represents a TON Connect challenge.
+*/
+export interface TonConnectChallenge {
+	'@type': 'tonConnectChallenge';
+	/**
+104-byte challenge.
+*/
+	challenge: string;
+	/**
+Unique identifier of the first outgoing event.
+*/
+	event_id: string;
+}
+
+/**
+Represents identifier of an event in a TON Connect session.
+*/
+export interface TonConnectSessionEventId {
+	'@type': 'tonConnectSessionEventId';
+	/**
+The event identifier.
+*/
+	event_id: string;
+}
+
+/**
+Represents result of cryptocurrency transfer from the current user's TON wallet.
+*/
+export interface TonWalletTransferResult {
+	'@type': 'tonWalletTransferResult';
+	/**
+True, if the transfer is gasless.
+*/
+	is_gasless?: boolean;
+	/**
+Unique identifier of the sent message; use getTonWalletTransactionByMsgHash to poll information about the transaction.
+*/
+	msg_hash: string;
+	/**
+The completed transaction; may be null if the transaction is still pending.
+*/
+	transaction: TonWalletTransaction;
+}
+
+/**
+Describes state of active stories posted by a chat.
 Subtype of {@link ActiveStoryState}.
 */
 export interface ActiveStoryStateLive {
@@ -7563,6 +8502,12 @@ Collectible usernames that were purchased at https://fragment.com and can be pas
 details.
 */
 	collectible_usernames: string[];
+	/**
+Secondary non-collectible username; for bots only. Can't be used in toggleBotUsernameIsActive; use
+addBotSecondaryUsername or deleteBotSecondaryUsername to edit it. If the username is disabled, then Telegram Premium
+subscription is required to re-enable it.
+*/
+	secondary_username: string;
 }
 
 /**
@@ -8416,8 +9361,9 @@ True, if the link only creates join request. If true, total number of joining me
 */
 	creates_join_request?: boolean;
 	/**
-True, if the link is primary. Primary invite link can't have name, expiration date, or usage limit. There is exactly one
-primary invite link for each administrator with can_invite_users right at a given time.
+True, if the link is primary. Primary invite link can't have name, expiration date, or usage limit. Primary link can
+create join requests only if this is set up using toggleSupergroupJoinByRequest. There is exactly one primary invite
+link for each administrator with can_invite_users right at a given time.
 */
 	is_primary?: boolean;
 	/**
@@ -13034,7 +13980,12 @@ If true, the freeform gradient fill needs to be animated on every sent message.
 */
 	animate_outgoing_message_fill?: boolean;
 	/**
-Accent color of outgoing messages in ARGB format.
+True, if there is chosen accent color for outgoing messages; otherwise, the color must be deduced from other theme
+settings.
+*/
+	has_outgoing_message_accent_color?: boolean;
+	/**
+Accent color of outgoing messages in ARGB format; must be ignored if has_outgoing_message_accent_color is false.
 */
 	outgoing_message_accent_color: number;
 }
@@ -13253,6 +14204,22 @@ Text.
 The number of the bank card.
 */
 	bank_card_number: string;
+}
+
+/**
+An address in the TON blockchain.
+Subtype of {@link RichText}.
+*/
+export interface RichTextTonAddress {
+	'@type': 'richTextTonAddress';
+	/**
+Text.
+*/
+	text: RichText;
+	/**
+The address.
+*/
+	address: string;
 }
 
 /**
@@ -18531,6 +19498,67 @@ A sticker to be shown in the message; may be null if unknown.
 }
 
 /**
+Represents a transfer with the TON wallet of the current user.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageTonWalletTransfer {
+	'@type': 'messageTonWalletTransfer';
+	/**
+Sender of the transfer; 0 if unknown.
+*/
+	sender_user_id: number;
+	/**
+Unique identifier of the transaction; may be empty if the transfer isn't send yet. Use getTonWalletTransaction to get
+additional information about the transaction.
+*/
+	transaction_id: string;
+	/**
+Address in the TON blockchain of the transaction peer.
+*/
+	peer_address: string;
+	/**
+The amount of received cryptocurrency, in the smallest units of the cryptocurrency; negative for outgoing transactions.
+*/
+	amount: number;
+	/**
+Comment added to the transaction.
+*/
+	comment: string;
+	/**
+True, if the comment is encrypted and must be decrypted using the receiver's or sender's private key.
+*/
+	is_comment_encrypted?: boolean;
+}
+
+/**
+A request from a dApp was received through TON Connect.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageTonConnectRequest {
+	'@type': 'messageTonConnectRequest';
+	/**
+Unique identifier of the TON Connect session.
+*/
+	session_id: string;
+	/**
+State of the request.
+*/
+	state: TonConnectRequestState;
+	/**
+Name of the dApp; may be empty if unknown.
+*/
+	dapp_name: string;
+	/**
+Topic of the request; may be empty if none.
+*/
+	topic: string;
+	/**
+Identifier to trace the request; may be empty if none.
+*/
+	trace_id: string;
+}
+
+/**
 A regular gift was received or sent by the current user, or the current user was notified about a channel gift.
 Subtype of {@link MessageContent}.
 */
@@ -19202,6 +20230,15 @@ Subtype of {@link TextEntityType}.
 */
 export interface TextEntityTypeBankCardNumber {
 	'@type': 'textEntityTypeBankCardNumber';
+
+}
+
+/**
+An address in the TON blockchain.
+Subtype of {@link TextEntityType}.
+*/
+export interface TextEntityTypeTonAddress {
+	'@type': 'textEntityTypeTonAddress';
 
 }
 
@@ -21041,6 +22078,10 @@ True, if the message can be reported using reportSupergroupSpam.
 True, if fact check for the message can be changed through setMessageFactCheck.
 */
 	can_set_fact_check?: boolean;
+	/**
+Identifiers of custom emoji used in the message.
+*/
+	custom_emoji_ids: string[];
 	/**
 True, if content of the message can't be saved locally, because it is protected by the current user; if true, then
 can_be_saved is false.
@@ -26396,7 +27437,7 @@ New identifier of the custom emoji; 0 if none.
 }
 
 /**
-The has_protected_content setting of a channel was toggled.
+The has_protected_content setting of a chat was toggled.
 Subtype of {@link ChatEventAction}.
 */
 export interface ChatEventHasProtectedContentToggled {
@@ -26588,7 +27629,7 @@ New value of volume_level; 1-20000 in hundreds of percents.
 }
 
 /**
-The is_forum setting of a channel was toggled.
+The is_forum setting of a supergroup was toggled.
 Subtype of {@link ChatEventAction}.
 */
 export interface ChatEventIsForumToggled {
@@ -28039,7 +29080,8 @@ Number of bought Telegram Stars.
 */
 	star_count: number;
 	/**
-Identifier of the chat that is supposed to receive the Telegram Stars; pass 0 if none.
+Identifier of the chat that is supposed to receive the Telegram Stars; pass 0 if none. If non-zero and
+getOption("star_top_up_disabled"), then the payment isn't allowed and the user can't buy Telegram Stars in this place.
 */
 	chat_id: number;
 }
@@ -29129,6 +30171,38 @@ Prize of the giveaway; may be null for pinned message.
 True, if the message is a pinned message with the specified content.
 */
 	is_pinned?: boolean;
+}
+
+/**
+A message with a TON wallet transfer.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentTonWalletTransfer {
+	'@type': 'pushMessageContentTonWalletTransfer';
+	/**
+Sender of the transfer; 0 if unknown.
+*/
+	sender_user_id: number;
+	/**
+String representation of the received amount.
+*/
+	amount: string;
+	/**
+Comment added to the transaction if it is public.
+*/
+	comment: string;
+}
+
+/**
+A message with a request from a dApp was received through TON Connect.
+Subtype of {@link PushMessageContent}.
+*/
+export interface PushMessageContentTonConnectRequest {
+	'@type': 'pushMessageContentTonConnectRequest';
+	/**
+Name of the dApp; may be empty if unknown.
+*/
+	dapp_name: string;
 }
 
 /**
@@ -31728,7 +32802,8 @@ Username of the bot which will manage the new bot.
 */
 	manager_bot_username: string;
 	/**
-Suggested username for the bot; always ends with "bot" case-insensitive.
+Suggested username for the bot; always ends with "bot" or a string from updateAllowedBotUsernamePremiumSuffixes
+case-insensitive.
 */
 	suggested_bot_username: string;
 	/**
@@ -31867,6 +32942,54 @@ export interface InternalLinkTypeTheme {
 Name of the theme.
 */
 	theme_name: string;
+}
+
+/**
+The link is a universal TON Connect link.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeTonConnect {
+	'@type': 'internalLinkTypeTonConnect';
+	/**
+TON Connect version.
+*/
+	version: number;
+	/**
+Hex-encoded public X25519 key of the dApp.
+*/
+	dapp_client_id: string;
+	/**
+TON Connect connect request.
+*/
+	connect_request: TonConnectConnectRequest;
+	/**
+Request return strategy; one of "back", "none", or a URL to open.
+*/
+	return_strategy: string;
+	/**
+Embedded RPC request represented as base64url-encoded JSON.
+*/
+	rpc_request: string;
+	/**
+Identifier to trace the connection request.
+*/
+	trace_id: string;
+}
+
+/**
+The link is a link for sending Grams from the user's TON wallet.
+Subtype of {@link InternalLinkType}.
+*/
+export interface InternalLinkTypeTonWalletTransfer {
+	'@type': 'internalLinkTypeTonWalletTransfer';
+	/**
+Chosen receiver of the transfer; may be null if none.
+*/
+	receiver: TonWalletTransferReceiver;
+	/**
+The pre-filled amount of TON Grams to send; in the smallest units of the cryptocurrency.
+*/
+	gram_amount: number;
 }
 
 /**
@@ -33022,6 +34145,15 @@ export interface SuggestedActionViewChecksHint {
 }
 
 /**
+Suggests the user to view a hint about receiving of the first TON wallet transfer.
+Subtype of {@link SuggestedAction}.
+*/
+export interface SuggestedActionViewFirstTonWalletTransferHint {
+	'@type': 'suggestedActionViewFirstTonWalletTransferHint';
+
+}
+
+/**
 Suggests the user to convert specified supergroup to a broadcast group.
 Subtype of {@link SuggestedAction}.
 */
@@ -33778,7 +34910,7 @@ Amount of earned revenue.
 */
 	revenue_amount: ChatRevenueAmount;
 	/**
-Current conversion rate of the cryptocurrency in which revenue is calculated to USD.
+Current exchange rate of the cryptocurrency in which revenue is calculated to USD.
 */
 	usd_rate: number;
 }
@@ -34002,7 +35134,7 @@ Telegram Star revenue status.
 */
 	status: StarRevenueStatus;
 	/**
-Current conversion rate of a Telegram Star to USD.
+Current exchange rate of a Telegram Star to USD.
 */
 	usd_rate: number;
 }
@@ -34044,7 +35176,7 @@ Amount of earned revenue.
 */
 	status: GramRevenueStatus;
 	/**
-Current conversion rate of nanogram to USD cents.
+Current exchange rate of nanogram to USD cents.
 */
 	usd_rate: number;
 }
@@ -36340,6 +37472,19 @@ Point in time (Unix timestamp) when stealth mode can be enabled again; 0 if ther
 }
 
 /**
+Lists of suffixes allowed in secondary bot usernames, which can be added additionally to the main username if the bot's
+owner has a Telegram Premium subscription.
+Subtype of {@link Update}.
+*/
+export interface UpdateAllowedBotUsernamePremiumSuffixes {
+	'@type': 'updateAllowedBotUsernamePremiumSuffixes';
+	/**
+The list of allowed suffixes.
+*/
+	suffixes: string[];
+}
+
+/**
 Lists of bots which Mini Apps must be allowed to read text from clipboard and must be opened without a warning.
 Subtype of {@link Update}.
 */
@@ -36771,6 +37916,54 @@ export interface UpdateOwnedGramCount {
 The new amount of owned Grams; in the smallest units of the cryptocurrency.
 */
 	gram_amount: number;
+}
+
+/**
+The state of the TON wallet of the current user has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateTonWalletState {
+	'@type': 'updateTonWalletState';
+	/**
+The new state of the wallet.
+*/
+	state: TonWalletState;
+}
+
+/**
+The information about gasless transfers has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateTonWalletGaslessTransfersInfo {
+	'@type': 'updateTonWalletGaslessTransfersInfo';
+	/**
+The new state of the wallet.
+*/
+	info: TonWalletGaslessTransfersInfo;
+}
+
+/**
+A session of a TON Connect has changed.
+Subtype of {@link Update}.
+*/
+export interface UpdateTonWalletTonConnectSession {
+	'@type': 'updateTonWalletTonConnectSession';
+	/**
+The new state of the session.
+*/
+	session: TonConnectSession;
+}
+
+/**
+TON Connect sessions must be disconnected in a regular way.
+Subtype of {@link Update}.
+*/
+export interface UpdateTonWalletTonConnectSessionDisconnectRequired {
+	'@type': 'updateTonWalletTonConnectSessionDisconnectRequired';
+	/**
+Identifiers of the sessions.
+*/
+	session_ids: string[];
 }
 
 /**
@@ -38000,6 +39193,45 @@ export type TonTransactionType =
 	| TonTransactionTypeStakeDicePayout
 	| TonTransactionTypeUnsupported;
 
+export type TonCenterApiRequestType =
+	| TonCenterApiRequestTypeGet
+	| TonCenterApiRequestTypePost;
+
+export type TonWalletTransferReceiver =
+	| TonWalletTransferReceiverUser
+	| TonWalletTransferReceiverAddress;
+
+export type TonWalletTransactionState =
+	| TonWalletTransactionStateSucceeded
+	| TonWalletTransactionStateFailed;
+
+export type TonWalletTransactionType =
+	| TonWalletTransactionTypeOnRampDeposit
+	| TonWalletTransactionTypeTransfer
+	| TonWalletTransactionTypeNftTransfer
+	| TonWalletTransactionTypeKeyChange;
+
+export type TonConnectRequestState =
+	| TonConnectRequestStatePending
+	| TonConnectRequestStateAccepted
+	| TonConnectRequestStateRejected;
+
+export type TonConnectManifest =
+	| TonConnectManifestPending
+	| TonConnectManifestInfo
+	| TonConnectManifestFailed
+	| TonConnectManifestInvalid;
+
+export type TonConnectSessionState =
+	| TonConnectSessionStatePending
+	| TonConnectSessionStateReady
+	| TonConnectSessionStateClosing
+	| TonConnectSessionStateClosed;
+
+export type TonConnectConnectItem =
+	| TonConnectConnectItemAddress
+	| TonConnectConnectItemProof;
+
 export type ActiveStoryState =
 	| ActiveStoryStateLive
 	| ActiveStoryStateUnread
@@ -38269,6 +39501,7 @@ export type RichText =
 	| RichTextHashtag
 	| RichTextCashtag
 	| RichTextBankCardNumber
+	| RichTextTonAddress
 	| RichTextBotCommand
 	| RichTextFixed
 	| RichTextMentionName
@@ -38574,6 +39807,8 @@ export type MessageContent =
 	| MessageGiftedStars
 	| MessageGiftedGrams
 	| MessageGiveawayPrizeStars
+	| MessageTonWalletTransfer
+	| MessageTonConnectRequest
 	| MessageGift
 	| MessageUpgradedGift
 	| MessageRefundedUpgradedGift
@@ -38618,6 +39853,7 @@ export type TextEntityType =
 	| TextEntityTypeEmailAddress
 	| TextEntityTypePhoneNumber
 	| TextEntityTypeBankCardNumber
+	| TextEntityTypeTonAddress
 	| TextEntityTypeBold
 	| TextEntityTypeItalic
 	| TextEntityTypeUnderline
@@ -39224,6 +40460,8 @@ export type PushMessageContent =
 	| PushMessageContentPoll
 	| PushMessageContentPremiumGiftCode
 	| PushMessageContentGiveaway
+	| PushMessageContentTonWalletTransfer
+	| PushMessageContentTonConnectRequest
 	| PushMessageContentGift
 	| PushMessageContentUpgradedGift
 	| PushMessageContentScreenshotTaken
@@ -39444,6 +40682,8 @@ export type InternalLinkType =
 	| InternalLinkTypeStoryAlbum
 	| InternalLinkTypeTextCompositionStyle
 	| InternalLinkTypeTheme
+	| InternalLinkTypeTonConnect
+	| InternalLinkTypeTonWalletTransfer
 	| InternalLinkTypeUnknownDeepLink
 	| InternalLinkTypeUpgradedGift
 	| InternalLinkTypeUserPhoneNumber
@@ -39532,6 +40772,7 @@ export type SuggestedAction =
 	| SuggestedActionCheckPassword
 	| SuggestedActionCheckPhoneNumber
 	| SuggestedActionViewChecksHint
+	| SuggestedActionViewFirstTonWalletTransferHint
 	| SuggestedActionConvertToBroadcastGroup
 	| SuggestedActionSetPassword
 	| SuggestedActionUpgradePremium
@@ -39720,6 +40961,7 @@ export type Update =
 	| UpdateChatActiveStories
 	| UpdateStoryListChatCount
 	| UpdateStoryStealthMode
+	| UpdateAllowedBotUsernamePremiumSuffixes
 	| UpdateTrustedMiniAppBots
 	| UpdateOption
 	| UpdateStickerSet
@@ -39750,6 +40992,10 @@ export type Update =
 	| UpdateActiveLiveLocationMessages
 	| UpdateOwnedStarCount
 	| UpdateOwnedGramCount
+	| UpdateTonWalletState
+	| UpdateTonWalletGaslessTransfersInfo
+	| UpdateTonWalletTonConnectSession
+	| UpdateTonWalletTonConnectSessionDisconnectRequired
 	| UpdateChatRevenueAmount
 	| UpdateStarRevenueStatus
 	| UpdateGramRevenueStatus
@@ -41582,11 +42828,11 @@ Identifiers of the new pinned Saved Messages topics.
 }
 
 /**
-Returns full information about a community. The data will be sent through update.
-Request type for {@link Tdjson#loadCommunityFullInfo}.
+Returns full information about a community.
+Request type for {@link Tdjson#getCommunityFullInfo}.
 */
-export interface LoadCommunityFullInfo {
-	'@type': 'loadCommunityFullInfo';
+export interface GetCommunityFullInfo {
+	'@type': 'getCommunityFullInfo';
 	/**
 Community identifier.
 */
@@ -41628,6 +42874,51 @@ Identifier of the community.
 New name of the community.
 */
 	name: string;
+}
+
+/**
+Changes the photo of a community; requires can_change_info administrator right in the community.
+Request type for {@link Tdjson#setCommunityPhoto}.
+*/
+export interface SetCommunityPhoto {
+	'@type': 'setCommunityPhoto';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+New chat photo; pass null to delete the chat photo.
+*/
+	photo: InputChatPhoto;
+}
+
+/**
+Changes permissions of regular members in the given community; requires can_ban_members administrator right in the
+community.
+Request type for {@link Tdjson#setCommunityPermissions}.
+*/
+export interface SetCommunityPermissions {
+	'@type': 'setCommunityPermissions';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+New permissions of the community.
+*/
+	permissions: CommunityPermissions;
+}
+
+/**
+Deletes a community; requires owner privileges.
+Request type for {@link Tdjson#deleteCommunity}.
+*/
+export interface DeleteCommunity {
+	'@type': 'deleteCommunity';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
 }
 
 /**
@@ -43704,15 +44995,19 @@ for animation, photo, and video messages.
 }
 
 /**
-Edits the message from which a callback query has originated with an ephemeral message; for bots only.
-Request type for {@link Tdjson#editCallbackQueryMessage}.
+Replies to a callback query with an ephemeral message; for bots only.
+Request type for {@link Tdjson#replyToCallbackQueryWithEphemeralMessage}.
 */
-export interface EditCallbackQueryMessage {
-	'@type': 'editCallbackQueryMessage';
+export interface ReplyToCallbackQueryWithEphemeralMessage {
+	'@type': 'replyToCallbackQueryWithEphemeralMessage';
 	/**
 Identifier of the callback query.
 */
 	callback_query_id: string;
+	/**
+Pass true if the ephemeral message must replace the message from which the callback query originated.
+*/
+	replace_callback_query_message?: boolean;
 	/**
 Pass true if the content of the message must be protected from forwarding and saving.
 */
@@ -45339,8 +46634,8 @@ Approximate quote position in UTF-16 code units.
 }
 
 /**
-Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses) found in
-the text. Can be called synchronously.
+Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, TON blockchain addresses, URLs, and
+email addresses) found in the text. Can be called synchronously.
 Request type for {@link Tdjson#getTextEntities}.
 */
 export interface GetTextEntities {
@@ -52991,7 +54286,8 @@ File identifiers of the media to delete.
 }
 
 /**
-Checks whether a username can be set for a new bot. Use checkChatUsername to check username for other chat types.
+Checks whether a username can be set for a new bot or assigned as a secondary username to an existing bot. Use
+checkChatUsername to check username for other chat types.
 Request type for {@link Tdjson#checkBotUsername}.
 */
 export interface CheckBotUsername {
@@ -53000,6 +54296,11 @@ export interface CheckBotUsername {
 Username to be checked.
 */
 	username: string;
+	/**
+Pass true to check whether the username is suitable as a secondary username for an existing bot; pass false to check
+whether the username is suitable for createBot.
+*/
+	is_secondary?: boolean;
 }
 
 /**
@@ -53020,7 +54321,10 @@ Name of the bot; 1-64 characters.
 */
 	name: string;
 	/**
-Username of the bot. The username must end with "bot". Use checkBotUsername to find whether the name is suitable.
+Username of the bot. The username must end with "bot" or a string from updateAllowedBotUsernamePremiumSuffixes
+case-insensitive. Use checkBotUsername to find whether the name is suitable. If the username doesn't end with "bot",
+then the current user must have Telegram Premium subscription, the chosen username will be assigned as secondary and an
+additional regular username ending with "bot" will be automatically assigned to the created bot.
 */
 	username: string;
 	/**
@@ -53124,6 +54428,38 @@ Identifier of the target bot.
 Profile photo to set; pass null to delete the chat photo.
 */
 	photo: InputChatPhoto;
+}
+
+/**
+Adds a secondary username to a bot. Can be called only if userTypeBot.can_be_edited, the bot has no secondary username
+and the current user has Telegram Premium subscription. May return an error with a message
+"OWNER_USERNAMES_LIMIT_EXCEEDED" if the current user already owns at least getOption("secondary_bot_username_count_max")
+bots with a secondary username.
+Request type for {@link Tdjson#addBotSecondaryUsername}.
+*/
+export interface AddBotSecondaryUsername {
+	'@type': 'addBotSecondaryUsername';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
+	/**
+The new secondary username; must be non-empty. Use checkBotUsername to check username validness.
+*/
+	username: string;
+}
+
+/**
+Removes a secondary username from a bot. Can be called only if userTypeBot.can_be_edited == true and the bot has a
+secondary username.
+Request type for {@link Tdjson#deleteBotSecondaryUsername}.
+*/
+export interface DeleteBotSecondaryUsername {
+	'@type': 'deleteBotSecondaryUsername';
+	/**
+Identifier of the target bot.
+*/
+	bot_user_id: number;
 }
 
 /**
@@ -53258,11 +54594,11 @@ Identifier of the user or the supergroup or channel chat, which will be verified
 */
 	verified_id: MessageSender;
 	/**
-Custom description of verification reason; 0-getOption("bot_verification_custom_description_length_max"). If empty, then
-"was verified by organization "organization_name"" will be used as description. Can be specified only if the bot is
-allowed to provide custom description.
+Custom description of verification reason; 0-getOption("bot_verification_custom_description_length_max") characters.
+Only TextUrl entities are supported. If empty, then "was verified by organization "organization_name"" will be used as
+description. Can be specified only if the bot is allowed to provide custom description.
 */
-	custom_description: string;
+	custom_description: FormattedText;
 }
 
 /**
@@ -55304,8 +56640,8 @@ Chat identifier.
 }
 
 /**
-Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if
-chat.can_be_reported.
+Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, if
+chat.can_be_reported, or if messageProperties.can_report_chat.
 Request type for {@link Tdjson#reportChat}.
 */
 export interface ReportChat {
@@ -55434,7 +56770,7 @@ The maximum number of transactions to be returned; up to 100.
 }
 
 /**
-Returns the list of TON blockchain transactions of the current user.
+Returns the list of TON Gram transactions of the current user.
 Request type for {@link Tdjson#getTonTransactions}.
 */
 export interface GetTonTransactions {
@@ -55452,6 +56788,643 @@ of results.
 The maximum number of transactions to return.
 */
 	limit: number;
+}
+
+/**
+Returns the list of TON wallet transactions of the current user; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#getTonWalletTransactions}.
+*/
+export interface GetTonWalletTransactions {
+	'@type': 'getTonWalletTransactions';
+	/**
+Direction of the transactions to receive; pass null to get all transactions.
+*/
+	direction: TransactionDirection;
+	/**
+Offset of the first transaction to return as received from the previous request; use empty string to get the first chunk
+of results.
+*/
+	offset: string;
+	/**
+The maximum number of transactions to return.
+*/
+	limit: number;
+}
+
+/**
+Returns a TON wallet transaction by their identifier.
+Request type for {@link Tdjson#getTonWalletTransaction}.
+*/
+export interface GetTonWalletTransaction {
+	'@type': 'getTonWalletTransaction';
+	/**
+Identifier of the transaction.
+*/
+	transaction_id: string;
+}
+
+/**
+Returns a TON wallet transaction by their msg_hash; return an error if the transaction isn't finalized yet.
+Request type for {@link Tdjson#getTonWalletTransactionByMsgHash}.
+*/
+export interface GetTonWalletTransactionByMessageHash {
+	'@type': 'getTonWalletTransactionByMsgHash';
+	/**
+Value of msg_hash of the transaction.
+*/
+	msg_hash: string;
+}
+
+/**
+Loads state of the TON wallet of the current user; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#loadTonWalletState}.
+*/
+export interface LoadTonWalletState {
+	'@type': 'loadTonWalletState';
+
+}
+
+/**
+Loads or reloads the current state of gasless transfers for the current user; can be used only if
+getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#loadTonWalletGaslessTransfersInfo}.
+*/
+export interface LoadTonWalletGaslessTransfersInfo {
+	'@type': 'loadTonWalletGaslessTransfersInfo';
+
+}
+
+/**
+Returns information about balance of the current user in the bot https://t.me/walt; can be used only if
+getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#checkWalletBotBalance}.
+*/
+export interface CheckWalletBotBalance {
+	'@type': 'checkWalletBotBalance';
+
+}
+
+/**
+Returns TON wallet addresses of the specified users; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#getUserTonWalletAddresses}.
+*/
+export interface GetUserTonWalletAddresses {
+	'@type': 'getUserTonWalletAddresses';
+	/**
+Identifiers of the users whose wallet addresses have to be returned. If a user has no TON wallet, it will be skipped in
+the result.
+*/
+	user_ids: number[];
+}
+
+/**
+Creates a TON wallet for the specified regular user; can be used only if getOption("can_use_ton_wallet"). The current
+user must have positive TON wallet balance.
+Request type for {@link Tdjson#createUserTonWallet}.
+*/
+export interface CreateUserTonWallet {
+	'@type': 'createUserTonWallet';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+}
+
+/**
+Returns information about a TON wallet with the given address; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#getAddressTonWallet}.
+*/
+export interface GetAddressTonWallet {
+	'@type': 'getAddressTonWallet';
+	/**
+Address in the TON blockchain.
+*/
+	address: string;
+}
+
+/**
+Returns the secret phrase of the user's TON wallet as a space separated list of words. Works only if
+tonWalletState.can_export_phrase is true.
+Request type for {@link Tdjson#getTonWalletSecretPhrase}.
+*/
+export interface GetTonWalletSecretPhrase {
+	'@type': 'getTonWalletSecretPhrase';
+	/**
+Password of the current user; pass an empty string unless receive an error with a message "PASSWORD_MISSING" for a
+passwordless request.
+*/
+	password: string;
+}
+
+/**
+Returns a challenge which may be used to proof ownership of a TON wallet; can be used only if
+getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#getTonWalletOwnershipProofChallenge}.
+*/
+export interface GetTonWalletOwnershipProofChallenge {
+	'@type': 'getTonWalletOwnershipProofChallenge';
+
+}
+
+/**
+Enables backup of the TON wallet of the user. Works only if tonWalletState.can_enable_backup is true.
+Request type for {@link Tdjson#enableTonWalletBackup}.
+*/
+export interface EnableTonWalletBackup {
+	'@type': 'enableTonWalletBackup';
+	/**
+The secret phrase of the user's TON wallet as a space separated list of words.
+*/
+	secret_phrase: string;
+	/**
+Proof of the TON wallet ownership; use getTonWalletOwnershipProofChallenge to get a challenge for the proof.
+*/
+	proof: TonWalletOwnershipProof;
+}
+
+/**
+Disables backup of the TON wallet of the user. Works only if tonWalletState.is_backup_enabled is true.
+Request type for {@link Tdjson#disableTonWalletBackup}.
+*/
+export interface DisableTonWalletBackup {
+	'@type': 'disableTonWalletBackup';
+	/**
+Password of the current user; pass an empty string unless receive an error with a message "PASSWORD_MISSING" for a
+passwordless request.
+*/
+	password: string;
+}
+
+/**
+Disables backup of the TON wallet of the user using proof of wallet ownership instead of the password. Works only if
+tonWalletState.is_backup_enabled is true.
+Request type for {@link Tdjson#disableTonWalletBackupWithProof}.
+*/
+export interface DisableTonWalletBackupWithProof {
+	'@type': 'disableTonWalletBackupWithProof';
+	/**
+Proof of the TON wallet ownership; use getTonWalletOwnershipProofChallenge to get a challenge for the proof.
+*/
+	proof: TonWalletOwnershipProof;
+}
+
+/**
+Sends a cryptocurrency from the user's TON wallet; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#sendTonWalletTransfer}.
+*/
+export interface SendTonWalletTransfer {
+	'@type': 'sendTonWalletTransfer';
+	/**
+Identifier of the user who will receive the transfer; pass 0 if unknown.
+*/
+	user_id: number;
+	/**
+Address in the TON blockchain of the transaction peer.
+*/
+	address: string;
+	/**
+The amount of the sent cryptocurrency, in the smallest units of the cryptocurrency.
+*/
+	amount: number;
+	/**
+Comment added to the transaction.
+*/
+	comment: string;
+	/**
+Pass true if the comment is encrypted and must be decrypted using the receiver's or sender's private key.
+*/
+	is_comment_encrypted?: boolean;
+	/**
+Non-persistent identifier, which will be returned back in messageSendingStatePending object and can be used to match
+sent messages and corresponding updateNewMessage updates.
+*/
+	sending_id: number;
+	/**
+Serialized data for regular cryptocurrency transfer request. The minimum allowed transfer amount is
+getOption("ton_wallet_transfer_amount_min").
+*/
+	regular_transfer_data: string;
+	/**
+Serialized data for gasless cryptocurrency transfer request; pass an empty string to force a regular request. The
+minimum allowed transfer amount for a gassless transfer is getOption("ton_wallet_gasless_transfer_amount_min").
+*/
+	gasless_transfer_data: string;
+}
+
+/**
+Deletes the current TON wallet of the user and creates a new one; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#deleteTonWallet}.
+*/
+export interface DeleteTonWallet {
+	'@type': 'deleteTonWallet';
+	/**
+Password of the current user; pass an empty string unless receive an error with a message "PASSWORD_MISSING" for a
+passwordless request.
+*/
+	password: string;
+}
+
+/**
+Replaces the current TON wallet with another existing v6r2 wallet or changes private key of the current TON wallet; can
+be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#replaceTonWallet}.
+*/
+export interface ReplaceTonWallet {
+	'@type': 'replaceTonWallet';
+	/**
+Password of the current user; pass an empty string unless receive an error with a message "PASSWORD_MISSING" for a
+passwordless request.
+*/
+	password: string;
+	/**
+Original public key of the new TON wallet.
+*/
+	anchor_public_key: string;
+	/**
+Proof of ownership of the new private key of the TON wallet; use getTonWalletOwnershipProofChallenge to get a challenge
+for the proof.
+*/
+	proof: TonWalletOwnershipProof;
+}
+
+/**
+Returns exchange rates of currencies to USD.
+Request type for {@link Tdjson#getCurrencyExchangeRates}.
+*/
+export interface GetCurrencyExchangeRates {
+	'@type': 'getCurrencyExchangeRates';
+
+}
+
+/**
+Returns NFTs stored on the TON wallet of the user; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#getTonWalletNfts}.
+*/
+export interface GetTonWalletNfts {
+	'@type': 'getTonWalletNfts';
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of NFTs to be returned; must be positive and can't be greater than 20.
+*/
+	limit: number;
+}
+
+/**
+Returns active TON Connect sessions; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#getTonConnectSessions}.
+*/
+export interface GetTonConnectSessions {
+	'@type': 'getTonConnectSessions';
+
+}
+
+/**
+Creates a TON Connect session; can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#createTonConnectSession}.
+*/
+export interface CreateTonConnectSession {
+	'@type': 'createTonConnectSession';
+	/**
+Hex-encoded public X25519 key of the dApp.
+*/
+	dapp_client_id: string;
+	/**
+URL of the manifest of the dApp.
+*/
+	manifest_url: string;
+}
+
+/**
+Sets wallet_client_id for a pending TON Connect session. Then, sendTonConnectSessionConnectResult must be used to accept
+or reject the session.
+Request type for {@link Tdjson#setTonConnectSessionWalletClientId}.
+*/
+export interface SetTonConnectSessionWalletClientId {
+	'@type': 'setTonConnectSessionWalletClientId';
+	/**
+Unique identifier of the session.
+*/
+	session_id: string;
+	/**
+Hex-encoded public X25519 key of the current user's application calculated from the TON wallet private key and session
+parameters.
+*/
+	wallet_client_id: string;
+}
+
+/**
+Accepts or rejects a TON Connect session.
+Request type for {@link Tdjson#sendTonConnectSessionConnectResult}.
+*/
+export interface SendTonConnectSessionConnectResult {
+	'@type': 'sendTonConnectSessionConnectResult';
+	/**
+Unique identifier of the session.
+*/
+	session_id: string;
+	/**
+Answer to the challenge received from setTonConnectSessionWalletClientId.
+*/
+	challenge_answer: string;
+	/**
+Pass true to reject the request; pass false to accept it.
+*/
+	is_error?: boolean;
+	/**
+Body of the result.
+*/
+	body: string;
+	/**
+Identifier to trace the connection request.
+*/
+	trace_id: string;
+}
+
+/**
+Returns pending requests in a TON Connect session.
+Request type for {@link Tdjson#getTonConnectSessionPendingRequests}.
+*/
+export interface GetTonConnectSessionPendingRequests {
+	'@type': 'getTonConnectSessionPendingRequests';
+	/**
+Unique identifier of the session.
+*/
+	session_id: string;
+}
+
+/**
+Returns pending requests with a dApp through TON Connect.
+Request type for {@link Tdjson#getTonConnectDAppPendingRequests}.
+*/
+export interface GetTonConnectDAppPendingRequests {
+	'@type': 'getTonConnectDAppPendingRequests';
+	/**
+Hex-encoded public X25519 key of the dApp.
+*/
+	dapp_client_id: string;
+}
+
+/**
+Claims a request received through TON Connect for processing on this device.
+Request type for {@link Tdjson#claimTonConnectRequest}.
+*/
+export interface ClaimTonConnectRequest {
+	'@type': 'claimTonConnectRequest';
+	/**
+Unique identifier of the TON Connect session.
+*/
+	session_id: string;
+	/**
+Identifier of the message with the request.
+*/
+	message_id: number;
+	/**
+Identifier of the request assigned by the dApp.
+*/
+	dapp_request_id: string;
+	/**
+Pass true to reject the request.
+*/
+	is_rejected?: boolean;
+}
+
+/**
+Sends an answer for a request received through TON Connect.
+Request type for {@link Tdjson#answerTonConnectRequest}.
+*/
+export interface AnswerTonConnectRequest {
+	'@type': 'answerTonConnectRequest';
+	/**
+Unique identifier of the TON Connect session.
+*/
+	session_id: string;
+	/**
+Identifier of the message with the request.
+*/
+	message_id: number;
+	/**
+Identifier to trace the request.
+*/
+	trace_id: string;
+	/**
+Body of the response.
+*/
+	body: string;
+}
+
+/**
+Returns the next event identifier for the given TON Connect session.
+Request type for {@link Tdjson#getTonConnectSessionNextEventId}.
+*/
+export interface GetTonConnectSessionNextEventId {
+	'@type': 'getTonConnectSessionNextEventId';
+	/**
+Unique identifier of the TON Connect session.
+*/
+	session_id: string;
+}
+
+/**
+Closes a TON Connect session.
+Request type for {@link Tdjson#disconnectTonConnectSession}.
+*/
+export interface DisconnectTonConnectSession {
+	'@type': 'disconnectTonConnectSession';
+	/**
+Unique identifier of the TON Connect session to close.
+*/
+	session_id: string;
+	/**
+Encrypted body of the disconnect event; may be empty if the session has already been closed. Use
+getTonConnectSessionNextEventId to get event identifier for the event.
+*/
+	body: string;
+}
+
+/**
+Returns available on-ramp providers.
+Request type for {@link Tdjson#getOnRampProviders}.
+*/
+export interface GetOnRampProviders {
+	'@type': 'getOnRampProviders';
+	/**
+Pass a cryptocurrency to receive only providers that support it; pass an empty string to receive all providers.
+*/
+	cryptocurrency: string;
+}
+
+/**
+Returns the list of fiat currencies supported by an on-ramp provider for the given cryptocurrency.
+Request type for {@link Tdjson#getOnRampProviderBaseCurrencies}.
+*/
+export interface GetOnRampProviderBaseCurrencies {
+	'@type': 'getOnRampProviderBaseCurrencies';
+	/**
+Unique identifier of the on-ramp provider; only for providers that supports base currencies.
+*/
+	provider_id: string;
+	/**
+The cryptocurrency that will be bought.
+*/
+	cryptocurrency: string;
+}
+
+/**
+Returns the available on-ramp payment methods based on the current user location.
+Request type for {@link Tdjson#getOnRampPaymentAvailability}.
+*/
+export interface GetOnRampPaymentAvailability {
+	'@type': 'getOnRampPaymentAvailability';
+	/**
+Unique identifier of the on-ramp provider.
+*/
+	provider_id: string;
+	/**
+The cryptocurrency that will be bought.
+*/
+	cryptocurrency: string;
+	/**
+ISO 4217 currency code of the currency that will be used for the purchase; pass an empty string if unknown.
+*/
+	base_currency: string;
+}
+
+/**
+Returns the limits for an on-ramp payment; only for providers that supports limits retrieval.
+Request type for {@link Tdjson#getOnRampPaymentLimits}.
+*/
+export interface GetOnRampPaymentLimits {
+	'@type': 'getOnRampPaymentLimits';
+	/**
+Unique identifier of the on-ramp provider.
+*/
+	provider_id: string;
+	/**
+The cryptocurrency that will be bought.
+*/
+	cryptocurrency: string;
+	/**
+ISO 4217 currency code of the currency that will be used for the purchase.
+*/
+	base_currency: string;
+	/**
+Name of the chosen payment method; pass an empty string if none.
+*/
+	payment_method_name: string;
+}
+
+/**
+Returns a quote for an on-ramp payment; only for providers that supports quote retrieval.
+Request type for {@link Tdjson#getOnRampPaymentQuote}.
+*/
+export interface GetOnRampPaymentQuote {
+	'@type': 'getOnRampPaymentQuote';
+	/**
+Unique identifier of the on-ramp provider.
+*/
+	provider_id: string;
+	/**
+The cryptocurrency that will be bought.
+*/
+	cryptocurrency: string;
+	/**
+ISO 4217 currency code of the currency that will be used for the purchase.
+*/
+	base_currency: string;
+	/**
+The amount of the cryptocurrency to buy; pass an empty string if the user selected base_currency_amount.
+*/
+	cryptocurrency_amount: string;
+	/**
+The amount of the base currency to spend; pass an empty string if the user selected cryptocurrency_amount.
+*/
+	base_currency_amount: string;
+	/**
+Name of the chosen payment method; pass an empty string if none.
+*/
+	payment_method_name: string;
+}
+
+/**
+Creates a session for an on-ramp payment.
+Request type for {@link Tdjson#createOnRampPaymentSession}.
+*/
+export interface CreateOnRampPaymentSession {
+	'@type': 'createOnRampPaymentSession';
+	/**
+Unique identifier of the on-ramp provider.
+*/
+	provider_id: string;
+	/**
+The cryptocurrency that will be bought.
+*/
+	cryptocurrency: string;
+	/**
+Address to which the cryptocurrency will be sent.
+*/
+	address: string;
+	/**
+Name of the chosen payment method; pass an empty string if none.
+*/
+	payment_method_name: string;
+	/**
+ISO 4217 currency code of the currency that will be used for the purchase; pass an empty string if unknown.
+*/
+	base_currency: string;
+	/**
+The amount of the cryptocurrency to buy; pass an empty string if the user selected base_currency_amount.
+*/
+	cryptocurrency_amount: string;
+	/**
+The amount of the base currency to spend; pass an empty string if the user selected cryptocurrency_amount.
+*/
+	base_currency_amount: string;
+	/**
+Memo for the query; pass an empty string if none.
+*/
+	memo: string;
+	/**
+Preferred theme for the WebView; pass "light" for a light theme, "dark" for a dark theme, or leave empty for a default
+theme.
+*/
+	theme: string;
+	/**
+The URL opened on successful payment; pass an empty string if none.
+*/
+	success_return_url: string;
+	/**
+The URL opened on failed payment; pass an empty string if none.
+*/
+	fail_return_url: string;
+}
+
+/**
+Sends a request to TON Center API and returns its response in JSON format.
+Request type for {@link Tdjson#sendTonCenterApiRequest}.
+*/
+export interface SendTonCenterApiRequest {
+	'@type': 'sendTonCenterApiRequest';
+	/**
+The path of the requested endpoint. See https://toncenter.com/api/v3/index.html for the list of supported endpoints.
+*/
+	endpoint: string;
+	/**
+Type of the request.
+*/
+	type: TonCenterApiRequestType;
+}
+
+/**
+Returns a URL for TON Center Streaming API.
+Request type for {@link Tdjson#getTonCenterStreamingApiUrl}.
+*/
+export interface GetTonCenterStreamingApiUrl {
+	'@type': 'getTonCenterStreamingApiUrl';
+
 }
 
 /**
@@ -57070,6 +59043,18 @@ The link.
 }
 
 /**
+Dismissess a received web token without consumption; for official Telegram apps only.
+Request type for {@link Tdjson#dismissWebToken}.
+*/
+export interface DismissWebToken {
+	'@type': 'dismissWebToken';
+	/**
+The token to dismiss.
+*/
+	token: string;
+}
+
+/**
 Returns application config, provided by the server. Can be called before authorization.
 Request type for {@link Tdjson#getApplicationConfig}.
 */
@@ -57611,9 +59596,12 @@ export type Request =
 	| DeleteSavedMessagesTopicMessagesByDate
 	| ToggleSavedMessagesTopicIsPinned
 	| SetPinnedSavedMessagesTopics
-	| LoadCommunityFullInfo
+	| GetCommunityFullInfo
 	| CreateCommunity
 	| SetCommunityName
+	| SetCommunityPhoto
+	| SetCommunityPermissions
+	| DeleteCommunity
 	| GetGroupsInCommon
 	| GetChatHistory
 	| GetMessageThreadHistory
@@ -57705,7 +59693,7 @@ export type Request =
 	| EditInlineMessageReplyMarkup
 	| EditEphemeralMessage
 	| EditEphemeralMessageCaption
-	| EditCallbackQueryMessage
+	| ReplyToCallbackQueryWithEphemeralMessage
 	| EditMessageSchedulingState
 	| DeleteMessageEphemeralContent
 	| SetMessageFactCheck
@@ -58245,6 +60233,8 @@ export type Request =
 	| SetBotName
 	| GetBotName
 	| SetBotProfilePhoto
+	| AddBotSecondaryUsername
+	| DeleteBotSecondaryUsername
 	| ToggleBotUsernameIsActive
 	| ReorderBotActiveUsernames
 	| SetBotInfoDescription
@@ -58383,6 +60373,43 @@ export type Request =
 	| GetChatRevenueWithdrawalUrl
 	| GetChatRevenueTransactions
 	| GetTonTransactions
+	| GetTonWalletTransactions
+	| GetTonWalletTransaction
+	| GetTonWalletTransactionByMessageHash
+	| LoadTonWalletState
+	| LoadTonWalletGaslessTransfersInfo
+	| CheckWalletBotBalance
+	| GetUserTonWalletAddresses
+	| CreateUserTonWallet
+	| GetAddressTonWallet
+	| GetTonWalletSecretPhrase
+	| GetTonWalletOwnershipProofChallenge
+	| EnableTonWalletBackup
+	| DisableTonWalletBackup
+	| DisableTonWalletBackupWithProof
+	| SendTonWalletTransfer
+	| DeleteTonWallet
+	| ReplaceTonWallet
+	| GetCurrencyExchangeRates
+	| GetTonWalletNfts
+	| GetTonConnectSessions
+	| CreateTonConnectSession
+	| SetTonConnectSessionWalletClientId
+	| SendTonConnectSessionConnectResult
+	| GetTonConnectSessionPendingRequests
+	| GetTonConnectDAppPendingRequests
+	| ClaimTonConnectRequest
+	| AnswerTonConnectRequest
+	| GetTonConnectSessionNextEventId
+	| DisconnectTonConnectSession
+	| GetOnRampProviders
+	| GetOnRampProviderBaseCurrencies
+	| GetOnRampPaymentAvailability
+	| GetOnRampPaymentLimits
+	| GetOnRampPaymentQuote
+	| CreateOnRampPaymentSession
+	| SendTonCenterApiRequest
+	| GetTonCenterStreamingApiUrl
 	| GetStarRevenueStatistics
 	| GetStarWithdrawalUrl
 	| GetStarAdAccountUrl
@@ -58485,6 +60512,7 @@ export type Request =
 	| GetPhoneNumberInfoSync
 	| GetCollectibleItemInfo
 	| GetDeepLinkInfo
+	| DismissWebToken
 	| GetAppConfig
 	| SaveAppLogEvent
 	| GetAppDownloadLink
@@ -59733,12 +61761,12 @@ Changes the order of pinned Saved Messages topics.
 	}
 
 	/**
-Returns full information about a community. The data will be sent through update.
+Returns full information about a community.
 */
-	async loadCommunityFullInfo(options: Omit<LoadCommunityFullInfo, '@type'>): Promise<Ok> {
+	async getCommunityFullInfo(options: Omit<GetCommunityFullInfo, '@type'>): Promise<CommunityFullInfo> {
 		return this._request({
 			...options,
-			'@type': 'loadCommunityFullInfo',
+			'@type': 'getCommunityFullInfo',
 		});
 	}
 
@@ -59759,6 +61787,37 @@ Changes name of the given community; requires can_change_info administrator righ
 		return this._request({
 			...options,
 			'@type': 'setCommunityName',
+		});
+	}
+
+	/**
+Changes the photo of a community; requires can_change_info administrator right in the community.
+*/
+	async setCommunityPhoto(options: Omit<SetCommunityPhoto, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setCommunityPhoto',
+		});
+	}
+
+	/**
+Changes permissions of regular members in the given community; requires can_ban_members administrator right in the
+community.
+*/
+	async setCommunityPermissions(options: Omit<SetCommunityPermissions, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setCommunityPermissions',
+		});
+	}
+
+	/**
+Deletes a community; requires owner privileges.
+*/
+	async deleteCommunity(options: Omit<DeleteCommunity, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteCommunity',
 		});
 	}
 
@@ -60742,12 +62801,12 @@ Edits the caption and reply markup of an ephemeral message sent by the bot; for 
 	}
 
 	/**
-Edits the message from which a callback query has originated with an ephemeral message; for bots only.
+Replies to a callback query with an ephemeral message; for bots only.
 */
-	async editCallbackQueryMessage(options: Omit<EditCallbackQueryMessage, '@type'>): Promise<Ok> {
+	async replyToCallbackQueryWithEphemeralMessage(options: Omit<ReplyToCallbackQueryWithEphemeralMessage, '@type'>): Promise<Ok> {
 		return this._request({
 			...options,
-			'@type': 'editCallbackQueryMessage',
+			'@type': 'replyToCallbackQueryWithEphemeralMessage',
 		});
 	}
 
@@ -61609,8 +63668,8 @@ the quote is not found. Can be called synchronously.
 	}
 
 	/**
-Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, URLs, and email addresses) found in
-the text. Can be called synchronously.
+Returns all entities (mentions, hashtags, cashtags, bot commands, bank card numbers, TON blockchain addresses, URLs, and
+email addresses) found in the text. Can be called synchronously.
 */
 	async getTextEntities(options: Omit<GetTextEntities, '@type'>): Promise<TextEntities> {
 		return this._request({
@@ -66249,7 +68308,8 @@ Deletes media previews from the list of media previews of a bot.
 	}
 
 	/**
-Checks whether a username can be set for a new bot. Use checkChatUsername to check username for other chat types.
+Checks whether a username can be set for a new bot or assigned as a secondary username to an existing bot. Use
+checkChatUsername to check username for other chat types.
 */
 	async checkBotUsername(options: Omit<CheckBotUsername, '@type'>): Promise<CheckChatUsernameResult> {
 		return this._request({
@@ -66328,6 +68388,30 @@ Changes a profile photo for a bot.
 		return this._request({
 			...options,
 			'@type': 'setBotProfilePhoto',
+		});
+	}
+
+	/**
+Adds a secondary username to a bot. Can be called only if userTypeBot.can_be_edited, the bot has no secondary username
+and the current user has Telegram Premium subscription. May return an error with a message
+"OWNER_USERNAMES_LIMIT_EXCEEDED" if the current user already owns at least getOption("secondary_bot_username_count_max")
+bots with a secondary username.
+*/
+	async addBotSecondaryUsername(options: Omit<AddBotSecondaryUsername, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addBotSecondaryUsername',
+		});
+	}
+
+	/**
+Removes a secondary username from a bot. Can be called only if userTypeBot.can_be_edited == true and the bot has a
+secondary username.
+*/
+	async deleteBotSecondaryUsername(options: Omit<DeleteBotSecondaryUsername, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteBotSecondaryUsername',
 		});
 	}
 
@@ -67687,8 +69771,8 @@ Removes a chat action bar without any other action.
 	}
 
 	/**
-Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, or if
-chat.can_be_reported.
+Reports a chat to the Telegram moderators. A chat can be reported only from the chat action bar, if
+chat.can_be_reported, or if messageProperties.can_report_chat.
 */
 	async reportChat(options: Omit<ReportChat, '@type'>): Promise<ReportChatResult> {
 		return this._request({
@@ -67756,12 +69840,383 @@ true.
 	}
 
 	/**
-Returns the list of TON blockchain transactions of the current user.
+Returns the list of TON Gram transactions of the current user.
 */
 	async getTonTransactions(options: Omit<GetTonTransactions, '@type'>): Promise<TonTransactions> {
 		return this._request({
 			...options,
 			'@type': 'getTonTransactions',
+		});
+	}
+
+	/**
+Returns the list of TON wallet transactions of the current user; can be used only if getOption("can_use_ton_wallet").
+*/
+	async getTonWalletTransactions(options: Omit<GetTonWalletTransactions, '@type'>): Promise<TonWalletTransactions> {
+		return this._request({
+			...options,
+			'@type': 'getTonWalletTransactions',
+		});
+	}
+
+	/**
+Returns a TON wallet transaction by their identifier.
+*/
+	async getTonWalletTransaction(options: Omit<GetTonWalletTransaction, '@type'>): Promise<TonWalletTransaction> {
+		return this._request({
+			...options,
+			'@type': 'getTonWalletTransaction',
+		});
+	}
+
+	/**
+Returns a TON wallet transaction by their msg_hash; return an error if the transaction isn't finalized yet.
+*/
+	async getTonWalletTransactionByMsgHash(options: Omit<GetTonWalletTransactionByMessageHash, '@type'>): Promise<TonWalletTransaction> {
+		return this._request({
+			...options,
+			'@type': 'getTonWalletTransactionByMsgHash',
+		});
+	}
+
+	/**
+Loads state of the TON wallet of the current user; can be used only if getOption("can_use_ton_wallet").
+*/
+	async loadTonWalletState(): Promise<Ok> {
+		return this._request({
+			'@type': 'loadTonWalletState',
+		});
+	}
+
+	/**
+Loads or reloads the current state of gasless transfers for the current user; can be used only if
+getOption("can_use_ton_wallet").
+*/
+	async loadTonWalletGaslessTransfersInfo(): Promise<Ok> {
+		return this._request({
+			'@type': 'loadTonWalletGaslessTransfersInfo',
+		});
+	}
+
+	/**
+Returns information about balance of the current user in the bot https://t.me/walt; can be used only if
+getOption("can_use_ton_wallet").
+*/
+	async checkWalletBotBalance(): Promise<WalletBotBalance> {
+		return this._request({
+			'@type': 'checkWalletBotBalance',
+		});
+	}
+
+	/**
+Returns TON wallet addresses of the specified users; can be used only if getOption("can_use_ton_wallet").
+*/
+	async getUserTonWalletAddresses(options: Omit<GetUserTonWalletAddresses, '@type'>): Promise<UserTonWalletAddresses> {
+		return this._request({
+			...options,
+			'@type': 'getUserTonWalletAddresses',
+		});
+	}
+
+	/**
+Creates a TON wallet for the specified regular user; can be used only if getOption("can_use_ton_wallet"). The current
+user must have positive TON wallet balance.
+*/
+	async createUserTonWallet(options: Omit<CreateUserTonWallet, '@type'>): Promise<UserTonWalletAddress> {
+		return this._request({
+			...options,
+			'@type': 'createUserTonWallet',
+		});
+	}
+
+	/**
+Returns information about a TON wallet with the given address; can be used only if getOption("can_use_ton_wallet").
+*/
+	async getAddressTonWallet(options: Omit<GetAddressTonWallet, '@type'>): Promise<UserTonWalletAddress> {
+		return this._request({
+			...options,
+			'@type': 'getAddressTonWallet',
+		});
+	}
+
+	/**
+Returns the secret phrase of the user's TON wallet as a space separated list of words. Works only if
+tonWalletState.can_export_phrase is true.
+*/
+	async getTonWalletSecretPhrase(options: Omit<GetTonWalletSecretPhrase, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'getTonWalletSecretPhrase',
+		});
+	}
+
+	/**
+Returns a challenge which may be used to proof ownership of a TON wallet; can be used only if
+getOption("can_use_ton_wallet").
+*/
+	async getTonWalletOwnershipProofChallenge(): Promise<TonWalletOwnershipProofChallenge> {
+		return this._request({
+			'@type': 'getTonWalletOwnershipProofChallenge',
+		});
+	}
+
+	/**
+Enables backup of the TON wallet of the user. Works only if tonWalletState.can_enable_backup is true.
+*/
+	async enableTonWalletBackup(options: Omit<EnableTonWalletBackup, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'enableTonWalletBackup',
+		});
+	}
+
+	/**
+Disables backup of the TON wallet of the user. Works only if tonWalletState.is_backup_enabled is true.
+*/
+	async disableTonWalletBackup(options: Omit<DisableTonWalletBackup, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'disableTonWalletBackup',
+		});
+	}
+
+	/**
+Disables backup of the TON wallet of the user using proof of wallet ownership instead of the password. Works only if
+tonWalletState.is_backup_enabled is true.
+*/
+	async disableTonWalletBackupWithProof(options: Omit<DisableTonWalletBackupWithProof, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'disableTonWalletBackupWithProof',
+		});
+	}
+
+	/**
+Sends a cryptocurrency from the user's TON wallet; can be used only if getOption("can_use_ton_wallet").
+*/
+	async sendTonWalletTransfer(options: Omit<SendTonWalletTransfer, '@type'>): Promise<TonWalletTransferResult> {
+		return this._request({
+			...options,
+			'@type': 'sendTonWalletTransfer',
+		});
+	}
+
+	/**
+Deletes the current TON wallet of the user and creates a new one; can be used only if getOption("can_use_ton_wallet").
+*/
+	async deleteTonWallet(options: Omit<DeleteTonWallet, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteTonWallet',
+		});
+	}
+
+	/**
+Replaces the current TON wallet with another existing v6r2 wallet or changes private key of the current TON wallet; can
+be used only if getOption("can_use_ton_wallet").
+*/
+	async replaceTonWallet(options: Omit<ReplaceTonWallet, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'replaceTonWallet',
+		});
+	}
+
+	/**
+Returns exchange rates of currencies to USD.
+*/
+	async getCurrencyExchangeRates(): Promise<CurrencyExchangeRates> {
+		return this._request({
+			'@type': 'getCurrencyExchangeRates',
+		});
+	}
+
+	/**
+Returns NFTs stored on the TON wallet of the user; can be used only if getOption("can_use_ton_wallet").
+*/
+	async getTonWalletNfts(options: Omit<GetTonWalletNfts, '@type'>): Promise<TonNfts> {
+		return this._request({
+			...options,
+			'@type': 'getTonWalletNfts',
+		});
+	}
+
+	/**
+Returns active TON Connect sessions; can be used only if getOption("can_use_ton_wallet").
+*/
+	async getTonConnectSessions(): Promise<TonConnectSessions> {
+		return this._request({
+			'@type': 'getTonConnectSessions',
+		});
+	}
+
+	/**
+Creates a TON Connect session; can be used only if getOption("can_use_ton_wallet").
+*/
+	async createTonConnectSession(options: Omit<CreateTonConnectSession, '@type'>): Promise<TonConnectSession> {
+		return this._request({
+			...options,
+			'@type': 'createTonConnectSession',
+		});
+	}
+
+	/**
+Sets wallet_client_id for a pending TON Connect session. Then, sendTonConnectSessionConnectResult must be used to accept
+or reject the session.
+*/
+	async setTonConnectSessionWalletClientId(options: Omit<SetTonConnectSessionWalletClientId, '@type'>): Promise<TonConnectChallenge> {
+		return this._request({
+			...options,
+			'@type': 'setTonConnectSessionWalletClientId',
+		});
+	}
+
+	/**
+Accepts or rejects a TON Connect session.
+*/
+	async sendTonConnectSessionConnectResult(options: Omit<SendTonConnectSessionConnectResult, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'sendTonConnectSessionConnectResult',
+		});
+	}
+
+	/**
+Returns pending requests in a TON Connect session.
+*/
+	async getTonConnectSessionPendingRequests(options: Omit<GetTonConnectSessionPendingRequests, '@type'>): Promise<TonConnectRequests> {
+		return this._request({
+			...options,
+			'@type': 'getTonConnectSessionPendingRequests',
+		});
+	}
+
+	/**
+Returns pending requests with a dApp through TON Connect.
+*/
+	async getTonConnectDAppPendingRequests(options: Omit<GetTonConnectDAppPendingRequests, '@type'>): Promise<TonConnectRequests> {
+		return this._request({
+			...options,
+			'@type': 'getTonConnectDAppPendingRequests',
+		});
+	}
+
+	/**
+Claims a request received through TON Connect for processing on this device.
+*/
+	async claimTonConnectRequest(options: Omit<ClaimTonConnectRequest, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'claimTonConnectRequest',
+		});
+	}
+
+	/**
+Sends an answer for a request received through TON Connect.
+*/
+	async answerTonConnectRequest(options: Omit<AnswerTonConnectRequest, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'answerTonConnectRequest',
+		});
+	}
+
+	/**
+Returns the next event identifier for the given TON Connect session.
+*/
+	async getTonConnectSessionNextEventId(options: Omit<GetTonConnectSessionNextEventId, '@type'>): Promise<TonConnectSessionEventId> {
+		return this._request({
+			...options,
+			'@type': 'getTonConnectSessionNextEventId',
+		});
+	}
+
+	/**
+Closes a TON Connect session.
+*/
+	async disconnectTonConnectSession(options: Omit<DisconnectTonConnectSession, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'disconnectTonConnectSession',
+		});
+	}
+
+	/**
+Returns available on-ramp providers.
+*/
+	async getOnRampProviders(options: Omit<GetOnRampProviders, '@type'>): Promise<OnRampProviders> {
+		return this._request({
+			...options,
+			'@type': 'getOnRampProviders',
+		});
+	}
+
+	/**
+Returns the list of fiat currencies supported by an on-ramp provider for the given cryptocurrency.
+*/
+	async getOnRampProviderBaseCurrencies(options: Omit<GetOnRampProviderBaseCurrencies, '@type'>): Promise<Currencies> {
+		return this._request({
+			...options,
+			'@type': 'getOnRampProviderBaseCurrencies',
+		});
+	}
+
+	/**
+Returns the available on-ramp payment methods based on the current user location.
+*/
+	async getOnRampPaymentAvailability(options: Omit<GetOnRampPaymentAvailability, '@type'>): Promise<OnRampPaymentAvailability> {
+		return this._request({
+			...options,
+			'@type': 'getOnRampPaymentAvailability',
+		});
+	}
+
+	/**
+Returns the limits for an on-ramp payment; only for providers that supports limits retrieval.
+*/
+	async getOnRampPaymentLimits(options: Omit<GetOnRampPaymentLimits, '@type'>): Promise<OnRampPaymentLimits> {
+		return this._request({
+			...options,
+			'@type': 'getOnRampPaymentLimits',
+		});
+	}
+
+	/**
+Returns a quote for an on-ramp payment; only for providers that supports quote retrieval.
+*/
+	async getOnRampPaymentQuote(options: Omit<GetOnRampPaymentQuote, '@type'>): Promise<OnRampPaymentQuote> {
+		return this._request({
+			...options,
+			'@type': 'getOnRampPaymentQuote',
+		});
+	}
+
+	/**
+Creates a session for an on-ramp payment.
+*/
+	async createOnRampPaymentSession(options: Omit<CreateOnRampPaymentSession, '@type'>): Promise<OnRampPaymentSession> {
+		return this._request({
+			...options,
+			'@type': 'createOnRampPaymentSession',
+		});
+	}
+
+	/**
+Sends a request to TON Center API and returns its response in JSON format.
+*/
+	async sendTonCenterApiRequest(options: Omit<SendTonCenterApiRequest, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'sendTonCenterApiRequest',
+		});
+	}
+
+	/**
+Returns a URL for TON Center Streaming API.
+*/
+	async getTonCenterStreamingApiUrl(): Promise<TonCenterStreamingApiUrl> {
+		return this._request({
+			'@type': 'getTonCenterStreamingApiUrl',
 		});
 	}
 
@@ -68797,6 +71252,16 @@ for testing. Returns a 404 error for unknown links. Can be called before authori
 		return this._request({
 			...options,
 			'@type': 'getDeepLinkInfo',
+		});
+	}
+
+	/**
+Dismissess a received web token without consumption; for official Telegram apps only.
+*/
+	async dismissWebToken(options: Omit<DismissWebToken, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'dismissWebToken',
 		});
 	}
 
