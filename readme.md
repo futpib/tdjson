@@ -22,13 +22,17 @@ const myTdjson = new MyTdjson();
 
 // All methods typed and autocompleted with documentation 🎉
 const proxy = await myTdjson.addProxy({
-	server: '127.0.0.1',
-	port: 1234,
-	enable: true,
-	type: {
-		'@type': 'proxyTypeSocks5',
-		username: 'username',
-		password: 'password',
+	proxy: {
+		'@type': 'proxy',
+		server: '127.0.0.1',
+		port: 1234,
+		type: {
+			'@type': 'proxyTypeSocks5',
+			username: 'username',
+			password: 'password',
+		},
 	},
+	enable: true,
+	comment: 'My SOCKS5 proxy',
 });
 ```

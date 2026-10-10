@@ -27,14 +27,18 @@ test('addProxy', async t => {
 	const { tdjson } = t.context;
 
 	await tdjson.addProxy({
-		server: '127.0.0.1',
-		port: 1234,
-		enable: true,
-		type: {
-			'@type': 'proxyTypeSocks5',
-			username: 'username',
-			password: 'password',
+		proxy: {
+			'@type': 'proxy',
+			server: '127.0.0.1',
+			port: 1234,
+			type: {
+				'@type': 'proxyTypeSocks5',
+				username: 'username',
+				password: 'password',
+			},
 		},
+		enable: true,
+		comment: 'test proxy',
 	});
 
 	t.snapshot(tdjson.log);
