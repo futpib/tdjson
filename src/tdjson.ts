@@ -5014,7 +5014,7 @@ Number of times the gift can be purchased by all users; may be null if not limit
 */
 	overall_limits: GiftPurchaseLimits;
 	/**
-Background of the gift.
+Background of the gift; may be null if the gift has no background.
 */
 	background: GiftBackground;
 	/**
@@ -6266,7 +6266,7 @@ The number of seconds between consecutive Telegram Star debitings.
 */
 	subscription_period: number;
 	/**
-Information about the bought subscription.
+Information about the bought subscription; may be null if no information about the subscription is available.
 */
 	product_info: ProductInfo;
 }
@@ -6286,7 +6286,7 @@ The number of seconds between consecutive Telegram Star debitings.
 */
 	subscription_period: number;
 	/**
-Information about the bought subscription.
+Information about the bought subscription; may be null if no information about the subscription is available.
 */
 	product_info: ProductInfo;
 	/**
@@ -8503,9 +8503,9 @@ details.
 */
 	collectible_usernames: string[];
 	/**
-Secondary non-collectible username; for bots only. Can't be used in toggleBotUsernameIsActive; use
-addBotSecondaryUsername or deleteBotSecondaryUsername to edit it. If the username is disabled, then Telegram Premium
-subscription is required to re-enable it.
+Secondary non-collectible username. Currently, must be non-empty only for bot accounts. Can't be used in
+toggleBotUsernameIsActive; use addBotSecondaryUsername or deleteBotSecondaryUsername to edit it. If the username is
+disabled, then Telegram Premium subscription is required to re-enable it.
 */
 	secondary_username: string;
 }
@@ -17635,7 +17635,7 @@ Encrypted JSON-encoded data about the user.
 */
 	data: string;
 	/**
-The front side of an identity document.
+The front side of an identity document; may be null if the element isn't an identity document.
 */
 	front_side: DatedFile;
 	/**
@@ -47064,7 +47064,7 @@ button.
 }
 
 /**
-Shares users after pressing a keyboardButtonTypeRequestUsers button with the bot.
+Shares users after pressing a keyboardButtonTypeRequestUsers or keyboardButtonTypeRequestManagedBot button with the bot.
 Request type for {@link Tdjson#shareUsersWithBot}.
 */
 export interface ShareUsersWithBot {
@@ -47521,11 +47521,11 @@ Identifier of the query.
 */
 	query_id: string;
 	/**
-The result.
+The result; must be null if a URL is passed.
 */
 	result: ChatJoinRequestResult;
 	/**
-URL of the Web App to open.
+URL of the Web App to open; must be null if a result is passed.
 */
 	url: string;
 }
@@ -63928,7 +63928,7 @@ needed. If an error is returned, then the button must be handled as an ordinary 
 	}
 
 	/**
-Shares users after pressing a keyboardButtonTypeRequestUsers button with the bot.
+Shares users after pressing a keyboardButtonTypeRequestUsers or keyboardButtonTypeRequestManagedBot button with the bot.
 */
 	async shareUsersWithBot(options: Omit<ShareUsersWithBot, '@type'>): Promise<Ok> {
 		return this._request({
