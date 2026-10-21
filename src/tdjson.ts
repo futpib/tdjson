@@ -853,7 +853,8 @@ Recovery email address.
 }
 
 /**
-Returns information about the availability of a temporary password, which can be used for payments.
+Contains information about the availability of a temporary password, which can be used for payments and withdrawal of
+upgraded gifts.
 */
 export interface TemporaryPasswordState {
 	'@type': 'temporaryPasswordState';
@@ -2224,8 +2225,8 @@ users can participate in the poll.
 */
 	country_codes: string[];
 	/**
-The list of 0-based poll identifiers in which the options of the poll must be shown; empty if the order of options must
-not be changed.
+The list of 0-based poll option identifiers in which the options of the poll must be shown; empty if the order of
+options must not be changed.
 */
 	option_order: number[];
 	/**
@@ -2941,7 +2942,7 @@ True, if the bot can view gifts and Telegram Star amount owned by the business a
 */
 	can_view_gifts_and_stars?: boolean;
 	/**
-True, if the bot can sell regular gifts received by the business account.
+True, if the bot can sell or delete regular gifts received by the business account.
 */
 	can_sell_gifts?: boolean;
 	/**
@@ -3266,7 +3267,7 @@ Photo minithumbnail; may be null.
 */
 	minithumbnail: Minithumbnail;
 	/**
-Available variants of the photo in JPEG format, in different size.
+Available variants of the photo in JPEG format, in different sizes.
 */
 	sizes: PhotoSize[];
 	/**
@@ -3686,6 +3687,37 @@ Short name of the current application; 0-64 English letters, digits, and undersc
 The mode in which the Web App is opened; pass null to open in webAppOpenModeFullSize.
 */
 	mode: WebAppOpenMode;
+}
+
+/**
+Describes position of a rectangle area on a story media or a TON wallet card.
+*/
+export interface AreaPosition {
+	'@type': 'areaPosition';
+	/**
+The abscissa of the rectangle's center, as a percentage of the media or the card width.
+*/
+	x_percentage: number;
+	/**
+The ordinate of the rectangle's center, as a percentage of the media or the card height.
+*/
+	y_percentage: number;
+	/**
+The width of the rectangle, as a percentage of the media or the card width.
+*/
+	width_percentage: number;
+	/**
+The height of the rectangle, as a percentage of the media or the card height.
+*/
+	height_percentage: number;
+	/**
+Clockwise rotation angle of the rectangle, in degrees; 0-360.
+*/
+	rotation_angle: number;
+	/**
+The radius of the rectangle corner rounding, as a percentage of the media or the card width.
+*/
+	corner_radius_percentage: number;
 }
 
 /**
@@ -4114,7 +4146,7 @@ Describes a found affiliate program.
 export interface FoundAffiliateProgram {
 	'@type': 'foundAffiliateProgram';
 	/**
-User identifier of the bot created the program.
+User identifier of the bot that created the program.
 */
 	bot_user_id: number;
 	/**
@@ -4152,7 +4184,7 @@ The link that can be used to refer users if the program is still active.
 */
 	url: string;
 	/**
-User identifier of the bot created the program.
+User identifier of the bot that created the program.
 */
 	bot_user_id: number;
 	/**
@@ -4714,7 +4746,7 @@ Price paid for the gift.
 }
 
 /**
-The gift was assigned from blockchain and isn't owned by the current user. The gift can't be transferred, resold or
+The gift was assigned from blockchain and isn't owned by the current user. The gift can't be transferred, resold, or
 withdrawn to blockchain.
 Subtype of {@link UpgradedGiftOrigin}.
 */
@@ -5014,7 +5046,7 @@ Number of times the gift can be purchased by all users; may be null if not limit
 */
 	overall_limits: GiftPurchaseLimits;
 	/**
-Background of the gift.
+Background of the gift; may be null if the gift has no background.
 */
 	background: GiftBackground;
 	/**
@@ -5108,6 +5140,10 @@ Address of the gift NFT in TON blockchain; may be empty if none. Append the addr
 getOption("ton_blockchain_explorer_url") to get a link with information about the address.
 */
 	gift_address: string;
+	/**
+True, if the gift NFT can be used as background_nft_address in setTonWalletCardStickers.
+*/
+	can_be_ton_wallet_card_background?: boolean;
 	/**
 Model of the upgraded gift.
 */
@@ -5220,6 +5256,28 @@ Number of gifts upgraded from the same gift being resold on Fragment.
 The HTTPS link to the Fragment for the gift; may be empty if there are no such gifts being sold on Fragment.
 */
 	fragment_url: string;
+}
+
+/**
+Contains information needed to deposit an upgraded gift from the TON wallet of the current user to a Telegram account.
+The gift must be transferred by an internal message from the wallet to nft_address with gram_amount attached and with
+payload as the message body.
+*/
+export interface UpgradedGiftDepositInfo {
+	'@type': 'upgradedGiftDepositInfo';
+	/**
+Address in TON blockchain to which the message must be sent.
+*/
+	nft_address: string;
+	/**
+Body of the NFT transfer message.
+*/
+	payload: string;
+	/**
+The amount of TON Grams that must be attached to the message to cover fees, in the smallest units of the cryptocurrency;
+excess amount will be returned to the wallet.
+*/
+	gram_amount: number;
 }
 
 /**
@@ -5438,7 +5496,7 @@ The backdrop.
 */
 	backdrop: UpgradedGiftBackdrop;
 	/**
-Total number of gifts with the symbol.
+Total number of gifts with the backdrop.
 */
 	total_count: number;
 }
@@ -5586,7 +5644,7 @@ Unique number of the gift among gifts upgraded from the same gift after upgrade;
 */
 	unique_gift_number: number;
 	/**
-True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone are able to see them.
+True, if the sender and gift text are shown only to the gift receiver; otherwise, everyone is able to see them.
 */
 	is_private?: boolean;
 	/**
@@ -5605,6 +5663,10 @@ True, if the gift is a regular gift that can be upgraded to a unique gift; only 
 True, if the gift is an upgraded gift that can be transferred to another owner; only for the receiver of the gift.
 */
 	can_be_transferred?: boolean;
+	/**
+True, if the gift is a regular gift that can be deleted using deleteGift; only for the receiver of the gift.
+*/
+	can_be_deleted?: boolean;
 	/**
 True, if the gift was refunded and isn't available anymore.
 */
@@ -5701,7 +5763,7 @@ export interface AttributeCraftPersistenceProbability {
 	/**
 The 4 numbers that describe probability of the craft result to have the same attribute as one of the original gifts if
 1, 2, 3, or 4 gifts with the attribute are used in the craft. Each number represents the number of crafted gifts with
-the original attribute per 1000 successful craftings.
+the original attribute per 1000 successful crafts.
 */
 	persistence_chance_per_mille: number[];
 }
@@ -5721,7 +5783,7 @@ The list of gifts.
 	gifts: ReceivedGift[];
 	/**
 The 4 objects that describe probabilities of the crafted gift to have the backdrop or symbol of one of the original
-gifts for the cases when 1, 2, 3 or 4 gifts are used in the craft correspondingly.
+gifts for the cases when 1-4 gifts are used in the craft correspondingly.
 */
 	attribute_persistence_probabilities: AttributeCraftPersistenceProbability[];
 	/**
@@ -5943,7 +6005,7 @@ The HTTPS link to the Fragment for the resold items; may be empty if there are n
 }
 
 /**
-Represent auction state of a gift.
+Represents auction state of a gift.
 */
 export interface GiftAuctionState {
 	'@type': 'giftAuctionState';
@@ -6266,7 +6328,7 @@ The number of seconds between consecutive Telegram Star debitings.
 */
 	subscription_period: number;
 	/**
-Information about the bought subscription.
+Information about the bought subscription; may be null if no information about the subscription is available.
 */
 	product_info: ProductInfo;
 }
@@ -6286,7 +6348,7 @@ The number of seconds between consecutive Telegram Star debitings.
 */
 	subscription_period: number;
 	/**
-Information about the bought subscription.
+Information about the bought subscription; may be null if no information about the subscription is available.
 */
 	product_info: ProductInfo;
 	/**
@@ -6622,7 +6684,7 @@ The Telegram Star amount that was received by Telegram; can be negative for refu
 }
 
 /**
-The transaction is a sending of a paid group reaction; relevant for regular users only.
+The transaction is a sending of a paid group call reaction; relevant for regular users only.
 Subtype of {@link StarTransactionType}.
 */
 export interface StarTransactionTypePaidGroupCallReactionSend {
@@ -6955,7 +7017,7 @@ The offset for the next request. If empty, then there are no more results.
 }
 
 /**
-Describes state of active stories posted by a chat.
+Describes a type of request to the TON Center API.
 Subtype of {@link TonCenterApiRequestType}.
 */
 export interface TonCenterApiRequestTypeGet {
@@ -7092,9 +7154,20 @@ The current UNIX timestamp which was used to create the proof.
 */
 	timestamp: number;
 	/**
-The signature prooving the ownership.
+The signature proving the ownership.
 */
 	signature: string;
+}
+
+/**
+Contains the secret phrase of a TON wallet.
+*/
+export interface TonWalletSecretPhrase {
+	'@type': 'tonWalletSecretPhrase';
+	/**
+The secret phrase as a space separated list of words.
+*/
+	secret_phrase: string;
 }
 
 /**
@@ -7430,6 +7503,11 @@ Attributes of the NFT.
 Additional data about the NFT; may be null if none.
 */
 	extra: JsonValue;
+	/**
+The upgraded gift corresponding to the NFT; may be null if none. Information about the owner of the gift isn't
+available. Original details of the gift are available only to the sender and the receiver of the original gift.
+*/
+	gift: UpgradedGift;
 }
 
 /**
@@ -7445,6 +7523,73 @@ List of NFTs.
 The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
+}
+
+/**
+Describes a sticker on a TON wallet card.
+*/
+export interface TonWalletCardSticker {
+	'@type': 'tonWalletCardSticker';
+	/**
+Position of the sticker on the card.
+*/
+	position: AreaPosition;
+	/**
+The NFT shown as the sticker. If nft.gift is non-null, then it is enough to draw the sticker and there is no need to
+download the media of the NFT.
+*/
+	nft: TonNft;
+}
+
+/**
+Describes a TON wallet card, which is shown on the profile page of a user to everyone.
+*/
+export interface TonWalletCard {
+	'@type': 'tonWalletCard';
+	/**
+Address of the wallet.
+*/
+	address: string;
+	/**
+Balance of the wallet, in the smallest units of the cryptocurrency; may be slightly outdated.
+*/
+	gram_amount: number;
+	/**
+Stickers placed on the card.
+*/
+	stickers: TonWalletCardSticker[];
+	/**
+Address of the NFT of one of the stickers, whose colors must be used for the card background; may be empty if the
+default background must be used.
+*/
+	background_nft_address: string;
+}
+
+/**
+Describes a sticker to be placed on the TON wallet card of the current user.
+*/
+export interface InputTonWalletCardSticker {
+	'@type': 'inputTonWalletCardSticker';
+	/**
+Position of the sticker on the card.
+*/
+	position: AreaPosition;
+	/**
+Address of an NFT owned by the wallet, which is an upgraded gift; use getTonWalletNfts to get the list of owned NFTs.
+*/
+	nft_address: string;
+}
+
+/**
+Contains a list of names of upgraded gift collections. The name of the collection of an upgraded gift is the part of
+upgradedGift.name before the last "-".
+*/
+export interface UpgradedGiftCollectionNames {
+	'@type': 'upgradedGiftCollectionNames';
+	/**
+The names.
+*/
+	names: string[];
 }
 
 /**
@@ -7530,6 +7675,27 @@ Comment added to the transaction.
 True, if the comment is encrypted and must be decrypted using the user's private key.
 */
 	is_comment_encrypted?: boolean;
+}
+
+/**
+A Telegram gift was minted as a TON NFT or was transferred from Telegram to the wallet or back; peer details aren't
+available for the transaction.
+Subtype of {@link TonWalletTransactionType}.
+*/
+export interface TonWalletTransactionTypeTelegramGiftTransfer {
+	'@type': 'tonWalletTransactionTypeTelegramGiftTransfer';
+	/**
+The minted or transferred NFT.
+*/
+	nft: TonNft;
+	/**
+True, if the transfer is from the wallet to Telegram.
+*/
+	is_outgoing?: boolean;
+	/**
+True, if the gift was displayed on the current user's profile page before or after the transfer.
+*/
+	is_saved?: boolean;
 }
 
 /**
@@ -7749,6 +7915,29 @@ URL of the manifest of the dApp.
 Items requested from the wallet.
 */
 	items: TonConnectConnectItem[];
+}
+
+/**
+Contains data required to give access to the TON wallet of the current user in acceptOauthRequest.
+*/
+export interface TonConnectConnectData {
+	'@type': 'tonConnectConnectData';
+	/**
+Unique identifier of the session.
+*/
+	session_id: string;
+	/**
+Answer to the challenge received from setTonConnectSessionWalletClientId.
+*/
+	challenge_answer: string;
+	/**
+Body of the result of the connection request as in sendTonConnectSessionConnectResult.
+*/
+	body: string;
+	/**
+Proof of the TON wallet ownership for the payload oauthLinkInfo.ton_proof_payload.
+*/
+	proof: TonWalletOwnershipProof;
 }
 
 /**
@@ -8485,7 +8674,7 @@ export interface Usernames {
 	'@type': 'usernames';
 	/**
 List of active usernames; the first one must be shown as the primary username. The order of active usernames can be
-changed with reorderActiveUsernames, reorderBotActiveUsernames or reorderSupergroupActiveUsernames.
+changed with reorderActiveUsernames, reorderBotActiveUsernames, or reorderSupergroupActiveUsernames.
 */
 	active_usernames: string[];
 	/**
@@ -8503,9 +8692,9 @@ details.
 */
 	collectible_usernames: string[];
 	/**
-Secondary non-collectible username; for bots only. Can't be used in toggleBotUsernameIsActive; use
-addBotSecondaryUsername or deleteBotSecondaryUsername to edit it. If the username is disabled, then Telegram Premium
-subscription is required to re-enable it.
+Secondary non-collectible username. Currently, must be non-empty only for bot accounts. Can't be used in
+toggleBotUsernameIsActive; use addBotSecondaryUsername or deleteBotSecondaryUsername to edit it. If the username is
+disabled, then Telegram Premium subscription is required to re-enable it.
 */
 	secondary_username: string;
 }
@@ -8865,6 +9054,14 @@ no pending rating changes.
 Note added to the user's contact; may be null if none.
 */
 	note: FormattedText;
+	/**
+TON wallet card of the user; may be null if none.
+*/
+	ton_wallet_card: TonWalletCard;
+	/**
+Theme of the screen for sharing a link to the user; may be null if the default theme is used.
+*/
+	share_theme: ProfileShareTheme;
 	/**
 Information about business settings for Telegram Business accounts; may be null if none.
 */
@@ -9244,7 +9441,7 @@ Identifier of the chat.
 }
 
 /**
-The join request was sent and have to be approved by administrators of the chat.
+The join request was sent and has to be approved by administrators of the chat.
 Subtype of {@link ChatJoinResult}.
 */
 export interface ChatJoinResultRequestSent {
@@ -9899,7 +10096,7 @@ True, if aggressive anti-spam checks can be enabled or disabled in the supergrou
 */
 	can_toggle_aggressive_anti_spam?: boolean;
 	/**
-True, if new chat members will have access to old messages. In public, discussion, of forum groups and all channels, old
+True, if new chat members will have access to old messages. In public, discussion, or forum groups and all channels, old
 messages are always available, so this option affects only private non-forum supergroups without a linked chat. The
 value of this field is only available to chat administrators.
 */
@@ -9973,6 +10170,10 @@ unknown.
 The main tab chosen by the administrators of the channel; may be null if not chosen manually.
 */
 	main_profile_tab: ProfileTab;
+	/**
+Theme of the screen for sharing a link to the supergroup or the channel; may be null if the default theme is used.
+*/
+	share_theme: ProfileShareTheme;
 	/**
 Identifier of the basic group from which supergroup was upgraded; 0 if none.
 */
@@ -10432,7 +10633,7 @@ Contains a list of users and chats that spend most money on paid messages and re
 export interface LiveStoryDonors {
 	'@type': 'liveStoryDonors';
 	/**
-Total amount of spend Telegram Stars.
+Total amount of spent Telegram Stars.
 */
 	total_star_count: number;
 	/**
@@ -10763,11 +10964,20 @@ export interface TextQuote {
 	'@type': 'textQuote';
 	/**
 Text of the quote. Only Bold, Italic, Underline, Strikethrough, Spoiler, CustomEmoji, and DateTime entities can be
-present in the text.
+present in the text. May be empty if the quote was chosen from a rich message.
 */
 	text: FormattedText;
 	/**
-Approximate quote position in the original message in UTF-16 code units as specified by the message sender.
+Rich text of the quote if it was chosen from a rich message; empty if the quote wasn't chosen from a rich message. Only
+richTextPlain, richTextBold, richTextItalic, richTextUnderline, richTextStrikethrough, richTextSpoiler,
+richTextSubscript, richTextSuperscript, richTextDateTime, richTextCustomEmoji, richTextMathematicalExpression, and
+richTexts can be present in the texts.
+*/
+	rich_texts: RichText[];
+	/**
+Approximate quote position in the original message in UTF-16 code units as specified by the message sender. For quotes
+from rich messages, it is the position in the text formed by joining plain texts of all quotable texts of the message,
+separated by line feeds.
 */
 	position: number;
 	/**
@@ -10783,11 +10993,22 @@ export interface InputTextQuote {
 	'@type': 'inputTextQuote';
 	/**
 Text of the quote; 0-getOption("message_reply_quote_length_max") characters. Only Bold, Italic, Underline,
-Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed to be kept and must be kept in the quote.
+Strikethrough, Spoiler, CustomEmoji, and DateTime entities are allowed to be kept and must be kept in the quote. Ignored
+if rich_texts are non-empty.
 */
 	text: FormattedText;
 	/**
-Quote position in the original message in UTF-16 code units.
+Quote from a rich message; pass an empty array if the quote isn't chosen from a rich message. Must contain one element
+for each quoted text of the message in the order of their appearance. The first and the last elements can contain only a
+part of the corresponding text; all other elements must contain the whole text. Formatting of the quoted parts must be
+kept. Mathematical expressions must be quoted entirely. Buttons in pageBlockButtonRow, anchors and dividers can't be
+quoted. There can be up to 32 quoted texts with total length up to getOption("message_reply_quote_length_max")
+characters.
+*/
+	rich_texts: RichText[];
+	/**
+Quote position in the original message in UTF-16 code units. For quotes from rich messages, it is the position in the
+text formed by joining plain texts of all quotable texts of the message, separated by line feeds.
 */
 	position: number;
 }
@@ -11125,7 +11346,7 @@ For messages sent by the current user, supergroupFullInfo.my_boost_count must be
 	sender_boost_count: number;
 	/**
 Tag of the sender of the message in the supergroup at the time the message was sent; may be empty if none or unknown.
-For messages sent in basic groups or supergroup administrators, the current custom title or tag must be used instead.
+For messages sent in basic groups or by supergroup administrators, the current custom title or tag must be used instead.
 */
 	sender_tag: string;
 	/**
@@ -13532,6 +13753,25 @@ True, if the user must be asked for the permission to share their phone number.
 */
 	request_phone_number_access?: boolean;
 	/**
+True, if access to the user's TON wallet is requested by the app. If true and the user agrees to give access, then use
+createTonConnectSession with dapp_client_id and ton_connect_manifest_url to create the TON Connect session, then
+setTonConnectSessionWalletClientId, then create a tonWalletOwnershipProof for the given domain with the payload
+ton_proof_payload, and then pass all data to acceptOauthRequest in the parameter ton_connect_connect_data.
+*/
+	request_ton_wallet_access?: boolean;
+	/**
+Hex-encoded public X25519 key of the dApp; may be empty if TON wallet access wasn't requested.
+*/
+	dapp_client_id: string;
+	/**
+URL of the TON Connect manifest of the dApp; may be empty if TON wallet access wasn't requested.
+*/
+	ton_connect_manifest_url: string;
+	/**
+Payload for TON wallet ownership proof; may be empty if TON wallet access wasn't requested.
+*/
+	ton_proof_payload: string;
+	/**
 The version of a browser used for the authorization.
 */
 	browser: string;
@@ -13991,6 +14231,129 @@ Accent color of outgoing messages in ARGB format; must be ignored if has_outgoin
 }
 
 /**
+Describes a backdrop, which can be used as a background of a theme of the screen for sharing a link to a user or a chat.
+*/
+export interface ProfileShareThemeBackdrop {
+	'@type': 'profileShareThemeBackdrop';
+	/**
+Unique identifier of the backdrop.
+*/
+	id: number;
+	/**
+Name of the backdrop.
+*/
+	name: string;
+	/**
+Colors of the backdrop.
+*/
+	colors: UpgradedGiftBackdropColors;
+}
+
+/**
+Contains a list of backdrops, which can be used as a background of a theme of the screen for sharing a link to a user or
+a chat.
+*/
+export interface ProfileShareThemeBackdrops {
+	'@type': 'profileShareThemeBackdrops';
+	/**
+The list of backdrops.
+*/
+	backdrops: ProfileShareThemeBackdrop[];
+}
+
+/**
+Describes an emoji.
+Subtype of {@link EmojiType}.
+*/
+export interface EmojiTypeRegular {
+	'@type': 'emojiTypeRegular';
+	/**
+Text representation of the emoji.
+*/
+	emoji: string;
+}
+
+/**
+A custom emoji.
+Subtype of {@link EmojiType}.
+*/
+export interface EmojiTypeCustomEmoji {
+	'@type': 'emojiTypeCustomEmoji';
+	/**
+Identifier of the custom emoji.
+*/
+	custom_emoji_id: string;
+}
+
+/**
+Describes a theme of the screen for sharing a link to a user or a chat.
+Subtype of {@link ProfileShareTheme}.
+*/
+export interface ProfileShareThemeEmoji {
+	'@type': 'profileShareThemeEmoji';
+	/**
+The emoji; 0-6 regular or custom emoji. If empty, then use_default_background is false.
+*/
+	emojis: EmojiType[];
+	/**
+True, if the default background is used; otherwise, the backdrop with identifier background_backdrop_id is used as
+background.
+*/
+	use_default_background?: boolean;
+	/**
+Identifier of the backdrop used as background; must be ignored if use_default_background is true. Use
+getProfileShareThemeBackdrops to get details about the backdrop.
+*/
+	background_backdrop_id: number;
+}
+
+/**
+A theme based on an upgraded gift owned by the user or the chat.
+Subtype of {@link ProfileShareTheme}.
+*/
+export interface ProfileShareThemeUpgradedGift {
+	'@type': 'profileShareThemeUpgradedGift';
+	/**
+The upgraded gift.
+*/
+	gift: UpgradedGift;
+}
+
+/**
+Describes a theme of the screen for sharing a link to a user or a chat to be set.
+Subtype of {@link InputProfileShareTheme}.
+*/
+export interface InputProfileShareThemeEmoji {
+	'@type': 'inputProfileShareThemeEmoji';
+	/**
+The emoji; 0-6 regular or custom emoji. If empty, then use_default_background must be false.
+*/
+	emojis: EmojiType[];
+	/**
+Pass true to use the default background; otherwise, the backdrop with identifier background_backdrop_id will be used as
+background.
+*/
+	use_default_background?: boolean;
+	/**
+Identifier of the backdrop to be used as background; ignored if use_default_background is true. Use
+getProfileShareThemeBackdrops to get the list of available backdrops.
+*/
+	background_backdrop_id: number;
+}
+
+/**
+A theme based on an upgraded gift.
+Subtype of {@link InputProfileShareTheme}.
+*/
+export interface InputProfileShareThemeUpgradedGift {
+	'@type': 'inputProfileShareThemeUpgradedGift';
+	/**
+Identifier of the upgraded gift, which is owned by the user or the chat, for which the theme is set.
+*/
+	received_gift_id: string;
+}
+
+/**
 Represents a button inside a rich message.
 */
 export interface InlineButton {
@@ -14341,7 +14704,7 @@ Subtype of {@link RichText}.
 export interface RichTextIcon {
 	'@type': 'richTextIcon';
 	/**
-The image represented as a document. The image can be in GIF, JPEG or PNG format.
+The image represented as a document. The image can be in GIF, JPEG, or PNG format.
 */
 	document: Document;
 	/**
@@ -14515,8 +14878,8 @@ Value of the item; 0 for unordered lists.
 */
 	value: number;
 	/**
-Type of the item numbering type; must be one of "a" for lowercase letters, "A" for uppercase letters, "i" for lowercase
-Roman numerals, "I" for uppercase Roman numerals, "1" for decimal numbers, or empty for unordered lists.
+Type of item numbering; must be one of "a" for lowercase letters, "A" for uppercase letters, "i" for lowercase Roman
+numerals, "I" for uppercase Roman numerals, "1" for decimal numbers, or an empty string for unordered lists.
 */
 	type: string;
 }
@@ -14543,8 +14906,8 @@ Value of the item; pass 0 for unordered lists.
 */
 	value: number;
 	/**
-Type of the item numbering type; must be one of "a" for a lowercase letter, "A" for an uppercase letter, "i" for
-lowercase Roman numerals, "I" for uppercase Roman numerals, "1" for decimal numbers, or empty for unordered lists.
+Type of item numbering; pass "a" for lowercase letters, "A" for uppercase letters, "i" for lowercase Roman numerals, "I"
+for uppercase Roman numerals, "1" for decimal numbers, or an empty string for unordered lists.
 */
 	type: string;
 }
@@ -14577,7 +14940,7 @@ export interface PageBlockHorizontalAlignmentRight {
 }
 
 /**
-Describes a Vertical alignment of a table cell content.
+Describes a vertical alignment of a table cell content.
 Subtype of {@link PageBlockVerticalAlignment}.
 */
 export interface PageBlockVerticalAlignmentTop {
@@ -15711,7 +16074,7 @@ export interface LinkPreviewTypePremiumGiftCode {
 }
 
 /**
-The link is a link to a dialog for creating of a managed bot.
+The link is a link to a dialog for creating a managed bot.
 Subtype of {@link LinkPreviewType}.
 */
 export interface LinkPreviewTypeRequestManagedBot {
@@ -17588,7 +17951,7 @@ URL for the privacy policy of the service; may be empty.
 }
 
 /**
-Contains information about a Telegram Passport elements and corresponding errors.
+Contains information about Telegram Passport elements and corresponding errors.
 */
 export interface PassportElementsWithErrors {
 	'@type': 'passportElementsWithErrors';
@@ -17635,7 +17998,7 @@ Encrypted JSON-encoded data about the user.
 */
 	data: string;
 	/**
-The front side of an identity document.
+The front side of an identity document; may be null if the element isn't an identity document.
 */
 	front_side: DatedFile;
 	/**
@@ -18487,7 +18850,7 @@ Call duration, in seconds.
 A message with information about a group call not bound to a chat. If the message is incoming, the call isn't active,
 isn't missed, and has no duration, and getOption("can_accept_calls") is true, then incoming call screen must be shown to
 the user. Use getGroupCallParticipants to show current group call participants on the screen. Use joinGroupCall to
-accept the call or declineGroupCallInvitation to decline it. If the call become active or missed, then the call screen
+accept the call or declineGroupCallInvitation to decline it. If the call becomes active or missed, then the call screen
 must be hidden.
 Subtype of {@link MessageContent}.
 */
@@ -18683,7 +19046,7 @@ Subtype of {@link MessageContent}.
 export interface MessageChatOwnerLeft {
 	'@type': 'messageChatOwnerLeft';
 	/**
-Identifier of the user who will become the new owner of the chat if the previous owner isn't return; 0 if none.
+Identifier of the user who will become the new owner of the chat if the previous owner doesn't return; 0 if none.
 */
 	new_owner_user_id: number;
 }
@@ -19508,7 +19871,7 @@ Sender of the transfer; 0 if unknown.
 */
 	sender_user_id: number;
 	/**
-Unique identifier of the transaction; may be empty if the transfer isn't send yet. Use getTonWalletTransaction to get
+Unique identifier of the transaction; may be empty if the transfer isn't sent yet. Use getTonWalletTransaction to get
 additional information about the transaction.
 */
 	transaction_id: string;
@@ -19623,6 +19986,10 @@ True, if the gift can be upgraded to a unique gift; only for the receiver of the
 */
 	can_be_upgraded?: boolean;
 	/**
+True, if the gift can be deleted using deleteGift; only for the receiver of the gift.
+*/
+	can_be_deleted?: boolean;
+	/**
 True, if the gift was converted to Telegram Stars; only for the receiver of the gift.
 */
 	was_converted?: boolean;
@@ -19723,7 +20090,7 @@ receiver of the gift.
 }
 
 /**
-A gift which purchase, upgrade or transfer were refunded.
+A gift which purchase, upgrade, or transfer were refunded.
 Subtype of {@link MessageContent}.
 */
 export interface MessageRefundedUpgradedGift {
@@ -19839,6 +20206,15 @@ The new number of Telegram Stars that must be paid by non-administrator users of
 to the direct messages group; 0 if the direct messages group was disabled or the messages are free.
 */
 	paid_message_star_count: number;
+}
+
+/**
+The sender of the message used a link of the other user, which allows sending unpaid messages to the user.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageUnpaidMessagesAllowedByLink {
+	'@type': 'messageUnpaidMessagesAllowedByLink';
+
 }
 
 /**
@@ -20349,7 +20725,7 @@ HTTP or tg:// URL to be opened when the link is clicked.
 }
 
 /**
-A text shows instead of a raw mention of the user (e.g., when the user has no username).
+A text shown instead of a raw mention of the user (e.g., when the user has no username).
 Subtype of {@link TextEntityType}.
 */
 export interface TextEntityTypeMentionName {
@@ -20651,7 +21027,7 @@ Video width and height; must be positive and not greater than 640.
 }
 
 /**
-A video note to be sent.
+A voice note to be sent.
 */
 export interface InputVoiceNote {
 	'@type': 'inputVoiceNote';
@@ -20829,8 +21205,8 @@ The number of Telegram Stars the user agreed to pay to send the messages.
 */
 	paid_message_star_count: number;
 	/**
-Pass true if the user explicitly chosen a sticker or a custom emoji from an installed sticker set; applicable only to
-sendMessage and sendMessageAlbum.
+Pass true if the user has explicitly chosen a sticker or a custom emoji from an installed sticker set; applicable only
+to sendMessage and sendMessageAlbum.
 */
 	update_order_of_installed_sticker_sets?: boolean;
 	/**
@@ -21962,7 +22338,7 @@ True, if the message can be deleted for all users using the method deleteMessage
 	can_be_deleted_for_all_users?: boolean;
 	/**
 True, if the message can be edited using the methods editMessageText, editMessageCaption, or editMessageReplyMarkup. For
-live location, poll, and checklist messages this fields shows whether editMessageLiveLocation, stopPoll, or
+live location, poll, and checklist messages this field shows whether editMessageLiveLocation, stopPoll, or
 editMessageChecklist respectively can be used with this message.
 */
 	can_be_edited?: boolean;
@@ -22024,7 +22400,7 @@ True, if a link can be generated for the message using getMessageLink.
 */
 	can_get_link?: boolean;
 	/**
-True, if media timestamp links can be generated for media timestamp entities in the message text, caption or link
+True, if media timestamp links can be generated for media timestamp entities in the message text, caption, or link
 preview description using getMessageLink.
 */
 	can_get_media_timestamp_links?: boolean;
@@ -22907,37 +23283,6 @@ Emoji representing the weather.
 }
 
 /**
-Describes position of a clickable rectangle area on a story media.
-*/
-export interface StoryAreaPosition {
-	'@type': 'storyAreaPosition';
-	/**
-The abscissa of the rectangle's center, as a percentage of the media width.
-*/
-	x_percentage: number;
-	/**
-The ordinate of the rectangle's center, as a percentage of the media height.
-*/
-	y_percentage: number;
-	/**
-The width of the rectangle, as a percentage of the media width.
-*/
-	width_percentage: number;
-	/**
-The height of the rectangle, as a percentage of the media height.
-*/
-	height_percentage: number;
-	/**
-Clockwise rotation angle of the rectangle, in degrees; 0-360.
-*/
-	rotation_angle: number;
-	/**
-The radius of the rectangle corner rounding, as a percentage of the media width.
-*/
-	corner_radius_percentage: number;
-}
-
-/**
 Describes type of clickable area on a story media.
 Subtype of {@link StoryAreaType}.
 */
@@ -23007,7 +23352,7 @@ Identifier of the message.
 }
 
 /**
-An area pointing to a HTTP or tg:// link.
+An area pointing to an HTTP or tg:// link.
 Subtype of {@link StoryAreaType}.
 */
 export interface StoryAreaTypeLink {
@@ -23058,7 +23403,7 @@ export interface StoryArea {
 	/**
 Position of the area.
 */
-	position: StoryAreaPosition;
+	position: AreaPosition;
 	/**
 Type of the area.
 */
@@ -23088,7 +23433,7 @@ Subtype of {@link InputStoryAreaType}.
 export interface InputStoryAreaTypeFoundVenue {
 	'@type': 'inputStoryAreaTypeFoundVenue';
 	/**
-Identifier of the inline query, used to found the venue.
+Identifier of the inline query, used to find the venue.
 */
 	query_id: string;
 	/**
@@ -23150,7 +23495,7 @@ Identifier of the message. Use messageProperties.can_be_shared_in_story to check
 }
 
 /**
-An area pointing to a HTTP or tg:// link.
+An area pointing to an HTTP or tg:// link.
 Subtype of {@link InputStoryAreaType}.
 */
 export interface InputStoryAreaTypeLink {
@@ -23201,7 +23546,7 @@ export interface InputStoryArea {
 	/**
 Position of the area.
 */
-	position: StoryAreaPosition;
+	position: AreaPosition;
 	/**
 Type of the area.
 */
@@ -24159,7 +24504,7 @@ Identifier of a user who won in the giveaway; 0 if none.
 	user_id: number;
 	/**
 The created Telegram Premium gift code if it was used by the user or can be claimed by the current user; an empty string
-otherwise; for Telegram Premium giveways only.
+otherwise; for Telegram Premium giveaways only.
 */
 	gift_code: string;
 	/**
@@ -24787,7 +25132,7 @@ Group call participant identifier.
 */
 	participant_id: MessageSender;
 	/**
-True, is the user has spoken recently.
+True, if the user has spoken recently.
 */
 	is_speaking?: boolean;
 }
@@ -25145,7 +25490,7 @@ The second color used to show the message text in the RGB format.
 */
 	second_color: number;
 	/**
-Background color for the message the RGB format.
+Background color for the message in the RGB format.
 */
 	background_color: number;
 }
@@ -25916,9 +26261,13 @@ The URL.
 */
 	url: string;
 	/**
-Left time for which the link is valid, in seconds; 0 if the link is a public username link.
+Left time for which the link is valid, in seconds; 0 if the link is permanent.
 */
 	expires_in: number;
+	/**
+True, if a permanent link to the current user can be received; false if all links to the current user expire.
+*/
+	can_get_permanent_link?: boolean;
 }
 
 /**
@@ -26025,7 +26374,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageAnimation, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageAnimation, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
 inputMessageContact.
 */
 	input_message_content: InputMessageContent;
@@ -26071,7 +26420,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or inputMessageContact.
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26108,7 +26457,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageAudio, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageAudio, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
 inputMessageContact.
 */
 	input_message_content: InputMessageContent;
@@ -26146,7 +26495,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or inputMessageContact.
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26195,7 +26544,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageDocument, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageDocument, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
 inputMessageContact.
 */
 	input_message_content: InputMessageContent;
@@ -26261,7 +26610,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or inputMessageContact.
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26306,7 +26655,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessagePhoto, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessagePhoto, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
 inputMessageContact.
 */
 	input_message_content: InputMessageContent;
@@ -26344,7 +26693,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageSticker, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageSticker, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
 inputMessageContact.
 */
 	input_message_content: InputMessageContent;
@@ -26382,7 +26731,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or inputMessageContact.
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26435,7 +26784,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageVideo, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageVideo, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
 inputMessageContact.
 */
 	input_message_content: InputMessageContent;
@@ -26469,7 +26818,7 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageVoiceNote, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue or
+inputMessageVoiceNote, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
 inputMessageContact.
 */
 	input_message_content: InputMessageContent;
@@ -28290,7 +28639,7 @@ export interface PremiumFeatureForumTopicIcon {
 }
 
 /**
-Allowed to set a premium application icons.
+Allowed to set premium application icons.
 Subtype of {@link PremiumFeature}.
 */
 export interface PremiumFeatureAppIcons {
@@ -28545,7 +28894,7 @@ export interface PremiumStoryFeaturePriorityOrder {
 }
 
 /**
-The ability to hide the fact that the user viewed other's stories.
+The ability to hide the fact that the user viewed others' stories.
 Subtype of {@link PremiumStoryFeature}.
 */
 export interface PremiumStoryFeatureStealthMode {
@@ -28572,7 +28921,7 @@ export interface PremiumStoryFeatureCustomExpirationDuration {
 }
 
 /**
-The ability to save other's unprotected stories.
+The ability to save others' unprotected stories.
 Subtype of {@link PremiumStoryFeature}.
 */
 export interface PremiumStoryFeatureSaveStories {
@@ -28679,7 +29028,7 @@ Subtype of {@link PremiumSource}.
 export interface PremiumSourceBusinessFeature {
 	'@type': 'premiumSourceBusinessFeature';
 	/**
-The used feature; pass null if none specific feature was used.
+The used feature; pass null if no specific feature was used.
 */
 	feature: BusinessFeature;
 }
@@ -29581,7 +29930,7 @@ Subtype of {@link InputChatTheme}.
 export interface InputChatThemeGift {
 	'@type': 'inputChatThemeGift';
 	/**
-Name of the upgraded gift. A gift can be used only in one chat in a time. When the same gift is used in another chat,
+Name of the upgraded gift. A gift can be used only in one chat at a time. When the same gift is used in another chat,
 theme in the previous chat is reset to default.
 */
 	name: string;
@@ -30592,7 +30941,7 @@ Text of the option.
 }
 
 /**
-A forwarded messages.
+Forwarded messages.
 Subtype of {@link PushMessageContent}.
 */
 export interface PushMessageContentMessageForwards {
@@ -31068,7 +31417,7 @@ The user identifiers, total number of users in all rules must not exceed 1000.
 }
 
 /**
-A rule to allow all members of certain specified basic groups and supergroups to doing something.
+A rule to allow all members of certain specified basic groups and supergroups to do something.
 Subtype of {@link UserPrivacySettingRule}.
 */
 export interface UserPrivacySettingRuleAllowChatMembers {
@@ -31278,7 +31627,7 @@ export interface ReadDatePrivacySettings {
 	'@type': 'readDatePrivacySettings';
 	/**
 True, if message read date is shown to other users in private chats. If false and the current user isn't a Telegram
-Premium user, then they will not be able to see other's message read date.
+Premium user, then they will not be able to see others' message read date.
 */
 	show_read_date?: boolean;
 }
@@ -32643,7 +32992,7 @@ The type of the content of the story to post; may be null if unspecified.
 /**
 The link is an OAuth link. Call getOauthLinkInfo with the given URL to process the link if the link was received from
 outside of the application; otherwise, ignore it. After getOauthLinkInfo, show the user confirmation dialog and process
-it with checkOauthRequestMatchCode, acceptOauthRequest or declineOauthRequest.
+it with checkOauthRequestMatchCode, acceptOauthRequest, or declineOauthRequest.
 Subtype of {@link InternalLinkType}.
 */
 export interface InternalLinkTypeOauth {
@@ -32775,6 +33124,11 @@ Draft text for message to send in the chat.
 True, if chat profile information screen must be opened; otherwise, the chat itself must be opened.
 */
 	open_profile?: boolean;
+	/**
+Token, which allows the current user to send unpaid messages; may be empty if none. If the token isn't empty and the
+chat is a private chat with a regular user, then call applyUnpaidMessagesToken with the user and the token.
+*/
+	unpaid_messages_token: string;
 }
 
 /**
@@ -33036,6 +33390,11 @@ Draft text for message to send in the chat.
 True, if user's profile information screen must be opened; otherwise, the chat itself must be opened.
 */
 	open_profile?: boolean;
+	/**
+Token, which allows the current user to send unpaid messages to the user; may be empty if none. If the token isn't empty
+and the user is found, then call applyUnpaidMessagesToken with the user and the token.
+*/
+	unpaid_messages_token: string;
 }
 
 /**
@@ -33049,6 +33408,11 @@ export interface InternalLinkTypeUserToken {
 The token.
 */
 	token: string;
+	/**
+Token, which allows the current user to send unpaid messages to the user; may be empty if none. If the token isn't empty
+and the user is found, then call applyUnpaidMessagesToken with the user and the token.
+*/
+	unpaid_messages_token: string;
 }
 
 /**
@@ -33077,7 +33441,7 @@ The link is a link to a Web App. Call searchPublicChat with the given bot userna
 bot is restricted for the current user, then show an error message. Otherwise, call searchWebApp with the received bot
 and the given web_app_short_name. Process received foundWebApp by showing a confirmation dialog if needed. If the bot
 can be added to attachment or side menu, but isn't added yet, then show a disclaimer about Mini Apps being third-party
-applications instead of the dialog and ask the user to accept their Terms of service. If the user accept the terms and
+applications instead of the dialog and ask the user to accept their Terms of service. If the user accepts the terms and
 confirms adding, then use toggleBotIsAddedToAttachmentMenu to add the bot. Then, call getWebAppLinkUrl and open the
 returned URL as a Web App.
 Subtype of {@link InternalLinkType}.
@@ -34453,6 +34817,24 @@ The proxy's secret in hexadecimal encoding.
 }
 
 /**
+A web proxy server. MTProto traffic goes through an HTTPS relay page hosted by the application in a hidden web view; see
+updateWebProxyCarrierOpened. The proxy server must be a domain name and the port must be 443.
+Subtype of {@link ProxyType}.
+*/
+export interface ProxyTypeWeb {
+	'@type': 'proxyTypeWeb';
+	/**
+Base path of the relay on the server, without leading and trailing slashes; may be empty. Consists of 0-128 characters;
+each "/"-separated segment must match [A-Za-z0-9][A-Za-z0-9_-]*.
+*/
+	path: string;
+	/**
+The MTProto proxy secret in hexadecimal encoding; must be 16 bytes long, optionally prefixed with the byte 0xdd.
+*/
+	secret: string;
+}
+
+/**
 Contains information about a proxy server added to the list of proxies.
 */
 export interface AddedProxy {
@@ -34488,6 +34870,126 @@ export interface AddedProxies {
 List of proxy servers.
 */
 	proxies: AddedProxy[];
+}
+
+/**
+Describes a web proxy carrier: an HTTPS relay page, which carries traffic of a web proxy and must be loaded by the
+application as the top-level document of a hidden web view. Before loading the page, the application must arrange for an
+object named carrier.bridge_object_name to be defined in the top-level document whenever its origin is exactly
+carrier.origin, and in no other document or frame. The object must be read-only and must have two members: a method
+postMessage(value), which passes an ArrayBuffer or a typed array to processWebProxyCarrierMessage as
+webProxyCarrierMessageBinary, passes a string as webProxyCarrierMessageText, and rejects any other value; and a property
+onmessage, which the page sets to a function. The application delivers data to the page by calling that function with an
+object {data: value}, where value is an ArrayBuffer for binary data and a string for text. Each carrier needs its own
+web view.
+*/
+export interface WebProxyCarrier {
+	'@type': 'webProxyCarrier';
+	/**
+Unique identifier of the carrier.
+*/
+	id: number;
+	/**
+Identifier of the added proxy that uses the carrier; 0 if the carrier is used by pingProxy or testProxy.
+*/
+	proxy_id: number;
+	/**
+The HTTPS URL to load. The URL contains the capability for the proxy and a fragment, which must be kept; the URL must
+never be logged or shown to the user.
+*/
+	url: string;
+	/**
+Origin of the relay page, for example, "https://proxy.example.com". The web view must not be allowed to navigate to
+another origin.
+*/
+	origin: string;
+	/**
+The only path prefix on carrier.origin from which the page may load resources or to which it may send requests, for
+example, "/" or "/relay/".
+*/
+	path_prefix: string;
+	/**
+Name of the object to define in the top-level document; currently, always "TelegramWebProxy".
+*/
+	bridge_object_name: string;
+	/**
+True, if the carrier is needed only to test the proxy and will be closed after the test. The application may refuse to
+open such carriers, for example, to avoid creating a web view for every saved proxy.
+*/
+	is_temporary?: boolean;
+}
+
+/**
+Describes a message passed by the page of a web proxy carrier to postMessage of the bridge object.
+Subtype of {@link WebProxyCarrierMessage}.
+*/
+export interface WebProxyCarrierMessageText {
+	'@type': 'webProxyCarrierMessageText';
+	/**
+The string.
+*/
+	text: string;
+}
+
+/**
+A binary message, passed as an ArrayBuffer or a typed array.
+Subtype of {@link WebProxyCarrierMessage}.
+*/
+export interface WebProxyCarrierMessageBinary {
+	'@type': 'webProxyCarrierMessageBinary';
+	/**
+Data of the message.
+*/
+	data: string;
+}
+
+/**
+Describes the reason why a web proxy carrier failed.
+Subtype of {@link WebProxyCarrierError}.
+*/
+export interface WebProxyCarrierErrorUnsupported {
+	'@type': 'webProxyCarrierErrorUnsupported';
+
+}
+
+/**
+The application can't open the carrier now, for example, because it is in the background; TDLib will request it again
+after the next call to setNetworkType or after a delay.
+Subtype of {@link WebProxyCarrierError}.
+*/
+export interface WebProxyCarrierErrorPaused {
+	'@type': 'webProxyCarrierErrorPaused';
+
+}
+
+/**
+The page failed to load: a network, TLS, or HTTP error, or a forbidden navigation.
+Subtype of {@link WebProxyCarrierError}.
+*/
+export interface WebProxyCarrierErrorLoadFailed {
+	'@type': 'webProxyCarrierErrorLoadFailed';
+	/**
+The error to be logged; must not contain the URL.
+*/
+	message: string;
+}
+
+/**
+The web view or its renderer process was terminated, or passing data between the application and the page failed.
+Subtype of {@link WebProxyCarrierError}.
+*/
+export interface WebProxyCarrierErrorTerminated {
+	'@type': 'webProxyCarrierErrorTerminated';
+
+}
+
+/**
+The application refused to open a temporary carrier.
+Subtype of {@link WebProxyCarrierError}.
+*/
+export interface WebProxyCarrierErrorRefused {
+	'@type': 'webProxyCarrierErrorRefused';
+
 }
 
 /**
@@ -34887,7 +35389,7 @@ Amount of the cryptocurrency available for withdrawal, in the smallest units of 
 */
 	available_amount: string;
 	/**
-True, if Telegram Stars can be withdrawn now or later.
+True, if the cryptocurrency can be withdrawn now or later.
 */
 	withdrawal_enabled?: boolean;
 }
@@ -35056,7 +35558,7 @@ Point in time (Unix timestamp) when the transaction was refunded.
 }
 
 /**
-Contains a chat revenue transactions.
+Contains a chat revenue transaction.
 */
 export interface ChatRevenueTransaction {
 	'@type': 'chatRevenueTransaction';
@@ -37721,6 +38223,52 @@ The new connection state.
 }
 
 /**
+A web proxy carrier must be opened as described in webProxyCarrier. Messages passed by the page to the bridge object
+must be passed to processWebProxyCarrierMessage. Failures of the carrier must be reported with
+reportWebProxyCarrierError.
+Subtype of {@link Update}.
+*/
+export interface UpdateWebProxyCarrierOpened {
+	'@type': 'updateWebProxyCarrierOpened';
+	/**
+The carrier.
+*/
+	carrier: WebProxyCarrier;
+}
+
+/**
+Data must be delivered as an ArrayBuffer to the page of a web proxy carrier through the onmessage function of the bridge
+object, in the order of the updates.
+Subtype of {@link Update}.
+*/
+export interface UpdateWebProxyCarrierData {
+	'@type': 'updateWebProxyCarrierData';
+	/**
+Identifier of the carrier.
+*/
+	carrier_id: number;
+	/**
+The data to deliver.
+*/
+	data: string;
+}
+
+/**
+A web proxy carrier must be closed. If the page has passed any message to the bridge object, then the application must
+deliver the string {"t":"close"} to the page, so that it can end its relay session, and destroy the web view shortly
+after, for example, in 200 milliseconds; otherwise, the web view must be destroyed immediately. Messages from the
+carrier received after this update must be ignored.
+Subtype of {@link Update}.
+*/
+export interface UpdateWebProxyCarrierClosed {
+	'@type': 'updateWebProxyCarrierClosed';
+	/**
+Identifier of the carrier.
+*/
+	carrier_id: number;
+}
+
+/**
 The freeze state of the current user's account has changed.
 Subtype of {@link Update}.
 */
@@ -37872,7 +38420,7 @@ Subtype of {@link Update}.
 export interface UpdateSavedMessagesTags {
 	'@type': 'updateSavedMessagesTags';
 	/**
-Identifier of Saved Messages topic which tags were changed; 0 if tags for the whole chat has changed.
+Identifier of Saved Messages topic which tags were changed; 0 if tags for the whole chat have changed.
 */
 	saved_messages_topic_id: number;
 	/**
@@ -37937,7 +38485,7 @@ Subtype of {@link Update}.
 export interface UpdateTonWalletGaslessTransfersInfo {
 	'@type': 'updateTonWalletGaslessTransfersInfo';
 	/**
-The new state of the wallet.
+The new information about gasless transfers.
 */
 	info: TonWalletGaslessTransfersInfo;
 }
@@ -39209,6 +39757,7 @@ export type TonWalletTransactionType =
 	| TonWalletTransactionTypeOnRampDeposit
 	| TonWalletTransactionTypeTransfer
 	| TonWalletTransactionTypeNftTransfer
+	| TonWalletTransactionTypeTelegramGiftTransfer
 	| TonWalletTransactionTypeKeyChange;
 
 export type TonConnectRequestState =
@@ -39485,6 +40034,18 @@ export type BuiltInTheme =
 	| BuiltInThemeNight
 	| BuiltInThemeTinted
 	| BuiltInThemeArctic;
+
+export type EmojiType =
+	| EmojiTypeRegular
+	| EmojiTypeCustomEmoji;
+
+export type ProfileShareTheme =
+	| ProfileShareThemeEmoji
+	| ProfileShareThemeUpgradedGift;
+
+export type InputProfileShareTheme =
+	| InputProfileShareThemeEmoji
+	| InputProfileShareThemeUpgradedGift;
 
 export type RichText =
 	| RichTextPlain
@@ -39817,6 +40378,7 @@ export type MessageContent =
 	| MessagePaidMessagesRefunded
 	| MessagePaidMessagePriceChanged
 	| MessageDirectMessagePriceChanged
+	| MessageUnpaidMessagesAllowedByLink
 	| MessageChecklistTasksDone
 	| MessageChecklistTasksAdded
 	| MessageSuggestedPostApprovalFailed
@@ -40794,7 +41356,19 @@ export type TextParseMode =
 export type ProxyType =
 	| ProxyTypeSocks5
 	| ProxyTypeHttp
-	| ProxyTypeMtproto;
+	| ProxyTypeMtproto
+	| ProxyTypeWeb;
+
+export type WebProxyCarrierMessage =
+	| WebProxyCarrierMessageText
+	| WebProxyCarrierMessageBinary;
+
+export type WebProxyCarrierError =
+	| WebProxyCarrierErrorUnsupported
+	| WebProxyCarrierErrorPaused
+	| WebProxyCarrierErrorLoadFailed
+	| WebProxyCarrierErrorTerminated
+	| WebProxyCarrierErrorRefused;
 
 export type StatisticalGraph =
 	| StatisticalGraphData
@@ -40978,6 +41552,9 @@ export type Update =
 	| UpdateWebBrowserSettings
 	| UpdateLanguagePackStrings
 	| UpdateConnectionState
+	| UpdateWebProxyCarrierOpened
+	| UpdateWebProxyCarrierData
+	| UpdateWebProxyCarrierClosed
 	| UpdateFreezeState
 	| UpdateAgeVerificationParameters
 	| UpdateTermsOfService
@@ -41202,8 +41779,8 @@ The email address of the user.
 
 /**
 Resends an authentication code to the user. Works only when the current authorization state is
-authorizationStateWaitCode, the next_code_type of the result is not null and the server-specified timeout has passed, or
-when the current authorization state is authorizationStateWaitEmailCode.
+authorizationStateWaitCode, authorization_state.code_info.next_type is not null and the server-specified timeout has
+passed, or when the current authorization state is authorizationStateWaitEmailCode.
 Request type for {@link Tdjson#resendAuthenticationCode}.
 */
 export interface ResendAuthenticationCode {
@@ -41338,7 +41915,7 @@ list.
 /**
 Resets the login email address. May return an error with a message "TASK_ALREADY_EXISTS" if reset is still pending.
 Works only when the current authorization state is authorizationStateWaitEmailCode and
-authorization_state.can_reset_email_address == true.
+authorization_state.email_address_reset_state != null.
 Request type for {@link Tdjson#resetAuthenticationEmailAddress}.
 */
 export interface ResetAuthenticationEmailAddress {
@@ -41718,7 +42295,7 @@ export interface CancelPasswordReset {
 }
 
 /**
-Creates a new temporary password for processing payments.
+Creates a new temporary password for processing payments and withdrawal of upgraded gifts.
 Request type for {@link Tdjson#createTemporaryPassword}.
 */
 export interface CreateTemporaryPassword {
@@ -41908,7 +42485,7 @@ Identifier of the reply message.
 }
 
 /**
-Returns information about a newest pinned message in the chat. Returns a 404 error if the message doesn't exist.
+Returns information about the newest pinned message in the chat. Returns a 404 error if the message doesn't exist.
 Request type for {@link Tdjson#getChatPinnedMessage}.
 */
 export interface GetChatPinnedMessage {
@@ -41962,7 +42539,7 @@ Request type for {@link Tdjson#getFullRichMessage}.
 export interface GetFullRichMessage {
 	'@type': 'getFullRichMessage';
 	/**
-Identifier of the chat the messages belong to.
+Identifier of the chat the message belongs to.
 */
 	chat_id: number;
 	/**
@@ -42109,7 +42686,7 @@ File type; pass null if unknown.
 
 /**
 Loads more chats from a chat list. The loaded chats and their positions in the chat list will be sent through updates.
-Chats are sorted by the pair (chat.position.order, chat.id) in descending order. Returns a 404 error if all chats have
+Chats are sorted by the pair (chatPosition.order, chat.id) in descending order. Returns a 404 error if all chats have
 been loaded.
 Request type for {@link Tdjson#loadChats}.
 */
@@ -42887,7 +43464,7 @@ Identifier of the community.
 */
 	community_id: number;
 	/**
-New chat photo; pass null to delete the chat photo.
+New community photo; pass null to delete the community photo.
 */
 	photo: InputChatPhoto;
 }
@@ -44135,7 +44712,7 @@ translateText.to_language_code for the list of supported values.
 */
 	translate_to_language_code: string;
 	/**
-Name of the style of the resulted text; handle updateTextCompositionStyles to get the list of supported styles; pass an
+Name of the style of the resulting text; handle updateTextCompositionStyles to get the list of supported styles; pass an
 empty string to keep the current style of the text.
 */
 	style_name: string;
@@ -44162,7 +44739,7 @@ translateText.to_language_code for the list of supported values.
 */
 	translate_to_language_code: string;
 	/**
-Name of the style of the resulted text; handle updateTextCompositionStyles to get the list of supported styles; pass an
+Name of the style of the resulting text; handle updateTextCompositionStyles to get the list of supported styles; pass an
 empty string to keep the current style of the text or if a custom prompt is used.
 */
 	style_name: string;
@@ -44544,7 +45121,7 @@ sent messages and corresponding updateNewMessage updates.
 */
 	sending_id: number;
 	/**
-Pass true to get a fake message instead of actually sending them.
+Pass true to get a fake message instead of actually sending it.
 */
 	only_preview?: boolean;
 	/**
@@ -44770,7 +45347,7 @@ The new message reply markup; pass null if none; for bots only.
 	reply_markup: ReplyMarkup;
 	/**
 New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
-inputMessageDocument, inputMessagePhoto or inputMessageVideo.
+inputMessageDocument, inputMessagePhoto, or inputMessageVideo.
 */
 	input_message_content: InputMessageContent;
 }
@@ -44885,7 +45462,7 @@ The new message reply markup; pass null if none; for bots only.
 	reply_markup: ReplyMarkup;
 	/**
 New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
-inputMessageDocument, inputMessagePhoto or inputMessageVideo.
+inputMessageDocument, inputMessagePhoto, or inputMessageVideo.
 */
 	input_message_content: InputMessageContent;
 }
@@ -45273,7 +45850,7 @@ The new message reply markup; pass null if none; for bots only.
 	reply_markup: ReplyMarkup;
 	/**
 New content of the message. Must be one of the following types: inputMessageAnimation, inputMessageAudio,
-inputMessageDocument, inputMessagePhoto or inputMessageVideo.
+inputMessageDocument, inputMessagePhoto, or inputMessageVideo.
 */
 	input_message_content: InputMessageContent;
 }
@@ -45692,7 +46269,8 @@ Identifier of a quick reply message in the same shortcut to be replied; pass 0 i
 */
 	reply_to_message_id: number;
 	/**
-The content of the message to be added; inputMessagePaidMedia, inputMessageForwarded and inputMessageLiveLocation.
+The content of the message to be added; inputMessagePaidMedia, inputMessageForwarded and inputMessageLiveLocation aren't
+supported.
 */
 	input_message_content: InputMessageContent;
 }
@@ -45774,7 +46352,7 @@ Identifiers of the quick reply messages to re-add. Message identifiers must be i
 }
 
 /**
-Asynchronously edits the text, media or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
+Asynchronously edits the text, media, or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
 whether a message can be edited. Media message can be edited only to a media message. Checklist messages can be edited
 only to a checklist message. The type of message content in an album can't be changed with exception of replacing a
 photo with a video or vice versa.
@@ -46313,7 +46891,7 @@ Identifier of the message.
 */
 	message_id: number;
 	/**
-Number of reaction per row, 5-25.
+Number of reactions per row, 5-25.
 */
 	row_size: number;
 }
@@ -46857,7 +47435,7 @@ Identifier of the message containing the poll.
 */
 	message_id: number;
 	/**
-0-based identifiers of answer options, chosen by the user. User can choose more than 1 answer option only is the poll
+0-based identifiers of answer options, chosen by the user. User can choose more than 1 answer option only if the poll
 allows multiple answers.
 */
 	option_ids: number[];
@@ -46958,7 +47536,7 @@ List of added tasks.
 }
 
 /**
-Adds tasks of a checklist in a message as done or not done.
+Marks tasks of a checklist in a message as done or not done.
 Request type for {@link Tdjson#markChecklistTasksAsDone}.
 */
 export interface MarkChecklistTasksAsDone {
@@ -47064,7 +47642,7 @@ button.
 }
 
 /**
-Shares users after pressing a keyboardButtonTypeRequestUsers button with the bot.
+Shares users after pressing a keyboardButtonTypeRequestUsers or keyboardButtonTypeRequestManagedBot button with the bot.
 Request type for {@link Tdjson#shareUsersWithBot}.
 */
 export interface ShareUsersWithBot {
@@ -47214,7 +47792,7 @@ Types of the chats to which the message can be sent.
 }
 
 /**
-Saves an inline message to be sent by the given user.
+Returns an inline message prepared by a bot to be sent by the current user.
 Request type for {@link Tdjson#getPreparedInlineMessage}.
 */
 export interface GetPreparedInlineMessage {
@@ -47521,11 +48099,11 @@ Identifier of the query.
 */
 	query_id: string;
 	/**
-The result.
+The result; must be null if a URL is passed.
 */
 	result: ChatJoinRequestResult;
 	/**
-URL of the Web App to open.
+URL of the Web App to open; must be empty if a result is passed.
 */
 	url: string;
 }
@@ -47892,7 +48470,7 @@ Pass true to mark as read the specified messages even if the chat is closed.
 }
 
 /**
-Informs TDLib that the message content has been opened (e.g., the user has opened a photo, video, document, location or
+Informs TDLib that the message content has been opened (e.g., the user has opened a photo, video, document, location, or
 venue, or has listened to an audio file or voice note message). An updateMessageContentOpened update will be generated
 if something has changed.
 Request type for {@link Tdjson#openMessageContent}.
@@ -48050,7 +48628,7 @@ The HTTP link.
 }
 
 /**
-Returns information about an OAuth deep link. Use checkOauthRequestMatchCode, acceptOauthRequest or declineOauthRequest
+Returns information about an OAuth deep link. Use checkOauthRequestMatchCode, acceptOauthRequest, or declineOauthRequest
 to process the link.
 Request type for {@link Tdjson#getOauthLinkInfo}.
 */
@@ -48107,6 +48685,11 @@ Pass true if the current user allowed the bot that was returned in getOauthLinkI
 Pass true if the current user allowed the bot that was returned in getOauthLinkInfo, to access their phone number.
 */
 	allow_phone_number_access?: boolean;
+	/**
+Pass data required to access the user's TON wallet via TON Connect if the current user allowed this; pass null if the
+access wasn't requested or the user declined access.
+*/
+	ton_connect_connect_data: TonConnectConnectData;
 }
 
 /**
@@ -48596,7 +49179,7 @@ Chat folder identifier.
 }
 
 /**
-Process new chats added to a shareable chat folder by its owner.
+Processes new chats added to a shareable chat folder by its owner.
 Request type for {@link Tdjson#processChatFolderNewChats}.
 */
 export interface ProcessChatFolderNewChats {
@@ -48714,9 +49297,9 @@ chatBoostLevelFeatures.can_set_profile_background_custom_emoji to check whether 
 }
 
 /**
-Changes the message auto-delete or self-destruct (for secret chats) time in a chat. Requires change_info administrator
-right in basic groups, supergroups and channels. Message auto-delete time can't be changed in a chat with the current
-user (Saved Messages) and the chat 777000 (Telegram).
+Changes the message auto-delete or self-destruct (for secret chats) time in a chat. Requires can_change_info
+administrator right in basic groups, supergroups and channels. Message auto-delete time can't be changed in a chat with
+the current user (Saved Messages) and the chat 777000 (Telegram).
 Request type for {@link Tdjson#setChatMessageAutoDeleteTime}.
 */
 export interface SetChatMessageAutoDeleteTime {
@@ -48918,7 +49501,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Identifier of the message with the request. The message must be incoming and has content of the type
+Identifier of the message with the request. The message must be incoming and have content of the type
 messageChatHasProtectedContentDisableRequested.
 */
 	request_message_id: number;
@@ -49895,9 +50478,9 @@ Chat identifier.
 }
 
 /**
-Returns the list of stories that posted by the given chat to its chat page. If from_story_id == 0, then pinned stories
-are returned first. Then, stories are returned in reverse chronological order (i.e., in order of decreasing story_id).
-For optimal performance, the number of returned stories is chosen by TDLib.
+Returns the list of stories that were posted by the given chat to its chat page. If from_story_id == 0, then pinned
+stories are returned first. Then, stories are returned in reverse chronological order (i.e., in order of decreasing
+story_id). For optimal performance, the number of returned stories is chosen by TDLib.
 Request type for {@link Tdjson#getChatPostedToChatPageStories}.
 */
 export interface GetChatPostedToChatPageStories {
@@ -49997,7 +50580,7 @@ Request type for {@link Tdjson#getStoryAvailableReactions}.
 export interface GetStoryAvailableReactions {
 	'@type': 'getStoryAvailableReactions';
 	/**
-Number of reaction per row, 5-25.
+Number of reactions per row, 5-25.
 */
 	row_size: number;
 }
@@ -50295,7 +50878,7 @@ Identifier of the story album.
 	story_album_id: number;
 	/**
 Identifier of the stories to add to the album; 1-getOption("story_album_size_max") identifiers. If after addition the
-album has more than getOption("story_album_size_max") stories, then the last one are removed from the album.
+album has more than getOption("story_album_size_max") stories, then the last ones are removed from the album.
 */
 	story_ids: number[];
 }
@@ -51207,7 +51790,7 @@ Invite link to be revoked.
 }
 
 /**
-Deletes revoked chat invite links. Requires administrator privileges and can_invite_users right in the chat for own
+Deletes a revoked chat invite link. Requires administrator privileges and can_invite_users right in the chat for own
 links and owner privileges for other links.
 Request type for {@link Tdjson#deleteRevokedChatInviteLink}.
 */
@@ -51218,7 +51801,7 @@ Chat identifier.
 */
 	chat_id: number;
 	/**
-Invite link to revoke.
+Invite link to delete.
 */
 	invite_link: string;
 }
@@ -52265,7 +52848,7 @@ New participant's volume level; 1-20000 in hundreds of percents.
 }
 
 /**
-Toggles whether a group call participant hand is rased; for video chats only.
+Toggles whether a group call participant hand is raised; for video chats only.
 Request type for {@link Tdjson#toggleGroupCallParticipantIsHandRaised}.
 */
 export interface ToggleGroupCallParticipantIsHandRaised {
@@ -53836,8 +54419,8 @@ Current mobile network code.
 }
 
 /**
-Resends the authentication code sent to a phone number. Works only if the previously received authenticationCodeInfo
-next_code_type was not null and the server-specified timeout has passed.
+Resends the authentication code sent to a phone number. Works only if the previously received
+authenticationCodeInfo.next_type was not null and the server-specified timeout has passed.
 Request type for {@link Tdjson#resendPhoneNumberCode}.
 */
 export interface ResendPhoneNumberCode {
@@ -54002,7 +54585,22 @@ Request type for {@link Tdjson#getUserLink}.
 */
 export interface GetUserLink {
 	'@type': 'getUserLink';
-
+	/**
+Pass true to get a link, which allows other users to send unpaid messages to the current user. By default, a temporary
+link is returned in this case.
+*/
+	remove_messages_fee?: boolean;
+	/**
+Pass true to get a permanent link; ignored if remove_messages_fee is false. Can be used only if can_get_permanent_link
+is true in a previously received userLink.
+*/
+	return_permanent_link?: boolean;
+	/**
+Pass true to revoke previously created links, which allow other users to send unpaid messages to the current user;
+ignored if remove_messages_fee is false. If return_permanent_link is true, then the permanent link is revoked too;
+otherwise, only temporary links are revoked.
+*/
+	revoke_previous_links?: boolean;
 }
 
 /**
@@ -54013,6 +54611,25 @@ export interface SearchUserByToken {
 	'@type': 'searchUserByToken';
 	/**
 Token to search for.
+*/
+	token: string;
+}
+
+/**
+Allows the current user to send unpaid messages to the given user, which requires payment for incoming messages, using a
+token from an internal link of the type internalLinkTypePublicChat, internalLinkTypeUserPhoneNumber, or
+internalLinkTypeUserToken. The first message sent to the user will be preceded by a messageUnpaidMessagesAllowedByLink
+message. Repeated calls and calls for the current user have no effect.
+Request type for {@link Tdjson#applyUnpaidMessagesToken}.
+*/
+export interface ApplyUnpaidMessagesToken {
+	'@type': 'applyUnpaidMessagesToken';
+	/**
+Identifier of the user.
+*/
+	user_id: number;
+	/**
+Token from the link.
 */
 	token: string;
 }
@@ -54706,7 +55323,7 @@ New number of days of inactivity before sessions will be automatically terminate
 }
 
 /**
-Returns all website where the current user used Telegram to log in.
+Returns all websites where the current user used Telegram to log in.
 Request type for {@link Tdjson#getConnectedWebsites}.
 */
 export interface GetConnectedWebsites {
@@ -54821,7 +55438,7 @@ New value of the supergroup sticker set identifier. Use 0 to remove the supergro
 
 /**
 Changes the custom emoji sticker set of a supergroup; requires can_change_info administrator right. The chat must have
-at least chatBoostFeatures.min_custom_emoji_sticker_set_boost_level boost level to pass the corresponding color.
+at least chatBoostFeatures.min_custom_emoji_sticker_set_boost_level boost level to set a custom emoji sticker set.
 Request type for {@link Tdjson#setSupergroupCustomEmojiStickerSet}.
 */
 export interface SetSupergroupCustomEmojiStickerSet {
@@ -55455,6 +56072,23 @@ Identifier of the gift.
 }
 
 /**
+Deletes a gift without receiving Telegram Stars for it. Use receivedGift.can_be_deleted or messageGift.can_be_deleted to
+check whether the gift can be deleted.
+Request type for {@link Tdjson#deleteGift}.
+*/
+export interface DeleteGift {
+	'@type': 'deleteGift';
+	/**
+Unique identifier of business connection on behalf of which to send the request; for bots only.
+*/
+	business_connection_id: string;
+	/**
+Identifier of the gift.
+*/
+	received_gift_id: string;
+}
+
+/**
 Toggles whether a gift is shown on the current user's or the channel's profile page; requires can_post_messages
 administrator right in the channel chat.
 Request type for {@link Tdjson#toggleGiftIsSaved}.
@@ -55797,7 +56431,7 @@ Identifier of the gift.
 }
 
 /**
-Returns upgraded gifts of the current user who can be used to craft another gifts.
+Returns upgraded gifts of the current user, which can be used to craft other gifts.
 Request type for {@link Tdjson#getGiftsForCrafting}.
 */
 export interface GetGiftsForCrafting {
@@ -55844,7 +56478,7 @@ Unique name of the upgraded gift.
 
 /**
 Returns a URL for upgraded gift withdrawal in the TON blockchain as an NFT; requires owner privileges for gifts owned by
-a chat.
+a chat. The user must have a valid temporary password; see createTemporaryPassword.
 Request type for {@link Tdjson#getUpgradedGiftWithdrawalUrl}.
 */
 export interface GetUpgradedGiftWithdrawalUrl {
@@ -55853,10 +56487,65 @@ export interface GetUpgradedGiftWithdrawalUrl {
 Identifier of the gift.
 */
 	received_gift_id: string;
-	/**
-The 2-step verification password of the current user.
+}
+
+/**
+Withdraws an upgraded gift to the TON blockchain as an NFT directly to the TON wallet of the current user, which is
+created automatically if the user has no wallet yet; requires owner privileges for gifts owned by a chat. The user must
+have a valid temporary password; see createTemporaryPassword. The gift will be received by the wallet in a few seconds
+after the request succeeds.
+Request type for {@link Tdjson#withdrawUpgradedGift}.
 */
-	password: string;
+export interface WithdrawUpgradedGift {
+	'@type': 'withdrawUpgradedGift';
+	/**
+Identifier of the gift.
+*/
+	received_gift_id: string;
+	/**
+Pass true to keep the gift displayed on the user's or the chat's profile page after withdrawal.
+*/
+	keep_on_profile?: boolean;
+}
+
+/**
+Returns information needed to deposit an upgraded gift from the TON wallet of the current user to a Telegram account.
+Use sendTonWalletTransfer to complete transfer of the gift. The gift will be received by the new owner with a message
+about the gift after the transfer is confirmed in the blockchain.
+Request type for {@link Tdjson#getUpgradedGiftDepositInfo}.
+*/
+export interface GetUpgradedGiftDepositInfo {
+	'@type': 'getUpgradedGiftDepositInfo';
+	/**
+Identifier of the user or the channel chat that will receive the gift.
+*/
+	owner_id: MessageSender;
+	/**
+Unique name of the upgraded gift.
+*/
+	name: string;
+	/**
+Pass true to hide the sender of the gift in the message received by the new owner.
+*/
+	hide_sender?: boolean;
+}
+
+/**
+Shows an upgraded gift from the TON wallet of the current user on a profile page or hides it from all profile pages; the
+gift remains in the wallet.
+Request type for {@link Tdjson#displayUpgradedGift}.
+*/
+export interface DisplayUpgradedGift {
+	'@type': 'displayUpgradedGift';
+	/**
+Identifier of the current user or a channel chat owned by the current user on whose profile page the gift will be shown;
+pass null to hide the gift from all profile pages.
+*/
+	owner_id: MessageSender;
+	/**
+Unique name of the upgraded gift.
+*/
+	name: string;
 }
 
 /**
@@ -56032,7 +56721,7 @@ Identifier of the gift collection.
 	collection_id: number;
 	/**
 Identifier of the gifts to add to the collection; 1-getOption("gift_collection_size_max") identifiers. If after addition
-the collection has more than getOption("gift_collection_size_max") gifts, then the last one are removed from the
+the collection has more than getOption("gift_collection_size_max") gifts, then the last ones are removed from the
 collection.
 */
 	received_gift_ids: string[];
@@ -56216,6 +56905,33 @@ export interface ResetInstalledBackgrounds {
 }
 
 /**
+Returns the list of backdrops, which can be used as a background of a theme of the screen for sharing a link to a user
+or a chat.
+Request type for {@link Tdjson#getProfileShareThemeBackdrops}.
+*/
+export interface GetProfileShareThemeBackdrops {
+	'@type': 'getProfileShareThemeBackdrops';
+
+}
+
+/**
+Changes the theme of the screen for sharing a link to the current user or a chat. The chat must have a username.
+Requires can_change_info administrator right in supergroups and channels.
+Request type for {@link Tdjson#setProfileShareTheme}.
+*/
+export interface SetProfileShareTheme {
+	'@type': 'setProfileShareTheme';
+	/**
+Identifier of the chat with the current user, or identifier of a supergroup or a channel chat.
+*/
+	chat_id: number;
+	/**
+The new theme; pass null to use the default theme.
+*/
+	theme: InputProfileShareTheme;
+}
+
+/**
 Returns information about the current localization target. This is an offline method if only_local is true. Can be
 called before authorization.
 Request type for {@link Tdjson#getLocalizationTargetInfo}.
@@ -56316,7 +57032,7 @@ New information about the custom local language pack.
 }
 
 /**
-Adds, edits or deletes a string in a custom local language pack. Can be called before authorization.
+Adds, edits, or deletes a string in a custom local language pack. Can be called before authorization.
 Request type for {@link Tdjson#setCustomLanguagePackString}.
 */
 export interface SetCustomLanguagePackString {
@@ -56812,7 +57528,7 @@ The maximum number of transactions to return.
 }
 
 /**
-Returns a TON wallet transaction by their identifier.
+Returns a TON wallet transaction by its identifier.
 Request type for {@link Tdjson#getTonWalletTransaction}.
 */
 export interface GetTonWalletTransaction {
@@ -56824,7 +57540,7 @@ Identifier of the transaction.
 }
 
 /**
-Returns a TON wallet transaction by their msg_hash; return an error if the transaction isn't finalized yet.
+Returns a TON wallet transaction by its msg_hash; returns an error if the transaction isn't finalized yet.
 Request type for {@link Tdjson#getTonWalletTransactionByMsgHash}.
 */
 export interface GetTonWalletTransactionByMessageHash {
@@ -56903,8 +57619,7 @@ Address in the TON blockchain.
 }
 
 /**
-Returns the secret phrase of the user's TON wallet as a space separated list of words. Works only if
-tonWalletState.can_export_phrase is true.
+Returns the secret phrase of the user's TON wallet. Works only if tonWalletState.can_export_phrase is true.
 Request type for {@link Tdjson#getTonWalletSecretPhrase}.
 */
 export interface GetTonWalletSecretPhrase {
@@ -56917,7 +57632,7 @@ passwordless request.
 }
 
 /**
-Returns a challenge which may be used to proof ownership of a TON wallet; can be used only if
+Returns a challenge which may be used to prove ownership of a TON wallet; can be used only if
 getOption("can_use_ton_wallet").
 Request type for {@link Tdjson#getTonWalletOwnershipProofChallenge}.
 */
@@ -57006,7 +57721,7 @@ getOption("ton_wallet_transfer_amount_min").
 	regular_transfer_data: string;
 	/**
 Serialized data for gasless cryptocurrency transfer request; pass an empty string to force a regular request. The
-minimum allowed transfer amount for a gassless transfer is getOption("ton_wallet_gasless_transfer_amount_min").
+minimum allowed transfer amount for a gasless transfer is getOption("ton_wallet_gasless_transfer_amount_min").
 */
 	gasless_transfer_data: string;
 }
@@ -57074,6 +57789,38 @@ The maximum number of NFTs to be returned; must be positive and can't be greater
 }
 
 /**
+Returns names of upgraded gift collections whose NFTs can be used as background_nft_address in setTonWalletCardStickers;
+can be used only if getOption("can_use_ton_wallet").
+Request type for {@link Tdjson#getTonWalletCardBackgroundGiftCollectionNames}.
+*/
+export interface GetTonWalletCardBackgroundGiftCollectionNames {
+	'@type': 'getTonWalletCardBackgroundGiftCollectionNames';
+
+}
+
+/**
+Changes the list of stickers on the TON wallet card of the current user; can be used only if
+getOption("can_use_ton_wallet"). The whole list of stickers is replaced. The request can take up to 20 seconds to
+complete, so it must be called only on explicit user action. Stickers are removed automatically if the corresponding NFT
+leaves the wallet or the wallet is replaced. Returns the updated card.
+Request type for {@link Tdjson#setTonWalletCardStickers}.
+*/
+export interface SetTonWalletCardStickers {
+	'@type': 'setTonWalletCardStickers';
+	/**
+The new list of stickers; pass an empty list to remove all stickers. Up to 10 stickers can be added. Each NFT can be
+used only once.
+*/
+	stickers: InputTonWalletCardSticker[];
+	/**
+Address of the NFT from the new list of stickers, whose colors will be used for the card background; pass an empty
+string to use the default background. The NFT must correspond to an upgraded gift with can_be_ton_wallet_card_background
+== true.
+*/
+	background_nft_address: string;
+}
+
+/**
 Returns active TON Connect sessions; can be used only if getOption("can_use_ton_wallet").
 Request type for {@link Tdjson#getTonConnectSessions}.
 */
@@ -57100,7 +57847,7 @@ URL of the manifest of the dApp.
 
 /**
 Sets wallet_client_id for a pending TON Connect session. Then, sendTonConnectSessionConnectResult must be used to accept
-or reject the session.
+or reject the session. If the session was created for an OAuth request, then acceptOauthRequest must be used instead.
 Request type for {@link Tdjson#setTonConnectSessionWalletClientId}.
 */
 export interface SetTonConnectSessionWalletClientId {
@@ -57264,7 +58011,7 @@ Request type for {@link Tdjson#getOnRampProviderBaseCurrencies}.
 export interface GetOnRampProviderBaseCurrencies {
 	'@type': 'getOnRampProviderBaseCurrencies';
 	/**
-Unique identifier of the on-ramp provider; only for providers that supports base currencies.
+Unique identifier of the on-ramp provider; only for providers that support base currencies.
 */
 	provider_id: string;
 	/**
@@ -57294,7 +58041,7 @@ ISO 4217 currency code of the currency that will be used for the purchase; pass 
 }
 
 /**
-Returns the limits for an on-ramp payment; only for providers that supports limits retrieval.
+Returns the limits for an on-ramp payment; only for providers that support limits retrieval.
 Request type for {@link Tdjson#getOnRampPaymentLimits}.
 */
 export interface GetOnRampPaymentLimits {
@@ -57318,7 +58065,7 @@ Name of the chosen payment method; pass an empty string if none.
 }
 
 /**
-Returns a quote for an on-ramp payment; only for providers that supports quote retrieval.
+Returns a quote for an on-ramp payment; only for providers that support quote retrieval.
 Request type for {@link Tdjson#getOnRampPaymentQuote}.
 */
 export interface GetOnRampPaymentQuote {
@@ -58833,7 +59580,7 @@ Request type for {@link Tdjson#getConnectedAffiliateProgram}.
 export interface GetConnectedAffiliateProgram {
 	'@type': 'getConnectedAffiliateProgram';
 	/**
-The affiliate to which the affiliate program will be connected.
+The affiliate to which the affiliate program is connected.
 */
 	affiliate: AffiliateType;
 	/**
@@ -59043,7 +59790,7 @@ The link.
 }
 
 /**
-Dismissess a received web token without consumption; for official Telegram apps only.
+Dismisses a received web token without consumption; for official Telegram apps only.
 Request type for {@link Tdjson#dismissWebToken}.
 */
 export interface DismissWebToken {
@@ -59189,6 +59936,40 @@ export interface PingProxy {
 The proxy to test; pass null to ping a Telegram server without a proxy.
 */
 	proxy: Proxy;
+}
+
+/**
+Passes a message, which the page of a web proxy carrier passed to postMessage of the bridge object, to TDLib. Must be
+called in the order in which the messages were passed. Can be called before authorization.
+Request type for {@link Tdjson#processWebProxyCarrierMessage}.
+*/
+export interface ProcessWebProxyCarrierMessage {
+	'@type': 'processWebProxyCarrierMessage';
+	/**
+Identifier of the carrier.
+*/
+	carrier_id: number;
+	/**
+The received message.
+*/
+	message: WebProxyCarrierMessage;
+}
+
+/**
+Reports that a web proxy carrier failed. TDLib closes the carrier and decides whether and when to request a new one. Can
+be called before authorization.
+Request type for {@link Tdjson#reportWebProxyCarrierError}.
+*/
+export interface ReportWebProxyCarrierError {
+	'@type': 'reportWebProxyCarrierError';
+	/**
+Identifier of the carrier.
+*/
+	carrier_id: number;
+	/**
+The error.
+*/
+	error: WebProxyCarrierError;
 }
 
 /**
@@ -60209,6 +60990,7 @@ export type Request =
 	| GetBusinessChatLinkInfo
 	| GetUserLink
 	| SearchUserByToken
+	| ApplyUnpaidMessagesToken
 	| SetCommands
 	| DeleteCommands
 	| GetCommands
@@ -60295,6 +61077,7 @@ export type Request =
 	| PlaceGiftAuctionBid
 	| IncreaseGiftAuctionBid
 	| SellGift
+	| DeleteGift
 	| ToggleGiftIsSaved
 	| SetPinnedGifts
 	| ToggleChatGiftNotifications
@@ -60314,6 +61097,9 @@ export type Request =
 	| GetUpgradedGift
 	| GetUpgradedGiftValueInfo
 	| GetUpgradedGiftWithdrawalUrl
+	| WithdrawUpgradedGift
+	| GetUpgradedGiftDepositInfo
+	| DisplayUpgradedGift
 	| GetUpgradedGiftsPromotionalAnimation
 	| SetGiftResalePrice
 	| SearchGiftsForResale
@@ -60335,6 +61121,8 @@ export type Request =
 	| GetInstalledBackgrounds
 	| RemoveInstalledBackground
 	| ResetInstalledBackgrounds
+	| GetProfileShareThemeBackdrops
+	| SetProfileShareTheme
 	| GetLocalizationTargetInfo
 	| GetLanguagePackInfo
 	| GetLanguagePackStrings
@@ -60392,6 +61180,8 @@ export type Request =
 	| ReplaceTonWallet
 	| GetCurrencyExchangeRates
 	| GetTonWalletNfts
+	| GetTonWalletCardBackgroundGiftCollectionNames
+	| SetTonWalletCardStickers
 	| GetTonConnectSessions
 	| CreateTonConnectSession
 	| SetTonConnectSessionWalletClientId
@@ -60523,6 +61313,8 @@ export type Request =
 	| RemoveProxy
 	| GetProxies
 	| PingProxy
+	| ProcessWebProxyCarrierMessage
+	| ReportWebProxyCarrierError
 	| SetLogStream
 	| GetLogStream
 	| SetLogVerbosityLevel
@@ -60619,8 +61411,8 @@ authorization state is authorizationStateWaitEmailAddress.
 
 	/**
 Resends an authentication code to the user. Works only when the current authorization state is
-authorizationStateWaitCode, the next_code_type of the result is not null and the server-specified timeout has passed, or
-when the current authorization state is authorizationStateWaitEmailCode.
+authorizationStateWaitCode, authorization_state.code_info.next_type is not null and the server-specified timeout has
+passed, or when the current authorization state is authorizationStateWaitEmailCode.
 */
 	async resendAuthenticationCode(options: Omit<ResendAuthenticationCode, '@type'>): Promise<Ok> {
 		return this._request({
@@ -60712,7 +61504,7 @@ Finishes user registration. Works only when the current authorization state is a
 	/**
 Resets the login email address. May return an error with a message "TASK_ALREADY_EXISTS" if reset is still pending.
 Works only when the current authorization state is authorizationStateWaitEmailCode and
-authorization_state.can_reset_email_address == true.
+authorization_state.email_address_reset_state != null.
 */
 	async resetAuthenticationEmailAddress(): Promise<Ok> {
 		return this._request({
@@ -61023,7 +61815,7 @@ Cancels reset of 2-step verification password. The method can be called if passw
 	}
 
 	/**
-Creates a new temporary password for processing payments.
+Creates a new temporary password for processing payments and withdrawal of upgraded gifts.
 */
 	async createTemporaryPassword(options: Omit<CreateTemporaryPassword, '@type'>): Promise<TemporaryPasswordState> {
 		return this._request({
@@ -61173,7 +61965,7 @@ a 404 error if the message doesn't exist.
 	}
 
 	/**
-Returns information about a newest pinned message in the chat. Returns a 404 error if the message doesn't exist.
+Returns information about the newest pinned message in the chat. Returns a 404 error if the message doesn't exist.
 */
 	async getChatPinnedMessage(options: Omit<GetChatPinnedMessage, '@type'>): Promise<Message> {
 		return this._request({
@@ -61302,7 +62094,7 @@ by the application.
 
 	/**
 Loads more chats from a chat list. The loaded chats and their positions in the chat list will be sent through updates.
-Chats are sorted by the pair (chat.position.order, chat.id) in descending order. Returns a 404 error if all chats have
+Chats are sorted by the pair (chatPosition.order, chat.id) in descending order. Returns a 404 error if all chats have
 been loaded.
 */
 	async loadChats(options: Omit<LoadChats, '@type'>): Promise<Ok> {
@@ -63178,7 +63970,7 @@ message.
 	}
 
 	/**
-Asynchronously edits the text, media or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
+Asynchronously edits the text, media, or caption of a quick reply message. Use quickReplyMessage.can_be_edited to check
 whether a message can be edited. Media message can be edited only to a media message. Checklist messages can be edited
 only to a checklist message. The type of message content in an album can't be changed with exception of replacing a
 photo with a video or vice versa.
@@ -63866,7 +64658,7 @@ Adds tasks to a checklist in a message.
 	}
 
 	/**
-Adds tasks of a checklist in a message as done or not done.
+Marks tasks of a checklist in a message as done or not done.
 */
 	async markChecklistTasksAsDone(options: Omit<MarkChecklistTasksAsDone, '@type'>): Promise<Ok> {
 		return this._request({
@@ -63928,7 +64720,7 @@ needed. If an error is returned, then the button must be handled as an ordinary 
 	}
 
 	/**
-Shares users after pressing a keyboardButtonTypeRequestUsers button with the bot.
+Shares users after pressing a keyboardButtonTypeRequestUsers or keyboardButtonTypeRequestManagedBot button with the bot.
 */
 	async shareUsersWithBot(options: Omit<ShareUsersWithBot, '@type'>): Promise<Ok> {
 		return this._request({
@@ -63989,7 +64781,7 @@ Saves an inline message to be sent by the given user; for bots only.
 	}
 
 	/**
-Saves an inline message to be sent by the given user.
+Returns an inline message prepared by a bot to be sent by the current user.
 */
 	async getPreparedInlineMessage(options: Omit<GetPreparedInlineMessage, '@type'>): Promise<PreparedInlineMessage> {
 		return this._request({
@@ -64322,7 +65114,7 @@ counter, removing deleted messages in supergroups and channels).
 	}
 
 	/**
-Informs TDLib that the message content has been opened (e.g., the user has opened a photo, video, document, location or
+Informs TDLib that the message content has been opened (e.g., the user has opened a photo, video, document, location, or
 venue, or has listened to an audio file or voice note message). An updateMessageContentOpened update will be generated
 if something has changed.
 */
@@ -64421,7 +65213,7 @@ Returns a type of the web browser which must be used to open the link.
 	}
 
 	/**
-Returns information about an OAuth deep link. Use checkOauthRequestMatchCode, acceptOauthRequest or declineOauthRequest
+Returns information about an OAuth deep link. Use checkOauthRequestMatchCode, acceptOauthRequest, or declineOauthRequest
 to process the link.
 */
 	async getOauthLinkInfo(options: Omit<GetOauthLinkInfo, '@type'>): Promise<OauthLinkInfo> {
@@ -64783,7 +65575,7 @@ getOption("chat_folder_new_chats_update_period") for the given chat folder.
 	}
 
 	/**
-Process new chats added to a shareable chat folder by its owner.
+Processes new chats added to a shareable chat folder by its owner.
 */
 	async processChatFolderNewChats(options: Omit<ProcessChatFolderNewChats, '@type'>): Promise<Ok> {
 		return this._request({
@@ -64855,9 +65647,9 @@ administrator right.
 	}
 
 	/**
-Changes the message auto-delete or self-destruct (for secret chats) time in a chat. Requires change_info administrator
-right in basic groups, supergroups and channels. Message auto-delete time can't be changed in a chat with the current
-user (Saved Messages) and the chat 777000 (Telegram).
+Changes the message auto-delete or self-destruct (for secret chats) time in a chat. Requires can_change_info
+administrator right in basic groups, supergroups and channels. Message auto-delete time can't be changed in a chat with
+the current user (Saved Messages) and the chat 777000 (Telegram).
 */
 	async setChatMessageAutoDeleteTime(options: Omit<SetChatMessageAutoDeleteTime, '@type'>): Promise<Ok> {
 		return this._request({
@@ -65559,9 +66351,9 @@ Returns the list of active stories posted by the given chat.
 	}
 
 	/**
-Returns the list of stories that posted by the given chat to its chat page. If from_story_id == 0, then pinned stories
-are returned first. Then, stories are returned in reverse chronological order (i.e., in order of decreasing story_id).
-For optimal performance, the number of returned stories is chosen by TDLib.
+Returns the list of stories that were posted by the given chat to its chat page. If from_story_id == 0, then pinned
+stories are returned first. Then, stories are returned in reverse chronological order (i.e., in order of decreasing
+story_id). For optimal performance, the number of returned stories is chosen by TDLib.
 */
 	async getChatPostedToChatPageStories(options: Omit<GetChatPostedToChatPageStories, '@type'>): Promise<Stories> {
 		return this._request({
@@ -66297,7 +67089,7 @@ then additionally to the revoked link returns new primary link.
 	}
 
 	/**
-Deletes revoked chat invite links. Requires administrator privileges and can_invite_users right in the chat for own
+Deletes a revoked chat invite link. Requires administrator privileges and can_invite_users right in the chat for own
 links and owner privileges for other links.
 */
 	async deleteRevokedChatInviteLink(options: Omit<DeleteRevokedChatInviteLink, '@type'>): Promise<Ok> {
@@ -66927,7 +67719,7 @@ users with the default volume level.
 	}
 
 	/**
-Toggles whether a group call participant hand is rased; for video chats only.
+Toggles whether a group call participant hand is raised; for video chats only.
 */
 	async toggleGroupCallParticipantIsHandRaised(options: Omit<ToggleGroupCallParticipantIsHandRaised, '@type'>): Promise<Ok> {
 		return this._request({
@@ -67993,8 +68785,8 @@ applications only.
 	}
 
 	/**
-Resends the authentication code sent to a phone number. Works only if the previously received authenticationCodeInfo
-next_code_type was not null and the server-specified timeout has passed.
+Resends the authentication code sent to a phone number. Works only if the previously received
+authenticationCodeInfo.next_type was not null and the server-specified timeout has passed.
 */
 	async resendPhoneNumberCode(options: Omit<ResendPhoneNumberCode, '@type'>): Promise<AuthenticationCodeInfo> {
 		return this._request({
@@ -68126,8 +68918,9 @@ Returns information about a business chat link.
 	/**
 Returns an HTTPS link, which can be used to get information about the current user.
 */
-	async getUserLink(): Promise<UserLink> {
+	async getUserLink(options: Omit<GetUserLink, '@type'>): Promise<UserLink> {
 		return this._request({
+			...options,
 			'@type': 'getUserLink',
 		});
 	}
@@ -68139,6 +68932,19 @@ Searches a user by a token from the user's link.
 		return this._request({
 			...options,
 			'@type': 'searchUserByToken',
+		});
+	}
+
+	/**
+Allows the current user to send unpaid messages to the given user, which requires payment for incoming messages, using a
+token from an internal link of the type internalLinkTypePublicChat, internalLinkTypeUserPhoneNumber, or
+internalLinkTypeUserToken. The first message sent to the user will be preceded by a messageUnpaidMessagesAllowedByLink
+message. Repeated calls and calls for the current user have no effect.
+*/
+	async applyUnpaidMessagesToken(options: Omit<ApplyUnpaidMessagesToken, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'applyUnpaidMessagesToken',
 		});
 	}
 
@@ -68572,7 +69378,7 @@ Changes the period of inactivity after which sessions will automatically be term
 	}
 
 	/**
-Returns all website where the current user used Telegram to log in.
+Returns all websites where the current user used Telegram to log in.
 */
 	async getConnectedWebsites(): Promise<ConnectedWebsites> {
 		return this._request({
@@ -68654,7 +69460,7 @@ Changes the sticker set of a supergroup; requires can_change_info administrator 
 
 	/**
 Changes the custom emoji sticker set of a supergroup; requires can_change_info administrator right. The chat must have
-at least chatBoostFeatures.min_custom_emoji_sticker_set_boost_level boost level to pass the corresponding color.
+at least chatBoostFeatures.min_custom_emoji_sticker_set_boost_level boost level to set a custom emoji sticker set.
 */
 	async setSupergroupCustomEmojiStickerSet(options: Omit<SetSupergroupCustomEmojiStickerSet, '@type'>): Promise<Ok> {
 		return this._request({
@@ -69036,6 +69842,17 @@ Sells a gift for Telegram Stars; requires owner privileges for gifts owned by a 
 	}
 
 	/**
+Deletes a gift without receiving Telegram Stars for it. Use receivedGift.can_be_deleted or messageGift.can_be_deleted to
+check whether the gift can be deleted.
+*/
+	async deleteGift(options: Omit<DeleteGift, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'deleteGift',
+		});
+	}
+
+	/**
 Toggles whether a gift is shown on the current user's or the channel's profile page; requires can_post_messages
 administrator right in the channel chat.
 */
@@ -69190,7 +70007,7 @@ Returns information about a received gift.
 	}
 
 	/**
-Returns upgraded gifts of the current user who can be used to craft another gifts.
+Returns upgraded gifts of the current user, which can be used to craft other gifts.
 */
 	async getGiftsForCrafting(options: Omit<GetGiftsForCrafting, '@type'>): Promise<GiftsForCrafting> {
 		return this._request({
@@ -69221,12 +70038,48 @@ Returns information about value of an upgraded gift by its name.
 
 	/**
 Returns a URL for upgraded gift withdrawal in the TON blockchain as an NFT; requires owner privileges for gifts owned by
-a chat.
+a chat. The user must have a valid temporary password; see createTemporaryPassword.
 */
 	async getUpgradedGiftWithdrawalUrl(options: Omit<GetUpgradedGiftWithdrawalUrl, '@type'>): Promise<HttpUrl> {
 		return this._request({
 			...options,
 			'@type': 'getUpgradedGiftWithdrawalUrl',
+		});
+	}
+
+	/**
+Withdraws an upgraded gift to the TON blockchain as an NFT directly to the TON wallet of the current user, which is
+created automatically if the user has no wallet yet; requires owner privileges for gifts owned by a chat. The user must
+have a valid temporary password; see createTemporaryPassword. The gift will be received by the wallet in a few seconds
+after the request succeeds.
+*/
+	async withdrawUpgradedGift(options: Omit<WithdrawUpgradedGift, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'withdrawUpgradedGift',
+		});
+	}
+
+	/**
+Returns information needed to deposit an upgraded gift from the TON wallet of the current user to a Telegram account.
+Use sendTonWalletTransfer to complete transfer of the gift. The gift will be received by the new owner with a message
+about the gift after the transfer is confirmed in the blockchain.
+*/
+	async getUpgradedGiftDepositInfo(options: Omit<GetUpgradedGiftDepositInfo, '@type'>): Promise<UpgradedGiftDepositInfo> {
+		return this._request({
+			...options,
+			'@type': 'getUpgradedGiftDepositInfo',
+		});
+	}
+
+	/**
+Shows an upgraded gift from the TON wallet of the current user on a profile page or hides it from all profile pages; the
+gift remains in the wallet.
+*/
+	async displayUpgradedGift(options: Omit<DisplayUpgradedGift, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'displayUpgradedGift',
 		});
 	}
 
@@ -69447,6 +70300,27 @@ Resets list of installed backgrounds to its default value.
 	}
 
 	/**
+Returns the list of backdrops, which can be used as a background of a theme of the screen for sharing a link to a user
+or a chat.
+*/
+	async getProfileShareThemeBackdrops(): Promise<ProfileShareThemeBackdrops> {
+		return this._request({
+			'@type': 'getProfileShareThemeBackdrops',
+		});
+	}
+
+	/**
+Changes the theme of the screen for sharing a link to the current user or a chat. The chat must have a username.
+Requires can_change_info administrator right in supergroups and channels.
+*/
+	async setProfileShareTheme(options: Omit<SetProfileShareTheme, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setProfileShareTheme',
+		});
+	}
+
+	/**
 Returns information about the current localization target. This is an offline method if only_local is true. Can be
 called before authorization.
 */
@@ -69524,7 +70398,7 @@ authorization.
 	}
 
 	/**
-Adds, edits or deletes a string in a custom local language pack. Can be called before authorization.
+Adds, edits, or deletes a string in a custom local language pack. Can be called before authorization.
 */
 	async setCustomLanguagePackString(options: Omit<SetCustomLanguagePackString, '@type'>): Promise<Ok> {
 		return this._request({
@@ -69860,7 +70734,7 @@ Returns the list of TON wallet transactions of the current user; can be used onl
 	}
 
 	/**
-Returns a TON wallet transaction by their identifier.
+Returns a TON wallet transaction by its identifier.
 */
 	async getTonWalletTransaction(options: Omit<GetTonWalletTransaction, '@type'>): Promise<TonWalletTransaction> {
 		return this._request({
@@ -69870,7 +70744,7 @@ Returns a TON wallet transaction by their identifier.
 	}
 
 	/**
-Returns a TON wallet transaction by their msg_hash; return an error if the transaction isn't finalized yet.
+Returns a TON wallet transaction by its msg_hash; returns an error if the transaction isn't finalized yet.
 */
 	async getTonWalletTransactionByMsgHash(options: Omit<GetTonWalletTransactionByMessageHash, '@type'>): Promise<TonWalletTransaction> {
 		return this._request({
@@ -69940,10 +70814,9 @@ Returns information about a TON wallet with the given address; can be used only 
 	}
 
 	/**
-Returns the secret phrase of the user's TON wallet as a space separated list of words. Works only if
-tonWalletState.can_export_phrase is true.
+Returns the secret phrase of the user's TON wallet. Works only if tonWalletState.can_export_phrase is true.
 */
-	async getTonWalletSecretPhrase(options: Omit<GetTonWalletSecretPhrase, '@type'>): Promise<Text> {
+	async getTonWalletSecretPhrase(options: Omit<GetTonWalletSecretPhrase, '@type'>): Promise<TonWalletSecretPhrase> {
 		return this._request({
 			...options,
 			'@type': 'getTonWalletSecretPhrase',
@@ -69951,7 +70824,7 @@ tonWalletState.can_export_phrase is true.
 	}
 
 	/**
-Returns a challenge which may be used to proof ownership of a TON wallet; can be used only if
+Returns a challenge which may be used to prove ownership of a TON wallet; can be used only if
 getOption("can_use_ton_wallet").
 */
 	async getTonWalletOwnershipProofChallenge(): Promise<TonWalletOwnershipProofChallenge> {
@@ -70042,6 +70915,29 @@ Returns NFTs stored on the TON wallet of the user; can be used only if getOption
 	}
 
 	/**
+Returns names of upgraded gift collections whose NFTs can be used as background_nft_address in setTonWalletCardStickers;
+can be used only if getOption("can_use_ton_wallet").
+*/
+	async getTonWalletCardBackgroundGiftCollectionNames(): Promise<UpgradedGiftCollectionNames> {
+		return this._request({
+			'@type': 'getTonWalletCardBackgroundGiftCollectionNames',
+		});
+	}
+
+	/**
+Changes the list of stickers on the TON wallet card of the current user; can be used only if
+getOption("can_use_ton_wallet"). The whole list of stickers is replaced. The request can take up to 20 seconds to
+complete, so it must be called only on explicit user action. Stickers are removed automatically if the corresponding NFT
+leaves the wallet or the wallet is replaced. Returns the updated card.
+*/
+	async setTonWalletCardStickers(options: Omit<SetTonWalletCardStickers, '@type'>): Promise<TonWalletCard> {
+		return this._request({
+			...options,
+			'@type': 'setTonWalletCardStickers',
+		});
+	}
+
+	/**
 Returns active TON Connect sessions; can be used only if getOption("can_use_ton_wallet").
 */
 	async getTonConnectSessions(): Promise<TonConnectSessions> {
@@ -70062,7 +70958,7 @@ Creates a TON Connect session; can be used only if getOption("can_use_ton_wallet
 
 	/**
 Sets wallet_client_id for a pending TON Connect session. Then, sendTonConnectSessionConnectResult must be used to accept
-or reject the session.
+or reject the session. If the session was created for an OAuth request, then acceptOauthRequest must be used instead.
 */
 	async setTonConnectSessionWalletClientId(options: Omit<SetTonConnectSessionWalletClientId, '@type'>): Promise<TonConnectChallenge> {
 		return this._request({
@@ -70172,7 +71068,7 @@ Returns the available on-ramp payment methods based on the current user location
 	}
 
 	/**
-Returns the limits for an on-ramp payment; only for providers that supports limits retrieval.
+Returns the limits for an on-ramp payment; only for providers that support limits retrieval.
 */
 	async getOnRampPaymentLimits(options: Omit<GetOnRampPaymentLimits, '@type'>): Promise<OnRampPaymentLimits> {
 		return this._request({
@@ -70182,7 +71078,7 @@ Returns the limits for an on-ramp payment; only for providers that supports limi
 	}
 
 	/**
-Returns a quote for an on-ramp payment; only for providers that supports quote retrieval.
+Returns a quote for an on-ramp payment; only for providers that support quote retrieval.
 */
 	async getOnRampPaymentQuote(options: Omit<GetOnRampPaymentQuote, '@type'>): Promise<OnRampPaymentQuote> {
 		return this._request({
@@ -71256,7 +72152,7 @@ for testing. Returns a 404 error for unknown links. Can be called before authori
 	}
 
 	/**
-Dismissess a received web token without consumption; for official Telegram apps only.
+Dismisses a received web token without consumption; for official Telegram apps only.
 */
 	async dismissWebToken(options: Omit<DismissWebToken, '@type'>): Promise<Ok> {
 		return this._request({
@@ -71359,6 +72255,28 @@ Computes time needed to receive a response from a Telegram server through a prox
 		return this._request({
 			...options,
 			'@type': 'pingProxy',
+		});
+	}
+
+	/**
+Passes a message, which the page of a web proxy carrier passed to postMessage of the bridge object, to TDLib. Must be
+called in the order in which the messages were passed. Can be called before authorization.
+*/
+	async processWebProxyCarrierMessage(options: Omit<ProcessWebProxyCarrierMessage, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'processWebProxyCarrierMessage',
+		});
+	}
+
+	/**
+Reports that a web proxy carrier failed. TDLib closes the carrier and decides whether and when to request a new one. Can
+be called before authorization.
+*/
+	async reportWebProxyCarrierError(options: Omit<ReportWebProxyCarrierError, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'reportWebProxyCarrierError',
 		});
 	}
 
