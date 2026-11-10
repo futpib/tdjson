@@ -302,6 +302,32 @@ List of text entities.
 }
 
 /**
+Describes a part of a text.
+*/
+export interface TextRange {
+	'@type': 'textRange';
+	/**
+Offset of the part, in UTF-16 code units.
+*/
+	offset: number;
+	/**
+Length of the part, in UTF-16 code units.
+*/
+	length: number;
+}
+
+/**
+Contains a list of text parts.
+*/
+export interface TextRanges {
+	'@type': 'textRanges';
+	/**
+List of text parts.
+*/
+	ranges: TextRange[];
+}
+
+/**
 A text with some entities.
 */
 export interface FormattedText {
@@ -2541,6 +2567,10 @@ True, if the bot has topics.
 */
 	has_topics?: boolean;
 	/**
+True, if the bot has topics, which are shown in a sidebar.
+*/
+	has_topic_sidebar?: boolean;
+	/**
 True, if users can create and delete topics in the chat with the bot.
 */
 	allows_users_to_create_topics?: boolean;
@@ -3391,7 +3421,7 @@ True, if the user can send polls and checklists.
 */
 	can_send_polls?: boolean;
 	/**
-True, if the user can send animations, games, stickers, and dice and use inline bots.
+True, if the user can send animations, games, stickers, widgets, and dice and use inline bots.
 */
 	can_send_other_messages?: boolean;
 	/**
@@ -5277,7 +5307,7 @@ Body of the NFT transfer message.
 The amount of TON Grams that must be attached to the message to cover fees, in the smallest units of the cryptocurrency;
 excess amount will be returned to the wallet.
 */
-	gram_amount: number;
+	gram_amount: string;
 }
 
 /**
@@ -7416,7 +7446,7 @@ Public key of the wallet; may be empty if none.
 	/**
 The total amount of owned TON Grams, in the smallest units of the cryptocurrency.
 */
-	gram_amount: number;
+	gram_amount: string;
 	/**
 True, if the wallet is being created.
 */
@@ -7553,7 +7583,7 @@ Address of the wallet.
 	/**
 Balance of the wallet, in the smallest units of the cryptocurrency; may be slightly outdated.
 */
-	gram_amount: number;
+	gram_amount: string;
 	/**
 Stickers placed on the card.
 */
@@ -7622,7 +7652,7 @@ export interface TonWalletTransactionTypeOnRampDeposit {
 	/**
 The amount of received cryptocurrency, in the smallest units of the cryptocurrency.
 */
-	amount: number;
+	amount: string;
 	/**
 Name of the on-ramp provider.
 */
@@ -7638,7 +7668,7 @@ export interface TonWalletTransactionTypeTransfer {
 	/**
 The amount of received cryptocurrency, in the smallest units of the cryptocurrency; negative for outgoing transactions.
 */
-	amount: number;
+	amount: string;
 	/**
 True, if the fee was paid by Telegram.
 */
@@ -7735,7 +7765,7 @@ Point in time (Unix timestamp) when the transaction was completed.
 	/**
 The fee amount paid for the transaction in TON Grams, in the smallest units of the cryptocurrency.
 */
-	fee_amount: number;
+	fee_amount: string;
 	/**
 State of the transaction.
 */
@@ -7754,7 +7784,7 @@ export interface TonWalletTransactions {
 	/**
 The total amount of owned TON Grams, in the smallest units of the cryptocurrency.
 */
-	gram_amount: number;
+	gram_amount: string;
 	/**
 List of transactions.
 */
@@ -8354,6 +8384,209 @@ The minimum chat boost level required to use the color in a channel chat.
 }
 
 /**
+Describes the types of chats to which notification settings are relevant.
+Subtype of {@link NotificationSettingsScope}.
+*/
+export interface NotificationSettingsScopePrivateChats {
+	'@type': 'notificationSettingsScopePrivateChats';
+
+}
+
+/**
+Notification settings applied to all basic group and supergroup chats when the corresponding chat setting has a default
+value.
+Subtype of {@link NotificationSettingsScope}.
+*/
+export interface NotificationSettingsScopeGroupChats {
+	'@type': 'notificationSettingsScopeGroupChats';
+
+}
+
+/**
+Notification settings applied to all channel chats when the corresponding chat setting has a default value.
+Subtype of {@link NotificationSettingsScope}.
+*/
+export interface NotificationSettingsScopeChannelChats {
+	'@type': 'notificationSettingsScopeChannelChats';
+
+}
+
+/**
+Contains information about notification settings for a chat or a forum topic.
+*/
+export interface ChatNotificationSettings {
+	'@type': 'chatNotificationSettings';
+	/**
+If true, the value for the topic's chat, the chat's community, or the relevant type of chat is used instead of mute_for.
+*/
+	use_default_mute_for?: boolean;
+	/**
+Time left before notifications will be unmuted, in seconds.
+*/
+	mute_for: number;
+	/**
+If true, the value for the topic's chat, the chat's community, or the relevant type of chat is used instead of sound_id.
+*/
+	use_default_sound?: boolean;
+	/**
+Identifier of the notification sound to be played for messages; 0 if sound is disabled.
+*/
+	sound_id: string;
+	/**
+If true, the value for the topic's chat, the chat's community, or the relevant type of chat is used instead of
+show_preview.
+*/
+	use_default_show_preview?: boolean;
+	/**
+True, if message content must be displayed in notifications.
+*/
+	show_preview?: boolean;
+	/**
+If true, the value for the chat's community or the relevant type of chat is used instead of mute_stories.
+*/
+	use_default_mute_stories?: boolean;
+	/**
+True, if story notifications are disabled for the chat.
+*/
+	mute_stories?: boolean;
+	/**
+If true, the value for the chat's community or the relevant type of chat is used instead of story_sound_id.
+*/
+	use_default_story_sound?: boolean;
+	/**
+Identifier of the notification sound to be played for stories; 0 if sound is disabled.
+*/
+	story_sound_id: string;
+	/**
+If true, the value for the chat's community or the relevant type of chat is used instead of show_story_poster.
+*/
+	use_default_show_story_poster?: boolean;
+	/**
+True, if the chat that posted a story must be displayed in notifications.
+*/
+	show_story_poster?: boolean;
+	/**
+If true, the value for the topic's chat, the chat's community, or the relevant type of chat is used instead of
+disable_pinned_message_notifications.
+*/
+	use_default_disable_pinned_message_notifications?: boolean;
+	/**
+If true, notifications for incoming pinned messages will be created as for an ordinary unread message.
+*/
+	disable_pinned_message_notifications?: boolean;
+	/**
+If true, the value for the topic's chat, the chat's community, or the relevant type of chat is used instead of
+disable_mention_notifications.
+*/
+	use_default_disable_mention_notifications?: boolean;
+	/**
+If true, notifications for messages with mentions will be created as for an ordinary unread message.
+*/
+	disable_mention_notifications?: boolean;
+}
+
+/**
+Contains information about notification settings for several chats.
+*/
+export interface ScopeNotificationSettings {
+	'@type': 'scopeNotificationSettings';
+	/**
+Time left before notifications will be unmuted, in seconds.
+*/
+	mute_for: number;
+	/**
+Identifier of the notification sound to be played; 0 if sound is disabled; pass -1 to use the app-dependent default
+sound.
+*/
+	sound_id: string;
+	/**
+True, if message content must be displayed in notifications.
+*/
+	show_preview?: boolean;
+	/**
+If true, story notifications are received only for the first 5 chats from topChatCategoryUsers regardless of the value
+of mute_stories.
+*/
+	use_default_mute_stories?: boolean;
+	/**
+True, if story notifications are disabled.
+*/
+	mute_stories?: boolean;
+	/**
+Identifier of the notification sound to be played for stories; 0 if sound is disabled; pass -1 to use the app-dependent
+default sound.
+*/
+	story_sound_id: string;
+	/**
+True, if the chat that posted a story must be displayed in notifications.
+*/
+	show_story_poster?: boolean;
+	/**
+True, if notifications for incoming pinned messages will be created as for an ordinary unread message.
+*/
+	disable_pinned_message_notifications?: boolean;
+	/**
+True, if notifications for messages with mentions will be created as for an ordinary unread message.
+*/
+	disable_mention_notifications?: boolean;
+}
+
+/**
+Describes sources of reactions for which notifications will be shown.
+Subtype of {@link ReactionNotificationSource}.
+*/
+export interface ReactionNotificationSourceNone {
+	'@type': 'reactionNotificationSourceNone';
+
+}
+
+/**
+Notifications for reactions are shown only for reactions from contacts.
+Subtype of {@link ReactionNotificationSource}.
+*/
+export interface ReactionNotificationSourceContacts {
+	'@type': 'reactionNotificationSourceContacts';
+
+}
+
+/**
+Notifications for reactions are shown for all reactions.
+Subtype of {@link ReactionNotificationSource}.
+*/
+export interface ReactionNotificationSourceAll {
+	'@type': 'reactionNotificationSourceAll';
+
+}
+
+/**
+Contains information about notification settings for reactions and poll votes.
+*/
+export interface ReactionNotificationSettings {
+	'@type': 'reactionNotificationSettings';
+	/**
+Source of message reactions for which notifications are shown.
+*/
+	message_reaction_source: ReactionNotificationSource;
+	/**
+Source of story reactions for which notifications are shown.
+*/
+	story_reaction_source: ReactionNotificationSource;
+	/**
+Source of poll votes for which notifications are shown.
+*/
+	poll_vote_source: ReactionNotificationSource;
+	/**
+Identifier of the notification sound to be played; 0 if sound is disabled; pass -1 to use the app-dependent default
+sound.
+*/
+	sound_id: string;
+	/**
+True, if reaction sender and emoji must be displayed in notifications.
+*/
+	show_preview?: boolean;
+}
+
+/**
 Contains identifier of a community.
 */
 export interface CommunityId {
@@ -8490,6 +8723,10 @@ Status of the current user in the community.
 Actions that non-administrator community members are allowed to take in the community.
 */
 	permissions: CommunityPermissions;
+	/**
+True, if all chats of the community are collapsed into one entry in the chat list.
+*/
+	are_chats_collapsed?: boolean;
 }
 
 /**
@@ -8537,6 +8774,80 @@ Number of pending requests for addition of chats to the community; 0 if the curr
 community.
 */
 	add_chat_request_count: number;
+	/**
+Notification settings for the community. Default notification settings are chosen based on the type of a chat in the
+community.
+*/
+	notification_settings: ChatNotificationSettings;
+}
+
+/**
+Represents a list of communities.
+*/
+export interface Communities {
+	'@type': 'communities';
+	/**
+List of community identifiers.
+*/
+	community_ids: number[];
+}
+
+/**
+Describes a request to add a chat to a community.
+*/
+export interface CommunityAddChatRequest {
+	'@type': 'communityAddChatRequest';
+	/**
+Identifier of the chat to be added.
+*/
+	chat_id: number;
+	/**
+True, if the chat will be visible only to administrators of the community.
+*/
+	is_hidden?: boolean;
+	/**
+Identifier of the user who sent the request.
+*/
+	sender_user_id: number;
+	/**
+Point in time (Unix timestamp) when the request was sent.
+*/
+	date: number;
+}
+
+/**
+Contains a list of requests to add chats to a community.
+*/
+export interface CommunityAddChatRequests {
+	'@type': 'communityAddChatRequests';
+	/**
+Approximate total number of requests found.
+*/
+	total_count: number;
+	/**
+List of the requests.
+*/
+	requests: CommunityAddChatRequest[];
+	/**
+The offset for the next getCommunityAddChatRequests request. If empty, then there are no more results.
+*/
+	next_offset: string;
+}
+
+/**
+Contains information about chats in a community, which are joined or owned by a member of the community.
+*/
+export interface CommunityMemberChats {
+	'@type': 'communityMemberChats';
+	/**
+Identifiers of the chats owned by the member. The chats will be removed from the community if the member is banned in
+the community.
+*/
+	owned_chat_ids: number[];
+	/**
+Identifiers of the non-owned chats joined by the member.
+*/
+	joined_chat_ids: number[];
 }
 
 /**
@@ -9980,6 +10291,10 @@ True, if the supergroup is a forum, which topics are shown in the same way as in
 */
 	has_forum_tabs?: boolean;
 	/**
+True, if the supergroup is a forum, which topics are shown in a sidebar. If true, then has_forum_tabs is false.
+*/
+	has_forum_sidebar?: boolean;
+	/**
 Information about the restrictions that must be applied to the corresponding supergroup or channel chat; may be null if
 none.
 */
@@ -11054,7 +11369,7 @@ Media content of the message if the message was from another chat or topic; may 
 and messages without media. Can be only one of the following types: messageAnimation, messageAudio, messageChecklist,
 messageContact, messageDice, messageDocument, messageGame, messageGiveaway, messageGiveawayWinners, messageInvoice,
 messageLocation, messagePaidMedia, messagePhoto, messagePoll, messageStakeDice, messageSticker, messageStory,
-messageText (for link preview), messageVenue, messageVideo, messageVideoNote, or messageVoiceNote.
+messageText (for link preview), messageVenue, messageVideo, messageVideoNote, messageVoiceNote, or messageWidget.
 */
 	content: MessageContent;
 }
@@ -11971,207 +12286,6 @@ The list of files.
 The offset for the next request. If empty, then there are no more results.
 */
 	next_offset: string;
-}
-
-/**
-Describes the types of chats to which notification settings are relevant.
-Subtype of {@link NotificationSettingsScope}.
-*/
-export interface NotificationSettingsScopePrivateChats {
-	'@type': 'notificationSettingsScopePrivateChats';
-
-}
-
-/**
-Notification settings applied to all basic group and supergroup chats when the corresponding chat setting has a default
-value.
-Subtype of {@link NotificationSettingsScope}.
-*/
-export interface NotificationSettingsScopeGroupChats {
-	'@type': 'notificationSettingsScopeGroupChats';
-
-}
-
-/**
-Notification settings applied to all channel chats when the corresponding chat setting has a default value.
-Subtype of {@link NotificationSettingsScope}.
-*/
-export interface NotificationSettingsScopeChannelChats {
-	'@type': 'notificationSettingsScopeChannelChats';
-
-}
-
-/**
-Contains information about notification settings for a chat or a forum topic.
-*/
-export interface ChatNotificationSettings {
-	'@type': 'chatNotificationSettings';
-	/**
-If true, the value for the relevant type of chat or the forum chat is used instead of mute_for.
-*/
-	use_default_mute_for?: boolean;
-	/**
-Time left before notifications will be unmuted, in seconds.
-*/
-	mute_for: number;
-	/**
-If true, the value for the relevant type of chat or the forum chat is used instead of sound_id.
-*/
-	use_default_sound?: boolean;
-	/**
-Identifier of the notification sound to be played for messages; 0 if sound is disabled.
-*/
-	sound_id: string;
-	/**
-If true, the value for the relevant type of chat or the forum chat is used instead of show_preview.
-*/
-	use_default_show_preview?: boolean;
-	/**
-True, if message content must be displayed in notifications.
-*/
-	show_preview?: boolean;
-	/**
-If true, the value for the relevant type of chat is used instead of mute_stories.
-*/
-	use_default_mute_stories?: boolean;
-	/**
-True, if story notifications are disabled for the chat.
-*/
-	mute_stories?: boolean;
-	/**
-If true, the value for the relevant type of chat is used instead of story_sound_id.
-*/
-	use_default_story_sound?: boolean;
-	/**
-Identifier of the notification sound to be played for stories; 0 if sound is disabled.
-*/
-	story_sound_id: string;
-	/**
-If true, the value for the relevant type of chat is used instead of show_story_poster.
-*/
-	use_default_show_story_poster?: boolean;
-	/**
-True, if the chat that posted a story must be displayed in notifications.
-*/
-	show_story_poster?: boolean;
-	/**
-If true, the value for the relevant type of chat or the forum chat is used instead of
-disable_pinned_message_notifications.
-*/
-	use_default_disable_pinned_message_notifications?: boolean;
-	/**
-If true, notifications for incoming pinned messages will be created as for an ordinary unread message.
-*/
-	disable_pinned_message_notifications?: boolean;
-	/**
-If true, the value for the relevant type of chat or the forum chat is used instead of disable_mention_notifications.
-*/
-	use_default_disable_mention_notifications?: boolean;
-	/**
-If true, notifications for messages with mentions will be created as for an ordinary unread message.
-*/
-	disable_mention_notifications?: boolean;
-}
-
-/**
-Contains information about notification settings for several chats.
-*/
-export interface ScopeNotificationSettings {
-	'@type': 'scopeNotificationSettings';
-	/**
-Time left before notifications will be unmuted, in seconds.
-*/
-	mute_for: number;
-	/**
-Identifier of the notification sound to be played; 0 if sound is disabled; pass -1 to use the app-dependent default
-sound.
-*/
-	sound_id: string;
-	/**
-True, if message content must be displayed in notifications.
-*/
-	show_preview?: boolean;
-	/**
-If true, story notifications are received only for the first 5 chats from topChatCategoryUsers regardless of the value
-of mute_stories.
-*/
-	use_default_mute_stories?: boolean;
-	/**
-True, if story notifications are disabled.
-*/
-	mute_stories?: boolean;
-	/**
-Identifier of the notification sound to be played for stories; 0 if sound is disabled; pass -1 to use the app-dependent
-default sound.
-*/
-	story_sound_id: string;
-	/**
-True, if the chat that posted a story must be displayed in notifications.
-*/
-	show_story_poster?: boolean;
-	/**
-True, if notifications for incoming pinned messages will be created as for an ordinary unread message.
-*/
-	disable_pinned_message_notifications?: boolean;
-	/**
-True, if notifications for messages with mentions will be created as for an ordinary unread message.
-*/
-	disable_mention_notifications?: boolean;
-}
-
-/**
-Describes sources of reactions for which notifications will be shown.
-Subtype of {@link ReactionNotificationSource}.
-*/
-export interface ReactionNotificationSourceNone {
-	'@type': 'reactionNotificationSourceNone';
-
-}
-
-/**
-Notifications for reactions are shown only for reactions from contacts.
-Subtype of {@link ReactionNotificationSource}.
-*/
-export interface ReactionNotificationSourceContacts {
-	'@type': 'reactionNotificationSourceContacts';
-
-}
-
-/**
-Notifications for reactions are shown for all reactions.
-Subtype of {@link ReactionNotificationSource}.
-*/
-export interface ReactionNotificationSourceAll {
-	'@type': 'reactionNotificationSourceAll';
-
-}
-
-/**
-Contains information about notification settings for reactions and poll votes.
-*/
-export interface ReactionNotificationSettings {
-	'@type': 'reactionNotificationSettings';
-	/**
-Source of message reactions for which notifications are shown.
-*/
-	message_reaction_source: ReactionNotificationSource;
-	/**
-Source of story reactions for which notifications are shown.
-*/
-	story_reaction_source: ReactionNotificationSource;
-	/**
-Source of poll votes for which notifications are shown.
-*/
-	poll_vote_source: ReactionNotificationSource;
-	/**
-Identifier of the notification sound to be played; 0 if sound is disabled; pass -1 to use the app-dependent default
-sound.
-*/
-	sound_id: string;
-	/**
-True, if reaction sender and emoji must be displayed in notifications.
-*/
-	show_preview?: boolean;
 }
 
 /**
@@ -13821,7 +13935,7 @@ Approximate number of unread messages in the message thread.
 	unread_message_count: number;
 	/**
 The messages from which the thread starts. The messages are returned in reverse chronological order (i.e., in order of
-decreasing message_id).
+decreasing message.id).
 */
 	messages: Message[];
 	/**
@@ -18767,6 +18881,58 @@ True, if the story was automatically forwarded because of a mention of the user.
 }
 
 /**
+A message with an HTML widget.
+Subtype of {@link MessageContent}.
+*/
+export interface MessageWidget {
+	'@type': 'messageWidget';
+	/**
+Width of the widget; 0 if the widget must occupy the whole width of the message bubble.
+*/
+	width: number;
+	/**
+Height of the widget; 0 if the height of the widget isn't fixed.
+*/
+	height: number;
+	/**
+HTML code of the widget.
+*/
+	html: string;
+	/**
+Public data of the widget.
+*/
+	public_data: string;
+	/**
+Data of the widget, which is specific to the chat.
+*/
+	chat_data: string;
+	/**
+Identifier of the shared widget; 0 if the widget isn't shared.
+*/
+	widget_id: string;
+	/**
+Widget caption.
+*/
+	caption: FormattedText;
+	/**
+True, if the caption must be shown above the widget; otherwise, the caption must be shown below the widget.
+*/
+	show_caption_above_media?: boolean;
+	/**
+True, if the message is a copy of the widget.
+*/
+	is_copy?: boolean;
+	/**
+True, if the widget can send queries to the bot.
+*/
+	can_send_queries?: boolean;
+	/**
+True, if the widget can send queries to the bot in the background.
+*/
+	can_send_background_queries?: boolean;
+}
+
+/**
 A message with a checklist.
 Subtype of {@link MessageContent}.
 */
@@ -19882,7 +20048,7 @@ Address in the TON blockchain of the transaction peer.
 	/**
 The amount of received cryptocurrency, in the smallest units of the cryptocurrency; negative for outgoing transactions.
 */
-	amount: number;
+	amount: string;
 	/**
 Comment added to the transaction.
 */
@@ -20813,7 +20979,7 @@ A thumbnail to be sent along with a file; must be in JPEG or WEBP format for sti
 export interface InputThumbnail {
 	'@type': 'inputThumbnail';
 	/**
-Thumbnail file to send. Sending thumbnails by file_id is currently not supported.
+Thumbnail file to send. Sending thumbnails by inputFileId or inputFileRemote is currently not supported.
 */
 	thumbnail: InputFile;
 	/**
@@ -22264,6 +22430,75 @@ The checklist to send.
 }
 
 /**
+A message with an HTML widget; for bots only.
+Subtype of {@link InputMessageContent}.
+*/
+export interface InputMessageWidget {
+	'@type': 'inputMessageWidget';
+	/**
+Width of the widget; 0 if the widget must occupy the whole width of the message bubble.
+*/
+	width: number;
+	/**
+Height of the widget; 0 if the height of the widget isn't fixed.
+*/
+	height: number;
+	/**
+HTML code of the widget; 1-32768 bytes; must not exceed 4096 bytes when compressed by zlib with the maximal compression
+level.
+*/
+	html: string;
+	/**
+Public data of the widget, which will be available in copies and forwards of the message.
+*/
+	public_data: string;
+	/**
+Data of the widget, which is specific to the chat.
+*/
+	chat_data: string;
+	/**
+Widget caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
+*/
+	caption: FormattedText;
+	/**
+True, if the caption must be shown above the widget; otherwise, the caption must be shown below the widget.
+*/
+	show_caption_above_media?: boolean;
+	/**
+Pass true to allow the widget to send queries to the bot.
+*/
+	allow_queries?: boolean;
+	/**
+Pass true to create a shared widget, which can be sent again by its identifier.
+*/
+	is_shared?: boolean;
+}
+
+/**
+A message with an existing shared widget; for bots only.
+Subtype of {@link InputMessageContent}.
+*/
+export interface InputMessageSharedWidget {
+	'@type': 'inputMessageSharedWidget';
+	/**
+Identifier of the shared widget.
+*/
+	widget_id: string;
+	/**
+Data of the widget, which is specific to the chat.
+*/
+	chat_data: string;
+	/**
+Widget caption; pass null to use an empty caption; 0-getOption("message_caption_length_max") characters.
+*/
+	caption: FormattedText;
+	/**
+True, if the caption must be shown above the widget; otherwise, the caption must be shown below the widget.
+*/
+	show_caption_above_media?: boolean;
+}
+
+/**
 A forwarded message.
 Subtype of {@link InputMessageContent}.
 */
@@ -23427,22 +23662,6 @@ Address of the location; pass null if unknown.
 }
 
 /**
-An area pointing to a venue found by the bot getOption("venue_search_bot_username").
-Subtype of {@link InputStoryAreaType}.
-*/
-export interface InputStoryAreaTypeFoundVenue {
-	'@type': 'inputStoryAreaTypeFoundVenue';
-	/**
-Identifier of the inline query, used to find the venue.
-*/
-	query_id: string;
-	/**
-Identifier of the inline query result.
-*/
-	result_id: string;
-}
-
-/**
 An area pointing to a venue already added to the story.
 Subtype of {@link InputStoryAreaType}.
 */
@@ -23559,12 +23778,11 @@ Contains a list of story areas to be added.
 export interface InputStoryAreas {
 	'@type': 'inputStoryAreas';
 	/**
-List of input story areas. Currently, a story can have up to 10 inputStoryAreaTypeLocation,
-inputStoryAreaTypeFoundVenue, and inputStoryAreaTypePreviousVenue areas, up to
-getOption("story_suggested_reaction_area_count_max") inputStoryAreaTypeSuggestedReaction areas, up to 1
-inputStoryAreaTypeMessage area, up to getOption("story_link_area_count_max") inputStoryAreaTypeLink areas if the current
-user is a Telegram Premium user, up to 3 inputStoryAreaTypeWeather areas, and up to 1 inputStoryAreaTypeUpgradedGift
-area.
+List of input story areas. Currently, a story can have up to 10 inputStoryAreaTypeLocation and
+inputStoryAreaTypePreviousVenue areas, up to getOption("story_suggested_reaction_area_count_max")
+inputStoryAreaTypeSuggestedReaction areas, up to 1 inputStoryAreaTypeMessage area, up to
+getOption("story_link_area_count_max") inputStoryAreaTypeLink areas if the current user is a Telegram Premium user, up
+to 3 inputStoryAreaTypeWeather areas, and up to 1 inputStoryAreaTypeUpgradedGift area.
 */
 	areas: InputStoryArea[];
 }
@@ -23948,6 +24166,10 @@ Caption of the story.
 */
 	caption: FormattedText;
 	/**
+Music attached to the story; may be null if none.
+*/
+	music: Audio;
+	/**
 Identifiers of story albums to which the story is added; only for manageable stories.
 */
 	album_ids: number[];
@@ -24078,7 +24300,7 @@ Identifier of the story list in which the stories are shown; may be null if the 
 	list: StoryList;
 	/**
 A parameter used to determine order of the stories in the story list; 0 if the stories don't need to be shown in the
-story list. Stories must be sorted by the pair (order, story_poster_chat_id) in descending order.
+story list. Stories must be sorted by the pair (order, chat_id) in descending order.
 */
 	order: number;
 	/**
@@ -26053,6 +26275,17 @@ recognized.
 }
 
 /**
+Contains a list of probable languages of speech.
+*/
+export interface SpeechRecognitionLanguages {
+	'@type': 'speechRecognitionLanguages';
+	/**
+IETF language tags of the languages in descending order of their probability; for example, "en-US".
+*/
+	language_codes: string[];
+}
+
+/**
 Describes a connection of the bot with a business account.
 */
 export interface BusinessConnection {
@@ -26374,8 +26607,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageAnimation, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
-inputMessageContact.
+inputMessageAnimation, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue,
+inputMessageWidget, inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26420,7 +26653,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or inputMessageContact.
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, inputMessageWidget,
+inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26457,8 +26691,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageAudio, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
-inputMessageContact.
+inputMessageAudio, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue,
+inputMessageWidget, inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26495,7 +26729,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or inputMessageContact.
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, inputMessageWidget,
+inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26544,8 +26779,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageDocument, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
-inputMessageContact.
+inputMessageDocument, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue,
+inputMessageWidget, inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26610,7 +26845,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or inputMessageContact.
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, inputMessageWidget,
+inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26655,8 +26891,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessagePhoto, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
-inputMessageContact.
+inputMessagePhoto, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue,
+inputMessageWidget, inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26693,8 +26929,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageSticker, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
-inputMessageContact.
+inputMessageSticker, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue,
+inputMessageWidget, inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26731,7 +26967,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or inputMessageContact.
+inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, inputMessageWidget,
+inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26784,8 +27021,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageVideo, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
-inputMessageContact.
+inputMessageVideo, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue,
+inputMessageWidget, inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -26818,8 +27055,8 @@ The message reply markup; pass null if none. Must be of type replyMarkupInlineKe
 	reply_markup: ReplyMarkup;
 	/**
 The content of the message to be sent. Must be one of the following types: inputMessageText, inputMessageRichMessage,
-inputMessageVoiceNote, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue, or
-inputMessageContact.
+inputMessageVoiceNote, inputMessageInvoice, inputMessageLiveLocation, inputMessageLocation, inputMessageVenue,
+inputMessageWidget, inputMessageSharedWidget, or inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -27240,6 +27477,99 @@ True, if an alert must be shown to the user instead of a toast notification.
 URL to be opened.
 */
 	url: string;
+}
+
+/**
+Describes a TON wallet of the user, who is used in a widget query.
+*/
+export interface WidgetQueryWallet {
+	'@type': 'widgetQueryWallet';
+	/**
+Address of the wallet.
+*/
+	address: string;
+	/**
+Balance of the wallet, in the smallest units of the cryptocurrency.
+*/
+	gram_amount: string;
+	/**
+Public key of the wallet; may be empty if unknown.
+*/
+	public_key: string;
+	/**
+Serialized StateInit of the wallet contract; must be empty if and only if public_key is empty.
+*/
+	state_init: string;
+}
+
+/**
+Describes type of a widget query.
+Subtype of {@link WidgetQueryType}.
+*/
+export interface WidgetQueryTypeData {
+	'@type': 'widgetQueryTypeData';
+	/**
+True, if the TON wallet card of the user who sends the query is sent to the bot along with the query.
+*/
+	with_wallet?: boolean;
+}
+
+/**
+The query contains data signed by a TON wallet of the user who sends the query.
+Subtype of {@link WidgetQueryType}.
+*/
+export interface WidgetQueryTypeSignData {
+	'@type': 'widgetQueryTypeSignData';
+	/**
+The wallet that signed the data.
+*/
+	wallet: WidgetQueryWallet;
+	/**
+JSON-serialized signed data.
+*/
+	sign_data: string;
+}
+
+/**
+The query notifies the bot about a transaction sent from a TON wallet of the user who sends the query.
+Subtype of {@link WidgetQueryType}.
+*/
+export interface WidgetQueryTypeSentTransaction {
+	'@type': 'widgetQueryTypeSentTransaction';
+	/**
+The wallet from which the transaction was sent.
+*/
+	wallet: WidgetQueryWallet;
+	/**
+Value of msg_hash of the transaction.
+*/
+	msg_hash: string;
+}
+
+/**
+Contains an answer to a widget query.
+*/
+export interface WidgetQueryAnswer {
+	'@type': 'widgetQueryAnswer';
+	/**
+Data returned by the bot.
+*/
+	data: string;
+}
+
+/**
+Contains public data of a widget.
+*/
+export interface WidgetPublicData {
+	'@type': 'widgetPublicData';
+	/**
+Public data of the widget.
+*/
+	data: string;
+	/**
+The number of seconds after which the public data can be polled again.
+*/
+	poll_period: number;
 }
 
 /**
@@ -33343,7 +33673,7 @@ Chosen receiver of the transfer; may be null if none.
 	/**
 The pre-filled amount of TON Grams to send; in the smallest units of the cryptocurrency.
 */
-	gram_amount: number;
+	gram_amount: string;
 }
 
 /**
@@ -38586,6 +38916,23 @@ Point in time (Unix timestamp) when the weekly number of tries will reset; 0 if 
 }
 
 /**
+Speech in an audio file was partially recognized. The final result will be returned by the corresponding
+recognizeSpeechInFile request.
+Subtype of {@link Update}.
+*/
+export interface UpdateSpeechRecognitionInFile {
+	'@type': 'updateSpeechRecognitionInFile';
+	/**
+Identifier of the speech recognition as specified in recognizeSpeechInFile.
+*/
+	recognition_id: string;
+	/**
+Partially recognized text.
+*/
+	partial_text: string;
+}
+
+/**
 The levels of live story group call messages have changed.
 Subtype of {@link Update}.
 */
@@ -38964,6 +39311,130 @@ An identifier uniquely corresponding to the chat a message was sent to.
 Query payload.
 */
 	payload: CallbackQueryPayload;
+}
+
+/**
+A new incoming widget query; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdateNewWidgetQuery {
+	'@type': 'updateNewWidgetQuery';
+	/**
+Unique query identifier.
+*/
+	id: string;
+	/**
+Identifier of the user who sent the query.
+*/
+	sender_user_id: number;
+	/**
+Identifier of the chat where the query was sent.
+*/
+	chat_id: number;
+	/**
+Identifier of the message from which the query originated.
+*/
+	message_id: number;
+	/**
+Identifier that uniquely corresponds to the chat to which the message was sent.
+*/
+	chat_instance: string;
+	/**
+Type of the chat to which the message was sent.
+*/
+	chat_type: string;
+	/**
+Type of the query.
+*/
+	query_type: WidgetQueryType;
+	/**
+Data of the query.
+*/
+	data: string;
+	/**
+Identifier of the shared widget from which the query originated; 0 if the widget isn't shared.
+*/
+	widget_id: string;
+	/**
+TON wallet card of the user who sent the query; may be null if none.
+*/
+	wallet_card: TonWalletCard;
+}
+
+/**
+A new incoming widget query from a message sent via a bot; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdateNewInlineWidgetQuery {
+	'@type': 'updateNewInlineWidgetQuery';
+	/**
+Unique query identifier.
+*/
+	id: string;
+	/**
+Identifier of the user who sent the query.
+*/
+	sender_user_id: number;
+	/**
+Identifier of the inline message from which the query originated.
+*/
+	inline_message_id: string;
+	/**
+Identifier that uniquely corresponds to the chat to which the message was sent.
+*/
+	chat_instance: string;
+	/**
+Type of the chat to which the message was sent.
+*/
+	chat_type: string;
+	/**
+Type of the query.
+*/
+	query_type: WidgetQueryType;
+	/**
+Data of the query.
+*/
+	data: string;
+	/**
+Identifier of the shared widget from which the query originated; 0 if the widget isn't shared.
+*/
+	widget_id: string;
+	/**
+TON wallet card of the user who sent the query; may be null if none.
+*/
+	wallet_card: TonWalletCard;
+}
+
+/**
+A new incoming widget query from a copy of a shared widget; for bots only.
+Subtype of {@link Update}.
+*/
+export interface UpdateNewWidgetCopyQuery {
+	'@type': 'updateNewWidgetCopyQuery';
+	/**
+Unique query identifier.
+*/
+	id: string;
+	/**
+Identifier of the user who sent the query.
+*/
+	sender_user_id: number;
+	/**
+Type of the query.
+*/
+	query_type: WidgetQueryType;
+	/**
+Data of the query.
+*/
+	data: string;
+	/**
+Identifier of the shared widget from which the query originated.
+*/
+	widget_id: string;
+	/**
+TON wallet card of the user who sent the query; may be null if none.
+*/
+	wallet_card: TonWalletCard;
 }
 
 /**
@@ -39801,6 +40272,16 @@ export type GiveawayPrize =
 	| GiveawayPrizePremium
 	| GiveawayPrizeStars;
 
+export type NotificationSettingsScope =
+	| NotificationSettingsScopePrivateChats
+	| NotificationSettingsScopeGroupChats
+	| NotificationSettingsScopeChannelChats;
+
+export type ReactionNotificationSource =
+	| ReactionNotificationSourceNone
+	| ReactionNotificationSourceContacts
+	| ReactionNotificationSourceAll;
+
 export type CommunityMemberStatus =
 	| CommunityMemberStatusCreator
 	| CommunityMemberStatusAdministrator
@@ -39930,16 +40411,6 @@ export type ReportSponsoredResult =
 	| ReportSponsoredResultOptionRequired
 	| ReportSponsoredResultAdsHidden
 	| ReportSponsoredResultPremiumRequired;
-
-export type NotificationSettingsScope =
-	| NotificationSettingsScopePrivateChats
-	| NotificationSettingsScopeGroupChats
-	| NotificationSettingsScopeChannelChats;
-
-export type ReactionNotificationSource =
-	| ReactionNotificationSourceNone
-	| ReactionNotificationSourceContacts
-	| ReactionNotificationSourceAll;
 
 export type DraftMessageContent =
 	| DraftMessageContentText
@@ -40313,6 +40784,7 @@ export type MessageContent =
 	| MessagePoll
 	| MessageStakeDice
 	| MessageStory
+	| MessageWidget
 	| MessageChecklist
 	| MessageInvoice
 	| MessageCall
@@ -40510,6 +40982,8 @@ export type InputMessageContent =
 	| InputMessageStakeDice
 	| InputMessageStory
 	| InputMessageChecklist
+	| InputMessageWidget
+	| InputMessageSharedWidget
 	| InputMessageForwarded;
 
 export type SearchMessagesFilter =
@@ -40589,7 +41063,6 @@ export type StoryAreaType =
 
 export type InputStoryAreaType =
 	| InputStoryAreaTypeLocation
-	| InputStoryAreaTypeFoundVenue
 	| InputStoryAreaTypePreviousVenue
 	| InputStoryAreaTypeSuggestedReaction
 	| InputStoryAreaTypeMessage
@@ -40758,6 +41231,11 @@ export type CallbackQueryPayload =
 	| CallbackQueryPayloadData
 	| CallbackQueryPayloadDataWithPassword
 	| CallbackQueryPayloadGame;
+
+export type WidgetQueryType =
+	| WidgetQueryTypeData
+	| WidgetQueryTypeSignData
+	| WidgetQueryTypeSentTransaction;
 
 export type ChatEventAction =
 	| ChatEventMessageEdited
@@ -41577,6 +42055,7 @@ export type Update =
 	| UpdateStarRevenueStatus
 	| UpdateGramRevenueStatus
 	| UpdateSpeechRecognitionTrial
+	| UpdateSpeechRecognitionInFile
 	| UpdateGroupCallMessageLevels
 	| UpdateDiceEmojis
 	| UpdateStakeDiceState
@@ -41597,6 +42076,9 @@ export type Update =
 	| UpdateNewCallbackQuery
 	| UpdateNewInlineCallbackQuery
 	| UpdateNewBusinessCallbackQuery
+	| UpdateNewWidgetQuery
+	| UpdateNewInlineWidgetQuery
+	| UpdateNewWidgetCopyQuery
 	| UpdateNewShippingQuery
 	| UpdateNewPreCheckoutQuery
 	| UpdateNewCustomEvent
@@ -43064,6 +43546,15 @@ export interface GetSuitablePersonalChats {
 }
 
 /**
+Returns a list of supergroup and channel chats owned by the current user, which can be added to a community.
+Request type for {@link Tdjson#getSuitableCommunityChats}.
+*/
+export interface GetSuitableCommunityChats {
+	'@type': 'getSuitableCommunityChats';
+
+}
+
+/**
 Loads more topics in a channel direct messages chat administered by the current user. The loaded topics will be sent
 through updateDirectMessagesChatTopic. Topics are sorted by their topic.order in descending order. Returns a 404 error
 if all topics have been loaded.
@@ -43100,7 +43591,7 @@ Identifier of the topic to get.
 
 /**
 Returns messages in the topic in a channel direct messages chat administered by the current user. The messages are
-returned in reverse chronological order (i.e., in order of decreasing message_id).
+returned in reverse chronological order (i.e., in order of decreasing message.id).
 Request type for {@link Tdjson#getDirectMessagesChatTopicHistory}.
 */
 export interface GetDirectMessagesChatTopicHistory {
@@ -43300,7 +43791,7 @@ can be smaller than the specified limit, even if the end of the list is not reac
 
 /**
 Returns messages in a Saved Messages topic. The messages are returned in reverse chronological order (i.e., in order of
-decreasing message_id).
+decreasing message.id).
 Request type for {@link Tdjson#getSavedMessagesTopicHistory}.
 */
 export interface GetSavedMessagesTopicHistory {
@@ -43417,6 +43908,15 @@ Community identifier.
 }
 
 /**
+Returns the list of communities joined by the current user.
+Request type for {@link Tdjson#getJoinedCommunities}.
+*/
+export interface GetJoinedCommunities {
+	'@type': 'getJoinedCommunities';
+
+}
+
+/**
 Creates a new community for the given chat. Returns identifier of the created community.
 Request type for {@link Tdjson#createCommunity}.
 */
@@ -43487,6 +43987,184 @@ New permissions of the community.
 }
 
 /**
+Changes notification settings of a community.
+Request type for {@link Tdjson#setCommunityNotificationSettings}.
+*/
+export interface SetCommunityNotificationSettings {
+	'@type': 'setCommunityNotificationSettings';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+New notification settings for the community.
+*/
+	notification_settings: ChatNotificationSettings;
+}
+
+/**
+Adds a chat to a community. If the current user isn't allowed to change the list of chats in the community, then a
+request to add the chat is sent to administrators of the community instead and the method fails with the error
+"COMMUNITY_REQUEST_CREATED".
+Request type for {@link Tdjson#addCommunityChat}.
+*/
+export interface AddCommunityChat {
+	'@type': 'addCommunityChat';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+Identifier of the chat to add; only chats with owned bots and owned basic group, supergroup and channel chats are
+allowed; basic group chats will be automatically upgraded to supergroup chats. A community can have up to
+getOption("community_chat_count_max") supergroup and channel chats and up to getOption("community_bot_count_max") chats
+with bots; otherwise, the method fails with the error "COMMUNITY_PEERS_TOO_MUCH".
+*/
+	chat_id: number;
+	/**
+Pass true if the chat will be visible only to administrators of the community.
+*/
+	is_hidden?: boolean;
+}
+
+/**
+Removes a chat from a community. Members of the chat, which aren't members of other chats in the community, will be
+removed from the community. Requires owner privileges in the supergroup or channel chat, or ownership of the bot for
+chats with bots, or can_edit_chat_list administrator right in the community.
+Request type for {@link Tdjson#removeCommunityChat}.
+*/
+export interface RemoveCommunityChat {
+	'@type': 'removeCommunityChat';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+Identifier of the chat to remove.
+*/
+	chat_id: number;
+}
+
+/**
+Returns pending requests to add chats to a community. Administrators of the community with can_edit_chat_list right
+receive all requests; other users receive only requests sent by them.
+Request type for {@link Tdjson#getCommunityAddChatRequests}.
+*/
+export interface GetCommunityAddChatRequests {
+	'@type': 'getCommunityAddChatRequests';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+Offset of the first entry to return as received from the previous request; use empty string to get the first chunk of
+results.
+*/
+	offset: string;
+	/**
+The maximum number of requests to return.
+*/
+	limit: number;
+}
+
+/**
+Handles a pending request to add a chat to a community; requires can_edit_chat_list administrator right in the
+community.
+Request type for {@link Tdjson#processCommunityAddChatRequest}.
+*/
+export interface ProcessCommunityAddChatRequest {
+	'@type': 'processCommunityAddChatRequest';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+Identifier of the chat from the request.
+*/
+	chat_id: number;
+	/**
+Pass true to approve the request and add the chat to the community; pass false to decline it. If the community already
+has the maximum number of chats, then approval fails with the error "COMMUNITY_PEERS_TOO_MUCH".
+*/
+	approve?: boolean;
+}
+
+/**
+Handles all pending requests to add chats to a community; requires can_edit_chat_list administrator right in the
+community.
+Request type for {@link Tdjson#processCommunityAddChatRequests}.
+*/
+export interface ProcessCommunityAddChatRequests {
+	'@type': 'processCommunityAddChatRequests';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+Pass true to approve all requests and add the chats to the community; pass false to decline them.
+*/
+	approve?: boolean;
+}
+
+/**
+Changes whether all chats of a community are collapsed into one entry in the chat list. If the chats are expanded, then
+the community is removed from all chat folders.
+Request type for {@link Tdjson#toggleCommunityAreChatsCollapsed}.
+*/
+export interface ToggleCommunityAreChatsCollapsed {
+	'@type': 'toggleCommunityAreChatsCollapsed';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+Pass true to collapse all chats of the community into one entry in the chat list.
+*/
+	are_chats_collapsed?: boolean;
+}
+
+/**
+Bans or unbans a member of a community; requires can_ban_members administrator right in the community. A banned member
+is banned in all chats of the community. Administrators of the community can be banned only by the owner of the
+community and administrators, which can edit administrator rights of the member. If an owner of a chat in the community
+is banned, then the chat is removed from the community; in this case, can_edit_chat_list administrator right is also
+required.
+Request type for {@link Tdjson#toggleCommunityMemberIsBanned}.
+*/
+export interface ToggleCommunityMemberIsBanned {
+	'@type': 'toggleCommunityMemberIsBanned';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+Identifier of the member to ban or unban.
+*/
+	member_id: MessageSender;
+	/**
+Pass true to ban the member; pass false to unban the member.
+*/
+	is_banned?: boolean;
+}
+
+/**
+Returns chats in a community, which were joined by a member of the community; requires can_ban_members administrator
+right in the community. Can be used to show chats that will be affected by the member ban.
+Request type for {@link Tdjson#getCommunityMemberChats}.
+*/
+export interface GetCommunityMemberChats {
+	'@type': 'getCommunityMemberChats';
+	/**
+Identifier of the community.
+*/
+	community_id: number;
+	/**
+Identifier of the member.
+*/
+	member_id: MessageSender;
+}
+
+/**
 Deletes a community; requires owner privileges.
 Request type for {@link Tdjson#deleteCommunity}.
 */
@@ -43520,7 +44198,7 @@ The maximum number of chats to be returned; up to 100.
 
 /**
 Returns messages in a chat. The messages are returned in reverse chronological order (i.e., in order of decreasing
-message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline method if
+message.id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline method if
 only_local is true.
 Request type for {@link Tdjson#getChatHistory}.
 */
@@ -43554,7 +44232,7 @@ Pass true to get only messages that are available without sending network reques
 /**
 Returns messages in a message thread of a message. Can be used only if messageProperties.can_get_message_thread == true.
 Message thread of a channel message is in the channel's linked supergroup. The messages are returned in reverse
-chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages
+chronological order (i.e., in order of decreasing message.id). For optimal performance, the number of returned messages
 is chosen by TDLib.
 Request type for {@link Tdjson#getMessageThreadHistory}.
 */
@@ -43622,7 +44300,7 @@ Chat identifier.
 
 /**
 Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of
-decreasing message_id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
+decreasing message.id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
 instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by
 TDLib and can be smaller than the specified limit. A combination of query, sender_id, filter and topic_id search
 criteria is expected to be supported, only if it is required for Telegram official application implementation.
@@ -43670,8 +44348,8 @@ Additional filter for messages to search; pass null to search for all messages.
 
 /**
 Searches for messages in all chats except secret chats. Returns the results in reverse chronological order (i.e., in
-order of decreasing (date, chat_id, message_id)). For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit.
+order of decreasing (message.date, message.chat_id, message.id)). For optimal performance, the number of returned
+messages is chosen by TDLib and can be smaller than the specified limit.
 Request type for {@link Tdjson#searchMessages}.
 */
 export interface SearchMessages {
@@ -43748,7 +44426,7 @@ Additional filter for messages to search; pass null to search for all messages.
 
 /**
 Searches for messages tagged by the given reaction and with the given words in the Saved Messages chat; for Telegram
-Premium users only. Returns the results in reverse chronological order, i.e. in order of decreasing message_id. For
+Premium users only. Returns the results in reverse chronological order, i.e. in order of decreasing message.id. For
 optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit.
 Request type for {@link Tdjson#searchSavedMessages}.
 */
@@ -43785,7 +44463,7 @@ chosen by TDLib and can be smaller than the specified limit.
 
 /**
 Searches for call and group call messages. Returns the results in reverse chronological order (i.e., in order of
-decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
+decreasing message.id). For optimal performance, the number of returned messages is chosen by TDLib.
 Request type for {@link Tdjson#searchCallMessages}.
 */
 export interface SearchCallMessages {
@@ -44168,7 +44846,7 @@ Message identifier.
 
 /**
 Returns all scheduled messages in a chat. The messages are returned in reverse chronological order (i.e., in order of
-decreasing message_id).
+decreasing message.id).
 Request type for {@link Tdjson#getChatScheduledMessages}.
 */
 export interface GetChatScheduledMessages {
@@ -44802,6 +45480,34 @@ The original message.
 }
 
 /**
+Fixes text received as a result of speech recognition using an AI model by correcting recognition errors and adding
+punctuation; must not be used in secret chats. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram
+Premium is required to send further requests.
+Request type for {@link Tdjson#fixRecognizedTextWithAi}.
+*/
+export interface FixRecognizedTextWithAi {
+	'@type': 'fixRecognizedTextWithAi';
+	/**
+The recognized text.
+*/
+	text: FormattedText;
+}
+
+/**
+Fixes a rich message with text received as a result of speech recognition using an AI model by correcting recognition
+errors and adding punctuation. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium is
+required to send further requests.
+Request type for {@link Tdjson#fixRecognizedRichMessageWithAi}.
+*/
+export interface FixRecognizedRichMessageWithAi {
+	'@type': 'fixRecognizedRichMessageWithAi';
+	/**
+The message with the recognized text.
+*/
+	message: InputRichMessage;
+}
+
+/**
 Recognizes speech in a video note or a voice note message.
 Request type for {@link Tdjson#recognizeSpeech}.
 */
@@ -44835,6 +45541,37 @@ Identifier of the message.
 Pass true if the speech recognition is good.
 */
 	is_good?: boolean;
+}
+
+/**
+Recognizes speech in an audio file and returns the recognized text. The file must be in OGG format with Opus codec and
+must have size up to 1 MB. The same rules as for recognizeSpeech apply to the Telegram Premium requirement and speech
+recognition trial; must not be used in secret chats.
+Request type for {@link Tdjson#recognizeSpeechInFile}.
+*/
+export interface RecognizeSpeechInFile {
+	'@type': 'recognizeSpeechInFile';
+	/**
+The audio file.
+*/
+	audio_file: InputFile;
+	/**
+Unique identifier of the speech recognition, which will be used in updateSpeechRecognitionInFile to send partially
+recognized text; pass 0 if partial results aren't needed.
+*/
+	recognition_id: string;
+}
+
+/**
+Returns 1-3 most probable languages of speech in voice notes.
+Request type for {@link Tdjson#getSpeechRecognitionLanguages}.
+*/
+export interface GetSpeechRecognitionLanguages {
+	'@type': 'getSpeechRecognitionLanguages';
+	/**
+Identifier of the chat; pass 0 if none.
+*/
+	chat_id: number;
 }
 
 /**
@@ -44982,8 +45719,7 @@ Identifier of the inline query result.
 	result_id: string;
 	/**
 Pass true to hide the bot, via which the message is sent. Can be used only for bots
-getOption("animation_search_bot_username"), getOption("photo_search_bot_username"), and
-getOption("venue_search_bot_username").
+getOption("animation_search_bot_username") and getOption("photo_search_bot_username").
 */
 	hide_via_bot?: boolean;
 }
@@ -45403,6 +46139,38 @@ The new message reply markup; pass null if none.
 }
 
 /**
+Edits data of a widget sent by the bot; for bots only.
+Request type for {@link Tdjson#editMessageWidgetData}.
+*/
+export interface EditMessageWidgetData {
+	'@type': 'editMessageWidgetData';
+	/**
+The chat the message belongs to.
+*/
+	chat_id: number;
+	/**
+Identifier of the widget message.
+*/
+	message_id: number;
+	/**
+Pass true to edit public data of the widget.
+*/
+	edit_public_data?: boolean;
+	/**
+New public data of the widget; ignored if edit_public_data is false.
+*/
+	public_data: string;
+	/**
+Pass true to edit data of the widget, which is specific to the chat.
+*/
+	edit_chat_data?: boolean;
+	/**
+New data of the widget, which is specific to the chat; ignored if edit_chat_data is false.
+*/
+	chat_data: string;
+}
+
+/**
 Edits the text of an inline text or game message sent via the bot; for bots only.
 Request type for {@link Tdjson#editInlineMessageText}.
 */
@@ -45509,6 +46277,55 @@ The new message reply markup; pass null if none.
 }
 
 /**
+Edits data of a widget in an inline message sent via the bot; for bots only.
+Request type for {@link Tdjson#editInlineMessageWidgetData}.
+*/
+export interface EditInlineMessageWidgetData {
+	'@type': 'editInlineMessageWidgetData';
+	/**
+Inline message identifier.
+*/
+	inline_message_id: string;
+	/**
+Pass true to edit public data of the widget.
+*/
+	edit_public_data?: boolean;
+	/**
+New public data of the widget; ignored if edit_public_data is false.
+*/
+	public_data: string;
+	/**
+Pass true to edit data of the widget, which is specific to the chat.
+*/
+	edit_chat_data?: boolean;
+	/**
+New data of the widget, which is specific to the chat; ignored if edit_chat_data is false.
+*/
+	chat_data: string;
+}
+
+/**
+Edits public data of a shared widget created by the bot; for bots only.
+Request type for {@link Tdjson#editWidgetData}.
+*/
+export interface EditWidgetData {
+	'@type': 'editWidgetData';
+	/**
+Identifier of the shared widget.
+*/
+	widget_id: string;
+	/**
+New public data of the widget.
+*/
+	public_data: string;
+	/**
+Time during which the public data can be cached, in seconds; 5-3600. Pass 0 to keep the current value, which is 30 by
+default.
+*/
+	cache_time: number;
+}
+
+/**
 Edits the text, media, or reply markup of an ephemeral message sent by the bot; for bots only.
 Request type for {@link Tdjson#editEphemeralMessage}.
 */
@@ -45572,7 +46389,7 @@ for animation, photo, and video messages.
 }
 
 /**
-Replies to a callback query with an ephemeral message; for bots only.
+Replies to a callback query with an ephemeral message; for bots only. Returns the sent message.
 Request type for {@link Tdjson#replyToCallbackQueryWithEphemeralMessage}.
 */
 export interface ReplyToCallbackQueryWithEphemeralMessage {
@@ -45596,7 +46413,8 @@ The new message reply markup; pass null if none.
 	/**
 New content of the message. Must be one of the following types: inputMessageText, inputMessageAnimation,
 inputMessageAudio, inputMessageDocument, inputMessagePhoto, inputMessageRichMessage, inputMessageSticker,
-inputMessageVideo, inputMessageVideoNote, inputMessageVoiceNote.
+inputMessageVideo, inputMessageVideoNote, inputMessageVoiceNote, inputMessageLocation, inputMessageVenue,
+inputMessageContact.
 */
 	input_message_content: InputMessageContent;
 }
@@ -46302,8 +47120,7 @@ Identifier of the inline query result.
 	result_id: string;
 	/**
 Pass true to hide the bot, via which the message is sent. Can be used only for bots
-getOption("animation_search_bot_username"), getOption("photo_search_bot_username"), and
-getOption("venue_search_bot_username").
+getOption("animation_search_bot_username") and getOption("photo_search_bot_username").
 */
 	hide_via_bot?: boolean;
 }
@@ -46544,7 +47361,7 @@ Forum topic identifier.
 
 /**
 Returns messages in a topic in a forum supergroup chat or a chat with a bot with topics. The messages are returned in
-reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned
+reverse chronological order (i.e., in order of decreasing message.id). For optimal performance, the number of returned
 messages is chosen by TDLib.
 Request type for {@link Tdjson#getForumTopicHistory}.
 */
@@ -46576,7 +47393,7 @@ messages is chosen by TDLib and can be smaller than the specified limit.
 }
 
 /**
-Returns an HTTPS link to a topic in a forum supergroup chat. This is an offline method.
+Returns an HTTPS link to a topic in a forum supergroup chat or a chat with a bot. This is an offline method.
 Request type for {@link Tdjson#getForumTopicLink}.
 */
 export interface GetForumTopicLink {
@@ -47220,6 +48037,18 @@ export interface GetTextEntities {
 	'@type': 'getTextEntities';
 	/**
 The text in which to look for entities.
+*/
+	text: string;
+}
+
+/**
+Returns positions of all emoji found in the text in order of their appearance. Can be called synchronously.
+Request type for {@link Tdjson#getTextEmojiRanges}.
+*/
+export interface GetTextEmojiRanges {
+	'@type': 'getTextEmojiRanges';
+	/**
+The text in which to look for emoji.
 */
 	text: string;
 }
@@ -48155,6 +48984,64 @@ URL to be opened.
 Time during which the result of the query can be cached, in seconds.
 */
 	cache_time: number;
+}
+
+/**
+Sets the result of a widget query; for bots only.
+Request type for {@link Tdjson#answerWidgetQuery}.
+*/
+export interface AnswerWidgetQuery {
+	'@type': 'answerWidgetQuery';
+	/**
+Identifier of the widget query.
+*/
+	widget_query_id: string;
+	/**
+Data to be returned to the widget.
+*/
+	data: string;
+}
+
+/**
+Sends a widget query to a bot and returns an answer. Returns an error with code 502 if the bot fails to answer the query
+before the query timeout expires.
+Request type for {@link Tdjson#getWidgetQueryAnswer}.
+*/
+export interface GetWidgetQueryAnswer {
+	'@type': 'getWidgetQueryAnswer';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the widget message from which the query originated. The message must not be scheduled.
+*/
+	message_id: number;
+	/**
+Type of the query.
+*/
+	query_type: WidgetQueryType;
+	/**
+Data of the query.
+*/
+	data: string;
+}
+
+/**
+Returns the current public data of a widget. Must be called only if the widget is visible on the screen and asked to
+poll its public data.
+Request type for {@link Tdjson#getWidgetPublicData}.
+*/
+export interface GetWidgetPublicData {
+	'@type': 'getWidgetPublicData';
+	/**
+Identifier of the chat with the message.
+*/
+	chat_id: number;
+	/**
+Identifier of the widget message. The message must not be scheduled.
+*/
+	message_id: number;
 }
 
 /**
@@ -50261,6 +51148,11 @@ only if getOption("can_use_text_entities_in_story_caption").
 */
 	caption: FormattedText;
 	/**
+Music to be attached to the story; pass null if none. The music can be up to 60 seconds long. The bot
+getOption("audio_search_bot_username") can be used to find the music files.
+*/
+	music: InputAudio;
+	/**
 The privacy settings for the story; ignored for stories posted on behalf of supergroup and channel chats.
 */
 	privacy_settings: StoryPrivacySettings;
@@ -50373,6 +51265,27 @@ New timestamp of the frame, which will be used as video thumbnail.
 }
 
 /**
+Changes music attached to a story. Can be called only if story.can_be_edited == true and the story isn't being edited
+now.
+Request type for {@link Tdjson#editStoryMusic}.
+*/
+export interface EditStoryMusic {
+	'@type': 'editStoryMusic';
+	/**
+Identifier of the chat that posted the story.
+*/
+	story_poster_chat_id: number;
+	/**
+Identifier of the story to edit.
+*/
+	story_id: number;
+	/**
+The new music; pass null to remove music from the story. The music can be up to 60 seconds long.
+*/
+	music: InputAudio;
+}
+
+/**
 Changes privacy settings of a story. The method can be called only for stories posted on behalf of the current user and
 if story.can_set_privacy_settings == true.
 Request type for {@link Tdjson#setStoryPrivacySettings}.
@@ -50437,8 +51350,8 @@ export interface GetStoryNotificationSettingsExceptions {
 
 /**
 Loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted
-by the pair (active_stories.order, active_stories.story_poster_chat_id) in descending order. Returns a 404 error if all
-active stories have been loaded.
+by the pair (active_stories.order, active_stories.chat_id) in descending order. Returns a 404 error if all active
+stories have been loaded.
 Request type for {@link Tdjson#loadActiveStories}.
 */
 export interface LoadActiveStories {
@@ -50480,7 +51393,7 @@ Chat identifier.
 /**
 Returns the list of stories that were posted by the given chat to its chat page. If from_story_id == 0, then pinned
 stories are returned first. Then, stories are returned in reverse chronological order (i.e., in order of decreasing
-story_id). For optimal performance, the number of returned stories is chosen by TDLib.
+story.id). For optimal performance, the number of returned stories is chosen by TDLib.
 Request type for {@link Tdjson#getChatPostedToChatPageStories}.
 */
 export interface GetChatPostedToChatPageStories {
@@ -50503,7 +51416,7 @@ and can be smaller than the specified limit.
 
 /**
 Returns the list of all stories posted by the given chat; requires can_edit_stories administrator right in the chat. The
-stories are returned in reverse chronological order (i.e., in order of decreasing story_id). For optimal performance,
+stories are returned in reverse chronological order (i.e., in order of decreasing story.id). For optimal performance,
 the number of returned stories is chosen by TDLib.
 Request type for {@link Tdjson#getChatArchivedStories}.
 */
@@ -55657,6 +56570,10 @@ New value of is_forum.
 New value of has_forum_tabs; ignored if is_forum is false.
 */
 	has_forum_tabs?: boolean;
+	/**
+New value of has_forum_sidebar; ignored if is_forum is false. Must be false if has_forum_tabs is true.
+*/
+	has_forum_sidebar?: boolean;
 }
 
 /**
@@ -55745,7 +56662,7 @@ Secret chat identifier.
 /**
 Returns a list of service actions taken by chat members and administrators in the last 48 hours. Available only in
 supergroups and channels. Requires administrator rights. Returns results in reverse chronological order (i.e., in order
-of decreasing event_id).
+of decreasing chatEvent.id).
 Request type for {@link Tdjson#getChatEventLog}.
 */
 export interface GetChatEventLog {
@@ -56226,8 +57143,8 @@ export interface CraftGift {
 	'@type': 'craftGift';
 	/**
 Identifier of the gifts to use for crafting. In the case of a successful craft, the resulting gift will have the number
-of the first gift. Consequently, the first gift must not have been withdrawn to the TON blockchain as an NFT and must
-have an empty gift_address.
+of the first gift. Consequently, unless getOption("can_craft_from_withdrawn_first_gift") is true, the first gift must
+not have been withdrawn to the TON blockchain as an NFT and must have an empty gift_address.
 */
 	received_gift_ids: string[];
 }
@@ -57372,6 +58289,7 @@ Option identifier chosen by the user; leave empty for the initial request.
 	option_id: string;
 	/**
 Identifiers of reported messages. Use messageProperties.can_report_chat to check whether the message can be reported.
+Ephemeral messages must be reported separately.
 */
 	message_ids: number[];
 	/**
@@ -57700,7 +58618,7 @@ Address in the TON blockchain of the transaction peer.
 	/**
 The amount of the sent cryptocurrency, in the smallest units of the cryptocurrency.
 */
-	amount: number;
+	amount: string;
 	/**
 Comment added to the transaction.
 */
@@ -60359,6 +61277,7 @@ export type Request =
 	| GetSuitableDiscussionChats
 	| GetInactiveSupergroupChats
 	| GetSuitablePersonalChats
+	| GetSuitableCommunityChats
 	| LoadDirectMessagesChatTopics
 	| GetDirectMessagesChatTopic
 	| GetDirectMessagesChatTopicHistory
@@ -60378,10 +61297,20 @@ export type Request =
 	| ToggleSavedMessagesTopicIsPinned
 	| SetPinnedSavedMessagesTopics
 	| GetCommunityFullInfo
+	| GetJoinedCommunities
 	| CreateCommunity
 	| SetCommunityName
 	| SetCommunityPhoto
 	| SetCommunityPermissions
+	| SetCommunityNotificationSettings
+	| AddCommunityChat
+	| RemoveCommunityChat
+	| GetCommunityAddChatRequests
+	| ProcessCommunityAddChatRequest
+	| ProcessCommunityAddChatRequests
+	| ToggleCommunityAreChatsCollapsed
+	| ToggleCommunityMemberIsBanned
+	| GetCommunityMemberChats
 	| DeleteCommunity
 	| GetGroupsInCommon
 	| GetChatHistory
@@ -60444,8 +61373,12 @@ export type Request =
 	| CreateRichMessageWithAi
 	| FixTextWithAi
 	| FixRichMessageWithAi
+	| FixRecognizedTextWithAi
+	| FixRecognizedRichMessageWithAi
 	| RecognizeSpeech
 	| RateSpeechRecognition
+	| RecognizeSpeechInFile
+	| GetSpeechRecognitionLanguages
 	| GetChatAvailableMessageSenders
 	| SetChatMessageSender
 	| SendMessage
@@ -60467,11 +61400,14 @@ export type Request =
 	| EditMessageMedia
 	| EditMessageCaption
 	| EditMessageReplyMarkup
+	| EditMessageWidgetData
 	| EditInlineMessageText
 	| EditInlineMessageLiveLocation
 	| EditInlineMessageMedia
 	| EditInlineMessageCaption
 	| EditInlineMessageReplyMarkup
+	| EditInlineMessageWidgetData
+	| EditWidgetData
 	| EditEphemeralMessage
 	| EditEphemeralMessageCaption
 	| ReplyToCallbackQueryWithEphemeralMessage
@@ -60558,6 +61494,7 @@ export type Request =
 	| GetMessageEffect
 	| SearchQuote
 	| GetTextEntities
+	| GetTextEmojiRanges
 	| ParseTextEntities
 	| ParseMarkdown
 	| GetMarkdownText
@@ -60606,6 +61543,9 @@ export type Request =
 	| AnswerChatJoinRequestQuery
 	| GetCallbackQueryAnswer
 	| AnswerCallbackQuery
+	| AnswerWidgetQuery
+	| GetWidgetQueryAnswer
+	| GetWidgetPublicData
 	| AnswerShippingQuery
 	| AnswerPreCheckoutQuery
 	| SetGameScore
@@ -60731,6 +61671,7 @@ export type Request =
 	| StartLiveStory
 	| EditStory
 	| EditStoryCover
+	| EditStoryMusic
 	| SetStoryPrivacySettings
 	| ToggleStoryIsPostedToChatPage
 	| DeleteStory
@@ -62364,6 +63305,15 @@ Returns a list of channel chats, which can be used as a personal chat.
 	}
 
 	/**
+Returns a list of supergroup and channel chats owned by the current user, which can be added to a community.
+*/
+	async getSuitableCommunityChats(): Promise<Chats> {
+		return this._request({
+			'@type': 'getSuitableCommunityChats',
+		});
+	}
+
+	/**
 Loads more topics in a channel direct messages chat administered by the current user. The loaded topics will be sent
 through updateDirectMessagesChatTopic. Topics are sorted by their topic.order in descending order. Returns a 404 error
 if all topics have been loaded.
@@ -62387,7 +63337,7 @@ Returns information about the topic in a channel direct messages chat administer
 
 	/**
 Returns messages in the topic in a channel direct messages chat administered by the current user. The messages are
-returned in reverse chronological order (i.e., in order of decreasing message_id).
+returned in reverse chronological order (i.e., in order of decreasing message.id).
 */
 	async getDirectMessagesChatTopicHistory(options: Omit<GetDirectMessagesChatTopicHistory, '@type'>): Promise<Messages> {
 		return this._request({
@@ -62491,7 +63441,7 @@ their topic.order in descending order. Returns a 404 error if all topics have be
 
 	/**
 Returns messages in a Saved Messages topic. The messages are returned in reverse chronological order (i.e., in order of
-decreasing message_id).
+decreasing message.id).
 */
 	async getSavedMessagesTopicHistory(options: Omit<GetSavedMessagesTopicHistory, '@type'>): Promise<Messages> {
 		return this._request({
@@ -62563,6 +63513,15 @@ Returns full information about a community.
 	}
 
 	/**
+Returns the list of communities joined by the current user.
+*/
+	async getJoinedCommunities(): Promise<Communities> {
+		return this._request({
+			'@type': 'getJoinedCommunities',
+		});
+	}
+
+	/**
 Creates a new community for the given chat. Returns identifier of the created community.
 */
 	async createCommunity(options: Omit<CreateCommunity, '@type'>): Promise<CommunityId> {
@@ -62604,6 +63563,109 @@ community.
 	}
 
 	/**
+Changes notification settings of a community.
+*/
+	async setCommunityNotificationSettings(options: Omit<SetCommunityNotificationSettings, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'setCommunityNotificationSettings',
+		});
+	}
+
+	/**
+Adds a chat to a community. If the current user isn't allowed to change the list of chats in the community, then a
+request to add the chat is sent to administrators of the community instead and the method fails with the error
+"COMMUNITY_REQUEST_CREATED".
+*/
+	async addCommunityChat(options: Omit<AddCommunityChat, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'addCommunityChat',
+		});
+	}
+
+	/**
+Removes a chat from a community. Members of the chat, which aren't members of other chats in the community, will be
+removed from the community. Requires owner privileges in the supergroup or channel chat, or ownership of the bot for
+chats with bots, or can_edit_chat_list administrator right in the community.
+*/
+	async removeCommunityChat(options: Omit<RemoveCommunityChat, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'removeCommunityChat',
+		});
+	}
+
+	/**
+Returns pending requests to add chats to a community. Administrators of the community with can_edit_chat_list right
+receive all requests; other users receive only requests sent by them.
+*/
+	async getCommunityAddChatRequests(options: Omit<GetCommunityAddChatRequests, '@type'>): Promise<CommunityAddChatRequests> {
+		return this._request({
+			...options,
+			'@type': 'getCommunityAddChatRequests',
+		});
+	}
+
+	/**
+Handles a pending request to add a chat to a community; requires can_edit_chat_list administrator right in the
+community.
+*/
+	async processCommunityAddChatRequest(options: Omit<ProcessCommunityAddChatRequest, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'processCommunityAddChatRequest',
+		});
+	}
+
+	/**
+Handles all pending requests to add chats to a community; requires can_edit_chat_list administrator right in the
+community.
+*/
+	async processCommunityAddChatRequests(options: Omit<ProcessCommunityAddChatRequests, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'processCommunityAddChatRequests',
+		});
+	}
+
+	/**
+Changes whether all chats of a community are collapsed into one entry in the chat list. If the chats are expanded, then
+the community is removed from all chat folders.
+*/
+	async toggleCommunityAreChatsCollapsed(options: Omit<ToggleCommunityAreChatsCollapsed, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleCommunityAreChatsCollapsed',
+		});
+	}
+
+	/**
+Bans or unbans a member of a community; requires can_ban_members administrator right in the community. A banned member
+is banned in all chats of the community. Administrators of the community can be banned only by the owner of the
+community and administrators, which can edit administrator rights of the member. If an owner of a chat in the community
+is banned, then the chat is removed from the community; in this case, can_edit_chat_list administrator right is also
+required.
+*/
+	async toggleCommunityMemberIsBanned(options: Omit<ToggleCommunityMemberIsBanned, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'toggleCommunityMemberIsBanned',
+		});
+	}
+
+	/**
+Returns chats in a community, which were joined by a member of the community; requires can_ban_members administrator
+right in the community. Can be used to show chats that will be affected by the member ban.
+*/
+	async getCommunityMemberChats(options: Omit<GetCommunityMemberChats, '@type'>): Promise<CommunityMemberChats> {
+		return this._request({
+			...options,
+			'@type': 'getCommunityMemberChats',
+		});
+	}
+
+	/**
 Deletes a community; requires owner privileges.
 */
 	async deleteCommunity(options: Omit<DeleteCommunity, '@type'>): Promise<Ok> {
@@ -62625,7 +63687,7 @@ Returns a list of common group chats with a given user. Chats are sorted by thei
 
 	/**
 Returns messages in a chat. The messages are returned in reverse chronological order (i.e., in order of decreasing
-message_id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline method if
+message.id). For optimal performance, the number of returned messages is chosen by TDLib. This is an offline method if
 only_local is true.
 */
 	async getChatHistory(options: Omit<GetChatHistory, '@type'>): Promise<Messages> {
@@ -62638,7 +63700,7 @@ only_local is true.
 	/**
 Returns messages in a message thread of a message. Can be used only if messageProperties.can_get_message_thread == true.
 Message thread of a channel message is in the channel's linked supergroup. The messages are returned in reverse
-chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned messages
+chronological order (i.e., in order of decreasing message.id). For optimal performance, the number of returned messages
 is chosen by TDLib.
 */
 	async getMessageThreadHistory(options: Omit<GetMessageThreadHistory, '@type'>): Promise<Messages> {
@@ -62673,7 +63735,7 @@ applied to the chat.
 
 	/**
 Searches for messages with given words in the chat. Returns the results in reverse chronological order, i.e. in order of
-decreasing message_id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
+decreasing message.id. Cannot be used in secret chats with a non-empty query (searchSecretMessages must be used
 instead), or without an enabled message database. For optimal performance, the number of returned messages is chosen by
 TDLib and can be smaller than the specified limit. A combination of query, sender_id, filter and topic_id search
 criteria is expected to be supported, only if it is required for Telegram official application implementation.
@@ -62687,8 +63749,8 @@ criteria is expected to be supported, only if it is required for Telegram offici
 
 	/**
 Searches for messages in all chats except secret chats. Returns the results in reverse chronological order (i.e., in
-order of decreasing (date, chat_id, message_id)). For optimal performance, the number of returned messages is chosen by
-TDLib and can be smaller than the specified limit.
+order of decreasing (message.date, message.chat_id, message.id)). For optimal performance, the number of returned
+messages is chosen by TDLib and can be smaller than the specified limit.
 */
 	async searchMessages(options: Omit<SearchMessages, '@type'>): Promise<FoundMessages> {
 		return this._request({
@@ -62710,7 +63772,7 @@ number of returned messages is chosen by TDLib.
 
 	/**
 Searches for messages tagged by the given reaction and with the given words in the Saved Messages chat; for Telegram
-Premium users only. Returns the results in reverse chronological order, i.e. in order of decreasing message_id. For
+Premium users only. Returns the results in reverse chronological order, i.e. in order of decreasing message.id. For
 optimal performance, the number of returned messages is chosen by TDLib and can be smaller than the specified limit.
 */
 	async searchSavedMessages(options: Omit<SearchSavedMessages, '@type'>): Promise<FoundChatMessages> {
@@ -62722,7 +63784,7 @@ optimal performance, the number of returned messages is chosen by TDLib and can 
 
 	/**
 Searches for call and group call messages. Returns the results in reverse chronological order (i.e., in order of
-decreasing message_id). For optimal performance, the number of returned messages is chosen by TDLib.
+decreasing message.id). For optimal performance, the number of returned messages is chosen by TDLib.
 */
 	async searchCallMessages(options: Omit<SearchCallMessages, '@type'>): Promise<FoundMessages> {
 		return this._request({
@@ -62916,7 +63978,7 @@ and topic. Cannot be used in secret chats.
 
 	/**
 Returns all scheduled messages in a chat. The messages are returned in reverse chronological order (i.e., in order of
-decreasing message_id).
+decreasing message.id).
 */
 	async getChatScheduledMessages(options: Omit<GetChatScheduledMessages, '@type'>): Promise<Messages> {
 		return this._request({
@@ -63273,6 +64335,30 @@ is required to send further requests.
 	}
 
 	/**
+Fixes text received as a result of speech recognition using an AI model by correcting recognition errors and adding
+punctuation; must not be used in secret chats. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram
+Premium is required to send further requests.
+*/
+	async fixRecognizedTextWithAi(options: Omit<FixRecognizedTextWithAi, '@type'>): Promise<FormattedText> {
+		return this._request({
+			...options,
+			'@type': 'fixRecognizedTextWithAi',
+		});
+	}
+
+	/**
+Fixes a rich message with text received as a result of speech recognition using an AI model by correcting recognition
+errors and adding punctuation. May return an error with a message "AICOMPOSE_FLOOD_PREMIUM" if Telegram Premium is
+required to send further requests.
+*/
+	async fixRecognizedRichMessageWithAi(options: Omit<FixRecognizedRichMessageWithAi, '@type'>): Promise<RichMessage> {
+		return this._request({
+			...options,
+			'@type': 'fixRecognizedRichMessageWithAi',
+		});
+	}
+
+	/**
 Recognizes speech in a video note or a voice note message.
 */
 	async recognizeSpeech(options: Omit<RecognizeSpeech, '@type'>): Promise<Ok> {
@@ -63289,6 +64375,28 @@ Rates recognized speech in a video note or a voice note message.
 		return this._request({
 			...options,
 			'@type': 'rateSpeechRecognition',
+		});
+	}
+
+	/**
+Recognizes speech in an audio file and returns the recognized text. The file must be in OGG format with Opus codec and
+must have size up to 1 MB. The same rules as for recognizeSpeech apply to the Telegram Premium requirement and speech
+recognition trial; must not be used in secret chats.
+*/
+	async recognizeSpeechInFile(options: Omit<RecognizeSpeechInFile, '@type'>): Promise<Text> {
+		return this._request({
+			...options,
+			'@type': 'recognizeSpeechInFile',
+		});
+	}
+
+	/**
+Returns 1-3 most probable languages of speech in voice notes.
+*/
+	async getSpeechRecognitionLanguages(options: Omit<GetSpeechRecognitionLanguages, '@type'>): Promise<SpeechRecognitionLanguages> {
+		return this._request({
+			...options,
+			'@type': 'getSpeechRecognitionLanguages',
 		});
 	}
 
@@ -63522,6 +64630,16 @@ side.
 	}
 
 	/**
+Edits data of a widget sent by the bot; for bots only.
+*/
+	async editMessageWidgetData(options: Omit<EditMessageWidgetData, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editMessageWidgetData',
+		});
+	}
+
+	/**
 Edits the text of an inline text or game message sent via the bot; for bots only.
 */
 	async editInlineMessageText(options: Omit<EditInlineMessageText, '@type'>): Promise<Ok> {
@@ -63573,6 +64691,26 @@ Edits the reply markup of an inline message sent via a bot; for bots only.
 	}
 
 	/**
+Edits data of a widget in an inline message sent via the bot; for bots only.
+*/
+	async editInlineMessageWidgetData(options: Omit<EditInlineMessageWidgetData, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editInlineMessageWidgetData',
+		});
+	}
+
+	/**
+Edits public data of a shared widget created by the bot; for bots only.
+*/
+	async editWidgetData(options: Omit<EditWidgetData, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editWidgetData',
+		});
+	}
+
+	/**
 Edits the text, media, or reply markup of an ephemeral message sent by the bot; for bots only.
 */
 	async editEphemeralMessage(options: Omit<EditEphemeralMessage, '@type'>): Promise<Ok> {
@@ -63593,9 +64731,9 @@ Edits the caption and reply markup of an ephemeral message sent by the bot; for 
 	}
 
 	/**
-Replies to a callback query with an ephemeral message; for bots only.
+Replies to a callback query with an ephemeral message; for bots only. Returns the sent message.
 */
-	async replyToCallbackQueryWithEphemeralMessage(options: Omit<ReplyToCallbackQueryWithEphemeralMessage, '@type'>): Promise<Ok> {
+	async replyToCallbackQueryWithEphemeralMessage(options: Omit<ReplyToCallbackQueryWithEphemeralMessage, '@type'>): Promise<Message> {
 		return this._request({
 			...options,
 			'@type': 'replyToCallbackQueryWithEphemeralMessage',
@@ -64077,7 +65215,7 @@ Returns information about a topic in a forum supergroup chat or a chat with a bo
 
 	/**
 Returns messages in a topic in a forum supergroup chat or a chat with a bot with topics. The messages are returned in
-reverse chronological order (i.e., in order of decreasing message_id). For optimal performance, the number of returned
+reverse chronological order (i.e., in order of decreasing message.id). For optimal performance, the number of returned
 messages is chosen by TDLib.
 */
 	async getForumTopicHistory(options: Omit<GetForumTopicHistory, '@type'>): Promise<Messages> {
@@ -64088,7 +65226,7 @@ messages is chosen by TDLib.
 	}
 
 	/**
-Returns an HTTPS link to a topic in a forum supergroup chat. This is an offline method.
+Returns an HTTPS link to a topic in a forum supergroup chat or a chat with a bot. This is an offline method.
 */
 	async getForumTopicLink(options: Omit<GetForumTopicLink, '@type'>): Promise<MessageLink> {
 		return this._request({
@@ -64467,6 +65605,16 @@ email addresses) found in the text. Can be called synchronously.
 		return this._request({
 			...options,
 			'@type': 'getTextEntities',
+		});
+	}
+
+	/**
+Returns positions of all emoji found in the text in order of their appearance. Can be called synchronously.
+*/
+	async getTextEmojiRanges(options: Omit<GetTextEmojiRanges, '@type'>): Promise<TextRanges> {
+		return this._request({
+			...options,
+			'@type': 'getTextEmojiRanges',
 		});
 	}
 
@@ -64964,6 +66112,38 @@ Sets the result of a callback query; for bots only.
 		return this._request({
 			...options,
 			'@type': 'answerCallbackQuery',
+		});
+	}
+
+	/**
+Sets the result of a widget query; for bots only.
+*/
+	async answerWidgetQuery(options: Omit<AnswerWidgetQuery, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'answerWidgetQuery',
+		});
+	}
+
+	/**
+Sends a widget query to a bot and returns an answer. Returns an error with code 502 if the bot fails to answer the query
+before the query timeout expires.
+*/
+	async getWidgetQueryAnswer(options: Omit<GetWidgetQueryAnswer, '@type'>): Promise<WidgetQueryAnswer> {
+		return this._request({
+			...options,
+			'@type': 'getWidgetQueryAnswer',
+		});
+	}
+
+	/**
+Returns the current public data of a widget. Must be called only if the widget is visible on the screen and asked to
+poll its public data.
+*/
+	async getWidgetPublicData(options: Omit<GetWidgetPublicData, '@type'>): Promise<WidgetPublicData> {
+		return this._request({
+			...options,
+			'@type': 'getWidgetPublicData',
 		});
 	}
 
@@ -66278,6 +67458,17 @@ Changes cover of a video story. Can be called only if story.can_be_edited == tru
 	}
 
 	/**
+Changes music attached to a story. Can be called only if story.can_be_edited == true and the story isn't being edited
+now.
+*/
+	async editStoryMusic(options: Omit<EditStoryMusic, '@type'>): Promise<Ok> {
+		return this._request({
+			...options,
+			'@type': 'editStoryMusic',
+		});
+	}
+
+	/**
 Changes privacy settings of a story. The method can be called only for stories posted on behalf of the current user and
 if story.can_set_privacy_settings == true.
 */
@@ -66320,8 +67511,8 @@ Returns the list of chats with non-default notification settings for stories.
 
 	/**
 Loads more active stories from a story list. The loaded stories will be sent through updates. Active stories are sorted
-by the pair (active_stories.order, active_stories.story_poster_chat_id) in descending order. Returns a 404 error if all
-active stories have been loaded.
+by the pair (active_stories.order, active_stories.chat_id) in descending order. Returns a 404 error if all active
+stories have been loaded.
 */
 	async loadActiveStories(options: Omit<LoadActiveStories, '@type'>): Promise<Ok> {
 		return this._request({
@@ -66353,7 +67544,7 @@ Returns the list of active stories posted by the given chat.
 	/**
 Returns the list of stories that were posted by the given chat to its chat page. If from_story_id == 0, then pinned
 stories are returned first. Then, stories are returned in reverse chronological order (i.e., in order of decreasing
-story_id). For optimal performance, the number of returned stories is chosen by TDLib.
+story.id). For optimal performance, the number of returned stories is chosen by TDLib.
 */
 	async getChatPostedToChatPageStories(options: Omit<GetChatPostedToChatPageStories, '@type'>): Promise<Stories> {
 		return this._request({
@@ -66364,7 +67555,7 @@ story_id). For optimal performance, the number of returned stories is chosen by 
 
 	/**
 Returns the list of all stories posted by the given chat; requires can_edit_stories administrator right in the chat. The
-stories are returned in reverse chronological order (i.e., in order of decreasing story_id). For optimal performance,
+stories are returned in reverse chronological order (i.e., in order of decreasing story.id). For optimal performance,
 the number of returned stories is chosen by TDLib.
 */
 	async getChatArchivedStories(options: Omit<GetChatArchivedStories, '@type'>): Promise<Stories> {
@@ -69645,7 +70836,7 @@ Closes a secret chat, effectively transferring its state to secretChatStateClose
 	/**
 Returns a list of service actions taken by chat members and administrators in the last 48 hours. Available only in
 supergroups and channels. Requires administrator rights. Returns results in reverse chronological order (i.e., in order
-of decreasing event_id).
+of decreasing chatEvent.id).
 */
 	async getChatEventLog(options: Omit<GetChatEventLog, '@type'>): Promise<ChatEvents> {
 		return this._request({
