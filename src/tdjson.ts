@@ -5714,8 +5714,8 @@ Identifiers of collections to which the gift is added; only for the receiver of 
 */
 	collection_ids: number[];
 	/**
-Number of Telegram Stars that can be claimed by the receiver instead of the regular gift; 0 if the gift can't be sold by
-the current user.
+Number of Telegram Stars that can be claimed by the receiver instead of the regular gift within
+getOption("gift_sell_period") seconds from its sending; 0 if the gift can't be sold by the receiver.
 */
 	sell_star_count: number;
 	/**
@@ -20118,8 +20118,8 @@ Unique number of the gift among gifts upgraded from the same gift after upgrade;
 */
 	unique_gift_number: number;
 	/**
-Number of Telegram Stars that can be claimed by the receiver instead of the regular gift; 0 if the gift can't be sold by
-the receiver.
+Number of Telegram Stars that can be claimed by the receiver instead of the regular gift within
+getOption("gift_sell_period") seconds from its sending; 0 if the gift can't be sold by the receiver.
 */
 	sell_star_count: number;
 	/**
@@ -56973,7 +56973,9 @@ The number of Telegram Stars to put in the bid.
 }
 
 /**
-Sells a gift for Telegram Stars; requires owner privileges for gifts owned by a chat.
+Sells a gift for Telegram Stars. Use receivedGift.sell_star_count or messageGift.sell_star_count to check whether the
+gift is soldable. A gift can be sold if it is soldable and not more than getOption("gift_sell_period") seconds passed
+since gift sending.
 Request type for {@link Tdjson#sellGift}.
 */
 export interface SellGift {
@@ -56990,7 +56992,7 @@ Identifier of the gift.
 
 /**
 Deletes a gift without receiving Telegram Stars for it. Use receivedGift.can_be_deleted or messageGift.can_be_deleted to
-check whether the gift can be deleted.
+check whether the gift can be deleted. The gift may be deleted even it can still be sold using sellGift.
 Request type for {@link Tdjson#deleteGift}.
 */
 export interface DeleteGift {
@@ -71023,7 +71025,9 @@ Increases a bid for an auction gift without changing gift text and receiver.
 	}
 
 	/**
-Sells a gift for Telegram Stars; requires owner privileges for gifts owned by a chat.
+Sells a gift for Telegram Stars. Use receivedGift.sell_star_count or messageGift.sell_star_count to check whether the
+gift is soldable. A gift can be sold if it is soldable and not more than getOption("gift_sell_period") seconds passed
+since gift sending.
 */
 	async sellGift(options: Omit<SellGift, '@type'>): Promise<Ok> {
 		return this._request({
@@ -71034,7 +71038,7 @@ Sells a gift for Telegram Stars; requires owner privileges for gifts owned by a 
 
 	/**
 Deletes a gift without receiving Telegram Stars for it. Use receivedGift.can_be_deleted or messageGift.can_be_deleted to
-check whether the gift can be deleted.
+check whether the gift can be deleted. The gift may be deleted even it can still be sold using sellGift.
 */
 	async deleteGift(options: Omit<DeleteGift, '@type'>): Promise<Ok> {
 		return this._request({
